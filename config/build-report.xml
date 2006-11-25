@@ -1,0 +1,171 @@
+<?xml version="1.0"?>
+
+<project name="report">
+
+   <!-- The ruleset files -->
+   <property name="pmd.rules" value="${base.dir}/config/jcoderz-pmd.xml"/>
+   <property name="checkstyle.rules" value="${base.dir}/config/jcoderz-checkstyle.xml" />
+   <property name="findbugs.rules" value="${base.dir}/config/jcoderz-findbugs.xml" />
+   <property name="filter.rules" value="${base.dir}/config/jcoderz-report-filter.xsl" />
+
+   <!-- NOTE: Not executed by the report target yet! -->
+   <target name="summary-report">
+      <!-- This is the classpath used by the JcReportAntTask -->   
+      <path id="jcreport.classpath">
+         <pathelement path="${base.dir}/build/classes"/>
+         <fileset dir="${base.dir}/lib">
+            <include name="default/jaxb/*.jar"/>
+            <include name="default/chart2d/*.jar"/>
+         </fileset>
+      </path>
+      <taskdef name="jcsummaryreport"
+               classname="org.jcoderz.phoenix.report.JcSummaryReportAntTask">
+         <classpath refid="jcreport.classpath" />
+      </taskdef>
+      <!-- TODO: Find a good place for the fawkez build!
+           The folder should be the CC artefacts folder -->
+      <jcsummaryreport name="fawkez-summary"
+                       summary="c:/temp/findings-report/history.csv"
+                       dest="c:/temp/findings-report/xxx"
+                       basedir="c:/temp/findings-report"/>
+   </target>
+
+   <target name="report">
+      <!-- This is the classpath used by the JcReportAntTask -->   
+      <path id="jcreport.classpath">
+         <pathelement path="${base.dir}/build/classes"/>
+         <fileset dir="${base.dir}/lib">
+            <include name="default/jaxb/*.jar"/>
+            <include name="default/chart2d/*.jar"/>
+         </fileset>
+      </path>
+      <taskdef name="jcreport"
+               classname="org.jcoderz.phoenix.report.JcReportAntTask">
+         <classpath refid="jcreport.classpath" />
+      </taskdef>
+
+      <!-- This classpath is used by the checkstyle process -->   
+      <path id="checkstyle.classpath">
+         <fileset dir="${base.dir}/lib">
+            <include name="default/antlr/*.jar"/>
+            <include name="default/checkstyle/*.jar"/>
+            <include name="default/commons-beanutils/*.jar"/>
+            <include name="default/commons-cli/*.jar"/>
+            <include name="default/commons-logging/*.jar"/>
+         </fileset>
+      </path>
+      <!-- This classpath is used by the pmd and cpd process -->   
+      <path id="pmd.classpath">
+         <fileset dir="${base.dir}/lib">
+            <include name="default/pmd/*.jar"/>
+            <include name="default/jaxen/*.jar"/>
+            <include name="default/oro/*.jar"/>
+         </fileset>
+      </path>
+      <!-- This classpath is used by the findbugs process -->   
+      <path id="findbugs.classpath">
+         <fileset dir="${base.dir}/lib">
+            <include name="default/findbugs/*.jar"/>
+            <include name="default/dom4j/*.jar"/>
+            <include name="default/jaxen/*.jar"/>
+            <exclude name="**/coreplugin.jar"/>
+         </fileset>
+      </path>
+      <path id="findbugs.plugins">
+		  <path location="${base.dir}/lib/default/findbugs/coreplugin.jar"/>
+      </path>
+      <!-- This is the auxiliary classpath used by findbugs -->   
+      <path id="findbugs.aux.classpath">
+         <path location="${base.dir}/build/classes"/>
+         <fileset dir="${base.dir}/lib">
+            <include name="default/chart2d/*.jar"/>
+            <include name="default/jaxb/*.jar"/>
+            <include name="default/commons-httpclient/*.jar"/>
+            <include name="default/commons-cli/*.jar"/>
+            <include name="default/commons-pool/*.jar"/>
+            <include name="default/checkstyle/*.jar"/>
+            <include name="default/fop/*.jar"/>
+            <include name="default/jtidy/*.jar"/>
+            <include name="default/batik-1.5-fop/*.jar"/>
+            <include name="default/velocity/*.jar"/>
+            <include name="default/jivesoftware/*.jar"/>
+            <include name="default/geronimo-spec/*.jar"/>
+            <include name="default/cobertura/*.jar"/>
+            <include name="default/ant/*.jar"/>
+            <include name="default/antlr/*.jar"/>
+            <include name="default/xercesImpl/*.jar"/>
+            <include name="default/xalan/*.jar"/>
+            <include name="eclipse/*.jar"/>
+         </fileset>
+      </path>
+
+      <delete dir="${base.dir}/build/jcreport"/>
+      <jcreport name="fawkez"
+                dest="${base.dir}/build/doc/findings-report"
+                wikibase="https://www.jcoderz.org/wiki/"
+                webrcsbase="https://www.jcoderz.org/websvn/phoeniX/trunk/"
+                webrcssuffix=""
+                packagebase="org.jcoderz"
+                projectbase="${base.dir}"
+                tempfolder="${base.dir}/build/jcreport"
+                maxheap="128"
+                debug="false">
+         <classpath refid="jcreport.classpath"/>
+         <reports>   
+            <report name="fawkez-test"
+                    level="test"
+                    sourcepath="${base.dir}/test/java"
+                    classpath="${build.dir}/classes">
+            </report>   
+            <report name="fawkez-prod"
+                    level="prod"
+                    sourcepath="${base.dir}/src/java"
+                    classpath="${build.dir}/classes">
+            </report>
+         </reports>
+         <mappings>
+            <webrcs pattern="**/fawkez" url="http://" suffix=""/>
+         </mappings>   
+         <tools>
+            <pmd config="${pmd.rules}"
+                 targetjdk="1.4"
+                 encoding="Cp1252">
+               <classpath refid="pmd.classpath"/>
+            </pmd>
+            <cpd minimumtokens="100">
+               <classpath refid="pmd.classpath"/>
+            </cpd>
+            <findbugs config="${findbugs.rules}"
+                      maxheap="512"
+                      effort="max"
+                      debug="false"
+                      warninglevel="low">
+               <classpath refid="findbugs.classpath"/>
+               <auxclasspath refid="findbugs.aux.classpath"/>
+			   <pluginlist refid="findbugs.plugins"/>
+            </findbugs>
+            <checkstyle config="${checkstyle.rules}"
+                        maxheap="512"> 
+               <classpath refid="checkstyle.classpath" />
+            </checkstyle>
+            <!-- cobertura datafile="x.ser">
+            </cobertura -->
+         </tools>
+         <filters>
+            <filter file="${filter.rules}"/>
+         </filters>
+      </jcreport>   
+   </target>   
+
+   <target name="view-report" depends="report, view-report-nodeps"
+           description="Generates a report and displays it on the os default browser."/>
+   <target name="view-report-nodeps">
+   <!-- TODO: for not win os we might check if the $BROWSER environment
+              variable is set and if use this as command -->
+      <exec executable="cmd.exe" spawn="true" os="Windows XP">
+         <arg value="/C" />
+         <arg file="${build.dir}/report-fawkez/index.html"/>
+      </exec>
+   </target>
+
+</project>

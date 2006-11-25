@@ -1,0 +1,100 @@
+<uc:usecase xmlns:uc="http://www.jcoderz.org/xsd/xdoc/usecase-SNAPSHOT.xsd"
+                    xmlns:db="http://docbook.org/ns/docbook"
+                   id="UC-19" level="UserGoal">
+	<uc:version>$Revision: 1.1 $</uc:version>
+	<uc:commitlog>
+		$Log: trigger_payment.xml,v $
+		Revision 1.1  2005/09/05 14:02:14  mgriffel
+		xdoc: first use case document
+		
+		Revision 1.2  2005/09/01 13:23:50  dcoppola
+		Due to we are only supporting one currency per merchant, the check of that currency will be done against the merchant currency.
+		
+		Revision 1.1  2005/08/31 15:30:30  dcoppola
+		initial draft of maggie use cases
+
+	</uc:commitlog>
+	<uc:name>Trigger Payment</uc:name>
+	<uc:goal>A payment will be triggered, which has to be aggregated to the consumer/merchant account.</uc:goal>
+	<uc:scope>Micro Aggregation</uc:scope>
+	<uc:trigger></uc:trigger>
+	<uc:priority>high - prototype</uc:priority>
+	<uc:response_time>immediately</uc:response_time>
+	<uc:frequency_of_use>ad-hoc</uc:frequency_of_use>
+	<uc:actors>
+		<uc:primary>
+			<uc:name>Shop</uc:name>
+			<uc:channel>Web</uc:channel>
+		</uc:primary>
+		<uc:secondary>
+			<uc:name>System</uc:name>
+			<uc:channel>WEB</uc:channel>
+		</uc:secondary>
+	</uc:actors>
+	<uc:stakeholder>Shop wants to trigger a payment, which has to be aggregated onto the account of the consumer/merchant/PI combination immediately.</uc:stakeholder>
+   <uc:stakeholder>Service Provider wants to transfer responsibilities to receive the payments and to aggregate them onto the correct account.</uc:stakeholder>
+	<uc:precondition>none</uc:precondition>
+	<uc:guarantees>
+		<uc:success>Shop is notified about the correct aggregation of the amount to the relevant account.</uc:success>
+		<uc:minimal>Shop is notified about an error occured and the reason or further handling.</uc:minimal>
+	</uc:guarantees>
+	<uc:success>
+      <uc:step id="1">Shop sends payment request to the system with the following data:
+         <itemizedlist>
+            <listitem>Amount</listitem>
+            <listitem>PI data (including account data)</listitem>
+            <listitem>currency</listitem>
+            <listitem>merchant identification</listitem>
+            <listitem>basket information</listitem>
+         </itemizedlist>
+      </uc:step>
+      <uc:step id="2">System checks if merchant id is known to the system. <uc:ref id="UC-19-E1"/></uc:step>
+      <uc:step id="3">System checks if an account for that combination of merchant and payment instrument (PI) does exist.<uc:ref id="UC-19-E2"/></uc:step>
+      <uc:step id="4">System checks if the given currency maps to the currency deposited for the merchant. <uc:ref id="UC-19-E5"/></uc:step>
+      <uc:step id="5">System checks if the amount does fit to system rules.<uc:ref id="UC-19-E6"/></uc:step>
+      <uc:step id="6">System checks if account has been blocked.<uc:ref id="UC-19-E7"/></uc:step>
+      <uc:step id="7">System aggregates amount to the account.<uc:ref id="UC-19-E8"/></uc:step>
+      <uc:step id="8">System notifies that the amount has been aggregated succesfully.</uc:step>
+      <uc:step id="9">use case ends.</uc:step>
+	</uc:success>
+   <uc:extension id="E1" name="MERCHANT UNKNOWN">
+      <uc:step id="1">System logs an error.</uc:step>
+		<uc:step id="2">System replies an error to the Shop with the message to use the right merchant id.</uc:step>
+      <uc:step id="3">use case ends.</uc:step>
+	</uc:extension>
+	<uc:extension id="E2" name="ACCOUNT NOT EXISTING">
+		<uc:step id="1">System checks if the payment instrument is known to the system.<uc:ref id="UC-19-E3"/></uc:step>
+      <uc:step id="2">System creates an account for that merchant/PI combination and stores the given currency to that account.</uc:step>
+      <uc:step id="3">System returns to <uc:ref id="UC-19-4"/></uc:step>
+	</uc:extension>
+   <uc:extension id="E3" name="UNKNOWN PI">
+		<uc:step id="1">System checks if the payment instrument is valid.<uc:ref id="UC-19-E4"/></uc:step>
+      <uc:step id="2">System stores PI data to the system and returns to <uc:ref id="UC-19-E2-2"/></uc:step>
+	</uc:extension>
+   <uc:extension id="E4" name="INVALID PI">
+		<uc:step id="1">System logs an error.</uc:step>
+      <uc:step id="2">System replies an error that PI is not valid.</uc:step>
+      <uc:step id="3">use case ends.</uc:step>
+	</uc:extension>
+   <uc:extension id="E5" name="WRONG CURRENCY FOR MERCHANT">
+		<uc:step id="1">System logs an error.</uc:step>
+      <uc:step id="2">System replies an error that given currency does not match merchant currency.</uc:step>
+      <uc:step id="3">use case ends.</uc:step>
+	</uc:extension>
+   <uc:extension id="E6" name="AMOUNT DOES NOT FIT RULES">
+		<uc:step id="1">System logs an error.</uc:step>
+      <uc:step id="2">System replies an error that given currency violates given rules.</uc:step>
+      <uc:step id="3">use case ends.</uc:step>
+	</uc:extension>
+   <uc:extension id="E7" name="ACCOUNT BLOCKED">
+		<uc:step id="1">System logs an error.</uc:step>
+      <uc:step id="2">System replies an error that the account has been blocked. (eg. locked PI)</uc:step>
+      <uc:step id="3">use case ends.</uc:step>
+	</uc:extension>
+   <uc:extension id="E8" name="TECHNICAL ERROR">
+		<uc:step id="1">System logs an error.</uc:step>
+      <uc:step id="2">System replies that an error occured.</uc:step>
+      <uc:step id="3">use case ends.</uc:step>
+	</uc:extension>
+	<uc:open_issue>Is a merchant id necessary or will the identity of the merchant be clarified by certificates or other security features?</uc:open_issue>
+</uc:usecase>

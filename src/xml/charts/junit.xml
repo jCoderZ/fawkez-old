@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated from chart2d.dtd by XMLBuddy-->
+<!DOCTYPE Chart2D SYSTEM "file:///D:/home/Andreas/projekte/phoenix-2/src/java/org/jcoderz/phoenix/chart2d/chart2d.dtd">
+<Chart2D Filename="unit-tests.png">
+    <LBChart2D>
+        <Object2DProperties ObjectTitleText="Unit Test Results"/>
+        <Chart2DProperties/>
+            <GraphChart2DProperties LabelsAxisTitleText="Build"
+                NumbersAxisTitleText="Number"
+                LabelsAxisTicksAlignment="CENTERED">
+            <!-- X-Achse  -->
+            <!-- max = max number of builds per LABELS -->
+            <!-- count = anzahl der labels -->
+            <AxisLabelText max="10" count="20">!.*log.*BUILD_([0-9]*)\.xml</AxisLabelText>
+        </GraphChart2DProperties>
+        <LegendProperties>
+            <!-- Z-Achse -->
+            <LegendLabelsTexts>!{tests errors failures}</LegendLabelsTexts>
+        </LegendProperties>
+        <Dataset>
+            <Set> <!-- foreach z -->
+                <Category>
+                <Data>!sum(/cruisecontrol/testsuites/testsuite/@$z)</Data>
+                </Category>
+            </Set>
+         </Dataset>
+        <MultiColorsProperties ColorsCustomize="true">
+            <ColorsCustom>0x009933</ColorsCustom>
+            <ColorsCustom>0xFF8C00</ColorsCustom>
+            <ColorsCustom>0xB22222</ColorsCustom>
+        </MultiColorsProperties>
+        <GraphProperties
+            GraphBarsExistence="false"
+            GraphLinesExistence="true"
+            GraphLinesThicknessModel="2"
+            GraphLinesWithinCategoryOverlapRatio="1f"
+            GraphDotsExistence="false"
+            GraphDotsThicknessModel="3"
+            GraphDotsWithinCategoryOverlapRatio="1f"
+            GraphAllowComponentAlignment="true"
+            GraphLabelsLinesExistence="true"
+            GraphComponentsAlphaComposite="ALPHA_COMPOSITE_MEDIUM"
+            GraphNumbersLinesThicknessModel="1"
+            />
+    </LBChart2D>
+</Chart2D>

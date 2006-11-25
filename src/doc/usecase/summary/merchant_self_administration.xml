@@ -1,0 +1,49 @@
+<uc:usecase xmlns:uc="uc"
+            xmlns:db="http://docbook.org/ns/docbook"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="uc
+                                http://www.jcoderz.org/xsd/xdoc/usecase-SNAPSHOT.xsd"
+            id="UC-3" level="Summary">
+	<uc:version>$Revision: 1.1 $</uc:version>
+	<uc:name>Merchant Self Administration</uc:name>
+	<uc:goal>Administration of the system.</uc:goal>
+	<uc:scope>Micro Aggregation Administration</uc:scope>
+	<uc:trigger></uc:trigger>
+	<uc:priority>High</uc:priority>
+	<uc:response_time></uc:response_time>
+	<uc:frequency_of_use></uc:frequency_of_use>
+	<uc:actors>
+		<uc:primary>
+			<uc:name>Merchant</uc:name>
+			<uc:channel>Web</uc:channel>
+		</uc:primary>
+		<uc:secondary>
+			<uc:name>System</uc:name>
+			<uc:channel>WEB</uc:channel>
+		</uc:secondary>
+	</uc:actors>
+	<uc:stakeholder>Merchant wants to get control over it's data, TX and disputes.</uc:stakeholder>
+   <uc:stakeholder>Service Provider wants to transfer responsibilities to the merchant, but only as far as allowed.</uc:stakeholder>
+	<uc:precondition>none</uc:precondition>
+	<uc:guarantees>
+		<uc:success>none yet</uc:success>
+		<uc:minimal>none yet</uc:minimal>
+	</uc:guarantees>
+	<uc:success>
+      <uc:step id="1" desc="">Merchant performs login.<uc:ref id="UC-25"/></uc:step>
+      <uc:step id="2" desc="">Merchant is able to manage his master data via self adminstration. <uc:ref id="UC-14"/></uc:step>
+      <uc:step id="3" desc="">Merchant can handle disputes related to him. <uc:ref id="UC-15"/></uc:step>
+      <uc:step id="4" desc="">Merchant can view and administer it's transactions. <uc:ref id="UC-16"/></uc:step>
+      <uc:step id="5" desc="">Merchant can view statistics. <uc:ref id="UC-17"/></uc:step>
+      <uc:step id="6" desc="">Merchant can view it's invoices. <uc:ref id="UC-18"/></uc:step>
+      <uc:step id="7" desc="">Merchant can trigger the settlement manually.<uc:ref id="UC-26"/></uc:step>
+      <uc:step id="8" desc="">Merchant can modify aggregation rules parameters.<uc:ref id="UC-27"/></uc:step>
+	</uc:success>
+	<!--extension id="E1">
+		<uc:step id="1"></uc:step>
+	</uc:extension-->
+	<!--open_issue></uc:open_issue-->
+   <uc:commitlog>
+      $Log$
+   </uc:commitlog>
+</uc:usecase>

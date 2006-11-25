@@ -1,0 +1,4 @@
+# Get the server name from the command line parameters
+set serverName [lindex $argv 0]
+
+puts "Configuring '$serverName' ..."

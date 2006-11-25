@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<req:requirement xmlns:req="req"
+                 xmlns:db="http://docbook.org/ns/docbook"
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xsi:schemaLocation="req
+                                     http://www.jcoderz.org/xsd/xdoc/requirements-SNAPSHOT.xsd">
+  <req:title>Global Requirement. [DUMMY]</req:title>
+  <req:category>
+     <req:primary>Functional Requirement</req:primary>
+     <req:secondary>Organizational Structure</req:secondary>
+  </req:category>
+  <req:key>F-11</req:key>
+  <req:summary>Global Requirement. [DUMMY]</req:summary>
+  <req:priority>High</req:priority>
+  <req:description>
+      A functional requirement
+  </req:description>
+  <req:version>$Revision: $</req:version>
+</req:requirement>

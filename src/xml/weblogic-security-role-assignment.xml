@@ -1,0 +1,24 @@
+<security-role-assignment>
+   <role-name>Admin</role-name>
+   <externally-defined/>
+</security-role-assignment>
+<security-role-assignment>
+   <role-name>Observer</role-name>
+   <externally-defined/>
+</security-role-assignment>
+<security-role-assignment>
+   <role-name>SecurityAdmin</role-name>
+   <externally-defined/>
+</security-role-assignment>
+<security-role-assignment>
+   <role-name>ManualCorrectionAdmin</role-name>
+   <externally-defined/>
+</security-role-assignment>
+<security-role-assignment>
+   <role-name>ManualCorrectionApprovalAdmin</role-name>
+   <externally-defined/>
+</security-role-assignment>
+<security-role-assignment>
+   <role-name>ProcessingAdmin</role-name>
+   <externally-defined/>
+</security-role-assignment>

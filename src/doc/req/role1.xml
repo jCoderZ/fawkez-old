@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<req:requirement xmlns:req="req"
+                 xmlns:db="http://docbook.org/ns/docbook"
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xsi:schemaLocation="req
+                                     http://www.jcoderz.org/xsd/xdoc/requirements-SNAPSHOT.xsd">
+  <req:title>Responsible</req:title>
+  <req:category>
+     <req:primary>Role</req:primary>
+     <req:secondary>Main Group</req:secondary>
+  </req:category>
+  <req:key>RP-90000</req:key>
+  <req:summary>Responsible</req:summary>
+  <req:priority>High</req:priority>
+  <req:description>
+  
+  </req:description>
+  <req:role>
+     <req:name>Responsible</req:name>
+     <req:alternative_name>
+        <req:name lang="de">Verantwortlicher</req:name>
+     </req:alternative_name>
+  </req:role>
+  <req:version>Revision: $</req:version>
+</req:requirement>

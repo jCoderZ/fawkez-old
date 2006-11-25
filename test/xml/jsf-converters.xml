@@ -1,0 +1,7 @@
+<jsfConverters>
+
+   <jsfConverter classname="FooBar"
+                 package="org.jcoderz.maggie.ui.convert"
+                 type="org.jcoderz.maggie.types.Amount"/>
+
+</jsfConverters>

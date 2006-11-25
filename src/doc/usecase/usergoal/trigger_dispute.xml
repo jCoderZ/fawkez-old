@@ -1,0 +1,81 @@
+<uc:usecase xmlns:uc="http://www.jcoderz.org/xsd/xdoc/usecase-SNAPSHOT.xsd" xmlns="http://docbook.org/ns/docbook" id="UC-23" level="UserGoal">
+	<uc:version>$Revision: 1.1 $</uc:version>
+	<uc:commitlog>
+		$Log: trigger_dispute.xml,v $
+		Revision 1.1  2005/09/05 14:02:14  mgriffel
+		xdoc: first use case document
+		
+		Revision 1.1  2005/09/01 13:17:33  dcoppola
+		added initial version of additional use cases
+		
+	</uc:commitlog>
+	<uc:name>Trigger Dispute</uc:name>
+	<uc:goal>Possibility to trigger a dispute related to a certain transaction.</uc:goal>
+	<uc:scope>Micro Aggregation</uc:scope>
+	<uc:trigger></uc:trigger>
+	<uc:priority>high - prototype</uc:priority>
+	<uc:response_time>immediately</uc:response_time>
+	<uc:frequency_of_use>ad-hoc</uc:frequency_of_use>
+	<uc:actors>
+		<uc:primary>
+			<uc:name>Consumer</uc:name>
+			<channel>Web</channel>
+		</uc:primary>
+		<uc:secondary>
+			<uc:name>System</uc:name>
+			<channel>WEB</channel>
+		</uc:secondary>
+	</uc:actors>
+	<uc:stakeholder>Consumer wants to trigger a dispute for a certain transaction.</uc:stakeholder>
+   <uc:stakeholder>Merchant to have a fix way to handle disputes about transactions.</uc:stakeholder>
+	<uc:precondition>none</uc:precondition>
+	<uc:guarantees>
+		<uc:success>Consumer is notified that dispute has been received by the merchant.</uc:success>
+		<minimal>Consumer is notified that triggering dispute failed.</minimal>
+	</uc:guarantees>
+	<uc:success>
+      <uc:step id="1">Consumer enters the dispute form carrying the following information:
+         <itemizedlist>
+            <listitem>PI data (including account data)</listitem>
+            <listitem>credential</listitem>
+            <listitem>transaction id</listitem>
+         </itemizedlist>.
+      </uc:step>
+      <uc:step id="2">System checks, if there is an account for the given payment instrument. <uc:ref id="UC-23-E1"/></uc:step>
+      <uc:step id="3">System checks, if the credential is valid for that account. <uc:ref id="UC-23-E2"/></uc:step>
+      <uc:step id="4">System checks, if the transaction id does exist. <uc:ref id="UC-23-E3"/></uc:step>
+      <uc:step id="5">System checks, if the transaction id does match to the merchant/PI account. <uc:ref id="UC-23-E4"/></uc:step>
+      <uc:step id="6">System displays a form:
+         <itemizedlist>
+            <listitem>Name</listitem>
+            <listitem>E-Mail</listitem>
+            <listitem>Reason of the dispute</listitem>
+         </itemizedlist>.
+      </uc:step>
+      <uc:step id="7">System stores dispute information.</uc:step>
+      <uc:step id="8">System notifies Merchant about the new dispute.</uc:step>
+      <uc:step id="9">System notifes the consumer that dispute has been forwarded to the merchant.</uc:step>
+      <uc:step id="10">use case ends.</uc:step>
+	</uc:success>
+   <uc:extension id="E1" name="ACCOUNT DOES NOT EXIST">
+      <uc:step id="1">System logs an error.</uc:step>
+		<uc:step id="2">System replies an error to the Consumer that account does not exist.</uc:step>
+      <uc:step id="3">use case ends.</uc:step>
+	</uc:extension>
+   <uc:extension id="E2" name="INVALID CREDENTIAL">
+      <uc:step id="1">System logs an error.</uc:step>
+		<uc:step id="2">System replies an error to the Consumer that he is not allowd to see the transaction view.</uc:step>
+      <uc:step id="3">use case ends.</uc:step>
+	</uc:extension>
+   <uc:extension id="E3" name="UNKNOWN TRANSACTION">
+      <uc:step id="1">System logs an error.</uc:step>
+		<uc:step id="2">System replies an error to the Consumer that transaction is not known to the system.</uc:step>
+      <uc:step id="3">use case ends.</uc:step>
+	</uc:extension>
+   <uc:extension id="E4" name="WRONG TRANSACTION">
+      <uc:step id="1">System logs an error.</uc:step>
+		<uc:step id="2">System replies an error to the Consumer that the transaction is not related to the consumers account.</uc:step>
+      <uc:step id="3">use case ends.</uc:step>
+	</uc:extension>
+	<!--open_issue></uc:open_issue-->
+</uc:usecase>

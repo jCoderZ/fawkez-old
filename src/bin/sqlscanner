@@ -1,0 +1,7 @@
+#!/bin/sh
+
+FILE=$1
+TMP=`basename $FILE`
+java -cp build/enclipse org.jcoderz.phoenix.sqlparser.SqlScanner $FILE 1> /tmp/$TMP
+diff -u $FILE /tmp/$TMP
+

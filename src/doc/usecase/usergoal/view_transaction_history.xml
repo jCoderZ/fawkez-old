@@ -1,0 +1,74 @@
+<uc:usecase xmlns:uc="http://www.jcoderz.org/xsd/xdoc/usecase-SNAPSHOT.xsd" xmlns="http://docbook.org/ns/docbook" id="UC-22" level="UserGoal">
+	<uc:version>$Revision: 1.1 $</uc:version>
+	<uc:commitlog>
+		$Log: view_transaction_history.xml,v $
+		Revision 1.1  2005/09/05 14:02:14  mgriffel
+		xdoc: first use case document
+		
+		Revision 1.1  2005/09/01 13:17:33  dcoppola
+		added initial version of additional use cases
+		
+	</uc:commitlog>
+	<uc:name>View Transaction History (Consumer)</uc:name>
+	<uc:goal>Possibility to view all the transactions related to an account.</uc:goal>
+	<uc:scope>Micro Aggregation</uc:scope>
+	<uc:trigger></uc:trigger>
+	<uc:priority>high - prototype</uc:priority>
+	<uc:response_time>immediately</uc:response_time>
+	<uc:frequency_of_use>ad-hoc</uc:frequency_of_use>
+	<uc:actors>
+		<uc:primary>
+			<uc:name>Consumer</uc:name>
+			<channel>Web</channel>
+		</uc:primary>
+		<uc:secondary>
+			<uc:name>System</uc:name>
+			<channel>WEB</channel>
+		</uc:secondary>
+	</uc:actors>
+	<uc:stakeholder>Consumer wants to take a look at his/her transactions.</uc:stakeholder>
+   <uc:stakeholder>Merchant wants the consumer to be aware of the transaction history.</uc:stakeholder>
+	<uc:precondition>none</uc:precondition>
+	<uc:guarantees>
+		<uc:success>Consumer sees a list of his transactions with their state and is able to browse over it.</uc:success>
+		<minimal>Consumer is notified about the reason, why the transaction history is not available.</minimal>
+	</uc:guarantees>
+	<uc:success>
+      <uc:step id="1">Consumer enters the self service/transaction history view carrying the following information:
+         <itemizedlist>
+            <listitem>PI data (including account data)</listitem>
+            <listitem>credential</listitem>
+         </itemizedlist>.
+      </uc:step>
+      <uc:step id="2">System checks, if there is an account for the given payment instrument. <uc:ref id="UC-22-E1"/></uc:step>
+      <uc:step id="3">System checks, if the credential is valid for that account. <uc:ref id="UC-22-E2"/></uc:step>
+      <uc:step id="4">System displays a list of all transactions containing the following data:
+         <itemizedlist>
+            <listitem>timestamp</listitem>
+            <listitem>amount</listitem>
+            <listitem>currency</listitem>
+            <listitem>basket information</listitem>
+            <listitem>dispute state</listitem>
+            <listitem>link to trigger dispute. <uc:ref id="UC-23"/></listitem>
+         </itemizedlist>.
+         <uc:ref id="UC-22-E3"/>
+      </uc:step>
+      <uc:step id="5">use case ends.</uc:step>
+	</uc:success>
+   <uc:extension id="E1" name="ACCOUNT DOES NOT EXIST">
+      <uc:step id="1">System logs an error.</uc:step>
+		<uc:step id="2">System replies an error to the Consumer that account does not exist.</uc:step>
+      <uc:step id="3">use case ends.</uc:step>
+	</uc:extension>
+   <uc:extension id="E2" name="INVALID CREDENTIAL">
+      <uc:step id="1">System logs an error.</uc:step>
+		<uc:step id="2">System replies an error to the Consumer that he is not allowd to see the transaction view.</uc:step>
+      <uc:step id="3">use case ends.</uc:step>
+	</uc:extension>
+   <uc:extension id="E3" name="TECHNICAL ERROR">
+      <uc:step id="1">System logs an error.</uc:step>
+		<uc:step id="2">System replies an error to the Consumer that it was not possible to display transactions.</uc:step>
+      <uc:step id="3">use case ends.</uc:step>
+	</uc:extension>
+	<!--open_issue></uc:open_issue-->
+</uc:usecase>

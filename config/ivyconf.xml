@@ -1,0 +1,25 @@
+<ivyconf>
+  <conf defaultResolver="default-resolver"/>
+  <resolvers>
+    <chain name="default-resolver" returnFirst="true">
+      <filesystem name="local-libraries">
+        <artifact pattern="${local.artifact.root}/[module]/[artifact].[ext]" />
+      </filesystem>
+      <filesystem name="local-libraries-revision">
+        <artifact pattern="${local.artifact.root}/[module]/[artifact]-[revision].[ext]" />
+      </filesystem>
+      <filesystem name="libraries">
+        <artifact pattern="${base.dir}/lib/[module]/[artifact].[ext]" />
+      </filesystem>
+      <filesystem name="libraries-revision">
+        <artifact pattern="${base.dir}/lib/[module]/[artifact]-[revision].[ext]" />
+      </filesystem>
+      <ibiblio name="ibiblio-maven2"
+                m2compatible="true"/>
+      <ibiblio name="ibiblio-org"/>
+      <ibiblio name="ibiblio-special"
+                  pattern="[module]/[type]s/[artifact].[ext]"/>
+    </chain>
+  </resolvers>
+</ivyconf>
+

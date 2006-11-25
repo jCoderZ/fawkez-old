@@ -1,0 +1,174 @@
+<chapter>
+
+   <title>Whitespace and Indentation</title>
+
+   <section>
+      <title>Indention</title>
+
+      <para>Four spaces should be used as the unit of indentation. Never use
+      tabs. All indentation must be done using space characters.</para>
+
+      <para>Do not write lines longer than 80 characters, since they are not handled
+      well by many terminals and tools.</para>
+
+      <para>Note: Examples for use in documentation should have a shorter
+      line length (no more than 70 characters).</para>
+
+      <para>Break always before the keywords <classname>extends</classname>,
+      <classname>implements</classname> and <classname>throws</classname>
+      and indent a additional unit of indention (4 spaces).</para>
+
+      <informalexample>
+         <programlisting>&IndentationExtendsAndImplements;</programlisting>
+      </informalexample>
+
+      <para>When an expression will not fit on a single line, break it
+      according to these general principles: 
+      <itemizedlist mark='opencircle'>
+
+         <listitem>
+            <para>Break field and variable initializers before the '=' operator.</para>
+         </listitem>
+         <listitem>
+            <para>Break after opening parenthesis, comma or dot.</para>
+         </listitem>
+         <listitem>
+            <para>Break before an operator or closing parenthesis.</para>
+         </listitem>
+
+         <listitem>
+            <para>Prefer higher-level breaks to lower-level breaks.</para>
+         </listitem>
+
+         <listitem>
+            <para>Base indent is two additional units of indention (8 spaces).
+            Deeper nested expressions are further indented according to their
+            nesting level. (12, 16, ... spaces)</para>
+         </listitem>
+      </itemizedlist>
+      </para>
+     
+      <informalexample>
+         <programlisting>&IndentationSampleExtended;</programlisting>
+      </informalexample>
+     
+      <para>If the above rules lead to confusing code or to code that
+            is squished up against the right margin, just indent 8 spaces
+            instead.
+      </para>
+
+      <para>If your code is so deeply nested, splitting the code into several
+      methods might be a good idea. Also if your statement is much too long to
+      fit in a line you might think about rewriting the code using several
+      statements.</para>
+
+   </section>
+
+   <section>
+
+      <title>Blank Lines</title>
+
+      <para>Blank lines improve readability by setting off sections of code
+      that are logically related.</para>
+
+      <para>One blank line should always be used in the following
+      circumstances:
+         <itemizedlist mark='opencircle'>
+
+            <listitem>
+               <para>Between methods</para>
+            </listitem>
+
+            <listitem>
+               <para>Before a block or single-line comment</para>
+            </listitem>
+
+            <listitem>
+               <para>Between logical sections inside a method to improve
+               readability</para>
+            </listitem>
+
+            <listitem>
+               <para>Between groups of import statements</para>
+            </listitem>
+
+         </itemizedlist>
+      </para>
+
+      <para>Two blank lines should always be used between sections 
+      of a source file.</para>
+
+   </section>
+
+   <section>
+
+      <title>Blank Spaces</title>
+
+      <para>Blank spaces must be used in the following circumstances:
+         <itemizedlist mark='opencircle'>
+
+            <listitem>
+               <para>A keyword followed by a parenthesis must be separated
+               by a space.
+               <informalexample>
+                  <programlisting>&WhileLoop;</programlisting>
+               </informalexample>
+               Note that a blank space must not be used between a method name
+               and its opening parenthesis, except at the method declaration
+               (see below). This helps to distinguish keywords from method calls.</para>
+            </listitem>
+
+            <listitem>
+               <para>A blank space must appear after commas in argument
+               lists.</para>
+            </listitem>
+
+            <listitem>
+               <para>All binary operators except <classname>.</classname>
+               must be separated from their operands by spaces. Blank
+               spaces must not separate unary operators such as unary
+               minus, increment <classname>++</classname>, and decrement
+               <classname>--</classname> from their operands.
+               <informalexample>
+                  <programlisting>&BinaryOperatorWhitespace;</programlisting>
+               </informalexample>
+               </para>
+            </listitem>
+
+            <listitem>
+               <para>The expressions in a <classname>for</classname> statement
+               must be separated by blank spaces.
+               <informalexample>
+                  <programlisting>&ForStatement;</programlisting>
+               </informalexample>
+               </para>
+            </listitem>
+
+            <listitem>
+               <para>Casts must be followed by a blank space.
+               <informalexample>
+                  <programlisting>&Casts;</programlisting>
+               </informalexample>
+               </para>
+            </listitem>
+
+            <listitem>
+               <para>Method/Constructor declarations. 
+               To allow easy searching for method or constructor
+               declarations put a whitespace between the method name and the
+               opening paranthesis of the parameter list. When doing a method 
+               invocation, do not put a whitespace between method name and 
+               paranthesis. This allows to distinguish between method invocation
+               and declaration.
+               <informalexample>
+                  <programlisting>&MethodDeclarationWhitespace;</programlisting>
+               </informalexample>
+               </para>
+            </listitem>
+
+         </itemizedlist>
+      </para>
+
+   </section>
+
+</chapter>

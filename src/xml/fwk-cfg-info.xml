@@ -1,0 +1,81 @@
+<!-- =============================================
+     Configuration Service
+     ============================================= -->
+<group
+   id="5"
+   name="Configuration Service"
+   short-name="CFG"
+   package="org.jcoderz.commons.config"
+   base-exception="org.jcoderz.commons.BaseException"
+   base-runtime-exception="org.jcoderz.commons.BaseRuntimeException"
+   service="ALL">
+   <message
+      id="1"
+      name="CONFIGURATION_INITIALIZATION_FAILED"
+      level="SEVERE"
+      business-impact="MIDDLE"
+      base-exception="org.jcoderz.commons.config.ConfigurationServiceRuntimeException">
+      <text>
+         Failed to initialize Configuration Service.
+      </text>
+      <solution>
+         Review the nested exception(s) to determine the problem that led
+         to the error condition. If appropriate, contact 
+         First Data International Mobile Solutions Support.
+      </solution>
+   </message>
+   <message
+      id="2"
+      name="CONFIGURATION_VALUE_NOT_FOUND"
+      level="SEVERE"
+      business-impact="MIDDLE"
+      base-exception="org.jcoderz.commons.config.ConfigurationServiceRuntimeException">
+      <text>
+         Could not read config value for {KEY}.
+      </text>
+      <solution>
+         Review the nested exception(s) to determine the problem that led
+         to the error condition. If appropriate, contact 
+         First Data International Mobile Solutions Support.
+      </solution>
+   </message>
+   <message
+      id="3"
+      name="CONFIGURATION_VALUE_READ"
+      level="CONFIG"
+      category="FLOW"
+      business-impact="NONE">
+      <text>Read config value for {KEY} = ''{VALUE}''.</text>
+   </message>
+   <message
+      id="4"
+      name="CONFIGURATION_TYPE_CONVERSION_FAILED"
+      level="SEVERE"
+      business-impact="MIDDLE"
+      base-exception="org.jcoderz.commons.config.ConfigurationServiceRuntimeException">
+      <text>Config value {VALUE} for key {org.jcoderz.commons.config.ConfigurationKey:KEY}
+          could not be converted to type {TYPE}.
+      </text>
+      <solution>
+         Review the nested exception(s) to determine the problem that led
+         to the error condition. If appropriate, contact 
+         First Data International Mobile Solutions Support.
+      </solution>
+   </message>
+   <message
+      id="5"
+      name="CONFIGURATION_FACTORY_FAILED"
+      level="SEVERE"
+      business-impact="MIDDLE"
+      base-exception="org.jcoderz.commons.config.ConfigurationServiceRuntimeException">
+      <text>
+         Failed to create ServiceConfiguration instance for service
+         {CLASSNAME}.
+      </text>
+      <solution>
+         Review the nested exception(s) to determine the problem that led
+         to the error condition. If appropriate, contact 
+         First Data International Mobile Solutions Support.
+      </solution>
+   </message>
+</group>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<req:requirement 
+            xmlns:req="req"
+            xmlns:db="http://docbook.org/ns/docbook"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="req
+                                http://www.jcoderz.org/xsd/xdoc/requirements-SNAPSHOT.xsd">
+  <req:title>Brand</req:title>
+  <req:category>
+     <req:primary>Domain Model</req:primary>
+  </req:category>
+  <req:key>D-90006</req:key>
+  <req:summary>Brand</req:summary>
+  <req:priority>High</req:priority>
+  <req:description>
+    Some mind numbing texts
+  </req:description>
+  <req:entity>
+     <req:name>Brand</req:name>
+     <req:alternative_name>
+        <req:name lang="de">Marke</req:name>
+        <req:name lang="de">MeineMarke</req:name>
+     </req:alternative_name>
+     <req:attribute>
+        <req:name>MyId</req:name>
+        <req:pattern>NAME_[1-9]1-16</req:pattern>
+     </req:attribute>
+  </req:entity>
+  <req:version>$Revision: 1.3 $</req:version>
+  <req:open_issue>Example open issue</req:open_issue>
+  <req:open_issue>Second Example open issue</req:open_issue>
+</req:requirement>

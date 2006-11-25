@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE application PUBLIC "-//Sun Microsystems, Inc.//DTD J2EE Application 1.3//EN"
+                             "http://java.sun.com/dtd/application_1_3.dtd">
+
+<application>
+   <display-name>COMMONS - The jCoderZ Project Commons</display-name>
+   <description>COMMONS - The jCoderZ Project common libraries</description>
+   <module>
+      <ejb>commons-ejb.jar</ejb>
+   </module>
+   <module>
+      <ejb>commons-test-ejb.jar</ejb>
+   </module>
+   <module>
+      <connector>filesystem.rar</connector>
+   </module>
+   <module>
+      <connector>http.rar</connector>
+   </module>
+   <module>
+      <web>
+         <web-uri>commons-web.war</web-uri>
+         <context-root>/commons</context-root>
+      </web>
+   </module>
+   <module>
+      <web>
+         <web-uri>commons-test-web.war</web-uri>
+         <context-root>/commons-test</context-root>
+      </web>
+   </module>
+</application>

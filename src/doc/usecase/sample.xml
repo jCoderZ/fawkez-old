@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+
+<uc:usecases xmlns:uc="uc"
+             xmlns:req="req"
+             xmlns:xi="http://www.w3.org/2003/XInclude"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="req
+                                http://www.jcoderz.org/xsd/xdoc/requirements-SNAPSHOT.xsd
+                                uc
+                                http://www.jcoderz.org/xsd/xdoc/usecase-SNAPSHOT.xsd">
+   <uc:info project="Sample" version="0.1" template="true"/>
+   <bookinfo>
+      <!-- injected into the docbook bookinfo element -->
+      <authorgroup>
+         <author><firstname>Dino</firstname><surname>Coppola</surname></author>
+      </authorgroup>
+   </bookinfo>
+   <chapter>
+      <title>Introduction</title>
+      <para>
+         The purpose of this document is to test xdoc
+      </para>
+   </chapter>
+
+   <!-- use cases -->
+   <xi:include href="summary/summary.xml" parse="xml"/>
+   <xi:include href="summary/system_administration.xml" parse="xml"/>
+   <xi:include href="summary/merchant_self_administration.xml" parse="xml"/>
+   <xi:include href="summary/shop_activities.xml" parse="xml"/>
+   <xi:include href="summary/consumer_self_service.xml" parse="xml"/>
+
+   <xi:include href="usergoal/consumer_registration.xml" parse="xml"/>
+   <xi:include href="usergoal/trigger_payment.xml" parse="xml"/>
+   <xi:include href="usergoal/trigger_dispute.xml" parse="xml"/>
+   <xi:include href="usergoal/view_transaction_history.xml" parse="xml"/>
+
+   <xi:include href="usergoal/login.xml" parse="xml"/>
+   <xi:include href="usergoal/modify_master_data.xml" parse="xml"/>
+   <xi:include href="usergoal/view_merchant_transaction_history.xml" parse="xml"/>
+   <xi:include href="usergoal/modify_aggregation_rules_parameters.xml" parse="xml"/>
+   <xi:include href="usergoal/trigger_manual_settlement.xml" parse="xml"/>
+
+
+
+   <!-- requirements -->
+   <xi:include href="../req/DUM-1.xml" parse="xml"/>
+   <xi:include href="../req/product.xml" parse="xml"/>
+   
+   <!-- entities -->
+   <xi:include href="../req/entity1.xml" parse="xml"/>
+   <xi:include href="../req/entity2.xml" parse="xml"/>
+   <xi:include href="../req/entity3.xml" parse="xml"/>
+   <xi:include href="../req/entity4.xml" parse="xml"/>
+   <xi:include href="../req/entity5.xml" parse="xml"/>
+   
+   <xi:include href="../req/project.xml" parse="xml"/>
+   <xi:include href="../req/model.xml" parse="xml"/>
+   
+   <!-- roles -->
+   <xi:include href="../req/role1.xml" parse="xml"/>
+   <xi:include href="../req/role2.xml" parse="xml"/>
+
+</uc:usecases>
+

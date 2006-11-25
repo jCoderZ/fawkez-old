@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated from chart2d.dtd by XMLBuddy-->
+<!DOCTYPE Chart2D SYSTEM "file:///D:/home/Andreas/projekte/phoenix-2/src/java/org/jcoderz/phoenix/chart2d/chart2d.dtd">
+<Chart2D Filename="findings-big.png">
+    <LBChart2D>
+        <Object2DProperties ObjectTitleText="Findings"/>
+        <Chart2DProperties/>
+            <GraphChart2DProperties LabelsAxisTitleText="Build"
+                NumbersAxisTitleText="Number"
+                LabelsAxisTicksAlignment="CENTERED">
+            <!-- X-Achse  -->
+            <!-- max = max number of builds per LABELS -->
+            <!-- count = anzahl der labels -->
+            <AxisLabelText max="10" count="20">!.*log.*BUILD_([0-9]*)\.xml</AxisLabelText>
+        </GraphChart2DProperties>
+        <LegendProperties>
+            <!-- Z-Achse -->
+            <LegendLabelsTexts>!{error warning info coverage}</LegendLabelsTexts>
+        </LegendProperties>
+        <Dataset>
+            <Set> <!-- foreach z -->
+                <Category>
+                <Data>!/cruisecontrol/findingsummary/@$z</Data>
+                </Category>
+            </Set>
+         </Dataset>
+        <MultiColorsProperties/>
+        <GraphProperties
+            GraphBarsExistence="false"
+            GraphLinesExistence="true"
+            GraphLinesThicknessModel="2"
+            GraphLinesWithinCategoryOverlapRatio="1f"
+            GraphDotsExistence="false"
+            GraphDotsThicknessModel="3"
+            GraphDotsWithinCategoryOverlapRatio="1f"
+            GraphAllowComponentAlignment="true"
+            GraphLabelsLinesExistence="true"
+            GraphComponentsAlphaComposite="ALPHA_COMPOSITE_MEDIUM"
+            GraphNumbersLinesThicknessModel="1"
+            />
+    </LBChart2D>
+</Chart2D>

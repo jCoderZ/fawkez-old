@@ -1,0 +1,585 @@
+<?xml version="1.0"?>
+<!DOCTYPE module PUBLIC
+    "-//Puppy Crawl//DTD Check Configuration 1.1//EN"
+    "http://www.puppycrawl.com/dtds/configuration_1_1.dtd">
+
+<!-- $Id$ -->
+
+<!--
+  a Checkstyle configuration that checks
+  the jCoderZ Java Code Conventions and
+  some best practices
+-->
+
+<module name="Checker">
+
+    <!-- force locale settings, because the checkstyle finding message is used to detect the finding type -->
+    <property name="localeCountry" value="US"/>
+    <property name="localeLanguage" value="en"/>
+   <!--
+      <property name="severity" value="ignore"/>
+
+      ignore
+      info
+      warning
+      error
+   -->
+   <!-- we now have a package xml....
+   <module name="PackageHtml">
+      <property name="severity" value="info"/>
+   </module>
+   -->
+
+   <!-- Checks whether files end with a new line. [new] -->
+   <module name="NewlineAtEndOfFile">
+      <property name="severity" value="warning"/>
+   </module>
+
+   <!-- Performs a line-by-line comparison of all code lines and
+        reports  duplicate code, i.e. a sequence of lines that differ
+        only in indentation. -->
+   <!--
+   <module name="StrictDuplicateCode">
+      <property name="min" value="45"/>
+      <property name="severity" value="warning"/>
+   </module>
+   -->
+
+   <module name="TreeWalker">
+      <property name="tabWidth" value="4"/>
+
+      <!-- jCoderZ Java Code Conventions -->
+
+      <!-- Don't use magics -->
+      <module name="MagicNumber">
+         <property name="ignoreNumbers" value="-1, 0, 1"/>
+         <!-- property name="allowInConstants" value="true"/ Checkstyle Feature Request: 1244439-->
+      </module>
+
+      <!-- We require a whitespace after method declarations just before the '('. -->
+      <module name="MethodParamPad">
+         <property name="tokens" value="METHOD_DEF, CTOR_DEF"/>
+         <property name="option" value="space"/>
+         <property name="allowLineBreaks" value="true"/>
+      </module>
+
+      <!-- File Header conventions -->
+
+      <!-- Checks the header of a source file against a header file that contains a regular expression -->
+     <module name="RegexpHeader">
+         <property name="header" value='^/\*$\n^ \* \$[I]d.*\$$\n^ \*$\n^ \* Copyright .*, The jCoderZ.org Project. All rights reserved.$\n^ \*$\n^ \* Redistribution and use in source and binary forms, with or without$\n^ \* modification, are permitted provided that the following conditions are$\n^ \* met:$\n^ \*$\n^ \*    \* Redistributions of source code must retain the above copyright$\n^ \*      notice, this list of conditions and the following disclaimer.$\n^ \*    \* Redistributions in binary form must reproduce the above$\n^ \*      copyright notice, this list of conditions and the following$\n^ \*      disclaimer in the documentation and/or other materials$\n^ \*      provided with the distribution.$\n^ \*    \* Neither the name of the jCoderZ.org Project nor the names of$\n^ \*      its contributors may be used to endorse or promote products$\n^ \*      derived from this software without specific prior written$\n^ \*      permission.$\n^ \*$\n^ \* THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS "AS IS" AND$\n^ \* ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE$\n^ \* IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR$\n^ \* PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE REGENTS AND CONTRIBUTORS$\n^ \* BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR$\n^ \* CONSEQUENTIAL DAMAGES \(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF$\n^ \* SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR$\n^ \* BUSINESS INTERRUPTION\) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,$\n^ \* WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT \(INCLUDING NEGLIGENCE OR$\n^ \* OTHERWISE\) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF$\n^ \* ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.$\n^ \*/$\n'/>
+         <property name="severity" value="warning"/>
+      </module>
+
+      <!-- Source File content ordering conventions -->
+
+      <!-- Checks that the order of modifiers conforms to the Java Language specification -->
+      <module name="ModifierOrder">
+         <property name="severity" value="warning"/>
+      </module>
+
+
+      <!-- Comments conventions -->
+
+      <!-- Checks Javadoc comments for class and interface definitions -->
+      <module name="JavadocType">
+         <property name="scope" value="public"/>
+         <property name="authorFormat" value="\S"/>
+         <property name="severity" value="warning"/>
+      </module>
+
+      <!-- Checks Javadoc comments for constructor and method definitions -->
+      <module name="JavadocMethod">
+         <property name="scope" value="public"/>
+         <property name="allowUndeclaredRTE" value="true"/>
+         <property name="severity" value="warning"/>
+      </module>
+
+      <!-- Checks that variables have Javadoc comments. -->
+      <module name="JavadocVariable">
+         <property name="scope" value="public"/>
+         <property name="severity" value="warning"/>
+      </module>
+
+      <!-- Validates Javadoc comments to help ensure they are well formed. -->
+      <module name="JavadocStyle">
+         <property name="scope" value="public"/>
+         <property name="severity" value="warning"/>
+      </module>
+
+      <!-- Naming conventions -->
+
+      <!-- The prefix of a unique package name is always org.jcoderz. -->
+      <module name="PackageName">
+         <property name="format" value="^org\.(jcoderz)(\.[a-z][a-z0-9]*)+$"/>
+         <property name="severity" value="error"/>
+      </module>
+
+      <!-- Class and interface names should be capitalized -->
+      <!-- In mixed case with the first letter of each internal word capitalized -->
+      <module name="TypeName">
+         <property name="format" value="^[A-Z][a-zA-Z0-9]*$"/>
+         <property name="severity" value="error"/>
+      </module>
+
+      <!-- The name of natural members should start with a lowercase 'm' -->
+      <module name="MemberName">
+         <property name="format" value="^m[A-Z][a-zA-Z0-9]*$"/>
+         <property name="severity" value="error"/>
+      </module>
+
+      <!-- The name of class members should start with a lowercase 's' -->
+      <module name="StaticVariableName">
+         <property name="format" value="^s[A-Z][a-zA-Z0-9]*$"/>
+         <property name="severity" value="error"/>
+      </module>
+
+      <!-- The name of constants should be all uppercase with words separated by underscores -->
+      <module name="ConstantName">
+         <property name="format" value="^((logger)|([A-Z](_?[A-Z0-9]+)*)$)"/>
+         <property name="severity" value="error"/>
+      </module>
+
+      <!-- The name of methods should be lowercase -->
+      <!-- In mixed case with the first letter of each internal word capitalized -->
+      <module name="MethodName">
+         <property name="severity" value="error"/>
+      </module>
+
+      <!-- Variable names are in mixed case with a lowercase first letter, -->
+      <!-- internal words start with capital letters-->
+      <module name="LocalVariableName">
+         <property name="severity" value="error"/>
+      </module>
+
+
+      <!-- Checks for imports -->
+
+      <!-- Checks that there are no import statements that use the * notation. -->
+      <module name="AvoidStarImport">
+         <property name="severity" value="info"/>
+      </module>
+
+      <!-- Checks for imports from a set of illegal packages. -->
+      <module name="IllegalImport">
+         <property name="illegalPkgs"
+                   value="com.brokat, sun"/>
+         <property name="severity" value="warning"/>
+      </module>
+
+      <!-- Checks for redundant import statements. [new] -->
+      <module name="RedundantImport">
+         <property name="severity" value="info"/>
+      </module>
+
+      <!-- Checks for unused import statements. -->
+      <module name="UnusedImports">
+         <property name="severity" value="info"/>
+      </module>
+
+
+      <!-- Checks for Size Violations -->
+
+      <!-- enforce default line length limit -->
+      <module name="LineLength">
+         <property name="max" value="80"/>
+         <property name="severity" value="warning"/>
+         <property name="ignorePattern" value="(.*\*.*home=)|(.*\*.*business=)|(\$Id: .*)|(.*\*.*\{@link)|(.*\*.*@see )|(.*\*.*remote-business-interface)" />
+      </module>
+
+      <!-- enforce default method length limit (max = 150) -->
+      <module name="MethodLength">
+         <property name="severity" value="warning"/>
+         <property name="max" value="100"/>
+      </module>
+
+      <!-- enforce default class length limit (max = 2000) -->
+      <module name="FileLength">
+         <property name="severity" value="warning"/>
+         <property name="max" value="2500"/>
+      </module>
+
+      <!-- Checks for long anonymous inner classes. -->
+      <module name="AnonInnerLength">
+         <property name="max" value="20"/>
+         <property name="severity" value="info"/>
+      </module>
+
+      <!-- Checks the number of parameters of a method or constructor.  -->
+      <module name="ParameterNumber">
+         <property name="max" value="10"/>
+         <property name="severity" value="warning"/>
+      </module>
+
+
+      <!-- White Space conventions -->
+
+      <!-- Checks that there are no tab characters ('\t') in the source code -->
+      <module name="TabCharacter">
+         <property name="severity" value="error"/>
+      </module>
+
+      <!-- Checks that there is no whitespace after '.' and unary operators -->
+      <module name="NoWhitespaceAfter">
+         <property name="tokens" value="ARRAY_INIT, BNOT, DEC, DOT, INC, UNARY_MINUS, UNARY_PLUS"/>
+         <property name="severity" value="warning"/>
+      </module>
+
+      <!-- Checks that there is no whitespace before tokens SEMI, DOT, POST_DEC, POST_INC -->
+      <module name="NoWhitespaceBefore">
+         <property name="severity" value="warning"/>
+      </module>
+
+      <!-- Checks the policy on how to wrap lines on operators -->
+      <!-- The operator must be on a new line, except assignment operators -->
+      <module name="OperatorWrap">
+         <property name="severity" value="warning"/>
+      </module>
+
+      <!-- Checks the policy on the padding of parentheses; i.e. whether
+           a space is required after a left parenthesis and before a
+           right parenthesis, or such spaces are forbidden. -->
+      <module name="ParenPad">
+         <property name="severity" value="warning"/>
+      </module>
+
+      <!-- Checks that commas and casts are followed by whitespace -->
+      <module name="WhitespaceAfter">
+         <property name="tokens" value="COMMA, TYPECAST"/>
+         <property name="severity" value="warning"/>
+      </module>
+
+      <!-- Checks that a token is surrounded by whitespace -->
+      <module name="WhitespaceAround">
+         <property name="severity" value="warning"/>
+      </module>
+
+
+      <!-- Checks for blocks -->
+
+      <!-- The left brace must always be on a new line -->
+      <module name="LeftCurly">
+         <property name="option" value="nl"/>
+         <property name="severity" value="error"/>
+      </module>
+
+      <!-- The right brace must be alone on the line -->
+      <module name="RightCurly">
+         <property name="option" value="alone"/>
+         <property name="severity" value="error"/>
+      </module>
+
+      <!-- Checks for braces around code blocks -->
+      <module name="NeedBraces">
+         <property name="severity" value="warning"/>
+      </module>
+
+      <!-- Checks for empty block text policy -->
+      <module name="EmptyBlock">
+         <property name="option" value="text"/>
+         <property name="severity" value="warning"/>
+      </module>
+
+
+      <!-- Coding Problems -->
+
+      <!-- Checks that classes that define a covariant equals() method also
+           override method equals(java.lang.Object). -->
+      <module name="CovariantEquals">
+         <property name="severity" value="error"/>
+      </module>
+
+      <!-- The "double-checked locking" idiom (DCL) tries to avoid
+           the runtime cost of synchronization. -->
+      <module name="DoubleCheckedLocking">
+         <property name="severity" value="error"/>
+      </module>
+
+      <!-- Detects empty statements (standalone ;). [new] -->
+      <module name="EmptyStatement">
+         <property name="severity" value="warning"/>
+      </module>
+
+      <!-- Checks that classes that override equals() also override
+           hashCode().  [new] -->
+      <module name="EqualsHashCode">
+         <property name="severity" value="error"/>
+      </module>
+
+      <!-- Checks that local variables that never have their values
+           changed are declared final. -->
+      <module name="FinalLocalVariable">
+         <property name="severity" value="info"/>
+      </module>
+
+      <!-- Checks that a local variable or a parameter does not shadow
+           a field that is defined in the same class.  [new] -->
+      <module name="HiddenField">
+         <property name="severity" value="warning"/>
+      </module>
+
+      <!-- Checks for illegal instantiations where a factory method
+           is preferred. [new]  -->
+      <module name="IllegalInstantiation">
+         <property name="classes" value="java.lang.Boolean, java.util.Calendar"/>
+         <property name="severity" value="warning"/>
+      </module>
+
+      <!-- Checks for assignments in subexpressions, such as in
+           String s = Integer.toString(i = 2);. [new] -->
+      <module name="InnerAssignment">
+         <property name="severity" value="warning"/>
+      </module>
+
+      <!-- Checks that switch statement has "default" clause -->
+      <module name="MissingSwitchDefault">
+         <property name="severity" value="error"/>
+      </module>
+
+      <!-- Checks for redundant exceptions declared in throws clause
+           such as duplicates, unchecked exceptions or subclasses of
+           another declared exception. -->
+      <module name="RedundantThrows">
+         <property name="allowUnchecked" value="true"/>
+         <property name="allowSubclasses" value="true"/>
+         <property name="severity" value="warning"/>
+      </module>
+
+      <!-- Checks for overly complicated boolean expressions.
+           Currently finds code like if (b == true),
+           b || true, !false, etc. [new] -->
+      <module name="SimplifyBooleanExpression">
+         <property name="severity" value="info"/>
+      </module>
+
+      <!-- Checks for overly complicated boolean return statements.
+           For example the following code [new] -->
+      <module name="SimplifyBooleanReturn">
+         <property name="severity" value="info"/>
+      </module>
+
+      <!-- Checks that string literals are not used with == or !=. -->
+      <module name="StringLiteralEquality">
+         <property name="severity" value="error"/>
+      </module>
+
+      <!-- Restricts nested if-else blocks to a specified depth. -->
+      <module name="NestedIfDepth">
+         <property name="max" value="2"/>
+         <property name="severity" value="warning"/>
+      </module>
+
+      <!-- Restricts nested if-else blocks to a specified depth. -->
+      <module name="NestedTryDepth">
+         <property name="max" value="2"/>
+         <property name="severity" value="warning"/>
+      </module>
+
+      <!--  Checks that an overriding clone() method invokes super.clone(). -->
+      <module name="SuperClone">
+         <property name="severity" value="error"/>
+      </module>
+
+      <!-- Checks that an overriding finalize() method invokes super.finalize().
+           -->
+      <module name="SuperFinalize">
+         <property name="severity" value="error"/>
+      </module>
+
+      <!-- Catching java.lang.Throwable, java.lang.Error is almost never acceptable. -->
+      <module name="IllegalCatch">
+         <property name="illegalClassNames"
+                   value="java.lang.Error, java.lang.Throwable"/>
+         <property name="severity" value="warning"/>
+      </module>
+
+      <!-- Ensures that the setUp(), tearDown()methods are named correctly,
+           have no arguments, return void and are either public or protected.
+           Also ensures that suite() is named correctly, have no arguments,
+           return junit.framewotk.Test, public and static. -->
+      <module name="JUnitTestCase">
+         <property name="severity" value="warning"/>
+      </module>
+
+      <!-- Restrict the number of return statements. -->
+      <module name="ReturnCount">
+         <property name="max" value="1"/>
+         <property name="severity" value="warning"/>
+      </module>
+
+      <!-- Checks that particular class are never used as types in
+           variable declarations, return values or parameters.
+           Includes a pattern check that by default disallows
+           abstract classes. -->
+      <module name="IllegalType">
+         <property name="illegalClassNames"
+                   value="java.util.Hashtable, java.util.Vector"/>
+         <property name="severity" value="error"/>
+      </module>
+      <module name="IllegalType">
+         <property name="severity" value="warning"/>
+      </module>
+
+      <!-- According to Code Conventions for the Java Programming Language ,
+           the parts of a class or interface declaration should appear in the
+           well-defined order. -->
+      <module name="DeclarationOrder">
+         <property name="severity" value="warning"/>
+      </module>
+
+      <!-- Disallow assignment of parameters. -->
+      <module name="ParameterAssignment">
+         <property name="severity" value="warning"/>
+      </module>
+
+      <!--
+         Checks that logger calls use level FINE or smaller.
+      -->
+      <!--module name="org.jcoderz.phoenix.checkstyle.LoggingLevel">
+         <property name="severity" value="warning"/>
+         <property name="loggerName" value="log"/>
+         <property name="logCallMaxLevel" value="CONFIG"/>
+         <property name="allowedLoggerMethods" value="config,fine,finer,entering,exiting,throwing,finest"/>
+      </module-->
+
+      <!-- Checks if any class or object member explicitly initialized to
+           default for its type value (null for object references, zero
+           for numeric types and char and false for booolean. -->
+      <!--
+      <module name="ExplicitInitialization">
+         <property name="severity" value="warning"/>
+      </module>
+      -->
+
+
+      <!-- Design Problems -->
+
+      <!-- Checks visibility of class members. -->
+      <module name="VisibilityModifier">
+         <property name="severity" value="warning"/>
+      </module>
+
+      <!-- Checks that a class which has only private constructors
+           is declared as final. [new] -->
+      <module name="FinalClass">
+         <property name="severity" value="info"/>
+      </module>
+
+      <!-- Implements Bloch, Effective Java, Item 17 -
+           Use Interfaces only to define types.  [new] -->
+      <module name="InterfaceIsType">
+         <property name="severity" value="warning"/>
+      </module>
+
+      <!-- Make sure that utility classes
+           (classes that contain only static methods) do not
+           have a public constructor. [new] -->
+      <module name="HideUtilityClassConstructor">
+         <property name="severity" value="warning"/>
+      </module>
+
+      <!-- Ensures that exceptions are immutable. -->
+      <!--
+      <module name="MutableException">
+         <property name="severity" value="warning"/>
+      </module>
+      -->
+
+      <!-- Restricts throws statements to a specified count. -->
+      <!--
+      <module name="ThrowsCount">
+         <property name="max" value="2"/>
+         <property name="severity" value="warning"/>
+      </module>
+      -->
+
+      <!-- Metrics Checks -->
+
+      <!-- Checks cyclomatic complexity against a specified limit. -->
+      <module name="CyclomaticComplexity">
+         <property name="max" value="12"/>
+         <property name="severity" value="warning"/>
+      </module>
+      <module name="CyclomaticComplexity">
+         <property name="max" value="20"/>
+         <property name="severity" value="error"/>
+      </module>
+
+      <!-- Misc -->
+
+      <!-- checks for reminder comments -->
+      <module name="TodoComment">
+         <property name="format"
+            value="(TODO|FIXME|CHECKME)"/>
+         <property name="severity" value="info"/>
+      </module>
+
+      <!-- checks for wrong reminder comments -->
+      <module name="TodoComment">
+         <property name="format"
+            value="(DOCUMENT ME|To change the template)"/>
+         <property name="severity" value="warning"/>
+      </module>
+
+      <!-- Checks that long constants are defined with an upper ell.
+           That is ' L' and not 'l'. [new] -->
+      <module name="UpperEll">
+         <property name="severity" value="warning"/>
+      </module>
+
+      <!-- Checks the style of array type definitions. [new] -->
+      <module name="ArrayTypeStyle">
+         <property name="severity" value="info"/>
+      </module>
+
+      <!-- Checks correct indentation of Java Code. -->
+      <!-- DISABLED [mig]
+      <module name="Indentation">
+         <property name="caseIndent" value="3"/>
+         <property name="basicOffset" value="3"/>
+         <property name="severity" value="warning"/>
+      </module>
+      -->
+
+
+      <!-- Checks for Usage -->
+
+      <!-- Checks that a private field is used in more than one method,
+           constructor, or initializer.-->
+      <!--
+      <module name="usage.OneMethodPrivateField">
+         <property name="severity" value="warning"/>
+      </module>
+      -->
+
+      <!-- Checks that a local variable is used after its declaration. -->
+<!--
+      <module name="usage.UnusedLocalVariable">
+         <property name="severity" value="warning"/>
+      </module>
+-->
+      <!-- Checks that a parameter is used. -->
+      <!--
+      <module name="usage.UnusedParameter">
+         <property name="severity" value="warning"/>
+      </module>
+      -->
+<!--
+      <module name="usage.UnusedPrivateField">
+         <property name="severity" value="warning"/>
+         <property name="ignoreFormat" value="(^logger$)|(^serialVersionUID$)"/>
+      </module>
+-->
+      <!-- Checks that a private method is used. -->
+      <!-- DISABLED, pmd rule used instead (this one generates
+           many false-positives -->
+      <!--
+      <module name="usage.UnusedPrivateMethod">
+         <property name="ignoreFormat" value="^readResolve$"/>
+         <property name="severity" value="warning"/>
+      </module>
+      -->
+   </module>
+
+
+</module>

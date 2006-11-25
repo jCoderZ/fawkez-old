@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  **
+  ** This is the schema definition for additional information on SQL
+  ** tables. This additional information (meta information) is used
+  ** by the SqlTransformer to enhance SQL scripts.
+  **
+  -->
+<xs:schema
+   xmlns:xs="http://www.w3.org/2001/XMLSchema"
+   xmlns:jxb="http://java.sun.com/xml/ns/jaxb"
+   xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc"
+   jxb:extensionBindingPrefixes="xjc" 
+   jxb:version="1.0">
+   
+   <!-- copied from JAXB sample schema -->
+   <xs:annotation>
+      <xs:appinfo>
+      
+         <jxb:globalBindings
+            fixedAttributeAsConstantProperty="true"
+            collectionType="java.util.ArrayList"
+            typesafeEnumBase="xs:NCName"
+            choiceContentProperty="true"
+            typesafeEnumMemberName="generateError"
+            enableFailFastCheck="false"
+            generateIsSetMethod="true"
+            underscoreBinding="asCharInWord">
+            <xjc:serializable uid="14988"/>
+         </jxb:globalBindings>
+         <jxb:schemaBindings>
+            <jxb:package name="org.jcoderz.phoenix.sqlparser.jaxb"/>
+         </jxb:schemaBindings>
+      </xs:appinfo>
+   </xs:annotation>
+   
+   <xs:element name="default" type="xs:string"/>
+
+	<xs:element name="index">
+		<xs:complexType>
+			<xs:simpleContent>
+				<xs:extension base="xs:string">
+					<xs:attribute name="name" type="xs:NMTOKEN" use="required"/>
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="table">
+		<xs:complexType>
+			<xs:simpleContent>
+				<xs:extension base="xs:string">
+					<xs:attribute name="name" type="xs:NMTOKEN" use="required"/>
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
+	</xs:element>
+   
+	<xs:element name="create-index">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="default"/>
+				<xs:element ref="index" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="create-table">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="default"/>
+				<xs:element ref="table" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="sql-metainf">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="create-table"/>
+				<xs:element ref="create-index"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+</xs:schema>

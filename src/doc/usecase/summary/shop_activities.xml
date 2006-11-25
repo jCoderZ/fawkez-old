@@ -1,0 +1,38 @@
+<uc:usecase xmlns:uc="http://www.jcoderz.org/xsd/xdoc/usecase-SNAPSHOT.xsd" xmlns="http://docbook.org/ns/docbook" id="UC-4" level="Summary">
+	<uc:version>$Revision: 1.1 $</uc:version>
+	<uc:commitlog>
+		$Log:$
+	</uc:commitlog>
+	<uc:name>Shop activities</uc:name>
+	<uc:goal>Shop interacts with the micro aggregation system.</uc:goal>
+	<uc:scope>Micro Aggregation</uc:scope>
+	<uc:trigger></uc:trigger>
+	<uc:priority>summary</uc:priority>
+	<uc:response_time></uc:response_time>
+	<uc:frequency_of_use></uc:frequency_of_use>
+	<uc:actors>
+		<uc:primary>
+			<uc:name>Shop</uc:name>
+			<channel>Web</channel>
+		</uc:primary>
+		<uc:secondary>
+			<uc:name>System</uc:name>
+			<channel>WEB</channel>
+		</uc:secondary>
+	</uc:actors>
+	<uc:stakeholder>Shop wants to interact with the system.</uc:stakeholder>
+	<uc:precondition>none</uc:precondition>
+	<uc:guarantees>
+		<uc:success>none yet</uc:success>
+		<minimal>none yet</minimal>
+	</uc:guarantees>
+	<uc:success>
+      <uc:step id="1">Shop triggers payment. <uc:ref id="UC-19" actor="Shop"/></uc:step>
+      <uc:step id="2">Shop queries for a payment. <uc:ref id="UC-20" actor="Shop"/></uc:step>
+      <uc:step id="3">Shop checks consumers payment instrument. <uc:ref id="UC-21" actor="Shop"/></uc:step>
+	</uc:success>
+	<!--extension id="E1">
+		<uc:step id="1"></uc:step>
+	</uc:extension-->
+	<!--open_issue></uc:open_issue-->
+</uc:usecase>

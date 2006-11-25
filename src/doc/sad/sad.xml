@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<sad app-id="1" release="$Name:  $">
+
+<info>
+   <!-- injected into the docbook bookinfo element -->
+   <authorgroup>
+      <author><firstname>Michael</firstname><surname>Griffel</surname></author>
+      <author><firstname>Andreas</firstname><surname>Mandel</surname></author>
+      <author><firstname>Albrecht</firstname><surname>Messner</surname></author>
+      <author><firstname>Michael</firstname><surname>Rumpf</surname></author>
+   </authorgroup>
+</info>
+
+   <intro>
+      <para>This document describes the architecture and design topics
+      of the jCoderZ Commons Package.
+      The Commons Package may be the base for all of your Java-based projects.
+      </para>
+   </intro>
+
+   <architecture>
+      <quote author="Donald Knuth, Foreword to the book A=B">
+      Science is what we understand well enough
+      to explain to a computer.
+      Art is everything else we do.
+      </quote>
+
+      <overview>
+         <para>The following figure shows the high level architecture and
+         the component stack of the Commons Package.</para>
+
+         <figure>
+            <title>Big Picture: Overview of the Commons Package</title>
+            <img src="images/commons-big-picture.svg"/>
+         </figure>
+      </overview>
+
+      <goals>
+         <para>Provide base concepts and common implementation for 
+			Java projects.</para>
+      </goals>
+
+      <constraints>
+      </constraints>
+   </architecture>
+
+   <components>
+      <!-- ========================================================
+           LOGGING AND EXCEPTION CONCEPT
+           ======================================================== -->
+      <component name="Logging and Exception Concept">
+         <modules>
+            <package name="org.jcoderz.commons"/>
+            <package name="org.jcoderz.commons.logging"/>
+         </modules>
+      </component>
+
+      <!-- ========================================================
+           SIMPLE TYPE GENERATOR
+           ======================================================== -->
+      <component name="Simple Type Generator">
+         <modules>
+            <include href="src/doc/sad/simple-type-generator.xml"/>
+         </modules>
+      </component>
+
+      <!-- ========================================================
+           UTILITY CLASSES
+           ======================================================== -->
+      <component name="Utility Package">
+         <modules>
+            <package name="org.jcoderz.commons.util"/>
+         </modules>
+      </component>
+
+      <!-- ========================================================
+           FILE SYSTEM CONNECTOR
+           ======================================================== -->
+      <component name="File System Connector">
+         <modules>
+            <package name="org.jcoderz.commons.connector.file"/>
+         </modules>
+      </component>
+
+      <!-- ========================================================
+           HTTP CONNECTOR
+           ======================================================== -->
+      <component name="HTTP Connector">
+         <modules>
+            <package name="org.jcoderz.commons.connector.http"/>
+         </modules>
+      </component>
+
+      <!-- ========================================================
+           Configuration Service
+           ======================================================== -->
+      <component group-id="5">
+         <modules>
+            <package name="org.jcoderz.commons.config"/>
+         </modules>
+      </component>
+   </components>
+
+   <include href="src/doc/sad/appendix.xml"/>
+
+</sad>
+

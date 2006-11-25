@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<req:requirement xmlns:req="req"
+                 xmlns:db="http://docbook.org/ns/docbook"
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xsi:schemaLocation="req
+                                     http://www.jcoderz.org/xsd/xdoc/requirements-SNAPSHOT.xsd">
+  <req:title>Model</req:title>
+  <req:category>
+     <req:primary>Domain Model</req:primary>
+     <req:secondary>Vehicle</req:secondary>
+  </req:category>
+  <req:key>D-90018</req:key>
+  <req:summary>Model</req:summary>
+  <req:priority>High</req:priority>
+  <req:description>
+    Model based on vehicle 1.x.
+  </req:description>
+  <req:entity>
+    <req:name>Model</req:name>
+    <req:attribute>
+      <req:name>Name</req:name>
+      <req:pattern>String</req:pattern>
+    </req:attribute>     
+  </req:entity>
+  <req:version>$Revision: 1.3 $</req:version>
+  <req:open_issue>An open issue...<emphasis role="bold">And a bold text...</emphasis></req:open_issue>
+</req:requirement>

@@ -1,0 +1,103 @@
+<chapter>
+   <title>Introduction</title>
+
+   <blockquote>
+      <attribution>Donald Knuth, 
+         <citetitle>Foreward to the book A=B</citetitle>
+      </attribution>
+      <para>
+         Science is what we understand well enough 
+         to explain to a computer. 
+         Art is everything else we do.
+      </para>
+   </blockquote>
+
+   <section>
+      <title>Why Have Code Conventions</title>
+
+      <para>Code conventions are important to programmers for a number of
+      reasons:
+         <itemizedlist mark='opencircle'>
+            <listitem>
+               <para>80% of the lifetime cost of a piece of software goes to
+               maintenance.</para>
+            </listitem>
+            <listitem>
+               <para>Hardly any software is maintained for its whole life by
+               the original author.</para>
+            </listitem>
+            <listitem>
+               <para>Code conventions improve the readability of the software,
+               allowing engineers to understand new code more quickly and
+               thoroughly.</para>
+            </listitem>
+            <listitem>
+               <para>If you ship your source code as a product, you need to
+               make sure it is as well packaged and clean as any other product
+               you create.</para>
+            </listitem>
+         </itemizedlist>
+      </para>
+      <para>For the conventions to work, every person at jCoderZ.org  
+		  writing software must conform to the code conventions.</para>
+   </section>
+
+   <section>
+      <title>Acknowledgements</title>
+      <para>This document is the result of the merger of 2 sources:
+         <itemizedlist mark='opencircle'>
+
+            <listitem>
+               <para>Java Code Conventions from Sun. The original can be found
+               at <ulink url="http://java.sun.com/docs/codeconv/"/> <citation>JavaCodeConv</citation>.</para>
+            </listitem>
+
+            <listitem>
+               <para>The former code conventions we where used to adhere.</para>
+            </listitem>
+
+         </itemizedlist>
+      </para>
+      
+      <para>The document is maintained by the jCoderZ.org Project. 
+		  Comments can be sent the web site at http://www.jcoderz.org/.
+      </para>
+   </section>
+
+   <section>
+      <title>Document content</title>
+
+      <para>This document contains a list of rules ordered by different
+      aspects. In general all given rules must be respected in order to 
+      make the code more readable. 
+      </para>
+      <para>If conforming to these rules leads to code that is harder to read and
+      understand, you might break these rules and choose another style for small
+      parts of your code. You must prefer open standards when using another
+      convention and document the convention and the reason for breaking these
+      rules. 
+      </para>
+      <para>The inability to conform to this guideline might be a strong
+      indication that the given code approach could be enhanced. To avoid major 
+      rework tasks, please get in contact with any member of the jCoderZ.org
+      Project in order to get assistance for the given coding problem.
+      </para>
+
+      <para>If you are faced with a problem that is not covered by any of the 
+      rules in this document, get in contact with the jCoderZ.org Project or 
+      use the referred document to identify a solution. 
+      </para>
+      
+      <para>The Book <citetitle>Writing Robust Java Code</citetitle>
+      <citation>Ambler00</citation>
+      is a reading recommendation and gives a good introduction for novice and 
+      advanced software engineers.
+      </para>
+      <para>Conformance to this coding guideline will automatically be checked 
+      by <ulink url="http://checkstyle.sourceforge.net/">Checkstyle</ulink>. 
+      If non-conforming code is detected, the code author will be contacted 
+      and asked to enhance his source code. 
+      </para>
+   </section>
+
+</chapter>

@@ -1,0 +1,140 @@
+/* Default */
+
+font {font-family:arial,helvetica,sans-serif !important}
+font {font-size:12pt}
+
+a {
+   text-decoration:none
+}
+
+a:visited {
+   color:#96C
+}
+
+a:link,a.named:visited,a:visited,a:visited {
+   color:#594FBF
+}
+a:hover,b.error,span.error {
+   text-decoration:underline
+}
+
+body,th,td,p,div,span,a,input,select,textarea,ul,ol,dl,h1,h2,h3,h4,h5,h6,li,big,small,b {
+   font-family:arial,helvetica,sans-serif
+   font-size:12pt
+}
+code,kbd,tt,pre,code a,kbd a,tt a,pre a,code span,kbd span,tt span,pre span {
+   font-family:monaco,courier,"courier new"
+   font-size:12pt
+}
+
+pre.programlisting {
+   whitespace: pre;
+   color: #303030;
+   background-color: #f7f7f7;
+   padding-top: 4px;
+   padding-left: 4px;
+   padding-right: 4px;
+   padding-top: 4px;
+   margin: 0em;
+}
+
+div.authorgroup, div.releaseinfo, p.copyright, div.mediaobject, h2.subtitle {
+   text-align:center;
+}
+
+div.mediaobject {
+   margin: 25px;
+}
+
+h1 {
+   font-size:24pt;
+   line-height:30pt;
+   text-align:center;
+}
+
+h2 {
+   font-size:16pt;
+}
+
+h3 {
+   font-size:14pt;
+}
+
+
+table.added, tr.added, th.added, td.added
+             { background-color: lime;
+               color: black; }
+table.deleted, tr.deleted, th.deleted, td.deleted
+             { text-decoration: line-through;
+               background-color: #FF7F7F;
+               color: black; }
+table.changed, tr.changed, th.changed, td.changed
+             { background-color: lightyellow;
+               color: black; }
+
+div.added    { background-color: lime; }
+div.deleted  { text-decoration: line-through;
+               background-color: #FF7F7F; }
+div.changed  { background-color: yellow; }
+div.off      {  }
+
+span.added   { background-color: lime; }
+span.deleted { text-decoration: line-through;
+               background-color: #FF7F7F; }
+span.changed { background-color: yellow; }
+span.off     {  }
+
+/* Customization */
+
+body {
+  margin: 0;
+  margin-left: 62px;
+  padding: 0;
+
+  font-family: Verdana, sans-serif;
+  font-size: small;
+
+  color: #333;
+  background: #e0e0e0;
+
+  float: left;
+  width: 800px;
+  line-height: 1.5em;
+  text-align: left;
+}
+
+div.book {
+  padding: 30px;
+  background: #ffffff;
+}
+
+/* Program Listings */
+
+pre.programlisting {
+   width: 730px;
+}
+
+/* Quotes */
+
+table.blockquote {
+  margin: 0 0 0 30px;
+  padding: 10px 0 0 20px;
+  font-size: 88%;
+  line-height: 1.5em;
+  color: #666;
+  background: url(images/quotes.gif) no-repeat top left;
+}
+
+table.blockquote p {
+  margin-top: 0;
+}
+
+span.attribution {
+  margin: 5px 0 0;
+}
+
+/* Chapter Separator */
+
+div.chapter {
+   border-top: solid 5px #e0e0e0;
+}

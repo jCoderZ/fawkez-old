@@ -1,0 +1,140 @@
+<?xml version="1.0"?>
+
+<project name="fawkez-macros">
+
+<!--==================================================================
+    MACROS
+    ===================================================================-->
+    <macrodef name="append-version">
+       <attribute name="jarfile"/>
+       <sequential>
+          <uptodate property="@{jarfile}.uptodate"
+                    targetfile="@{jarfile}" >
+             <srcfiles dir="${base.dir}">
+                <include name="VERSION" />
+             </srcfiles>
+          </uptodate>
+          <jar destfile="@{jarfile}"
+               update="true"
+               compress="false"
+               keepcompression="true"
+               basedir="${base.dir}">
+             <include name="VERSION" if="@{jarfile}.uptodate"/>
+          </jar>
+       </sequential>
+    </macrodef>
+
+    <macrodef name="jaxb-compiler">
+        <attribute name="schema"/>
+        <attribute name="produces"/>
+        <sequential>
+            <xjc target="${build.dir}/gen-java"
+                 extension="true"
+                 schema="@{schema}">
+                <arg value="-use-runtime"/>
+                <arg value="org.jcoderz.phoenix.report.jaxb.impl.runtime"/>
+                <depends file="@{schema}"/>
+                <produces dir="@{produces}">
+                    <include name="**/*"/>
+                </produces>
+            </xjc>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="generate-entity-beans">
+       <attribute name="sqlfile"/>
+       <attribute name="package"/>
+       <attribute name="datasource" default="jdbc/fawkez"/>
+       <attribute name="templatedir" default="${build.dir}/cmpgen-templates"/>
+       <sequential>
+          <mkdir dir="${build.dir}/cmpgen-templates"/>
+          <copy todir="${build.dir}/cmpgen-templates">
+             <fileset dir="${base.dir}/src/java/org/jcoderz/phoenix/cmpgen2">
+                <include name="*.vtl"/>
+                <include name="*.vm"/>
+             </fileset>
+          </copy>
+          <java
+             classname="org.jcoderz.phoenix.cmpgen2.CmpGenerator"
+             fork="false"
+             taskname="cmp-gen"
+             failonerror="true">
+             <classpath>
+                <path refid="default.classpath"/>
+                <pathelement path="${build.dir}/classes"/>
+                <pathelement path="${build.dir}/bootstrap-classes"/>
+             </classpath>
+             <arg value="-i"/>
+             <arg file="@{sqlfile}"/>
+             <arg value="-d"/>
+             <arg file="${build.dir}/gen-java"/>
+             <arg value="-p"/>
+             <arg value="@{package}"/>
+             <arg value="-ds"/>
+             <arg value="@{datasource}"/>
+             <arg value="-t"/>
+             <arg file="@{templatedir}"/>
+             <arg value="-o"/>
+          </java>
+       </sequential>
+    </macrodef>
+
+    <macrodef name="xdoclet-ejb">
+        <attribute name="destdir"/>
+        <attribute name="dd-dir"/>
+        <element name="sources"/>
+        <sequential>
+            <echo level="info" message="Generating EJBs to @{destdir} ..."/>
+            <taskdef name="utildoclet"
+                  classname="xdoclet.modules.ejb.EjbDocletTask">
+                <classpath refid="default.classpath"/>
+            </taskdef>
+            <taskdef name="ejbdoclet"
+                  classname="xdoclet.modules.ejb.EjbDocletTask">
+                <classpath refid="default.classpath"/>
+            </taskdef>
+            <mkdir dir="@{dd-dir}"/>
+            <utildoclet
+              destdir="@{destdir}"
+              excludedtags="@version,@author,@see"
+              ejbspec="2.0"
+              ejbclassnamesuffix="Bean,Impl">
+                <sources/>
+                <utilobject kind="physical" pattern="{0}JNDIUtil"/>
+            </utildoclet>
+            <!-- ejbdoclet task for all Beans and deployment descriptors -->
+            <ejbdoclet
+                 destdir="@{destdir}"
+                 excludedtags="@version,@author,@see"
+                 ejbspec="2.0"
+                 ejbclassnamesuffix="Bean,Impl">
+                <sources/>
+                <dataobject/>
+                <remoteinterface/>
+                <homeinterface/>
+                <localinterface/>
+                <localhomeinterface/>
+                <utilobject kind="logical" pattern="{0}Util"/>
+                <entitypk/>
+                <entitycmp cmpspec="1.x"/>
+                <entitybmp/>
+                <dao/>
+                <session/>
+                <deploymentdescriptor
+                   destdir="@{dd-dir}"
+                   validatexml="true"
+                   mergedir="${base.dir}/src/xml/xdoclet"/>
+                <weblogic
+                    xmlencoding="UTF-8"
+                    destdir="@{dd-dir}"
+                    validatexml="true"
+                    version="8.1"
+                    createtables="Disabled"
+                    orderdatabaseoperations="False"
+                    enablebatchoperations="False"
+                    mergeDir="${base.dir}/src/xml"/>
+            </ejbdoclet>
+        </sequential>
+    </macrodef>
+
+</project>

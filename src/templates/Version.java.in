@@ -1,0 +1,173 @@
+/*
+ * $Id$
+ *
+ * Copyright 2006, The jCoderZ.org Project. All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are
+ * met:
+ *
+ *     * Redistributions of source code must retain the above copyright
+ *       notice, this list of conditions and the following disclaimer.
+ *     * Redistributions in binary form must reproduce the above
+ *       copyright notice, this list of conditions and the following
+ *       disclaimer in the documentation and/or other materials
+ *       provided with the distribution.
+ *     * Neither the name of the jCoderZ.org Project nor the names of
+ *       its contributors may be used to endorse or promote products
+ *       derived from this software without specific prior written
+ *       permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS "AS IS" AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+ * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE REGENTS AND CONTRIBUTORS
+ * BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
+ * BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+ * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+ * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+package ${project.package};
+
+import java.util.Collections;
+import java.util.Map;
+import java.util.TreeMap;
+
+/**
+ * This class holds version information at compile time.
+ *
+ * Compiled at ${build.time} on ${env.HOSTNAME} by ${user.name}.
+ *
+ * @author generated
+ *
+ * TODO: provide getter and constants for remaining properties.
+ */
+public final class Version
+{
+    /** Name of the property holding the project name. */
+    public static final String PROJECT_NAME = "project.Name";
+    /** Name of the property holding the project name (lowercase). */
+    public static final String PROJECT_NAME_LOWERCASE = "project.name";
+    /** Name of the property holding the project base Java package. */
+    public static final String PROJECT_PACKAGE = "project.package";
+    /** Name of the property holding the project's copyright year. */
+    public static final String COPYRIGHT_YEAR = "project.copyright.year";
+    /** Name of the property holding the compile date (w/o time). */
+    public static final String COMPILE_DATE = "compile.date";
+    /** Name of the property holding the compile time (w/o date). */
+    public static final String COMPILE_TIME = "compile.time";
+
+    
+    private static final Map /* <String, String> */ PROPERTIES;
+    static
+    {
+        final Map m = new TreeMap();
+        // Project specific
+        m.put(PROJECT_NAME, "${Name}");
+        m.put(PROJECT_NAME_LOWERCASE, "${name}");
+        m.put(PROJECT_PACKAGE, "${project.package}");
+        m.put(COPYRIGHT_YEAR, "${copyright.year}");
+        
+        // Compile time
+        m.put(COMPILE_DATE, "${DSTAMP}");
+        m.put(COMPILE_TIME, "${TSTAMP}");
+        m.put("compile.user.name", "${user.name}");
+        m.put("compile.build.mode", "${build.mode}");
+        
+        m.put("cclabel", "${label}");
+        // Compile environment
+        m.put("ant.version", "${ant.version}");
+        m.put("java.vm.info", "${java.vm.info}");
+        m.put("java.vm.name", "${java.vm.name}");
+        m.put("java.vm.vendor", "${java.vm.vendor}");
+        m.put("java.vm.version", "${java.vm.version}");
+        m.put("os.arch", "${os.arch}");
+        m.put("os.name", "${os.name}");
+        m.put("os.version", "${os.version}");
+        m.put("file.encoding", "${file.encoding}");
+        
+        PROPERTIES = Collections.unmodifiableMap(m);
+    }  
+    
+    /**
+     * Returns a unmodifiable {@link java.util.Map} &lt;String, String&gt; 
+     * of all compile time properties.
+     * @return a unmodifiable  {@link java.util.Map} &lt;String, String&gt; 
+     *     of all compile time properties.
+     */
+    public static Map getProperties ()
+    {
+        return PROPERTIES;
+    }
+
+    /**
+     * Returns the project name as {@link String}.
+     * @return the project name as {@link String}.
+     */
+    public static String getProjectName ()
+    {
+        return getProperty(PROJECT_NAME);
+    }
+
+    /**
+     * Returns the project name in lowercase as {@link String}.
+     * @return the project name in lowercase as {@link String}.
+     */
+    public static String getProjectNameLowerCase ()
+    {
+        return getProperty(PROJECT_NAME_LOWERCASE);
+    }
+
+    /**
+     * Returns the project's copyright year as {@link String}.
+     * @return the project's copyright year as {@link String}.
+     */
+    public static String getCopyrightYear ()
+    {
+        return getProperty(COPYRIGHT_YEAR);
+    }
+
+    /**
+     * Returns the compile date (w/o time) as {@link String}.
+     * @return the compile date (w/o time) as {@link String}.
+     */
+    public static String getCompileDateString ()
+    {
+        return getProperty(COMPILE_DATE);
+    }
+
+    /**
+     * Returns the compile time (w/o date) as {@link String}.
+     * @return the compile time (w/o date) as {@link String}.
+     */
+    public static String getCompileTimeString ()
+    {
+        return getProperty(COMPILE_TIME);
+    }
+
+    /**
+     * Returns the value of the named property.
+     * @param key the property name.
+     * @return the value of the named property or <tt>null</tt> if the given
+     *     property is not available.
+     */
+    public static String getProperty (String key)
+    {
+        return (String) PROPERTIES.get(key);
+    }
+    
+    public static String getDescription ()
+    {
+        final StringBuffer sb = new StringBuffer();
+        sb.append("Project ");
+        sb.append(getProjectName());
+        sb.append(" bla bla ");
+        sb.append(Version.class.getPackage().getName());
+        sb.append("TODO");
+        return sb.toString();
+    }
+
+}

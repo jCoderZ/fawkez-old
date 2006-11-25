@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<simpleTypes>
+
+<!-- ===============================================================
+     TYPE-SAFE ENUMERATIONS
+     =============================================================== -->
+   <typeSafeEnumerations>
+      <enumeration
+         classname="BusinessImpact"
+         package="org.jcoderz.commons">
+         <value>Critical</value>
+         <value>Major</value>
+         <value>Middle</value>
+         <value>Minor</value>
+         <value>None</value>
+         <value>Undefined</value>
+      </enumeration>
+
+      <enumeration
+         classname="Category"
+         package="org.jcoderz.commons">
+         <value>Audit</value>
+         <value>Business</value>
+         <value>Flow</value>
+         <value>Security</value>
+         <value>Technical</value>
+         <value>Undefined</value>
+      </enumeration>
+
+      <enumeration
+         classname="ReportLevel"
+         package="org.jcoderz.phoenix.report">
+         <value>prod</value>
+         <value>misc</value>
+         <value>test</value>
+      </enumeration>
+
+      <enumeration
+         classname="ReportFormat"
+         package="org.jcoderz.phoenix.report">
+         <value>sourceDirectory</value>
+         <value>jcoderz</value>
+         <value>checkstyle</value>
+         <value>jcoverage</value>
+         <value>findbugs</value>
+         <value>pmd</value>
+         <value>cpd</value>
+         <value>cobertura</value>
+      </enumeration>
+
+      <enumeration
+         classname="Origin"
+         package="org.jcoderz.phoenix.report">
+         <value>PMD</value>
+         <value>Checkstyle</value>
+         <value>Findbugs</value>
+         <value>Coverage</value>
+         <value>CPD</value>
+      </enumeration>
+
+      <enumeration
+         classname="OutputFormat"
+         package="org.jcoderz.phoenix.report">
+         <value>xml</value>
+         <value>html</value>
+      </enumeration>
+
+      <!--enumeration  more methods!
+         classname="Severity"
+         package="org.jcoderz.phoenix.report">
+         <value>filtered</value>
+         <value>false-positive</value>
+         <value>ok</value>
+         <value>info</value>
+         <value>coverage</value>
+         <value>cpd</value>
+         <value>warning</value>
+         <value>error</value>
+      </enumeration-->
+
+      <enumeration
+         classname="HttpConnectionState"
+         package="org.jcoderz.commons.connector.http.transport">
+         <value>connection not established</value>
+         <value>connection established</value>
+         <value>connection executed</value>
+         <value>connection released</value>
+         <value>connection closed</value>
+      </enumeration>
+
+      <enumeration
+         classname="JiraState"
+         package="org.jcoderz.commons.types">
+         <value>Submitted</value>
+         <value>InfoRequested</value>
+         <value>Postponed</value>
+         <value>Assigned</value>
+         <value>Rejected</value>
+         <value>Opened</value>
+         <value>Resolved</value>
+         <value>Accepted</value>
+         <value>Closed</value>
+         <state name="start" type="start">
+            <transition target="Submitted" name="Submit"/>
+         </state>
+         <state name="Submitted">
+            <transition target="Postponed" name="Postpone"/>
+            <transition target="Assigned" name="Assign"/>
+            <transition target="Rejected" name="Reject"/>
+         </state>
+         <state name="InfoRequested">
+            <transition target="Closed" name="Close"/>
+            <transition target="Submitted" name="Resubmit"/>
+         </state>
+         <state name="Postponed">
+            <transition target="Assigned" name="Assign"/>
+         </state>
+         <state name="Assigned">
+            <transition target="Opened" name="Open"/>
+         </state>
+         <state name="Rejected">
+            <transition target="Closed" name="Close"/>
+         </state>
+         <state name="Opened">
+            <transition target="InfoRequested" name="Info Request"/>
+            <transition target="Postponed" name="Postpone"/>
+            <transition target="Assigned" name="Re-Assign"/>
+            <transition target="Rejected" name="Reject"/>
+            <transition target="Resolved" name="Resolve"/>
+         </state>
+         <state name="Resolved">
+            <transition target="Accepted" name="Accept"/>
+         </state>
+         <state name="Accepted">
+            <transition target="Closed" name="Close"/>
+         </state>
+         <state name="Closed"/>
+      </enumeration>
+
+
+   </typeSafeEnumerations>
+
+<!-- ===============================================================
+     RESTRICTED STRINGS
+     =============================================================== -->
+   <restrictedStrings>
+      <restrictedString
+         classname="Url"
+         package="org.jcoderz.commons.types"
+         min-length="1"
+         max-length="1024">
+      </restrictedString>
+       <restrictedString
+         classname="ConfigurationKey"
+         package="org.jcoderz.commons.config"
+         min-length="15"
+         max-length="255">
+      </restrictedString>
+
+   </restrictedStrings>
+<!-- ===============================================================
+     VALUE OBJECTS
+     =============================================================== -->
+   <valueObjects>
+   <!--
+      <valueObject
+         classname="FooValueObject"
+         package="org.jcoderz.commons.foo.types"
+         serializable="true"
+         final="false" >
+         <description>The Foo is documented here.</description>
+         <member
+            name="Id"
+            type="long">unique identifier for Foo
+         </member>
+         <member
+            name="Creation Date"
+            type="org.jcoderz.commons.types.Date">
+            creation date of Buz
+         </member>
+         <member
+            name="Participants"
+            type="java.util.List"
+            initial-value="new java.util.ArrayList()"
+            final="true">List of all Merchants
+         </member>
+      </valueObject>
+      <valueObject
+         classname="Settlement"
+         package="org.jcoderz.commons.foo.types"
+         serializable="true"
+         final="false">
+         <description>The Settlement.</description>
+         <member
+            name="Amount"
+            type="org.jcoderz.commons.types.PrecisionAmount">
+            amount of this settlement
+         </member>
+         <member
+            name="Settlement Date"
+            type="org.jcoderz.commons.types.Date">
+            date of this settlement
+         </member>
+         <member
+            name="Settlement State"
+            type="SettlementState">
+            state of this settlement
+         </member>
+         <member
+            name="Payor"
+            type="org.jcoderz.commons.types.ParticipantId">
+            payor of this settlement
+         </member>
+         <member
+            name="Payee"
+            type="org.jcoderz.commons.types.ParticipantId">
+            payee of this settlement
+         </member>
+      </valueObject>
+-->
+   </valueObjects>
+
+</simpleTypes>

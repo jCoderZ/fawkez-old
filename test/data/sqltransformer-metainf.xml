@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sql-metainf>
+   <create-table>
+      <default>initrans 23</default>
+      <table name="oid_all">initrans 23
+storage (freelists 5 freelistgroups 5)</table>
+   </create-table>
+   <create-index>
+      <default>initrans 25</default>
+      <index name="idx_oid_all_offer_id">initrans 21</index>
+   </create-index>
+</sql-metainf>

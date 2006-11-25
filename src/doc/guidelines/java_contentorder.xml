@@ -1,0 +1,141 @@
+<chapter>
+
+   <title>Source File Structure</title>
+
+   <para>A file consists of sections that should be separated by blank lines
+   and an optional comment identifying each section. Files longer than 2000
+   lines are cumbersome and should be avoided.</para>
+
+   <para>Each Java source file must contain a single toplevel class 
+   or interface.</para>
+
+   <para>Java source files must have the following ordering:
+      <itemizedlist mark='opencircle'>
+
+         <listitem>
+            <para>File Header</para>
+         </listitem>
+
+         <listitem>
+            <para>Package and Import statements</para>
+         </listitem>
+
+         <listitem>
+            <para>Class and interface declarations</para>
+         </listitem>
+      </itemizedlist>
+   </para>
+
+   <section>
+      <title>File Header</title>
+      <para>All source files must begin with the following header:</para>
+      <informalexample>
+      <!-- TODO: use entity/charcode for dollar sign -->
+         <programlisting>&CopyrightHeader;</programlisting>
+      </informalexample>
+
+      <para>You don't have to bother with filling in
+      Id into this header as they are automatically 
+      filled via CVS/SVN functionality. 
+    </para>
+
+   </section>
+
+   <section>
+
+      <title>Package and Import statements</title>
+
+      <para>The package declaration must follow immediately 
+      after the file header.</para>
+      
+      <para>For import statements the <quote>single-type import statements</quote>
+      must always be used:
+         <informalexample>
+            <programlisting>&SingleTypeImports;</programlisting>
+         </informalexample>
+      Using single-type imports is quite useful and makes it easy for
+      the reader to determine the package of a particular type.
+      Do not use <quote>On-demand import statements</quote>:
+         <informalexample>
+            <programlisting>&OnDemandImports;</programlisting>
+         </informalexample>
+      </para>
+
+      <para>Import statements should be lexicographically sorted and grouped
+      according to the upper level packages (Recommendation).</para>
+
+   </section>
+
+   <section>
+
+      <title>Class and Interface Declarations</title>
+
+      <para>The following table describes the parts of a class or interface
+      declaration, in the order that they should appear:
+
+         <table frame='all'>
+            <title>Class/Interface parts order</title>
+            <tgroup cols='3'>
+               <colspec colwidth="10*"/>
+               <colspec colwidth="70*"/>
+               <colspec colwidth="70*"/>
+               <thead>
+                  <row>
+                     <entry align="left">No.</entry>
+                     <entry align="left">Part of Class/Interface</entry>
+                     <entry align="left">Declaration Notes</entry>
+                  </row>
+               </thead>
+               <tbody>
+                  <row>
+                     <entry>1</entry>
+                     <entry>Class/interface documentation comment
+                     (<classname>/**...*/</classname>)</entry>
+                     <!-- TODO: Link to Documentation Comments -->
+                     <entry>See Documentation Comments for information on what
+                     should be in this comment.</entry>
+                  </row>
+                  <row>
+                     <entry>2</entry>
+                     <entry>Class or interface statement</entry>
+                     <entry></entry>
+                  </row>
+                  <row>
+                     <entry>3</entry>
+                     <entry>Class/interface implementation comment
+                     (<classname>/*...*/</classname>), if necessary.</entry>
+                     <entry>This comment should contain any class-wide or
+                     interface-wide information that wasn't appropriate for the
+                     class/interface documentation comment.</entry>
+                  </row>
+                  <row>
+                     <entry>4</entry>
+                     <entry>Class (static) variables <footnote id='fn_order'><para>Order
+                     is always from public to most private: public, protected,
+                     then package level (no access modifier), private.</para>
+                     </footnote></entry>
+                     <entry></entry>
+                  </row>
+                  <row>
+                     <entry>5</entry>
+                     <entry>Instance variables <footnoteref linkend='fn_order'/></entry>
+                     <entry></entry>
+                  </row>
+                  <row>
+                     <entry>6</entry>
+                     <entry>Constructors <footnoteref linkend='fn_order'/></entry>
+                     <entry></entry>
+                  </row>
+                  <row>
+                     <entry>7</entry>
+                     <entry>Methods <footnoteref linkend='fn_order'/></entry>
+                     <entry></entry>
+                  </row>
+               </tbody>
+            </tgroup>
+         </table>
+      </para>
+
+   </section>
+
+</chapter>

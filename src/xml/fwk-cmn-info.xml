@@ -1,0 +1,27 @@
+<!-- =============================================
+     Common Messages
+     ============================================= -->
+<group
+   id="2"
+   name="Common Error"
+   short-name="CMN"
+   package="org.jcoderz.commons">
+   <message
+      id="1"
+      name="ENTITY_NOT_FOUND"
+      level="SEVERE"
+      base-exception="org.jcoderz.commons.BaseException">
+      <text>
+         A database entry in table {TABLE} was not found.
+         No rows were returned when executing the
+         finder method ''{FINDER}'' with the argument(s)
+         ''{Serializable:ARGUMENTS}'' on entity bean {ENTITY}.
+      </text>
+      <solution>
+         Review the log file to determine if the usage of the
+         Administration Tool led to the error. Create the requested value
+         prior to using the Administration Tool or change the query used for
+         retrieving the value via the Adminstration Tool.
+      </solution>
+   </message>
+</group>

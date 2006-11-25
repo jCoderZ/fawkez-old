@@ -1,0 +1,321 @@
+##
+## Special treatment for compound columns
+##
+#macro(compoundColumn $compoundColumn)
+#set($compoundJavaField = $cmpgen.sqlNameToJavaName($compoundColumn))
+#if($column.getJavaType().endsWith("Amount"))
+#set($compoundType = "Currency")
+#set($fqCompoundType = "java.util.Currency")
+#elseif($column.getJavaType().endsWith("Period"))
+#set($compoundType = "Timestamp")
+#set($fqCompoundType = "java.sql.Timestamp")
+#end
+#if(!$column.isPeriodDefined())
+#if($column.isNotNull())
+#set($javaType = "long")
+#set($fqJavaType = "long")
+#else
+#set($javaType = "Long")
+#set($fqJavaType = "java.lang.Long")
+#end
+#else
+#set($javaType = "Timestamp")
+#set($fqJavaType = "java.sql.Timestamp")
+#end
+#set($javaFieldName = $cmpgen.sqlNameToJavaName($column.getColumnName()))
+#set($fqComplexType = $column.getJavaType())
+#set($complexType = $cmpgen.unqualifyType($column.getJavaType()))
+#set($storeMethodSig = $column.getStoreMethod())
+#set($loadMethodSig = $column.getLoadMethod())
+#set($loadMethod = $loadMethodSig.substring(0, $loadMethodSig.indexOf("(")).trim())
+#set($storeMethod = $storeMethodSig.substring(0, $storeMethodSig.indexOf("(")).trim())
+#set($simpleGetterName = "get${javaFieldName}As$cmpgen.capitalize($javaType)")
+#set($simpleSetterName = "set${javaFieldName}As$cmpgen.capitalize($javaType)")
+#set($compoundGetterWithType = "get${compoundJavaField}As$cmpgen.capitalize($javaType)")
+#set($compoundSetterWithType = "set${compoundJavaField}As$cmpgen.capitalize($javaType)")
+#set($compoundGetter = "get${compoundJavaField}")
+#set($compoundSetter = "set${compoundJavaField}")
+   /**
+    * Returns the value of the $javaFieldName field as ${complexType}.
+    * @return the value of the $javaFieldName field as ${complexType}.
+    * @throws RuntimeException if the DB value can't
+    *         be converted to the complex type
+    * @ejb.interface-method
+    */
+#if(!$column.isPeriodDefined())
+   public $complexType get$javaFieldName ()
+#else
+   public Period get$column.getPeriodFieldName() ()
+#end
+         throws InconsistentDatabaseException
+   {
+      final $fqJavaType value = $simpleGetterName();
+#if(!$column.isPeriodDefined())
+      final String currencyStr = ${compoundGetter}();
+      final $fqCompoundType comp;
+      if (currencyStr != null)
+      {
+         comp = java.util.Currency.getInstance(currencyStr);
+      }
+      else
+      {
+         comp = null;
+      }
+#else
+## CHECKME: do we need to handle nullable periods?
+      final $fqJavaType comp
+            = ${compoundGetterWithType}();
+#end
+      final $complexType result;
+#if($column.isNotNull())
+      if (comp == null)
+      {
+         // hey! $compoundColumn must not be null if base column is not nullable
+        throw new InconsistentDatabaseException (
+              "null",
+              "$compoundColumn",
+              "$stmt.getTableName()",
+              "$fqJavaType");
+      }
+      else
+      {
+#if(!$column.isPeriodDefined())
+         result = ${complexType}.fromLong(value, comp);
+#else
+         result = ${complexType}.createPeriod(
+               Date.fromSqlTimestamp($simpleGetterName()),
+               Date.fromSqlTimestamp(${compoundGetterWithType}()));
+#end
+      }
+#else
+      if (value != null && comp != null)
+      {
+         try
+         {
+#if(!$column.isPeriodDefined())
+            result = ${complexType}.fromLong(value.longValue(), comp);
+#else
+            result = ${complexType}.createPeriod(
+                  Date.fromSqlTimestamp($simpleGetterName()),
+                  Date.fromSqlTimestamp(${compoundGetterWithType}()));
+#end
+         }
+         catch (Exception x)
+         {
+            throw new InconsistentDatabaseException (
+               "base = " + value
+               + ", compound = " + comp,
+               "$column.getColumnName(), $compoundColumn",
+               "$stmt.getTableName()",
+               "$fqComplexType",
+               x);
+         }
+      }
+      else if (value == null && comp == null)
+      {
+         result = null;
+      }
+      else
+      {
+         throw new InconsistentDatabaseException (
+            "base = " + value
+            + ", compound = " + comp,
+            "$column.getColumnName(), $compoundColumn",
+            "$stmt.getTableName()",
+            "$fqComplexType");
+      }
+#end
+      return result;
+   }
+
+   /**
+    * Returns the value of the $javaFieldName field as ${javaType}.
+    * @return the value of the $javaFieldName field as ${javaType}.
+    */
+   public abstract $fqJavaType $simpleGetterName ();
+
+   /**
+    * Sets the value of the $javaFieldName field as ${complexType}.
+    * @param value the value of the $javaFieldName field as ${complexType}.
+    * @ejb.interface-method
+    */
+#if(!$column.isPeriodDefined())
+   public void set$javaFieldName ($complexType value)
+#else
+   public void set$column.getPeriodFieldName() ($complexType value)
+#end
+   {
+#if($column.isNotNull())
+      Assert.notNull(value, "value");
+#if(!$column.isPeriodDefined())
+      ${simpleSetterName}(value.getValue());
+      ${compoundSetter}(value.getCurrency().toString());
+#else
+      ${simpleSetterName}(value.getStartTime().toSqlTimestamp());
+      ${compoundSetterWithType}(value.getEndTime().toSqlTimestamp());
+#end
+#else
+      if (value == null)
+      {
+         ${simpleSetterName}(null);
+         ${compoundSetter}(null);
+      }
+      else
+      {
+#if(!$column.isPeriodDefined())
+         ${simpleSetterName}(new Long(value.getValue()));
+         ${compoundSetter}(value.getCurrency().toString());
+#else
+         ${simpleSetterName}(value.getStartTime().toSqlTimestamp());
+         ${compoundSetterWithType}(value.getEndTime().toSqlTimestamp());
+#end
+      }
+#end
+   }
+
+   /**
+    * Sets the value of the $javaFieldName field as ${javaType}.
+    * @param value the value of the $javaFieldName field as ${javaType}.
+    */
+   public abstract void $simpleSetterName ($fqJavaType value);
+
+#end
+#copyrightHeader()
+
+package ${package};
+
+#set($imports = $cmpgen.buildHelperImportList($stmt))
+#foreach($import in $imports)
+import ${import};
+#end
+
+/**
+ * $baseName Entity Bean Helper.
+ * Generated by Phoenix CMP Generator II $cmpgen.getVersion()
+ *
+ * @author fawkeZ (jCoderZ.org)
+ */
+public abstract class ${baseName}TypeConverter
+{
+#foreach($column in $stmt.getColumns())
+#if($column.isSkipInInterface())
+## only the primitive-type getters and setters required here,
+## without being interface methods
+#computeFields()
+#simpleHelperGetter()
+
+#simpleSetter(false)
+
+#elseif($column.getJavaType().endsWith("Amount"))
+#compoundColumn($column.getCurrencyColumn())
+#elseif($column.getJavaType().endsWith("Period"))
+#if($column.isPeriodDefined())
+#compoundColumn($column.getPeriodEndDateColumn())
+#end
+#else
+#computeFields()
+#if($column.getLoadMethod())
+   /**
+#if($column.getAnnotation())
+#set($annotationWithPeriod = $column.getAnnotation() + ".")
+#set($indexOfFirstDot = $annotationWithPeriod.indexOf(". "))
+#set($annotationFirstSentence = $annotationWithPeriod.substring(0, $indexOfFirstDot))
+    * Returns $column.getAnnotation()
+    * @return $annotationFirstSentence
+#else
+    * Returns the value of the $javaFieldName field as ${complexType}.
+    * @return the value of the $javaFieldName field as ${complexType}.
+#end
+    * @throws RuntimeException if the DB value can't
+    *         be converted to the complex type
+    * @ejb.interface-method
+    */
+   public $complexType get$javaFieldName ()
+         throws InconsistentDatabaseException
+   {
+      final $fqJavaType value = $simpleGetterName();
+      final $complexType result;
+#if($cmpgen.isPrimitiveType($fqJavaType))
+      result = ${complexType}.${loadMethod}(value);
+#else
+      if (value == null)
+      {
+         result = null;
+      }
+      else
+      {
+         try
+         {
+            result = ${complexType}.${loadMethod}(value);
+         }
+         catch (Exception x)
+         {
+            throw new InconsistentDatabaseException (
+                  String.valueOf(value),
+                  "$column.getColumnName()",
+                  "$stmt.getTableName()",
+                  "$fqComplexType",
+                  x);
+         }
+      }
+#end
+      return result;
+   }
+
+   /**
+    * Sets the value of the $javaFieldName field as ${complexType}.
+    * @param value the value of the $javaFieldName field as ${complexType}.
+    * @ejb.interface-method
+    */
+   public void set$javaFieldName ($complexType value)
+   {
+#if($cmpgen.isPrimitiveType($fqJavaType))
+      ${simpleSetterName}(value.${storeMethod}());
+#else
+      if (value != null)
+      {
+         ${simpleSetterName}(value.${storeMethod}());
+      }
+      else
+      {
+         ${simpleSetterName}(null);
+      }
+#end
+   }
+
+#simpleSetter(false)
+
+#end##if colum.getLoadMethod
+#simpleHelperGetter()
+#end##if
+
+#end##foreach
+
+   /**
+    * Returns an immutable value object representing this entity.
+    * @return an immutable value object representing this entity.
+    * @throws InconsistentDatabaseException if the value in the database
+    *       cannot be converted into its corresponding java type.
+    * @ejb.interface-method
+    */
+   public ${baseName}Value toValue ()
+         throws InconsistentDatabaseException
+   {
+      return new ${baseName}ValueImpl(
+#set($count = 0)
+#foreach($column in $stmt.getColumns())
+#if(!$column.isSkipInInterface())
+#computeFields()
+#if(!$column.isPeriodDefined())
+         #if($count != 0),#end
+         get${javaFieldName}()
+#else
+         #if($count != 0),#end
+         get$column.getPeriodFieldName()()
+#end
+#set($count = $count + 1)
+#end
+#end
+      );
+   }
+}

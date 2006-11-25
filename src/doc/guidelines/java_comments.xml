@@ -1,0 +1,83 @@
+<chapter>
+   <title>Comments</title>
+
+   <section>
+      <title>Implementation Comments</title>
+
+      <para>Implementation comments are those which are delimited by 
+      <classname>/*...*/</classname> and <classname>//</classname>.
+
+      They are means for commenting out code or for
+      adding information about the particular implementation. 
+      Doc comments are meant to describe the specification of the code, 
+      from an implementation-independent
+      perspective. It is meant for developers who might not necessarily have the
+      source code at hand. 
+      </para>
+      <para>Comments should be used to give an overview of the code
+      and provide additional information that are not readily available in the
+      code itself. Comments should contain only information that are relevant
+      to reading and understanding the program. For example, information about
+      how to build the corresponding package or in what directory it resides
+      should not be stated as a comment.</para>
+
+      <para>Discussions of non-trivial or non-obvious design decisions are
+      appropriate, but avoid duplicating information that is present and 
+      clearly visible in the code. Redundant comments get outdated too easily.
+      In general, avoid any comments that are likely to
+      get outdated as the code evolves.</para>
+
+      <para>Note: A high frequency of comments sometimes reflects poor quality of
+      code. When you feel compelled to add a comment, consider rewriting the
+      code to make it clearer. Comments must not be enclosed in large boxes
+      drawn with asterisks or other characters.</para>
+   </section>
+
+   <section>
+      <title>Documentation Comments</title>
+
+      <para>Doc comments describe Java classes, interfaces, constructors,
+      methods, and fields. Each doc comment is set inside the comment
+      delimiters <classname>/**...*/</classname>.
+      
+         <informalexample>
+            <programlisting>&ExampleClass;</programlisting>
+         </informalexample>
+      </para>
+
+      <para>The first line of doc comments
+      (<classname>/**</classname>) for classes and interfaces is not indented.
+      Subsequent doc comment lines each have 1 space of indentation (to
+      vertically align the asterisks). Members, including constructors, have
+      three spaces for the first doc comment line and four spaces thereafter.
+      Doc comments should not be positioned inside a method or constructor
+      definition block, because Java associates documentation comments with
+      the first declaration after the comment.</para>
+
+      <para>Doc comments for classes or interfaces must include the 
+      <classname>@author</classname> tag. Only one name per @author tag in the
+      form <classname>@author</classname> <emphasis>firstname lastname</emphasis>.
+      Developers making major changes on the file must 
+      add their name.
+
+      For methods or constructors the
+      <classname>@param</classname>, <classname>@return</classname>, 
+      <classname>@throws</classname>, <classname>@see</classname> tag
+      must be included as needed. 
+      Do not use the <classname>@exception</classname> tag.
+      
+      A <classname>package.html</classname> must be added for each new package.
+      </para>
+
+      <para>
+      For further details, see 
+      <ulink url="http://java.sun.com/j2se/javadoc/writingdoccomments/index.html">
+      How to Write Doc Comments for Javadoc</ulink>
+      which includes information on the doc comment tags and for details about 
+      doc comments and javadoc, see the
+      <ulink url="http://java.sun.com/j2se/javadoc/">Javadoc Tool Home Page.</ulink>
+      </para>
+
+   </section>
+
+</chapter>

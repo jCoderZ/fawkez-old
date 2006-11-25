@@ -1,0 +1,14 @@
+
+# Get the server name from the command line parameters
+set ear [lindex $argv 0]
+
+# Get the server name from the command line parameters
+set serverName [lindex $argv 1]
+
+# Map web module to virtual host
+set v_params [list "framework-test" "framework-test.war,WEB-INF/web.xml" "default_host"]
+set vhostref [list $v_params]
+set attrs [list -server $serverName -MapWebModToVH $vhostref]
+
+puts "Deploying '$ear' on '$serverName' ..."
+$AdminApp install $ear $attrs

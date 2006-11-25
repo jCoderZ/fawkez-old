@@ -1,0 +1,347 @@
+<?xml version="1.0"?>
+
+<project name="build-doc">
+
+    <path id="xdoc.classpath">
+       <pathelement path="${build.dir}/classes"/>
+       <pathelement path="${build.dir}/docbook/"/> <!-- CatalogManager -->
+       <pathelement path="${build.dir}/docbook/docbook-xsl-1.69.1/extensions/saxon653.jar"/>
+       <fileset dir="${base.dir}/lib">
+          <include name="default/saxon/*.jar"/>
+          <include name="default/fop/*.jar"/>
+          <include name="default/batik-1.5-fop/*.jar"/>
+          <include name="default/xml-resolver/*.jar"/>
+          <include name="default/avalon-framework/*.jar"/>
+          <include name="default/xerces/*.jar"/>
+          <include name="default/xalan/*.jar"/>
+       </fileset>
+    </path>
+
+    <target name="xsl-stylesheets" depends="xsl-stylesheets_uptodatecheck,
+       xsl-stylesheets-nodeps" />
+    <target name="xsl-stylesheets_uptodatecheck">
+      <uptodate property="xsl-stylesheets_uptodate"
+                targetfile="${build.dir}/docbook/CatalogManager.properties">
+        <srcfiles dir="${base.dir}/src/xml/xsl/" includes="*.xsl.in"/>
+      </uptodate>
+    </target>
+    <target name="xsl-stylesheets-nodeps" unless="xsl-stylesheets_uptodate">
+       <property name="windows.uri.extension" value=""/>
+        <mkdir dir="${build.dir}/docbook"/>
+       <unzip src="${base.dir}/lib/default/docbook-xsl/docbook-xsl.zip"
+              dest="${build.dir}/docbook"/>
+       <copy file="${base.dir}/src/xml/xsl/jcoderz-xsl-param.xsl"
+             todir="${build.dir}/docbook" />
+       <copy file="${base.dir}/src/xml/xsl/jcoderz-html-style.xsl.in"
+             tofile="${build.dir}/docbook/jcoderz-html-style.xsl" />
+       <replace file="${build.dir}/docbook/jcoderz-html-style.xsl">
+          <replacefilter token="@DOCBOOK_XSL_HOME@"
+                         value="./docbook-xsl-1.69.1" />
+       </replace>
+       <copy file="${base.dir}/src/xml/xsl/jcoderz-fo-style.xsl.in"
+             tofile="${build.dir}/docbook/jcoderz-fo-style.xsl" />
+       <replace file="${build.dir}/docbook/jcoderz-fo-style.xsl">
+          <replacefilter token="@DOCBOOK_XSL_HOME@"
+                         value="./docbook-xsl-1.69.1" />
+       </replace>
+        <property name="catalog" 
+            location="${build.dir}/docbook/docbook-xsl-1.69.1/catalog.xml"/>
+       <echo file="${build.dir}/docbook/CatalogManager.properties"
+             append="false">#
+# File generated at ${build.time} on ${env.HOSTNAME}
+# by ${user.name}.
+#
+verbosity=1
+
+# Always use semicolons in this list
+catalogs=${catalog}
+
+# Prefer PUBLIC identifiers over SYSTEM identifiers
+prefer=public
+
+catalog-class-name=org.apache.xml.resolver.Resolver
+
+relative-catalogs=false
+static-catalog=yes
+# end-of-file
+       </echo>
+		<!-- Make it work in a windows environment -->
+        <replace file="${build.dir}/docbook/CatalogManager.properties" 
+            token="\" value="\\"/>
+    </target>
+
+    <target name="sad" depends="compile-all, xsl-stylesheets, sad-nodeps"/>
+    <target name="sad-nodeps">
+       <taskdef name="xdoc"
+                classname="org.jcoderz.commons.taskdefs.XtremeDocs">
+          <classpath>
+             <pathelement location="${build.dir}/classes"/>
+             <path refid="xdoc.classpath"/>
+          </classpath>
+       </taskdef>
+
+       <copy todir="${build.dir}/doc/sad/images"
+             overwrite="true">
+          <fileset dir="${base.dir}/src/doc/sad/images">
+             <include name="*.svg"/>
+             <include name="*.png"/>
+          </fileset>
+          <fileset dir="${base.dir}/src/doc/images">
+             <include name="*.svg"/>
+             <include name="*.png"/>
+          </fileset>
+       </copy>
+       <xdoc type="SAD" in="${base.dir}/src/doc/sad/sad.xml"
+             out="${build.dir}/doc/sad" failonerror="true"
+             xephome="${xep.home}" cclabel="${label}">
+          <src dir="${base.dir}/src/java"/>
+          <src dir="${build.dir}/gen-java"/>
+          <classpath>
+             <path refid="xdoc.classpath"/>
+          </classpath>
+          <formatter type="HTML"
+             style="${build.dir}/docbook/jcoderz-html-style.xsl"
+             css="${base.dir}/src/css/default.css"/>
+          <formatter type="PDF"
+             style="${build.dir}/docbook/jcoderz-fo-style.xsl"/>
+          <docletPath>
+             <pathelement location="${build.dir}/classes"/>
+             <fileset dir="${base.dir}/lib">
+                <include name="default/jtidy/*.jar"/>
+                <include name="umlgraph/*.jar"/>
+                <include name="default/geronimo-spec/*.jar"/>
+             </fileset>
+             <path refid="xdoc.classpath"/>
+          </docletPath>
+       </xdoc>
+    </target>
+
+    <target name="usecase" depends="compile-all, xsl-stylesheets, usecase-nodeps"/>
+    <target name="usecase-nodeps">
+       <taskdef name="xdoc"
+                classname="org.jcoderz.commons.taskdefs.XtremeDocs">
+          <classpath>
+             <pathelement location="${build.dir}/classes"/>
+             <path refid="xdoc.classpath"/>
+          </classpath>
+       </taskdef>
+
+       <mkdir dir="${build.dir}/doc/usecase/images"/>
+       <copy todir="${build.dir}/doc/usecase/images"
+            overwrite="true">
+         <fileset dir="${base.dir}/src/doc/usecase/images">
+            <include name="*.svg"/>
+            <include name="*.png"/>
+         </fileset>
+         <fileset dir="${base.dir}/src/doc/images">
+            <include name="*.svg"/>
+            <include name="*.png"/>
+         </fileset>
+       </copy>
+       <xdoc type="UseCase" in="${base.dir}/src/doc/usecase/sample.xml"
+             out="${build.dir}/doc/usecase" failonerror="true"
+             xephome="${xep.home}" cclabel="${label}" companyname="JCoderZ.org"
+             companylogo="jcoderz-org">
+          <src dir="${base.dir}/src/java"/>
+          <src dir="${build.dir}/gen-java"/>
+          <classpath>
+                <path refid="xdoc.classpath"/>
+          </classpath>
+          <formatter type="HTML"
+             style="${build.dir}/docbook/jcoderz-html-style.xsl"
+             css="${base.dir}/src/css/default.css"/>
+          <formatter type="PDF"
+             style="${build.dir}/docbook/jcoderz-fo-style.xsl"/>
+          <docletPath>
+             <path refid="xdoc.classpath"/>
+          </docletPath>
+      </xdoc>
+   </target>
+
+
+   <!-- =================================================================== -->
+   <!-- Saxon (XSLT processing)                                             -->
+   <!-- =================================================================== -->
+   <target name="subtarget-saxon" depends="xsl-stylesheets">
+      <java taskname="saxon" fork="true" failonerror="true"
+            dir="${build.dir}/docbook"
+            classname="com.icl.saxon.StyleSheet">
+         <arg value="-x"/>
+         <arg value="org.apache.xml.resolver.tools.ResolvingXMLReader"/>
+         <arg value="-y"/>
+         <arg value="org.apache.xml.resolver.tools.ResolvingXMLReader"/>
+         <arg value="-r"/>
+         <arg value="org.apache.xml.resolver.tools.CatalogResolver"/>
+         <arg value="-u"/>
+         <arg value="-o"/>
+         <arg file="${outfile}"/>
+         <arg value="${xmlfile}"/>
+         <arg value="${stylesheet}"/>
+         <arg value="html.stylesheet=default.css"/>
+         <arg value="use.extensions=1"/>
+         <arg value="fop.extensions=1"/>
+         <arg value="xep.extensions=1"/>
+         <classpath refid="xdoc.classpath"/>
+      </java>
+   </target>
+
+   <!-- =================================================================== -->
+   <!-- Xalan2 (XSLT processing)                                             -->
+   <!-- =================================================================== -->
+   <target name="subtarget-xalan" depends="xsl-stylesheets">
+      <java taskname="xalan" fork="true" failonerror="true"
+            dir="${build.dir}/docbook"
+            classname="org.apache.xalan.xslt.Process">
+         <arg value="-ENTITYRESOLVER"/>
+         <arg value="com.sun.resolver.tools.CatalogResolver"/>
+         <arg value="-URIRESOLVER"/>
+         <arg value="com.sun.resolver.tools.CatalogResolver"/>
+         <arg value="-out"/>
+         <arg file="${outfile}"/>
+         <arg value="-in"/>
+         <arg file="${xmlfile}"/>
+         <arg value="-xsl"/>
+         <arg value="${stylesheet}"/>
+         <jvmarg value="-Xbootclasspath/p:${xalan.jar}"/>
+         <classpath refid="xdoc.classpath"/>
+      </java>
+   </target>
+
+   <!-- =================================================================== -->
+   <!-- FOP  (.fo -> pdf)                                                   -->
+   <!-- =================================================================== -->
+   <target name="check-have-renderX">
+      <available property="have-renderX"
+                 file="/opt/xep/3.6.4/xep.sh"
+                 type="file"/>
+      <echo message="renderX=${have-renderX}"/>
+   </target>
+   <target name="xep" if="have-renderX">
+      <exec dir="${basedir}"
+            executable="sh">
+         <arg line="-c '/opt/xep/3.6.4/xep.sh -fo ${fo.file} -pdf ${outfile}'"/>
+      </exec>
+   </target>
+   <target name="fop" unless="have-renderX">
+      <taskdef name="fop"
+          classname="org.apache.fop.tools.anttasks.Fop">
+          <classpath refid="xdoc.classpath"/>
+      </taskdef>
+
+      <fop format="application/pdf"
+           fofile="${fo.file}"
+           outfile="${outfile}"
+           messagelevel="warn" />
+   </target>
+   <target name="subtarget-fo" depends="check-have-renderX, xep, fop">
+   </target>
+
+   <!-- =================================================================== -->
+   <!-- DocBook to HTML                                                    -->
+   <!-- =================================================================== -->
+   <target name="docbook2html">
+      <antcall target="subtarget-saxon">
+         <param name="xmlfile" value="file:${xmlfile}"/>
+         <param name="outfile" value="${outfile}"/>
+         <param name="stylesheet" value="file:${build.dir}/docbook/jcoderz-html-style.xsl"/>
+      </antcall>
+      <echo message="HTML file: ${outfile}" />
+   </target>
+
+   <!-- =================================================================== -->
+   <!-- DocBook to PDF                                                      -->
+   <!-- =================================================================== -->
+   <target name="docbook2pdf">
+      <property name="fo.file" value="${build.dir}/guidelines/tmp.fo"/>
+      <antcall target="subtarget-saxon">
+         <param name="xmlfile" value="file:${xmlfile}"/>
+         <param name="outfile" value="${fo.file}"/>
+         <param name="stylesheet" value="file:${build.dir}/docbook/jcoderz-fo-style.xsl"/>
+      </antcall>
+      <antcall target="subtarget-fo" >
+         <param name="fofile" value="${fo.file}"/>
+         <param name="outfile" value="${outfile}"/>
+      </antcall>
+      <echo message="PDF file: ${outfile}" />
+   </target>
+
+
+   <!-- =================================================================== -->
+   <!-- Generate Java Code Snippets                                         -->
+   <!-- =================================================================== -->
+   <target name="java-codesnippets"
+           depends="prepare, compile-all, 
+			   java-codesnippets_uptodatecheck, java-codesnippets-nodeps">
+   </target>
+   <target name="java-codesnippets_uptodatecheck">
+      <uptodate property="java-codesnippets_uptodate"
+                targetfile="${build.dir}/guidelines/xml/java/snippets/code-snippet-catalog.xml">
+        <srcfiles dir="${base.dir}/src/java/org/jcoderz/guidelines" includes="*.java"/>
+        <srcfiles dir="${base.dir}/src/java/org/jcoderz/guidelines/snippets" includes="*.java"/>
+      </uptodate>
+   </target>
+   <target name="java-codesnippets-nodeps" unless="java-codesnippets_uptodate">
+      <mkdir dir="${build.dir}/guidelines/classes"/>
+      <javac srcdir="${base.dir}/src/java/org/jcoderz/guidelines"
+             destdir="${build.dir}/guidelines/classes"
+             deprecation="${build.debug}"
+             debug="${build.debug}"
+             source="1.4">
+         <classpath>
+            <pathelement path="${build.dir}/classes"/>
+            <path refid="default.classpath"/>
+         </classpath>
+      </javac>
+      <mkdir dir="${build.dir}/guidelines/xml/java/snippets"/>
+      <java taskname="codesnippets" fork="false" failonerror="true"
+            classname="org.jcoderz.guidelines.JavaCodeSnippets">
+         <arg path="${base.dir}/src/java/org/jcoderz/guidelines/snippets/"/>
+         <arg path="${build.dir}/guidelines/xml/java/snippets/"/>
+         <classpath>
+            <pathelement location="${build.dir}/guidelines/classes"/>
+            <pathelement path="${build.dir}/classes"/>
+         </classpath>
+      </java>
+   </target>
+
+   <!-- =================================================================== -->
+   <!-- Guideline: Java                                                     -->
+   <!-- =================================================================== -->
+   <target name="guideline-java"
+           depends="java-codesnippets, guideline-java_uptodatecheck, guideline-java-nodeps">
+   </target>
+   <target name="guideline-java_uptodatecheck">
+      <uptodate property="guideline-java_uptodate"
+                targetfile="${build.dir}/guidelines/java/java.pdf">
+        <srcfiles dir="${build.dir}/guidelines/xml/java" includes="**/*"/>
+      </uptodate>
+   </target>
+
+   <target name="guideline-java-nodeps" unless="guideline-java_uptodate">
+      <property name="java.outdir" value="${build.dir}/doc/guidelines/java"/>
+      <mkdir dir="${java.outdir}"/>
+
+      <!-- HTML -->
+      <antcall target="docbook2html">
+         <param name="xmlfile" value="${base.dir}/src/doc/guidelines/java.xml"/>
+         <param name="outfile" value="${java.outdir}/java.html"/>
+      </antcall>
+
+      <mkdir dir="${java.outdir}/images"/>
+      <copy file="${base.dir}/src/css/default.css" todir="${java.outdir}"/>
+      <copy todir="${java.outdir}/images"
+            overwrite="true">
+         <fileset dir="${base.dir}/src/doc/images">
+            <include name="*.svg"/>
+            <include name="*.png"/>
+         </fileset>
+      </copy>
+
+      <!-- PDF -->
+      <antcall target="docbook2pdf">
+         <param name="xmlfile" value="${base.dir}/src/doc/guidelines/java.xml"/>
+         <param name="outfile" value="${java.outdir}/java.pdf"/>
+      </antcall>
+   </target>
+
+</project>

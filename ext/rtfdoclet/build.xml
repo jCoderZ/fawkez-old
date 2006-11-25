@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+
+<project name="rtfdoclet" basedir="." default="build">
+
+   <property file="../../lib/ant.properties"/>
+
+   <property name="build.dir" value="${basedir}/build"/>
+   <property name="dist.dir" value="${basedir}/dist"/>
+
+   <target name="timestamp">
+      <tstamp>
+         <format property="build.time" pattern="yyyy.MM.dd HH:mm z"/>
+      </tstamp>
+   </target>
+   <target name="prepare" depends="timestamp">
+      <mkdir dir="${build.dir}/classes" />
+      <echo message="JAVACC.HOME=${javacc.home}"/>
+   </target>
+
+
+   <target name="build" depends="prepare">
+      <mkdir dir="${build.dir}/gen-java"/>
+      <javacc target="./sources/htmlComment.jj"
+              outputdirectory="${build.dir}/gen-java"
+              javacchome="${javacc.home}"
+              static="false"/>
+      <javac destdir="${build.dir}/classes"
+             deprecation="true"
+             debug="true" >
+         <src path="${basedir}/sources"/>
+         <src path="${build.dir}/gen-java"/>
+      </javac>
+      <jar jarfile="${build.dir}/rtfdoclet.jar">
+         <fileset dir="${build.dir}/classes">
+            <exclude name="**/*Test*.class"/>
+         </fileset>
+      </jar>
+   </target>
+
+   <target name="dist" depends="build">
+      <mkdir dir="${dist.dir}"/>
+      <copy file="${build.dir}/rtfdoclet.jar" 
+            todir="${dist.dir}"/>
+   </target>
+
+   <target name="clean" description="Clean all build stuff.">
+      <delete dir="${basedir}/build"/>
+   </target>
+
+   <target name="distclean" depends="clean" description="Clean up everything">
+      <delete dir="${basedir}/dist"/>
+   </target>
+
+</project>

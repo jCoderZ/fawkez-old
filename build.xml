@@ -1,0 +1,992 @@
+<?xml version="1.0"?>
+<!--
+    $Id$
+
+    Copyright 2006, The jCoderZ.org Project. All rights reserved.
+
+    Redistribution and use in source and binary forms, with or without
+    modification, are permitted provided that the following conditions are
+    met:
+
+        * Redistributions of source code must retain the above copyright
+          notice, this list of conditions and the following disclaimer.
+        * Redistributions in binary form must reproduce the above
+          copyright notice, this list of conditions and the following
+          disclaimer in the documentation and/or other materials
+          provided with the distribution.
+        * Neither the name of the jCoderZ.org Project nor the names of
+          its contributors may be used to endorse or promote products
+          derived from this software without specific prior written
+          permission.
+
+    THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS "AS IS" AND
+    ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+    IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+    PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE REGENTS AND CONTRIBUTORS
+    BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+    CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+    SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
+    BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+    WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+    OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+    ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ -->
+<project name="fawkeZ" basedir="." default="build" xmlns:ivy="antlib:fr.jayasoft.ivy.ant">
+
+    <import file="config/properties.xml"/>
+    <import file="config/macros.xml"/>
+    <import file="config/build-test.xml"/>
+    <import file="config/build-report.xml"/>
+    <import file="config/build-doc.xml"/>
+
+    <!-- =================================================================== -->
+    <!-- Classpath                                                           -->
+    <!-- =================================================================== -->
+    <path id="default.classpath">
+      <path location="${base.dir}/lib/eclipse/tools.jar"/>
+      <fileset dir="${base.dir}/lib">
+        <include name="default/**/*.jar"/>
+        <!-- causing conflicts w/ the xerces jar from Ant
+             using the junitreport task -->
+        <exclude name="default/**/xercesImpl*.jar"/>
+        <!-- special BCEL version -->
+        <exclude name="default/findbugs/bcel*.jar"/>
+      </fileset>
+    </path>
+    <path id="javadoc.classpath">
+      <path refid="default.classpath"/>
+      <fileset dir="${base.dir}/lib">
+        <include name="default/**/xercesImpl*.jar"/>
+        <include name="default/findbugs/bcel*.jar"/>
+      </fileset>
+    </path>
+
+    <path id="jaxb-compile.classpath">
+      <fileset dir="${base.dir}/lib">
+        <include name="default/jaxb/*.jar"/>
+      </fileset>
+      <path refid="default.classpath"/>
+    </path>
+
+    <!-- =================================================================== -->
+    <!-- Help                                                                -->
+    <!-- =================================================================== -->
+    <target name="help">
+        <echo taskname="help">
++-----------------------------------------------------------------+
+|   __                _        _____                              |
+|  / _| __ ___      _| | _____|__  /                              |
+| | |_ / _` \ \ /\ / / |/ / _ \ / /                               |
+| |  _| (_| |\ V  V /|   (  __// /_                               |
+| |_|  \__,_| \_/\_/ |_|\_\___/____|                              |
+|                                                                 |
+| - Version ${version} -
+|                                                                 |
+| Welcome to the ${Name} build.
+| Following targets are available:                                |
+|                                                                 |
+| build (default)   build minimum for deployment                  |
+| dist              build distribution                            |
+| tarball           build distribution tarball                    |
+| clean             clean up, except dist                         |
+| distclean         clean up everything                           |
+| libclean          clean up everything and clear lib directory   |
+| test              run all JUnit tests (local and server)        |
+| doc               build documentation (API, SAD, ...)           |
++-----------------------------------------------------------------+
+        </echo>
+    </target>
+
+    <!-- =================================================================== -->
+    <!-- Environment Info                                                    -->
+    <!-- =================================================================== -->
+    <target name="dump-info"
+            depends="check_for_optional_packages"
+            unless="dump-info-done">
+        <echo level="info" taskname="info">
++-----------------------------------------------------------------+
+|   __                _        _____                              |
+|  / _| __ ___      _| | _____|__  /                              |
+| | |_ / _` \ \ /\ / / |/ / _ \ / /                               |
+| |  _| (_| |\ V  V /|   (  __// /_                               |
+| |_|  \__,_| \_/\_/ |_|\_\___/____|                              |
+|                                                                 |
+| - Version ${version} -
+|                                                                 |
+| JAVA_HOME=${env.JAVA_HOME}
+| ${java.vm.vendor}/${java.vm.version}
+| ${ant.version}
+| ${os.name}/${os.arch}/${os.version}
+| file.encoding=${file.encoding}  language=${user.language}  build.debug=${build.debug}
+| CLASSPATH=${env.CLASSPATH}
++-----------------------------------------------------------------+
+</echo>
+        <property name="dump-info-done" value="true"/>
+   </target>
+
+    <!-- =================================================================== -->
+    <!-- Check to see what optional dependencies are available               -->
+    <!-- =================================================================== -->
+    <target name="check_for_optional_packages"
+            unless="check_for_optional_packages-done">
+        <available property="junit.present"
+                   classname="junit.framework.TestCase">
+            <classpath>
+                <pathelement path="system.classpath"/>
+            </classpath>
+        </available>
+        <property name="check_for_optional_packages-done" value="true"/>
+    </target>
+
+    <!-- =================================================================== -->
+    <!-- Generates a Version class w/ information about this build           -->
+    <!-- =================================================================== -->
+    <target name="generate-version-class" depends="timestamp">
+        <mkdir dir="${build.dir}"/>
+        <echoproperties destfile="${build.dir}/compile.properties"/>
+        <mkdir dir="${build.dir}/gen-java/${project.package.path}"/>
+        <copy file="${base.dir}/src/templates/Version.java.in"
+            tofile="${build.dir}/gen-java/${project.package.path}/Version.java">
+            <filterset begintoken="$${" endtoken="}">
+                <filtersfile file="${build.dir}/compile.properties"/>
+            </filterset>
+        </copy>
+    </target>
+
+    <!-- =================================================================== -->
+    <!-- Set up proxy communications                                         -->
+    <!-- =================================================================== -->
+    <target name="configure-proxy-with-auth" if="proxyUser">
+      <condition property="proxy-settings-complete">
+        <and>
+          <isset property="proxyUser"/>
+          <isset property="proxyPass"/>
+          <isset property="proxyHost"/>
+          <isset property="proxyPort"/>
+        </and>
+      </condition>
+      <fail unless="proxy-settings-complete">
+        Proxy settings are incomplete. To use a proxy with proxy authentication,
+        you need to set the following:
+           o proxyUser
+           o proxyPass
+           o proxyHost
+           o proxyPort
+      </fail>
+      <setproxy
+        proxyhost="${proxyHost}"
+        proxyport="${proxyPort}"
+        proxyuser="${proxyUser}"
+        proxypassword="${proxyPass}"/>
+      <property name="proxy-configured" value="true"/>
+    </target>
+
+    <target name="configure-proxy-without-auth"
+      if="proxyHost"
+      unless="proxy-configured">
+      <condition property="proxy-settings-complete">
+        <and>
+          <isset property="proxyHost"/>
+          <isset property="proxyPort"/>
+        </and>
+      </condition>
+      <fail unless="proxy-settings-complete">
+        Proxy settings are incomplete. To use a proxy, you need to set the following:
+           o proxyHost
+           o proxyPort
+      </fail>
+      <setproxy
+        proxyhost="${proxyHost}"
+        proxyport="${proxyPort}"/>
+    </target>
+
+    <target name="configure-proxy-settings"
+      depends="configure-proxy-with-auth, configure-proxy-without-auth"/>
+
+    <!-- =================================================================== -->
+    <!-- Retrieve 3rd party libraries from ibiblio and local file repository -->
+    <!-- =================================================================== -->
+    <target name="retrieve-3rd-party-libs"
+      depends="configure-proxy-settings">
+        <!-- for eclipse/doclet -->
+        <mkdir dir="${base.dir}/lib/eclipse"/>
+        <copy file="${env.JAVA_HOME}/lib/tools.jar"
+            todir="${base.dir}/lib/eclipse"/>
+        <!-- xmlns:ivy="antlib:fr.jayasoft.ivy.ant" -->
+        <typedef resource="fr/jayasoft/ivy/ant/antlib.xml">
+            <classpath>
+                <pathelement location="${base.dir}/lib/ivy/ivy-1.4.1.jar"/>
+                <pathelement location="${base.dir}/lib/ivy/commons-httpclient-3.0.1.jar"/>
+                <pathelement location="${base.dir}/lib/ivy/commons-logging.jar"/>
+                <pathelement location="${base.dir}/lib/ivy/commons-codec-1.3.jar"/>
+            </classpath>
+        </typedef>
+        <configure file="${base.dir}/config/ivyconf.xml" />
+        <resolve file="${base.dir}/config/ivy.xml" conf="default"/>
+        <retrieve pattern="${base.dir}/lib/[conf]/[module]/[artifact].[ext]"
+            conf="default"/>
+    </target>
+    <target name="report-dependency" depends="retrieve-3rd-party-libs">
+        <mkdir dir="${build.dir}/ivy"/>
+        <report todir="${build.dir}/ivy"/>
+    </target>
+
+    <!-- =================================================================== -->
+    <!-- Prepares build environment: generate Version class, retrieve libs   -->
+    <!-- =================================================================== -->
+    <target name="timestamp">
+        <tstamp>
+            <format property="build.time" pattern="yyyy.MM.dd HH:mm z"/>
+        </tstamp>
+    </target>
+    <target name="prepare" depends="timestamp, dump-info,
+        generate-version-class, retrieve-3rd-party-libs">
+      <!-- Part of the IDE source part -->
+        <mkdir dir="${build.dir}/gen-java"/>
+        <mkdir dir="${build.dir}/gen-test"/>
+    </target>
+
+    <!-- =================================================================== -->
+    <!-- Generates the Ant task                                              -->
+    <!-- =================================================================== -->
+    <!-- TODO: add -nodeps target -->
+    <target name="bootstrap-ant-tasks" depends="prepare">
+        <mkdir dir="${build.dir}/bootstrap-classes"/>
+        <!-- fork="true" is needed to prevent from compile errors on AIX. -->
+        <javac destdir="${build.dir}/bootstrap-classes"
+             deprecation="${build.debug}"
+             debug="true"
+             fork="true"
+             source="1.4">
+            <src path="${base.dir}/src/bootstrap-java"/>
+            <classpath refid="default.classpath"/>
+        </javac>
+        <javac destdir="${build.dir}/bootstrap-classes"
+             deprecation="${build.debug}"
+             debug="true"
+             fork="true"
+             source="1.4">
+            <src path="${base.dir}/src/java"/>
+            <include name="org/jcoderz/commons/taskdefs/*.java"/>
+            <include name="org/jcoderz/commons/util/*.java"/>
+            <include name="org/jcoderz/phoenix/cmpgen2/*.java"/>
+            <exclude name="org/jcoderz/commons/util/JaxbUtil.java"/>
+            <exclude name="org/jcoderz/commons/util/JmsUtil.java"/>
+            <exclude name="org/jcoderz/commons/util/ThrowableUtil.java"/>
+            <exclude name="org/jcoderz/commons/*.java"/>
+            <classpath>
+                <pathelement path="${build.dir}/bootstrap-classes"/>
+                <path refid="default.classpath"/>
+            </classpath>
+        </javac>
+        <copy todir="${build.dir}/bootstrap-classes/org/jcoderz/commons/taskdefs">
+            <fileset dir="${base.dir}/src/xml/xsl">
+                <include name="*.xsl"/>
+            </fileset>
+            <fileset dir="${base.dir}/src/xml/schema">
+                <include name="app-info.xsd"/>
+            </fileset>
+        </copy>
+    </target>
+
+   <!-- =================================================================== -->
+   <!-- Generates the log message info classes                              -->
+   <!-- =================================================================== -->
+   <target name="generate-log-message-info"
+           depends="bootstrap-ant-tasks,
+                    generate-log-message-info.uptodatecheck,
+                    generate-log-message-info-nodeps"/>
+   <target name="generate-log-message-info.uptodatecheck">
+      <uptodate property="generate-log-message-info.uptodate"
+                targetfile="${build.dir}/generate-log-message-info.out" >
+         <srcfiles dir= "${base.dir}">
+            <include name="src/xml/app-info.xml"/>
+            <include name="src/xml/csp-*-info.xml"/>
+            <include name="src/xml/xsl/libcommon.xsl"/>
+            <include name="src/xml/xsl/generate-log-message-info.xsl"/>
+         </srcfiles>
+      </uptodate>
+   </target>
+   <!-- TODO: Refactor: one task for all artifacts from app-info.xml -->
+   <target name="generate-log-message-info-nodeps"
+           unless="generate-log-message-info.uptodate">
+      <taskdef name="log-message-generator"
+               classname="org.jcoderz.commons.taskdefs.LogMessageGenerator">
+         <classpath>
+            <pathelement location="${build.dir}/classes"/>
+            <pathelement location="${build.dir}/bootstrap-classes"/>
+            <path refid="default.classpath"/>
+         </classpath>
+      </taskdef>
+      <log-message-generator
+         in="${base.dir}/src/xml/app-info.xml"
+         out="${build.dir}/generate-log-message-info.out"
+         destDir="${build.dir}/gen-java"
+         application="FWK"
+         failonerror="true"
+         force="true"/>
+   </target>
+
+   <target name="app-info"
+           depends="bootstrap-ant-tasks,
+                    app-info-nodeps"/>
+   <target name="app-info-nodeps"
+           unless="app-info.uptodate">
+      <taskdef name="app-info"
+               classname="org.jcoderz.commons.taskdefs.AppInfoTask">
+         <classpath>
+            <pathelement location="${build.dir}/classes"/>
+            <pathelement location="${build.dir}/bootstrap-classes"/>
+            <path refid="default.classpath"/>
+         </classpath>
+      </taskdef>
+      <app-info
+         in="${base.dir}/src/xml/app-info.xml"
+         out="${build.dir}/app-info.xml"
+         failonerror="true"
+         validate="true"
+         force="false"/>
+   </target>
+
+
+   <!-- =================================================================== -->
+   <!-- Generates the simple type classes                                   -->
+   <!-- =================================================================== -->
+   <target name="generate-simple-types"
+           depends="generate-simple-types.uptodatecheck,
+                    generate-simple-types-nodeps"/>
+   <target name="generate-simple-types.uptodatecheck">
+      <uptodate property="generate-simple-types.uptodate"
+                targetfile="${build.dir}/simple-types.out" >
+         <srcfiles dir= "${base.dir}">
+            <include name="src/xml/simple-types.xml"/>
+            <include name="src/xml/xsl/generate-simple-types.xsl"/>
+            <include name="src/xml/xsl/libcommon.xsl"/>
+         </srcfiles>
+      </uptodate>
+   </target>
+   <target name="generate-simple-types-nodeps"
+           unless="generate-simple-types.uptodate">
+      <xslt basedir="${base.dir}"
+            in="${base.dir}/src/xml/simple-types.xml"
+            out="${build.dir}/simple-types.out"
+            style="${base.dir}/src/xml/xsl/generate-simple-types.xsl"
+            force="true">
+         <param name="outdir" expression="${base.dir}/build/gen-java"/>
+      </xslt>
+      <touch file="${build.dir}/simple-types.out"/>
+   </target>
+
+   <!-- =================================================================== -->
+   <!-- TEMPORARY ! generate config service classes                                          -->
+   <!-- =================================================================== -->
+   <target name="generate-config-classes"
+      depends="bootstrap-ant-tasks, generate-config-classes-nodeps"/>
+   <target name="generate-config-classes-nodeps">
+      <taskdef name="config-classes-generator"
+               classname="org.jcoderz.commons.taskdefs.ConfigurationClassesGenerator">
+         <classpath>
+            <pathelement location="${build.dir}/classes"/>
+            <pathelement location="${build.dir}/bootstrap-classes"/>
+            <path refid="default.classpath"/>
+         </classpath>
+      </taskdef>
+      <config-classes-generator
+               in="${base.dir}/src/xml/app-info.xml"
+               out="${build.dir}/app-info-config-classes.out"
+               destDir="${build.dir}/gen-java"
+               application="FawkeZ"
+               groups="SEC TST CFG CON"
+               failonerror="true"
+               force="false"/>
+   </target>
+
+    <!-- =================================================================== -->
+    <!-- generate config init resource bundle                                -->
+    <!-- =================================================================== -->
+    <target name="generate-config-init-file"
+       depends="prepare, generate-config-init-file-uptodatecheck,
+                generate-config-init-file-nodeps"/>
+    <target name="generate-config-init-file-uptodatecheck">
+       <uptodate property="generate-config-init-file.uptodate"
+                 targetfile="${build.dir}/gen-sql/cfg_initialize.sql" >
+          <srcfiles dir="${base.dir}/src/xml">
+             <include name="app-info.xml" />
+             <include name="csp-*-info.xml" />
+          </srcfiles>
+       </uptodate>
+    </target>
+    <target name="generate-config-init-file-nodeps"
+        unless="generate-config-init-file.uptodate">
+       <taskdef name="config-init-file-generator"
+                classname="org.jcoderz.commons.taskdefs.ConfigurationInitFileGenerator">
+          <classpath>
+            <pathelement location="${build.dir}/classes"/>
+            <pathelement location="${build.dir}/bootstrap-classes"/>
+            <path refid="default.classpath"/>
+          </classpath>
+       </taskdef>
+       <!-- for database solution -->
+       <config-init-file-generator
+                in="${base.dir}/src/xml/app-info.xml"
+                out="${build.dir}/gen-sql/cfg_initialize.sql"
+                application="FawkeZ"
+                groups="TST CFG CON"
+                mode="sql"
+                failonerror="true"
+                force="true"/>
+    </target>
+
+   <!-- =================================================================== -->
+   <!-- Run JAXB Schema compiler                                            -->
+   <!-- =================================================================== -->
+   <target name="jaxb-stubs"
+           depends="jaxb-stubs-uptodate-check, jaxb-stubs-nodeps"/>
+   <target name="jaxb-stubs-uptodate-check" >
+	<!-- Disabled: Each jaxb task has it's own dependency ckeck
+		<uptodate property="jaxb-stubs.uptodate"
+                targetfile="${build.dir}/gen-java/org/jcoderz/phoenix/checkstyle/jaxb/jaxb.properties" >
+         <srcfiles dir= "${base.dir}/src/xml/schema" includes="**/*.xsd"/>
+     </uptodate> -->
+   </target>
+   <target name="jaxb-stubs-nodeps"
+           depends="prepare"
+           unless="jaxb-stubs.uptodate"
+           description="Generate JAXB Java Classes from Schema(s)">
+      <mkdir dir="${build.dir}/gen-java" />
+
+      <!-- compile types used by the XML schema -->
+        <mkdir dir="${build.dir}/classes"/>
+        <javac destdir="${build.dir}/classes"
+            deprecation="${build.debug}"
+            debug="${build.debug}"
+            classpathref="default.classpath"
+            source="1.4">
+            <src path="${base.dir}/src/java"/>
+            <src path="${build.dir}/gen-java"/>
+            <include name="org/jcoderz/phoenix/report/Severity.java"/>
+            <include name="org/jcoderz/phoenix/report/Origin.java"/>
+            <include name="org/jcoderz/phoenix/report/ReportLevel.java"/>
+        </javac>
+        <taskdef name="xjc" classname="com.sun.tools.xjc.XJCTask">
+            <classpath>
+                <path refid="jaxb-compile.classpath"/>
+                <pathelement path="${build.dir}/classes"/>
+            </classpath>
+        </taskdef>
+
+        <xjc target="${build.dir}/gen-java"
+             extension="true"
+             schema="${base.dir}/src/xml/schema/report.xsd">
+            <depends file="${base.dir}/src/xml/schema/report.xsd"/>
+            <produces dir="${build.dir}/gen-java/org/jcoderz/phoenix/report/jaxb">
+                <include name="**/*"/>
+            </produces>
+        </xjc>
+
+        <jaxb-compiler schema="${base.dir}/src/xml/schema/log-message.xsd"
+            produces="${build.dir}/gen-java/org/jcoderz/commons/logging"/>
+
+        <jaxb-compiler schema="${base.dir}/src/xml/findbugs/findbugs.xsd"
+            produces="${build.dir}/gen-java/org/jcoderz/phoenix/findbugs/jaxb"/>
+        <xjc target="${build.dir}/gen-java"
+             extension="true"
+			 binding="${base.dir}/src/xml/findbugs/messagecollection.xjb"
+             schema="${base.dir}/src/xml/findbugs/messagecollection.xsd">
+<!--            <arg value="-use-runtime"/>
+            <arg value="org.jcoderz.phoenix.report.jaxb.impl.runtime"/> -->
+            <depends file="${base.dir}/src/xml/findbugs/messagecollection.xsd"/>
+            <produces dir="${build.dir}/gen-java/org/jcoderz/phoenix/findbugs/message/jaxb">
+                <include name="**/*"/>
+            </produces>
+        </xjc>
+
+        <jaxb-compiler schema="${base.dir}/src/xml/schema/pmd.xsd"
+            produces="${build.dir}/gen-java/org/jcoderz/phoenix/pmd/jaxb"/>
+        <jaxb-compiler schema="${base.dir}/src/xml/schema/pmd-ruleset.xsd"
+            produces="${build.dir}/gen-java/org/jcoderz/phoenix/pmd/ruleset/jaxb"/>
+        <jaxb-compiler schema="${base.dir}/src/xml/schema/cpd.xsd"
+            produces="${build.dir}/gen-java/org/jcoderz/phoenix/cpd/jaxb"/>
+
+        <jaxb-compiler schema="${base.dir}/src/xml/schema/coverage.xsd"
+            produces="${build.dir}/gen-java/org/jcoderz/phoenix/coverage/jaxb"/>
+
+        <jaxb-compiler schema="${base.dir}/src/xml/schema/jcoverage.xsd"
+            produces="${build.dir}/gen-java/org/jcoderz/phoenix/jcoverage/jaxb"/>
+
+        <jaxb-compiler schema="${base.dir}/src/xml/schema/checkstyle.xsd"
+            produces="${build.dir}/gen-java/org/jcoderz/phoenix/checkstyle/jaxb"/>
+        <jaxb-compiler schema="${base.dir}/src/xml/schema/checkstyle-message.xsd"
+            produces="${build.dir}/gen-java/org/jcoderz/phoenix/checkstyle/message/jaxb"/>
+
+        <jaxb-compiler schema="${base.dir}/src/xml/schema/sql-transformer-metainf.xsd"
+            produces="${build.dir}/gen-java/org/jcoderz/phoenix/sqlparser/jaxb"/>
+    </target>
+
+    <!-- =================================================================== -->
+    <!-- Generate CMP entity beans from SQL scrips                           -->
+    <!-- =================================================================== -->
+    <target name="generate-entity-beans"
+       depends="prepare, generate-entity-beans-uptodatecheck,
+       generate-entity-beans-nodeps"/>
+    <target name="generate-entity-beans-uptodatecheck">
+        <uptodate property="entities.uptodate"
+          targetfile="${build.dir}/generate-entity-beans.done">
+            <srcfiles dir="${base.dir}/src/sql">
+                <include name="*_create_*.sql"/>
+            </srcfiles>
+        </uptodate>
+    </target>
+    <target name="generate-entity-beans-nodeps" unless="entities.uptodate">
+        <touch file="${build.dir}/generate-entity-beans.done"/>
+        <generate-entity-beans
+          sqlfile="${base.dir}/src/sql/cfg_create_tables.sql"
+          package="org.jcoderz.commons.config"/>
+    </target>
+
+    <!-- =================================================================== -->
+    <!-- Extend deployment descriptors for read-only entity beans            -->
+    <!-- =================================================================== -->
+    <target name="add-readonly-entities"
+        depends="ejbdoclet, bootstrap-ant-tasks">
+        <taskdef name="make-readonly-beans"
+            classname="org.jcoderz.commons.taskdefs.MakeReadonlyBeans">
+            <classpath>
+                <pathelement location="${build.dir}/classes"/>
+                <pathelement location="${build.dir}/bootstrap-classes"/>
+                <path refid="default.classpath"/>
+            </classpath>
+        </taskdef>
+        <mkdir dir="${build.dir}/dd-with-readonly-entities"/>
+        <make-readonly-beans
+         destdir="${build.dir}/dd-with-readonly-entities"
+         sourcedestdir="${build.dir}/gen-java"
+         deploymentdescriptor="${build.dir}/deploymentdescriptors/ejb-jar.xml"
+         weblogicDeploymentDescriptor="${build.dir}/deploymentdescriptors/weblogic-ejb-jar.xml"
+         weblogicCmpDeploymentDescriptor="${build.dir}/deploymentdescriptors/weblogic-cmp-rdbms-jar.xml"
+         failonerror="true">
+            <readonlybean name="ConfigEntity"/>
+        </make-readonly-beans>
+    </target>
+
+    <!-- =================================================================== -->
+    <!-- run Xdoclet for all Beans                                           -->
+    <!-- =================================================================== -->
+    <target name="ejbdoclet"
+        depends="prepare, generate-entity-beans, ejbdoclet-uptodatecheck, ejbdoclet-nodeps"/>
+    <target name="ejbdoclet-uptodatecheck">
+        <uptodate property="ejbdoclet.uptodate"
+                  targetfile="${build.dir}/deploymentdescriptors/ejb-jar.xml" >
+            <srcfiles dir="${base.dir}/src/java">
+                <include name="**/*Bean.java" />
+                <exclude name="**/*MBean.java" />
+            </srcfiles>
+            <srcfiles dir="${build.dir}/gen-java">
+                <include name="**/*Bean.java" />
+                <exclude name="**/*MBean.java" />
+            </srcfiles>
+        </uptodate>
+    </target>
+    <target name="ejbdoclet-nodeps" unless="ejbdoclet.uptodate">
+        <xdoclet-ejb
+            destdir="${build.dir}/gen-java"
+            dd-dir="${build.dir}/deploymentdescriptors">
+            <sources>
+                <fileset dir="${base.dir}/src/java">
+                    <include name="**/*Bean.java" />
+                    <exclude name="**/*MBean.java" />
+                </fileset>
+                <fileset dir="${build.dir}/gen-java">
+                    <include name="**/*Bean.java" />
+                    <exclude name="**/*MBean.java" />
+                </fileset>
+            </sources>
+        </xdoclet-ejb>
+    </target>
+
+    <!-- =================================================================== -->
+    <!-- run Xdoclet/Web for production Servlets                             -->
+    <!-- =================================================================== -->
+    <target name="webdoclet"
+            depends="ejbdoclet,webdoclet-uptodatecheck, webdoclet-nodeps"/>
+    <target name="webdoclet-uptodatecheck">
+        <uptodate property="webdoclet.uptodate"
+             targetfile="${build.dir}/deploymentdescriptors/web.xml" >
+            <srcfiles dir="${base.dir}/src/java">
+                <include name="**/*Servlet.java" />
+            </srcfiles>
+        </uptodate>
+    </target>
+    <target name="webdoclet-nodeps" unless="webdoclet.uptodate">
+        <taskdef name="webdoclet"
+             classname="xdoclet.modules.web.WebDocletTask">
+            <classpath refid="default.classpath"/>
+        </taskdef>
+        <webdoclet destdir="${build.dir}" verbose="true">
+            <fileset dir="${base.dir}/src/java">
+                <include name="**/*Servlet.java" />
+            </fileset>
+            <deploymentdescriptor
+             destdir="${build.dir}/deploymentdescriptors"
+             validatexml="true"
+             mergedir="${base.dir}/src/xml/xdoclet" />
+        </webdoclet>
+    </target>
+
+<!-- =================================================================== -->
+   <!-- compile all Java classes                                            -->
+   <!-- =================================================================== -->
+   <target name="compile-all"
+          depends="generate-log-message-info, app-info, generate-simple-types,
+               generate-config-classes, generate-config-init-file, jaxb-stubs, webdoclet,
+               add-readonly-entities, compile-all-nodeps"
+          description="Compile all Java classes">
+    </target>
+    <target name="compile-all-nodeps">
+        <mkdir dir="${build.dir}/classes"/>
+        <javac destdir="${build.dir}/classes"
+             deprecation="${build.debug}"
+             debug="true"
+             fork="true"
+             source="1.4">
+            <src path="${base.dir}/src/java"/>
+            <src path="${build.dir}/gen-java"/>
+            <classpath refid="default.classpath"/>
+        </javac>
+        <copy todir="${build.dir}/classes">
+            <fileset dir="${base.dir}/src/java/">
+                <include name="**/*.properties"/>
+            </fileset>
+            <!-- generated properties i.e. for configuration service-->
+            <fileset dir="${build.dir}/gen-java/">
+                <include name="**/*.ser" />
+                <include name="**/*.properties"/>
+            </fileset>
+        </copy>
+        <copy todir="${build.dir}/classes/org/jcoderz/commons/taskdefs">
+            <fileset dir="${base.dir}/src/xml/xsl">
+                <include name="*.xsl"/>
+            </fileset>
+            <fileset dir="${base.dir}/src/xml/schema">
+                <include name="app-info.xsd"/>
+            </fileset>
+        </copy>
+        <!-- Copy resources for the JcoderzReport to be included into the jar -->
+        <copy file="${base.dir}/src/css/reportstyle.css"
+              todir="${build.dir}/classes/org/jcoderz/phoenix/report"/>
+        <copy todir="${build.dir}/classes/org/jcoderz/phoenix/report">
+           <fileset dir="${base.dir}/src/image">
+              <include name="*.gif"/>
+           </fileset>
+        </copy>
+        <!-- extract PMD rulesets -->
+        <unjar dest="${build.dir}/classes"
+               src="${base.dir}/lib/default/pmd/pmd.jar">
+            <patternset>
+                <include name="rulesets/**/*.*"/>
+            </patternset>
+        </unjar>
+        <copy file="${base.dir}/src/xml/findbugs/messages.xml"
+              tofile="${build.dir}/classes/org/jcoderz/phoenix/findbugs/messages.xml"/>
+        <copy file="${base.dir}/src/xml/checkstyle-messages.xml"
+              tofile="${build.dir}/classes/org/jcoderz/phoenix/checkstyle/checkstyle-messages.xml"/>
+        <copy file="${base.dir}/src/java/org/jcoderz/phoenix/chart2d/chart2d.dtd"
+              tofile="${build.dir}/stats/chart2d/chart2d.dtd"/>
+    </target>
+
+    <target name="fawkez-jar" depends="compile-all, fawkez-jar-nodeps"/>
+    <target name="fawkez-jar-nodeps">
+        <jar jarfile="${build.dir}/fawkez.jar">
+            <fileset dir="${build.dir}/classes">
+                <include name="org/jcoderz/commons/*"/>
+            	<include name="org/jcoderz/commons/statistics/**"/>
+                <include name="org/jcoderz/commons/types/**"/>
+            	<include name="org/jcoderz/commons/util/**"/>
+            </fileset>
+        </jar>
+        <jar jarfile="${build.dir}/fawkez-tools.jar">
+            <fileset dir="${build.dir}/classes">
+                <include name="org/jcoderz/commons/doclet/**"/>
+                <include name="org/jcoderz/commons/taskdefs/*"/>
+                <include name="org/jcoderz/commons/types/**"/>
+            	<include name="org/jcoderz/commons/phoenix/**"/>
+            </fileset>
+        </jar>
+        <jar jarfile="${build.dir}/fawkez-server.jar">
+            <fileset dir="${build.dir}/classes">
+            	<include name="org/jcoderz/commons/config/**"/>
+            	<include name="org/jcoderz/commons/connector/**"/>
+            	<include name="org/jcoderz/commons/logging/**"/>
+            	<!-- TODO: DDs-->
+            </fileset>
+        </jar>
+        <jar jarfile="${build.dir}/fawkez-all.jar">
+            <fileset dir="${build.dir}/classes"/>
+        </jar>    	
+        <append-version jarfile="${build.dir}/fawkez.jar"/>
+        <append-version jarfile="${build.dir}/fawkez-tools.jar"/>
+        <append-version jarfile="${build.dir}/fawkez-server.jar"/>
+        <append-version jarfile="${build.dir}/fawkez-all.jar"/>
+    </target>
+    <target name="fawkez-src-jar" depends="fawkez-jar, fawkez-src-jar-nodeps"/>
+    <target name="fawkez-src-jar-nodeps">
+        <jar jarfile="${build.dir}/fawkez-src.jar">
+            <fileset dir="${base.dir}/src/java">
+               <include name="**/*.java"/>
+            </fileset>
+        </jar>
+        <append-version jarfile="${build.dir}/fawkez-src.jar"/>
+    </target>
+
+   <!-- =================================================================== -->
+   <!-- Default target: build everything (developer mode)                   -->
+   <!-- =================================================================== -->
+   <target name="build"
+           depends="prepare, fawkez-jar"
+           description="Build everthing (developer mode).">
+   </target>
+
+   <!-- =================================================================== -->
+   <!-- build distribution in 'dist'                                        -->
+   <!-- =================================================================== -->
+   <target name="dist"
+           depends="build, fawkez-src-jar, dist-nodeps"
+           description="Build distribution"/>
+   <target name="dist-nodeps">
+      <mkdir dir="${dist.dir}"/>
+      <mkdir dir="${dist.dir}/etc"/>
+      <mkdir dir="${dist.dir}/sql"/>
+      <mkdir dir="${dist.dir}/config"/>
+      <mkdir dir="${dist.dir}/resources/image"/>
+
+      <!-- root -->
+      <copy file="${base.dir}/VERSION" todir="${dist.dir}"/>
+      <copy file="${base.dir}/CHANGES" todir="${dist.dir}"/>
+      <copy file="${base.dir}/LICENSE" todir="${dist.dir}"/>
+      <copy todir="${dist.dir}">
+         <fileset dir="${build.dir}">
+            <include name="fawkez.jar"/>
+            <include name="fawkez-tools.jar"/>
+            <include name="fawkez-server.jar"/>
+            <include name="fawkez-all.jar"/>
+            <include name="fawkez-src.jar"/>
+         </fileset>
+      </copy>
+
+      <!-- sql -->
+      <taskdef name="sqltransformer"
+               classname="org.jcoderz.phoenix.sqlparser.SqlTransformerTask">
+         <classpath>
+            <pathelement path="${build.dir}/classes"/>
+            <path refid="default.classpath"/>
+         </classpath>
+      </taskdef>
+
+      <sqltransformer todir="${dist.dir}/sql">
+         <fileset dir="${base.dir}/src/sql">
+            <include name="*_create*.sql"/>
+            <include name="*_initialize*.sql"/>
+            <include name="*_drop*.sql"/>
+         </fileset>
+         <fileset dir="${build.dir}/gen-sql">
+            <include name="*_create*.sql"/>
+            <include name="*_initialize*.sql"/>
+            <include name="*_drop*.sql"/>
+         </fileset>
+      </sqltransformer>
+
+      <!-- etc -->
+      <copy todir="${dist.dir}/etc">
+         <fileset dir="${base.dir}/src/xml">
+            <include name="app-info.xml"/>
+            <include name="csp-*-info.xml"/>
+         </fileset>
+      </copy>
+
+      <!-- config -->
+      <copy todir="${dist.dir}/config">
+         <fileset dir="${base.dir}/config">
+            <include name="jcoderz-*.xml"/>
+            <include name="jcoderz-*.xsl"/>
+         </fileset>
+      </copy>
+
+      <!-- resources -->
+      <copy todir="${dist.dir}/resources">
+        <fileset dir="${base.dir}/src/css">
+          <include name="*.css"/>
+        </fileset>
+      </copy>
+      <copy todir="${dist.dir}/resources/image">
+        <fileset dir="${base.dir}/src/image">
+          <include name="*.gif"/>
+          <include name="*.svg"/>
+        </fileset>
+      </copy>
+
+      <!-- DONE -->
+      <echo level="info" taskname="**">
++-----------------------------------------------------------------+
+| C O N G R A T U L A T I O N !                                   |
+|                                                                 |
+| The build of ${name}/${version} was successful.
+| You will find the complete distribution in the                  |
+|                                                                 |
+|    ${base.dir}/dist
+|                                                                 |
+| directory.                                                      |
+|                                                                 |
+| Thanks for building ${name}.
+|                                            The jCoderZ.org Team |
++-----------------------------------------------------------------+
+      </echo>
+   </target>
+
+   <!-- =================================================================== -->
+   <!-- build distribution tarball                                          -->
+   <!-- =================================================================== -->
+   <target name="tarball"
+           depends="dist, doc"
+           description="Build distribution tarball">
+      <property name="tarball"
+                value="${build.dir}/fawkez-${DSTAMP}${TSTAMP}.tar.gz"/>
+      <echo level="info" message="Creating distribution tarball ${tarball}"/>
+      <tar tarfile="${tarball}"
+           compression="gzip">
+         <tarfileset dir="${dist.dir}" mode="755" >
+            <include name="*.sh"/>
+            <include name="bin/*.sh" />
+         </tarfileset>
+         <tarfileset dir="${dist.dir}" >
+            <include name="**"/>
+            <exclude name="*.sh"/>
+            <exclude name="bin/*.sh" />
+         </tarfileset>
+      </tar>
+   </target>
+
+	<target name="doc" depends="javadoc, guideline-java, sad" 
+		description="Build Docomentation"/>
+	
+   <!-- =================================================================== -->
+   <!-- Create JavaDoc                                                      -->
+   <!-- =================================================================== -->
+   <target name="javadoc" depends="prepare"
+           description="Internal JavaDoc FawkeZ.">
+	  
+	   <!-- These values should be set by jMade -->
+	   <property name="java.javadoc" 
+		   value="http://java.sun.com/j2se/1.5.0/docs/api"/>
+	   <property name="j2ee.javadoc"
+		   value="http://java.sun.com/j2ee/1.4/docs/api"/>
+	   <property name="jaxb.javadoc"
+		   value="http://java.sun.com/webservices/docs/1.4/api"/>
+	   <property name="xmlunit.javadoc"
+		   value="http://xmlunit.sourceforge.net/doc"/>
+	   <property name="junit.javadoc"
+		   value="http://www.junit.org/junit/javadoc/3.8.1"/>
+	   <property name="smack.javadoc"
+		   value="http://www.jivesoftware.org/builds/smack/docs/latest/javadoc"/>
+	   <property name="xerces.javadoc"
+		   value="http://xerces.apache.org/xerces-j/apiDocs"/>
+
+      <mkdir dir="${build.dir}/doc/api"/>
+      <javadoc
+         packagenames="org.jcoderz.*"
+         destdir="${build.dir}/doc/api"
+         windowtitle="${Name} - Developer's Documentation"
+         doctitle="&lt;h1&gt;${Name}&lt;/h1&gt;"
+         bottom="&lt;i&gt;Copyright ${copyright.year} The jCoderZ Project.&lt;/i&gt;"
+         author="true"
+         version="true"
+         use="true"
+         additionalparam="-quiet -J-Xmx256m"
+         breakiterator="true"
+         source="1.4">
+		  <tag name="ejb.create-method"/>
+		  <tag name="ejb.bean"/>
+		  <tag name="ejb.interface"/>
+		  <tag name="ejb.interface-method"/>
+		  <tag name="ejb.ejb-external-ref"/>
+		  <tag name="ejb.ejb-ref"/>
+		  <tag name="ejb.finder"/>
+		  <tag name="ejb.permission"/>
+		  <tag name="ejb.persistence"/>
+		  <tag name="ejb.persistent-field"/>
+		  <tag name="ejb.pk-field"/>
+		  <tag name="ejb.resource-ref"/>
+		  <tag name="ejb.security-roles"/>
+		  <tag name="ejb.transaction"/>
+		  <tag name="fdims.admintool.sampleOutput"/>
+		  <tag name="web.servlet"/>
+		  <tag name="web.servlet-mapping"/>
+		  <tag name="weblogic.cache"/>
+		  <tag name="weblogic.data-source-name"/>
+		  <tag name="weblogic.delay-database-insert-until"/>
+		  <tag name="weblogic.enable-call-by-reference"/>
+		  <tag name="weblogic.persistence"/>
+		  <tag name="weblogic.resource-description"/>
+		  <tag name="fdims.admintool.example"/>
+
+         <!-- taglet name="org.jcoderz.phoenix.javadoc.JcoderzTaglet" 
+			 path="${build.dir}/classes"/ -->
+         <sourcepath>
+            <pathelement path="${base.dir}/src/java"/>
+            <pathelement path="${base.dir}/test/java"/>
+            <pathelement path="${base.dir}/build/gen-java"/>
+            <pathelement path="${base.dir}/build/gen-test"/>
+            <!--
+            <pathelement path="${base.dir}/tools/java"/>
+            -->
+         </sourcepath>
+         <classpath>
+            <path refid="javadoc.classpath"/>
+         </classpath>
+         <link href="${java.javadoc}"/>
+         <link href="${j2ee.javadoc}"/>
+         <link href="${jaxb.javadoc}"/>
+         <link href="${junit.javadoc}"/>
+         <link href="${xmlunit.javadoc}"/>
+		 <link href="http://java.sun.com/j2se/1.5.0/docs/guide/javadoc/doclet/spec"/>
+         <link href="${smack.javadoc}"/>
+         <link href="${xerces.javadoc}"/>
+      </javadoc>
+      <!--
+      <copy todir="${build.dir}/doc/api">
+         <fileset dir="${base.dir}/src/docs" includes="**/doc-files/*"/>
+      </copy>
+      -->
+   </target>
+
+
+   <!-- =================================================================== -->
+   <!-- Cleans up generated stuff, except directory 'dist'                  -->
+   <!-- =================================================================== -->
+   <target name="clean" description="Clean all build stuff.">
+      <delete dir="${build.dir}"/>
+      <delete file="jcoverage.ser"/>
+   </target>
+
+   <!-- =================================================================== -->
+   <!-- Cleans up everything                                                -->
+   <!-- =================================================================== -->
+   <target name="distclean" depends="clean" description="Clean up everything">
+      <delete dir="${dist.dir}"/>
+      <delete>
+         <fileset dir="${base.dir}" includes="jcoverage*.ser"/>
+      </delete>
+   </target>
+
+   <!-- =================================================================== -->
+   <!-- Cleans up everything including the lib directory                    -->
+   <!-- =================================================================== -->
+   <target name="libclean" depends="distclean"
+           description="Clean up everything including most of the lib directory">
+      <delete dir="${base.dir}/lib/default"/>
+      <delete dir="${base.dir}/lib/jaxb-compile"/>
+      <delete dir="${base.dir}/lib/test"/>
+   </target>
+
+
+</project>
+

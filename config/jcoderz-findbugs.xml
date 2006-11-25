@@ -1,0 +1,6 @@
+<!-- This is a FindBugs exclude file and must be specified by using the '-excelude' parameter -->
+<Match classregex=".*" >
+    <!-- SS - UnreadFields, UPM - FindUncalledPrivateMethods -->
+    <BugCode name="SS,UPM" />
+</Match>
+

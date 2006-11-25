@@ -1,0 +1,24 @@
+<body>
+<section>
+   <title>Overview</title>
+
+   <para>This package contains utility classes that can be used by any
+   jCoderZ Java project.</para>
+
+   <para>
+   Classes in this package have only a dependency to
+   the JDK and the <classname>org.jcoderz.commons</classname> package.
+   Most of the classes are independent of each other.
+   </para>
+</section>
+
+<section>
+<title>API</title>
+
+   <apidoc name="util">
+      <class name="org.jcoderz.commons.util.*"/>
+   </apidoc>
+</section>
+
+</body>
+

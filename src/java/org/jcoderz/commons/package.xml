@@ -1,0 +1,298 @@
+<body>
+
+<quote author="Douglas Adams">
+Flying is learning how to throw yourself at the ground and miss.
+</quote>
+
+<section>
+   <title>Overview</title>
+   <section>
+      <title>Requirements</title>
+      <para>The following requirements dictate the logging
+      and exception handling concept (or just "logging" for short)
+      in the jCoderZ Commons project:
+      <ul>
+         <li>Common logging concepts should be used.
+         These concepts encompass:
+            <ul>
+               <li>use of Log Levels</li>
+               <li>use of distinct logger names</li>
+            </ul>
+         </li>
+         <li>Well proven logging concepts of previous projects
+         should be used.These concepts encompass:
+            <ul>
+               <li>use of a (pseudo-)unique "tracking number" that
+               is assigned per log event</li>
+               <li>use of a unique message id per log event type
+               that links to a knowledge base describing details
+               of the log event type</li>
+               <li>use of parameters as meta data</li>
+            </ul>
+         </li>
+         <li>All available context information that could be helpful
+         to track a problem should be logged.</li>
+         <li>The logging concept must be able to handle Java Exception
+         stacktraces.</li>
+         <li>The logging concept should easily integrate into
+         CA UniCenter.</li>
+         <li>The Java Logging API (java.util.logging) should be
+         used.</li>
+         <li>The Logging concept must support a nesting concept.</li>
+         <li>Any log event or exception with the log level INFO or
+         higher must be declared in a well-defined resource file
+         (XML).</li>
+         <li>The logging classes are only allowed to have a dependency
+         to the JDK classes.</li>
+      </ul>
+      </para>
+   </section>
+   <section>
+      <title>Data Model</title>
+
+      <para>The following table shows the required data that should
+      be associated with an log event or an exception. It also shows
+      the mapping of some field to the CA Unicenter log format.
+      </para>
+
+      <table frame="topbot">
+      <title>Available field of a log event and the corresponding
+      CA Unicenter mapping.</title>
+      <tgroup cols='2' align='left' colsep='1' rowsep='1'>
+      <thead>
+      <row>
+      <entry>Log Data</entry>
+      <entry>CA UniCenter field</entry>
+      </row>
+      </thead>
+      <tbody>
+      <row><entry>Log Level</entry><entry>Level</entry></row>
+      <row><entry>Tracking Number</entry><entry>Part of the textual description</entry></row>
+      <row><entry>Message ID</entry><entry>Message ID</entry></row>
+      <row><entry>Event Time (Date &amp; Time including ms)</entry><entry>Date, Time</entry></row>
+      <row><entry>Node ID (IP Address)</entry><entry>Node ID</entry></row>
+      <row><entry>Instance ID</entry><entry>Instance ID</entry></row>
+      <row><entry>Description</entry><entry>Part of the textual description</entry></row>
+      <row><entry>Logger Name</entry><entry>-</entry></row>
+      <row><entry>Thread ID</entry><entry>-</entry></row>
+      <row><entry>Stack</entry><entry>-</entry></row>
+      <row><entry>Cause</entry><entry>-</entry></row>
+      <row><entry>Arbitrary Parameters</entry><entry>-</entry></row>
+      </tbody>
+      </tgroup>
+      </table>
+
+      <para>
+      The section below give some more detail about data fields that are
+      not self-explanatory.
+      </para>
+
+      <section>
+         <title>Log data field description</title>
+         <para>
+         <section>
+            <title>Log Level</title>
+            <para>The Java Logging API defines the following log levels
+            (in descending order): SEVERE, WARNING, INFO, CONFIG, FINE,
+            FINER, FINEST. CA UniCenter defines the following log levels
+            (in descending order): FAIL, CRITICAL, WARNING, INFO.</para>
+
+            <para>To map Java Logging levels on CA UniCenter levels, an
+            additional "critical" flag is introduced in the log data
+            structure that may only be set when the log level is "WARNING".
+            Then the following mapping applies:
+            <table frame="topbot">
+            <title>Mapping of Java Logging Levels to CA UniCenter log levels.</title>
+            <tgroup cols='2' align='left' colsep='1' rowsep='1'>
+            <thead>
+            <row>
+            <entry>Java Logging Level</entry>
+            <entry>CA UniCenter Level</entry>
+            </row>
+            </thead>
+            <tbody>
+            <row><entry>CONFIG</entry><entry>INFO</entry></row>
+            <row><entry>INFO</entry><entry>INFO</entry></row>
+            <row><entry>WARNING</entry><entry>WARNING</entry></row>
+            <row><entry>WARNING with critical flag</entry><entry>CRITICAL</entry></row>
+            <row><entry>SEVERE</entry><entry>FAIL</entry></row>
+            </tbody>
+            </tgroup>
+            </table>
+            </para>
+         </section>
+
+         <section>
+            <title>Tracking Number</title>
+            <para>String with quasi-unique number as identifier for the
+            instance of the Loggable implementation. The tracking number
+            is a kind of message digest of a concrete log event instance
+            or exception. The tracking number makes it easy to locate the
+            line in the application log where a specific log events or
+            exception occurred. Thus, the tracking number should always
+            be reported to the peer (client) in case of an error.
+            </para>
+         </section>
+
+         <section>
+            <title>Message Identifier</title>
+            <para>Unique string identifying a conrecte message type. The
+            identifier is combined from the application short name, the
+            group short name and the message name, e.g.
+            <classname>FOO_RTE_INTERNAL_ERROR</classname>. The method
+            <methodname>getSymbol</methodname> in the interface
+            <classname>LogMessageInfo</classname> returns this message
+            identifier. There is also a unique integer representation for
+            a message identifier.
+            </para>
+         </section>
+
+         <section>
+            <title>Node Identifier</title>
+            <para>String as identifier of the node running the application
+            or service. This is always the IP-address of the machine.</para>
+         </section>
+
+         <section>
+            <title>Instance Identifier</title>
+            <para>String identifier for the application or service, which
+            logs the Loggable, e.g. the name of the Bea Managed Server.</para>
+         </section>
+
+         <section>
+            <title>Thread Identifier</title>
+            <para>An long value identifying the current thread that creates
+            the log event. This is not the thread identifier of the
+            underlying operation system, since this feature is only
+            available with the 1.5 version of the JDK.</para>
+         </section>
+
+         <section>
+            <title>Parameters</title>
+            <para>Optional parameters for a log event. A parameter is a
+            key value pair that can be assigned to a concrete log event
+            instance. Some of the parameters are required and enforced
+            to render the details message description.</para>
+         </section>
+
+         <section>
+            <title>Cause</title>
+            <para>A <classname>Throwable</classname>, that was the
+            reason for the log event or exception.
+            Note: a <classname>Loggable</classname> implements a
+            <classname>Throwable</classname>, so the cause for a log event
+            or exception might be another, a nested log event or
+            exception.</para>
+         </section>
+
+         </para>
+      </section>
+   </section>
+</section>
+
+<section>
+   <title>Logic</title>
+
+   <section>
+      <title>Logging vs. Exceptions</title>
+      <para>Most of the time, when a log event occurs, it will have
+      been caused by an exception. However, there are situations where
+      such an event is detected and must be logged without an exception.
+      Thus, we distinguish between a log event and a Loggable Exception,
+      which both have the log data described above.</para>
+
+      <para>The common log data is defined in the interface
+      <classname>Loggable</classname>. This interface is implemented by
+      the three base classes:
+      <ul>
+         <li><classname>BaseException</classname>,</li>
+         <li><classname>BaseRuntimeException</classname> and</li>
+         <li><classname>LogEvent</classname></li>
+      </ul>
+      Because Java doesn't support multi-inheritance, there are
+      two implementations of a base exception, the
+      <classname>BaseException</classname> for checked exception and
+      a second one, called <classname>BaseRuntimeException</classname>,
+      that is the base class for all unchecked (runtime) exceptions.
+      </para>
+
+      <diagram type="class" name="logevent">
+         <class name="org.jcoderz.commons.LogEvent"/>
+         <class name="org.jcoderz.commons.AuditLogEvent"/>
+         <class name="org.jcoderz.commons.Loggable"/>
+         <class name="org.jcoderz.commons.BaseException"/>
+         <class name="org.jcoderz.commons.BaseRuntimeException"/>
+         <description>
+         Class diagram of the base exceptions and log events.
+         </description>
+      </diagram>
+   </section>
+
+   <section>
+      <title>Log Message Info</title>
+      <para>Some data in a log event or exception is taken from the
+      current runtime environment, like the timestamp or stack trace,
+      and is not static for a specific log event type. However, there
+      are some kind of fields for a specific log event type that will never
+      change, like the unique identifier of the message or the
+      description text. These fields are static for a specific log event
+      or exception and are defined by the interface
+      <classname>LogMessageInfo</classname>.</para>
+
+      <diagram type="class" name="logmessageinfo">
+         <class name="org.jcoderz.commons.LogMessageInfo"/>
+         <description>
+         The LogMessageInfo interface defines static fields for a specific
+         log event or exception.
+         </description>
+      </diagram>
+   </section>
+
+</section>
+
+<section>
+   <title>Implementation</title>
+
+   <para>
+   All log events and exceptions are defined in an XML file
+   called <filename>app-info.xml</filename> with an well-defined schema.
+   The following snippets is a example message out of the XML file:
+
+      <pre>
+...
+&lt;message
+   id="1"
+   name="INTERNAL_ERROR"
+   level="SEVERE"
+   base-exception="org.jcoderz.commons.RuntimeErrorException"&gt;
+   &lt;text&gt;
+      The system encountered an unexpected condition, or contains
+      a software bug. Details: {TECHNICAL_DESCRIPTION}.
+   &lt;/text&gt;
+   &lt;solution&gt;
+      Review the log file to determine the problem that led
+      to the error condition. If appropriate, contact
+      The jCoderz Project.
+   &lt;/solution&gt;
+&lt;/message&gt;
+...</pre>
+
+   </para>
+
+   <para>Another dummy paragraph.</para>
+</section>
+
+<section>
+   <title>API Documentation</title>
+   <apidoc name="base">
+      <class name="org.jcoderz.commons.BaseException"/>
+      <class name="org.jcoderz.commons.BaseRuntimeException"/>
+      <class name="org.jcoderz.commons.Loggable"/>
+      <class name="org.jcoderz.commons.LogMessageInfo"/>
+      <class name="org.jcoderz.commons.LogEvent"/>
+      <class name="org.jcoderz.commons.AuditPrincipal"/>
+      <class name="org.jcoderz.commons.AuditLogEvent"/>
+   </apidoc>
+</section>
+
+</body>

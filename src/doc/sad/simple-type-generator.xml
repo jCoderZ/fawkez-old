@@ -1,0 +1,270 @@
+<module>
+   <quote author="Picard (Star Trek)">
+   Tea, Earl Grey, hot.
+   </quote>
+   
+   <section>
+      <title>Motivation</title>
+      <para>Data types limit the values that a variable can hold 
+      or that an expression can produce, limit the operations 
+      supported on those values, and determine the meaning of the 
+      operations. Strong typing helps detect errors at compile time.
+      </para>
+      
+      <para>The Java programming language provides a lot of data types,
+      however, most of the data types used in a external API requires
+      more specific data types. For example, using a 
+      <classname>java.lang.String</classname> for a customer's surname
+      do not cover possible limitations, such as the maximum length of 
+      the name in the corresponding database field or GUI. Another 
+      missing data type in the Java language is the type-safe enumeration
+      <footnote><para>This is only true for JDK 1.4 or lower. 
+      A enumeration type is available with JDK 1.5</para></footnote>
+      as described in <citation><xref linkend="bloch01"/></citation>.
+      </para>
+      
+   </section>   
+   <section>
+      <title>Implementation View</title>
+      <p>Process a XML document file that define simple types like 
+         type-safe enumerations, restricted strings, regular expression
+         strings or value objects and generates the Java classes.
+         The classes are generated via XSLT and various style sheets from 
+         the fawkez.jar archive. </p>
+
+      <p>
+         The simple type generator provides the following types:
+         <ul>
+            <li>A type-safe enumeration class.</li>
+            <li>A restricted string class.</li>
+            <li>A regular expression string class.</li>
+            <li>A value object class.</li>
+         </ul>   
+         The following subsection describes those types in more details.
+      </p>
+      
+      <section>
+         <title>Supported Types</title>
+         <section>
+            <title>Type-safe Enumeration</title>
+
+            <p>A type-safe enumeration (also called "enum") 
+            should be used liberally. In particular, they are a robust 
+            alternative to the simple <classname>String</classname>
+            or <classname>int</classname> constants used in 
+            many older APIs to represent sets of related items. 
+            </p>
+            <p>Characteristic: 
+               <ul>
+                  <li>constructor for an enum is declared as private.</li>
+                  <li>enums are final and cannot be derived from.</li> 
+                  <li><methodname>toString</methodname> and 
+                     <methodname>fromString</methodname> simply use the 
+                     text of the enum constants.</li>
+                  <li>for enum constants, equals and == amount to the same thing (instance),
+                      and can be used interchangeably.</li>
+                  <li>enum constants are public static final.</li>
+                  <li>enums are serializable.</li>
+               </ul>   
+            </p>
+            <pre>
+   &lt;typeSafeEnumerations>
+      &lt;enumeration
+         classname="Color"
+         package="org.jcoderz.commons">
+         &lt;value>blue&lt;/value>
+         &lt;value>red&lt;/value>
+         &lt;value>yellow&lt;/value>
+      &lt;/enumeration>
+   &lt;/typeSafeEnumerations></pre>
+         </section>
+         <section>
+            <title>Restricted Strings</title>
+            <p>A restricted string is a wrapper around the 
+            <classname>java.lang.String</classname> class with additional
+            length constraints.</p>
+            <p>Characteristic: 
+               <ul>
+                  <li>minimum and maximum length of the wrapped string 
+                  can be defined as XML attribute.</li>
+                  <li>supports the declaration of constants.</li>
+                  <li>classes are final and cannot be derived from.</li> 
+               </ul>   
+            </p>
+            <pre>
+   &lt;restrictedStrings>
+      &lt;restrictedString
+         classname="FooString"
+         package="org.jcoderz.commons"
+         min-length="1"
+         max-length="10">
+         &lt;constant
+            name="CONSTANT_VALUE"
+            value="foo"
+            comment="Additional Constant defined in the XML document."/>
+      &lt;/restrictedString>
+   &lt;/restrictedStrings></pre>
+         </section>
+
+         <section>
+            <title>Restricted Longs</title>
+            <p>A restricted long is a wrapper around the native type
+            <classname>long</classname> with additional
+            length constraints.</p>
+            <p>Characteristic: 
+               <ul>
+                  <li>minimum and maximum value of the long 
+                  can be defined as XML attribute.</li>
+                  <li>supports the declaration of constants.</li>
+                  <li>classes are final and cannot be derived from.</li> 
+               </ul>   
+            </p>
+            <pre>
+   &lt;restrictedLongs>
+      &lt;restrictedLong
+         classname="FooLong"
+         package="org.jcoderz.commons"
+         min-value="1"
+         max-value="10">
+         &lt;constant
+            name="CONSTANT_VALUE"
+            value="5"
+            comment="Additional Constant defined in the XML document."/>
+      &lt;/restrictedLong>
+   &lt;/restrictedLongs></pre>
+         </section>
+
+         <section>
+            <title>Regex Strings</title>
+            <p>A "regex" string is a wrapper around the 
+            <classname>java.lang.String</classname> class that matches 
+            a regular expression.</p>
+            <pre>
+   &lt;regexStrings>
+      &lt;regexString
+         classname="RegexString"
+         package="org.jcoderz.commons">
+         &lt;regex>foo|bar|buz&lt;/regex>
+      &lt;/regexString>
+   &lt;/regexStrings></pre>
+         </section>
+ 
+         <section>
+            <title>Value Objects</title>
+            <p>The value object is also known as the "Transfer Object" from 
+            the Core J2EE Pattern Catalog 
+            <citation><xref linkend="CoreJ2EEPatterns"/></citation>.
+            <pre>
+      &lt;valueObject
+         classname="ValueObject"
+         final="true"
+         serializable="true"
+         package="org.jcoderz.commons">
+         &lt;description>
+            A sample value object.
+         &lt;/description>
+         &lt;member
+            name="Time Stamp"
+            type="org.jcoderz.commons.type.Date">
+            The time stamp.
+         &lt;/member>
+         &lt;member
+            name="Foo Type Map"
+            type="java.util.Map">
+            A map that maps 
+            {@link java.lang.String} to 
+            {@link Foo} instances.
+         &lt;/member>
+      &lt;/valueObject></pre>		      
+            </p>
+         </section>
+      </section>
+      <section>
+         <title>The Ant Task</title>
+         <p><b>Note:</b>The 
+         <a href="http://xml.apache.org/xalan2/">Xalan2</a> XSL processor 
+         is required for this task. If you are using JDK 1.4 or higher, 
+         this task does not require external libraries not supplied in 
+         the fawkeZ distribution.</p>
+
+         <p>This task doesn't support/require any nested elements.</p>
+
+         <section>
+            <title>Parameters</title>
+            <p>
+            <table border="1" cellpadding="2" cellspacing="0" summary="parameters">
+              <tr>
+                <td valign="top"><b>Attribute</b></td>
+                <td valign="top"><b>Description</b></td>
+                <td align="center" valign="top"><b>Required</b></td>
+              </tr>
+              <tr>
+                <td valign="top">destdir</td>
+                <td valign="top">directory in which to store the results.</td>
+                <td align="center" valign="top">Yes</td>
+              </tr>
+              <tr>
+                <td valign="top">in</td>
+                <td valign="top">specifies a single XML document that contains
+                the log message info.</td>
+                <td valign="top" align="center">Yes</td>
+              </tr>
+              <tr>
+                <td valign="top">out</td>
+                <td valign="top">specifies the output name for the log output.</td>
+                <td valign="top" align="center">Yes</td>
+              </tr>
+              <tr>
+                <td valign="top">xsl</td>
+                <td valign="top">specifies a XSL stylesheet that is used for
+                transformation.</td>
+                <td valign="top" align="center">No; default is to use the 
+                build-in stylesheet.</td>
+              </tr>
+              <tr>
+                <td valign="top">force</td>
+                <td valign="top">Recreate target files, even if they are newer
+                  than their corresponding source files.</td>
+                <td valign="top" align="center">No; default is false</td>
+              </tr>
+              <tr>
+                <td valign="top">failonerror</td>
+                <td valign="top">Stop the buildprocess if the target fails 
+                with an error.</td>
+                <td valign="top" align="center">No; default is false</td>
+              </tr>
+            </table>
+            </p>
+         </section>
+
+         <section>
+            <title>Usage</title>
+
+         <p>
+            <pre>
+         &lt;taskdef name="simple-type-generator"
+                  classname="org.jcoderz.commons.taskdefs.SimpleTypeGenerator">
+            &lt;classpath>
+               &lt;pathelement location="path/to/fawkez.jar"/>
+            &lt;/classpath>
+         &lt;/taskdef>     
+            </pre>
+            Add task definition to the current project.
+            <pre>
+         &lt;simple-type-generator 
+            in="${base.dir}/src/xml/simple-types.xml"
+            out="${build.dir}/simply-types.out"
+            destDir="${build.dir}/foo"
+            failonerror="true"
+            force="true"/>
+            </pre>
+            Generates the simple type classes to the directory 
+            <code>${build.dir}/foo</code>.
+            The dependency check is omitted, since
+            the <code>force</code> attribute is set to <code>true</code>.
+            This target will fail if an error occurs.
+         </p>
+         </section>
+      </section>
+   </section>   
+</module>

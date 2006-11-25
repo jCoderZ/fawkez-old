@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns:docbook="http://docbook.org/ns/docbook"
+            xmlns:req="req"
+            targetNamespace="req">
+   <xsd:import schemaLocation="http://www.docbook.org/xsd/4.2/docbook.xsd"/>
+
+   <xsd:simpleType name='requirementPriority'>
+      <xsd:restriction base='xsd:string'>
+         <xsd:pattern value='High|Medium|Low'/>
+      </xsd:restriction>
+   </xsd:simpleType>
+   
+   <xsd:element name="ref">
+      <xsd:complexType>
+         <xsd:attribute name="id" type="xsd:string" use="required"/>
+      </xsd:complexType>
+   </xsd:element>
+   <xsd:element name="title" type="xsd:string"/>
+   <xsd:element name="key" type="xsd:string"/>
+   <xsd:element name="summary" type="xsd:string"/>
+   <xsd:element name="priority" type="req:requirementPriority"/>
+   <xsd:element name="version" type="xsd:string"/>
+   <xsd:element name="open_issue" type="xsd:string"/>
+   <xsd:element name="constraints" type="xsd:string"/>
+   <xsd:element name="pattern" type="xsd:string"/>
+   <xsd:element name="linkend" type="xsd:string"/>
+   <xsd:element name="linkstart" type="xsd:string"/>
+   <xsd:element name="primary" type="xsd:string"/>
+   <xsd:element name="secondary" type="xsd:string"/>
+   <xsd:element name="tertiary" type="xsd:string"/>
+   
+
+   <xsd:group name="content">
+      <xsd:sequence>
+           <xsd:element ref="para" minOccurs="0" maxOccurs="100"/>
+           <xsd:element ref="itemizedlist" minOccurs="0" maxOccurs="100"/>
+           <xsd:element ref="segmentedlist" minOccurs="0" maxOccurs="100"/>
+           <xsd:element ref="table" minOccurs="0" maxOccurs="100"/>
+           <xsd:element ref="indexterm" minOccurs="0" maxOccurs="100"/>
+           <xsd:element ref="emphasis" minOccurs="0" maxOccurs="100"/>
+           <xsd:element ref="sbr" minOccurs="0" maxOccurs="100"/>
+           <xsd:element ref="req:ref" minOccurs="0" maxOccurs="100"/>
+           <xsd:any minOccurs="0" maxOccurs="unbounded"/>
+      </xsd:sequence>
+   </xsd:group>
+   
+
+   <!-- entities and attributes for the data model -->
+   <xsd:element name="name">
+      <xsd:complexType mixed="true">
+         <xsd:attribute name="lang" type="xsd:string"/>
+      </xsd:complexType>
+   </xsd:element>
+      
+   <xsd:element name="alternative_name">
+      <xsd:complexType>
+         <xsd:sequence>
+            <xsd:element ref="req:name" minOccurs="1" maxOccurs="unbounded"/>
+         </xsd:sequence>
+      </xsd:complexType>
+   </xsd:element>
+   
+   <xsd:element name="objectreference">
+      <xsd:complexType>
+         <xsd:sequence>
+            <xsd:element ref="req:linkstart" minOccurs="1" maxOccurs="1"/>
+            <xsd:element ref="req:linkend" minOccurs="1" maxOccurs="1"/>
+            <xsd:element ref="req:ref" minOccurs="0" maxOccurs="1"/>
+         </xsd:sequence>
+      </xsd:complexType>
+   </xsd:element>
+   
+   <xsd:element name="attribute">
+      <xsd:complexType>
+         <xsd:sequence>
+            <xsd:element ref="req:name" minOccurs="1" maxOccurs="1"/>
+            <xsd:element ref="req:alternative_name" minOccurs="0" maxOccurs="1"/>
+            <xsd:element ref="req:pattern" minOccurs="1" maxOccurs="1"/>
+            <xsd:element ref="req:objectreference" minOccurs="0" maxOccurs="1"/>
+         </xsd:sequence>
+      </xsd:complexType>
+   </xsd:element>
+
+   <xsd:element name="entity">
+      <xsd:complexType>
+         <xsd:sequence>
+            <xsd:element ref="req:name" minOccurs="1" maxOccurs="1"/>
+            <xsd:element ref="req:alternative_name" minOccurs="0" maxOccurs="1"/>
+            <xsd:element ref="req:constraints" minOccurs="0" maxOccurs="1"/>
+            <xsd:element ref="req:attribute" minOccurs="0" maxOccurs="unbounded"/>
+         </xsd:sequence>
+      </xsd:complexType>
+   </xsd:element>
+   
+   <xsd:element name="category">
+      <xsd:complexType>
+         <xsd:sequence>
+            <xsd:element ref="req:primary" minOccurs="1" maxOccurs="1"/>
+            <xsd:element ref="req:secondary" minOccurs="0" maxOccurs="1"/>
+            <xsd:element ref="req:tertiary" minOccurs="0" maxOccurs="1"/>
+         </xsd:sequence>
+      </xsd:complexType>
+   </xsd:element>
+
+   <!-- the main description with free docbook based text -->
+   <xsd:element name="description">
+      <xsd:complexType mixed="true">
+         <xsd:sequence>
+            <xsd:group ref="req:content"/>
+         </xsd:sequence>
+      </xsd:complexType>
+   </xsd:element>
+      
+   <xsd:element name="superior">
+      <xsd:complexType>
+         <xsd:sequence>
+            <xsd:element ref="req:ref" minOccurs="1" maxOccurs="1"/>
+         </xsd:sequence>
+      </xsd:complexType>
+   </xsd:element>   
+      
+   <xsd:element name="role">
+      <xsd:complexType>
+         <xsd:sequence>
+            <xsd:element ref="req:name" minOccurs="1" maxOccurs="1"/>
+            <xsd:element ref="req:alternative_name" minOccurs="0" maxOccurs="1"/>
+            <xsd:element ref="req:superior" minOccurs="0" maxOccurs="1"/>
+         </xsd:sequence>
+      </xsd:complexType>
+   </xsd:element>
+
+   <!-- the root requirement element -->
+   <xsd:element name="requirement">
+      <xsd:complexType>
+         <xsd:sequence>
+            <xsd:element ref="req:title" minOccurs="1" maxOccurs="1"/>
+            <xsd:element ref="req:alternative_name" minOccurs="0" maxOccurs="1"/>
+            <xsd:element ref="req:category" minOccurs="1" maxOccurs="1"/>
+            <xsd:element ref="req:key" minOccurs="1" maxOccurs="1"/>
+            <xsd:element ref="req:summary" minOccurs="1" maxOccurs="1"/>
+            <xsd:element ref="req:priority" minOccurs="1" maxOccurs="1"/>
+            <xsd:element ref="req:description" minOccurs="1" maxOccurs="1"/>
+            <xsd:element ref="req:entity" minOccurs="0" maxOccurs="1"/>
+            <xsd:element ref="req:role" minOccurs="0" maxOccurs="1"/>
+            <xsd:element ref="req:version" minOccurs="1" maxOccurs="1"/>
+            <xsd:element ref="req:open_issue" minOccurs="0" maxOccurs="unbounded"/>
+         </xsd:sequence>
+      </xsd:complexType>
+   </xsd:element>
+</xsd:schema>

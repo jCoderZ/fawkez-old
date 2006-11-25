@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE weblogic-connection-factory-dd PUBLIC '-//BEA Systems, Inc.//DTD WebLogic 8.1.0 Connector//EN' 'http://www.bea.com/servers/wls810/dtd/weblogic810-ra.dtd'>
+
+<weblogic-connection-factory-dd>
+
+    <connection-factory-name>FileSystemConnectionFactory</connection-factory-name>
+    <jndi-name>eis/FileSystemConnector</jndi-name>
+    <pool-params>
+      <initial-capacity>2</initial-capacity>
+      <max-capacity>50</max-capacity>
+      <connection-profiling-enabled>true</connection-profiling-enabled>
+    </pool-params>
+</weblogic-connection-factory-dd>
+

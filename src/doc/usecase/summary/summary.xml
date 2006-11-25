@@ -1,0 +1,58 @@
+<uc:usecase xmlns:uc="http://www.jcoderz.org/xsd/xdoc/usecase-SNAPSHOT.xsd"
+               id="UC-1" level="Summary">
+	<uc:version>$Revision: 1.1 $</uc:version>
+	<uc:commitlog>
+		$Log: $
+	</uc:commitlog>
+	<uc:name>summary</uc:name>
+	<uc:goal>System to aggregate micro payments and to settle aggregated amounts.</uc:goal>
+	<uc:scope>Micro Aggregation</uc:scope>
+	<uc:trigger></uc:trigger>
+	<uc:priority>global view (vision)</uc:priority>
+	<uc:response_time></uc:response_time>
+	<uc:frequency_of_use></uc:frequency_of_use>
+	<uc:actors>
+		<uc:primary>
+			<uc:name>Shop</uc:name>
+			<uc:channel>Web</uc:channel>
+		</uc:primary>
+		<uc:secondary>
+			<uc:name>Merchant</uc:name>
+			<uc:channel>WEB</uc:channel>
+		</uc:secondary>
+		<uc:secondary>
+			<uc:name>Consumer</uc:name>
+			<uc:channel>WEB</uc:channel>
+		</uc:secondary>
+      <uc:secondary>
+			<uc:name>Operator</uc:name>
+			<uc:channel>WEB</uc:channel>
+		</uc:secondary>
+      <uc:secondary>
+			<uc:name>Payment Issuer</uc:name>
+			<uc:channel>WEB</uc:channel>
+		</uc:secondary>
+      <uc:secondary>
+			<uc:name>Time</uc:name>
+			<uc:channel>WEB</uc:channel>
+		</uc:secondary>
+	</uc:actors>
+	<uc:stakeholder>Service Provider wants to enable micro payments to payment instruments like credit cards and to participate by reducing cost of single transactions.</uc:stakeholder>
+   <uc:stakeholder></uc:stakeholder>
+	<uc:precondition>none</uc:precondition>
+	<uc:guarantees>
+		<uc:success>none yet</uc:success>
+		<uc:minimal>none yet</uc:minimal>
+	</uc:guarantees>
+	<uc:success>
+		<uc:step id="1">Operator is able to administrate the system. <uc:ref id="UC-2" actor="Operator"/></uc:step>
+      <uc:step id="2">Merchant is able to view/maintain it's account via self adminstration. <uc:ref id="UC-3" actor="Merchant"/></uc:step>
+      <uc:step id="3">Shop can handle payments. <uc:ref id="UC-4" actor="Shop"/></uc:step>
+      <uc:step id="4">Consumer is able to manage it's data and disputes via self adminstration. <uc:ref id="UC-5" actor="Consumer"/></uc:step>
+      <uc:step id="5">Payment Issuer is able to lock payment instruments. <uc:ref id="UC-6" actor="Payment Issuer"/></uc:step>
+	</uc:success>
+	<!--extension id="E1">
+		<uc:step id="1"></uc:step>
+	</uc:extension-->
+	<!--open_issue></uc:open_issue-->
+</uc:usecase>

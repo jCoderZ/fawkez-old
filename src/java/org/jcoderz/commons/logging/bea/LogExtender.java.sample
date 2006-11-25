@@ -1,0 +1,225 @@
+/*
+ * $Id$
+ *
+ * Copyright 2006, The jCoderZ.org Project. All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are
+ * met:
+ *
+ *    * Redistributions of source code must retain the above copyright
+ *      notice, this list of conditions and the following disclaimer.
+ *    * Redistributions in binary form must reproduce the above
+ *      copyright notice, this list of conditions and the following
+ *      disclaimer in the documentation and/or other materials
+ *      provided with the distribution.
+ *    * Neither the name of the jCoderZ.org Project nor the names of
+ *      its contributors may be used to endorse or promote products
+ *      derived from this software without specific prior written
+ *      permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS "AS IS" AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+ * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE REGENTS AND CONTRIBUTORS
+ * BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
+ * BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+ * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+ * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+package org.jcoderz.commons.logging.bea;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
+import java.util.StringTokenizer;
+import java.util.logging.ErrorManager;
+import java.util.logging.Handler;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
+
+import weblogic.application.ApplicationLifecycleEvent;
+import weblogic.application.ApplicationLifecycleListener;
+
+/**
+ * This class listens for application lifecyle events and installs additional
+ * log handlers accordingly.
+ * It queries the LogManager for the property:
+ * <ul>
+ * <li><code>org.jcoderz.commons.logging.bea.LogExtender.handlers</code>
+ * which gives a list of handlers to be installed at application preStart and
+ * to be deinstalled at application postStop.
+ * <li><code>org.jcoderz.commons.logging.bea.LogExtender.rootloggers</code>
+ * which gives a list of logger names, for which the handlers are set. All
+ * loggers having them as parent loggers will use the newly installed handlers,
+ * unless they have explicitely the parent handlers disabled.<p>
+ * </ul>
+ *
+ * For installing this LogExtender within an application the ear must contain
+ * a weblogic-application.xml file with the following entry:<p>
+ * <pre>
+ *  &lt;listener>
+ *     &lt;listener-class>
+ *        org.jcoderz.commons.logging.bea.LogExtender
+ *     &lt;/listener-class>
+ *  &lt;/listener>
+ * </pre>
+ * <p>
+ * For more information see Bea Weblogic documentation on application
+ * development.
+ *
+ */
+public class LogExtender
+      extends ApplicationLifecycleListener
+{
+   private static final String CLASSNAME = LogExtender.class.getName();
+   private static final String HANDLERS_PROPERTY
+         = CLASSNAME + ".handlers";
+   private static final String LOGGERS_PROPERTY
+         = CLASSNAME + ".rootloggers";
+
+   private static final Logger logger = Logger.getLogger(CLASSNAME);
+
+   private final List mHandlerNames = new ArrayList();
+   private final List mHandlers = new ArrayList();
+   private final List mLoggerNames = new ArrayList();
+
+   /**
+    * @see weblogic.application.ApplicationLifecycleListener#postStop(weblogic.application.ApplicationLifecycleEvent)
+    */
+   public void postStop (final ApplicationLifecycleEvent appEvent)
+   {
+      super.postStop(appEvent);
+
+      deinstallHandlers();
+
+      mHandlers.clear();
+      mHandlerNames.clear();
+      mLoggerNames.clear();
+   }
+
+   /**
+    * @see weblogic.application.ApplicationLifecycleListener#preStart(weblogic.application.ApplicationLifecycleEvent)
+    */
+   public void preStart (final ApplicationLifecycleEvent appEvent)
+   {
+      super.preStart(appEvent);
+
+      mHandlers.clear();
+      mHandlerNames.clear();
+      mLoggerNames.clear();
+
+      configureHandlers();
+      configureLoggers();
+      installHandlers();
+   }
+
+   private void configureHandlers ()
+   {
+      final String handlers
+            = LogManager.getLogManager().getProperty(HANDLERS_PROPERTY);
+
+      if ((handlers != null) && (handlers.length() > 0))
+      {
+         final StringTokenizer tokenizer
+               = new StringTokenizer(handlers, " ,/t");
+
+         while (tokenizer.hasMoreTokens())
+         {
+            mHandlerNames.add(tokenizer.nextToken());
+         }
+      }
+   }
+
+   private void configureLoggers ()
+   {
+      final String loggers
+            = LogManager.getLogManager().getProperty(LOGGERS_PROPERTY);
+
+      if ((loggers != null) && (loggers.length() > 0))
+      {
+         final StringTokenizer tokenizer
+               = new StringTokenizer(loggers, " ,/t");
+
+         while (tokenizer.hasMoreTokens())
+         {
+            mLoggerNames.add(tokenizer.nextToken());
+         }
+      }
+   }
+
+   private void installHandlers ()
+   {
+      for (final Iterator iter = mHandlerNames.iterator(); iter.hasNext(); )
+      {
+         final String name = (String) iter.next();
+         try
+         {
+            mHandlers.add(Class.forName(name).newInstance());
+         }
+         catch (Exception ex)
+         {
+            reportError("Cannot instantiate new handler class " + name, ex);
+         }
+      }
+      for (final Iterator lit = mLoggerNames.iterator(); lit.hasNext(); )
+      {
+         final Logger curLogger = Logger.getLogger((String) lit.next());
+
+         for (final Iterator hit = mHandlers.iterator(); hit.hasNext(); )
+         {
+            curLogger.addHandler((Handler) hit.next());
+         }
+      }
+   }
+
+   private void deinstallHandlers ()
+   {
+      for (final Iterator hit = mHandlers.iterator(); hit.hasNext(); )
+      {
+         final Handler handler = (Handler) hit.next();
+         for (final Iterator lit = mLoggerNames.iterator(); lit.hasNext(); )
+         {
+            final Logger curLogger = Logger.getLogger((String) lit.next());
+            try
+            {
+               curLogger.removeHandler(handler);
+            }
+            catch (Exception ex)
+            {
+               reportError("Cannot remove handler " + handler + " from logger "
+                     + curLogger.getName(), ex);
+            }
+         }
+         try
+         {
+            handler.close();
+         }
+         catch (Exception ex)
+         {
+            reportError("Cannot close handler " + handler, ex);
+         }
+      }
+   }
+
+   /**
+    * Reports an error to each ErrorManager installed for the internal logger.
+    *
+    * @param msg The message of the error.
+    * @param ex THe exception leading to the error.
+    */
+   private void reportError (final String msg, final Exception ex)
+   {
+      final List handlers = Arrays.asList(logger.getHandlers());
+
+      for (final Iterator iter = handlers.iterator(); iter.hasNext(); )
+      {
+         final Handler handler = (Handler) iter.next();
+         handler.getErrorManager().error(msg, ex, ErrorManager.GENERIC_FAILURE);
+      }
+   }
+}

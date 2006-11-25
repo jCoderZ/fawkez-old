@@ -1,0 +1,344 @@
+<body>
+   <section>
+      <title>Overview</title>
+      The File System Connector is intended to provide access to a file system from an
+      application running on a J2EE application server. The File Connector
+      implements the Java Connector Architecture (JCA) 1.0 specification.
+
+      <p>
+     The most important features of the container are
+        <ul>
+           <li>Directory operations, such as list, create or delete a directory.</li>
+           <li>File operations: create, delete, rename, move or check file's existence</li>
+           <li>Operations to read/write the file's content</li>
+        </ul>
+     </p>
+     <section>
+       <title>Restrictions</title>
+       <ul>
+          <li>This connector does not provide the javax.resource.cci</li>
+          <li>The resource's reauthentication is not supported</li>
+       </ul>
+     </section>
+   </section>
+   <section>
+      <title>Logical View</title>
+
+      <p>
+      The JCA 1.0 defines three major components involved in the
+      Connector Architecture:
+        <ul>
+           <li>J2EE Application Server</li>
+           <li>Application running on a J2EE Server (the Client)</li>
+           <li>Connector (JCA) provider</li>
+        </ul>
+       </p>
+<para/>
+      <p>
+        Following contracts should be met by these components:
+        <ul>
+          <li>System Contract (between JCA provider and J2EE Server)</li>
+          <li>Container-Component Contract (between Application and J2EE Server)</li>
+          <li>Client API (between JCA provider and Application)</li>
+          <li>Security Contract (between all components)</li>
+        </ul>
+     </p>
+     <p>
+        The File Connector implements three of these contracts:
+        <ul>
+           <li>Container-Component Contract by providing
+              <ul>
+                 <li>managed connection factory FsManagedConnectionFactoryImpl</li>
+                 <li>managed connection FsManagedConnectionImpl</li>
+              </ul>
+           </li>
+           <li>Client API by providing
+              <ul>
+                 <li>connection factory interface FsConnectionFactory</li>
+                 <li>connection interface FsConnection</li>
+                 <li>connection factory's implementation FsConnectionFactoryImpl</li>
+                 <li>connection's implementation FsConnectionImpl</li>
+              </ul>
+          </li>
+          <li>Security Contract by providing User/Password base authentication
+           mechanism and supporting the security context JAAS Subject with
+           principal and credentials.
+        </li>
+        </ul>
+     </p>
+      <section>
+        <title>Managed Connection Factory</title>
+           The Managed Connection Factory FsManagedConnectionFactoryImpl
+           implements the javax.resource.spi.ManagedConnectionFactory interface.
+           This class is as  well a factory for managed connections as a factory
+           for FsConnectionFactory's. This class is the main entry point for
+           the underlying Application Server for interactions with the File
+           System Connector. An instance of this class will be instantiated by the
+           application server immediately after deployment. The
+           FsManagedConnectionFactoryImpl provides some connector specific
+           attributes (for more details see the section 'Connector's Attributes').
+<diagram type="class" name="FsManagedConnectionFactoryImpl">
+   <class name="org.jcoderz.commons.connector.ManagedConnectionFactoryBase"/>
+   <class name="org.jcoderz.commons.connector.file.FsManagedConnectionFactoryImpl"/>
+   <description>
+   The Managed Connection Factory FsManagedConnectionFactoryImpl.
+   </description>
+</diagram>
+      </section>
+      <section>
+         <title>Managed Connection</title>
+         The main task of the FsManagedConnectionImpl class is to manage
+         FsConnection's instances.
+
+<diagram type="class" name="FsManagedConnectionImpl">
+   <class name="org.jcoderz.commons.connector.file.FsManagedConnectionImpl"/>
+   <description>
+   The Managed Connection FsManagedConnectionImpl.
+   </description>
+</diagram>
+      </section>
+      <section>
+         <title>Connection Factory</title>
+        The FsConnectionFactory interface specifies the methods to retrieve a
+        FsConnection. The File System Connector does not provide the
+        javax.resource.cci interface. A connector's client should use the
+        FsConnectionFactory to obtain a connection to the File System instead.
+<diagram type="class" name="FsConnectionFactory">
+   <class name="org.jcoderz.commons.connector.file.FsConnectionFactoryImpl"/>
+   <description>
+   The Connection Factory.
+   </description>
+</diagram>
+     </section>
+
+     <section>
+         <title>Connection</title>
+          The FsConnection provides the interface between a connector's client and
+          the file system(s).
+<diagram type="class" name="FsConnectionImpl">
+   <class name="org.jcoderz.commons.connector.file.FsConnectionImpl"/>
+   <description>
+   The FsConnection.
+   </description>
+</diagram>
+      </section>
+   </section>
+        <section>
+           <title>Packaging and Deployment</title>
+           <section>
+              <title>Deployment Descriptor</title>
+              The deployment descriptor of the File Connector consists of two
+              components:
+            <ul>
+               <li>standard deployment descriptor ra.xml, that specifies the
+                   common and connector specific properties</li>
+                <li>application server specific deployment descriptor, that specify
+                    server relevant configuration and settings for an resource
+                    adapter.</li>
+            </ul>
+              The FawkeZ module delivers modules for the WebLogic Application
+              Server, thus the File System Connector includes the WebLogic specific
+              deployment descriptor weblogic-ra.xml
+             </section>
+           <section>
+              <title>Packaging</title>
+            <p>
+            The File System Connector is packaged in to the filesystem.rar
+            archive. This archive contains
+           <ul>
+              <li>the deployment descriptors
+                 <ul>
+                    <li>ra.xml - standard deployment descriptor</li>
+                    <li>weblogic-ra.xml - the WebLogic specific deployment descriptor</li>
+                 </ul>
+              </li>
+              <li>the implementation classes included in the  filesystem.jar</li>
+              <li>and the client.jar archive containing the client interfaces.</li>
+           </ul>
+           </p>
+
+           <p>
+           The following shows the structure of the filesystem.rar:
+<pre>
+   META-INF/MANIFEST.MF
+   VERSION
+   META-INF/ra.xml
+   META-INF/weblogic-ra.xml
+   filesystem-client.jar
+   filesystem.jar
+</pre>
+            </p>
+           </section>
+           <section>
+              <title>Deployment</title>
+              The File System Connector can be deployed either:
+              <ul>
+                 <li>Directly into an application server as a stand-alone unit, or,</li>
+                 <li>Deployed with a J2EE application that consists of one or
+                     more J2EE modules in addition to the File System Connector
+                     module
+                 </li>
+              </ul>
+           </section>
+           <section>
+              <title>Connector Client Archive</title>
+            To prevent the connector's client to use the File System Connector's
+            implementation classes directly, the client archive file is supplied
+            on the client side. This archive provide connector's interfaces
+            only and should be included in the client classpath.
+           </section>
+     </section>
+   <section>
+      <title>Implementation View</title>
+      <section>
+         <title>Connection handling</title>
+         Unlike the strict JCA architecture an instance of
+         FsManagedConnection does not hold any physical connection itself.
+         Because of the file connector's operations are file based, there is no
+         point to hold the physical connection to a particular file over the
+         whole lifetime of the managed connection. Typically, a particular file
+         is created, manipulated and never touched again. Therefore the physical
+         handle is holden by the underlying FsConnection and is closed as soon
+         as the client closes the FsConnection.
+      </section>
+        <section>
+           <title>Usage</title>
+            <section>
+              <title>Base Path</title>
+               A connector's client is required to look up a connection
+               factory instance using the JNDI interface. The client then uses
+               the connection factory instance to get a connection to the
+               underlying file system.
+               A connection client is required to close the connection after the
+               connection is no more in use.
+            <pre>
+     // Create initial context
+     final InitialContext ctx = new InitialContext();
+     // Lookup the connection factory
+     final FsConnectionFactory cf = (FsConnectionFactory) ctx.lookup("java:comp/env/eis/FileSystemConnector");
+     // Retrieve conection
+     final FsConnection con = cf.getConnection();
+     // perform some file operations
+     con.moveFile("/tmp/a", "/tmp/b");
+     ...
+     // close connection
+     con.close();
+            </pre>
+            </section>
+            <section>
+              <title>Modifying the connector's attributes</title>
+           When the client wish to alter the connector specific attribute,
+           it pass a property object while retrieving a connection.
+           The new attributes are in effect only for the retrieved
+           connection.
+              <pre>
+     // Create a Properties object
+     final Properties props = new Properties();
+     // Set the new temp directory to use.
+     props.setProperty(FsConnectionFactory.PROP_TEMP_DIR, "/opt/app/temp");
+     // Set the new chunk size
+     props.setProperty(FsConnectionFactory.PROP_FILE_TRANSFER_CHUNK_SIZE,  0xFFFF);
+     // Retrieve conection
+     final FsConnection con = cf.getConnection(props);
+            </pre>
+            </section>
+        </section>
+
+        <section>
+            <title>Connector Attributes</title>
+            <p>The File Connector provides following attributes:
+            <ul>
+               <li>TempDir</li>
+               <li>FileTransferChunkSize</li>
+               <li>UserName</li>
+               <li>Password</li>
+            </ul>
+            These attributes may be specified in the deployment descriptor within
+            of the section 'config-property'. The Application Server
+            instantiates an instance of the FsManagedConnectionFactoryImpl class
+            immediately after deployment and tries to set the connector specific
+            properties defined in the deployment descriptor.
+            </p>
+           <section>
+               <title>TempDir</title>
+               Specifies the temporary directory to be used by this connector.
+               The default value will be retrieved from the system property
+               'java.io.tmpdir'. A connection client can overwrite this value
+               by passing the property while retrieving a  connection
+               by calling the method FsConnection.getConnection(Properties).
+           </section>
+           <section>
+               <title>FileTransferChunkSize</title>
+               This property specifies the chunk size used while file transferring.
+               If a file size exceeds the chunk size, the file will be transfered
+               chunk by chunk until all bytes will have been transfered. If this
+               property is not defined in the deployment descriptor the file
+               connector will use the default value. Too small value will probably
+               slow the performance down, and too large value may cause a
+               resource's allocation problem. The value of this property should be
+               adjusted to the underlying os, file system and available memory.
+               A connection client can overwrite this value by passing a property
+               object while retrieving a connection by calling the method
+               FsConnection.getConnection(Properties).
+           </section>
+           <section>
+               <title>UserName and Password</title>
+               When the file system connector is required to authenticate the
+               caller, the UserName and Password properties should be defined
+               in the deployment descriptor. The connector's client has to specify
+               the UserName and Password by passing a property object while
+               retrieving a connection by calling the method
+               FsConnection.getConnection(Properties).
+           </section>
+        </section>
+
+        <section>
+         <title>File transferring on different file systems.</title>
+          The FsConnection provides some methods, that internally use the
+          standard Java API method java.io.File.renameTo(). This method is the
+          best way, for example, to move a particular file from its location to
+          another one. Unfortunately, the Java Native Implementation on AIX
+          platform does not support renameTo on different file systems.
+          Therefore, the connector performs the 'rename' operation doing
+          following steps:
+        <ul>
+           <li>Invokes the java.io.File.renameTo method, and checks the result</li>
+           <li>If the file could not be renamed, the connector performs a file's
+            transferring by using the New IO features. The connector transfers
+            the file's content chunk by chunk,
+            until all bytes have been transfered. The size of a chunk is
+            affected by the attribute <b>FileTransferChunkSize</b>.
+         </li>
+      </ul>
+
+      </section>
+      <section>
+        <title>Handling of large files (>2GB)</title>
+         <p>
+         To keep the connector's implementation as simple as possible, the
+         connector uses the standard Java IO API to perform operation on
+         file system components. The Java Runtime applies the native code, that
+         depends on the underlying operation system.
+         </p>
+        <p>
+         On the AIX 5.2 platform the java.oi.File.exists() method returns a wrong
+         result if an existing file to be checked is larger as 2 GB.
+         To solve this problem, the connector does following steps:
+         <ul>
+            <li>Invokes the java.io.File.exists() method, and checks the result</li>
+            <li>If the result is <code>false</code>, the File Connector retrieves
+            the list of files from the parent directory of the file to be checked.
+            Then the connector checks the requested file in this list.</li>
+         </ul>
+        </p>
+      </section>
+   </section>
+   <section>
+      <title>API</title>
+      <apidoc name="file system connector">
+         <class name="org.jcoderz.commons.connector.file.FsManagedConnectionFactoryImpl"/>
+         <class name="org.jcoderz.commons.connector.file.FsConnection"/>
+         <class name="org.jcoderz.commons.connector.file.FsConnectionFactory"/>
+      </apidoc>
+   </section>
+</body>

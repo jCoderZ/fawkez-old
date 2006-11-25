@@ -1,0 +1,124 @@
+<chapter>
+   <title>Statements</title>
+
+   <section>
+      <title>Compound Statements</title>
+
+      <para>Compound statements are statements that contain lists of statements
+      enclosed in braces <classname>{ statements }</classname>. See the
+      following sections for examples.
+
+         <itemizedlist mark='opencircle'>
+
+            <listitem>
+               <para>The enclosed statements must be indented one more level
+               than the compound statement.</para>
+            </listitem>
+
+            <listitem>
+               <para>The opening and the closing brace must begin in a new
+               line and be indented to the beginning of the compound statement.
+               </para>
+            </listitem>
+
+            <listitem>
+               <para>Braces are used around all statements, even single
+               statements, when they are part of a control structure, such as
+               an if-else or for statement. This makes it easier to add
+               statements without accidentally introducing bugs due to
+               forgetting to add braces.</para>
+            </listitem>
+
+         </itemizedlist>
+
+      </para>
+   </section>
+
+   <section>
+      <title>return Statements</title>
+
+      <para>A return statement with a value should not use parentheses unless
+      they make the <classname>return</classname> value more obvious/better readable
+      in some way.</para>
+
+      <informalexample>
+         <programlisting>&ReturnStatement;</programlisting>
+      </informalexample>
+   </section>
+
+   <section>
+      <title>if, if-else, if else-if else Statements</title>
+
+      <informalexample>
+         <programlisting>&IfStatement;</programlisting>
+      </informalexample>
+   </section>
+
+   <section>
+      <title>for Statements</title>
+
+      <informalexample>
+         <programlisting>&ForStatement;</programlisting>
+      </informalexample>
+
+      <para>When using the comma operator in the initialization or update
+      clause of a <classname>for</classname> statement, don't use 
+      more than three variables. If needed, use
+      separate statements before the <classname>for</classname>
+      loop (for the initialization clause) or at the end of the loop (for
+      the update clause).</para>
+   </section>
+
+   <section>
+      <title>while Statements</title>
+
+      <informalexample>
+         <programlisting>&WhileLoop;</programlisting>
+      </informalexample>
+         
+      <!-- TODO: really not allowed? [mig] -->
+      <para>   
+      Don't do any operations within the control element:
+         <informalexample>
+            <programlisting>&SimpleWhileLoop;</programlisting>
+         </informalexample>
+      </para>
+   </section>
+
+   <section>
+      <title>do-while Statements</title>
+
+      <informalexample>
+         <programlisting>&DoWhileLoop;</programlisting>
+      </informalexample>
+   </section>
+
+   <section>
+      <title>switch Statements</title>
+
+      <informalexample>
+         <programlisting>&Switch;</programlisting>
+      </informalexample>
+
+      <para>Every time a case falls through (doesn't include a break
+      statement), add a comment where the break statement would normally be to
+      indicate that the fall-through is happening intentionally.
+      This is shown in the preceding code example with the <classname>/* falls
+      through */</classname> comment.</para>
+
+      <para>Every <classname>switch</classname> statement must include a
+      default <classname>case</classname>. The <classname>break</classname> in
+      the <classname>default</classname> case is redundant, but it prevents a
+      fall-through error if later another case is added. The 
+      <classname>default</classname> case should anyway always be the last to appear. 
+      </para>      
+   </section>
+
+   <section>
+      <title>try-catch Statements</title>
+      <informalexample>
+         <programlisting>&TryCatchFinally;</programlisting>
+      </informalexample>
+   </section>
+
+</chapter>

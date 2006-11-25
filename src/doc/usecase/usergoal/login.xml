@@ -1,0 +1,66 @@
+<uc:usecase xmlns:uc="uc"
+            xmlns:db="http://docbook.org/ns/docbook"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="uc
+                                http://www.jcoderz.org/xsd/xdoc/usecase-SNAPSHOT.xsd"
+            id="UC-25" level="UserGoal">
+	<uc:version>$Revision: 1.1 $</uc:version>
+	<uc:name>Merchant Self Administration Login</uc:name>
+	<uc:goal>To enter the merchant self administration, you have to be authorized.</uc:goal>
+	<uc:scope>Micro Aggregation Merchant Self Administration</uc:scope>
+	<uc:trigger></uc:trigger>
+	<uc:priority>High</uc:priority>
+	<uc:response_time>immediately</uc:response_time>
+	<uc:frequency_of_use>ad-hoc</uc:frequency_of_use>
+	<uc:actors>
+		<uc:primary>
+			<uc:name>Merchant</uc:name>
+			<uc:channel>Web</uc:channel>
+		</uc:primary>
+		<uc:secondary>
+			<uc:name>System</uc:name>
+			<uc:channel>WEB</uc:channel>
+		</uc:secondary>
+	</uc:actors>
+	<uc:stakeholder>Merchant wants to enter the self administration. Merchants do not want others to enter their self administration.</uc:stakeholder>
+   <uc:stakeholder>Service Provider wants to enable only authorized merchants to enter only their self administration.</uc:stakeholder>
+	<uc:precondition>none</uc:precondition>
+	<uc:guarantees>
+		<uc:success>Merchant has been authorized to enter the merchant self administration.</uc:success>
+		<uc:minimal>Merchant is notified, why he cannot enter the self administration.</uc:minimal>
+	</uc:guarantees>
+   <uc:success>
+      <uc:step id="1" desc="">System prompts for user and password.</uc:step>
+		<uc:step id="2" desc="">Merchant enters username and password and submits.</uc:step>
+      <uc:step id="3" desc="">System checks username. <uc:ref id="UC-14-E2"/></uc:step>
+      <uc:step id="4" desc="">System checks password. <uc:ref id="UC-14-E3"/></uc:step>
+      <uc:step id="5" desc="">System returns to caller (calling use case).</uc:step>
+	</uc:success>
+   <uc:extension id="E1" name="INVALID USERNAME">
+      <uc:step id="1" desc="">System logs a failed login.</uc:step>
+		<uc:step id="2" desc="">System replies an error to the Merchant that username or password is not valid.</uc:step>
+      <uc:step id="3" desc="">return to <uc:ref id="UC-14-E1"/>.</uc:step>
+	</uc:extension>
+   <uc:extension id="E2" name="INVALID PASSWORD">
+      <uc:step id="1" desc="">System logs a failed login.</uc:step>
+      <uc:step id="2" desc="">System checks if failed login retry limit was exceeded.<uc:ref id="UC-14-E4"/></uc:step>
+		<uc:step id="3" desc="">System replies an error to the Merchant that username or password is not valid.</uc:step>
+      <uc:step id="4" desc="">return to <uc:ref id="UC-14-E1"/>.</uc:step>
+	</uc:extension>
+   <uc:extension id="E3" name="PASSWORD RETRY LIMIT EXCEEDED">
+      <uc:step id="1" desc="">System logs a security fraud.</uc:step>
+      <uc:step id="2" desc="">System locks the merchant administration account.</uc:step>
+      <uc:step id="3" desc="">System notifies merchant that the account has been locked due to maximum retries with wrong password.</uc:step>
+		<uc:step id="4" desc="">use case ends.</uc:step>
+	</uc:extension>
+	<!--open_issue></uc:open_issue-->
+   <uc:commitlog>
+      $Log: login.xml,v $
+      Revision 1.1  2005/09/05 14:02:14  mgriffel
+      xdoc: first use case document
+      
+      Revision 1.1  2005/09/01 13:17:33  dcoppola
+      added initial version of additional use cases
+      
+   </uc:commitlog>
+</uc:usecase>

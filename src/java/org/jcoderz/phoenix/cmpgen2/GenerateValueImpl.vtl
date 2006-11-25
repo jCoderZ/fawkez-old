@@ -1,0 +1,266 @@
+#copyrightHeader()
+
+package ${package};
+
+
+#set($imports = $cmpgen.buildHelperImportList($stmt))
+#foreach($import in $imports)
+import ${import};
+#end
+
+import org.jcoderz.commons.util.HashCodeUtil;
+import org.jcoderz.commons.util.ObjectUtil;
+
+/**
+ * Read only view to a typed $baseName.
+ *
+ * If the members of this class are immutable instances of this class
+ * are also immutable.
+ *
+ * @author fawkeZ (jCoderZ.org) $cmpgen.getVersion()
+ */
+public final class ${baseName}ValueImpl
+      implements ${baseName}Value
+{
+   /** use this serialVersionUID for serialization. */
+   static final long serialVersionUID = 1L;
+   
+   private transient int mLazyHashCode;
+   private transient String mLazyStringRepresentation;
+
+#foreach($column in $stmt.getColumns())
+#computeFields()
+#if(!$column.isSkipInInterface())
+#if(!$column.isPeriodDefined())
+   /** The $javaFieldName field of this entity. */
+#if($column.getLoadMethod())
+   final $complexType m${javaFieldName};
+#else
+   final $javaType m${javaFieldName};
+#end
+#else
+   /** The $column.getPeriodFieldName() field of this entity. */
+   final Period m$column.getPeriodFieldName();
+#end
+#end
+#end
+
+   /**
+    * The public constructor of this ${baseName}ValueImpl.
+#set($colCount = 0)
+#foreach($column in $stmt.getColumns())
+#if(!$column.isSkipInInterface())
+#computeFields()
+#if(!$column.isPeriodDefined())
+    * @param $lcJavaFieldName the $javaFieldName of this entity
+#else
+#set ($t1 = $column.getPeriodFieldName().substring(0,1).toLowerCase())
+#set ($t2 = $column.getPeriodFieldName().substring(1))
+    * @param $t1$t2 the $column.getPeriodFieldName() of this entity
+#end
+#set($colCount = $colCount + 1)
+#end
+#end
+    */
+   public ${baseName}ValueImpl (
+#set($count = 1)
+#foreach($column in $stmt.getColumns())
+#if(!$column.isSkipInInterface())
+#computeFields()
+#if(!$column.isPeriodDefined())
+#if($column.getLoadMethod())
+      final $complexType $lcJavaFieldName#if($count < $colCount),#end
+
+#else
+      final $javaType $lcJavaFieldName#if($count < $colCount),#end
+
+#end
+#else
+#set ($t1 = $column.getPeriodFieldName().substring(0,1).toLowerCase())
+#set ($t2 = $column.getPeriodFieldName().substring(1))
+      final Period $t1$t2#if($count < $colCount),#end
+
+#end
+#set($count = $count + 1)
+#end
+#end
+   )
+   {
+#foreach($column in $stmt.getColumns())
+#if(!$column.isSkipInInterface())
+#computeFields()
+#if(!$column.isPeriodDefined())
+      m${javaFieldName} = ${lcJavaFieldName};
+#else
+#set ($t1 = $column.getPeriodFieldName().substring(0,1).toLowerCase())
+#set ($t2 = $column.getPeriodFieldName().substring(1))
+      m$column.getPeriodFieldName() = $t1$t2;
+#end
+#end
+#end
+   }
+
+#foreach($column in $stmt.getColumns())
+#if(!$column.isSkipInInterface())
+#computeFields()
+#if(!$column.isPeriodDefined())
+   /**
+    * Returns the ${javaFieldName}.
+    * @return the ${javaFieldName}.
+    */
+#if($column.getLoadMethod())
+   public $complexType get$javaFieldName ()
+#else
+   public $javaType $simpleGetterName ()
+#end
+   {
+      return m${javaFieldName};
+   }
+#else
+   /**
+    * Returns the period.
+    * @return An instance of type {@link org.jcoderz.commons.types.Period}.
+    */
+   public Period get$column.getPeriodFieldName() ()
+   {
+      return m$column.getPeriodFieldName();
+   }
+#end
+
+#end
+#end
+   /**
+    * Override hashCode.
+    * @return the Object's hashcode.
+    */
+   public int hashCode ()
+   {
+      if (mLazyHashCode == 0)
+      {
+         mLazyHashCode = HashCodeUtil.SEED;
+#foreach($column in $stmt.getColumns())
+#computeFields()
+#if(!$column.isSkipInInterface())
+#if(!$column.isPeriodDefined())
+         mLazyHashCode = HashCodeUtil.hash(mLazyHashCode, m${javaFieldName});
+#else
+         mLazyHashCode = HashCodeUtil.hash(mLazyHashCode, m$column.getPeriodFieldName());
+#end
+#end
+#end
+      }
+      return mLazyHashCode;
+   }
+
+   /**
+    * Returns true if this ${baseName}ValueImpl
+    * is equal to object.
+    * @param object the object to compare to.
+    * @return true if this ${baseName}ValueImpl
+    *       is equal to object.
+    */
+   public boolean equals (Object object)
+   {
+      final boolean result;
+      if (this == object)
+      {
+         result = true;
+      } 
+      else if (object instanceof ${baseName}ValueImpl)
+      {
+         final ${baseName}ValueImpl o
+               = (${baseName}ValueImpl) object;
+         result = true 
+#foreach($column in $stmt.getColumns())
+#computeFields()
+#if(!$column.isSkipInInterface())
+#if(!$column.isPeriodDefined())
+               && ObjectUtil.equals(m${javaFieldName}, o.m${javaFieldName})
+#else
+               && ObjectUtil.equals(m$column.getPeriodFieldName(), o.m$column.getPeriodFieldName())
+#end
+#end
+#end
+               ;
+      }
+      else
+      {
+         result = false;
+      }
+      return result;
+   }
+   
+   /**
+    * Returns a string representation of this object.
+    * @return a string representation of this object.
+    */
+   public String toString() 
+   {
+      if (mLazyStringRepresentation == null)
+      {
+         final StringBuffer sbuf = new StringBuffer();
+         sbuf.append("[${baseName}ValueImpl:");
+#foreach($column in $stmt.getColumns())
+#computeFields()
+#if(!$column.isSkipInInterface())
+#if(!$column.isPeriodDefined())
+         sbuf.append(" m${javaFieldName}:");
+         sbuf.append(m${javaFieldName});
+#else
+         sbuf.append(" m$column.getPeriodFieldName():");
+         sbuf.append(m$column.getPeriodFieldName());
+#end
+#end
+#end
+         sbuf.append("]");
+         mLazyStringRepresentation = sbuf.toString();
+      }
+      return mLazyStringRepresentation;
+   }
+
+   /**
+    * Converts this ${baseName}ValueImpl to the XDoclet-generated
+    * data object.
+    * @return the XDoclet generated data object representing this entity
+    */
+   public ${baseName}Data toData ()
+   {
+      final ${baseName}Data result = new ${baseName}Data();
+#foreach($column in $stmt.getColumns())
+#computeFields()
+#if(!$column.isSkipInInterface())
+#if(!$column.isPeriodDefined())
+      result.set${javaFieldName}(m${javaFieldName});
+#else
+      result.set$column.getPeriodFieldName()(m$column.getPeriodFieldName());
+#end
+#end
+#end
+      return result;
+   }
+   
+   /**
+    * Builds a ${baseName}Value from an XDoclet-generated
+    * data object.
+    * @return a ${baseName}Value representing this entity
+    */
+   public static ${baseName}Value fromData (${baseName}Data data)
+   {
+      return new ${baseName}ValueImpl (
+#set($count = 1)
+#foreach($column in $stmt.getColumns())
+#computeFields()
+#if(!$column.isSkipInInterface())
+#if(!$column.isPeriodDefined())
+         data.get${javaFieldName}()#if($count < $colCount),#end
+
+#else
+         data.get$column.getPeriodFieldName()()#if($count < $colCount),#end
+
+#end
+#set($count = $count + 1)
+#end
+#end
+      );
+   }
+}

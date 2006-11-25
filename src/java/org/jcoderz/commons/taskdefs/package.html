@@ -1,0 +1,412 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+   <head>
+      <title>org.jcoderz.commons.taskdefs package</title>
+   </head>
+
+   <body>
+      <p>This package contains Ant tasks that can be used by any
+      jCoderZ Java project.
+      </p>
+
+      <p>
+      Classes in this package are only allowed to have a dependency to
+      the JDK, the {@link org.jcoderz.commons} and the
+      {@link org.jcoderz.commons.util} package.package.
+      </p>
+
+      <h1>Log Message Generator</h1>
+
+      <p>Process a XML document file that define the application's log
+      messages and generate corresponding java typesafe enum classes.
+      The classes are generated via XSLT and various stylesheets from
+      the FawkeZ Java archive. </p>
+
+      <p><b>Note:</b>The
+      <a href="http://xml.apache.org/xalan2/">Xalan2</a> XSL processor
+      is required for this task. If you are using JDK 1.4 or higher,
+      this task does not require external libraries not supplied in
+      the FawkeZ distribution.</p>
+
+      <p>This task doesn't support/require any nested elements.</p>
+
+      <h2>Parameters</h2>
+         <table border="1" cellpadding="2" cellspacing="0" summary="parameters">
+           <tr>
+             <td valign="top"><b>Attribute</b></td>
+             <td valign="top"><b>Description</b></td>
+             <td align="center" valign="top"><b>Required</b></td>
+           </tr>
+           <tr>
+             <td valign="top">destdir</td>
+             <td valign="top">directory in which to store the results.</td>
+             <td align="center" valign="top">Yes</td>
+           </tr>
+           <tr>
+             <td valign="top">in</td>
+             <td valign="top">specifies a single XML document that contains
+             the log message info.</td>
+             <td valign="top" align="center">Yes</td>
+           </tr>
+           <tr>
+             <td valign="top">out</td>
+             <td valign="top">specifies the output name for the log output.</td>
+             <td valign="top" align="center">Yes</td>
+           </tr>
+           <tr>
+             <td valign="top">project</td>
+             <td valign="top">specifies the project name. The project name
+             defines the path in the XML document for the transformation.
+             The project name can either be the name as defined in the
+             XML document in the <code>@name</code> attribute or
+             it can be set to the value as defined in the
+             <code>@short-name</code> attribute.</td>
+             <td valign="top" align="center">Yes</td>
+           </tr>
+           <tr>
+             <td valign="top">xsl</td>
+             <td valign="top">specifies a XSL stylesheet that is used for
+             transformation.</td>
+             <td valign="top" align="center">No; default is to use the
+             build-in stylesheet.</td>
+           </tr>
+           <tr>
+             <td valign="top">force</td>
+             <td valign="top">Recreate target files, even if they are newer
+               than their corresponding source files.</td>
+             <td valign="top" align="center">No; default is false</td>
+           </tr>
+           <tr>
+             <td valign="top">failonerror</td>
+             <td valign="top">Stop the buildprocess if the target fails
+             with an error.</td>
+             <td valign="top" align="center">No; default is false</td>
+           </tr>
+         </table>
+
+      <h2>Examples</h2>
+
+      <blockquote>
+         <pre>
+      &lt;taskdef name="log-message-generator"
+               classname="org.jcoderz.commons.taskdefs.LogMessageGenerator">
+         &lt;classpath>
+            &lt;pathelement location="path/to/fawkez.jar"/>
+         &lt;/classpath>
+      &lt;/taskdef>
+         </pre>
+         Add task definition to the current project.
+         <pre>
+      &lt;log-message-generator
+         in="${base.dir}/src/xml/log-message-info.xml"
+         out="${build.dir}/log-message-info.xml.test.out"
+         destDir="${build.dir}/foo"
+         application="FawkeZ"
+         failonerror="true"
+         force="true"/>
+         </pre>
+         Generates the log message info classes to the directory
+         <code>${build.dir}/foo</code> for the applicaton
+         <code>FawkeZ</code>. The dependency check is omitted, since
+         the <code>force</code> attribute is set to <code>true</code>.
+         This target will fail if an error occurs.
+      </blockquote>
+
+      <h1>Simple Types Generator</h1>
+
+      <p>Process a XML document file that define simple types like
+         type-safe enumerations or restricted strings and generate
+         the java classes.
+         The classes are generated via XSLT and various stylesheets from
+         the FawkeZ Java archive. </p>
+
+      <blockquote>
+         Take the following XML document defines two simple-types:
+         <ul>
+            <li>A type-safe enumeration class.</li>
+            <li>A restricted string class.</li>
+         </ul>
+         <pre>
+&lt;?xml version="1.0" encoding="UTF-8"?>
+
+&lt;simpleTypes>
+
+&lt;!-- ===============================================================
+     TYPE-SAFE ENUMERATIONS
+     =============================================================== -->
+   &lt;typeSafeEnumerations>
+      &lt;enumeration
+         classname="Color"
+         package="org.jcoderz.commons">
+         &lt;value>blue&lt;/value>
+         &lt;value>red&lt;/value>
+         &lt;value>yellow&lt;/value>
+      &lt;/enumeration>
+   &lt;/typeSafeEnumerations>
+
+&lt;!-- ===============================================================
+     RESTRICTED STRINGS
+     =============================================================== -->
+   &lt;restrictedStrings>
+      &lt;restrictedString
+         classname="FooString"
+         package="org.jcoderz.commons"
+         min-length="1"
+         max-length="10">
+         &lt;constant
+            name="CONSTANT_VALUE"
+            value="foo"
+            comment="Additional Constant defined in the XML document."/>
+      &lt;/restrictedString>
+   &lt;/restrictedStrings>
+
+&lt;!-- ===============================================================
+     REGEX STRINGS
+     =============================================================== -->
+   &lt;regexStrings>
+      &lt;regexString
+         classname="RegexString"
+         package="org.jcoderz.commons">
+         &lt;regex>foo|bar|buz&lt;/regex>
+      &lt;/regexString>
+   &lt;/regexStrings>
+
+&lt;/simpleTypes>
+         </pre>
+      </blockquote>
+
+      <p><b>Note:</b>The
+      <a href="http://xml.apache.org/xalan2/">Xalan2</a> XSL processor
+      is required for this task. If you are using JDK 1.4 or higher,
+      this task does not require external libraries not supplied in
+      the FawkeZ distribution.</p>
+
+      <p>This task doesn't support/require any nested elements.</p>
+
+      <h2>Parameters</h2>
+         <table border="1" cellpadding="2" cellspacing="0" summary="parameters">
+           <tr>
+             <td valign="top"><b>Attribute</b></td>
+             <td valign="top"><b>Description</b></td>
+             <td align="center" valign="top"><b>Required</b></td>
+           </tr>
+           <tr>
+             <td valign="top">destdir</td>
+             <td valign="top">directory in which to store the results.</td>
+             <td align="center" valign="top">Yes</td>
+           </tr>
+           <tr>
+             <td valign="top">in</td>
+             <td valign="top">specifies a single XML document that contains
+             the log message info.</td>
+             <td valign="top" align="center">Yes</td>
+           </tr>
+           <tr>
+             <td valign="top">out</td>
+             <td valign="top">specifies the output name for the log output.</td>
+             <td valign="top" align="center">Yes</td>
+           </tr>
+           <tr>
+             <td valign="top">xsl</td>
+             <td valign="top">specifies a XSL stylesheet that is used for
+             transformation.</td>
+             <td valign="top" align="center">No; default is to use the
+             build-in stylesheet.</td>
+           </tr>
+           <tr>
+             <td valign="top">force</td>
+             <td valign="top">Recreate target files, even if they are newer
+               than their corresponding source files.</td>
+             <td valign="top" align="center">No; default is false</td>
+           </tr>
+           <tr>
+             <td valign="top">failonerror</td>
+             <td valign="top">Stop the buildprocess if the target fails
+             with an error.</td>
+             <td valign="top" align="center">No; default is false</td>
+           </tr>
+         </table>
+
+      <h2>Examples</h2>
+
+      <blockquote>
+         <pre>
+      &lt;taskdef name="simple-type-generator"
+               classname="org.jcoderz.commons.taskdefs.SimpleTypeGenerator">
+         &lt;classpath>
+            &lt;pathelement location="path/to/fawkez.jar"/>
+         &lt;/classpath>
+      &lt;/taskdef>
+         </pre>
+         Add task definition to the current project.
+         <pre>
+      &lt;simple-type-generator
+         in="${base.dir}/src/xml/simple-types.xml"
+         out="${build.dir}/simply-types.out"
+         destDir="${build.dir}/foo"
+         failonerror="true"
+         force="true"/>
+         </pre>
+         Generates the simple type classes to the directory
+         <code>${build.dir}/foo</code>.
+         The dependency check is omitted, since
+         the <code>force</code> attribute is set to <code>true</code>.
+         This target will fail if an error occurs.
+      </blockquote>
+
+      <h1>Generator for Configuration Classes and Initialization Files</h1>
+
+      <p>Process a XML document file that define the application's
+         configuration entries and generate corresponding java classes
+         or initialization files.
+         The classes or files are generated via XSLT and various stylesheets
+         from the FawkeZ Java archive. </p>
+
+      <p><b>Note:</b>The
+      <a href="http://xml.apache.org/xalan2/">Xalan2</a> XSL processor
+      is required for this task. If you are using JDK 1.4 or higher,
+      this task does not require external libraries not supplied in
+      the FawkeZ distribution.</p>
+
+      <p>This task doesn't support/require any nested elements.</p>
+
+      <h2>Parameters</h2>
+         <table border="1" cellpadding="2" cellspacing="0" summary="parameters">
+           <tr>
+             <td valign="top"><b>Attribute</b></td>
+             <td valign="top"><b>Description</b></td>
+             <td align="center" valign="top"><b>Required</b></td>
+           </tr>
+           <tr>
+             <td valign="top">destdir</td>
+             <td valign="top">directory in which to store the results.
+               <b>Note</b>: This attribute is only supported by the
+               configuration generator that produces the Java classes.</td>
+             <td align="center" valign="top">Yes, for the configuration
+               generator that produces the Java classes.</td>
+           </tr>
+           <tr>
+             <td valign="top">in</td>
+             <td valign="top">specifies a single XML document that contains
+             the log message info.</td>
+             <td valign="top" align="center">Yes</td>
+           </tr>
+           <tr>
+             <td valign="top">out</td>
+             <td valign="top">specifies the output name for the log output.</td>
+             <td valign="top" align="center">Yes</td>
+           </tr>
+           <tr>
+             <td valign="top">project</td>
+             <td valign="top">specifies the project name. The project name
+             defines the path in the XML document for the transformation.
+             The project name can either be the name as defined in the
+             XML document in the <code>@name</code> attribute or
+             it can be set to the value as defined in the
+             <code>@short-name</code> attribute.</td>
+             <td valign="top" align="center">Yes</td>
+           </tr>
+           <tr>
+             <td valign="top">groups</td>
+             <td valign="top">specifies the group names. The group names
+             are used to select the elements in the XML document
+             for the transformation.
+             The group names must be a non-empty list seperated by
+             a whitespace of the <code>@short-name</code> attribute in the
+             group element.</td>
+             <td valign="top" align="center">Yes</td>
+           </tr>
+           <tr>
+             <td valign="top">mode</td>
+             <td valign="top">specifies the initialization mode.
+               Valid values are: <b>properties</b> or <b>sql</b>.
+               <b>Note</b>: This attribute is only supported by the
+               configuration generator that produces the initialization files.
+               </td>
+             <td valign="top" align="center">No; default is <i>
+               properties</i>.</td>
+           </tr>
+           <tr>
+             <td valign="top">xsl</td>
+             <td valign="top">specifies a XSL stylesheet that is used for
+             transformation.</td>
+             <td valign="top" align="center">No; default is to use the
+             build-in stylesheet.</td>
+           </tr>
+           <tr>
+             <td valign="top">force</td>
+             <td valign="top">Recreate target files, even if they are newer
+               than their corresponding source files.</td>
+             <td valign="top" align="center">No; default is false</td>
+           </tr>
+           <tr>
+             <td valign="top">failonerror</td>
+             <td valign="top">Stop the buildprocess if the target fails
+             with an error.</td>
+             <td valign="top" align="center">No; default is false</td>
+           </tr>
+         </table>
+
+      <h2>Examples</h2>
+
+      <blockquote>
+         <pre>
+      &lt;taskdef name="config-classes-generator"
+               classname="org.jcoderz.commons.taskdefs.ConfigurationClassesGenerator">
+         &lt;classpath>
+            &lt;pathelement location="path/to/fawkez.jar"/>
+         &lt;/classpath>
+      &lt;/taskdef>
+         </pre>
+         Add task definition to the current project.
+         <pre>
+      &lt;config-classes-generator
+         in="${base.dir}/src/xml/app-info.xml"
+         out="${build.dir}/app-info-config-classes.xml.out"
+         destDir="${build.dir}/foo"
+         application="FawkeZ"
+         groups="SEC FOO BAR"
+         failonerror="true"
+         force="true"/>
+         </pre>
+         Generates the configuration classes to the directory
+         <code>${build.dir}/foo</code> for the applicaton
+         <code>FawkeZ</code> and the groups/services <i>SEC</i>,
+         <i>FOO</i> and <i>BAR</i>. The dependency check is omitted, since
+         the <code>force</code> attribute is set to <code>true</code>.
+         This target will fail if an error occurs.
+      </blockquote>
+
+      <blockquote>
+         <pre>
+      &lt;taskdef name="config-init-file-generator"
+               classname="org.jcoderz.commons.taskdefs.ConfigurationInitFileGenerator">
+         &lt;classpath>
+            &lt;pathelement location="path/to/fawkez.jar"/>
+         &lt;/classpath>
+      &lt;/taskdef>
+         </pre>
+         Add task definition to the current project.
+         <pre>
+      &lt;config-init-file-generator
+         in="${base.dir}/src/xml/app-info.xml"
+         out="${build.dir}/configuration.properties"
+         application="FawkeZ"
+         groups="SEC FOO BAR"
+         mode="SQL"
+         failonerror="true"
+         force="true"/>
+         </pre>
+         Generates the configuration initialization <b>property</b> file
+         <code>${build.dir}/configuration.properties</code> for the applicaton
+         <code>FawkeZ</code> and the groups/services <i>SEC</i>,
+         <i>FOO</i> and <i>BAR</i>. The dependency check is omitted, since
+         the <code>force</code> attribute is set to <code>true</code>.
+         This target will fail if an error occurs.
+      </blockquote>
+
+   </body>
+</html>
+

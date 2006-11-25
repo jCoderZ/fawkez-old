@@ -1,0 +1,158 @@
+<?xml version='1.0'?>
+<xsl:stylesheet version='1.0'
+                xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+<!-- include the docbook templates -->
+<xsl:import href="file:@DOCBOOK_XSL_HOME@/html/docbook.xsl"/>
+<!-- common parameters for docbook templates -->
+<xsl:import href="file:jcoderz-xsl-param.xsl"/>
+
+<xsl:output method="html" encoding="ISO-8859-1" indent="no"/>
+
+<xsl:variable name="stylesheet.revision">
+   <xsl:call-template name="remove-cvs-keyword">
+      <xsl:with-param name="keyword">Revision</xsl:with-param>
+      <xsl:with-param name="string">$Revision: 1.7 $</xsl:with-param>
+   </xsl:call-template>
+</xsl:variable>
+
+<!-- overwrite docbook templates -->
+
+<xsl:template match="*[@revisionflag]">
+  <xsl:choose>
+    <xsl:when test="local-name(.) = 'para'
+                    or local-name(.) = 'section'
+                    or local-name(.) = 'appendix'">
+      <div CLASS='{@revisionflag}'>
+    <xsl:apply-imports/>
+      </div>
+    </xsl:when>
+    <xsl:when test="local-name(.) = 'phrase'
+                    or local-name(.) = 'ulink'
+                    or local-name(.) = 'xref'">
+      <span CLASS='{@revisionflag}'>
+    <xsl:apply-imports/>
+      </span>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:message>
+    <xsl:text>Revisionflag on unexpected element: </xsl:text>
+    <xsl:value-of select="local-name(.)"/>
+    <xsl:text>(Assuming block)</xsl:text>
+      </xsl:message>
+      <div CLASS='{@revisionflag}'>
+    <xsl:apply-imports/>
+      </div>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
+<!-- templates concerning CVS-tags -->
+<xsl:template name="remove-cvs-keyword">
+   <xsl:param name="keyword"/>
+   <xsl:param name="string"/>
+
+   <xsl:variable name="keyword-start">
+      <xsl:value-of select="concat('$',$keyword,': ')"/>
+   </xsl:variable>
+
+   <xsl:choose>
+      <xsl:when test="contains($string, $keyword-start)">
+         <xsl:variable name="start">
+            <xsl:value-of select="substring-before($string, $keyword-start)"/>
+         </xsl:variable>
+         <xsl:variable name="keyword-value">
+            <xsl:value-of select="substring-before(substring-after($string, $keyword-start),' $')"/>
+         </xsl:variable>
+         <xsl:variable name="end">
+            <xsl:value-of select="substring-after($string, concat($keyword-start,$keyword-value,' $'))"/>
+         </xsl:variable>
+         <xsl:value-of select="concat($start,$keyword-value,$end)"/>
+      </xsl:when>
+
+      <xsl:otherwise>
+         <xsl:value-of select="$string"/>
+      </xsl:otherwise>
+   </xsl:choose>
+</xsl:template>
+
+<!-- overwrite standard titlepage templates -->
+<xsl:template match="bookinfo/releaseinfo" mode="titlepage.mode">
+   <xsl:call-template name="remove-cvs-keyword">
+      <xsl:with-param name="keyword">Name</xsl:with-param>
+      <xsl:with-param name="string"><xsl:value-of select="current()"/></xsl:with-param>
+   </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="revision/revnumber" mode="titlepage.mode">
+   <xsl:call-template name="remove-cvs-keyword">
+      <xsl:with-param name="keyword">Revision</xsl:with-param>
+      <xsl:with-param name="string"><xsl:value-of select="current()"/></xsl:with-param>
+   </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="revision/date" mode="titlepage.mode">
+   <xsl:call-template name="remove-cvs-keyword">
+      <xsl:with-param name="keyword">Date</xsl:with-param>
+      <xsl:with-param name="string"><xsl:value-of select="current()"/></xsl:with-param>
+   </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="revision/authorinitials" mode="titlepage.mode">
+   <xsl:call-template name="remove-cvs-keyword">
+      <xsl:with-param name="keyword">Author</xsl:with-param>
+      <xsl:with-param name="string"><xsl:value-of select="current()"/></xsl:with-param>
+   </xsl:call-template>
+</xsl:template>
+
+<!-- templates to view our company logo on the title page -->
+<xsl:template name="book.titlepage.recto">
+  <xsl:choose>
+    <xsl:when test="bookinfo/title">
+      <xsl:apply-templates mode="book.titlepage.recto.auto.mode" select="bookinfo/title"/>
+    </xsl:when>
+    <xsl:when test="info/title">
+      <xsl:apply-templates mode="book.titlepage.recto.auto.mode" select="info/title"/>
+    </xsl:when>
+    <xsl:when test="title">
+      <xsl:apply-templates mode="book.titlepage.recto.auto.mode" select="title"/>
+    </xsl:when>
+  </xsl:choose>
+  <xsl:choose>
+    <xsl:when test="bookinfo/subtitle">
+      <xsl:apply-templates mode="book.titlepage.recto.auto.mode" select="bookinfo/subtitle"/>
+    </xsl:when>
+    <xsl:when test="info/subtitle">
+      <xsl:apply-templates mode="book.titlepage.recto.auto.mode" select="info/subtitle"/>
+    </xsl:when>
+    <xsl:when test="subtitle">
+      <xsl:apply-templates mode="book.titlepage.recto.auto.mode" select="subtitle"/>
+    </xsl:when>
+  </xsl:choose>
+
+  <xsl:apply-templates mode="book.titlepage.recto.auto.mode" select="bookinfo/mediaobject"/>
+
+  <xsl:apply-templates mode="book.titlepage.recto.auto.mode" select="bookinfo/corpauthor"/>
+  <xsl:apply-templates mode="book.titlepage.recto.auto.mode" select="info/corpauthor"/>
+  <xsl:apply-templates mode="book.titlepage.recto.auto.mode" select="bookinfo/authorgroup"/>
+  <xsl:apply-templates mode="book.titlepage.recto.auto.mode" select="info/authorgroup"/>
+  <xsl:apply-templates mode="book.titlepage.recto.auto.mode" select="bookinfo/author"/>
+  <xsl:apply-templates mode="book.titlepage.recto.auto.mode" select="info/author"/>
+  <xsl:apply-templates mode="book.titlepage.recto.auto.mode" select="bookinfo/revision"/>
+  <xsl:apply-templates mode="book.titlepage.recto.auto.mode" select="info/revision"/>
+  <xsl:apply-templates mode="book.titlepage.recto.auto.mode" select="bookinfo/releaseinfo"/>
+  <xsl:apply-templates mode="book.titlepage.recto.auto.mode" select="info/releaseinfo"/>
+</xsl:template>
+
+<xsl:template match="mediaobject" mode="book.titlepage.recto.auto.mode">
+   <div class="mediaobject">
+      <img src="{imageobject[@role='html']/imagedata/@fileref}" border="0"/>
+   </div>
+</xsl:template>
+
+<xsl:template match="releaseinfo" mode="book.titlepage.recto.auto.mode">
+   <div class="releaseinfo">
+      <xsl:apply-templates select="text()"/>
+   </div>
+</xsl:template>
+
+</xsl:stylesheet>

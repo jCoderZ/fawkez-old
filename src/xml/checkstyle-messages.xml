@@ -1,0 +1,2409 @@
+<?xml version="1.0" encoding="ASCII"?>
+<CheckstyleMessages
+	xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+   xsi:noNamespaceSchemaLocation='schema/checkstyle-merssage.xsd'>
+
+   <FindingType>
+      <Symbol>CS_CONTENT</Symbol>
+      <ShortDescription>content</ShortDescription>
+      <MessagePattern>Empty .* block\.</MessagePattern>
+      <DetailedDescription>
+<![CDATA[
+<p>The block should not be empty. 
+If you think this is ok you must at least put a comment inside
+this block, describing why it is ok.</p>
+]]>
+      </DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_CURLY</Symbol>
+      <ShortDescription>Curly</ShortDescription>
+      <MessagePattern>'[\{\}]' should be on a new line\.</MessagePattern>
+      <DetailedDescription>
+<![CDATA[
+<p>Curley braces must be placed on a new line.</p>
+]]>
+      </DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_RIGHT_CURLY</Symbol>
+      <ShortDescription>RightCurly</ShortDescription>
+      <MessagePattern>'\}' should be alone on a line\.</MessagePattern>
+      <DetailedDescription>
+<![CDATA[
+<p>Curley braces must be placed on a new line. Right curley braces are always
+alone in a line.</p>
+]]>
+      </DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_OPERATOR</Symbol>
+      <ShortDescription>Operator should be on a new line.</ShortDescription>
+      <MessagePattern>'[^\}\{]*' should be on a new line\.</MessagePattern>
+      <DetailedDescription>
+<![CDATA[
+<p>line break should be placed before operator.</p>
+]]>
+      </DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_NEED_BRACES</Symbol>
+      <ShortDescription>NeedBraces</ShortDescription>
+      <MessagePattern>'.*' construct must use '\{\}'s\.</MessagePattern>
+      <DetailedDescription>
+<![CDATA[
+      <p class="body">
+      Checks for braces around code blocks.
+      </p>
+]]>
+      </DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_AVOID_NESTED_BLOCKS</Symbol>
+      <ShortDescription>Avoid nested blocks.</ShortDescription>
+      <MessagePattern>Avoid nested blocks\.</MessagePattern>
+      <DetailedDescription>
+<![CDATA[
+      <p class="body">
+      Finds nested blocks, i.e. blocks that are used freely in the code.
+      <p class="body">
+	  Rationale: Nested blocks are often leftovers from the debugging process,
+	  they confuse the reader.
+      </p>
+
+      <p>
+      For example this Check finds the obsolete braces in
+      </p>
+      <pre class="body">
+ public void guessTheOutput()
+ {
+     int whichIsWich = 0;
+     {
+         int whichIsWhich = 2;
+     }
+     System.out.println("value = " + whichIsWhich);
+ }
+ </pre>
+      <p class="body">
+      and debugging / refactoring leftovers such as
+      </p>
+
+      <pre class="body">
+// if (conditionThatIsNotUsedAnyLonger)
+{
+    System.out.println("unconditional");
+}
+</pre>
+
+      <p class="body">
+      A case in a switch statement does not implicitly form a block.
+      Thus to be able to introduce local variables that have case scope
+      it is necessary to open a nested block. This is supported, set
+      the allowInSwitchCase property to true and include all statements
+      of the case in the block.
+      </p>
+
+  <pre class="body">
+switch (a)
+{
+    case 0:
+        // Never OK, break outside block
+        {
+            x = 1;
+        }
+        break;
+    case 1:
+        // Never OK, statement outside block
+        System.out.println("Hello");
+        {
+            x = 2;
+            break;
+        }
+    case 1:
+        // OK if allowInSwitchCase is true
+        {
+            System.out.println("Hello");
+            x = 2;
+            break;
+        }
+}
+</pre>
+
+
+]]>
+      </DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_ARRAY_TRAILING_COMMA</Symbol>
+      <ShortDescription>ArrayTrailingComma</ShortDescription>
+      <MessagePattern>TODO</MessagePattern>
+      <DetailedDescription>
+<![CDATA[
+      <p class="body">
+      Checks that array initialization contains a trailing comma.
+      </p>
+      <pre class="body"	>
+      int[] a = new int[] 
+      {
+          1, 
+          2, 
+          3, 
+      }; 
+      </pre>
+      <p class="body">
+      The check allows to not add a comma if both left and right curlys
+      are on the same line.
+      </p>
+      <pre class="body">
+      return new int[] { 0 };
+      </pre>
+      <p class="body">
+      Rationale: Putting this comma in makes it easier to change the
+      order of the elements or add new elements on the end. 
+      </p>
+]]>
+      </DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_AVOID_INLINE_CONDITIONALS</Symbol>
+      <ShortDescription>AvoidInlineConditionals</ShortDescription>
+      <MessagePattern>TODO</MessagePattern>
+      <DetailedDescription>
+<![CDATA[
+      <p class="body">
+      Detects inline conditionals.
+
+      An example inline conditional is this:
+      </p>
+      <pre class="body"	>
+String a = getParameter("a");
+String b = (a==null || a.length&lt;1) ? null : a.substring(1);
+      </pre>
+      <p class="body">
+      Rationale: Some developers find inline conditionals hard to read,
+      so their company's coding standards forbids them.
+      </p>
+]]>
+      </DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_COVARIANT_EQUALS</Symbol>
+      <ShortDescription>CovariantEquals</ShortDescription>
+      <MessagePattern>covariant equals without overriding equals\(java.lang.Object\)\.</MessagePattern>
+      <DetailedDescription>
+<![CDATA[
+<p class="body">
+Rationale: Mistakenly defining a covariant equals() method 
+without overriding method equals(java.lang.Object) can produce 
+unexpected runtime behaviour. 
+</p>
+]]>
+      </DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_DOUBLE_CHECKED_LOCKING</Symbol>
+      <ShortDescription>DoubleCheckedLocking</ShortDescription>
+      <MessagePattern>The double-checked locking idiom is broken and should be avoided\.</MessagePattern>
+      <DetailedDescription>
+<![CDATA[
+      <p class="body">
+      The &quot;double-checked locking&quot; idiom (DCL) tries to avoid the runtime cost
+      of synchronization. An example that uses the DCL idiom is this:
+      </p>
+      <pre class="body">
+public class MySingleton
+{
+    private static theInstance = null;
+
+    private MySingleton() {}
+
+    public MySingleton getInstance() {
+        if ( theInstance == null ) { // synchronize only if necessary
+            synchronized( MySingleton.class ) {
+                if ( theInstance == null ) {
+                    theInstance = new MySingleton();
+                }
+            }
+        }
+    }
+}
+      </pre>
+      <p class="body">
+      The problem with the DCL idiom in Java is that it just does not work correctly.
+      Using it introduces bugs that are extremely hard to track down and reproduce.
+      The <a href="http://www.cs.umd.edu/~pugh/java/memoryModel/DoubleCheckedLocking.html">
+      &quot;Double-Checked Locking is Broken&quot; Declaration</a> has an in depth explanation
+      of the exact problem which has to do with the semantics of the Java memory model.
+      </p>
+      <p class="body">
+      The DoubleCheckedLocking check will find source code where a test is wrapped in a
+      synchronized block that is wrapped in the same test, like in the example above.
+      </p>
+]]>
+      </DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_EMPTY_STATEMENT</Symbol>
+      <ShortDescription>Empty Statement</ShortDescription>
+      <MessagePattern>Empty statement\.</MessagePattern>
+      <DetailedDescription>
+<![CDATA[
+      <p class="body">
+      Detected empty statements (standalone ;).
+      </p>
+]]>
+      </DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_EQUALS_HASH_CODE</Symbol>
+      <ShortDescription>EqualsHashCode</ShortDescription>
+      <MessagePattern>Definition of 'equals.*' without corresponding definition of 'hashCode.*'\.</MessagePattern>
+      <DetailedDescription>
+<![CDATA[
+<p>
+Rationale: The contract of equals() and hashCode() requires that equal objects
+have the same hashCode. Hence, whenever you override equals() you must override
+hashCode() to ensure that your class can be used in collections that are hash
+based. 
+</p>
+]]>
+      </DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_FINAL_LOCAL_VARIABLE</Symbol>
+      <ShortDescription>Local Variable should be declared final</ShortDescription>
+      <MessagePattern>Variable '.*' should be declared final\.</MessagePattern>
+      <DetailedDescription>
+<![CDATA[
+      <p class="body">
+      Checks that local variables that never have their values changed
+      are declared final.
+      </p>
+]]>
+      </DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_HIDDEN_FIELD</Symbol>
+      <ShortDescription>HiddenField</ShortDescription>
+      <MessagePattern>TODO</MessagePattern>
+      <DetailedDescription>
+<![CDATA[
+      <p class="body">
+      Checks that a local variable or a parameter does not shadow a field that is
+      defined in the same class.
+      </p>
+]]>
+      </DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_ILLEGAL_INSTANTIATION</Symbol>
+      <ShortDescription>Illegal Instantiation</ShortDescription>
+      <MessagePattern>Instantiation of .* should be avoided\.</MessagePattern>
+      <DetailedDescription>
+<![CDATA[
+      <p class="body">
+      Checks for illegal instantiations where a factory method is preferred.
+      </p>
+      <p class="body">
+      Rationale: Depending on the project, for some classes it might be preferable to
+      create instances through factory methods rather than calling the constructor.
+      </p>
+      <p class="body">
+      A simple example is the <span class="code">java.lang.Boolean</span> class. In
+      order to save memory and CPU cycles, it is preferable to use the predefined
+      constants <span class="code">
+      TRUE</span> and <span class="code">FALSE</span>. Constructor invocations should
+      be replaced by calls to <span class="code">Boolean.valueOf()</span>.
+      </p>
+      <p class="body">
+      Some extremely performance sensitive projects may require the use of factory
+      methods for other classes as well, to enforce the usage of number caches or
+      object pools.
+      </p>
+ <pre>   
+public class Foo 
+{
+   private Boolean bar = new Boolean("true"); // just do a Boolean bar = Boolean.TRUE or Boolean.valueOf(true);
+}   
+</pre>     
+]]>
+      </DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_ILLEGAL_TOKEN</Symbol>
+      <ShortDescription>IllegalToken</ShortDescription>
+      <MessagePattern>TODO</MessagePattern>
+      <DetailedDescription>
+<![CDATA[
+      <p class="body">
+      Checks for illegal tokens.
+      </p>
+      <p class="body">
+      Rational: Certain language features often lead to hard to
+      maintain code or are non-obvious to novice developers. Other
+      features may be discouraged in certain frameworks, such as not
+      having native methods in EJB components.
+      </p>
+      <table width="100%" border="1" cellpadding="5" class="body">
+        <tr class="header">
+          <th>name</th>
+          <th>description</th>
+          <th>type</th>
+          <th>default value</th>
+        </tr>
+        <tr>
+          <td>tokens</td>
+          <td>tokens to check</td>
+          <td>subset of <a
+          href="api/com/puppycrawl/tools/checkstyle/api/TokenTypes.html">TokenTypes</a>,
+          <a</td>
+          <td><a
+          href="api/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#LITERAL_SWITCH">LITERAL_SWITCH</a>,
+          <a
+          href="api/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#POST_INC">POST_INC</a>,
+          <a
+          href="api/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#POST_DEC">POST_DEC</a></td>
+        </tr>
+      </table>
+]]>
+      </DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_ILLEGAL_TOKEN_TEXT</Symbol>
+      <ShortDescription>IllegalTokenText</ShortDescription>
+      <MessagePattern>TODO</MessagePattern>
+      <DetailedDescription>
+<![CDATA[
+      <p class="body">
+      Checks for illegal token text.
+      </p>
+      <table width="100%" border="1" cellpadding="5" class="body">
+        <tr class="header">
+          <th>name</th>
+          <th>description</th>
+          <th>type</th>
+          <th>default value</th>
+        </tr>
+        <tr>
+          <td>tokens</td>
+          <td>tokens to check</td>
+          <td>subset of <a
+          href="api/com/puppycrawl/tools/checkstyle/api/TokenTypes.html">TokenTypes</a>
+          </td>
+          <td>empty</td>
+        </tr>
+        <tr>
+          <td>format</td>
+          <td>illegal pattern</td>
+          <td><a href="property_types.html#regexp">regular expression</a></td>
+          <td><span class="default">^$</span> (empty)</td>
+        </tr>
+        <tr>
+          <td>ignoreCase</td>
+          <td>Controls whether to ignore case when matching.</td>
+          <td><a href="property_types.html#boolean">Boolean</a></td>
+          <td><span class="default">false</span></td>
+        </tr>
+        <tr>
+          <td>message</td>
+          <td>Message which is used to notify about violations; 
+          if empty then the default message is used.</td>
+          <td><a href="property_types.html#String">String</a></td>
+          <td><span class="default">&quot;&quot;</span>(empty)</td>
+        </tr>
+      </table>
+]]>
+      </DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_INNER_ASSIGNMENT</Symbol>
+      <ShortDescription>InnerAssignment</ShortDescription>
+      <MessagePattern>Inner assignments should be avoided\.</MessagePattern>
+      <DetailedDescription>
+<![CDATA[
+      <p class="body">
+      Checks for assignments in subexpressions, such as in <span class="code">String s
+      = Integer.toString(i = 2);</span>.
+      </p>
+      <p class="body">
+      Rationale: With the exception of <span class="code">for</span> iterators, all
+      assignments should occur in their own toplevel statement to increase readability.
+      With inner assignments like the above it is difficult to see all places where a
+      variable is set.
+      </p>
+]]>
+      </DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_MAGIC_NUMBER</Symbol>
+      <ShortDescription>MagicNumber</ShortDescription>
+      <MessagePattern>'.*' is a magic number\.</MessagePattern>
+      <DetailedDescription>
+<![CDATA[
+      <p class="body">
+      Checks that there are no &quot;magic numbers&quot;, where a
+      magic number is a numeric literal that is not defined as a
+      constant. By default, -1, 0, 1, and 2 are not considered to
+      be magic numbers.
+      </p>
+]]>
+      </DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_MISSING_SWITCH_DEFAULT</Symbol>
+      <ShortDescription>Missing Switch Default</ShortDescription>
+      <MessagePattern>switch without "default" clause\.</MessagePattern>
+      <DetailedDescription>
+<![CDATA[
+      <p class="body">
+      Checks that switch statement has &quot;default&quot; clause.
+      </p>
+      <p class="body">
+      Rationale: It's usually a good idea to introduce a default case
+      in every switch statement. Even if the developer is sure that
+      all currently possible cases are covered, this should be
+      expressed in the default branch, e.g. by using an
+      assertion. This way the code is protected aginst later changes,
+      e.g. introduction of new types in an enumeration type.
+      </p>
+]]>
+      </DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_REDUNDANT_THROWS</Symbol>
+      <ShortDescription>RedundantThrows</ShortDescription>
+      <MessagePattern>TODO</MessagePattern>
+      <DetailedDescription>
+<![CDATA[
+      <p class="body">
+       Checks for redundant exceptions declared in throws clause
+        such as duplicates, unchecked exceptions or subclasses of 
+        another declared exception.
+      </p>
+]]>
+      </DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_SIMPLIFY_BOOLEAN_EXPRESSION</Symbol>
+      <ShortDescription>SimplifyBooleanExpression</ShortDescription>
+      <MessagePattern>Expression can be simplified.*</MessagePattern>
+      <DetailedDescription>
+<![CDATA[
+      <p class="body">
+      The expression ca be simplified. For example the following code
+      </p>
+      <pre class="body">
+if (isValid() == true)
+{
+   // code
+}
+      </pre>
+      <p class="body">
+      could be written as
+      </p>
+      <pre class="body">
+if (isValid())
+{
+   // code
+}
+      </pre>
+]]>
+      </DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_SIMPLIFY_BOOLEAN_RETURN</Symbol>
+      <ShortDescription>SimplifyBooleanReturn</ShortDescription>
+      <MessagePattern>Conditional logic can be removed\.</MessagePattern>
+      <DetailedDescription>
+<![CDATA[
+      <p class="body">
+      Complicated boolean return statements. For example the following code
+      </p>
+      <pre class="body">
+if (valid())
+    return false;
+else
+    return true;
+      </pre>
+      <p class="body">
+      could be written as
+      </p>
+      <pre class="body">
+return !valid();
+      </pre>
+      
+Avoid unnecessary if..then..else statements when returning a boolean
+    <br></p><pre>
+
+public class Foo {
+  private int bar =2;
+  public boolean isBarEqualsTo(int x) {
+    // this bit of code
+    if (bar == x) {
+     return true;
+    } else {
+     return false;
+    }
+    // can be replaced with a simple
+    // return bar == x;
+  }
+}
+
+    </pre>      
+      
+]]>
+      </DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_STRING_LITERAL_EQUALITY</Symbol>
+      <ShortDescription>StringLiteralEquality</ShortDescription>
+      <MessagePattern>TODO</MessagePattern>
+      <DetailedDescription>
+<![CDATA[
+]]>
+      </DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_NESTED_IF_DEPTH</Symbol>
+      <ShortDescription>Nested If Depth Exceeded</ShortDescription>
+      <MessagePattern>Nested if-else depth is .* \(max allowed is .*\)\.</MessagePattern>
+      <DetailedDescription>
+<![CDATA[
+]]>
+      </DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_NESTED_TRY_DEPTH</Symbol>
+      <ShortDescription>NestedTryDepth</ShortDescription>
+      <MessagePattern>TODO</MessagePattern>
+      <DetailedDescription>
+<![CDATA[
+]]>
+      </DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_SUPER_CLONE</Symbol>
+      <ShortDescription>SuperClone</ShortDescription>
+      <MessagePattern>Method 'clone' should call 'super.clone'\.</MessagePattern>
+      <DetailedDescription>
+<![CDATA[
+      <p class="body">
+      An overriding <span class="code">clone()</span> method does not invoke <span class="code">super.clone()</span>.
+      </p>
+      <p class="body">
+      Reference: <a href="http://java.sun.com/j2se/1.4.1/docs/api/java/lang/Object.html#clone()">Object.clone()</a>. 
+      </p>
+]]>
+      </DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_SUPER_FINALIZE</Symbol>
+      <ShortDescription>SuperFinalize</ShortDescription>
+      <MessagePattern>Method 'finalize' should call 'super.finalize'\.</MessagePattern>
+      <DetailedDescription>
+<![CDATA[
+      <p class="body">
+      An overriding <span class="code">finalize()</span> method does not invoke <span class="code">super.finalize()</span>.
+      </p>
+      <p class="body">
+      Reference: <a href="http://java.sun.com/docs/books/tutorial/java/data/garbagecollection.html">Cleaning
+      Up Unused Objects</a>. 
+      </p>
+]]>
+      </DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_SUPER_CLONE</Symbol>
+      <ShortDescription>SuperClone</ShortDescription>
+      <MessagePattern>TODO</MessagePattern>
+      <DetailedDescription>
+<![CDATA[
+      <p class="body">
+      Checks that an overriding <span class="code">clone()</span> method invokes <span class="code">super.clone()</span>.
+      </p>
+      <p class="body">
+      Reference: <a href="http://java.sun.com/j2se/1.4.1/docs/api/java/lang/Object.html#clone()">Object.clone()</a>. 
+      </p>
+]]>
+      </DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_ILLEGAL_CATCH</Symbol>
+      <ShortDescription>IllegalCatch</ShortDescription>
+      <MessagePattern>Catching '.*' is not allowed\.</MessagePattern>
+      <DetailedDescription>
+<![CDATA[
+      <p class="body">
+      Catching java.lang.Exception, java.lang.Error or java.lang.RuntimeException
+      is almost never acceptable.
+      </p>
+      <p class="body">
+      Rationale: Junior developers often simply catch Exception in an
+      attempt to handle multiple exception classes. This unfortunately
+      leads to code that inadvertantly catchs NPE, OutOfMemoryErrors,
+      etc.
+      </p>
+            
+ <p>
+
+This is dangerous because if a java.lang.Error, for example OutOfMemmoryError,
+occurs then it will be caught. The container should handle java.lang.Error.
+If application code will catch them, try to log them (which will probably fail)
+and continue silently the situation will not be desirable.
+      <br></p>
+<pre>                
+SimpleDateFormat sdf = null;
+try {
+    sdf = new SimpleDateFormat("yyyy-MM-dd");
+} catch (Throwable th) {  //Should not catch throwable
+    th.printStackTrace();
+}
+</pre>      
+]]>
+      </DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_PACKAGE_DECLARATION</Symbol>
+      <ShortDescription>PackageDeclaration</ShortDescription>
+      <MessagePattern>TODO</MessagePattern>
+      <DetailedDescription>
+<![CDATA[
+]]>
+      </DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_J_UNIT_TEST_CASE_SETUP_PUBLIC</Symbol>
+      <ShortDescription>JUnitTestCaseSetupPublic</ShortDescription>
+      <MessagePattern>The method 'setUp' must be public or protected\.</MessagePattern>
+      <DetailedDescription>
+<![CDATA[
+<p>
+JUnit: The method setUp() must be either public or protected.
+</p>
+<p>
+Rationale: often times developers will misname one or more of these methods and not realise that the method is not being called.
+</p>
+]]>
+      </DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_J_UNIT_TEST_CASE_SETUP_TYPO</Symbol>
+      <ShortDescription>JUnitTestCaseSetupTypo</ShortDescription>
+      <MessagePattern>The method '.*' should be named 'setUp'\.</MessagePattern>
+      <DetailedDescription>
+<![CDATA[
+<p>
+JUnit: The method must be named setUp(). Typo?
+</p>
+<p>
+Rationale: often times developers will misname one or more of these methods and not realise that the method is not being called.
+</p>
+]]>
+      </DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_RETURN_COUNT</Symbol>
+      <ShortDescription>More than one return in method</ShortDescription>
+      <MessagePattern>Return count is .* \(max allowed is .*\)\.</MessagePattern>
+      <DetailedDescription>
+<![CDATA[
+      <p class="body">
+      Restrict the number of return statements. Default = 2.
+      </p>
+
+      <p class="body">
+      Rationale:
+      Too many return points can be indication that code is
+      attempting to do too much or may be difficult to understand.
+      </p>
+
+]]>
+      </DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_ILLEGAL_TYPE</Symbol>
+      <ShortDescription>IllegalType</ShortDescription>
+      <MessagePattern>Declaring variables, return values or parameters of type '.*' is not allowed\.</MessagePattern>
+      <DetailedDescription>
+<![CDATA[
+    Avoid using implementation types (i.e., HashSet); use the interface (i.e, Set) instead
+    <br></p><pre>
+
+import java.util.*;
+public class Bar {
+
+ // should be "private List list"
+ private ArrayList list = new ArrayList();
+
+ // should be "public Set getFoo()"
+ public HashSet getFoo() {
+  return new HashSet();
+ }
+}
+</pre>
+
+      <p class="body">
+      Rationale:
+      Helps reduce coupling on concrete classes. In addition abstract
+      classes should be thought of a convenience base class implementations
+      of interfaces and as such are not types themsleves. 
+      </p>
+      
+      
+
+]]>
+      </DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_DECLARATION_ORDER</Symbol>
+      <ShortDescription>Declaration in wrong Order (public to private)</ShortDescription>
+      <MessagePattern>.* definition in wrong order\.</MessagePattern>
+      <DetailedDescription>
+<![CDATA[
+      <p class="body">
+      According to
+      <a
+      href="http://java.sun.com/docs/codeconv/html/CodeConventions.doc2.html#1852">
+      Code Conventions for the Java Programming Language</a>
+      , the parts of a class or interface declaration should appear in the
+      following order
+
+      <li> Class (static) variables. First the public class variables, then
+           the protected, then package level (no access modifier), and then
+           the private. </li>
+      <li> Instance variables. First the public class variables, then
+           the protected, then package level (no access modifier), and then
+           the private. </li>
+      <li> Constructors </li>
+      <li> Methods </li>
+      </p>
+
+]]>
+      </DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_PARAMETER_ASSIGNMENT</Symbol>
+      <ShortDescription>Avoid Parameter Assignment</ShortDescription>
+      <MessagePattern>Assignment of parameter '.*' is not allowed\.</MessagePattern>
+      <DetailedDescription>
+<![CDATA[
+      <p class="body"> Disallow assignment of parameters.</p>
+      <p class="body">Rationale: Parameter assignment is often
+      considered poor programming practice. Forcing developers to
+      declare parameters as final is often onerous. Having a check
+      ensure that parameters are never assigned would give the best of
+      both worlds.</p>
+
+]]>
+      </DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_EXPLICIT_INITIALIZATION</Symbol>
+      <ShortDescription>ExplicitInitialization</ShortDescription>
+      <MessagePattern>TODO</MessagePattern>
+      <DetailedDescription>
+<![CDATA[
+      <p class="body">Checks if any class or object member explicitly
+      initialized to default for its type value (<span
+      class="code">null</span> for object references, zero for numeric
+      types and <span class="code">char</span> and <span
+      class="code">false</span> for <span
+      class="code">booolean</span>.</p>
+      <p class="body">Rationale: each instance variable gets
+      initialized twice, to the same value.  Java
+      initializes each instance variable to its default
+      value (0 or null) before performing any
+      initialization specified in the code.  So in this case,
+      x gets initialized to 0 twice, and bar gets initialized
+      to null twice.  So there is a minor inefficiency.  This style of
+      coding is a hold-over from C/C++ style coding,
+      and it shows that the developer isn't really confident that
+      Java really initializes instance variables to default
+      values.</p>
+
+]]>
+      </DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_VISIBILITY_MODIFIER</Symbol>
+      <ShortDescription>Fields must not be public</ShortDescription>
+      <MessagePattern>Variable '.*' must be private and have accessor methods\.</MessagePattern>
+      <DetailedDescription>
+<![CDATA[
+      <p class="body">
+      Checks visibility of class members. Only static final members
+      may be public; other class members must be private.
+      </p>
+
+      <p class="body">
+      Rationale: Enforce encapsulation.
+      </p>
+
+
+]]>
+      </DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_FINAL_CLASS</Symbol>
+      <ShortDescription>Class should be final</ShortDescription>
+      <MessagePattern>Class .* should be declared as final\.</MessagePattern>
+      <DetailedDescription>
+<![CDATA[
+
+      <p class="body">
+      The class which has only private constructors should be declared as final.
+      </p>
+]]>
+      </DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_INTERFACE_IS_TYPE</Symbol>
+      <ShortDescription>InterfaceIsType</ShortDescription>
+      <MessagePattern>TODO</MessagePattern>
+      <DetailedDescription>
+<![CDATA[
+      <p class="body">
+  	  Implements Bloch, Effective Java, Item 17 -
+      Use Interfaces only to define types.
+      </p>
+
+      <p class="body">
+      According to Bloch, an interface should describe a <em>type</em>.
+      It is therefore inappropriate to define an interface that does not
+      contain any methods but only constants. The Standard class
+      <a href="http://java.sun.com/j2se/1.4.1/docs/api/javax/swing/SwingConstants.html">javax.swing.SwingConstants</a>
+      is an example of a class that would be flagged by this check.
+      </p>
+
+      <p class="body">
+      The check can be configured to also disallow marker interfaces like
+      <code>java.io.Serializable</code>, that do not contain methods or
+      constants at all.
+      </p>
+
+]]>
+      </DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_HIDE_UTILITY_CLASS_CONSTRUCTOR</Symbol>
+      <ShortDescription>Hide Utility Class Constructor</ShortDescription>
+      <MessagePattern>Utility classes should not have a public or default constructor\.</MessagePattern>
+      <DetailedDescription>
+<![CDATA[
+      <p class="body">
+      Make sure that utility classes (classes that contain only static methods)
+      do not have a public constructor.
+      </p>
+      <p class="body">
+      Rationale: Instantiating utility classes does not make sense.
+      Hence the constructors should either be private or (if you
+      want to allow subclassing) protected. A common mistake is forgetting
+      to hide the default constructor.
+      </p>
+      <p class="body">
+      If you make the constructor protected you may want to consider
+      the following constructor implementation technique to disallow
+      instantiating subclasses:
+      </p>
+      <pre class="body">
+public class StringUtils // not final to allow subclassing
+{
+    protected StringUtils() {
+        throw new UnsupportedOperationException(); // prevents calls from subclass
+    }
+
+    public static int count(char c, String s) {
+        // ...
+    }
+}
+      </pre>
+]]>
+      </DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_DESIGN_FOR_EXTENSION</Symbol>
+      <ShortDescription>DesignForExtension</ShortDescription>
+      <MessagePattern>TODO</MessagePattern>
+      <DetailedDescription>
+<![CDATA[
+      <p class="body">
+      Checks that classes are designed for extension.
+      More specifically, it enforces a programming style
+      where superclasses provide empty "hooks" that can be
+      implemented by subclasses.
+      </p>
+
+      <p class="body">
+      The exact rule is that nonprivate, nonstatic methods of classes that
+      can be subclassed must either be
+      </p>
+      <ul class="body">
+      <li>abstract or</li>
+      <li>final or</li>
+      <li>have an empty implementation</li>
+      </ul>
+
+      <p class="body">
+      Rationale: This API design style protects superclasses against beeing broken by
+      subclasses. The downside is that subclasses are limited in their flexibility,
+      in particular they cannot prevent execution of code in the superclass, but that also
+      means that subclasses cannot corrupt the state of the superclass by forgetting to
+      call the super method.
+      </p>
+
+]]>
+      </DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_MUTABLE_EXCEPTION</Symbol>
+      <ShortDescription>MutableException</ShortDescription>
+      <MessagePattern>TODO</MessagePattern>
+      <DetailedDescription>
+<![CDATA[
+      <p class="body">
+      Ensures that exceptions (defined as any class name conforming
+      to some regular expression) are immutable. That is, have only
+      final fields.
+      </p>
+
+      <p class="body">
+      The current algorithm is very simple it checks that all
+      members of exception are final.  User can still mutates an
+      exception's instance (e.g. Throwable has
+      setStackTrace(StackTraceElement[] stackTrace) method which
+      changes stack trace).  But, at least, all information provided
+      by this exception type is unchangable.
+      </p>
+
+      <p class="body">
+      Rationale:
+      Exception instances should represent an error
+      condition. Having non final fields not only allows the
+      state to be modified by accident and therefore mask the
+      original condition but also allows developers to
+      accidentally forget to initialise state thereby leading
+      to code catching the exception to draw incorrect
+      conclusions based on the state.
+      </p>
+
+]]>
+      </DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_THROWS_COUNT</Symbol>
+      <ShortDescription>ThrowsCount</ShortDescription>
+      <MessagePattern>TODO</MessagePattern>
+      <DetailedDescription>
+<![CDATA[
+      <p class="body">
+      Restricts throws statements to a specified count (default = 1).
+      </p>
+
+      <p class="body">
+      Rationale:
+      Exceptions form part of a methods interface. Declaring
+      a method to throw too many differently rooted
+      exceptions makes exception handling onerous and leads
+      to poor programming practices such as catch
+      (Exception). This check forces developers to put
+      exceptions into a heirachy such that in the simplest
+      case, only one type of exception need be checked for by
+      a caller but allows any sub-classes to be caught
+      specifically if necessary.
+      </p>
+
+]]>
+      </DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_STRICT_DUPLICATE_CODE</Symbol>
+      <ShortDescription>StrictDuplicateCode</ShortDescription>
+      <MessagePattern>Found duplicate of .* lines in .*, starting from line .*</MessagePattern>
+      <DetailedDescription>
+<![CDATA[
+      <p class="body">
+      Performs a line-by-line comparison of all code lines and reports
+      duplicate code, i.e. a sequence of lines that differ only in indentation.
+      All import statements in Java code are ignored, any other line -
+      including javadoc, whitespace lines between methods, etc. - is considered
+      (which is why the check is called <em>strict</em>).
+      </p>
+
+]]>
+      </DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_MISSING_HEADER</Symbol>
+      <ShortDescription>Missing Copyright Header</ShortDescription>
+      <MessagePattern>Missing a header - not enough lines in file\.</MessagePattern>
+      <DetailedDescription>
+<![CDATA[
+   Please include the copyright header.
+]]>
+      </DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_REGEXP_HEADER</Symbol>
+      <ShortDescription>RegexpHeader</ShortDescription>
+      <MessagePattern>Line does not match expected header line of '.*'\.</MessagePattern>
+      <DetailedDescription>
+<![CDATA[
+      <p class="body">
+      Checks the header of a source file against a header file that contains a <a href="http://jakarta.apache.org/regexp/apidocs/org/apache/regexp/RE.html">regular 
+      expression</a> for each line of the source header.
+      </p>
+      <p class="body">
+      Rationale: In some projects <a href="#Header">checking against a fixed header</a> 
+      is not sufficient, e.g. the header might require a copyright line where the year 
+      information is not static.
+      </p>
+      <p class="body">
+      For example, consider the following header file:
+      </p>
+      <pre class="body">
+line 1: /{71}
+line 2: // checkstyle:
+line 3: // Checks Java source code for adherence to a set of rules\.
+line 4: // Copyright \(C\) \d\d\d\d  Oliver Burn
+line 5: // Last modification by \$Author.*\$
+line 6: /{71}
+      </pre>
+
+      <p class="body">
+      Lines 1 and 6 demonstrate a more compact notation for 71 '/' characters. Line 4 
+      enforces that the copyright notice includes a four digit year. Line 5 is an 
+      example how to enforce revision control keywords in a file header.
+      </p>
+]]>
+      </DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_AVOID_STAR_IMPORT</Symbol>
+      <ShortDescription>Avoid import '*'</ShortDescription>
+      <MessagePattern>Using the '\.\*' form of import should be avoided - .*\.</MessagePattern>
+      <DetailedDescription>
+<![CDATA[
+       Using the '.*' form of import should be avoided.
+]]>
+      </DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_ILLEGAL_IMPORT</Symbol>
+      <ShortDescription>IllegalImport</ShortDescription>
+      <MessagePattern>Import from illegal package - .*\.</MessagePattern>
+      <DetailedDescription>
+<![CDATA[
+This package is not a public API. Do not used such classes.
+]]>
+      </DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_DUPLICATE_IMPORT</Symbol>
+      <ShortDescription>DuplicateImport</ShortDescription>
+      <MessagePattern>Duplicate import .*</MessagePattern>
+      <DetailedDescription>
+<![CDATA[
+      <p class="body">
+      It is a duplicate of another import. This is, when a class 
+      is imported more than once.
+      </p>
+]]>
+      </DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_REDUNDANT_IMPORT</Symbol>
+      <ShortDescription>Redundant Import</ShortDescription>
+      <MessagePattern>Redundant import from the .* - .*\.</MessagePattern>
+      <DetailedDescription>
+<![CDATA[
+      <p class="body">
+      Checks for redundant import statements. An import statement is considered 
+      redundant if:
+      </p>
+      <ul class="body">
+        <li>
+          It is a duplicate of another import. This is, when a class is imported more than 
+          once.
+        </li>
+        <li>
+          The class imported is from the <span class="code">java.lang</span> package, e.g. 
+          importing <span class="code">java.lang.String</span>.
+        </li>
+        <li>
+          The class imported is from the same package.
+        </li>
+      </ul>
+]]>
+      </DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_UNUSED_IMPORTS</Symbol>
+      <ShortDescription>UnusedImports</ShortDescription>
+      <MessagePattern>TODO</MessagePattern>
+      <DetailedDescription>
+<![CDATA[
+      <p class="body">
+      Checks for unused import statements. Checkstyle uses a simple but very reliable 
+      algorithm to report on unused import statements. An import statement is 
+      considered unused if:
+      </p>
+
+      <ul  class="body">
+        <li>
+          It is not referenced in the file. The algorithm does not support wild-card 
+          imports like <span class="code">import java.io.*;</span>. Most IDE's provide 
+          very sophisticated checks for imports that handle wild-card imports.
+        </li>
+
+        <li>
+          It is a duplicate of another import. This is when a class is imported more than 
+          once.
+        </li>
+
+        <li>
+          The class imported is from the <span class="code">java.lang</span> package. For 
+          example importing <span class="code">java.lang.String</span>.
+        </li>
+
+        <li>
+          The class imported is from the same package.
+        </li>
+      </ul>
+]]>
+      </DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_IMPORT_ORDER</Symbol>
+      <ShortDescription>ImportOrder</ShortDescription>
+      <MessagePattern>TODO</MessagePattern>
+      <DetailedDescription>
+<![CDATA[
+      <p class="body">Checks the ordering/grouping of imports.
+      Ensures that groups of imports come in a specific order (e.g.,
+      java. comes first, javax. comes first, then everything else) and
+      imports within each group are in lexicographic order.
+      </p>
+
+]]>
+      </DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_ENTITY_BEAN</Symbol>
+      <ShortDescription>EntityBean</ShortDescription>
+      <MessagePattern>TODO</MessagePattern>
+      <DetailedDescription>
+<![CDATA[
+      <p class="body">
+      Checks that a direct entity bean, i.e. a class that directly implements
+      <span class="code">javax.ejb.EntityBean</span>, satisfies these class requirements:
+      </p>
+      <ul>
+        <li class="body">
+          The class is defined as <span class="code">public</span>.
+        </li>
+        <li class="body">
+          The class cannot be defined as <span class="code">final</span>.
+        </li>
+        <li class="body">
+          It contains a <span class="code">public</span> constructor with no parameters.
+        </li>
+        <li class="body">
+          It must not define the <span class="code">finalize</span> method.
+        </li>
+      </ul>
+      <p class="body">
+      Checks that methods of a direct entity bean satisfy these requirements:
+      </p>
+      <ul>
+        <li class="body">
+          All <span class="code">ejbCreate&lt;METHOD&gt;(...)</span> methods are
+          <span class="code">public</span>, not <span class="code">final</span>, and not
+          <span class="code">static</span>.
+        </li>
+        <li class="body">
+          The return type of all <span class="code">ejbCreate&lt;METHOD&gt;(...)</span> 
+          methods is not <span class="code">void</span>, because the return type must be 
+          the entity bean's primary key type.
+        </li>
+        <li class="body">
+          All <span class="code">ejbPostCreate&lt;METHOD&gt;(...)</span> methods are
+          <span class="code">public</span>, not <span class="code">final</span>, and not
+          <span class="code">static</span>.
+        </li>
+        <li class="body">
+          The return type of all <span class="code">ejbPostCreate&lt;METHOD&gt;(...)</span> 
+          methods is <span class="code">void</span>.
+        </li>
+        <li class="body">
+          For each <span class="code">ejbCreate&lt;METHOD&gt;(...)</span> method there is 
+          a matching <span class="code">ejbPostCreate&lt;METHOD&gt;(...)</span> method.
+        </li>
+        </li>
+        <li class="body">
+          All <span class="code">ejbHome&lt;METHOD&gt;(...)</span> methods are
+          <span class="code">public</span>, and not <span class="code">static</span>.
+        </li>
+        <li class="body">
+          The throws clause of all <span class="code">ejbHome&lt;METHOD&gt;(...)</span> 
+          methods does not define the <span class="code">java.rmi.RemoteException</span>.
+        </li>
+      </ul>
+
+      <p class="body">
+      When the check is configured to check direct entity beans as having bean-managed
+      persistence, checks that methods satisfy these additional requirements:
+      </p>
+      <ul>
+        <li class="body">
+          All <span class="code">ejbFind&lt;METHOD&gt;(...)</span> methods are
+          <span class="code">public</span>, not <span class="code">final</span>, and not
+          <span class="code">static</span>.
+        </li>
+        <li class="body">
+          The return type of all <span class="code">ejbFind&lt;METHOD&gt;(...)</span> 
+          methods is not <span class="code">void</span>, because the return type must be 
+          the entity bean's primary key type, or a collection of primary keys.
+        </li>
+        <li class="body">
+          There is a <span class="code">ejbFindByPrimaryKey</span> method with one parameter.
+        </li>
+      </ul>
+      <p class="body">
+      When the check is configured to check direct entity beans as having container-managed
+      persistence, checks that methods satisfy these additional requirements:
+      </p>
+      <ul>
+        <li class="body">
+          The throws clause of all <span class="code">ejbCreate&lt;METHOD&gt;(...)</span> 
+          methods defines the <span class="code">javax.ejb.CreateException</span>.
+        </li>
+        <li class="body">
+          All <span class="code">ejbSelect&lt;METHOD&gt;(...)</span> methods are
+          <span class="code">public</span> and <span class="code">abstract</span>.
+        </li>
+        <li class="body">
+          The throws clause of all <span class="code">ejbSelect&lt;METHOD&gt;(...)</span> 
+          methods defines the <span class="code">javax.ejb.FinderException</span>.
+        </li>
+      </ul>
+
+
+]]>
+      </DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_FINAL_STATIC</Symbol>
+      <ShortDescription>FinalStatic</ShortDescription>
+      <MessagePattern>TODO</MessagePattern>
+      <DetailedDescription>
+<![CDATA[
+      <p class="body">
+      Checks that all static fields are declared final.
+      </p>
+      <p class="body">
+      Rational: This check ensures consistent runtime semantics so that EJB containers have
+      the flexibility to distribute instances across multiple JVMs.
+      </p>
+       <p class="body">
+       Reference: <a href="http://www.javaworld.com/javaworld/jw-08-2000/jw-0825-ejbrestrict.html">Programming restrictions on EJB</a>.
+     </p>
+]]>
+      </DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_LOCAL_HOME_INTERFACE</Symbol>
+      <ShortDescription>LocalHomeInterface</ShortDescription>
+      <MessagePattern>TODO</MessagePattern>
+      <DetailedDescription>
+<![CDATA[
+      <p class="body">
+      Checks that a direct local home interface, i.e. an interface that directly extends
+      <span class="code">javax.ejb.EJBLocalHome</span>, satisfies these requirements:
+      </p>
+      <ul>
+        <li class="body">
+          The return type of all <span class="code">create&lt;METHOD&gt;(...)</span> 
+          methods is not <span class="code">void</span>, because the return type must be 
+          the bean's local interface.
+        </li>
+        <li class="body">
+          The throws clause of all <span class="code">create&lt;METHOD&gt;(...)</span> 
+          methods defines the <span class="code">javax.ejb.CreateException</span>.
+        </li>
+      <li class="body">The throws clause of all methods does not define the <span class="code">java.rmi.RemoteException</span>.</li>
+      </ul>
+ <p class="body">
+ Reference: Enterprise JavaBeansTM Specification,Version 2.0, sections 6.4 and 9.6.
+ </p>
+]]>
+      </DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_LOCAL_INTERFACE</Symbol>
+      <ShortDescription>LocalInterface</ShortDescription>
+      <MessagePattern>TODO</MessagePattern>
+      <DetailedDescription>
+<![CDATA[
+      <p class="body">
+      Checks that a direct local interface, i.e. an interface that directly extends
+      <span class="code">javax.ejb.EJBLocalObject</span>, satisfies these requirements:
+      </p>
+      <ul>
+      <li class="body">The throws clause of all methods does not define the <span class="code">java.rmi.RemoteException</span>.</li>
+      </ul>
+ <p class="body">
+ Reference: Enterprise JavaBeansTM Specification,Version 2.0, section 9.10.
+ </p>
+]]>
+      </DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_MESSAGE_BEAN</Symbol>
+      <ShortDescription>MessageBean</ShortDescription>
+      <MessagePattern>TODO</MessagePattern>
+      <DetailedDescription>
+<![CDATA[
+      <p class="body">
+      Checks that a direct message bean, i.e. a class that directly implements
+      <span class="code">javax.ejb.MessageDrivenBean</span> and
+      <span class="code">javax.jms.MessageListener</span>, satisfies these class requirements:
+      </p>
+      <ul>
+        <li class="body">
+          The class is defined as <span class="code">public</span>.
+        </li>
+        <li class="body">
+          The class cannot be defined as <span class="code">final</span>.
+        </li>
+        <li class="body">
+          The class cannot be defined as <span class="code">abstract</span>.
+        </li>
+        <li class="body">
+          It contains a <span class="code">public</span> constructor with no parameters.
+        </li>
+        <li class="body">
+          It must not define the <span class="code">finalize</span> method.
+        </li>
+        <li class="body">
+          It defines an <span class="code">ejbCreate()</span> method this is
+          <span class="code">public</span>, not <span class="code">final</span>,
+          not <span class="code">static</span>, has no parameters, and has
+          return type <span class="code">void</span>.
+        </li>
+      </ul>
+
+      <p class="body">
+      Reference: Enterprise JavaBeans&trade; Specification,Version 2.0, section 15.7.
+      </p>
+]]>
+      </DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_REMOTE_HOME_INTERFACE</Symbol>
+      <ShortDescription>RemoteHomeInterface</ShortDescription>
+      <MessagePattern>TODO</MessagePattern>
+      <DetailedDescription>
+<![CDATA[
+      <p class="body">
+      Checks that a direct remote home interface, i.e. an interface that directly extends
+      <span class="code">javax.ejb.EJBHome</span>, satisfies these requirements:
+      </p>
+      <ul>
+        <li class="body">
+          The return type of all <span class="code">create&lt;METHOD&gt;(...)</span> 
+          methods is not <span class="code">void</span>, because the return type must be 
+          the bean's remote interface.
+        </li>
+        <li class="body">
+          The throws clause of all <span class="code">create&lt;METHOD&gt;(...)</span> 
+          methods defines the <span class="code">javax.ejb.CreateException</span>.
+        </li>
+      <li class="body">The throws clause of all methods defines the <span class="code">java.rmi.RemoteException</span>.</li>
+      </ul>
+ <p class="body">
+ Reference: Enterprise JavaBeansTM Specification,Version 2.0, sections 6.3 and 9.5.
+ </p>
+]]>
+      </DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_REMOTE_INTERFACE</Symbol>
+      <ShortDescription>RemoteInterface</ShortDescription>
+      <MessagePattern>TODO</MessagePattern>
+      <DetailedDescription>
+<![CDATA[
+      <p class="body">
+      Checks that a direct remote interface, i.e. an interface that directly extends
+      <span class="code">javax.ejb.EJBObject</span>, satisfies these requirements:
+      </p>
+      <ul>
+      <li class="body">The throws clause of all methods defines the <span class="code">java.rmi.RemoteException</span>.</li>
+      </ul>
+ <p class="body">
+ Reference: Enterprise JavaBeansTM Specification,Version 2.0, section 9.9.
+ </p>
+]]>
+      </DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_SESSION_BEAN</Symbol>
+      <ShortDescription>SessionBean</ShortDescription>
+      <MessagePattern>TODO</MessagePattern>
+      <DetailedDescription>
+<![CDATA[
+      <p class="body">
+      Checks that a direct session bean, i.e. a class that directly implements
+      <span class="code">javax.ejb.SessionBean</span>, satisfies these class requirements:
+      </p>
+      <ul>
+        <li class="body">
+          The class is defined as <span class="code">public</span>.
+        </li>
+        <li class="body">
+          The class cannot be defined as <span class="code">final</span>.
+        </li>
+        <li class="body">
+          The class cannot be defined as <span class="code">abstract</span>.
+        </li>
+        <li class="body">
+          It contains a <span class="code">public</span> constructor with no parameters.
+        </li>
+        <li class="body">
+          It must not define the <span class="code">finalize</span> method.
+        </li>
+        <li class="body">
+          It defines an <span class="code">ejbCreate&lt;METHOD&gt;()</span> method this is
+          <span class="code">public</span>, not <span class="code">final</span>,
+          not <span class="code">static</span>, and has
+          return type <span class="code">void</span>.
+        </li>
+      </ul>
+
+      <p class="body">
+      Reference: Enterprise JavaBeans&trade; Specification,Version 2.0, section 7.10.
+      </p>
+]]>
+      </DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_THIS_PARAMETER</Symbol>
+      <ShortDescription>ThisParameter</ShortDescription>
+      <MessagePattern>TODO</MessagePattern>
+      <DetailedDescription>
+<![CDATA[
+      <p class="body">
+      Checks that <span class="code">this</span> is not a parameter of any method calls or constructors for a bean.
+      Instead, you must use the result of the <span class="code">getEJBObject()</span> available in
+      <span class="code">SessionContext</span> or <span class="code">EntityContext</span>.
+      </p>
+       <p class="body">
+       Reference: <a href="http://www.javaworld.com/javaworld/jw-08-2000/jw-0825-ejbrestrict.html">Programming restrictions on EJB</a>.
+     </p>
+]]>
+      </DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_THIS_RETURN</Symbol>
+      <ShortDescription>ThisReturn</ShortDescription>
+      <MessagePattern>TODO</MessagePattern>
+      <DetailedDescription>
+<![CDATA[
+      <p class="body">
+      Checks that <span class="code">this</span> is not returned by a bean method.
+      Instead, you must use the result of the <span class="code">getEJBObject()</span> available in
+      <span class="code">SessionContext</span> or <span class="code">EntityContext</span>.
+      </p>
+       <p class="body">
+       Reference: <a href="http://www.javaworld.com/javaworld/jw-08-2000/jw-0825-ejbrestrict.html">Programming restrictions on EJB</a>.
+     </p>
+]]>
+      </DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_PACKAGE_HTML</Symbol>
+      <ShortDescription>PackageHtml</ShortDescription>
+      <MessagePattern>TODO</MessagePattern>
+      <DetailedDescription>
+<![CDATA[
+        <p class="body">
+        Checks that a <span class="code">package.html</span> file exists for each
+        package. More specifically, checks that each java file has a package.html sibling.
+        </p>
+
+      <h4 class="body">Properties</h4>
+      <table width="100%" border="1" cellpadding="5" class="body">
+        <tr class="header">
+          <th>name</th>
+          <th>description</th>
+          <th>type</th>
+          <th>default value</th>
+        </tr>
+        <tr>
+          <td>fileExtensions</td>
+          <td>file type extension to identify java files. Setting this property is
+              typically only required if your java source files are preprocessed
+              and the original files do not have the extension
+              <span class="code">.java</span></td>
+          <td><a href="property_types.html#stringSet">String Set</a></td>
+          <td><span class="default">java</span></td>
+        </tr>
+      </table>
+
+]]>
+      </DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_JAVADOC_OVERVIEW</Symbol>
+      <ShortDescription>Javadoc 1st sentence.</ShortDescription>
+      <MessagePattern>First sentence should end with a period\.</MessagePattern>
+      <DetailedDescription>
+<![CDATA[
+        <p>
+        Javadoc automatically places the first sentence in the method summary
+        table and index. With out proper punctuation the Javadoc may be 
+        malformed. 
+        </p>
+]]>
+      </DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_JAVADOC_TYPE</Symbol>
+      <ShortDescription>JavadocType</ShortDescription>
+      <MessagePattern>TODO</MessagePattern>
+      <DetailedDescription>
+<![CDATA[
+        <p class="body">
+        Checks Javadoc comments for class and interface definitions.
+        </p>
+
+]]>
+      </DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_JAVADOC_METHOD</Symbol>
+      <ShortDescription>JavadocMethod</ShortDescription>
+      <MessagePattern>TODO</MessagePattern>
+      <DetailedDescription>
+<![CDATA[
+        <p class="body">
+        Checks to ensure that the following tags exist (if required):
+        </p>
+        <ul class="body">
+          <li>
+            <span class="code">@return</span>
+          </li>
+          <li>
+            <span class="code">@param</span>
+          </li>
+          <li>
+            <span class="code">@throws</span> or <span class="code">@exception</span>
+          </li>
+          <li>
+            <span class="code">@see</span> or <span class="code">{@inheritDoc}</span>
+          </li>
+        </ul>
+
+        <p class="body">
+        For example, the following is valid:
+        </p>
+        <a name="checkReturnTag"></a>
+        <pre class="body">
+    /**
+     * Checks for a return tag.
+     * @return the index of the next unchecked tag
+     * @param aTagIndex the index to start in the tags
+     * @param aTags the tags to check
+     * @param aLineNo the line number of the expected tag
+     **/
+    public int checkReturnTag(final int aTagIndex,
+                              JavadocTag[] aTags,
+                              int aLineNo)
+        </pre>
+
+        <p class="body">
+        This supports the convention in the <a href="http://java.sun.com/j2se/javadoc/writingdoccomments/index.html#throwstag">Sun
+        Javadoc Guidelines</a> and the "Effective Java" book.
+        </p>
+
+]]>
+      </DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_MISSING_JAVADOC</Symbol>
+      <ShortDescription>JavadocMissing</ShortDescription>
+      <MessagePattern>Missing a Javadoc comment\.</MessagePattern>
+      <DetailedDescription>Missing a Javadoc comment.</DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_UNCLOSED_HTML_TAG</Symbol>
+      <ShortDescription>UnclosedHtmlTag</ShortDescription>
+      <MessagePattern>Unclosed HTML tag found: .*</MessagePattern>
+      <DetailedDescription>Missing HTML closing tag in Javadoc comment.</DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_EXTRA_HTML_TAG</Symbol>
+      <ShortDescription>ExtraHtmlTag</ShortDescription>
+      <MessagePattern>Extra HTML tag found: .*</MessagePattern>
+      <DetailedDescription>The specified HTML tag is not valid here.</DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_JAVADOC_STYLE</Symbol>
+      <ShortDescription>JavadocStyle</ShortDescription>
+      <MessagePattern>TODO</MessagePattern>
+      <DetailedDescription>
+<![CDATA[
+	<h2>JavadocStyle</h2>
+]]>
+      </DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_CYCLOMATIC_COMPLEXITY</Symbol>
+      <ShortDescription>Cyclomatic Complexity</ShortDescription>
+      <MessagePattern>Cyclomatic Complexity is .* \(max allowed is .*\)\.</MessagePattern>
+      <DetailedDescription>
+<![CDATA[
+The complexity is measured by the number of if, while, do, for, ?:, catch,
+switch, case statements, and operators &amp;&amp; and || (plus one) in the body of a
+constructor, method, static initializer, or instance initializer. It is a
+measure of the minimum number of possible paths through the source and
+therefore the number of required tests. Generally 1-4 is considered good, 5-7
+ok, 8-10 consider re-factoring, and 11+ re-factor now! 
+]]>
+      </DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_GENERIC_ILLEGAL_REGEXP</Symbol>
+      <ShortDescription>GenericIllegalRegexp</ShortDescription>
+      <MessagePattern>TODO</MessagePattern>
+      <DetailedDescription>
+<![CDATA[
+      <p class="body">
+      A generic check for code problems - the user can search for any pattern. This is 
+      similar to a recursive grep, only that it's integrated in checkstyle.
+      </p>
+      <p class="body">
+      Rationale: This check can be used to prototype checks and to find common bad 
+      practice such as calling <span class="code">ex.printStacktrace()</span>, <span class="code">
+      System.out.println()</span>, <span class="code">System.exit()</span>, etc.
+      </p>
+]]>
+      </DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_NEWLINE_AT_END_OF_FILE</Symbol>
+      <ShortDescription>NewlineAtEndOfFile</ShortDescription>
+      <MessagePattern>TODO</MessagePattern>
+      <DetailedDescription>
+<![CDATA[
+      <p class="body">
+      Checks whether files end with a new line.
+      </p>
+      <p class="body">
+      Rationale: Any source files and text files in general should end with a newline
+      character, especially when using SCM systems such as CVS. CVS will even
+      print a warning when it encounters a file that doesn't end with a newline.
+      </p>
+]]>
+      </DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_TODO_COMMENT</Symbol>
+      <ShortDescription>TodoComment</ShortDescription>
+      <MessagePattern>TODO</MessagePattern>
+      <DetailedDescription>
+<![CDATA[
+      <p class="body">
+      A check for <span class="code">TODO:</span> comments. Actually it is a generic <a href="http://jakarta.apache.org/regexp/apidocs/org/apache/regexp/RE.html">regular 
+      expression</a> matcher on Java comments. To check for other patterns in Java 
+      comments, set property format.
+      </p>
+]]>
+      </DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_TRANSLATION</Symbol>
+      <ShortDescription>Translation</ShortDescription>
+      <MessagePattern>TODO</MessagePattern>
+      <DetailedDescription>
+<![CDATA[
+      <p class="body">
+      A <a href="config.html#overview">FileSetCheck</a> that ensures the correct
+      translation of code by checking property files for consistency regarding their
+      keys. Two property files describing one and the same context are consistent if
+      they contain the same keys.
+      </p>
+      <p class="body">
+      Consider the following properties file in the same directory:
+      </p>
+      <pre>
+      #messages.properties
+      hello=Hello
+      cancel=Cancel
+
+      #messages_de.properties
+      hell=Hallo
+      ok=OK
+      </pre>
+      <p class="body">
+      The Translation check will find the typo in the german hello key, the
+      missing ok key in the default resource file and the missing cancel key
+      in the german resource file:
+      </p>
+      <pre>
+      messages_de.properties: Key 'hello' missing.
+      messages_de.properties: Key 'cancel' missing.
+      messages.properties: Key 'hell' missing.
+      messages.properties: Key 'ok' missing.
+      </pre>
+]]>
+      </DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_UNCOMMENTED_MAIN</Symbol>
+      <ShortDescription>UncommentedMain</ShortDescription>
+      <MessagePattern>TODO</MessagePattern>
+      <DetailedDescription>
+<![CDATA[
+      <p class="body">
+      Checks for uncommented main() methods (debugging leftovers).
+      </p>
+      <p class="body"> Rationale: main() method can be often used for
+      debug puposes.  Thus most of main() method should be
+      removed/commented out of the sources.
+      </p>
+]]>
+      </DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_UPPER_ELL</Symbol>
+      <ShortDescription>UpperEll</ShortDescription>
+      <MessagePattern>TODO</MessagePattern>
+      <DetailedDescription>
+<![CDATA[
+      <p class="body">
+      Checks that long constants are defined with an upper ell. That is <span class="code">' 
+      L'</span> and
+not <span class="code">'l'</span>. This is in accordance to the Java Language 
+Specification, <a href="http://java.sun.com/docs/books/jls/second_edition/html/lexical.doc.html#48282"> 
+Section
+      3.10.1</a>.
+</p>
+<p class="body"> Rationale: The letter <span class="code">l</span> looks a lot 
+like <span class="code">1</span>.
+      </p>
+]]>
+      </DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_ARRAY_TYPE_STYLE</Symbol>
+      <ShortDescription>ArrayTypeStyle</ShortDescription>
+      <MessagePattern>Array brackets at illegal position\.</MessagePattern>
+      <DetailedDescription>
+<![CDATA[
+      <p class="body">
+      Use Java-style: <code>public static void main(String[] args)</code>
+      instead of C-style: public static void main(String args[])
+      </p>
+
+]]>
+      </DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_FINAL_PARAMETERS</Symbol>
+      <ShortDescription>FinalParameters</ShortDescription>
+      <MessagePattern>TODO</MessagePattern>
+      <DetailedDescription>
+<![CDATA[
+      <p class="body">
+      Check that method/constructor parameters are final. Interface methods are not checked -
+      the final keyword does not make sense for interface method parameters as there is no code
+      that could modify the parameter.
+      </p>
+      <p class="body">
+      Rationale: Changing the value of parameters during the execution of the
+      method's algorithm can be confusing and should be avoided. A great way to
+      let the Java compiler prevent this coding style is to declare parameters
+      final.
+      </p>
+
+]]>
+      </DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_DESCENDANT_TOKEN</Symbol>
+      <ShortDescription>DescendantToken</ShortDescription>
+      <MessagePattern>TODO</MessagePattern>
+      <DetailedDescription>
+<![CDATA[
+      <p class="body">
+      Checks for restricted tokens beneath other tokens.
+      </p>
+      <p class="body">
+      WARNING: This is a very powerful and flexible check, but, at the
+      same time, it is low level and very implementation dependent
+      because its results depend on the grammar we use to build abstract
+      syntax trees. Thus we recomend using other checks when
+      they provide the desired funcionality. All in all, this check just
+      works on the level of an abstract tree and knows nothing about language
+      structures.
+      </p>
+
+]]>
+      </DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_INDENTATION</Symbol>
+      <ShortDescription>Wrong indentation</ShortDescription>
+      <MessagePattern>.* at indentation level [0-9]* not at correct indentation, .*</MessagePattern>
+      <DetailedDescription>
+<![CDATA[
+      <p>Indention of line is wrong.</p>
+]]>
+      </DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_MODIFIER_ORDER</Symbol>
+      <ShortDescription>Wrong order of Modifier</ShortDescription>
+      <MessagePattern>'.*' modifier out of order with the JLS suggestions\.</MessagePattern>
+      <DetailedDescription>
+<![CDATA[
+      <p>
+      Checks that the order of modifiers conforms to the suggestions in the <a href="http://java.sun.com/docs/books/jls/second_edition/html/classes.doc.html">Java
+      Language specification, sections 8.1.1, 8.3.1 and 8.4.3</a>. The correct order
+      is:
+      </p>
+
+      <ol class="body">
+
+        <li>
+          <span class="code">public</span>
+        </li>
+        <li>
+          <span class="code">protected</span>
+        </li>
+        <li>
+          <span class="code">private</span>
+
+        </li>
+        <li>
+          <span class="code">abstract</span>
+        </li>
+        <li>
+          <span class="code">static</span>
+        </li>
+        <li>
+
+          <span class="code">final</span>
+        </li>
+        <li>
+          <span class="code">transient</span>
+        </li>
+        <li>
+          <span class="code">volatile</span>
+
+        </li>
+        <li>
+          <span class="code">synchronized</span>
+        </li>
+        <li>
+          <span class="code">native</span>
+        </li>
+        <li>
+
+          <span class="code">strictfp</span>
+        </li>
+      </ol>
+      ]]>
+      </DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_REDUNDANT_MODIFIER</Symbol>
+      <ShortDescription>RedundantModifier</ShortDescription>
+      <MessagePattern>TODO</MessagePattern>
+      <DetailedDescription>
+<![CDATA[
+
+      <p class="body">
+      Checks that
+      <ul class="body">
+        <li>method declarations in interfaces include neither the <span class="code">
+      public</span> modifier nor the <span class="code">abstract</span> modifier (see
+      the <a
+href="http://java.sun.com/docs/books/jls/second_edition/html/interfaces.doc.html">Java
+Language specification, section 9.4</a>).
+      </li>
+      <li>all <span class="code">private</span> method declarations and all method declarations in a
+        <span class="code">final</span> class do not include modifier
+        <span class="code">final</span> (see the <a
+href="http://java.sun.com/docs/books/jls/second_edition/html/classes.doc.html#11246">Java
+Language specification, section 8.4.3.3</a>).</li>
+      <li>
+      variable declarations in interfaces include none of the following
+      modifiers: <span class="code">public</span>, <span class="code">static</span>,
+      <span class="code">final</span> (variables in interface definitions are constants
+      and have these modifiers implicitly, see the <a
+href="http://java.sun.com/docs/books/jls/second_edition/html/interfaces.doc.html">Java
+Language specification, section 9.3</a>).
+      </li>
+      </ul>
+
+]]>
+      </DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_EXECUTABLE_STATEMENT_COUNT</Symbol>
+      <ShortDescription>ExecutableStatementCount</ShortDescription>
+      <MessagePattern>TODO</MessagePattern>
+      <DetailedDescription>
+<![CDATA[
+]]>
+      </DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_FILE_LENGTH</Symbol>
+      <ShortDescription>FileLength</ShortDescription>
+      <MessagePattern>File length is .* lines \(max allowed is .*\)\.</MessagePattern>
+      <DetailedDescription>
+<![CDATA[
+      <p class="body">
+      Checks for long source files.
+      </p>
+      <p class="body">
+      Rationale: If a source file becomes very long it is hard to understand. 
+      Therefore long classes should usually be refactored into several individual 
+      classes that focus on a specific task.
+      </p>
+
+]]>
+      </DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_LINE_LENGTH</Symbol>
+      <ShortDescription>LineLength</ShortDescription>
+      <MessagePattern>Line is longer than [0-9]+ characters\.</MessagePattern>
+      <DetailedDescription>
+<![CDATA[
+      <p class="body">
+      Checks for long lines.
+      </p>
+      <p class="body">
+      Rationale: Long lines are hard to read in printouts or if developers have 
+      limited screen space for the source code, e.g. if the IDE displays additional 
+      information like project tree, class hierarchy, etc.
+      </p>
+
+]]>
+      </DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_METHOD_LENGTH</Symbol>
+      <ShortDescription>MethodLength</ShortDescription>
+      <MessagePattern>TODO</MessagePattern>
+      <DetailedDescription>
+<![CDATA[
+      <p class="body">
+      Checks for long methods and constructors.
+      </p>
+      <p class="body">
+      Rationale: If a method becomes very long it is hard to understand. Therefore 
+      long methods should usually be refactored into several individual methods that 
+      focus on a specific task.
+      </p>
+
+]]>
+      </DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_ANON_INNER_LENGTH</Symbol>
+      <ShortDescription>AnonInnerLength</ShortDescription>
+      <MessagePattern>Anonymous inner class length is .* lines (max allowed is .*)\.</MessagePattern>
+      <DetailedDescription>
+<![CDATA[
+      <p class="body">
+      Rationale: If an anonymous inner class becomes very long
+      it is hard to understand and to see the flow of the method
+      where the class is defined. Therefore long anonymous inner
+      classes should usually be refactored into a named inner class.
+      See also Bloch, Effective Java, p. 93.
+      </p>
+]]>
+      </DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_PARAMETER_NUMBER</Symbol>
+      <ShortDescription>ParameterNumber</ShortDescription>
+      <MessagePattern>TODO</MessagePattern>
+      <DetailedDescription>
+<![CDATA[
+      <p class="body">
+      Checks the number of parameters of a method or constructor.
+      </p>
+
+]]>
+      </DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_ONE_METHOD_PRIVATE_FIELD</Symbol>
+      <ShortDescription>OneMethodPrivateField</ShortDescription>
+      <MessagePattern>TODO</MessagePattern>
+      <DetailedDescription>
+<![CDATA[
+
+      <p class="body">
+      Checks that a private field is used in more than one method, constructor, or initializer.
+      </p>
+      <p class="body">
+      Rationale: a private field used in only one method, constructor, or
+      initializer should be replaced by a local variable.
+      </p>
+]]>
+      </DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_UNUSED_LOCAL_VARIABLE</Symbol>
+      <ShortDescription>Unused Local Variable</ShortDescription>
+      <MessagePattern>Unread local variable '.*'\.</MessagePattern>
+      <DetailedDescription>
+<![CDATA[
+
+      <p class="body">
+      Checks that a local variable is used after its declaration.
+      </p>
+      </p>
+]]>
+      </DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_UNUSED_PARAMETER</Symbol>
+      <ShortDescription>UnusedParameter</ShortDescription>
+      <MessagePattern>TODO</MessagePattern>
+      <DetailedDescription>
+<![CDATA[
+
+      <p class="body">
+      Checks that a parameter is used.
+      </p>
+      </p>
+]]>
+      </DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_UNUSED_PRIVATE_FIELD</Symbol>
+      <ShortDescription>Unused Private Field</ShortDescription>
+      <MessagePattern>Unused field '.*'\.</MessagePattern>
+      <DetailedDescription>
+<![CDATA[
+The private field (member variable) is never read/used in this class.
+<pre>
+public class Foo 
+{
+   private int mNeverUsed = 1;
+   
+   public void foo ()
+   {  
+   }
+}
+</pre>
+
+]]>
+      </DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_UNUSED_PRIVATE_METHOD</Symbol>
+      <ShortDescription>Unused Private Method</ShortDescription>
+      <MessagePattern>Unused method '.*'\.</MessagePattern>
+      <DetailedDescription>
+<![CDATA[
+
+      <p class="body">
+      The private method is never used. Remove it?
+      </p>
+]]>
+      </DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_EMPTY_FOR_ITERATOR_PAD</Symbol>
+      <ShortDescription>EmptyForIteratorPad</ShortDescription>
+      <MessagePattern>TODO</MessagePattern>
+      <DetailedDescription>
+<![CDATA[
+
+      <p class="body">
+      Checks the padding of an empty for iterator; that is whether white
+      space is required at an empty for iterator, or such white space is
+     forbidden.
+     No check occurs if there is a line wrap at the iterator, as in
+      </p>
+      <pre class="body">
+for (Iterator foo = very.long.line.iterator();
+      foo.hasNext();
+     )      
+      </pre>
+]]>
+      </DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_NO_WHITESPACE_AFTER</Symbol>
+      <ShortDescription>NoWhitespaceAfter</ShortDescription>
+      <MessagePattern>TODO</MessagePattern>
+      <DetailedDescription>
+<![CDATA[
+]]>
+      </DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_NO_WHITESPACE_BEFORE</Symbol>
+      <ShortDescription>No Whitespace Before</ShortDescription>
+      <MessagePattern>.* is preceded with whitespace\.</MessagePattern>
+      <DetailedDescription>
+<![CDATA[
+
+      <p class="body">
+      Checks that there is no whitespace before a token. More specifically, it checks 
+      that it is not preceded with whitespace, or (if linebreaks are allowed) all 
+      characters on the line before are whitespace. To allow linebreaks before a token, 
+      set property <span class="code">allowLineBreaks</span> to <span class="code">
+      true</span>.
+      </p>
+]]>
+      </DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_OPERATOR_WRAP</Symbol>
+      <ShortDescription>OperatorWrap</ShortDescription>
+      <MessagePattern>TODO</MessagePattern>
+      <DetailedDescription>
+<![CDATA[
+
+      <p class="body">
+      Checks the policy on how to wrap lines on operators.
+      </p>
+]]>
+      </DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_PAREN_PAD</Symbol>
+      <ShortDescription>ParenPad</ShortDescription>
+      <MessagePattern>TODO</MessagePattern>
+      <DetailedDescription>
+<![CDATA[
+
+      <p class="body">
+      Checks the policy on the padding of parentheses; i.e. whether a space is 
+      required after a left parenthesis and before a right parenthesis, or such spaces 
+      are forbidden.
+      </p>
+]]>
+      </DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_TYPECAST_PAREN_PAD</Symbol>
+      <ShortDescription>TypecastParenPad</ShortDescription>
+      <MessagePattern>TODO</MessagePattern>
+      <DetailedDescription>
+<![CDATA[
+      <h2>TypecastParenPad</h2>
+
+]]>
+      </DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_TAB_CHARACTER</Symbol>
+      <ShortDescription>TabCharacter</ShortDescription>
+      <MessagePattern>TODO</MessagePattern>
+      <DetailedDescription>
+<![CDATA[
+
+      <p class="body">
+      Checks that there are no tab characters (<span class="code">'\t'</span>) in the 
+      source code.
+      </p>
+      <p class="body">
+      Rationale:
+      </p>
+      <ul class="body">
+        <li>
+          Developers should not need to configure the tab width of their text editors in 
+          order to be able to read source code.
+        </li>
+        <li>
+          From the Apache jakarta coding standards: In a distributed development 
+          environment, when the cvs commit messages get sent to a mailing list, they are 
+          almost impossible to read if you use tabs.
+        </li>
+      </ul>
+
+]]>
+      </DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_WHITESPACE_AFTER</Symbol>
+      <ShortDescription>WhitespaceAfter</ShortDescription>
+      <MessagePattern>TODO</MessagePattern>
+      <DetailedDescription>
+<![CDATA[
+
+      <p class="body">
+      Checks that a token is followed by whitespace.
+      </p>
+]]>
+      </DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_WHITESPACE_AROUND</Symbol>
+      <ShortDescription>WhitespaceAround</ShortDescription>
+      <MessagePattern>TODO</MessagePattern>
+      <DetailedDescription>
+<![CDATA[
+
+      <p class="body">
+      Checks that a token is surrounded by whitespace.
+      </p>
+]]>
+      </DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_MISSING_WHITESPACE_BEFORE</Symbol>
+      <ShortDescription>Missing Whitespace Before</ShortDescription>
+      <MessagePattern>'.*' is not preceded with whitespace\.</MessagePattern>
+      <DetailedDescription>
+<![CDATA[
+      <p>This token must be preceded with a whitespace.</p>
+]]>
+      </DetailedDescription>
+   </FindingType>
+
+
+   <FindingType>
+      <Symbol>CS_NO_WHITESPACE_AFTER_MSG_DECL</Symbol>
+      <ShortDescription>Missing whitespace.</ShortDescription>
+      <MessagePattern>No whitespace \( \(\) after method declaration\.</MessagePattern>
+      <DetailedDescription>After the method declaration there should be a single ' '.</DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_JAVADOC_UNUSED_TAG</Symbol>
+      <ShortDescription>Unused Javadoc tag.</ShortDescription>
+      <MessagePattern>Unused .* tag.*\.</MessagePattern>
+      <DetailedDescription>Unused Javadoc tag.</DetailedDescription>
+   </FindingType>
+
+   <FindingType>
+      <Symbol>CS_NO_LOG_LEVEL_INFO</Symbol>
+      <ShortDescription>Trace log with invalid log level.</ShortDescription>
+      <MessagePattern>
+         Maximum allowed log level for trace log is .* but was .*\.
+      </MessagePattern>
+      <DetailedDescription>For trace logs there is a maximum log level. If the
+         message requires a log level as found, a predefined log message must
+         be used.
+      </DetailedDescription>
+   </FindingType>
+
+
+</CheckstyleMessages>

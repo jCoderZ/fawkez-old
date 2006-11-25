@@ -1,0 +1,104 @@
+<appendix>
+   <title>Appendix</title>
+   <bibliography>
+      <title>References</title>
+
+      <biblioentry>
+         <abbrev>Ambler00</abbrev>
+         <title>Writing Robust Java Code</title>
+         <author>
+            <firstname>Scott W.</firstname>
+            <surname>Ambler</surname>
+         </author>
+         <copyright>
+            <year>1998</year>
+            <year>1999</year>
+            <holder>AmbySoft Inc.</holder>
+         </copyright>
+         <publisher>
+            <publishername>
+               <ulink url="http://www.ambysoft.com/javaCodingStandards.pdf"/>
+            </publishername>
+         </publisher>
+      </biblioentry>
+
+      <biblioentry>
+         <abbrev>bloch01</abbrev>
+         <title>Effective Java Programming Language</title>
+         <author>
+            <firstname>Joshua</firstname>
+            <surname>Bloch</surname>
+         </author>
+         <copyright>
+            <year>2001</year>
+            <holder>Addison-Wesley Professional</holder>
+         </copyright>
+         <publisher>
+            <publishername>
+               Addison-Wesley Professional
+            </publishername>
+         </publisher>
+         <isbn>0201310058</isbn>
+      </biblioentry>
+
+      <biblioentry>
+         <abbrev>JavadocHowTo</abbrev>
+         <title>How to Write Doc Comments for the JavadocTM Tool</title>
+         <copyright>
+            <year>2000</year>
+            <holder>Sun Microsystems, Inc</holder>
+         </copyright>
+         <publisher>
+            <publishername>
+               <ulink url="http://java.sun.com/j2se/javadoc/writingdoccomments/index.html"></ulink>
+            </publishername>
+         </publisher>
+      </biblioentry>
+
+      <biblioentry>
+         <abbrev>SunCodeConv</abbrev>
+         <title>Code Conventions for the Java Programming Language</title>
+         <copyright>
+            <year>1995</year>
+            <year>2003</year>
+            <holder>Sun Microsystems, Inc</holder>
+         </copyright>
+         <publisher>
+            <publishername>
+               <ulink url="http://java.sun.com/docs/codeconv/"></ulink>
+            </publishername>
+         </publisher>
+      </biblioentry>
+
+      <biblioentry>
+         <abbrev>checkstyle</abbrev>
+         <title>Checkstyle</title>
+         <publisher>
+            <publishername>
+               <ulink url="http://checkstyle.sourceforge.net/"></ulink>
+            </publishername>
+         </publisher>
+      </biblioentry>
+
+      <biblioentry>
+         <abbrev>pmd</abbrev>
+         <title>PMD</title>
+         <publisher>
+            <publishername>
+               <ulink url="http://pmd.sourceforge.net/"></ulink>
+            </publishername>
+         </publisher>
+      </biblioentry>
+
+      <biblioentry>
+         <abbrev>findbugs</abbrev>
+         <title>FindBugs - A Bug Pattern Detector for Java</title>
+         <publisher>
+            <publishername>
+               <ulink url="http://www.cs.umd.edu/~pugh/java/bugs/"></ulink>
+            </publishername>
+         </publisher>
+      </biblioentry>
+
+   </bibliography>
+</appendix>

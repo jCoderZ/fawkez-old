@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<req:requirement xmlns:req="req"
+                 xmlns:db="http://docbook.org/ns/docbook"
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xsi:schemaLocation="req
+                                     http://www.jcoderz.org/xsd/xdoc/requirements-SNAPSHOT.xsd">
+  <req:title>Project</req:title>
+  <req:category>
+     <req:primary>Domain Model</req:primary>
+     <req:secondary>Project Structure</req:secondary>
+  </req:category>
+  <req:key>D-80000</req:key>
+  <req:summary>Project</req:summary>  
+  <req:priority>High</req:priority>
+  <req:description>
+
+  </req:description>
+  <req:entity>
+    <req:name>Project</req:name>
+    <req:attribute>
+      <req:name>Project Name</req:name>
+      <req:pattern>String</req:pattern>
+    </req:attribute>
+    <req:attribute>
+      <req:name>Vehicle Model</req:name>
+      <req:pattern></req:pattern>
+      <req:objectreference>
+        <req:linkstart>0..*</req:linkstart>
+        <req:linkend>0..1</req:linkend>
+        <req:ref id="D-90018"/>        
+      </req:objectreference>
+    </req:attribute>
+    <req:attribute>
+      <req:name>Date Begin</req:name>
+      <req:pattern>Date</req:pattern>
+    </req:attribute>
+    <req:attribute>
+      <req:name>Date End</req:name>
+      <req:pattern>Date</req:pattern>
+    </req:attribute>
+    <req:attribute>
+      <req:name>Project Manager</req:name>
+      <req:pattern></req:pattern>
+      <req:objectreference>
+        <req:linkstart>0..*</req:linkstart>
+        <req:linkend>1</req:linkend>
+        <req:ref id="D-10050"/>        
+      </req:objectreference>
+    </req:attribute>
+    <req:attribute>
+      <req:name>Project Deputy</req:name>
+      <req:pattern></req:pattern>
+      <req:objectreference>
+        <req:linkstart>0..*</req:linkstart>
+        <req:linkend>0..*</req:linkend>
+        <req:ref id="D-10050"/>        
+      </req:objectreference>
+    </req:attribute>
+    <req:attribute>
+      <req:name>Sub Project</req:name>
+      <req:pattern></req:pattern>
+      <req:objectreference>
+        <req:linkstart>1</req:linkstart>
+        <req:linkend>0..*</req:linkend>
+        <req:ref id="D-80001"/>        
+      </req:objectreference>
+    </req:attribute>
+  </req:entity>
+  <req:version>$Revision: 1.3 $</req:version>
+</req:requirement>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<req:requirement xmlns:req="req"
+                 xmlns:db="http://docbook.org/ns/docbook"
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xsi:schemaLocation="req
+                                     http://www.jcoderz.org/xsd/xdoc/requirements-SNAPSHOT.xsd">
+  <req:title>Substitute</req:title>
+  <req:category>
+     <req:primary>Role</req:primary>
+     <req:secondary>Main Group</req:secondary>
+  </req:category>
+  <req:key>RP-90001</req:key>
+  <req:summary>Substitute</req:summary>
+  <req:priority>High</req:priority>
+  <req:description>
+  
+  </req:description>
+  <req:role>
+     <req:name>Substitute</req:name>
+     <req:alternative_name>
+        <req:name lang="de">Untergebener</req:name>
+     </req:alternative_name>
+     <req:superior><req:ref id="RP-90000"/></req:superior>
+  </req:role>
+  <req:version>Revision: $</req:version>
+</req:requirement>

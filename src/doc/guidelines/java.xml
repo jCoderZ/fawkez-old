@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE book [
+
+<!ENTITY source "$Source$">
+<!ENTITY author "$Author: amandel $">
+<!ENTITY date "$Date: 2006-07-16 11:57:24 +0200 (Sun, 16 Jul 2006) $">
+<!ENTITY revision "$Revision: 258 $">
+<!ENTITY name "$Name$">
+
+<!ENTITY % copyright SYSTEM "copyright.xml">
+%copyright;
+
+<!ENTITY java_version SYSTEM "java_version.xml">
+<!ENTITY java_intro SYSTEM "java_intro.xml">
+<!ENTITY java_contentorder SYSTEM "java_contentorder.xml">
+<!ENTITY java_comments SYSTEM "java_comments.xml">
+<!ENTITY java_statements SYSTEM "java_statements.xml">
+<!ENTITY java_whitespace SYSTEM "java_whitespace.xml">
+<!ENTITY java_naming SYSTEM "java_naming.xml">
+<!ENTITY java_practices SYSTEM "java_practices.xml">
+<!ENTITY java_example SYSTEM "java_example.xml">
+<!ENTITY java_appendix SYSTEM "java_appendix.xml">
+
+<!ENTITY % java_code_snippets 
+   SYSTEM "../../../build/guidelines/xml/java/snippets/code-snippet-catalog.xml">
+%java_code_snippets;
+]>
+
+<book>
+
+   <bookinfo>
+
+      <mediaobject>
+         <imageobject role="fo">
+            <imagedata fileref="src/doc/images/jcoderz-org.svg" format="SVG"/>
+         </imageobject>
+         <imageobject role="html">
+            <imagedata fileref="images/jcoderz-org.png" format="PNG"/>
+         </imageobject>
+      </mediaobject>
+      
+      <affiliation>
+         <orgname>www.jcoderz.org</orgname>
+      </affiliation>
+
+      <address>
+         <othername>The jCoderZ Project</othername>
+      </address>
+
+      <copyright>
+         <year>2006</year>
+         <holder>jcoderz.org</holder>
+      </copyright>
+
+      <legalnotice><title>Important Notice</title>
+         &legal_notice;
+
+		  <para>Parts of this Document are Adapted with permission from 
+			  CODE CONVENTIONS FOR THE JAVATM PROGRAMMING LANGUAGE. 
+			  Copyright 1995-1999 Sun Microsysytems, Inc. All rights reserved.
+		  </para>
+		  
+         <formalpara>
+            <title>Document Control</title>
+
+            <para>This document is issued by jCoderZ.org
+            Any queries, or suggestions for 
+            improvement to this document
+	    should be addressed at our web page http://www.joderz.org/.
+            </para>
+         </formalpara>
+      </legalnotice>
+
+      <!-- Include version information  -->
+      &java_version;
+
+   </bookinfo>
+
+   &java_intro;
+
+   &java_contentorder;
+
+   &java_comments;
+
+   &java_statements;
+
+   &java_whitespace;
+
+   &java_naming;
+
+   &java_practices;
+
+   &java_example;
+
+   &java_appendix;
+
+</book>
+

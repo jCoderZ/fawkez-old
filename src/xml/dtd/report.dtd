@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<!--
+    An example how to use this DTD from your XML document:
+
+    <?xml version="1.0"?>
+
+    <!DOCTYPE report SYSTEM "report.dtd">
+
+    <report>
+    ...
+    </report>
+-->
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT item EMPTY>
+<!ATTLIST item
+    message CDATA #IMPLIED
+    severity ( info | warning | error | coverage ) "info"
+    type ( pmd | checkstyle | findbugs | coverage ) #REQUIRED
+    counter CDATA #IMPLIED
+    column CDATA #IMPLIED
+    end-column CDATA #IMPLIED
+    line CDATA #IMPLIED
+    end-line CDATA #IMPLIED
+  >
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT file (item)*>
+<!ATTLIST file
+    name CDATA #IMPLIED
+  >
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT report (file)*>

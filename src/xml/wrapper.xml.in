@@ -1,0 +1,9 @@
+<!DOCTYPE root 
+[
+   <!ENTITY stats           
+      SYSTEM "file:@file@">
+]>
+
+<root>
+   &stats;
+</root>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE connector PUBLIC '-//Sun Microsystems, Inc.//DTD Connector 1.0//EN' 'http://java.sun.com/dtd/connector_1_0.dtd'>
+
+<connector>
+   <display-name>FileConnector</display-name>
+   <vendor-name>SWAG</vendor-name>
+   <spec-version>1.0</spec-version>
+   <eis-type>File</eis-type>
+   <version>1.0</version>
+   <resourceadapter>
+      <managedconnectionfactory-class>org.jcoderz.commons.connector.file.FsManagedConnectionFactoryImpl</managedconnectionfactory-class>
+      <connectionfactory-interface>org.jcoderz.commons.connector.file.FsConnectionFactory</connectionfactory-interface>
+      <connectionfactory-impl-class>org.jcoderz.commons.connector.file.FsConnectionFactoryImpl</connectionfactory-impl-class>
+      <connection-interface>org.jcoderz.commons.connector.file.FsConnection</connection-interface>
+      <connection-impl-class>org.jcoderz.commons.connector.file.FsConnectionImpl</connection-impl-class>
+      <transaction-support>NoTransaction</transaction-support>
+<!--
+      <config-property>
+         <description>
+            This property defines the size of a chunk (maximum number of bytes),
+            that should by used while file transfering. If a file size exceeds
+            the chunk size, the file will be transfered chunk by chunk until all
+            bytes will have been transfered.
+            The Min value for this property is 1000, just 1KByte. 
+            The Max value is 2^31 - 1.
+            If this property is not defined in the deployment descriptor the
+            file connector will use the default value 20000000 (20MByte).
+            Too small value will probably slow the performance down, and too 
+            large value may cause a resource's allocation problem. The value of 
+            this property should be adjusted to the underlying os, file system 
+            and available memory.
+            A connection client can overwrite this value by passing the property
+            'FileTransferChunkSize' while retrieving a connection by calling the 
+            method FsConnectionFactory.getConnection(Properties)
+         </description>
+         <config-property-name>FileTransferChunkSize</config-property-name>
+         <config-property-type>java.lang.Long</config-property-type>
+         <config-property-value>12345678</config-property-value>
+      </config-property>
+      <config-property>
+         <description>
+            Defines the temporary directory to be used by this connector.
+            The default value will be retrieved from the system property 
+            'java.io.tmpdir'.
+            A connection client can overwrite this value by passing the property
+            'TempDir' while retrieving a connection by calling the 
+            method FsConnectionFactory.getConnection(Properties)
+         </description>
+         <config-property-name>TempDir</config-property-name>
+         <config-property-type>java.lang.String</config-property-type>
+         <config-property-value>/home/abretz/dev/tmp</config-property-value>
+      </config-property>
+-->
+      <reauthentication-support>false</reauthentication-support>
+   </resourceadapter>
+</connector>

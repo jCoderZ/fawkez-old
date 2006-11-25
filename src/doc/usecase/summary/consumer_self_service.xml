@@ -1,0 +1,44 @@
+<uc:usecase xmlns:uc="uc"
+            xmlns:db="http://docbook.org/ns/docbook"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="uc
+                                http://www.jcoderz.org/xsd/xdoc/usecase-SNAPSHOT.xsd"
+            id="UC-5" level="Summary">
+	<uc:version>$Revision: 1.1 $</uc:version>
+	<uc:name>Consumer Self Service</uc:name>
+	<uc:goal>Consumer Self Administration to manage disputes and view transactions.</uc:goal>
+	<uc:scope>Micro Aggregation Administration</uc:scope>
+	<uc:trigger></uc:trigger>
+	<uc:priority>High</uc:priority>
+	<uc:response_time></uc:response_time>
+	<uc:frequency_of_use></uc:frequency_of_use>
+	<uc:actors>
+		<uc:primary>
+			<uc:name>Consumer</uc:name>
+			<uc:channel>Web</uc:channel>
+		</uc:primary>
+		<uc:secondary>
+			<uc:name>System</uc:name>
+			<uc:channel>WEB</uc:channel>
+		</uc:secondary>
+	</uc:actors>
+	<uc:stakeholder>Consumer wants to get information about his TX and disputes, as well as about his payment instruments.</uc:stakeholder>
+   <uc:stakeholder>Merchant wants to provide the consumer with information.</uc:stakeholder>
+	<uc:precondition>none</uc:precondition>
+	<uc:guarantees>
+		<uc:success>none yet</uc:success>
+		<uc:minimal>none yet</uc:minimal>
+	</uc:guarantees>
+	<uc:success>
+		<uc:step id="1" desc="">Consumer views transaction history. <uc:ref id="UC-22"/></uc:step>
+      <uc:step id="2" desc="">Consumer triggers a dispute. <uc:ref id="UC-23"/></uc:step>
+      <uc:step id="3" desc="">Consumer blocks a payment instrument. <uc:ref id="UC-24"/></uc:step>
+	</uc:success>
+	<!--extension id="E1">
+		<uc:step id="1"></uc:step>
+	</uc:extension-->
+	<uc:open_issue>Should it be possible to have more than one Payment instrument available for the consumer?</uc:open_issue>
+   <uc:commitlog>
+      $Log:$
+   </uc:commitlog>
+</uc:usecase>

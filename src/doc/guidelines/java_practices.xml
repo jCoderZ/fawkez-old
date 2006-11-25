@@ -1,0 +1,89 @@
+<chapter>
+
+   <title>Programming Practices</title>
+
+   <section>
+
+      <title>Referring to Class Variables and Methods</title>
+
+      <para>Do not use an object to access a class (static) variable or
+      method. Use a class name instead.
+      <informalexample>
+         <programlisting>&ReferringSample;</programlisting>
+      </informalexample>
+      </para>
+
+   </section>
+
+   <section>
+
+      <title>Constants</title>
+
+      <para>Numerical constants (literals) must not be coded directly (magic numbers),
+      except for -1, 0, and 1, which can appear in a
+      <classname>for</classname> loop as counter values.</para>
+
+   </section>
+
+   <section>
+
+      <title>Parenthesis</title>
+
+      <para>It is generally a good idea to use parentheses liberally in
+      expressions involving mixed operators to avoid operator precedence
+      problems. Even if the operator precedence seems clear to you,
+      it might not be to others.  Do not assume that other programmers
+      know precedence as well as you do.</para>
+
+   </section>
+
+   <section>
+
+      <title>Returning Values</title>
+
+      <para>You should have only one exit point in a method. You must have a good
+      explanation if you use more than one return statement in a method.</para>
+
+   </section>
+
+   <section>
+
+      <title>Special Comments</title>
+
+      <para>Use <classname>TODO</classname> in a comment to flag something
+      that is bogus but works. Use <classname>FIXME</classname> to flag
+      something that is bogus and broken.</para>
+
+   </section>
+
+   <section>
+
+      <title>Initialization</title>
+
+      <para>Initialize local variables where they are declared. The
+      only reason not to initialize a variable in its declaration is if the
+      initial value depends on some computation that has to occur first.</para>
+
+   </section>
+
+   <section>
+      <title>Size Contraints</title>
+      
+      <para>Methods are limited to 100 lines of code. 
+      Empty lines and single line comments are ignored.</para>
+
+      <para>The number of arguments for an method or constructor must not
+      exceed 7.
+      </para>
+      
+   </section>
+
+   <section>
+      <title>Empty Blocks</title>
+      
+      <para>Intentionally empty block must contain a comment. Empty blocks that
+         can/should never be reached like empty catch or default block
+         must throw a RuntimeException.</para>
+   </section>
+
+</chapter>

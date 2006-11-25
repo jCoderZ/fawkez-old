@@ -1,0 +1,256 @@
+<body>
+   <section>
+      <title>Overview</title>
+      <p>
+      The Http Connector is intended to send Http messages to target system 
+      and to receive response from that system.
+      The Http Connector implements the Java Connector Architecture (JCA) 1.0 specification.
+         The most important features of the connector are
+         <ul>
+            <li>Sending and receiving Http messages.</li>
+            <li>Performing a configurable amount of retries.</li>
+            <li>Provide a sufficient error handling.</li>
+        </ul>
+      </p>
+      <section>
+         <title>Restrictions</title>
+         <p>
+         <ul>
+            <li>This connector does not provide the javax.resource.cci</li>
+            <li>This connector does not implement the transaction and security contract
+                defined in the JCA.</li>
+         </ul>
+         </p>
+      </section>
+   </section>
+   
+   <section>
+      <title>Logical View</title>
+      <p>
+         The JCA 1.0 defines three major components involved in the
+         Connector Architecture:
+         <ul>
+            <li>J2EE Application Server</li>
+            <li>Application running on a J2EE Server (the Client)</li>
+            <li>Connector (JCA) provider</li>
+         </ul>
+      </p>
+      <p>
+        Following contracts should be met by these components:
+        <ul>
+           <li>System Contract (between JCA provider and J2EE Server)</li>
+           <li>Container-Component Contract (between Application and J2EE Server)</li>
+           <li>Client API (between JCA provider and Application)</li>
+        </ul>
+      </p>
+      <p>
+         The HttpConnector implements two of these contracts:
+         <ul>
+            <li>Container-Component Contract by providing
+               <ul>
+                  <li>managed connection factory HttpManagedConnectionFactoryImpl</li>
+                  <li>managed connection HttpManagedConnectionImpl</li>
+              </ul>
+            </li>
+            <li>Client API by providing
+               <ul>
+                  <li>connection factory interface HttpConnectionFactory</li>
+                  <li>connection interface HttpConnection</li>
+                  <li>connection factory's implementation HttpConnectionFactoryImpl</li>
+                  <li>connection's implementation HttpConnectionImpl</li>
+               </ul>
+            </li>
+         </ul>
+      </p>
+      <section>
+         <title>Managed Connection Factory</title>
+         <p>
+         The Managed Connection Factory HttpManagedConnectionFactoryImpl
+         implements the javax.resource.spi.ManagedConnectionFactory interface.
+         This class is as  well a factory for managed connections as a factory
+         for HttpConnectionFactory's. This class is the main entry point for
+         the underlying Application Server for interactions with the Http 
+         Connector. An instance of this class will be instantiated by the
+         application server immediately after deployment. The
+         HttpManagedConnectionFactoryImpl provides some connector specific
+         attributes (for more details see the section 'Connector's Attributes').
+         <diagram type="class" name="HttpManagedConnectionFactoryImpl">
+            <class name="org.jcoderz.commons.connector.ManagedConnectionFactoryBase"/>
+            <class name="org.jcoderz.commons.connector.http.HttpManagedConnectionFactoryImpl"/>
+            <description>
+               The Managed Connection Factory HttpManagedConnectionFactoryImpl.
+            </description>
+         </diagram>
+         </p>
+      </section>
+      <section>
+         <title>Managed Connection</title>
+         <p>
+         The main task of the HttpManagedConnectionImpl class is to manage
+         HttpConnection's instances.
+         <diagram type="class" name="HttpManagedConnectionImpl">
+            <class name="org.jcoderz.commons.connector.http.HttpManagedConnectionImpl"/>
+            <description>
+               The Managed Connection HttpManagedConnectionImpl.
+            </description>
+         </diagram>
+         </p>
+      </section>
+      <section>
+         <title>Connection Factory</title>
+         <p>
+         The HttpConnectionFactory interface specifies the methods to retrieve a
+         HttpConnection. The Http Connector does not provide the
+         javax.resource.cci interface. A connector's client should use the
+         HttpConnectionFactory to obtain a http connection instead.
+         <diagram type="class" name="HttpConnectionFactory">
+            <class name="org.jcoderz.commons.connector.http.HttpConnectionFactoryImpl"/>
+            <description>
+               The Connection Factory.
+            </description>
+         </diagram>
+         </p>
+      </section>
+      <section>
+         <title>Connection</title>
+         <p>
+         The HttpConnection provides the interface between a connector's client and
+         a http target system.
+         <diagram type="class" name="HttpConnectionImpl">
+            <class name="org.jcoderz.commons.connector.http.HttpConnectionImpl"/>
+            <description>
+               The HttpConnection.
+            </description>
+         </diagram>
+         </p>
+      </section>
+   </section>
+   
+   <section>
+      <title>Packaging and Deployment</title>
+      <section>
+         <title>Deployment Descriptor</title>
+         <p>
+         The deployment descriptor of the Http Connector consists of two
+         components:
+         <ul>
+            <li>
+               standard deployment descriptor ra.xml, that specifies the
+               common and connector specific properties
+            </li>
+            <li>
+               application server specific deployment descriptor, that specify
+               server relevant configuration and settings for an resource
+               adapter.
+            </li>
+         </ul>
+         The FawkeZ module delivers modules for the WebLogic Application
+         Server, thus the Http Connector includes the WebLogic specific
+         deployment descriptor weblogic-ra.xml.
+         </p>
+      </section>
+      <section>
+         <title>Packaging</title>
+         <p>
+         The Http Connector is packaged in to the http.rar
+         archive. This archive contains
+         <ul>
+            <li>the deployment descriptors
+               <ul>
+                  <li>ra.xml - standard deployment descriptor</li>
+                  <li>weblogic-ra.xml - the WebLogic specific deployment descriptor</li>
+               </ul>
+            </li>
+            <li>the implementation classes included in the http.jar</li>
+            <li>and the http-client.jar archive containing the client interfaces.</li>
+        </ul>
+        </p>
+
+        <p>
+           The following shows the structure of the http.rar:
+           <pre>
+               META-INF/MANIFEST.MF
+               VERSION
+               META-INF/ra.xml
+               META-INF/weblogic-ra.xml
+               http-client.jar
+               http.jar
+           </pre>
+         </p>
+      </section>
+      <section>
+           <title>Deployment</title>
+           <p>
+           The Http Connector can be deployed either:
+           <ul>
+              <li>Directly into an application server as a stand-alone unit, or,</li>
+              <li>Deployed with a J2EE application that consists of one or
+                  more J2EE modules in addition to the Http Connector
+                  module
+              </li>
+           </ul>
+           </p>
+      </section>
+      <section>
+         <title>Connector Client Archive</title>
+         <p>
+         To prevent the connector's client to use the Http Connector's
+         implementation classes directly, the client archive file is supplied
+         on the client side. This archive provide connector's interfaces
+         only and should be included in the client classpath.
+         </p>
+      </section>
+   </section>   
+   <section>
+      <title>Implementation View</title>
+      <section>
+         <title>Connection handling</title>
+         <p>
+         The connector is able to perform retries. Therefore a connection will be initiated
+         internally if necessary.
+         </p>
+      </section>
+      <section>
+         <title>Usage</title>
+          <section>
+            <title>Base Path</title>
+            <p>
+             A connector's client is required to look up a connection
+             factory instance using the JNDI interface. The client then uses
+             the connection factory instance to get a connection to the
+             target system.
+             A connection client is required to close the connection after the
+             connection is no more in use.
+          <pre>
+   // Create initial context
+   final InitialContext ctx = new InitialContext();
+   // Lookup the connection factory
+   final HttpConnectionFactory cf = (HttpConnectionFactory) ctx.lookup("java:comp/env/eis/HttpConnector");
+   // Retrieve conection
+   final HttpConnection con = cf.getConnection();
+   // perform send and receive 
+   byte[] message = "message".getBytes();
+   con.sendAndReceive(message);
+   ...
+   // close connection
+   con.close();
+          </pre>
+          </p>
+          </section>
+      </section> 
+      <section>
+          <title>Connector Attributes</title>
+          <p>The Http Connector provides a couple of attributes
+             See the config file for further details.
+          </p>
+      </section>
+   </section>
+   <section>
+      <title>API Documentation</title>
+      <apidoc name="filesystemconnector">
+         <class name="org.jcoderz.commons.connector.http.HttpConnection"/>
+         <class name="org.jcoderz.commons.connector.http.HttpConnectionFactory"/>
+         <class name="org.jcoderz.commons.connector.http.HttpConnectionUtil"/>
+      </apidoc>
+   </section>
+</body>

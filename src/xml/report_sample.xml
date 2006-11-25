@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE report SYSTEM "report.dtd">
+
+<report>
+   <file name="d:/home/phoenix/phoenix/src/java/org/jcoderz/phoenix/report/Java2Html.java">
+      <item line="8"
+            column="1"
+            severity="info"
+            message="Utility classes should not have a public or default constructor."
+            end-line="125"
+            end-column="80"
+            type="pmd"/>
+      <item line="9"
+            column="1"
+            severity="info"
+            message="Utility classes should not have a public or default constructor."
+            end-line="125"
+            end-column="80"
+            type="pmd"/>
+      <item line="10"
+            column="1"
+            severity="info"
+            message="Utility classes should not have a public or default constructor."
+            end-line="125"
+            end-column="80"
+            type="pmd"/>
+      <item line="10"
+            column="7"
+            severity="error"
+            message="Utility classes should not have a public or default constructor."
+            end-line="125"
+            end-column="80"
+            type="checkstyle"/>
+      <item line="11"
+            column="1"
+            severity="info"
+            message="Utility classes should not have a public or default constructor."
+            end-line="125"
+            end-column="80"
+            type="pmd"/>
+      <item line="14"
+            end-line="125"
+            severity="info"
+            counter="0"
+            message="Utility classes should not have a public or default constructor."
+            type="pmd"/>
+      <item line="51"
+            counter="10"
+            type="coverage"/>
+      <item line="52"
+            counter="10"
+            type="coverage"/>
+      <item line="53"
+            counter="10"
+            type="coverage"/>
+      <item line="57"
+            counter="0"
+            type="coverage"/>
+   </file>
+</report>

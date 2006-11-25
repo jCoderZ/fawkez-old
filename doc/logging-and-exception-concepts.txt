@@ -1,0 +1,176 @@
+
+       __                _        _____
+      / _| __ ___      _| | _____|__  /
+     | |_ / _` \ \ /\ / / |/ / _ \ / /
+     |  _| (_| |\ V  V /|   (  __// /_
+     |_|  \__,_| \_/\_/ |_|\_\___/____|
+   _____________________________________________________________________
+
+                                        ``The only good is knowledge and
+                                           the only evil is ignorance.''
+                                               -- Socrates
+
+   fawkeZ Logging and Exception Handling Concepts
+   $Revision: 1.4 $
+   $Date: 2004/12/09 10:50:44 $
+
+   1. Requirements
+
+   The following requirements dictate the logging and exception handling
+   concept (or just "logging" for short) in the fawkeZ project:
+
+   - Common logging concepts should be used. These concepts encompass:
+     o use of Log Levels
+     o use of distinct logger names
+
+   - Well proven logging concepts of previous projects should be used.
+     These concepts encompass:
+     o use of a (pseudo-)unique "tracking number" that is assigned per
+       log event
+     o use of a unique message id per log event type that links to a
+       knowledge base describing details of the log event type
+     o use of parameters
+
+   - All available context information that could be helpful to track
+     a problem should be logged.
+
+   - The logging concept must be able to handle Java Exception stack
+     traces.
+
+   - The logging concept should easily integrate into CA UniCenter.
+
+   - The Java Logging API (java.util.logging) should be used.
+
+   - The Logging concept must support a nesting concept.
+
+   2. Data Model
+
+   Log Data                     | CA UniCenter field
+   -----------------------------+--------------------------------------
+   Log Level                    | Level
+   Tracking Number              | Part of the textual description
+   Message ID                   | Message ID
+   Date & Time (including ms)   | Date, Time
+   IP Address / Hostname        | Node ID
+   Instance ID                  | Instance ID
+   Description                  | Part of the textual description
+   Logger Name                  | -
+   PID                          | -
+   Application Version          | -
+   Thread ID                    | -
+   Exception                    | -
+   Stack                        | -
+   Cause                        | -
+   Context                      | -
+   Arbitrary Parameters         | -
+
+   The sections below give some more detail about data fields that are
+   not self-explanatory.
+
+   2.1 Log Level
+
+   The Java Logging API defines the following log levels (in descending
+   order): SEVERE, WARNING, INFO, CONFIG, FINE, FINER, FINEST
+   CA UniCenter defines the following log levels (in descending order):
+   FAIL, CRITICAL, WARNING, INFO
+
+   To map Java Logging levels on CA UniCenter levels, an additional
+   "critical" flag is introduced in the log data structure that may only
+   be set when the log level is "WARNING". Then the following mapping
+   applies:
+
+   Java Logging Level           | CA UniCenter Level
+   -----------------------------+--------------------------------------
+   CONFIG                       | INFO
+   INFO                         | INFO
+   WARNING                      | WARNING
+   WARNING with critical flag   | CRITICAL
+   SEVERE                       | FAIL
+
+   2.2 Tracking Number
+
+   This is a random generated long value (32 bit) that is converted to
+   a hex string. This makes the Tracking Number only pseudo unique,
+   because in theory collisions can occur, however, they are rather
+   unlikely.
+
+   2.3 Message ID
+
+   The format of the message ID is as follows: APP_SVC_EVENT_DESCRIPTION
+   where APP is the three-letter application mnemonic, SVC is the
+   application component (service) that produces log events of this
+   type, and EVENT_DESCRIPTION is a string describing the event type.
+   For example, the message id for the SRV event "Signature service
+   failed to load keystore" could look like SRV_SIG_LOAD_KEYSTORE_FAILED
+
+   Message IDs are declared in an XML file that serves as a basis for
+   the knowledge base. This XML file should contain the following data:
+
+   - Message ID
+   - Description (Detail)
+   - Reason
+   - Solution
+   - Business Impact
+
+   2.4 Instance ID
+
+   The instance id should be a descriptive name for the process running
+   the application. For example, on Bea WLS, we could use the Server
+   name. If no such information is available, the OS Process ID should
+   be used.
+
+   2.5 Description
+
+   This is the only field of the XML structure mentioned above that is
+   actually a part of the log message. Since this field is filled into
+   the log data at runtime, it can use parameter substitution.
+
+   2.6 Logger Name
+
+   The logger name should be the fully qualified class name of the class
+   declaring the logger. Usually, the following statements will be used:
+
+   public class Foo
+   {
+      private static final String CLASSNAME = Foo.class.getName();
+      private static final Logger logger = Logger.getLogger(CLASSNAME);
+      ...
+   }
+
+   3. Logging vs. Exceptions
+
+   Most of the time, when a log event occurs, it will have been caused
+   by an exception. However, there are situations where such an event is
+   detected and must be logged without an exception. Thus, we distinguish
+   between a Log Record and a Loggable Exception, which both have the
+   log data described above.
+
+   Here comes an interface suggestion which is definitely to be discussed:
+
+      public interface Loggable
+
+      public class LogRecord
+         implements Loggable
+
+      public class CommonException
+         extends Exception
+         implements Loggable
+
+   Possibly, we should do something like this:
+
+      public class LoggableImpl
+         implements Loggable
+
+   and then have the LogRecord and CommonException delegate to the
+   implementation class. Alternatively, it might be possible to just
+   have the CommonException delegate to a LogRecord.
+
+   4. The Nesting Mechanism
+
+   While it is common for exceptions to have nested exceptions (cause),
+   we also plan to use this concept for LogRecords.
+
+   Nesting means that:
+   - a Loggable can have another Loggable as cause
+   - a Loggable inherits the tracking number from its cause Loggable
+   - a Loggable overrides the Log Level of its cause

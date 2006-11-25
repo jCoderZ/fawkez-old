@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<simpleTypes>
+
+<!-- ===============================================================
+     TYPE-SAFE ENUMERATIONS
+     =============================================================== -->
+   <typeSafeEnumerations>
+      <enumeration
+         classname="Color"
+         package="org.jcoderz.commons">
+         <value>blue</value>
+         <value>red</value>
+         <value>yellow</value>
+      </enumeration>
+   </typeSafeEnumerations>
+
+<!-- ===============================================================
+     RESTRICTED STRINGS
+     =============================================================== -->
+   <restrictedStrings>
+      <restrictedString
+         classname="FooString"
+         package="org.jcoderz.commons"
+         min-length="1"
+         max-length="10">
+         <constant
+            name="CONSTANT_VALUE"
+            value="foo"
+            comment="Additional Constant defined in the XML document."/>
+      </restrictedString>
+   </restrictedStrings>
+
+<!-- ===============================================================
+     RESTRICTED LONG
+     =============================================================== -->
+   <restrictedLongs>
+      <restrictedLong
+         classname="FooLong"
+         package="org.jcoderz.commons"
+         min-value="1"
+         max-value="10">
+         <constant
+            name="CONSTANT_VALUE"
+            value="5"
+            comment="Additional Constant defined in the XML document."/>
+      </restrictedLong>
+   </restrictedLongs>
+
+<!-- ===============================================================
+     REGEX STRINGS
+     =============================================================== -->
+   <regexStrings>
+      <regexString
+         classname="RegexString"
+         package="org.jcoderz.commons">
+         <regex>foo|bar|buz</regex>
+      </regexString>
+   </regexStrings>
+
+</simpleTypes>

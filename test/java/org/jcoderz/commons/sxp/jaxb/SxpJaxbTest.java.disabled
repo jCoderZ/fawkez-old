@@ -1,0 +1,261 @@
+/*
+ * $Id: header.txt 19 2006-01-09 14:31:50Z amandel $
+ *
+ * Copyright 2006, The jCoderZ.org Project. All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are
+ * met:
+ *
+ *    * Redistributions of source code must retain the above copyright
+ *      notice, this list of conditions and the following disclaimer.
+ *    * Redistributions in binary form must reproduce the above
+ *      copyright notice, this list of conditions and the following
+ *      disclaimer in the documentation and/or other materials
+ *      provided with the distribution.
+ *    * Neither the name of the jCoderZ.org Project nor the names of
+ *      its contributors may be used to endorse or promote products
+ *      derived from this software without specific prior written
+ *      permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS "AS IS" AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+ * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE REGENTS AND CONTRIBUTORS
+ * BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
+ * BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+ * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+ * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+package org.jcoderz.commons.sxp.jaxb;
+
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FilenameFilter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringWriter;
+import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.PropertyException;
+import javax.xml.bind.Unmarshaller;
+import javax.xml.bind.Validator;
+import javax.xml.parsers.ParserConfigurationException;
+
+import junit.framework.Test;
+import junit.framework.TestSuite;
+
+import org.custommonkey.xmlunit.Diff;
+import org.custommonkey.xmlunit.XMLTestCase;
+import org.custommonkey.xmlunit.XMLUnit;
+import org.jcoderz.commons.TestCase;
+import org.jcoderz.commons.csp.sxp.SxpJaxbContext;
+import org.jcoderz.commons.csp.sxp.ValidationEventCollector;
+import org.jcoderz.commons.util.IoUtil;
+import org.xml.sax.SAXException;
+
+
+/**
+ * Test all supplied xml files to be parsed correctly and that we
+ * are able to marshal them correctly back into xml.
+ * @author Andreas Mandel
+ */
+public class SxpJaxbTest
+      extends TestCase
+{
+   private static final String XML_DIRECTORY
+         = "test/xml/sxp/wellformed";
+   private static final String XML_DIRECTORY_MALFORMED
+         = "test/xml/sxp/malformed";
+
+   /** A map containing the expected error messages for the negative tests. */
+   private static final Map ERROR_MESSAGES = new HashMap();
+
+   static
+   {
+      ERROR_MESSAGES.put(
+            "WrongNamespace.xml",
+            new String[] {".*namespace.*"});
+   }
+
+   /**
+    * Generating this test suite.
+    * @return this test suite.
+    */
+   public static Test suite ()
+   {
+      final File dir = new File(TestCase.getBaseDir(), XML_DIRECTORY);
+      String[] xmlFiles = dir.list(new XmlFilenameFilter());
+      if (xmlFiles == null)
+      {
+         throw new RuntimeException("[Error] " + "No XML files found at '"
+               + dir + "'!");
+      }
+      final TestSuite suite = new TestSuite();
+      for (int i = 0; i < xmlFiles.length; i++)
+      {
+         suite.addTest(new XmlFileValidation(dir, xmlFiles[i], true));
+      }
+
+      final File dirMalformed
+            = new File(TestCase.getBaseDir(), XML_DIRECTORY_MALFORMED);
+      xmlFiles = dirMalformed.list(new XmlFilenameFilter());
+      if (xmlFiles == null)
+      {
+         throw new RuntimeException("[Error] " + "No XML files found at '"
+               + dirMalformed + "'!");
+      }
+      for (int i = 0; i < xmlFiles.length; i++)
+      {
+         suite.addTest(new XmlFileValidation(dirMalformed, xmlFiles[i], false));
+      }
+      return suite;
+   }
+
+   static class XmlFilenameFilter
+         implements FilenameFilter
+   {
+      /**
+       * @see java.io.FilenameFilter#accept(java.io.File, java.lang.String)
+       */
+      public boolean accept (File dir, String name)
+      {
+         return name.endsWith(".xml");
+      }
+   }
+
+
+   static class XmlFileValidation
+         extends XMLTestCase
+   {
+      private static final SxpJaxbContext JAXB_CONTEXT
+            = new SxpJaxbContext();
+      private final String mXmlFileName;
+      private final File mDir;
+      private final boolean mIsPositive;
+
+      public XmlFileValidation (File dir, String xmlFileName, boolean positive)
+      {
+         super(xmlFileName);
+         mXmlFileName = xmlFileName;
+         mDir = dir;
+         mIsPositive = positive;
+      }
+
+      public void runTest ()
+            throws Throwable
+      {
+         testXmlFile();
+      }
+
+      public void testXmlFile ()
+            throws JAXBException, SAXException, IOException,
+               ParserConfigurationException
+      {
+         final InputStream in
+               = new FileInputStream(new File(mDir, mXmlFileName));
+         final byte[] data;
+         try
+         {
+            data = IoUtil.readFully(in);
+         }
+         finally
+         {
+            IoUtil.close(in);
+         }
+
+         JAXB_CONTEXT.getValidationEventCollector().reset();
+
+         Object result = null;
+         final Unmarshaller unmarshaller = JAXB_CONTEXT.getUnmarshaller();
+         try
+         {
+            result = unmarshaller.unmarshal(new ByteArrayInputStream(data));
+         }
+         catch (Exception ex)
+         {
+            assertTrue("Exception but no event." + ex,
+                  JAXB_CONTEXT.getValidationEventCollector().hasEvents());
+         }
+         if (mIsPositive)
+         {
+            assertPositiveResult(data, result);
+         }
+         else
+         {
+            assertNegativeResult(data, result);
+         }
+      }
+
+      private void assertNegativeResult (final byte[] data, Object result)
+            throws UnsupportedEncodingException
+      {
+         final ValidationEventCollector
+               eventCollector = JAXB_CONTEXT.getValidationEventCollector();
+         assertTrue("Expected errors for document: '"
+               + new String(data, "UTF-8") + "'",
+               eventCollector.hasEvents());
+         final String message = eventCollector.toString();
+         final String[] expectedMessage
+               = (String[]) ERROR_MESSAGES.get(mXmlFileName);
+         if (expectedMessage == null)
+         {
+            fail("No expected message defined for negative test. "
+                  + " Document name " + mXmlFileName
+               + " was " + (result == null ? "null" : "not null")
+               + ". The error message was:\n"  + message);
+         }
+         for (int i = 0; i < expectedMessage.length; i++)
+         {
+            if (!message.matches(expectedMessage[i]))
+            {
+               fail("Expected message part '" + expectedMessage[i]
+                     + "' not found in message. "
+                     + " Document name " + mXmlFileName
+                     + " was " + (result == null ? "null" : "not null")
+                     + ". The error message was:\n"  + message);
+            }
+         }
+      }
+
+      private void assertPositiveResult (final byte[] data, Object result)
+            throws JAXBException, PropertyException, SAXException, IOException,
+               ParserConfigurationException, UnsupportedEncodingException
+      {
+         final ValidationEventCollector
+               eventCollector = JAXB_CONTEXT.getValidationEventCollector();
+         assertFalse("Unmarshal got Events: '" + eventCollector.toString(),
+               eventCollector.hasEvents());
+
+         final Validator validator = JAXB_CONTEXT.getValidator();
+         validator.validate(result);
+         assertFalse("Validate got Events:" + eventCollector.toString(),
+               eventCollector.hasEvents());
+
+         final Marshaller marshaller = JAXB_CONTEXT.getMarshaller();
+         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+         final StringWriter sw = new StringWriter();
+         marshaller.marshal(result, sw);
+         assertFalse("Marshal got Events: '" + eventCollector.toString(),
+               eventCollector.hasEvents());
+         XMLUnit.setIgnoreWhitespace(true);
+         final Diff diff = new Diff(new String(data, "UTF-8"), sw.toString());
+         if (!diff.similar())
+         {
+            fail("Not similar (" + diff.toString()
+                  + ") found diff  between\n=============================\n"
+                  + new String(data, "UTF-8")
+                  + "\n=======A=N=D===================\n" + sw.toString()
+                  + "\n===============================\n\n");
+         }
+      }
+   }
+}

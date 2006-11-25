@@ -1,0 +1,14 @@
+<chapter>
+
+   <title>Java Source File Examples</title>
+
+   <para>The following example shows how to format a Java source file
+   containing a single public class. Interfaces are formatted similarly.</para>
+
+   <para>
+      <!-- do not break the following two lines -->
+      <programlisting 
+         linenumbering="numbered"><?dbhtml linenumbering.everyNth="1"?><?dbfo linenumbering.everyNth="1"?>&JCoderZJavaExample;</programlisting>
+   </para>
+
+</chapter>

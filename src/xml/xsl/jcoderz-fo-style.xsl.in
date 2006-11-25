@@ -1,0 +1,172 @@
+<?xml version='1.0'?>
+<xsl:stylesheet version='1.0'
+                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:fo="http://www.w3.org/1999/XSL/Format">
+<!-- include the docbook templates -->
+<xsl:import href="file:@DOCBOOK_XSL_HOME@/fo/profile-docbook.xsl"/>
+<!-- common parameters for docbook templates -->
+<xsl:import href="file:jcoderz-xsl-param.xsl"/>
+
+<xsl:output method="xml" encoding="ISO-8859-1" indent="no"/>
+
+<xsl:attribute-set name="xref.properties">
+   <xsl:attribute name="color">blue</xsl:attribute>
+</xsl:attribute-set>
+
+<xsl:attribute-set
+   name="monospace.verbatim.properties"
+   use-attribute-sets="verbatim.properties monospace.properties">
+   <xsl:attribute name="text-align">start</xsl:attribute>
+   <xsl:attribute name="font-size">
+     <xsl:value-of select="$body.font.master * 0.8"/>
+     <xsl:text>pt</xsl:text>
+   </xsl:attribute>
+</xsl:attribute-set>
+
+<xsl:attribute-set name="section.title.properties">
+  <xsl:attribute name="font-size">
+    <xsl:value-of select="$body.font.master * 1.2"/>
+    <xsl:text>pt</xsl:text>
+  </xsl:attribute>
+</xsl:attribute-set>
+
+<xsl:attribute-set name="section.title.level1.properties">
+  <xsl:attribute name="border-after-style">solid</xsl:attribute>
+  <xsl:attribute name="border-after-width">.1mm</xsl:attribute>
+  <xsl:attribute name="font-size">
+    <xsl:value-of select="$body.font.master * 1.6"/>
+    <xsl:text>pt</xsl:text>
+  </xsl:attribute>
+</xsl:attribute-set>
+
+<xsl:attribute-set name="section.title.level2.properties">
+  <xsl:attribute name="font-size">
+    <xsl:value-of select="$body.font.master * 1.4"/>
+    <xsl:text>pt</xsl:text>
+  </xsl:attribute>
+</xsl:attribute-set>
+
+<xsl:attribute-set name="section.title.level3.properties">
+  <xsl:attribute name="font-size">
+    <xsl:value-of select="$body.font.master * 1.2"/>
+    <xsl:text>pt</xsl:text>
+  </xsl:attribute>
+</xsl:attribute-set>
+
+<xsl:attribute-set name="formal.title.properties">
+
+  <xsl:attribute name="font-size">
+    <xsl:value-of select="$body.font.master * 1.0"/>
+    <xsl:text>pt</xsl:text>
+  </xsl:attribute>
+
+  <xsl:attribute name="space-after.minimum">0.0em</xsl:attribute>
+  <xsl:attribute name="space-after.optimum">0.4em</xsl:attribute>
+  <xsl:attribute name="space-after.maximum">0.4em</xsl:attribute>
+
+  <!--
+  <xsl:attribute name="border-style">solid</xsl:attribute>
+  <xsl:attribute name="border-width">.1mm</xsl:attribute>
+  -->
+
+</xsl:attribute-set>
+
+<xsl:attribute-set name="list.block.spacing">
+
+  <xsl:attribute name="space-before.minimum">0em</xsl:attribute>
+  <xsl:attribute name="space-before.optimum">0em</xsl:attribute>
+  <xsl:attribute name="space-before.maximum">0em</xsl:attribute>
+
+  <xsl:attribute name="space-after.minimum">0.0em</xsl:attribute>
+  <xsl:attribute name="space-after.optimum">0.6em</xsl:attribute>
+  <xsl:attribute name="space-after.maximum">0.6em</xsl:attribute>
+
+  <!--
+  <xsl:attribute name="border-style">solid</xsl:attribute>
+  <xsl:attribute name="border-width">.1mm</xsl:attribute>
+  -->
+
+</xsl:attribute-set>
+
+<xsl:attribute-set name="list.item.spacing">
+
+  <xsl:attribute name="space-before.minimum">0.0em</xsl:attribute>
+  <xsl:attribute name="space-before.optimum">0.2em</xsl:attribute>
+  <xsl:attribute name="space-before.maximum">0.2em</xsl:attribute>
+
+  <xsl:attribute name="space-after.minimum">0em</xsl:attribute>
+  <xsl:attribute name="space-after.optimum">0.2em</xsl:attribute>
+  <xsl:attribute name="space-after.maximum">0.2em</xsl:attribute>
+
+  <!--
+  <xsl:attribute name="border-style">solid</xsl:attribute>
+  <xsl:attribute name="border-width">.1mm</xsl:attribute>
+  -->
+
+</xsl:attribute-set>
+
+<xsl:template match="processing-instruction('line-break')">
+   <fo:block/>
+</xsl:template>
+
+
+<xsl:template name="book.titlepage.recto">
+  <xsl:choose>
+    <xsl:when test="bookinfo/title">
+      <xsl:apply-templates mode="book.titlepage.recto.auto.mode" select="bookinfo/title"/>
+    </xsl:when>
+    <xsl:when test="info/title">
+      <xsl:apply-templates mode="book.titlepage.recto.auto.mode" select="info/title"/>
+    </xsl:when>
+    <xsl:when test="title">
+      <xsl:apply-templates mode="book.titlepage.recto.auto.mode" select="title"/>
+    </xsl:when>
+  </xsl:choose>
+  <xsl:choose>
+    <xsl:when test="bookinfo/subtitle">
+      <xsl:apply-templates mode="book.titlepage.recto.auto.mode" select="bookinfo/subtitle"/>
+    </xsl:when>
+    <xsl:when test="info/subtitle">
+      <xsl:apply-templates mode="book.titlepage.recto.auto.mode" select="info/subtitle"/>
+    </xsl:when>
+    <xsl:when test="subtitle">
+      <xsl:apply-templates mode="book.titlepage.recto.auto.mode" select="subtitle"/>
+    </xsl:when>
+  </xsl:choose>
+
+  <xsl:apply-templates mode="book.titlepage.recto.auto.mode" select="bookinfo/mediaobject"/>
+
+  <xsl:apply-templates mode="book.titlepage.recto.auto.mode" select="bookinfo/corpauthor"/>
+  <xsl:apply-templates mode="book.titlepage.recto.auto.mode" select="info/corpauthor"/>
+  <xsl:apply-templates mode="book.titlepage.recto.auto.mode" select="bookinfo/authorgroup"/>
+  <xsl:apply-templates mode="book.titlepage.recto.auto.mode" select="info/authorgroup"/>
+  <xsl:apply-templates mode="book.titlepage.recto.auto.mode" select="bookinfo/author"/>
+  <xsl:apply-templates mode="book.titlepage.recto.auto.mode" select="info/author"/>
+  <xsl:apply-templates mode="book.titlepage.recto.auto.mode" select="bookinfo/revision"/>
+  <xsl:apply-templates mode="book.titlepage.recto.auto.mode" select="info/revision"/>
+  <xsl:apply-templates mode="book.titlepage.recto.auto.mode" select="bookinfo/releaseinfo"/>
+  <xsl:apply-templates mode="book.titlepage.recto.auto.mode" select="info/releaseinfo"/>
+  <xsl:apply-templates mode="book.titlepage.recto.auto.mode" select="bookinfo/pubdate"/>
+  <xsl:apply-templates mode="book.titlepage.recto.auto.mode" select="info/pubdate"/>
+</xsl:template>
+
+<xsl:template match="mediaobject" mode="book.titlepage.recto.auto.mode">
+   <fo:block text-align="center" padding-before="2.5cm">
+        <fo:external-graphic>
+            <xsl:attribute name="src">
+               <xsl:call-template name="fo-external-image">
+                  <xsl:with-param name="filename"
+                     select="imageobject[@role='fo']/imagedata/@fileref"/>
+               </xsl:call-template>
+            </xsl:attribute>
+         </fo:external-graphic>
+   </fo:block>
+</xsl:template>
+
+<xsl:template match="releaseinfo" mode="book.titlepage.recto.auto.mode">
+   <fo:block text-align="center" padding-before="1.5cm">
+      <xsl:apply-templates select="text()"/>
+   </fo:block>
+</xsl:template>
+
+</xsl:stylesheet>

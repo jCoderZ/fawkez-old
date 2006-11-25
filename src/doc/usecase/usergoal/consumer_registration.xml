@@ -1,0 +1,159 @@
+<uc:usecase xmlns:uc="uc"
+            xmlns:db="http://docbook.org/ns/docbook"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="uc
+                                http://www.jcoderz.org/xsd/xdoc/usecase-SNAPSHOT.xsd"
+            id="UC-10" level="UserGoal">
+	<uc:version>$Revision: 1.5 $</uc:version>
+	<uc:name>Consumer Registration</uc:name>
+	<uc:goal>Consumer has been registered to the m-Wallet.</uc:goal>
+	<uc:scope>m-Wallet</uc:scope>
+	<uc:trigger/>
+	<uc:priority>High</uc:priority>
+	<uc:response_time>immediately</uc:response_time>
+	<uc:frequency_of_use>ad-hoc</uc:frequency_of_use>
+	<uc:actors>
+		<uc:primary>
+			<uc:name>Consumer</uc:name>
+			<uc:channel>Web</uc:channel>
+		</uc:primary>
+		<uc:secondary>
+			<uc:name>m-Wallet</uc:name>
+			<uc:channel>Web</uc:channel>
+		</uc:secondary>
+	</uc:actors>
+	<uc:stakeholder>Service Provider wants to get all relevant data of the consumer.</uc:stakeholder>
+	<uc:stakeholder>Consumer wants to be able to top-up his registered account and to use his account to purchase things.</uc:stakeholder>
+	<uc:stakeholder>Merchant wants to provide the consumer to register easily to a payment system, that he will be able to buy goods easily.</uc:stakeholder>
+	<uc:precondition>System up and running</uc:precondition>
+	<uc:guarantees>
+		<uc:success>Consumer is registered to the system. All relevant consumer data are stored.</uc:success>
+		<uc:minimal>Consumer gets knowledge about the failure of the registration and the reason about it.</uc:minimal>
+	</uc:guarantees>
+	<uc:success>
+		<uc:step id="1" desc="Display form">System sends initial formular asking for the MSISDN of the Consumer.</uc:step>
+		<uc:step id="2" desc="Enter MSISDN">Consumer enters his MSISDN.</uc:step>
+		<uc:step id="3" desc="Enter H.I.P. Code">Consumer enters "human-only-readable" letters from a picture (e.g. Human Interactive Proof-Technologie).</uc:step>
+		<uc:step id="4" desc="Request Reg. Code">Consumer requests registration code..</uc:step>
+		<uc:step id="5" desc="Check H.I.P. Code">System checks entered human interaction proof text.<uc:ref id="UC-10-E3"/>
+		</uc:step>
+		<uc:step id="6" desc="Verify MSISDN">System verifies the MSISDN. <uc:ref id="UC-10-E1"/>
+		</uc:step>
+		<uc:step id="7" desc="Check Duplicate Accounts">System checks for an account already existing. <uc:ref id="UC-10-E2"/>
+		</uc:step>
+		<uc:step id="8" desc="Generate Reg. Code">System generates registration code.</uc:step>
+		<uc:step id="9" desc="Send Reg Code SMS">System sends SMS containing registration code to MSISDN. <uc:ref id="UC-10-E4"/>
+		</uc:step>
+		<uc:step id="10" desc="Ask For Reg Code">System asks for registration code.</uc:step>
+		<uc:step id="11" desc="Submit Reg Code">Consumer enters registration code and submits form. (Requirement: <uc:ref id="HLF_090"/>) <uc:ref id="UC-10-E5"/>
+		</uc:step>
+		<uc:step id="12" desc="Ask For Personal Data">System asks for consumer personal data. <uc:ref id="HLF_005"/>
+			<!-- itemizedlist>
+				<listitem>
+               <para>first name</para>
+            </listitem>
+				<listitem>
+               <para>last name</para>
+            </listitem>
+				<listitem>
+               <para>e-mail adress</para>
+            </listitem>
+				<listitem>
+               <para>repeat e-mail Adress</para>
+            </listitem>
+				<listitem>
+               <para>login name</para>
+            </listitem>
+				<listitem>
+               <para>password <uc:ref id="HLF_006"/></para>
+				</listitem>
+				<listitem>
+               </para>repeat password</para>
+            </listitem>
+				<listitem>
+               <para>personal greeting, which will be used in further conversation (e.g. Hello Yeti)</para>
+            </listitem>
+				<listitem>
+              <para>menu to choose security question (e.g. your mother's maiden name)</para>
+            </listitem>
+				<listitem>
+               <para>answer to security question</para>
+            </listitem>
+				<listitem>
+               <para>confirmation of the terms and conditions.</para>
+            </listitem>
+			</itemizedlist>   -->
+		</uc:step>
+		<uc:step id="13" desc="Submit Data">After filling out the form the consumer submits.</uc:step>
+		<uc:step id="14" desc="Verfiy Data">System verifies given master data.<uc:ref id="UC-10-E6"/>
+		</uc:step>
+		<uc:step id="15" desc="Create Account">System creates account with all the data given. <uc:ref id="UC-10-E7"/>
+		</uc:step>
+		<uc:step id="16" desc="Ask For PI">Consumer will be asked about to configure a payment instrument. <uc:ref id="UC-11"/>
+		</uc:step>
+	</uc:success>
+	<uc:extension id="E1" name="MSISDN_MALFORMED">
+		<uc:step id="1" desc="">System logs a warning.</uc:step>
+		<uc:step id="2" desc="">System replies an error to the Consumer, that the MSISDN was malformed.</uc:step>
+		<uc:step id="3" desc="">back to registration formular. <uc:ref id="UC-10-1"/>
+		</uc:step>
+	</uc:extension>
+	<uc:extension id="E2" name="MSISDN_ALREADY_IN_USE">
+		<uc:step id="1" desc="">System logs a warning.</uc:step>
+		<uc:step id="2" desc="">System replies an error to the Consumer, that the MSISDN is already in use with an account.</uc:step>
+		<uc:step id="3" desc="">back to registration formular. <uc:ref id="UC-10-1"/>
+		</uc:step>
+	</uc:extension>
+	<uc:extension id="E3" name="HUMAN_INTERACTION_NOT_PROOFED">
+		<uc:step id="1" desc="">System logs a warning.</uc:step>
+		<uc:step id="2" desc="">System replies an error to the Consumer, that the text for human interaction proof was not entered correctly.</uc:step>
+		<uc:step id="3" desc="">Back to registration formular. The Human Interaction Proof will be changed.<uc:ref id="UC-10-1"/>
+		</uc:step>
+	</uc:extension>
+	<uc:extension id="E4" name="SMS_SEND FAILS">
+		<uc:step id="1" desc="">System logs an error.</uc:step>
+		<uc:step id="2" desc="">System replies an error to the Consumer, that the sending of the SMS failed and informs about the reason of the failure, if available.</uc:step>
+		<uc:step id="3" desc="">Back to registration formular. The Human Interaction Proof will be changed.<uc:ref id="UC-10-1"/>
+		</uc:step>
+	</uc:extension>
+	<uc:extension id="E5" name="WRONG_REGISTRATION_CODE">
+		<uc:step id="1" desc="">System logs a warning.</uc:step>
+		<uc:step id="2" desc="">System replies to the Consumer, that the registration code he entered was wrong.</uc:step>
+		<uc:step id="3" desc="">Back to registration formular.<uc:ref id="UC-10-1"/>
+		</uc:step>
+	</uc:extension>
+	<uc:extension id="E6" name="INCORRECT_PERSONAL_DATA">
+		<uc:step id="1" desc="">System logs a warning.</uc:step>
+		<uc:step id="2" desc="">System replies to consumer, which personal data fields were not filled correctly.</uc:step>
+		<uc:step id="3" desc="">Back to registration formular.<uc:ref id="UC-10-12"/>
+		</uc:step>
+	</uc:extension>
+	<uc:extension id="E7" name="FAILED_ACCOUNT_CREATION">
+		<uc:step id="1" desc="">System logs an error.</uc:step>
+		<uc:step id="2" desc="">System replies to the Consumer, that the creation of his account failed giving the reason if available.</uc:step>
+		<uc:step id="3" desc="">Back to registration formular.<uc:ref id="UC-10-12"/>
+		</uc:step>
+	</uc:extension>
+	<uc:open_issue>After entering a wrong registration code, is it okay to start from entering the MSISDN on or should there be a retry mechanism starting from UC-10-8 or UC-10-10 directly?</uc:open_issue>
+	<uc:open_issue>Should the consumer personal data formular be extracted into another use case?</uc:open_issue>
+	<uc:open_issue>What are the exact checks in <uc:ref id="UC-10-14"/>? Should they be detailed here.</uc:open_issue>
+	<uc:open_issue>To avoid usage of human interaction proof, it is a better way that consumern sends SMS to the wallet, to register his MSISDN?</uc:open_issue>
+	<uc:commitlog>
+      $Log: consumer_registration.xml,v $
+      Revision 1.5  2005/12/08 14:25:18  dcoppola
+      Corrected CVS replacement strings.
+
+      Revision 1.4  2005/12/08 14:21:22  dcoppola
+      Corrected CVS tags.
+
+      Revision 1.3  2005/12/08 13:46:06  dcoppola
+      Collected all requirements for phase 1 and renumbered them.
+
+      Revision 1.2  2005/12/06 08:11:04  dcoppola
+      Final Draft for consumer registration.
+
+      Revision 1.1  2005/11/30 08:25:36  dcoppola
+      initial draft of consumer registration added
+
+   </uc:commitlog>
+</uc:usecase>

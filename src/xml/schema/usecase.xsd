@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns:docbook="http://docbook.org/ns/docbook"
+            xmlns:uc="uc" 
+            targetNamespace="uc">
+   <xsd:import schemaLocation="http://www.docbook.org/xsd/4.2/docbook.xsd"/>
+
+   <xsd:simpleType name='useCaseId'>
+      <xsd:restriction base='xsd:string'>
+         <xsd:pattern value='UC-[0-9]+'/>
+      </xsd:restriction>
+   </xsd:simpleType>
+
+   <xsd:simpleType name='stepId'>
+      <xsd:restriction base='xsd:string'>
+         <xsd:pattern value='[0-9]+'/>
+      </xsd:restriction>
+   </xsd:simpleType>
+
+   <xsd:simpleType name='useCaseLevel'>
+      <xsd:restriction base='xsd:string'>
+         <xsd:enumeration value="Summary"/>
+         <xsd:enumeration value="UserGoal"/>
+         <xsd:enumeration value="Component"/>
+      </xsd:restriction>
+   </xsd:simpleType>
+
+   <xsd:simpleType name='useCasePriority'>
+      <xsd:restriction base='xsd:string'>
+         <xsd:pattern value='High|Medium|Low'/>
+      </xsd:restriction>
+   </xsd:simpleType>
+      
+   <xsd:element name="channel" type="xsd:string"/>
+   <xsd:element name="version" type="xsd:string"/>
+   <xsd:element name="name" type="xsd:string"/>
+   <xsd:element name="goal" type="xsd:string"/>
+   <xsd:element name="scope" type="xsd:string"/>
+   <xsd:element name="trigger" type="xsd:string"/>
+   <xsd:element name="priority" type="uc:useCasePriority"/>
+   <xsd:element name="response_time" type="xsd:string"/>
+   <xsd:element name="frequency_of_use" type="xsd:string"/>
+   <xsd:element name="stakeholder" type="xsd:string"/>
+   <xsd:element name="open_issue" type="xsd:string"/>
+   <xsd:element name="commitlog" type="xsd:string"/>
+   
+   <xsd:element name="ref">
+      <xsd:complexType>
+         <xsd:attribute name="id" type="xsd:string" use="required"/>
+      </xsd:complexType>
+   </xsd:element>
+   
+   
+   <xsd:element name="primary">
+      <xsd:complexType>
+         <xsd:sequence>
+            <xsd:element ref="uc:name" minOccurs="0" maxOccurs="100"/>         
+            <xsd:element ref="uc:channel" minOccurs="0" maxOccurs="100"/>         
+         </xsd:sequence>
+      </xsd:complexType>
+   </xsd:element>
+   
+   <xsd:element name="secondary">
+      <xsd:complexType>
+         <xsd:sequence>
+            <xsd:element ref="uc:name" minOccurs="0" maxOccurs="100"/>         
+            <xsd:element ref="uc:channel" minOccurs="0" maxOccurs="100"/>         
+         </xsd:sequence>
+      </xsd:complexType>
+   </xsd:element>
+   
+   <xsd:group name="content">
+      <xsd:sequence>
+           <xsd:element ref="para" minOccurs="0"/>
+           <xsd:element ref="itemizedlist" minOccurs="0"/>
+           <xsd:element ref="segmentedlist" minOccurs="0"/>
+           <xsd:element ref="table" minOccurs="0"/>
+           <xsd:element ref="indexterm" minOccurs="0"/>
+           <xsd:element ref="uc:ref" minOccurs="0" maxOccurs="100"/>
+           <xsd:any minOccurs="0" maxOccurs="unbounded"/>
+      </xsd:sequence>
+   </xsd:group> 
+
+   <xsd:element name="step">
+     <xsd:complexType mixed="true">
+        <xsd:sequence>
+           <xsd:group ref="uc:content"/>
+         </xsd:sequence>
+         <xsd:attribute name="id" type="uc:stepId" use="required"/>
+         <xsd:attribute name="desc" type="xsd:string" use="required"/>
+      </xsd:complexType>
+   </xsd:element>
+   
+   <xsd:element name="precondition">
+     <xsd:complexType  mixed="true">
+        <xsd:sequence>
+           <xsd:group ref="uc:content"/>
+         </xsd:sequence>
+      </xsd:complexType>
+   </xsd:element>
+   
+   <xsd:element name="minimal">
+      <xsd:complexType mixed="true">
+         <xsd:sequence> 
+            <xsd:group ref="uc:content"/>
+          </xsd:sequence>
+       </xsd:complexType>
+    </xsd:element>
+   
+   <xsd:element name="success">
+      <xsd:complexType mixed="true">
+   	 <xsd:sequence>
+   	    <xsd:element ref="uc:step" minOccurs="0" maxOccurs="100"/>
+          <xsd:group ref="uc:content"/>
+   	  </xsd:sequence>
+      </xsd:complexType>
+   </xsd:element>
+
+   <xsd:element name="extension">   
+      <xsd:complexType>
+       <xsd:sequence>
+          <xsd:element ref="uc:step" minOccurs="0" maxOccurs="100"/>
+       </xsd:sequence>
+       <xsd:attribute name="id" type="xsd:string" use="required"/>
+       <xsd:attribute name="name" type="xsd:string" use="required"/>  
+      </xsd:complexType> 
+   </xsd:element>
+
+   <xsd:element name="actors">
+     <xsd:complexType>
+        <xsd:sequence>
+           <xsd:element ref="uc:primary" minOccurs="1" maxOccurs="1"/>
+           <xsd:element ref="uc:secondary" minOccurs="1" maxOccurs="100"/>
+         </xsd:sequence>
+      </xsd:complexType>
+   </xsd:element>
+
+   <xsd:element name="guarantees">
+     <xsd:complexType>
+        <xsd:sequence>
+           <xsd:element ref="uc:success"/>
+           <xsd:element ref="uc:minimal"/>
+         </xsd:sequence>
+      </xsd:complexType>
+   </xsd:element>
+
+   <!-- xsd:element name="success" type="uc:success"/>
+   <xsd:element name="extension" type="uc:extension"/ -->
+
+   <xsd:element name="usecase">
+      <xsd:complexType>
+         <xsd:sequence>
+            <xsd:element ref="uc:version" minOccurs="1" maxOccurs="1"/>
+            <xsd:element ref="uc:name" minOccurs="1" maxOccurs="1"/>
+            <xsd:element ref="uc:goal" minOccurs="1" maxOccurs="1"/>
+            <xsd:element ref="uc:scope" minOccurs="1" maxOccurs="1"/>
+            <xsd:element ref="uc:trigger" minOccurs="1" maxOccurs="1"/>
+            <xsd:element ref="uc:priority" minOccurs="1" maxOccurs="1"/>
+            <xsd:element ref="uc:response_time" minOccurs="1" maxOccurs="1"/>
+            <xsd:element ref="uc:frequency_of_use" minOccurs="1" maxOccurs="1"/>
+            <xsd:element ref="uc:actors" minOccurs="1" maxOccurs="1"/>
+            <xsd:element ref="uc:stakeholder" minOccurs="1" maxOccurs="100"/>
+            <xsd:element ref="uc:precondition" minOccurs="1" maxOccurs="1"/>
+            <xsd:element ref="uc:guarantees" minOccurs="1" maxOccurs="1"/>
+            <xsd:element ref="uc:success" minOccurs="1" maxOccurs="1"/>
+            <xsd:element ref="uc:extension" minOccurs="0" maxOccurs="100"/>
+            <xsd:element ref="uc:open_issue" minOccurs="0" maxOccurs="100"/>
+            <xsd:element ref="uc:commitlog" minOccurs="1" maxOccurs="1"/>
+         </xsd:sequence>
+         <xsd:attribute name="id" type="uc:useCaseId" use="required"/>
+         <xsd:attribute name="level" type="uc:useCaseLevel" use="required"/>
+      </xsd:complexType>
+   </xsd:element>
+   
+   <xsd:element name="info">
+      <xsd:complexType>
+         <xsd:attribute name="project"     type="xsd:string" use="required"/>
+         <xsd:attribute name="version"     type="xsd:string" use="required"/>
+         <xsd:attribute name="useTemplate" type="xsd:boolean" default="false"/>
+      </xsd:complexType>
+   </xsd:element>
+
+   <xsd:element name="usecases">
+      <xsd:complexType>
+         <xsd:sequence>
+            <xsd:element ref="uc:info" />
+            <xsd:element ref="uc:usecase" />            
+            <xsd:element ref="bookinfo" />
+            <xsd:element ref="chapter" />
+            <xsd:any minOccurs="0" maxOccurs="100"/>
+         </xsd:sequence>
+      </xsd:complexType>
+   </xsd:element>
+</xsd:schema>

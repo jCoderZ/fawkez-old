@@ -1,0 +1,75 @@
+<appendix label='A'>
+   <title>References</title>
+   <bibliography>
+      <title>Books</title>
+      <biblioentry>
+         <abbrev>Ambler00</abbrev>
+         <title>Writing Robust Java Code</title>
+         <author>
+            <firstname>Scott W.</firstname>
+            <surname>Ambler</surname>
+         </author>
+         <copyright>
+            <year>1998</year>
+            <year>1999</year>
+            <holder>AmbySoft Inc.</holder>
+         </copyright>
+         <publisher>
+            <publishername>
+               <ulink url="http://www.ambysoft.com/javaCodingStandards.pdf"/>
+            </publishername>
+         </publisher>
+      </biblioentry>
+
+      <biblioentry id="bloch01">
+         <abbrev>Bloch01</abbrev>
+         <title>Effective Java Programming Language</title>
+         <author>
+            <firstname>Joshua</firstname>
+            <surname>Bloch</surname>
+         </author>
+         <copyright>
+            <year>2001</year>
+            <holder>Addison-Wesley Professional</holder>
+         </copyright>
+         <publisher>
+            <publishername>
+               Addison-Wesley Professional
+            </publishername>
+         </publisher>
+         <isbn>0201310058</isbn>
+      </biblioentry>
+
+   </bibliography>
+
+   <bibliography>
+      <title>Online Resources</title>
+      <biblioentry id='CoreJ2EEPatterns'>
+         <abbrev>Alur01</abbrev>
+         <title>Core J2EE Patterns</title>
+         <author>
+            <firstname>John</firstname>
+            <surname>Crupi</surname>
+         </author>
+         <author>
+            <firstname>Dan</firstname>
+            <surname>Malks</surname>
+         </author>
+         <author>
+            <firstname>Deepak</firstname>
+            <surname>Alur</surname>
+         </author>
+         <copyright>
+            <year>2001</year>
+            <holder>Sun Microsystems Press</holder>
+         </copyright>
+         <publisher>
+            <publishername>
+               <ulink url="http://java.sun.com/developer/technicalArticles/J2EE/patterns/"/>
+            </publishername>
+         </publisher>
+      </biblioentry>
+
+   </bibliography>
+
+</appendix>

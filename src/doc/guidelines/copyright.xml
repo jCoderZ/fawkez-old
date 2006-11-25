@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- This file contains entities for the copyright and the legal notice. -->
+
+<!-- CVS keywords
+$Source$
+$Author: amandel $
+$Date: 2006-07-12 16:38:21 +0200 (Wed, 12 Jul 2006) $
+$Revision: 255 $
+$Name$
+-->
+
+<!ENTITY copyright_holder "
+The jCoderZ.org Project. All rights reserved.">
+
+<!ENTITY legal_notice "
+<para>Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are
+met:</para>
+
+    <itemizedlist mark='opencircle'>
+        <listitem>
+           <para>Redistributions of source code must retain the above copyright
+      notice, this list of conditions and the following disclaimer.</para>
+         </listitem>
+
+         <listitem>
+           <para>Redistributions in binary form must reproduce the above
+      copyright notice, this list of conditions and the following
+      disclaimer in the documentation and/or other materials
+      provided with the distribution.</para>
+         </listitem>
+
+         <listitem>
+           <para>Neither the name of the jCoderZ.org Project nor the names of
+      its contributors may be used to endorse or promote products
+      derived from this software without specific prior written
+      permission.</para>
+         </listitem>
+      </itemizedlist>
+
+<para>THIS MATERIAL IS PROVIDED BY THE REGENTS AND CONTRIBUTORS <quote>AS IS</quote> AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE REGENTS AND CONTRIBUTORS
+BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
+BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</para>
+">

@@ -1,0 +1,211 @@
+<?xml encoding="UTF-8" ?>
+
+<!ELEMENT  Chart2D (LBChart2D | LLChart2D | PieChart2D)>
+<!ATTLIST Chart2D Width CDATA "1024">
+<!ATTLIST Chart2D Height CDATA "768">
+<!ATTLIST Chart2D Type CDATA "png">
+<!ATTLIST Chart2D Filename CDATA "test.png">
+
+
+<!ELEMENT LBChart2D  (Object2DProperties, Chart2DProperties, GraphChart2DProperties, LegendProperties, (Dataset, MultiColorsProperties, GraphProperties)+, WarningRegionProperties*)>
+<!ELEMENT LLChart2D  (Object2DProperties, Chart2DProperties, GraphChart2DProperties, LegendProperties, (Dataset, MultiColorsProperties, GraphProperties)+, WarningRegionProperties*)>
+<!ELEMENT PieChart2D (Object2DProperties, Chart2DProperties, PieChart2DProperties,   LegendProperties, Dataset,  MultiColorsProperties)>
+
+
+<!ELEMENT Dataset  (Set*)>
+<!ATTLIST Dataset  DoConvertToStacked CDATA #IMPLIED>
+<!ELEMENT Set      (Category*)>
+<!ELEMENT Category (Data*)>
+<!ELEMENT Data     (#PCDATA)>
+
+
+<!ELEMENT Object2DProperties EMPTY>
+<!ATTLIST Object2DProperties ObjectBackgroundColor CDATA "0xD7D7D7">
+<!ATTLIST Object2DProperties ObjectBackgroundExistence (true |false) "true">
+<!ATTLIST Object2DProperties ObjectBackgroundLightSource (TOP | BOTTOM | LEFT | RIGHT| NONE) "TOP">
+<!ATTLIST Object2DProperties ObjectTitleExistence (true |false) "true">
+<!ATTLIST Object2DProperties ObjectTitleText CDATA "">
+<!ATTLIST Object2DProperties ObjectTitleFontPointModel CDATA "12">
+<!ATTLIST Object2DProperties ObjectTitleFontName CDATA "SansSerif">
+<!ATTLIST Object2DProperties ObjectTitleFontColor CDATA "BLACK">
+<!ATTLIST Object2DProperties ObjectTitleFontStyle (PLAIN | BOLD | ITALIC | BOLDITALIC) "PLAIN">
+<!ATTLIST Object2DProperties ObjectTitleBetweenRestGapExistence (true |false) "true">
+<!ATTLIST Object2DProperties ObjectTitleBetweenRestGapThicknessModel CDATA "3">
+<!ATTLIST Object2DProperties ObjectMagnifyWhenResize (true |false) "true">
+<!ATTLIST Object2DProperties ObjectBorderExistence (true |false) "true">
+<!ATTLIST Object2DProperties ObjectBorderThicknessModel CDATA "2">
+<!ATTLIST Object2DProperties ObjectBorderColor CDATA "BLACK">
+<!ATTLIST Object2DProperties ObjectGapExistence (true |false) "true">
+<!ATTLIST Object2DProperties ObjectGapThicknessModel CDATA "5">
+
+<!ELEMENT Chart2DProperties EMPTY>
+<!ATTLIST Chart2DProperties ChartBetweenChartAndLegendGapExistence (true |false) "true">
+<!ATTLIST Chart2DProperties ChartBetweenChartAndLegendGapThicknessModel CDATA "5">
+<!ATTLIST Chart2DProperties ChartDataLabelsPrecision CDATA "38">
+
+<!ELEMENT GraphChart2DProperties (AxisLabelText*,MultiColorsProperties?)>
+<!ATTLIST GraphChart2DProperties NumbersAxisTitleText CDATA "">
+<!ATTLIST GraphChart2DProperties NumbersAxisTitleFontStyle (PLAIN | BOLD | ITALIC | BOLDITALIC) "PLAIN">
+<!ATTLIST GraphChart2DProperties NumbersAxisTitleFontPointModel CDATA "11">
+<!ATTLIST GraphChart2DProperties NumbersAxisTitleFontName CDATA "SansSerif">
+<!ATTLIST GraphChart2DProperties NumbersAxisTitleFontColor CDATA "BLACK">
+<!ATTLIST GraphChart2DProperties NumbersAxisTitleExistence (true |false) "true">
+<!ATTLIST GraphChart2DProperties NumbersAxisTitleBetweenRestGapThicknessModel CDATA "3">
+<!ATTLIST GraphChart2DProperties NumbersAxisTitleBetweenRestGapExistence (true |false) "true">
+<!ATTLIST GraphChart2DProperties NumbersAxisTicksSizeModel CDATA "3x3">
+<!ATTLIST GraphChart2DProperties NumbersAxisTicksOutlineExistence (true |false) "false">
+<!ATTLIST GraphChart2DProperties NumbersAxisTicksOutlineColor CDATA "BLACK">
+<!ATTLIST GraphChart2DProperties NumbersAxisTicksExistence (true |false) "true">
+<!ATTLIST GraphChart2DProperties NumbersAxisTicksColor CDATA "BLACK">
+<!ATTLIST GraphChart2DProperties NumbersAxisNumLabels CDATA "7">
+<!ATTLIST GraphChart2DProperties NumbersAxisLabelsFontStyle (PLAIN | BOLD | ITALIC | BOLDITALIC) "PLAIN">
+<!ATTLIST GraphChart2DProperties NumbersAxisLabelsFontPointModel CDATA "10">
+<!ATTLIST GraphChart2DProperties NumbersAxisLabelsFontName CDATA "SansSerif">
+<!ATTLIST GraphChart2DProperties NumbersAxisLabelsFontColor CDATA "BLACK">
+<!ATTLIST GraphChart2DProperties NumbersAxisBetweenLabelsOrTicksGapThicknessModel CDATA "3">
+<!ATTLIST GraphChart2DProperties NumbersAxisBetweenLabelsOrTicksGapExistence (true |false) "true"> 
+<!ATTLIST GraphChart2DProperties NumbersAxisBetweenLabelsAndTicksGapThicknessModel CDATA "3">
+<!ATTLIST GraphChart2DProperties NumbersAxisBetweenLabelsAndTicksGapExistence (true |false) "true">
+<!ATTLIST GraphChart2DProperties LabelsAxisTitleText CDATA "">
+<!ATTLIST GraphChart2DProperties LabelsAxisTitleFontStyle (PLAIN | BOLD | ITALIC | BOLDITALIC) "PLAIN">
+<!ATTLIST GraphChart2DProperties LabelsAxisTitleFontPointModel CDATA "11">
+<!ATTLIST GraphChart2DProperties LabelsAxisTitleFontName CDATA "SansSerif">
+<!ATTLIST GraphChart2DProperties LabelsAxisTitleFontColor CDATA "BLACK">
+<!ATTLIST GraphChart2DProperties LabelsAxisTitleExistence (true |false) "true">
+<!ATTLIST GraphChart2DProperties LabelsAxisTitleBetweenRestGapThicknessModel CDATA "3">
+<!ATTLIST GraphChart2DProperties LabelsAxisTitleBetweenRestGapExistence (true |false) "true">
+<!ATTLIST GraphChart2DProperties LabelsAxisTicksSizeModel CDATA "3x3">
+<!ATTLIST GraphChart2DProperties LabelsAxisTicksOutlineExistence (true |false) "false">
+<!ATTLIST GraphChart2DProperties LabelsAxisTicksOutlineColor CDATA "BLACK">
+<!ATTLIST GraphChart2DProperties LabelsAxisTicksExistence (true |false) "true">
+<!ATTLIST GraphChart2DProperties LabelsAxisTicksColor CDATA "BLACK">
+<!ATTLIST GraphChart2DProperties LabelsAxisTicksAlignment (BETWEEN | CENTERED) "BETWEEN">
+<!ATTLIST GraphChart2DProperties LabelsAxisLabelsFontStyle (PLAIN | BOLD | ITALIC | BOLDITALIC) "PLAIN">
+<!ATTLIST GraphChart2DProperties LabelsAxisLabelsFontPointModel CDATA "10">
+<!ATTLIST GraphChart2DProperties LabelsAxisLabelsFontName CDATA "SansSerif">
+<!ATTLIST GraphChart2DProperties LabelsAxisLabelsFontColor CDATA "BLACK">
+<!ATTLIST GraphChart2DProperties LabelsAxisExistence (true |false) "true">
+<!ATTLIST GraphChart2DProperties LabelsAxisBetweenLabelsOrTicksGapThicknessModel CDATA "3"> 
+<!ATTLIST GraphChart2DProperties LabelsAxisBetweenLabelsOrTicksGapExistence (true |false) "true">
+<!ATTLIST GraphChart2DProperties LabelsAxisBetweenLabelsAndTicksGapThicknessModel CDATA "3">
+<!ATTLIST GraphChart2DProperties LabelsAxisBetweenLabelsAndTicksGapExistence (true |false) "true">
+<!ATTLIST GraphChart2DProperties GraphComponentsColoringByCat (true |false) "false">
+<!ATTLIST GraphChart2DProperties ChartGraphableToAvailableRatio CDATA ".95f"> 
+<!ATTLIST GraphChart2DProperties ChartDatasetCustomLeastValue CDATA "0">
+<!ATTLIST GraphChart2DProperties ChartDatasetCustomizeLeastValue (true |false) "false">
+<!ATTLIST GraphChart2DProperties ChartDatasetCustomizeGreatestValue (true |false) "false">
+<!ATTLIST GraphChart2DProperties ChartDatasetCustomGreatestValue CDATA "0">
+
+<!ELEMENT AxisLabelText (#PCDATA)>
+<!ATTLIST AxisLabelText count CDATA "30">
+<!ATTLIST AxisLabelText max CDATA "100">
+
+<!ELEMENT PieChart2DProperties EMPTY>
+<!ATTLIST PieChart2DProperties PieSectorLightSource (TOP | BOTTOM | LEFT | RIGHT| NONE) "TOP">
+<!ATTLIST PieChart2DProperties PieSectorsOutlineExistence (true |false) "false">
+<!ATTLIST PieChart2DProperties PieSectorsOutlineColor CDATA "BLACK">
+<!ATTLIST PieChart2DProperties PiePreferredSize CDATA "30">
+<!ATTLIST PieChart2DProperties PieLabelsType (RAW | PERCENT | RAWPERCENT) "RAWPERCENT">
+<!ATTLIST PieChart2DProperties PieLabelsPointsPieSectorsDepthRatio CDATA ".125f">
+<!ATTLIST PieChart2DProperties PieLabelsPointsGapOffsetModelRatio CDATA ".50f">
+<!ATTLIST PieChart2DProperties PieLabelsPointsGapOffsetExistence (true |false) "true">
+<!ATTLIST PieChart2DProperties PieLabelsPointsBetweenPieAndLabelGapsDepthRatio CDATA ".25f">
+<!ATTLIST PieChart2DProperties PieLabelsLinesThicknessModel CDATA "1">
+<!ATTLIST PieChart2DProperties PieLabelsLinesExistence (true |false) "true">
+<!ATTLIST PieChart2DProperties PieLabelsLinesDotsThicknessModel CDATA "2">
+<!ATTLIST PieChart2DProperties PieLabelsLinesDotsExistence (true |false) "false">
+<!ATTLIST PieChart2DProperties PieLabelsLinesDotsColor CDATA "BLACK">
+<!ATTLIST PieChart2DProperties PieLabelsLinesColor CDATA "BLACK">
+<!ATTLIST PieChart2DProperties PieLabelsFontStyle (PLAIN | BOLD | ITALIC | BOLDITALIC) "PLAIN">
+<!ATTLIST PieChart2DProperties PieLabelsFontPointModel CDATA "10">
+<!ATTLIST PieChart2DProperties PieLabelsFontName CDATA "SansSerif">
+<!ATTLIST PieChart2DProperties PieLabelsFontColor CDATA "BLACK">
+<!ATTLIST PieChart2DProperties PieLabelsExistence (true |false) "true">
+<!ATTLIST PieChart2DProperties PieLabelsBetweenLabelsGapThicknessModel CDATA "3">
+<!ATTLIST PieChart2DProperties PieLabelsBetweenLabelsGapExistence (true |false) "true">
+<!ATTLIST PieChart2DProperties ChartBetweenPieLabelsAndPieGapThicknessModel CDATA "6">
+<!ATTLIST PieChart2DProperties ChartBetweenPieLabelsAndPieGapExistence (true |false) "true">
+
+
+<!ELEMENT LegendProperties (LegendLabelsTexts*)>
+<!ATTLIST LegendProperties LegendLabelsFontStyle (PLAIN | BOLD | ITALIC | BOLDITALIC) "PLAIN">
+<!ATTLIST LegendProperties LegendLabelsFontPointModel CDATA "11">
+<!ATTLIST LegendProperties LegendLabelsFontName CDATA "SansSerif">
+<!ATTLIST LegendProperties LegendLabelsFontColor CDATA "BLACK">
+<!ATTLIST LegendProperties LegendGapThicknessModel CDATA "3">
+<!ATTLIST LegendProperties LegendGapExistence (true |false) "true">
+<!ATTLIST LegendProperties LegendExistence (true |false) "true">
+<!ATTLIST LegendProperties LegendBulletsSizeModel CDATA "9x9">
+<!ATTLIST LegendProperties LegendBulletsOutlineExistence (true |false) "true">
+<!ATTLIST LegendProperties LegendBulletsOutlineColor CDATA "BLACK">
+<!ATTLIST LegendProperties LegendBorderThicknessModel CDATA "2">
+<!ATTLIST LegendProperties LegendBorderExistence (true |false) "true">
+<!ATTLIST LegendProperties LegendBorderColor CDATA "GRAY">
+<!ATTLIST LegendProperties LegendBetweenLabelsOrBulletsGapThicknessModel CDATA "5">
+<!ATTLIST LegendProperties LegendBetweenLabelsOrBulletsGapExistence (true |false) "true">
+<!ATTLIST LegendProperties LegendBetweenLabelsAndBulletsGapThicknessModel CDATA "3">
+<!ATTLIST LegendProperties LegendBetweenLabelsAndBulletsGapExistence (true |false) "true">
+<!ATTLIST LegendProperties LegendBackgroundExistence (true |false) "false">
+<!ATTLIST LegendProperties LegendBackgroundColor CDATA "WHITE">
+
+<!ELEMENT LegendLabelsTexts (#PCDATA)>
+
+
+<!ELEMENT MultiColorsProperties (ColorsCustom*)>
+<!ATTLIST MultiColorsProperties ColorsType (NATURAL | PASTEL | CHART2D) "CHART2D">
+<!ATTLIST MultiColorsProperties ColorsCustomize (true |false) "false">
+
+<!ELEMENT ColorsCustom (#PCDATA)>
+
+
+<!ELEMENT GraphProperties (GraphNumbersLinesStyle*, GraphLabelsLinesStyle*)>
+<!ATTLIST GraphProperties GraphOutlineComponentsExistence (true |false) "false">
+<!ATTLIST GraphProperties GraphOutlineComponentsColor CDATA "BLACK">
+<!ATTLIST GraphProperties GraphNumbersLinesThicknessModel CDATA "2">
+<!ATTLIST GraphProperties GraphNumbersLinesExistence (true |false) "true">
+<!ATTLIST GraphProperties GraphNumbersLinesColor CDATA "GRAY">
+<!ATTLIST GraphProperties GraphLinesWithinCategoryOverlapRatio CDATA "0f">
+<!ATTLIST GraphProperties GraphLinesThicknessModel CDATA "5">
+<!ATTLIST GraphProperties GraphLinesThicknessAssociation (true |false) "true">
+<!ATTLIST GraphProperties GraphLinesFillInterior (true |false) "false">
+<!ATTLIST GraphProperties GraphLinesExistence (true |false) "false">
+<!ATTLIST GraphProperties GraphLinesExcessSpaceFeedbackRatio CDATA "0f">
+<!ATTLIST GraphProperties GraphLabelsLinesThicknessModel CDATA "2">
+<!ATTLIST GraphProperties GraphLabelsLinesExistence (true |false) "false">
+<!ATTLIST GraphProperties GraphLabelsLinesColor CDATA "GRAY">
+<!ATTLIST GraphProperties GraphDotsWithinCategoryOverlapRatio CDATA ".40f">
+<!ATTLIST GraphProperties GraphDotsThicknessModel CDATA "8">
+<!ATTLIST GraphProperties GraphDotsExistence (true |false) "false">
+<!ATTLIST GraphProperties GraphDotsExcessSpaceFeedbackRatio CDATA "0f">
+<!ATTLIST GraphProperties GraphComponentsOverflowClip CDATA "true">
+<!ATTLIST GraphProperties GraphComponentsLightType (COMPONENT | GRAPH) "COMPONENT">
+<!ATTLIST GraphProperties GraphComponentsLightSource (TOP | BOTTOM | LEFT | RIGHT | TOPLEFT | BOTTOMRIGHT | NONE) "TOP">
+<!ATTLIST GraphProperties GraphComponentsAlphaComposite (ALPHA_COMPOSITE_NONE | ALPHA_COMPOSITE_MILD | ALPHA_COMPOSITE_MEDIUM) "ALPHA_COMPOSITE_NONE"> 
+<!-- ex.: (ALPHA_COMPOSITE_NONE | ALPHA_COMPOSITE_MILD | ALPHA_COMPOSITE_MEDIUM  | CLEAR |  ) -->
+<!ATTLIST GraphProperties GraphBorderThicknessModel CDATA "2">
+<!ATTLIST GraphProperties GraphBorderRightTopColor CDATA "GRAY">
+<!ATTLIST GraphProperties GraphBorderLeftBottomColor CDATA "BLACK">
+<!ATTLIST GraphProperties GraphBorderExistence (true |false) "true">
+<!ATTLIST GraphProperties GraphBetweenComponentsGapThicknessModel CDATA "2">
+<!ATTLIST GraphProperties GraphBetweenComponentsGapExistence (true |false) "true">
+<!ATTLIST GraphProperties GraphBarsWithinCategoryOverlapRatio CDATA ".535f">
+<!ATTLIST GraphProperties GraphBarsThicknessModel CDATA "10">
+<!ATTLIST GraphProperties GraphBarsRoundingRatio CDATA ".75f">
+<!ATTLIST GraphProperties GraphBarsExistence (true |false) "true">
+<!ATTLIST GraphProperties GraphBarsExcessSpaceFeedbackRatio CDATA "1f"> 
+<!ATTLIST GraphProperties GraphBackgroundExistence (true |false) "false">
+<!ATTLIST GraphProperties GraphBackgroundColor CDATA "WHITE">
+<!ATTLIST GraphProperties GraphAllowComponentAlignment (true |false) "false">
+
+<!ELEMENT GraphLabelsLinesStyle EMPTY>
+<!ATTLIST GraphLabelsLinesStyle Style (CONTINUOUS | DASHED | DOTTED) "CONTINUOUS">
+<!ELEMENT GraphNumbersLinesStyle EMPTY>
+<!ATTLIST GraphNumbersLinesStyle Style (CONTINUOUS | DASHED | DOTTED) "CONTINUOUS">
+
+
+<!ELEMENT WarningRegionProperties EMPTY>
+<!ATTLIST WarningRegionProperties Low CDATA "0">
+<!ATTLIST WarningRegionProperties High CDATA "9999">
+<!ATTLIST WarningRegionProperties ComponentColor CDATA "RED">
+<!ATTLIST WarningRegionProperties BackgroundExistence (true |false) "true">
+<!ATTLIST WarningRegionProperties BackgroundColor CDATA "PINK">

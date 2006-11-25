@@ -1,0 +1,73 @@
+          _                      ___  __
+    _ __ | |__   ___   ___ _ __ (_) \/ /
+   | '_ \| '_ \ / _ \ / _ \ '_ \| |\  /
+   | |_) | | | | (_) |  __/ | | | |/  \
+   | .__/|_| |_|\___/ \___|_| |_|_/_/\_\
+   |_|
+
+   _____________________________________________________________________
+
+                             ``If debugging is the art of removing bugs,
+                               then programming must be the art of
+                               inserting them.''     -- Unknown
+
+   T O D O - G L O B A L
+
+   This document collects any *global* TODOs and open questions
+   regarding this project.
+
+   o Remove the project name wherever possible and use a common name
+     instead. For example, the cc/build.xml's Ant targets:
+       - build-css-dev -> build-dev
+       - css-build -> dev-build
+       - ...
+
+
+   C R U I S E   C O N T R O L
+   _____________________________________________________________________
+
+   o Move the logs/cruisecontrolwrapper into the common part.
+     This file does not have any project specific settings.
+   o X11 DISPLAY bug (chart2d) use of PJA:
+      -Xbootclasspath/a:/usr/local/pja/lib/pja.jar
+      -Dawt.toolkit=com.eteks.awt.PJAToolkit
+      -Djava.awt.toolkit=com.eteks.awt.PJAToolkit -Duser.home=/usr/local/pja
+      -Djava2d.font.usePlatformFont=false
+      -Djava.awt.fonts=/usr/local/jdk1.3/jre/lib/fonts
+      -Djava.awt.graphicsenv=com.eteks.java2d.PJAGraphicsEnvironment
+
+   o nightly run w/ system charts (DIMSTAT)
+   o help.jsp (smart icons ...)
+   o integrate numega true coverage?
+   o add link to webalizer
+   o FAQ page
+   o document architecture and sequence flow
+   o pmd.sf.net/cruisecontrol 3.0 update
+   o delgate javadoc (-> static) in nightly run
+   o refactor scripts/JSP/XSLT
+   o backup support
+
+
+   C H E C K S T Y L E   3.0
+   _____________________________________________________________________
+
+   o port jCoderZ coding guides the XML-based configuration
+   o write more Checkers
+      - MagicString
+
+   P R O J E C T   T E M P L A T E
+   _____________________________________________________________________
+
+   o Integrate QA stuff
+      - Makefile [w/ default target],
+      - cleanenv_ix/cleanenv_nt
+      - config/put2prod.conf [NT only]
+   o Integrate top-level folders:
+        dev/ (the files from the current template)
+        cc/ (should contain a template of the CC adapter files)
+          All the files should be created by the build-cc.xml script.
+        qa/ (will just be empty)
+
+   o Add a cc/README file and explain the purpose of the folders
+     and files from the CC adapter.
+

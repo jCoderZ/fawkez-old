@@ -1,0 +1,48 @@
+#copyrightHeader()
+
+package ${package};
+
+#set($imports = $cmpgen.buildHelperImportList($stmt))
+#foreach($import in $imports)
+import ${import};
+#end
+
+/**
+ * Read only view to a typed $baseName.
+ * @author fawkeZ (jCoderZ.org) $cmpgen.getVersion()
+ */
+public interface ${baseName}Value
+      extends java.io.Serializable
+{
+#foreach($column in $stmt.getColumns())
+#if(!$column.isSkipInInterface())
+#computeFields()
+#if(!$column.isPeriodDefined())
+#if($column.getLoadMethod())
+   /**
+    * Returns the ${javaFieldName}.
+    * @return the ${javaFieldName}.
+    */
+   $complexType get$javaFieldName ();
+
+#else
+   /**
+    * Returns the ${javaFieldName}.
+    * @return the ${javaFieldName}.
+    */
+   $javaType $simpleGetterName ();
+
+#end
+#else
+   /**
+    * Returns the $column.getPeriodFieldName().
+    * @return the $column.getPeriodFieldName().
+    */
+   Period get$column.getPeriodFieldName() ();
+
+#end
+#end
+#end
+
+   ${baseName}Data toData ();
+}

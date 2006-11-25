@@ -1,0 +1,114 @@
+<!-- =============================================
+     Runtime Errors
+     ============================================= -->
+<group
+   id="1"
+   name="Runtime Error"
+   short-name="RTE"
+   package="org.jcoderz.commons"
+   base-exception="org.jcoderz.commons.BaseRuntimeException">
+   <message
+      id="1"
+      name="INTERNAL_ERROR"
+      level="SEVERE"
+      base-exception="org.jcoderz.commons.RuntimeErrorException">
+      <text>
+         The system encountered an unexpected condition, or contains
+         a software bug. Details: {TECHNICAL_DESCRIPTION}.
+      </text>
+      <solution>
+         Review the log file to determine the problem that led
+         to the error condition.
+      </solution>
+   </message>
+
+   <message
+      id="2"
+      name="ARGUMENT_MALFORMED"
+      level="WARNING"
+      base-exception="org.jcoderz.commons.BaseRuntimeException">
+      <text>
+         The given argument is at least partly malformed.
+         Argument ''{ARGUMENT_NAME}'' cannot be set to
+         value ''{Serializable:ARGUMENT_VALUE}''. Detailed description: {HINT}.
+      </text>
+      <solution>
+         Supply a correct value for the argument.
+      </solution>
+   </message>
+
+   <message
+      id="3"
+      name="ASSERTION_FAILED"
+      level="SEVERE"
+      base-exception="org.jcoderz.commons.BaseRuntimeException">
+      <text>
+         Assertion failed. A condition in the programme is tested
+         and found to be false. Message: {MESSAGE}.
+      </text>
+      <solution>
+         .
+      </solution>
+   </message>
+
+   <message
+      id="4"
+      name="INCONSISTENT_DATABASE"
+      level="SEVERE"
+      base-exception="org.jcoderz.commons.BaseRuntimeException">
+      <text>
+         A value read from the database was invalid.
+         The database value {Serializable:ARGUMENT_VALUE} of column
+         {COLUMN} in table {TABLE} could not be converted into
+         the java type {TYPE}. Possibly the database has been
+         modified manually, or the software that wrote the database
+         contains a bug.
+      </text>
+      <solution>
+         Correct the value in the database if modified manually.
+      </solution>
+   </message>
+
+   <message
+      id="5"
+      name="REMOTE_CALL_FAILURE"
+      level="SEVERE"
+      base-exception="org.jcoderz.commons.RuntimeErrorException">
+      <text>
+         The call to a internal remote object failed.
+      </text>
+      <solution>
+         Review the log file to determine the problem that led
+         to the error condition.
+      </solution>
+   </message>
+
+   <message
+      id="6"
+      name="DATABASE_INTEGRITY_ERROR"
+      level="SEVERE"
+      base-exception="org.jcoderz.commons.InconsistentDatabaseException">
+      <text>
+         While accessing table {TABLE}, the following problem was
+         encountered: {PROBLEM}.
+      </text>
+      <solution>
+         Review the log file to determine the problem that led
+         to the error condition.
+      </solution>
+   </message>
+
+   <message
+      id="7"
+      name="DATABASE_ACCESS_FAILED"
+      level="SEVERE"
+      base-exception="org.jcoderz.commons.RuntimeErrorException">
+      <text>
+         The system encountered an exception while accessing a database.
+      </text>
+      <solution>
+         Review the log file to determine the problem that led
+         to the error condition.
+      </solution>
+   </message>
+</group>

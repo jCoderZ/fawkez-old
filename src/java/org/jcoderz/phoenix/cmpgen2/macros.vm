@@ -1,0 +1,73 @@
+#macro(computeFields)
+#set($javaType = $cmpgen.getUnqualifiedJavaType($column))
+#set($fqJavaType = $cmpgen.getQualifiedJavaType($column))
+#set($javaFieldName = $cmpgen.sqlNameToJavaName($column.getColumnName()))
+#set($t1 = $javaFieldName.substring(0,1).toLowerCase())
+#set($t2 = $javaFieldName.substring(1))
+#set($lcJavaFieldName = "$t1$t2")
+#if($column.getLoadMethod())
+#set($fqComplexType = $column.getJavaType())
+#set($complexType = $cmpgen.unqualifyType($fqComplexType))
+#set($storeMethodSig = $column.getStoreMethod())
+#set($loadMethodSig = $column.getLoadMethod())
+#set($loadMethod = $loadMethodSig.substring(0, $loadMethodSig.indexOf("(")).trim())
+#set($storeMethod = $storeMethodSig.substring(0, $storeMethodSig.indexOf("(")).trim())
+#set($simpleGetterName = "get${javaFieldName}As$cmpgen.capitalize($javaType)")
+#set($simpleSetterName = "set${javaFieldName}As$cmpgen.capitalize($javaType)")
+#else
+#set($simpleGetterName = "get${javaFieldName}")
+#set($simpleSetterName = "set${javaFieldName}")
+#end
+#end
+
+#macro(copyrightHeader)
+/*
+ * This is a generated class. It should not be committed to the CVS
+ * repository.
+ * Copyright (C) 2006, The jCoderZ Project. All rights reserved.
+ */
+#end
+
+#macro(simpleGetter $beanMethod $interfaceMethod)
+   /**
+    * Returns the value of the $javaFieldName field as ${javaType}.
+#if($column.getAnnotation())
+    * $column.getAnnotation()
+#end
+    * @return the value of the $javaFieldName field as ${javaType}.
+#if($interfaceMethod)
+    * @ejb.interface-method
+#end
+#if($beanMethod)
+#if($column.isPrimaryKey())
+    * @ejb.pk-field
+#end
+    * @ejb.persistent-field
+    * @ejb.persistence column-name="$column.getColumnName()"
+##    * @jcoderz.dbms-column name="$column.getColumnName()"
+#if($column.isWeblogicColumnTypeDefined())
+    * @weblogic.dbms-column-type $column.getWeblogicColumnType()
+#end
+#end
+    */
+   public abstract $javaType $simpleGetterName ();
+#end
+
+#macro(simpleBeanGetter $interfaceMethod)
+#simpleGetter(true $interfaceMethod)
+#end
+
+#macro(simpleHelperGetter)
+#simpleGetter(false false)
+#end
+
+#macro(simpleSetter $interfaceMethod)
+   /**
+    * Sets the value of the $javaFieldName field.
+    * @param value the value of the $javaFieldName field
+#if($interfaceMethod)
+    * @ejb.interface-method
+#end
+    */
+   public abstract void $simpleSetterName ($javaType value);
+#end

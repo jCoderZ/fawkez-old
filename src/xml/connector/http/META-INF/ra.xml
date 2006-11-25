@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE connector PUBLIC '-//Sun Microsystems, Inc.//DTD Connector 1.0//EN' 'http://java.sun.com/dtd/connector_1_0.dtd'>
+
+<connector>
+    <display-name>HttpConnector</display-name>
+    <vendor-name>The jCoderZ Project</vendor-name>
+    <spec-version>1.0</spec-version>
+    <eis-type>Http</eis-type>
+    <version>1.0</version>
+    <resourceadapter>
+        <managedconnectionfactory-class>org.jcoderz.commons.connector.http.HttpManagedConnectionFactoryImpl</managedconnectionfactory-class>
+        <connectionfactory-interface>org.jcoderz.commons.connector.http.HttpConnectionFactory</connectionfactory-interface>
+        <connectionfactory-impl-class>org.jcoderz.commons.connector.http.HttpConnectionFactoryImpl</connectionfactory-impl-class>
+        <connection-interface>org.jcoderz.commons.connector.http.HttpConnectionExtended</connection-interface>
+        <connection-impl-class>org.jcoderz.commons.connector.http.HttpConnectionImpl</connection-impl-class>
+        <transaction-support>NoTransaction</transaction-support>
+        <reauthentication-support>false</reauthentication-support>
+    </resourceadapter>
+</connector>

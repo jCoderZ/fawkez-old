@@ -40,7 +40,7 @@ import org.jcoderz.commons.taskdefs.XtremeDocs.FormatterInfoData;
 
 
 /**
- * Abstract class that defines the interface a DocBook renderer.
+ * Abstract class that defines the interface of a DocBook renderer.
  *
  * @author Michael Griffel
  */

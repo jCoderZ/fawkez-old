@@ -49,7 +49,7 @@ import org.xml.sax.SAXException;
 
 /**
  * Ant task that reads the master app-info.xml file, expands the XInclude
- * elements and writes the hole XML document to a file.
+ * elements and writes the whole XML document to a file.
  * <p>
  * This task can also perform a XML schema validation and perform
  * some checks that cannot be done via the XML schema.

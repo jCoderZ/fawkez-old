@@ -155,7 +155,7 @@ public class XtremeDocs
     * Set the name of the company or organisation.
     * @param companyName The mCompanyName to set.
     */
-   public void setCompanyName(String companyName)
+   public void setCompanyName (String companyName)
    {
       mCompanyName = companyName;
    }
@@ -164,7 +164,7 @@ public class XtremeDocs
     * Set the name of the company logo without suffix.
     * @param companyLogo The mCompanyLogo to set.
     */
-   public void setCompanyLogo(String companyLogo)
+   public void setCompanyLogo (String companyLogo)
    {
       mCompanyLogo = companyLogo;
    }
@@ -531,12 +531,12 @@ public class XtremeDocs
 
    private static final class Rasterizer
    {
-      private Rasterizer()
+      private Rasterizer ()
       {
          // utility class -- provides only static methods
       }
 
-      public static void rasterize(File in, File out)
+      public static void rasterize (File in, File out)
             throws TranscoderException, IOException
       {
          final OutputStream ostream = new FileOutputStream(out);

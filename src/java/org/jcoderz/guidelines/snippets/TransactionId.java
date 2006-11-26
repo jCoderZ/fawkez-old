@@ -53,10 +53,6 @@ public final class TransactionId
     /** Name of this type */
     public static final String TYPE_NAME = "TX_ID";
 
-    /** IMPP/IPAP minimum value of the OpCo generated TxId */
-    public static final long MINIMUM_OP_CO_GENERATED_TX_ID 
-            = 100000000000000L;
-
     /** Bit mask used for hashcode generation */
     private static final int NUMBER_OF_BITS_PER_INT = 32;
 
@@ -68,6 +64,7 @@ public final class TransactionId
 
     /** Holds the transaction id */
     private final long mTransactionId;
+
 
     /**
      * Creates a new instance of TransactionId.
@@ -89,9 +86,9 @@ public final class TransactionId
         mTransactionId = transactionId;
     }
 
+
     /**
-     * Parses the string argument as a transaction id as specified by
-     * IMPP/IPAP.
+     * Parses the string argument as a transaction id.
      *
      * @param s the <code>String</code> containing the transaction id.
      * @return the transaction id represented by the string argument.
@@ -126,8 +123,7 @@ public final class TransactionId
     }
 
     /**
-     * Returns a transaction id as specified by IMPP/IPAP with the given
-     * long <code>l</code>.
+     * Returns a transaction id from the given long <code>l</code>.
      *
      * @param l the <code>long</code> containing the transaction id.
      * @return the transaction id represented by the argument.
@@ -141,7 +137,7 @@ public final class TransactionId
     }
 
     /**
-     * Returns the transaction id as String as defined by IMPP/IPAP.
+     * Returns the transaction id as String.
      *
      * @return the transaction id as String.
      */
@@ -219,16 +215,6 @@ public final class TransactionId
     {
         return (int) (mTransactionId
                 ^ (mTransactionId >>> NUMBER_OF_BITS_PER_INT));
-    }
-
-    /**
-     * Returns true if this transaction id is in the opco generated range.
-     *
-     * @return true if this transaction id is in the opco generated range.
-     */
-    public boolean isInOpCoRange ()
-    {
-        return (mTransactionId >= MINIMUM_OP_CO_GENERATED_TX_ID);
     }
 
     /**

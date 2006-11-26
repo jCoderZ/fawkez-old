@@ -102,8 +102,8 @@
       <delete dir="${base.dir}/build/jcreport"/>
       <jcreport name="fawkez"
                 dest="${base.dir}/build/doc/findings-report"
-                wikibase="https://www.jcoderz.org/wiki/"
-                webrcsbase="https://www.jcoderz.org/websvn/phoeniX/trunk/"
+                wikibase="http://www.jcoderz.org/fawkez/wiki/jcreport:"
+                webrcsbase="http://www.jcoderz.org/fawkez/browser/trunk"
                 webrcssuffix=""
                 packagebase="org.jcoderz"
                 projectbase="${base.dir}"

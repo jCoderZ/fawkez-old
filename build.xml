@@ -863,6 +863,9 @@
             <exclude name="bin/*.sh" />
          </tarfileset>
       </tar>
+   	<mkdir dir="${build.dir}/doc"/>
+	   <copy file="${build.dir}/fawkez-${DSTAMP}${TSTAMP}.tar.gz"
+	        todir="${build.dir}/doc"/>
    </target>
 
 	<target name="doc" depends="javadoc, guideline-java, sad" 

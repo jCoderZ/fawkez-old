@@ -47,6 +47,8 @@ import java.util.TreeMap;
  */
 public final class Version
 {
+    /** Release version number from VERSION file. */
+    public static final String RELEASE_VERSION = "version";
     /** Name of the property holding the project name. */
     public static final String PROJECT_NAME = "project.Name";
     /** Name of the property holding the project name (lowercase). */
@@ -66,6 +68,7 @@ public final class Version
     {
         final Map m = new TreeMap();
         // Project specific
+        m.put(RELEASE_VERSION, "${version}");
         m.put(PROJECT_NAME, "${Name}");
         m.put(PROJECT_NAME_LOWERCASE, "${name}");
         m.put(PROJECT_PACKAGE, "${project.package}");
@@ -75,7 +78,6 @@ public final class Version
         m.put(COMPILE_DATE, "${DSTAMP}");
         m.put(COMPILE_TIME, "${TSTAMP}");
         m.put("compile.user.name", "${user.name}");
-        m.put("compile.build.mode", "${build.mode}");
         
         m.put("cclabel", "${label}");
         // Compile environment
@@ -101,6 +103,15 @@ public final class Version
     public static Map getProperties ()
     {
         return PROPERTIES;
+    }
+
+    /**
+     * Returns the release version number as {@link String}.
+     * @return the release version number as {@link String}.
+     */
+    public static String getReleaseVersion ()
+    {
+        return getProperty(RELEASE_VERSION);
     }
 
     /**
@@ -164,9 +175,10 @@ public final class Version
         final StringBuffer sb = new StringBuffer();
         sb.append("Project ");
         sb.append(getProjectName());
-        sb.append(" bla bla ");
+        sb.append("/");
+        sb.append(getReleaseVersion());
+        sb.append(" ");
         sb.append(Version.class.getPackage().getName());
-        sb.append("TODO");
         return sb.toString();
     }
 

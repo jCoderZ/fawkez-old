@@ -149,6 +149,7 @@
             tofile="${build.dir}/gen-java/${project.package.path}/Version.java">
             <filterset begintoken="$${" endtoken="}">
                 <filtersfile file="${build.dir}/compile.properties"/>
+                <filtersfile file="${base.dir}/VERSION"/>
             </filterset>
         </copy>
     </target>
@@ -301,7 +302,7 @@
                 targetfile="${build.dir}/generate-log-message-info.out" >
          <srcfiles dir= "${base.dir}">
             <include name="src/xml/app-info.xml"/>
-            <include name="src/xml/csp-*-info.xml"/>
+            <include name="src/xml/fwk-*-info.xml"/>
             <include name="src/xml/xsl/libcommon.xsl"/>
             <include name="src/xml/xsl/generate-log-message-info.xsl"/>
          </srcfiles>
@@ -412,7 +413,7 @@
                  targetfile="${build.dir}/gen-sql/cfg_initialize.sql" >
           <srcfiles dir="${base.dir}/src/xml">
              <include name="app-info.xml" />
-             <include name="csp-*-info.xml" />
+             <include name="fwk-*-info.xml" />
           </srcfiles>
        </uptodate>
     </target>
@@ -799,7 +800,7 @@
       <copy todir="${dist.dir}/etc">
          <fileset dir="${base.dir}/src/xml">
             <include name="app-info.xml"/>
-            <include name="csp-*-info.xml"/>
+            <include name="fwk-*-info.xml"/>
          </fileset>
       </copy>
 

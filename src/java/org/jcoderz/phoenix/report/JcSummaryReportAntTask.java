@@ -76,6 +76,8 @@ import org.xml.sax.SAXException;
  * This task uses a summary database file to create progress diagrams
  * showing the historical changes of the number of findings.
  *
+ * TODO: Separate into Command Line tool and Ant Task so that the
+ *       java.awt.headless property can be set by the Ant Task.
  * <ol>
  *   <li>Read the summary db file or create a new one if none exists.</li>
  *   <li>Check whether new folders have been created in the basedir.</li>
@@ -232,9 +234,9 @@ public class JcSummaryReportAntTask
          // on one day.
          final Map ymd2SummaryMap = createSummaryDbMap(summaryMap);
 
-         createFindingsChart(ymd2SummaryMap, summaryMap);
-         createQualityChart(ymd2SummaryMap, summaryMap);
-         createLocChart(ymd2SummaryMap, summaryMap);
+         createFindingsChart(ymd2SummaryMap, summaryMap,"Findings");
+         createQualityChart(ymd2SummaryMap, summaryMap, "Quality");
+         createLocChart(ymd2SummaryMap, summaryMap, "LOC");
 
          renderHtmlView(ymd2SummaryMap, summaryMap);
       }
@@ -254,16 +256,22 @@ public class JcSummaryReportAntTask
    {
       try
       {
+         log("Writing summary file " + summaryDbFile);
          summaryDbFile.createNewFile();
          final FileOutputStream fos = new FileOutputStream(summaryDbFile);
          final PrintWriter pw = new PrintWriter(fos);
          pw.println("Timestamp;Error;Warning;Info;"
                + "Coverage;Loc;CodeLoc;Quality");
    
-         final Iterator iter = summaryMap.values().iterator();
+         // Sort the keySet before writing the CSV file
+         final Set keySet = summaryMap.keySet();
+         final List keyList = new ArrayList(keySet);
+         Collections.sort(keyList);
+         final Iterator iter = keyList.iterator();
          while (iter.hasNext())
          {
-            final Summary sum = (Summary) iter.next();
+            Long ts = (Long) iter.next();
+            final Summary sum = (Summary) summaryMap.get(ts);
             pw.print(sum.getTimestamp() + ";");
             pw.print(sum.getError() + ";");
             pw.print(sum.getWarning() + ";");
@@ -301,6 +309,7 @@ public class JcSummaryReportAntTask
       final Map files = new HashMap();
       if (summaryDbFile.exists())
       {
+         log("Reading summary database...");
          FileReader fr = null;
          BufferedReader br = null;
          try
@@ -316,7 +325,11 @@ public class JcSummaryReportAntTask
                      && line.indexOf("Coverage") == -1)
                {
                   final Summary sum = createSummary(line, baseDir);
-                  files.put(new Long(sum.getTimestamp()), sum);
+                  log("Summary information from database: " + sum);
+                  if (sum != null)
+                  {
+                    files.put(new Long(sum.getTimestamp()), sum);
+                  }
                }
                line = br.readLine();
             }
@@ -337,19 +350,32 @@ public class JcSummaryReportAntTask
       final String[] folders = baseDir.list(new JcoderReportFilter());
       for (int i = 0; i < folders.length; i++)
       {
-         if (!files.containsKey(folders[i]))
+         if (!files.containsKey(Long.valueOf(folders[i])))
          {
             log("New report sub-folder found: " + folders[i]);
             final File folder = new File(baseDir, folders[i]);
-            final Summary sum = readSummaryXml(new File(folder, "summary.xml"));
+            Long ts = null;
+            try
+            {
+               ts = Long.valueOf(folders[i]);
+            }
+            catch (NumberFormatException ex)
+            {
+               log("The folder '" + folders[i] + "' is not a timestamp folder!");
+            }
+            final Summary sum = readSummaryXml(new File(folder, "summary.xml"), ts);
             files.put(new Long(sum.getTimestamp()), sum);
+         }
+         else
+         {
+            log("Report sub-folder '" + folders[i] + "' already in database!");
          }
       }
       return files;
    }
 
 
-   private Summary readSummaryXml (File summaryXml)
+   private Summary readSummaryXml (File summaryXml, Long folderTimestamp)
    {
       Summary sum = null;
       try
@@ -360,8 +386,19 @@ public class JcSummaryReportAntTask
          // There is only one root node
          final Node root = doc.getDocumentElement();
          final NamedNodeMap attrs = root.getAttributes();
-         final long ts = Long.parseLong(
-               attrs.getNamedItem("timestamp").getNodeValue().trim());
+         // Ignore the timestamp as the external script might choose another
+         // timestamp for the folder than the jcoderz-report has chosen
+         // for the XML file.
+         long ts;
+         if (folderTimestamp == null)
+         {
+             ts = Long.parseLong(
+                     attrs.getNamedItem("timestamp").getNodeValue().trim());
+         }
+         else
+         {
+             ts = folderTimestamp.longValue();
+         }
          final int error = Integer.parseInt(
                attrs.getNamedItem("error").getNodeValue().trim());
          final int warning = Integer.parseInt(
@@ -453,6 +490,7 @@ public class JcSummaryReportAntTask
                + "' does not match the expected number of '"
                + COLUMN_COUNT + "'!");
       }
+      Summary summary = null;
       final long timestamp = Long.parseLong(strtok.nextToken());
       final int error = Integer.parseInt(strtok.nextToken());
       final int warning = Integer.parseInt(strtok.nextToken());
@@ -461,9 +499,18 @@ public class JcSummaryReportAntTask
       final int loc = Integer.parseInt(strtok.nextToken());
       final int codeloc = Integer.parseInt(strtok.nextToken());
       final double quality = Double.parseDouble(strtok.nextToken());
-      
-      return new Summary(timestamp, error, warning, info, coverage, loc,
-            codeloc, quality);
+      final File summaryFile = new File(baseDir, "" + timestamp
+            + File.separator + "summary.xml");
+      if (summaryFile.exists() && summaryFile.isFile())
+      {
+         summary = new Summary(timestamp, error, warning, info, coverage, loc,
+            codeloc, quality, summaryFile);
+      }
+      else
+      {
+         log("Summary file does not exist: " + summaryFile);
+      }
+      return summary;
    }
 
 
@@ -473,36 +520,17 @@ public class JcSummaryReportAntTask
     *
     * @throws IOException if the image can not be written.
     */
-   private void createQualityChart (Map ymd2SummaryMap, Map summaryMap)
+   private void createQualityChart (Map ymd2SummaryMap, Map summaryMap, String title)
          throws IOException
    {
-      // TODO: Refactor
-
-      //Configure object properties
-      final Object2DProperties object2DProps = new Object2DProperties();
-
-      //Configure chart properties
-      final Chart2DProperties chart2DProps = new Chart2DProperties();
-      chart2DProps.setChartDataLabelsPrecision(0);
-
-      //Configure legend properties
-      final LegendProperties legendProps = new LegendProperties();
-      final String[] legendLabels = {"Quality"};
-      legendProps.setLegendLabelsTexts(legendLabels);
-
       final Set labels = new TreeSet(summaryMap.keySet());
       if (labels.size() == 0)
       {
          throw new RuntimeException("No reports found for chart!");
       }
 
-      //Configure graph properties
-      final GraphProperties graphProps = new GraphProperties();
-      graphProps.setGraphBarsExistence(false);
-      graphProps.setGraphDotsExistence(true);
-      graphProps.setGraphAllowComponentAlignment(true);
-      graphProps.setGraphDotsWithinCategoryOverlapRatio(1);
-
+      final String[] legendLabels = {"Quality"};
+      
       // Configure dataset
       final Dataset dataset = new Dataset(legendLabels.length,
          summaryMap.size(), 1);
@@ -520,49 +548,11 @@ public class JcSummaryReportAntTask
          i++;
       }
 
-      // Configure graph chart properties
-      final GraphChart2DProperties graphChart2DProps =
-            new GraphChart2DProperties();
-      final String[] labelsTexts = new String[labelsAxisLabels.size()];
-      graphChart2DProps.setLabelsAxisLabelsTexts((String[])
-         labelsAxisLabels.toArray(labelsTexts));
-      // The name of the Y-Axis
-      graphChart2DProps.setNumbersAxisTitleText("Quality");
-      graphChart2DProps.setLabelsAxisTicksAlignment(
-            GraphChart2DProperties.CENTERED);
-
-      // Configure graph component colors
-      final MultiColorsProperties multiColorsProps = new MultiColorsProperties();
-      multiColorsProps.setColorsCustomize(true);
-      multiColorsProps.setColorsCustom(new Color[] {Color.GREEN});
-
-      // Configure chart
-      final LBChart2D chart2D = new LBChart2D();
-      chart2D.setObject2DProperties(object2DProps);
-      chart2D.setChart2DProperties(chart2DProps);
-      chart2D.setLegendProperties(legendProps);
-      chart2D.setGraphChart2DProperties(graphChart2DProps);
-      chart2D.addGraphProperties(graphProps);
-      chart2D.addDataset(dataset);
-      chart2D.addMultiColorsProperties(multiColorsProps);
-
-      chart2D.setMaximumSize(LARGE_SIZE);
-      chart2D.setPreferredSize(LARGE_SIZE);
-
-      if (chart2D.validate(false))
-      {
-         java.io.File file = new java.io.File(mDestDir, "quality.png");
-         javax.imageio.ImageIO.write(chart2D.getImage(), "PNG", file);
-         chart2D.setMaximumSize(SMALL_SIZE);
-         chart2D.setPreferredSize(SMALL_SIZE);
-         chart2D.pack();
-         file = new java.io.File(mDestDir, "quality_small.png");
-         javax.imageio.ImageIO.write(chart2D.getImage(), "PNG", file);
-      }
-      else
-      {
-         chart2D.validate(true);
-      }
+      final GraphChart2DProperties graphChart2DProps
+            = createGraphChart2DProperties(labelsAxisLabels, title);
+      final MultiColorsProperties multiColorsProps
+            = createMultiColorsProperties(new Color[] {Color.GREEN});
+      createChart(title, legendLabels, dataset, graphChart2DProps, multiColorsProps);
    }
 
 
@@ -572,40 +562,20 @@ public class JcSummaryReportAntTask
     *
     * @throws IOException if the image can not be written.
     */
-   private void createLocChart (Map ymd2SummaryMap, Map summaryMap)
+   private void createLocChart (Map ymd2SummaryMap, Map summaryMap, String title)
          throws IOException
    {
-      // TODO: Refactor
-
-      //Configure object properties
-      final Object2DProperties object2DProps = new Object2DProperties();
-
-      //Configure chart properties
-      final Chart2DProperties chart2DProps = new Chart2DProperties();
-      chart2DProps.setChartDataLabelsPrecision(0);
-
-      //Configure legend properties
-      final LegendProperties legendProps = new LegendProperties();
-      final String[] legendLabels = {"Loc", "CodeLoc"};
-      legendProps.setLegendLabelsTexts(legendLabels);
-
       final Set labels = new TreeSet(summaryMap.keySet());
       if (labels.size() == 0)
       {
          throw new RuntimeException("No reports found for chart!");
       }
 
-      //Configure graph properties
-      final GraphProperties graphProps = new GraphProperties();
-      graphProps.setGraphBarsExistence(false);
-      graphProps.setGraphDotsExistence(true);
-      graphProps.setGraphAllowComponentAlignment(true);
-      graphProps.setGraphDotsWithinCategoryOverlapRatio(1);
-
+      final String[] legendLabels = {"Loc", "CodeLoc"};
+      
       // Configure dataset
       final Dataset dataset = new Dataset(legendLabels.length,
          summaryMap.size(), 1);
-
       final List labelsAxisLabels = new ArrayList();
       final Iterator iter = summaryMap.keySet().iterator();
       int i = 0;
@@ -620,49 +590,11 @@ public class JcSummaryReportAntTask
          i++;
       }
 
-      // Configure graph chart properties
-      final GraphChart2DProperties graphChart2DProps =
-            new GraphChart2DProperties();
-      final String[] labelsTexts = new String[labelsAxisLabels.size()];
-      graphChart2DProps.setLabelsAxisLabelsTexts((String[])
-         labelsAxisLabels.toArray(labelsTexts));
-      // The name of the Y-Axis
-      graphChart2DProps.setNumbersAxisTitleText("Lines Of Code");
-      graphChart2DProps.setLabelsAxisTicksAlignment(
-            GraphChart2DProperties.CENTERED);
-
-      // Configure graph component colors
-      final MultiColorsProperties multiColorsProps = new MultiColorsProperties();
-      multiColorsProps.setColorsCustomize(true);
-      multiColorsProps.setColorsCustom(new Color[] {Color.BLUE, Color.PINK});
-
-      // Configure chart
-      final LBChart2D chart2D = new LBChart2D();
-      chart2D.setObject2DProperties(object2DProps);
-      chart2D.setChart2DProperties(chart2DProps);
-      chart2D.setLegendProperties(legendProps);
-      chart2D.setGraphChart2DProperties(graphChart2DProps);
-      chart2D.addGraphProperties(graphProps);
-      chart2D.addDataset(dataset);
-      chart2D.addMultiColorsProperties(multiColorsProps);
-
-      chart2D.setMaximumSize(LARGE_SIZE);
-      chart2D.setPreferredSize(LARGE_SIZE);
-
-      if (chart2D.validate(false))
-      {
-         java.io.File file = new java.io.File(mDestDir, "loc.png");
-         javax.imageio.ImageIO.write(chart2D.getImage(), "PNG", file);
-         chart2D.setMaximumSize(SMALL_SIZE);
-         chart2D.setPreferredSize(SMALL_SIZE);
-         chart2D.pack();
-         file = new java.io.File(mDestDir, "loc_small.png");
-         javax.imageio.ImageIO.write(chart2D.getImage(), "PNG", file);
-      }
-      else
-      {
-         chart2D.validate(true);
-      }
+      final GraphChart2DProperties graphChart2DProps
+            = createGraphChart2DProperties(labelsAxisLabels, title);
+      final MultiColorsProperties multiColorsProps
+            = createMultiColorsProperties(new Color[] {Color.BLUE, Color.PINK});
+      createChart(title, legendLabels, dataset, graphChart2DProps, multiColorsProps);
    }
 
 
@@ -672,40 +604,20 @@ public class JcSummaryReportAntTask
     *
     * @throws IOException if the image can not be written.
     */
-   private void createFindingsChart (Map ymd2SummaryMap, Map summaryMap)
+   private void createFindingsChart (Map ymd2SummaryMap, Map summaryMap, String title)
          throws IOException
    {
-      // TODO: Refactor
-
-     //Configure object properties
-     final Object2DProperties object2DProps = new Object2DProperties();
-
-     //Configure chart properties
-     final Chart2DProperties chart2DProps = new Chart2DProperties();
-     chart2DProps.setChartDataLabelsPrecision(0);
-
-     //Configure legend properties
-     final LegendProperties legendProps = new LegendProperties();
-     final String[] legendLabels = {"Error", "Warning", "Info", "Coverage"};
-     legendProps.setLegendLabelsTexts(legendLabels);
-
      final Set labels = new TreeSet(summaryMap.keySet());
      if (labels.size() == 0)
      {
         throw new RuntimeException("No reports found for chart!");
      }
 
-     //Configure graph properties
-     final GraphProperties graphProps = new GraphProperties();
-     graphProps.setGraphBarsExistence(false);
-     graphProps.setGraphDotsExistence(true);
-     graphProps.setGraphAllowComponentAlignment(true);
-     graphProps.setGraphDotsWithinCategoryOverlapRatio(1);
-
+     final String[] legendLabels = {"Error", "Warning", "Info", "Coverage"};
+     
      // Configure dataset
      final Dataset dataset = new Dataset(legendLabels.length,
         summaryMap.size(), 1);
-
      final List labelsAxisLabels = new ArrayList();
      final Iterator iter = summaryMap.keySet().iterator();
      int i = 0;
@@ -722,50 +634,110 @@ public class JcSummaryReportAntTask
         i++;
      }
 
-     // Configure graph chart properties
-     final GraphChart2DProperties graphChart2DProps =
-           new GraphChart2DProperties();
-     final String[] labelsTexts = new String[labelsAxisLabels.size()];
-     graphChart2DProps.setLabelsAxisLabelsTexts((String[])
-        labelsAxisLabels.toArray(labelsTexts));
-     // The name of the Y-Axis
-     graphChart2DProps.setNumbersAxisTitleText("Findings");
-     graphChart2DProps.setLabelsAxisTicksAlignment(
-           GraphChart2DProperties.CENTERED);
-
-     // Configure graph component colors
-     final MultiColorsProperties multiColorsProps = new MultiColorsProperties();
-     multiColorsProps.setColorsCustomize(true);
-     multiColorsProps.setColorsCustom(new Color[] {Color.RED, Color.YELLOW,
+     final GraphChart2DProperties graphChart2DProps
+           = createGraphChart2DProperties(labelsAxisLabels, title);
+     final MultiColorsProperties multiColorsProps
+           = createMultiColorsProperties(new Color[] {Color.RED, Color.YELLOW,
               Color.CYAN, Color.MAGENTA});
+     createChart(title, legendLabels, dataset, graphChart2DProps, multiColorsProps);
+   }
 
-     // Configure chart
-     final LBChart2D chart2D = new LBChart2D();
-     chart2D.setObject2DProperties(object2DProps);
-     chart2D.setChart2DProperties(chart2DProps);
-     chart2D.setLegendProperties(legendProps);
-     chart2D.setGraphChart2DProperties(graphChart2DProps);
-     chart2D.addGraphProperties(graphProps);
-     chart2D.addDataset(dataset);
-     chart2D.addMultiColorsProperties(multiColorsProps);
 
-     chart2D.setMaximumSize(LARGE_SIZE);
-     chart2D.setPreferredSize(LARGE_SIZE);
+   private void createChart(final String title, final String[] legendLabels, final Dataset dataset, final GraphChart2DProperties graphChart2DProps, final MultiColorsProperties multiColorsProps) throws IOException
+   {
+      // Configure chart
+      final LBChart2D chart2D = new LBChart2D();
+      chart2D.setObject2DProperties(createObject2DProps());
+      chart2D.setChart2DProperties(createChart2DProperties());
+      chart2D.setLegendProperties(createLegendProperties(legendLabels));
 
-     if (chart2D.validate(false))
-     {
-        java.io.File file = new java.io.File(mDestDir, "findings.png");
-        javax.imageio.ImageIO.write(chart2D.getImage(), "PNG", file);
-        chart2D.setMaximumSize(SMALL_SIZE);
-        chart2D.setPreferredSize(SMALL_SIZE);
-        chart2D.pack();
-        file = new java.io.File(mDestDir, "findings_small.png");
-        javax.imageio.ImageIO.write(chart2D.getImage(), "PNG", file);
-     }
-     else
-     {
-        chart2D.validate(true);
-     }
+      chart2D.setGraphChart2DProperties(graphChart2DProps);
+      chart2D.addGraphProperties(createGraphProperties());
+      chart2D.addDataset(dataset);
+      chart2D.addMultiColorsProperties(multiColorsProps);
+
+      chart2D.setMaximumSize(LARGE_SIZE);
+      chart2D.setPreferredSize(LARGE_SIZE);
+
+      final String titleSmall = title.toLowerCase();
+      if (chart2D.validate(false))
+      {
+         java.io.File file = new java.io.File(mDestDir, titleSmall + ".png");
+         javax.imageio.ImageIO.write(chart2D.getImage(), "PNG", file);
+         chart2D.setMaximumSize(SMALL_SIZE);
+         chart2D.setPreferredSize(SMALL_SIZE);
+         chart2D.pack();
+         file = new java.io.File(mDestDir, titleSmall + "_small.png");
+         javax.imageio.ImageIO.write(chart2D.getImage(), "PNG", file);
+      }
+      else
+      {
+         chart2D.validate(true);
+      }
+   }
+
+
+   private MultiColorsProperties createMultiColorsProperties(Color[] colors)
+   {
+      // Configure graph component colors
+      final MultiColorsProperties multiColorsProps = new MultiColorsProperties();
+      multiColorsProps.setColorsCustomize(true);
+      multiColorsProps.setColorsCustom(colors);
+      return multiColorsProps;
+   }
+
+
+   private Object2DProperties createObject2DProps ()
+   {
+      final Object2DProperties object2DProps = new Object2DProperties();
+      object2DProps.setObjectBackgroundLightSource(Object2DProperties.NONE);
+      object2DProps.setObjectBackgroundColor(Color.LIGHT_GRAY);
+      return object2DProps;
+   }
+
+   
+   private GraphProperties createGraphProperties ()
+   {
+      // Configure graph properties
+      final GraphProperties graphProps = new GraphProperties();
+      graphProps.setGraphBarsExistence(false);
+      graphProps.setGraphLinesExistence(true);
+      graphProps.setGraphLinesThicknessModel(1);
+      return graphProps;
+   }
+
+
+   private Chart2DProperties createChart2DProperties ()
+   {
+      // Configure chart properties
+      final Chart2DProperties chart2DProps = new Chart2DProperties();
+      chart2DProps.setChartDataLabelsPrecision(0);
+      return chart2DProps;
+   }
+
+   
+   private LegendProperties createLegendProperties (String[] legendLabels)
+   {
+      // Configure legend properties
+      final LegendProperties legendProps = new LegendProperties();
+      legendProps.setLegendLabelsTexts(legendLabels);
+      return legendProps;
+   }
+
+
+   private GraphChart2DProperties createGraphChart2DProperties(List labelsAxisLabels, String title)
+   {
+      // Configure graph chart properties
+      final GraphChart2DProperties graphChart2DProps =
+            new GraphChart2DProperties();
+      final String[] labelsTexts = new String[labelsAxisLabels.size()];
+      graphChart2DProps.setLabelsAxisLabelsTexts((String[])
+            labelsAxisLabels.toArray(labelsTexts));
+      // The name of the Y-Axis
+      graphChart2DProps.setNumbersAxisTitleText(title);
+      graphChart2DProps.setLabelsAxisTicksAlignment(
+            GraphChart2DProperties.CENTERED);
+      return graphChart2DProps;
    }
 
    
@@ -842,7 +814,7 @@ public class JcSummaryReportAntTask
                log("Rendering detail table for month " + month);
 
                pw.println("<table class=\"month\">");
-               pw.println("<tr><td colspan=\"31\">"
+               pw.println("<tr><td>"
                      + MONTHS[month.intValue() - 1]
                      + " " + year +  "</td></tr>");
                pw.println("<tr class=\"daytable\">");
@@ -853,6 +825,19 @@ public class JcSummaryReportAntTask
                sortedDayList.addAll(dayMap.keySet());
                Collections.sort(sortedDayList);
                final Iterator dayIter = sortedDayList.iterator();
+               int counter = 0;
+               long errors = 0;
+               long warnings = 0;
+               long info = 0;
+               long coverage = 0;
+               long startErrors = 0;
+               long startWarnings = 0;
+               long startInfo = 0;
+               long startCoverage = 0;
+               long endErrors = 0;
+               long endWarnings = 0;
+               long endInfo = 0;
+               long endCoverage = 0;
                while (dayIter.hasNext())
                {
                   final Integer day = (Integer) dayIter.next();
@@ -870,12 +855,9 @@ public class JcSummaryReportAntTask
                      {
                         pw.print("<td class=\"day_odd\">");
                      }
-                     // TODO: Calculate offsets in % (+-X%)
                      pw.print("<div class=\"datelink\">");
                      if (sum.getSummaryXml() != null)
                      {
-                        // TODO: Fix link to summary.xml.parent()
-                        // go up until basedir is reached
                         pw.print("<a href=\"" + sum.getTimestamp()
                               + "/index.html\">");
                      }
@@ -896,9 +878,60 @@ public class JcSummaryReportAntTask
                      pw.print("<div class=\"coverage\">" + sum.getCoverage()
                            + "</div></td>");
                      i++;
+                     if (startErrors == 0)
+                     {
+                        startErrors = sum.getError();
+                     }
+                     if (startWarnings == 0)
+                     {
+                        startWarnings = sum.getWarning();
+                     }
+                     if (startInfo == 0)
+                     {
+                        startInfo = sum.getInfo();
+                     }
+                     if (startCoverage == 0)
+                     {
+                        startCoverage = sum.getCoverage();
+                     }
+                     endErrors = sum.getError();
+                     endWarnings = sum.getWarning();
+                     endInfo = sum.getInfo();
+                     endCoverage = sum.getCoverage();
+                     errors += sum.getError();
+                     warnings += sum.getWarning();
+                     info += sum.getInfo();
+                     coverage += sum.getCoverage();
+                     counter++;
                   }
                }
-               pw.println("</tr></table>");
+               pw.println("</tr>");
+               pw.println("<tr><td style=\"vertical-align:top;\">");
+               int errorsAvg = (int) errors / counter;
+               int warningsAvg = (int) warnings / counter;
+               int infoAvg = (int) info / counter;
+               int coverageAvg = (int) coverage / counter;
+               pw.println("<b>Average</b>"
+                     + "<div class=\"error\">Errors: " + errorsAvg
+                     + "</div><div class=\"warning\">Warnings: " + warningsAvg
+                     + "</div><div class=\"info\">Info: " + infoAvg
+                     + "</div><div class=\"coverage\">Coverage: " + coverageAvg + "</div>");
+               pw.println("</td>");
+               pw.println("<td style=\"vertical-align:top;\">");
+               
+               long deltaErrors = endErrors - startErrors;
+               long deltaWarnings = endWarnings - startWarnings;
+               long deltaInfo = endInfo - startInfo;
+               long deltaCoverage = endCoverage - startCoverage;
+               pw.println("<b>Tendency</b>"
+                  + "<div class=\"error\">Errors: " + (deltaErrors >= 0 ? "+" : "-") + deltaErrors
+                  + "</div><div class=\"warning\">Warnings: " + (deltaWarnings >= 0 ? "+" : "-") + deltaWarnings
+                  + "</div><div class=\"info\">Info: " +  (deltaInfo >= 0 ? "+" : "-") + deltaInfo
+                  + "</div><div class=\"coverage\">Coverage: " +  (deltaCoverage >= 0 ? "+" : "-") + deltaCoverage + "</div>");
+
+               pw.println("</td>");
+               pw.println("</tr>");
+               pw.println("</table>");
             }
          }
 
@@ -1024,6 +1057,38 @@ public class JcSummaryReportAntTask
          return mSummaryXml;
       }
 
+      public int hashCode ()
+      {
+         // MAXINT = 4294967296
+         // ts 20061122001122
+         // value to extract mmddHHMMSS from YYYY
+         final long div = 10000000000L;
+         final int mul = 1000000;
+         // max 1231235959
+         final long rest = mTimestamp % div;
+         // year 2006
+         final long year = mTimestamp / div;
+         // hash 2006000000 + 1231235959 = 3237235959 (Overflow in year 3063)
+         return (int) (year * mul + rest);
+      }
+
+      public boolean equals (Object sum)
+      {
+         boolean result = false;
+         if (sum != null)
+         {
+            if (sum == this)
+            {
+               result = true;
+            }
+            else
+            {
+               result = hashCode() == sum.hashCode();
+            }
+         }
+         return result;
+      }
+
       public String toString ()
       {
          return "[" + mTimestamp + ", " + mError + ", " + mWarning + ", "
@@ -1063,7 +1128,7 @@ public class JcSummaryReportAntTask
 
    
    //
-   // TODO: Remove test-code
+   // test-code
    //
 
    public void log (String msg)
@@ -1087,9 +1152,10 @@ public class JcSummaryReportAntTask
    {
       final JcSummaryReportAntTask jcSum = new JcSummaryReportAntTask();
       jcSum.setName("fawkez-summary");
-      jcSum.setDest("c:/temp/findings-report/");
+      jcSum.setDest("c:/temp/findings-report/xxx");
       jcSum.setSummary("c:/temp/findings-report/history.csv");  
       jcSum.setBaseDir("c:/temp/findings-report/");
       jcSum.execute();
    }
+
 }

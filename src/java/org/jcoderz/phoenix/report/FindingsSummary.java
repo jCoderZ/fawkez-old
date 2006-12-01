@@ -380,7 +380,7 @@ public final class FindingsSummary
          {
             out.write("<a href='" + getWikiPrefix()
                   + getFindingType().getSymbol()
-                  + "'>Further info on the SWAG portal.</a>");
+                  + "'>Further info on the wiki.</a>");
          }
 
          out.write("<p>");

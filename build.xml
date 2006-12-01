@@ -208,7 +208,20 @@
     <!-- Retrieve 3rd party libraries from ibiblio and local file repository -->
     <!-- =================================================================== -->
     <target name="retrieve-3rd-party-libs"
-      depends="configure-proxy-settings">
+        depends="configure-proxy-settings,
+               retrieve-3rd-party-libs.uptodatecheck,
+               retrieve-3rd-party-libs-nodeps"/>
+    <target name="retrieve-3rd-party-libs.uptodatecheck">
+      <uptodate property="retrieve-3rd-party-libs.uptodate"
+          targetfile="${build.dir}/retrieve-3rd-party-libs.done">
+          <srcfiles dir= "${base.dir}">
+              <include name="config/ivy.xml"/>
+              <include name="config/ivyconf.xml"/>
+          </srcfiles>
+      </uptodate>
+    </target>
+    <target name="retrieve-3rd-party-libs-nodeps"
+      unless="retrieve-3rd-party-libs.uptodate">
         <!-- for eclipse/doclet -->
         <mkdir dir="${base.dir}/lib/eclipse"/>
         <copy file="${env.JAVA_HOME}/lib/tools.jar"
@@ -226,6 +239,7 @@
         <resolve file="${base.dir}/config/ivy.xml" conf="default"/>
         <retrieve pattern="${base.dir}/lib/[conf]/[module]/[artifact].[ext]"
             conf="default"/>
+        <touch file="${build.dir}/retrieve-3rd-party-libs.done"/>
     </target>
     <target name="report-dependency" depends="retrieve-3rd-party-libs">
         <mkdir dir="${build.dir}/ivy"/>
@@ -242,7 +256,7 @@
     </target>
     <target name="prepare" depends="timestamp, dump-info,
         generate-version-class, retrieve-3rd-party-libs">
-      <!-- Part of the IDE source part -->
+        <!-- Part of the IDE source path -->
         <mkdir dir="${build.dir}/gen-java"/>
         <mkdir dir="${build.dir}/gen-test"/>
     </target>

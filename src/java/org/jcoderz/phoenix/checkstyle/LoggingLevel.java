@@ -66,7 +66,8 @@ import com.puppycrawl.tools.checkstyle.api.TokenTypes;
  * The default configuration of this check is:
  * <ul>
  *    <li>LoggerName = logger</li>
- *    <li>AllowedLoggerMethods = fine,finer,entering,exiting,throwing,finest</li>
+ *    <li>AllowedLoggerMethods 
+ *        = fine,finer,entering,exiting,throwing,finest</li>
  *    <li>LogCallMaxLevel = FINE</li>
  * </ul>
  * The class' logger instance variable must have the name 'logger'.
@@ -96,8 +97,8 @@ public class LoggingLevel
    /** A set of allowed logger method names besides logXYZ(). */
    private static final Set ALLOWED_LOGGER_METHODS = new HashSet();
 
-   private static String sLoggerName = DEFAULT_LOGGER_NAME;
-   private static Level sLogCallMaxLevel = LOG_CALL_MAX_ALLOWED_LEVEL;
+   private String mLoggerName = DEFAULT_LOGGER_NAME;
+   private Level mLogCallMaxLevel = LOG_CALL_MAX_ALLOWED_LEVEL;
 
    static
    {
@@ -130,7 +131,7 @@ public class LoggingLevel
     */
    public void setLoggerName (final String loggerName)
    {
-      sLoggerName = loggerName;
+      mLoggerName = loggerName;
    }
 
    /**
@@ -167,7 +168,7 @@ public class LoggingLevel
     */
    public void setLogCallMaxLevel (final String logCallMaxLevel)
    {
-      sLogCallMaxLevel = Level.parse(logCallMaxLevel);
+      mLogCallMaxLevel = Level.parse(logCallMaxLevel);
    }
 
    /**
@@ -178,14 +179,6 @@ public class LoggingLevel
       final int [] rc = new int[TOKEN_LIST.length];
       System.arraycopy(TOKEN_LIST, 0, rc, 0, rc.length);
       return rc;
-   }
-
-   /**
-    * @see com.puppycrawl.tools.checkstyle.api.Check#leaveToken(com.puppycrawl.tools.checkstyle.api.DetailAST)
-    */
-   public void leaveToken (DetailAST arg0)
-   {
-      super.leaveToken(arg0);
    }
 
    /**
@@ -218,7 +211,7 @@ public class LoggingLevel
          // the first child of the dot-Token is the variable name, which is
          // 'logger' in our case, otherwise not interested.
          final DetailAST varName = dot.findFirstToken(TokenTypes.IDENT);
-         if (varName.getText().equals(sLoggerName))
+         if (varName.getText().equals(mLoggerName))
          {
             visitLoggerCall(methCall, varName);
          }
@@ -293,7 +286,7 @@ public class LoggingLevel
          if (levelName != null)
          {
             final Level level = Level.parse(levelName.getText());
-            if (level.intValue() > sLogCallMaxLevel.intValue())
+            if (level.intValue() > mLogCallMaxLevel.intValue())
             {
                logDisallowedLogLevel(levelName);
             }
@@ -308,9 +301,10 @@ public class LoggingLevel
     */
    private void logDisallowedLogLevel (final DetailAST level)
    {
-      // trace.loglevel=Maximum allowed log level for trace log is ''{0}'' but was ''{1}''.
+      // trace.loglevel=Maximum allowed log level for trace log is 
+      //     ''{0}'' but was ''{1}''.
       log(level.getLineNo(), "trace.loglevel",
-            new Object[] {sLogCallMaxLevel, level.getText()});
+            new Object[] {mLogCallMaxLevel, level.getText()});
    }
 
    /**

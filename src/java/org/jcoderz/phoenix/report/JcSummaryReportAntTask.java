@@ -639,11 +639,15 @@ public class JcSummaryReportAntTask
      final MultiColorsProperties multiColorsProps
            = createMultiColorsProperties(new Color[] {Color.RED, Color.YELLOW,
               Color.CYAN, Color.MAGENTA});
-     createChart(title, legendLabels, dataset, graphChart2DProps, multiColorsProps);
+     createChart(title, legendLabels, dataset, graphChart2DProps, 
+             multiColorsProps);
    }
 
 
-   private void createChart(final String title, final String[] legendLabels, final Dataset dataset, final GraphChart2DProperties graphChart2DProps, final MultiColorsProperties multiColorsProps) throws IOException
+   private void createChart (final String title, final String[] legendLabels, 
+           final Dataset dataset, 
+           final GraphChart2DProperties graphChart2DProps, 
+           final MultiColorsProperties multiColorsProps) throws IOException
    {
       // Configure chart
       final LBChart2D chart2D = new LBChart2D();
@@ -677,10 +681,11 @@ public class JcSummaryReportAntTask
    }
 
 
-   private MultiColorsProperties createMultiColorsProperties(Color[] colors)
+   private MultiColorsProperties createMultiColorsProperties (Color[] colors)
    {
       // Configure graph component colors
-      final MultiColorsProperties multiColorsProps = new MultiColorsProperties();
+      final MultiColorsProperties multiColorsProps 
+          = new MultiColorsProperties();
       multiColorsProps.setColorsCustomize(true);
       multiColorsProps.setColorsCustom(colors);
       return multiColorsProps;
@@ -725,7 +730,8 @@ public class JcSummaryReportAntTask
    }
 
 
-   private GraphChart2DProperties createGraphChart2DProperties(List labelsAxisLabels, String title)
+   private GraphChart2DProperties createGraphChart2DProperties (
+           List labelsAxisLabels, String title)
    {
       // Configure graph chart properties
       final GraphChart2DProperties graphChart2DProps =
@@ -847,7 +853,7 @@ public class JcSummaryReportAntTask
                   while (reportsIter.hasNext())
                   {
                      final Summary sum = (Summary) reportsIter.next();
-                     if (i % 2 == 0)
+                     if ((i & 1) == 0)
                      {
                         pw.print("<td class=\"day_even\">");
                      }
@@ -1112,7 +1118,7 @@ public class JcSummaryReportAntTask
        * @param dir the directory where the file is located.
        * @param name the name of the file.
        */
-      public boolean accept(File dir, String name)
+      public boolean accept (File dir, String name)
       {
          boolean result = false;
          final File folder = new File(dir, name);

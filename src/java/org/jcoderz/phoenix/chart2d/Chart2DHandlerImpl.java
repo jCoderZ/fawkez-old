@@ -81,6 +81,7 @@ import net.sourceforge.chart2d.WarningRegionProperties;
 import org.apache.xpath.XPathAPI;
 import org.apache.xpath.objects.XObject;
 import org.jcoderz.commons.types.Date;
+import org.jcoderz.commons.util.Constants;
 import org.jcoderz.commons.util.IoUtil;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -195,9 +196,33 @@ public class Chart2DHandlerImpl implements Chart2DHandler
    private DocumentBuilder mDocumentBuilder; 
 
    /**
+    * A new handler for cart2d files. 
+    * The repository directory is used to read input xml files and to
+    * read and store a cache file.
+    * 
+    * @param dataRepository the directory to the logfiles, 
+    *           can be null.
+    */
+   public Chart2DHandlerImpl (File dataRepository)
+   {
+       mDataRepository = dataRepository;
+       if (mDataRepository != null)
+       {
+           collectPatterns(mDataRepository, null);
+           if (mFilePatterns.isEmpty())
+           {
+               throw new RuntimeException("No files found in repository path "
+                       + mDataRepository + ".");
+           }
+           readCache();
+       }
+   }
+
+
+   /**
     * Commandline interface to this handler.
     * Parameters should be 
-    * <input file or dir> [context path] [debug]
+    * &lt;input file or dir> [context path] [debug]
     * 
     * @param args args the commandline aruments.
     * @throws IOException if a io problem occures.
@@ -239,7 +264,7 @@ public class Chart2DHandlerImpl implements Chart2DHandler
       para = new File(args[0]);
       if (para.isFile())
       {
-         in = new File[] { para };
+         in = new File[] {para};
       }
       else
       {
@@ -281,29 +306,7 @@ public class Chart2DHandlerImpl implements Chart2DHandler
       System.out.println("Done.");
    }
 
-   /**
-    * A new handler for cart2d files. 
-    * The repository directory is used to read input xml files and to
-    * read and store a cache file.
-    * 
-    * @param dataRepository the directory to the logfiles, 
-    *           can be null.
-    */
-   public Chart2DHandlerImpl (File dataRepository)
-   {
-       mDataRepository = dataRepository;
-       if (mDataRepository != null)
-       {
-           collectPatterns(mDataRepository, null);
-           if (mFilePatterns.isEmpty())
-           {
-               throw new RuntimeException("No files found in repository path "
-                       + mDataRepository + ".");
-           }
-           readCache();
-       }
-   }
-
+   /** {@inheritDoc} */
    public void handleGraphLabelsLinesStyle (final Attributes meta)
          throws SAXException
    {
@@ -317,6 +320,7 @@ public class Chart2DHandlerImpl implements Chart2DHandler
     * Handles opening of Category a new ArrayList is created to 
     * collect inner Data elements.
     * @param meta the attributes that come with the element.
+    * @throws SAXException never.
     */
    public void startCategory (final Attributes meta) throws SAXException
    {
@@ -336,8 +340,8 @@ public class Chart2DHandlerImpl implements Chart2DHandler
    /**
     * Handles the closing of Category. 
     * The Category data, containing the collected Data elements 
-    * is added to the corrent Set. 
-    * @param meta the attributes that come with the element.
+    * is added to the corrent Set.
+    * @throws SAXException never.
     */
    public void endCategory () throws SAXException
    {
@@ -358,6 +362,7 @@ public class Chart2DHandlerImpl implements Chart2DHandler
    /**
     * Handles opening of MultiColorsProperties.
     * @param meta the attributes that come with the element.
+    * @throws SAXException never.
     */
    public void startMultiColorsProperties (final Attributes meta)
          throws SAXException
@@ -377,6 +382,11 @@ public class Chart2DHandlerImpl implements Chart2DHandler
       mCurrentMultiColors = new ArrayList();
    }
 
+   /**
+    * Handles the end of the MultiColorsProperties element.
+    * Adds the collected MultiColors to the properties.
+    * @throws SAXException never.
+    */
    public void endMultiColorsProperties () throws SAXException
    {
       if (sDebug)
@@ -392,12 +402,14 @@ public class Chart2DHandlerImpl implements Chart2DHandler
       }
 
       mMultiColorsProperties.add(mCurrentMultiColorsProperties);
+      mCurrentMultiColors = null;
    }
 
    /**
     * Handles opening of LBChart2D and registeres the chart type 
     * accordingly.
     * @param meta the attributes that come with the element.
+    * @throws SAXException never.
     */
    public void startLBChart2D (final Attributes meta) throws SAXException
    {
@@ -409,6 +421,7 @@ public class Chart2DHandlerImpl implements Chart2DHandler
       mChartType = "LBChart2D";
    }
 
+   /** {@inheritDoc} */
    public void endLBChart2D () throws SAXException
    {
       if (sDebug)
@@ -417,6 +430,12 @@ public class Chart2DHandlerImpl implements Chart2DHandler
       }
    }
 
+   /**
+    * Handles the content of the LegentLablesTexts element.
+    * Special handling for xpath expressions is done here. 
+    * See {@link Chart2DHandlerImpl} for details.
+    * @throws SAXException is a error occurs.
+    */
    public void handleLegendLabelsTexts (final java.lang.String data,
          final Attributes meta) throws SAXException
    {
@@ -439,7 +458,7 @@ public class Chart2DHandlerImpl implements Chart2DHandler
               Node node = i.nextNode();
               while (node != null)
               {
-                  if (sDebug)
+                 if (sDebug)
                   {
                       System.out.println("Legend Label: " 
                               + node.getNodeValue());
@@ -461,6 +480,7 @@ public class Chart2DHandlerImpl implements Chart2DHandler
       }
    }
 
+   /** {@inheritDoc} */
    public void startDataset (final Attributes meta) throws SAXException
    {
       if (sDebug)
@@ -471,6 +491,11 @@ public class Chart2DHandlerImpl implements Chart2DHandler
       mCurrentDataSet = new ArrayList();
    }
 
+   /**
+    * Called at the end of a dataset.
+    * The collected data is passed to chart2d.
+    * @throws if an error occures.
+    */
    public void endDataset () throws SAXException
    {
       if (sDebug)
@@ -536,6 +561,7 @@ public class Chart2DHandlerImpl implements Chart2DHandler
       mCurrentDataSet = null;
    }
 
+   /** {@inheritDoc} */
    public void handlePieChart2DProperties (final Attributes meta)
          throws SAXException
    {
@@ -551,6 +577,7 @@ public class Chart2DHandlerImpl implements Chart2DHandler
       setProperties(mPieChart2DProperties, meta);
    }
 
+   /** {@inheritDoc} */
    public void startGraphChart2DProperties (final Attributes meta)
          throws SAXException
    {
@@ -565,6 +592,7 @@ public class Chart2DHandlerImpl implements Chart2DHandler
       mCurrentLabelText = new ArrayList();
    }
 
+   /** {@inheritDoc} */
    public void endGraphChart2DProperties () throws SAXException
    {
       if (sDebug)
@@ -580,6 +608,7 @@ public class Chart2DHandlerImpl implements Chart2DHandler
       }
    }
 
+   /** {@inheritDoc} */
    public void handleAxisLabelText (final java.lang.String data,
          final Attributes meta) throws SAXException
    {
@@ -669,6 +698,7 @@ public class Chart2DHandlerImpl implements Chart2DHandler
         return result;
     }
 
+    /** {@inheritDoc} */
     public void startChart2D (final Attributes meta) throws SAXException
    {
       if (sDebug)
@@ -703,6 +733,7 @@ public class Chart2DHandlerImpl implements Chart2DHandler
       }
    }
 
+    /** {@inheritDoc} */
    public void endChart2D () throws SAXException
    {
       if (sDebug)
@@ -714,7 +745,7 @@ public class Chart2DHandlerImpl implements Chart2DHandler
       {
          Chart2D chart2d = null;
 
-         if (mChartType.equals("PieChart2D"))
+         if ("PieChart2D".equals(mChartType))
          {
             final PieChart2D chart = new PieChart2D();
 
@@ -727,17 +758,21 @@ public class Chart2DHandlerImpl implements Chart2DHandler
                   (MultiColorsProperties) mMultiColorsProperties.get(0));
             chart2d = chart;
          }
-         else if (mChartType.equals("LLChart2D"))
+         else if ("LLChart2D".equals(mChartType))
          {
             final LLChart2D chart = new LLChart2D();
             fillChartData(chart);
             chart2d = chart;
          }
-         else if (mChartType.equals("LBChart2D"))
+         else if ("LBChart2D".equals(mChartType))
          {
             final LBChart2D chart = new LBChart2D();
             fillChartData(chart);
             chart2d = chart;
+         }
+         else
+         {
+             throw new SAXException("Unknown chart type " + mChartType + ".");
          }
 
          final Dimension size = new Dimension(mWidth, mHeight);
@@ -763,6 +798,7 @@ public class Chart2DHandlerImpl implements Chart2DHandler
       }
    }
 
+   /** {@inheritDoc} */
    public void startLLChart2D (final Attributes meta) throws SAXException
    {
       if (sDebug)
@@ -773,6 +809,7 @@ public class Chart2DHandlerImpl implements Chart2DHandler
       mChartType = "LLChart2D";
    }
 
+   /** {@inheritDoc} */
    public void endLLChart2D () throws SAXException
    {
       if (sDebug)
@@ -781,6 +818,7 @@ public class Chart2DHandlerImpl implements Chart2DHandler
       }
    }
 
+   /** {@inheritDoc} */
    public void handleGraphNumbersLinesStyle (final Attributes meta)
          throws SAXException
    {
@@ -790,6 +828,7 @@ public class Chart2DHandlerImpl implements Chart2DHandler
       }
    }
 
+   /** {@inheritDoc} */
    public void handleData (final java.lang.String data, final Attributes meta)
          throws SAXException
    {
@@ -925,6 +964,7 @@ public class Chart2DHandlerImpl implements Chart2DHandler
        return result;
    }
 
+   /** {@inheritDoc} */
    public void startPieChart2D (final Attributes meta) throws SAXException
    {
       if (sDebug)
@@ -935,6 +975,7 @@ public class Chart2DHandlerImpl implements Chart2DHandler
       mChartType = "PieChart2D";
    }
 
+   /** {@inheritDoc} */
    public void endPieChart2D () throws SAXException
    {
       if (sDebug)
@@ -943,6 +984,7 @@ public class Chart2DHandlerImpl implements Chart2DHandler
       }
    }
 
+   /** {@inheritDoc} */
    public void handleObject2DProperties (final Attributes meta)
          throws SAXException
    {
@@ -956,6 +998,7 @@ public class Chart2DHandlerImpl implements Chart2DHandler
       setProperties(mObject2DProperties, meta);
    }
 
+   /** {@inheritDoc} */
    public void handleWarningRegionProperties (final Attributes meta)
          throws SAXException
    {
@@ -970,6 +1013,7 @@ public class Chart2DHandlerImpl implements Chart2DHandler
       setProperties(props, meta);
    }
 
+   /** {@inheritDoc} */
    public void handleChart2DProperties (final Attributes meta)
          throws SAXException
    {
@@ -983,6 +1027,7 @@ public class Chart2DHandlerImpl implements Chart2DHandler
       setProperties(mChart2DProperties, meta);
    }
 
+   /** {@inheritDoc} */
    public void startSet (final Attributes meta) throws SAXException
    {
       if (sDebug)
@@ -997,6 +1042,7 @@ public class Chart2DHandlerImpl implements Chart2DHandler
       mCurrentSet = new ArrayList();
    }
 
+   /** {@inheritDoc} */
    public void endSet () throws SAXException
    {
       if (sDebug)
@@ -1011,6 +1057,7 @@ public class Chart2DHandlerImpl implements Chart2DHandler
       mCurrentDataSet.add(mCurrentSet);
    }
 
+   /** {@inheritDoc} */
    public void startGraphProperties (final Attributes meta) throws SAXException
    {
       if (sDebug)
@@ -1025,6 +1072,7 @@ public class Chart2DHandlerImpl implements Chart2DHandler
       mGraphProperties.add(props);
    }
 
+   /** {@inheritDoc} */
    public void endGraphProperties () throws SAXException
    {
       if (sDebug)
@@ -1033,6 +1081,7 @@ public class Chart2DHandlerImpl implements Chart2DHandler
       }
    }
 
+   /** {@inheritDoc} */
    public void handleColorsCustom (final java.lang.String data,
          final Attributes meta) throws SAXException
    {
@@ -1044,6 +1093,7 @@ public class Chart2DHandlerImpl implements Chart2DHandler
       mCurrentMultiColors.add(getColor(data));
    }
 
+   /** {@inheritDoc} */
    public void startLegendProperties (final Attributes meta)
          throws SAXException
    {
@@ -1057,6 +1107,7 @@ public class Chart2DHandlerImpl implements Chart2DHandler
       mCurrentLegendLabelsTexts = new ArrayList();
    }
 
+   /** {@inheritDoc} */
    public void endLegendProperties () throws SAXException
    {
       if (sDebug)
@@ -1072,6 +1123,7 @@ public class Chart2DHandlerImpl implements Chart2DHandler
       }
    }
 
+   /** {@inheritDoc} */
    public void setProperties (Object props, final Attributes meta)
    {
       int i = meta.getLength() - 1;
@@ -1193,6 +1245,7 @@ public class Chart2DHandlerImpl implements Chart2DHandler
       }
    }
 
+   /** {@inheritDoc} */
    public Color getColor (String col)
    {
       Color c = null;
@@ -1216,6 +1269,7 @@ public class Chart2DHandlerImpl implements Chart2DHandler
       return c;
    }
 
+   /** {@inheritDoc} */
    public Dimension getDimension (String val)
    {
       double w;
@@ -1238,6 +1292,7 @@ public class Chart2DHandlerImpl implements Chart2DHandler
       return d;
    }
 
+   /** {@inheritDoc} */
    public Integer getInteger (String value, Object properties) throws Exception
    {
       int i;
@@ -1265,6 +1320,7 @@ public class Chart2DHandlerImpl implements Chart2DHandler
       return new Integer(i);
    }
 
+   /** {@inheritDoc} */
    public AlphaComposite getAlphaComposite (String value, Object properties)
          throws Exception
    {
@@ -1272,7 +1328,8 @@ public class Chart2DHandlerImpl implements Chart2DHandler
 
       try
       {
-         final Field f = properties.getClass().getField(value.toUpperCase());
+         final Field f = properties.getClass().getField(
+                 value.toUpperCase(Constants.SYSTEM_LOCALE));
 
          alpha = (AlphaComposite) f.get(null);
       }
@@ -1280,7 +1337,8 @@ public class Chart2DHandlerImpl implements Chart2DHandler
       {
          try
          {
-            final Field f = AlphaComposite.class.getField(value.toUpperCase());
+            final Field f = AlphaComposite.class.getField(
+                    value.toUpperCase(Constants.SYSTEM_LOCALE));
             alpha = AlphaComposite.getInstance(f.getInt(null));
          }
          catch (Exception ex)
@@ -1469,7 +1527,4 @@ public class Chart2DHandlerImpl implements Chart2DHandler
            return mLabel;
        }
    }
-
-   
 }
-

@@ -56,6 +56,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.Map.Entry;
+import java.util.logging.Handler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -83,6 +86,7 @@ import org.apache.xpath.objects.XObject;
 import org.jcoderz.commons.types.Date;
 import org.jcoderz.commons.util.Constants;
 import org.jcoderz.commons.util.IoUtil;
+import org.jcoderz.commons.util.LoggingProxy;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.traversal.NodeIterator;
@@ -238,7 +242,7 @@ public class Chart2DHandlerImpl implements Chart2DHandler
 
          msg = "Usage: java " + Chart2DHandlerImpl.class.getName()
                + " <input file or directory> [context path] [debug]";
-         System.out.println(msg);
+         log(msg);
          throw new IllegalArgumentException(msg);
       }
 
@@ -261,6 +265,16 @@ public class Chart2DHandlerImpl implements Chart2DHandler
           }
       }
       
+      if (sDebug)
+      {
+          final Handler[] handlers = Logger.getLogger("").getHandlers();
+          for (int index = 0; index < handlers.length; index++)
+          {
+             handlers[index].setLevel(Level.ALL);
+          }
+          Logger.getLogger("org.jcoderz.phoenix.chart2d").setLevel(Level.ALL);
+          Logger.getLogger("").setLevel(Level.ALL);
+      }
       para = new File(args[0]);
       if (para.isFile())
       {
@@ -287,33 +301,35 @@ public class Chart2DHandlerImpl implements Chart2DHandler
       {
          final File current = (File) i.next();
 
-         System.out.println("in: " + current.getAbsolutePath());
+         log("in: " + current.getAbsolutePath());
          try
          {
              final Chart2DHandlerImpl handler 
-                 = new Chart2DHandlerImpl(dataRepository); 
+                 = new Chart2DHandlerImpl(dataRepository);
+             Chart2DHandler theHandler = handler;
+             if (sDebug)
+             {
+                 theHandler = (Chart2DHandler) LoggingProxy.getProxy(handler);
+             }
              Chart2DParser.parse(new InputSource(new FileInputStream(current)),
-                 handler);
+                     theHandler);
             handler.writeCache();
          }
          catch (Exception ex)
          {
-            System.out.println("Got exception " + ex);
-            ex.printStackTrace(System.out);
+            log("Got exception", ex);
          }
       }
 
-      System.out.println("Done.");
+      log("Done.");
    }
+
 
    /** {@inheritDoc} */
    public void handleGraphLabelsLinesStyle (final Attributes meta)
          throws SAXException
    {
-      if (sDebug)
-      {
-         System.err.println("handle_GraphLabelsLinesStyle: " + meta);
-      }
+      // 
    }
 
    /**
@@ -324,16 +340,11 @@ public class Chart2DHandlerImpl implements Chart2DHandler
     */
    public void startCategory (final Attributes meta) throws SAXException
    {
-      if (sDebug)
+      if (mCurrentSet.size() < mCurrentLabelText.size())
       {
-          if (mCurrentSet.size() < mCurrentLabelText.size())
-          {
-              System.err.println("startCategory x = " 
-                      + mCurrentSet.size() + "/"
-                      + mCurrentLabelText.get(mCurrentSet.size()));
-          }
+          logDebug("startCategory x = " + mCurrentSet.size() + "/"
+                  + mCurrentLabelText.get(mCurrentSet.size()));
       }
-
       mCurrentCategory = new ArrayList();
    }
 
@@ -345,16 +356,12 @@ public class Chart2DHandlerImpl implements Chart2DHandler
     */
    public void endCategory () throws SAXException
    {
-      if (sDebug)
+      if (mCurrentSet.size() < mCurrentLabelText.size())
       {
-          if (mCurrentSet.size() < mCurrentLabelText.size())
-          {
-              System.err.println("endCategory x = " 
-                      + mCurrentSet.size() + "/"
-                      + mCurrentLabelText.get(mCurrentSet.size()));
-          }
+          logDebug("endCategory x = " 
+                  + mCurrentSet.size() + "/"
+                  + mCurrentLabelText.get(mCurrentSet.size()));
       }
-
       mCurrentSet.add(mCurrentCategory);
       mCurrentCategory = null; 
    }
@@ -367,11 +374,6 @@ public class Chart2DHandlerImpl implements Chart2DHandler
    public void startMultiColorsProperties (final Attributes meta)
          throws SAXException
    {
-      if (sDebug)
-      {
-         System.err.println("startMultiColorsProperties: " + meta);
-      }
-
       final MultiColorsProperties props = new MultiColorsProperties();
 
       props.setMultiColorsPropertiesToDefaults();
@@ -389,11 +391,6 @@ public class Chart2DHandlerImpl implements Chart2DHandler
     */
    public void endMultiColorsProperties () throws SAXException
    {
-      if (sDebug)
-      {
-         System.err.println("endMultiColorsProperties()");
-      }
-
       if (!mCurrentMultiColors.isEmpty())
       {
          mCurrentMultiColorsProperties
@@ -413,37 +410,26 @@ public class Chart2DHandlerImpl implements Chart2DHandler
     */
    public void startLBChart2D (final Attributes meta) throws SAXException
    {
-      if (sDebug)
-      {
-         System.err.println("startLBChart2D: " + meta);
-      }
-
       mChartType = "LBChart2D";
    }
 
    /** {@inheritDoc} */
    public void endLBChart2D () throws SAXException
    {
-      if (sDebug)
-      {
-         System.err.println("endLBChart2D()");
-      }
+       //
    }
 
    /**
     * Handles the content of the LegentLablesTexts element.
     * Special handling for xpath expressions is done here. 
     * See {@link Chart2DHandlerImpl} for details.
-    * @throws SAXException is a error occurs.
+    * @param data the element content.
+    * @param meta attributes set with the element.
+    * @throws SAXException if an error occurs.
     */
-   public void handleLegendLabelsTexts (final java.lang.String data,
+   public void handleLegendLabelsTexts (final String data,
          final Attributes meta) throws SAXException
    {
-      if (sDebug)
-      {
-         System.err.println("handle_LegendLabelsTexts: " + data);
-      }
-
       if (data.startsWith("!"))
       {
           try
@@ -458,11 +444,7 @@ public class Chart2DHandlerImpl implements Chart2DHandler
               Node node = i.nextNode();
               while (node != null)
               {
-                 if (sDebug)
-                  {
-                      System.out.println("Legend Label: " 
-                              + node.getNodeValue());
-                  }
+                  logDebug("Legend Label: " + node.getNodeValue());
                   mCurrentLegendLabelsTexts.add(node.getNodeValue());
                   node = i.nextNode();
               }
@@ -483,10 +465,6 @@ public class Chart2DHandlerImpl implements Chart2DHandler
    /** {@inheritDoc} */
    public void startDataset (final Attributes meta) throws SAXException
    {
-      if (sDebug)
-      {
-         System.err.println("startDataset: " + meta);
-      }
       mDoConvertToStacked = meta.getIndex("DoConvertToStacked") != -1;
       mCurrentDataSet = new ArrayList();
    }
@@ -494,15 +472,10 @@ public class Chart2DHandlerImpl implements Chart2DHandler
    /**
     * Called at the end of a dataset.
     * The collected data is passed to chart2d.
-    * @throws if an error occures.
+    * @throws SAXException if an error occures.
     */
    public void endDataset () throws SAXException
    {
-      if (sDebug)
-      {
-         System.err.println("endDataset()");
-      }
-
       final int zSize 
           = ((List) ((List) mCurrentDataSet.get(0)).get(0)).size();
       final int ySize 
@@ -512,7 +485,7 @@ public class Chart2DHandlerImpl implements Chart2DHandler
 
       if (!sMultible)
       {
-         System.out.println("Dimension: [" + mCurrentDataSet.size() + "]["
+         log("Dimension: [" + mCurrentDataSet.size() + "]["
                + ySize + "][" + zSize + "]");
       }
 
@@ -539,7 +512,7 @@ public class Chart2DHandlerImpl implements Chart2DHandler
 
                if (!sMultible)
                {
-                  System.out.println("point[" 
+                  log("point[" 
                           + x + "/" + mCurrentLegendLabelsTexts.get(x) + "][" 
                           + y + "/" + mCurrentLabelText.get(y) + "][" + z
                         + "] = " + f);
@@ -565,15 +538,8 @@ public class Chart2DHandlerImpl implements Chart2DHandler
    public void handlePieChart2DProperties (final Attributes meta)
          throws SAXException
    {
-      if (sDebug)
-      {
-         System.err.println("handle_PieChart2DProperties: " + meta);
-      }
-
       mPieChart2DProperties = new PieChart2DProperties();
-
       mPieChart2DProperties.setPieChart2DPropertiesToDefaults();
-
       setProperties(mPieChart2DProperties, meta);
    }
 
@@ -581,11 +547,6 @@ public class Chart2DHandlerImpl implements Chart2DHandler
    public void startGraphChart2DProperties (final Attributes meta)
          throws SAXException
    {
-      if (sDebug)
-      {
-         System.err.println("startGraphChart2DProperties: " + meta);
-      }
-
       mGraphChart2DProperties = new GraphChart2DProperties();
       mGraphChart2DProperties.setGraphChart2DPropertiesToDefaults();
       setProperties(mGraphChart2DProperties, meta);
@@ -595,11 +556,6 @@ public class Chart2DHandlerImpl implements Chart2DHandler
    /** {@inheritDoc} */
    public void endGraphChart2DProperties () throws SAXException
    {
-      if (sDebug)
-      {
-         System.err.println("endGraphChart2DProperties()");
-      }
-
       if (!mCurrentLabelText.isEmpty())
       {
          mGraphChart2DProperties
@@ -612,10 +568,6 @@ public class Chart2DHandlerImpl implements Chart2DHandler
    public void handleAxisLabelText (final java.lang.String data,
          final Attributes meta) throws SAXException
    {
-      if (sDebug)
-      {
-         System.err.println("handle_AxisLabelText: " + data);
-      }
       if (data.startsWith("!"))
       {
           // Maximum number of builds aggregated in one label
@@ -651,12 +603,7 @@ public class Chart2DHandlerImpl implements Chart2DHandler
           }
           
           mXaxisModulus = Math.max(1, size / count);
-          if (sDebug)
-          {
-              System.err.println("Will have " + mXaxisModulus 
-                      + " enties per category.");
-          }
-          
+          logDebug("Will have " + mXaxisModulus + " enties per category.");
           
           mXaxis.addAll(map);
           final Iterator i = map.iterator();
@@ -666,10 +613,7 @@ public class Chart2DHandlerImpl implements Chart2DHandler
               final String label = ((Pair) i.next()).getLabel();
               if (xPos % mXaxisModulus == 0)
               {
-                  if (sDebug)
-                  {
-                      System.out.println("X-Label: " + label);
-                  }
+                  logDebug("X-Label: " + label);
                   mCurrentLabelText.add(label);
               }
               xPos++;
@@ -701,11 +645,6 @@ public class Chart2DHandlerImpl implements Chart2DHandler
     /** {@inheritDoc} */
     public void startChart2D (final Attributes meta) throws SAXException
    {
-      if (sDebug)
-      {
-         System.err.println("startChart2D: " + meta);
-      }
-
       String value;
 
       value = meta.getValue("Width");
@@ -736,11 +675,6 @@ public class Chart2DHandlerImpl implements Chart2DHandler
     /** {@inheritDoc} */
    public void endChart2D () throws SAXException
    {
-      if (sDebug)
-      {
-         System.err.println("endChart2D()");
-      }
-
       try
       {
          Chart2D chart2d = null;
@@ -784,7 +718,7 @@ public class Chart2DHandlerImpl implements Chart2DHandler
          {
             javax.imageio.ImageIO.write(chart2d.getImage(), mType, new File(
                   mFilename));
-            System.out.println("out: " + new File(mFilename).getAbsolutePath());
+            log("out: " + new File(mFilename).getAbsolutePath());
          }
          else
          {
@@ -793,50 +727,35 @@ public class Chart2DHandlerImpl implements Chart2DHandler
       }
       catch (Exception ex)
       {
-         ex.printStackTrace();
-         throw new SAXException(ex);
+          final SAXException e = new SAXException(ex);
+          e.initCause(ex);
+          throw e;
       }
    }
 
    /** {@inheritDoc} */
    public void startLLChart2D (final Attributes meta) throws SAXException
    {
-      if (sDebug)
-      {
-         System.err.println("startLLChart2D: " + meta);
-      }
-
       mChartType = "LLChart2D";
    }
 
    /** {@inheritDoc} */
    public void endLLChart2D () throws SAXException
    {
-      if (sDebug)
-      {
-         System.err.println("endLLChart2D()");
-      }
+       //
    }
 
    /** {@inheritDoc} */
    public void handleGraphNumbersLinesStyle (final Attributes meta)
          throws SAXException
    {
-      if (sDebug)
-      {
-         System.err.println("handle_GraphNumbersLinesStyle: " + meta);
-      }
+       //
    }
 
    /** {@inheritDoc} */
    public void handleData (final java.lang.String data, final Attributes meta)
          throws SAXException
    {
-      if (sDebug)
-      {
-         System.err.println("handle_Data: " + data);
-      }
-
       if (data.startsWith("!"))
       {
           // LOOPIT
@@ -901,7 +820,7 @@ public class Chart2DHandlerImpl implements Chart2DHandler
     {
         final Pattern pat = Pattern.compile(TIME_PATTERN);
         final Matcher mat = pat.matcher(value);
-        System.out.println("grops " + value);
+        logDebug("grops " + value);
         if (mat.matches())
         {
             int minutes = 0;
@@ -925,10 +844,7 @@ public class Chart2DHandlerImpl implements Chart2DHandler
    private String resolveXpath (String fileName, String xpath) 
            throws SAXException
    {
-       if (sDebug)
-       {
-           System.out.print(xpath + " in "  + fileName);
-       }
+       logDebug(xpath + " in "  + fileName);
        String result = null;
        final String cacheKey = xpath + "@" + fileName;
        result = (String) mXpathCache.get(cacheKey);
@@ -948,18 +864,12 @@ public class Chart2DHandlerImpl implements Chart2DHandler
                e.initCause(ex);
                throw e;
            }
-           if (sDebug)
-           {
-               System.out.println(" = " + result);
-           }
+           logDebug(" = " + result);
            mXpathCache.put(cacheKey, result);
        }
        else
        {
-           if (sDebug)
-           {
-               System.out.println(" = " + result + " (cached)");
-           }
+           logDebug(" = " + result + " (cached)");
        }
        return result;
    }
@@ -967,32 +877,19 @@ public class Chart2DHandlerImpl implements Chart2DHandler
    /** {@inheritDoc} */
    public void startPieChart2D (final Attributes meta) throws SAXException
    {
-      if (sDebug)
-      {
-         System.err.println("startPieChart2D: " + meta);
-      }
-
       mChartType = "PieChart2D";
    }
 
    /** {@inheritDoc} */
    public void endPieChart2D () throws SAXException
    {
-      if (sDebug)
-      {
-         System.err.println("endPieChart2D()");
-      }
+       //
    }
 
    /** {@inheritDoc} */
    public void handleObject2DProperties (final Attributes meta)
          throws SAXException
    {
-      if (sDebug)
-      {
-         System.err.println("handle_Object2DProperties: " + meta);
-      }
-
       mObject2DProperties = new Object2DProperties();
       mObject2DProperties.setObject2DPropertiesToDefaults();
       setProperties(mObject2DProperties, meta);
@@ -1002,11 +899,6 @@ public class Chart2DHandlerImpl implements Chart2DHandler
    public void handleWarningRegionProperties (final Attributes meta)
          throws SAXException
    {
-      if (sDebug)
-      {
-         System.err.println("handle_WarningRegionProperties: " + meta);
-      }
-
       final WarningRegionProperties props = new WarningRegionProperties();
 
       props.setToDefaults();
@@ -1017,11 +909,6 @@ public class Chart2DHandlerImpl implements Chart2DHandler
    public void handleChart2DProperties (final Attributes meta)
          throws SAXException
    {
-      if (sDebug)
-      {
-         System.err.println("handle_Chart2DProperties: " + meta);
-      }
-
       mChart2DProperties = new Chart2DProperties();
       mChart2DProperties.setChart2DPropertiesToDefaults();
       setProperties(mChart2DProperties, meta);
@@ -1030,41 +917,29 @@ public class Chart2DHandlerImpl implements Chart2DHandler
    /** {@inheritDoc} */
    public void startSet (final Attributes meta) throws SAXException
    {
-      if (sDebug)
+      if (mCurrentDataSet.size() < mCurrentLegendLabelsTexts.size())
       {
-          if (mCurrentDataSet.size() < mCurrentLegendLabelsTexts.size())
-          {
-              System.err.println("startSet z = " + mCurrentDataSet.size() + "/"
-                      + mCurrentLegendLabelsTexts.get(mCurrentDataSet.size()));
-          }
+          logDebug("startSet z = " + mCurrentDataSet.size() + "/"
+                  + mCurrentLegendLabelsTexts.get(mCurrentDataSet.size()));
       }
-
       mCurrentSet = new ArrayList();
    }
 
    /** {@inheritDoc} */
    public void endSet () throws SAXException
    {
-      if (sDebug)
+      if (mCurrentDataSet.size() < mCurrentLegendLabelsTexts.size())
       {
-          if (mCurrentDataSet.size() < mCurrentLegendLabelsTexts.size())
-          {
-              System.err.println("endSet z = " + mCurrentDataSet.size() + "/"
-                      + mCurrentLegendLabelsTexts.get(mCurrentDataSet.size()));
-          }
+          logDebug("endSet z = " + mCurrentDataSet.size() + "/"
+                  + mCurrentLegendLabelsTexts.get(mCurrentDataSet.size()));
       }
-
       mCurrentDataSet.add(mCurrentSet);
+      mCurrentSet = null;
    }
 
    /** {@inheritDoc} */
    public void startGraphProperties (final Attributes meta) throws SAXException
    {
-      if (sDebug)
-      {
-         System.err.println("startGraphProperties: " + meta);
-      }
-
       final GraphProperties props = new GraphProperties();
 
       props.setGraphPropertiesToDefaults();
@@ -1075,21 +950,13 @@ public class Chart2DHandlerImpl implements Chart2DHandler
    /** {@inheritDoc} */
    public void endGraphProperties () throws SAXException
    {
-      if (sDebug)
-      {
-         System.err.println("endGraphProperties()");
-      }
+       //
    }
 
    /** {@inheritDoc} */
    public void handleColorsCustom (final java.lang.String data,
          final Attributes meta) throws SAXException
    {
-      if (sDebug)
-      {
-         System.err.println("handle_ColorsCustom: " + data);
-      }
-
       mCurrentMultiColors.add(getColor(data));
    }
 
@@ -1097,11 +964,6 @@ public class Chart2DHandlerImpl implements Chart2DHandler
    public void startLegendProperties (final Attributes meta)
          throws SAXException
    {
-      if (sDebug)
-      {
-         System.err.println("startLegendProperties: " + meta);
-      }
-
       mLegendProperties = new LegendProperties();
       mLegendProperties.setLegendPropertiesToDefaults();
       mCurrentLegendLabelsTexts = new ArrayList();
@@ -1110,11 +972,6 @@ public class Chart2DHandlerImpl implements Chart2DHandler
    /** {@inheritDoc} */
    public void endLegendProperties () throws SAXException
    {
-      if (sDebug)
-      {
-         System.err.println("endLegendProperties()");
-      }
-
       if (!mCurrentLegendLabelsTexts.isEmpty())
       {
          mLegendProperties
@@ -1239,7 +1096,7 @@ public class Chart2DHandlerImpl implements Chart2DHandler
 
          if (m == null)
          {
-            System.out.println("Could not set " + props.getClass().getName()
+            log("Could not set " + props.getClass().getName()
                   + "." + setterName + " = " + value);
          }
       }
@@ -1272,23 +1129,10 @@ public class Chart2DHandlerImpl implements Chart2DHandler
    /** {@inheritDoc} */
    public Dimension getDimension (String val)
    {
-      double w;
-      double h;
+      final double w = Double.parseDouble(val.substring(0, val.indexOf('x')));
+      final double h = Double.parseDouble(val.substring(1 + val.indexOf('x')));
       final Dimension d = new Dimension();
-
-      try
-      {
-         w = Double.parseDouble(val.substring(0, val.indexOf('x')));
-         h = Double.parseDouble(val.substring(1 + val.indexOf('x')));
-
-         d.setSize(w, h);
-      }
-      catch (RuntimeException ex)
-      {
-         ex.printStackTrace();
-         throw ex;
-      }
-
+      d.setSize(w, h);
       return d;
    }
 
@@ -1317,7 +1161,7 @@ public class Chart2DHandlerImpl implements Chart2DHandler
          }
       }
 
-      return new Integer(i);
+      return Integer.valueOf(i);
    }
 
    /** {@inheritDoc} */
@@ -1507,8 +1351,27 @@ public class Chart2DHandlerImpl implements Chart2DHandler
         return mDocumentBuilder;
     }
 
+    private static void log (String data)
+    {
+        System.out.println(data);
+    }
+
+    private static void log (String data, Throwable thr)
+    {
+        System.out.println(data + thr.getMessage());
+        thr.printStackTrace(System.out);
+    }
+
+
+    private static void logDebug (String data)
+    {
+        if (sDebug)
+        {
+            log(data);
+        }
+    }
     
-    private class Pair
+    private static class Pair
     {
        private final String mFileName;
        private final String mLabel;

@@ -48,220 +48,251 @@ public interface Chart2DHandler
    /**
     * An empty element event handling method.
     * @param meta value or null
+    * @throws SAXException in case of a parsing error.
     */
-   public void handleGraphLabelsLinesStyle (final Attributes meta)
+   void handleGraphLabelsLinesStyle (final Attributes meta)
          throws SAXException;
 
    /**
     * A container element start event handling method.
     * @param meta attributes
+    * @throws SAXException in case of a parsing error.
     */
-   public void startCategory (final Attributes meta) 
+   void startCategory (final Attributes meta) 
          throws SAXException;
 
    /**
     * A container element end event handling method.
+    * @throws SAXException in case of a parsing error.
     */
-   public void endCategory () 
+   void endCategory () 
          throws SAXException;
 
    /**
     * A container element start event handling method.
     * @param meta attributes
+    * @throws SAXException in case of a parsing error.
     */
-   public void startMultiColorsProperties (final Attributes meta)
+   void startMultiColorsProperties (final Attributes meta)
          throws SAXException;
 
    /**
     * A container element end event handling method.
+    * @throws SAXException in case of a parsing error.
     */
-   public void endMultiColorsProperties () 
+   void endMultiColorsProperties () 
          throws SAXException;
 
    /**
     * A container element start event handling method.
     * @param meta attributes
+    * @throws SAXException in case of a parsing error.
     */
-   public void startLBChart2D (final Attributes meta) 
+   void startLBChart2D (final Attributes meta) 
          throws SAXException;
 
    /**
     * A container element end event handling method.
+    * @throws SAXException in case of a parsing error.
     */
-   public void endLBChart2D () 
+   void endLBChart2D () 
          throws SAXException;
 
    /**
     * A data element event handling method.
     * @param data value or null
     * @param meta attributes
+    * @throws SAXException in case of a parsing error.
     */
-   public void handleLegendLabelsTexts (final String data, 
+   void handleLegendLabelsTexts (final String data, 
          final Attributes meta) 
          throws SAXException;
 
    /**
     * A container element start event handling method.
     * @param meta attributes
+    * @throws SAXException in case of a parsing error.
     */
-   public void startDataset (final Attributes meta) 
+   void startDataset (final Attributes meta) 
          throws SAXException;
 
    /**
     * A container element end event handling method.
+    * @throws SAXException in case of a parsing error.
     */
-   public void endDataset () 
+   void endDataset () 
          throws SAXException;
 
    /**
     * A container element start event handling method.
     * @param meta attributes
+    * @throws SAXException in case of a parsing error.
     */
-   public void handlePieChart2DProperties (final Attributes meta)
+   void handlePieChart2DProperties (final Attributes meta)
          throws SAXException;
 
    /**
     * A container element start event handling method.
     * @param meta attributes
+    * @throws SAXException in case of a parsing error.
     */
-   public void startGraphChart2DProperties (final Attributes meta)
+   void startGraphChart2DProperties (final Attributes meta)
          throws SAXException;
 
    /**
     * A container element end event handling method.
+    * @throws SAXException in case of a parsing error.
     */
-   public void endGraphChart2DProperties () 
+   void endGraphChart2DProperties () 
          throws SAXException;
 
    /**
     * A data element event handling method.
     * @param data value or null
     * @param meta attributes
+    * @throws SAXException in case of a parsing error.
     */
-   public void handleAxisLabelText (final String data, final Attributes meta) 
+   void handleAxisLabelText (final String data, final Attributes meta) 
          throws SAXException;
 
    /**
     * A container element start event handling method.
     * @param meta attributes
+    * @throws SAXException in case of a parsing error.
     */
-   public void startChart2D (final Attributes meta) 
+   void startChart2D (final Attributes meta) 
          throws SAXException;
 
    /**
     * A container element end event handling method.
+    * @throws SAXException in case of a parsing error.
     */
-   public void endChart2D () 
+   void endChart2D () 
          throws SAXException;
 
    /**
     * A container element start event handling method.
     * @param meta attributes
+    * @throws SAXException in case of a parsing error.
     */
-   public void startLLChart2D (final Attributes meta) 
+   void startLLChart2D (final Attributes meta) 
          throws SAXException;
 
    /**
     * A container element end event handling method.
+    * @throws SAXException in case of a parsing error.
     */
-   public void endLLChart2D () 
+   void endLLChart2D () 
          throws SAXException;
 
    /**
     * An empty element event handling method.
     * @param meta value or null
+    * @throws SAXException in case of a parsing error.
     */
-   public void handleGraphNumbersLinesStyle (final Attributes meta)
+   void handleGraphNumbersLinesStyle (final Attributes meta)
          throws SAXException;
 
    /**
     * A data element event handling method.
     * @param data value or null
     * @param meta attributes
+    * @throws SAXException in case of a parsing error.
     */
-   public void handleData (final java.lang.String data, final Attributes meta)
+   void handleData (final java.lang.String data, final Attributes meta)
          throws SAXException;
 
    /**
     * A container element start event handling method.
     * @param meta attributes
+    * @throws SAXException in case of a parsing error.
     */
-   public void startPieChart2D (final Attributes meta) 
+   void startPieChart2D (final Attributes meta) 
          throws SAXException;
 
    /**
     * A container element end event handling method.
+    * @throws SAXException in case of a parsing error.
     */
-   public void endPieChart2D () 
+   void endPieChart2D () 
          throws SAXException;
 
    /**
     * An empty element event handling method.
     * @param meta value or null
+    * @throws SAXException in case of a parsing error.
     */
-   public void handleObject2DProperties (final Attributes meta)
+   void handleObject2DProperties (final Attributes meta)
          throws SAXException;
 
    /**
     * An empty element event handling method.
     * @param meta value or null
+    * @throws SAXException in case of a parsing error.
     */
-   public void handleWarningRegionProperties (final Attributes meta)
+   void handleWarningRegionProperties (final Attributes meta)
          throws SAXException;
 
    /**
     * An empty element event handling method.
     * @param meta value or null
+    * @throws SAXException in case of a parsing error.
     */
-   public void handleChart2DProperties (final Attributes meta)
+   void handleChart2DProperties (final Attributes meta)
          throws SAXException;
 
    /**
     * A container element start event handling method.
     * @param meta attributes
+    * @throws SAXException in case of a parsing error.
     */
-   public void startSet (final Attributes meta) 
+   void startSet (final Attributes meta) 
          throws SAXException;
 
    /**
     * A container element end event handling method.
+    * @throws SAXException in case of a parsing error.
     */
-   public void endSet () 
+   void endSet () 
          throws SAXException;
 
    /**
     * A container element start event handling method.
     * @param meta attributes
+    * @throws SAXException in case of a parsing error.
     */
-   public void startGraphProperties (final Attributes meta)
+   void startGraphProperties (final Attributes meta)
          throws SAXException;
 
    /**
     * A container element end event handling method.
+    * @throws SAXException in case of a parsing error.
     */
-   public void endGraphProperties () 
+   void endGraphProperties () 
          throws SAXException;
 
    /**
     * A data element event handling method.
     * @param data value or null
     * @param meta attributes
+    * @throws SAXException in case of a parsing error.
     */
-   public void handleColorsCustom (final String data, final Attributes meta) 
+   void handleColorsCustom (final String data, final Attributes meta) 
          throws SAXException;
 
    /**
     * A container element start event handling method.
     * @param meta attributes
+    * @throws SAXException in case of a parsing error.
     */
-   public void startLegendProperties (final Attributes meta)
+   void startLegendProperties (final Attributes meta)
          throws SAXException;
 
    /**
     * A container element end event handling method.
-    *
+    * @throws SAXException in case of a parsing error.
     */
-   public void endLegendProperties () 
+   void endLegendProperties () 
          throws SAXException;
 
 }

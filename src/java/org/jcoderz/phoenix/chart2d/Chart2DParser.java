@@ -70,11 +70,13 @@ import org.xml.sax.helpers.AttributesImpl;
  */
 public class Chart2DParser implements ContentHandler
 {
-   private StringBuffer mBuffer;
-   private Chart2DHandler mHandler;
-   private Stack mContext;
-   private EntityResolver mResolver;
-   private EntityResolver mRootResolver;
+   private static final String UNEXPECTED_CHARACTERS_EVENT 
+       = "Unexpected characters() event! (Missing DTD?)";
+   private final StringBuffer mBuffer;
+   private final Chart2DHandler mHandler;
+   private final Stack mContext;
+   private final EntityResolver mResolver;
+   private final EntityResolver mRootResolver;
 
    /**
     * Creates a parser instance.
@@ -94,32 +96,25 @@ public class Chart2DParser implements ContentHandler
       mContext = new Stack();
    }
 
-   /**
-    * This SAX interface method is implemented by the parser.
-    */
+   /** {@inheritDoc} */
    public final void setDocumentLocator (Locator locator)
    {
+       // NOOP
    }
 
-   /**
-    * This SAX interface method is implemented by the parser.
-    */
+   /** {@inheritDoc} */
    public final void startDocument () 
          throws SAXException
    {
    }
 
-   /**
-    * This SAX interface method is implemented by the parser.
-    */
+   /** {@inheritDoc} */
    public final void endDocument () 
          throws SAXException
    {
    }
 
-   /**
-    * This SAX interface method is implemented by the parser.
-    */
+   /** {@inheritDoc} */
    public final void startElement (String ns, String name, String qname, 
          Attributes attrs) 
          throws SAXException
@@ -196,9 +191,7 @@ public class Chart2DParser implements ContentHandler
       }
    }
 
-   /**
-    * This SAX interface method is implemented by the parser.
-    */
+   /** {@inheritDoc} */
    public final void endElement (String ns, String name, String qname) 
          throws SAXException
    {
@@ -250,50 +243,38 @@ public class Chart2DParser implements ContentHandler
       }
    }
 
-   /**
-    * This SAX interface method is implemented by the parser.
-    */
+   /** {@inheritDoc} */
    public final void characters (char[] chars, int start, int len)
          throws SAXException
    {
       mBuffer.append(chars, start, len);
    }
 
-   /**
-    * This SAX interface method is implemented by the parser.
-    */
+   /** {@inheritDoc} */
    public final void ignorableWhitespace (char[] chars, int start, int len)
          throws SAXException
    {
    }
 
-   /**
-    * This SAX interface method is implemented by the parser.
-    */
+   /** {@inheritDoc} */
    public final void processingInstruction (String target, String data) 
          throws SAXException
    {
    }
 
-   /**
-    * This SAX interface method is implemented by the parser.
-    */
+   /** {@inheritDoc} */
    public final void startPrefixMapping (final String prefix, final String uri) 
          throws SAXException
    {
    }
 
-   /**
-    * This SAX interface method is implemented by the parser.
-    */
+   /** {@inheritDoc} */
    public final void endPrefixMapping (final String prefix)
          throws SAXException
    {
    }
 
-   /**
-    * This SAX interface method is implemented by the parser.
-    */
+   /** {@inheritDoc} */
    public final void skippedEntity (String name) 
          throws SAXException
    {
@@ -315,7 +296,7 @@ public class Chart2DParser implements ContentHandler
          if (fireOnlyIfMixed)
          {
             throw new IllegalStateException(
-                  "Unexpected characters() event! (Missing DTD?)");
+                  UNEXPECTED_CHARACTERS_EVENT);
          }
          mHandler.handleLegendLabelsTexts((mBuffer.length() == 0) 
                ? null : mBuffer.toString(), attrs);
@@ -325,7 +306,7 @@ public class Chart2DParser implements ContentHandler
          if (fireOnlyIfMixed)
          {
             throw new IllegalStateException(
-                  "Unexpected characters() event! (Missing DTD?)");
+                  UNEXPECTED_CHARACTERS_EVENT);
          }
          mHandler.handleAxisLabelText((mBuffer.length() == 0) 
                ? null : mBuffer.toString(), attrs);
@@ -335,7 +316,7 @@ public class Chart2DParser implements ContentHandler
          if (fireOnlyIfMixed)
          {
             throw new IllegalStateException(
-                  "Unexpected characters() event! (Missing DTD?)");
+                  UNEXPECTED_CHARACTERS_EVENT);
          }
          mHandler.handleData((mBuffer.length() == 0) 
                ? null : mBuffer.toString(), attrs);
@@ -345,7 +326,7 @@ public class Chart2DParser implements ContentHandler
          if (fireOnlyIfMixed)
          {
             throw new IllegalStateException(
-                  "Unexpected characters() event! (Missing DTD?)");
+                  UNEXPECTED_CHARACTERS_EVENT);
          }
          mHandler.handleColorsCustom((mBuffer.length() == 0) 
                ? null : mBuffer.toString(), attrs);
@@ -483,6 +464,7 @@ public class Chart2DParser implements ContentHandler
       public InputSource resolveEntity (String publicId, String systemId)
             throws SAXException, IOException
       {
+         InputSource result = null;
          if ((systemId != null && systemId.equals("chart2d.dtd"))
                || (publicId != null && publicId.equals("chart2d.dtd"))
                || (systemId != null && systemId
@@ -491,25 +473,22 @@ public class Chart2DParser implements ContentHandler
                      .equals("-//The jCoderZ Project//Chart2D//EN")))
          {
             // return a special input source
-            InputStream s = getClass().getResourceAsStream("chart2d.dtd");
-            if (s == null)
+            final InputStream s 
+                = getClass().getResourceAsStream("chart2d.dtd");
+            if (s != null)
             {
-               return null;
+               result = new InputSource(s);
             }
-            return new InputSource(s);
          }
          else
          {
-            // use the default behaviour
+            // use the default behaviour 
             if (mRootResolver != null)
             {
-               return mRootResolver.resolveEntity(publicId, systemId);
-            }
-            else
-            {
-               return null;
+               result = mRootResolver.resolveEntity(publicId, systemId);
             }
          }
+         return result;
       }
    }
 }

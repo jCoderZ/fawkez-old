@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated from chart2d.dtd by XMLBuddy-->
-<!DOCTYPE Chart2D SYSTEM "file:///D:/home/Andreas/projekte/phoenix-2/src/java/org/jcoderz/phoenix/chart2d/chart2d.dtd">
+<!DOCTYPE Chart2D PUBLIC "-//The jCoderZ Project//Chart2D//EN" "chart2d.dtd">
 <Chart2D Filename="quality.png">
     <LBChart2D>
         <Object2DProperties ObjectTitleText="Quolity of Component"/>
@@ -8,11 +7,9 @@
         <GraphChart2DProperties LabelsAxisTitleText="Build"
             NumbersAxisTitleText="Number"
             LabelsAxisTicksAlignment="CENTERED">
-            <!-- X-Achse !DEFINE MODULUS FOR DISPLAY LABELS!!! -->
             <AxisLabelText max="15" count="15">!.*log.*BUILD_([0-9]*)\.xml</AxisLabelText>
         </GraphChart2DProperties>
         <LegendProperties>
-            <!-- Z-Achse -->
             <LegendLabelsTexts>!/cruisecontrol/findingsummary/servicelevelxml/service/@name</LegendLabelsTexts>
         </LegendProperties>
         <Dataset>

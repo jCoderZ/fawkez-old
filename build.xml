@@ -868,11 +868,11 @@
       <echo level="info" message="Creating distribution tarball ${tarball}"/>
       <tar tarfile="${tarball}"
            compression="gzip">
-         <tarfileset dir="${dist.dir}" mode="755" >
+         <tarfileset dir="${dist.dir}" mode="755" prefix="fawkez-${version}/">
             <include name="*.sh"/>
             <include name="bin/*.sh" />
          </tarfileset>
-         <tarfileset dir="${dist.dir}" >
+         <tarfileset dir="${dist.dir}" prefix="fawkez-${version}/">
             <include name="**"/>
             <exclude name="*.sh"/>
             <exclude name="bin/*.sh" />

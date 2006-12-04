@@ -1,0 +1,61 @@
+There may be situations where you want to delegate the execution of the
+jCoderZ report (or any other task) to a server. This HOWTO describes
+what a simple solution for this problem might look like.
+
+1. Problem description
+
+To minimize the time of a Continuous Integration build, we want to
+delegate some time-consuming parts of the build (especially the jCoderZ
+report) to a dedicated "reporting server".
+
+  o As soon as source and class JARs are build, they should be
+    transferred to the reporting server.
+
+  o An independent build should run the jCoderZ reports on the reporting
+    server.
+
+  o At the end of the two builds, the artifacts should be downloaded
+    from the reporting server and be made available in the artifacts
+    directory of the continuous build server.
+
+2. Solution
+
+We are using luntbuild (http://luntbuild.javaforge.com) as build server
+to minimize integration effort. Luntbuild comes with a simple remoting
+interface based on the Caucho Hessian protocol.
+
+The basic steps for a remote build server are as follows:
+
+  o Set up and configure Luntbuild to execute the build targets that
+    you want it to run. In our case, the use of the File System VCS
+    adapter proved especially helpful.
+
+  o Write a client build file that makes use of the LuntBuildTask
+    contained in the fawkez distribution:
+
+    <taskdef name="luntbuild"
+        classname="org.jcoderz.commons.taskdefs.LuntBuildTask">
+        <classpath>
+            <pathelement location="build/fawkez-tools.jar"/>
+            <fileset dir="lib/luntbuild">
+                <include name="luntbuild-api.jar"/>
+                <include name="hessian-3.0.8.jar"/>
+            </fileset>
+        </classpath>
+    </taskdef>
+    <luntbuild
+        luntUrl="http://localhost:8080/luntbuild/app.do?service=hessian"
+        projectName="test"
+        scheduleName="on-demand"
+        userName="luntbuild"
+        password="yourPasswordHere"
+        toDir="${build.dir}">
+        <artifact name="artifact1.txt"/>
+        <artifact name="artifact2.txt"/>
+        <artifact name="artifact3.txt"/>
+    </luntbuild>
+    
+  o Put the luntbuild task in a <parallel> section so that the client
+    system can continue on the build while the server runs its tasks.
+
+That's it!

@@ -142,7 +142,7 @@
                       warninglevel="low">
                <classpath refid="findbugs.classpath"/>
                <auxclasspath refid="findbugs.aux.classpath"/>
-			   <pluginlist refid="findbugs.plugins"/>
+               <pluginlist refid="findbugs.plugins"/>
             </findbugs>
             <checkstyle config="${checkstyle.rules}"
                         maxheap="512"> 

@@ -114,6 +114,10 @@
         <dependency org="apache" name="avalon-framework" rev="4.1.5">
             <artifact name="avalon-framework" type="jar"/>
         </dependency>
+        <dependency org="luntsys" name="luntbuild" rev="1.3.4">
+            <artifact name="luntbuild-api" type="jar"/>
+            <artifact name="hessian-3.0.8" type="jar"/>
+        </dependency>
    </dependencies>
 
 </ivy-module>

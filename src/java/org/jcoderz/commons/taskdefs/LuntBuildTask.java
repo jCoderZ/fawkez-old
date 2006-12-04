@@ -180,13 +180,17 @@ public class LuntBuildTask
 
   /**
    * Adds an artifact for retrieval.
-   * @param artifact
+   * @param artifact the artifact to add
    */
   public void addArtifact (Artifact artifact)
   {
     mArtifacts.add(artifact);
   }
-  
+
+  /**
+   * Execute this ant task.
+   * @throws BuildException if a build error occurs
+   */
   public void execute () throws BuildException
   {
     checkParameters();
@@ -298,7 +302,7 @@ public class LuntBuildTask
     
     for (final Iterator it = mArtifacts.iterator(); it.hasNext(); )
     {
-      final String artifactName = ((Artifact)it.next()).getName();
+      final String artifactName = ((Artifact) it.next()).getName();
       final File outputFile = new File(new File(mToDir), artifactName);
       if (outputFile.exists())
       {
@@ -311,7 +315,7 @@ public class LuntBuildTask
       log("Writing to file: " + mToDir + File.separator + outputFile,
           Project.MSG_VERBOSE);
       final HttpURLConnection con
-          = (HttpURLConnection)new URL(artifactUrl).openConnection();
+          = (HttpURLConnection) new URL(artifactUrl).openConnection();
       con.setDoOutput(true);
       con.addRequestProperty("Keep-alive", "false");
       
@@ -400,7 +404,7 @@ public class LuntBuildTask
     log("Build log URL (Text format): " + buildLogUrlTxt, Project.MSG_VERBOSE);
 
     final URL buildLog = new URL(buildLogUrlTxt);
-    final HttpURLConnection con = (HttpURLConnection)buildLog.openConnection();
+    final HttpURLConnection con = (HttpURLConnection) buildLog.openConnection();
     log("Got HTTP code " + con.getResponseCode(), Project.MSG_VERBOSE);
 
     final InputStream is = con.getInputStream();
@@ -476,14 +480,18 @@ public class LuntBuildTask
   {
     if (mLuntServer == null)
     {
-      HessianProxyFactory factory = new HessianProxyFactory();
+      final HessianProxyFactory factory = new HessianProxyFactory();
       factory.setUser(mUserName);
       factory.setPassword(mPassword);
-      mLuntServer = (ILuntbuild)factory.create(ILuntbuild.class, mLuntUrl);
+      mLuntServer = (ILuntbuild) factory.create(ILuntbuild.class, mLuntUrl);
     }
     return mLuntServer;
   }
   
+  /**
+   * Represents an artifact to retrieve. This class basically consists of a
+   * name.
+   */
   public static final class Artifact
   {
     private String mName;

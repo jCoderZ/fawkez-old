@@ -1,11 +1,35 @@
-//
-// Copyright (C) 2006 Media Saturn Systemzentrale. All rights reserved.
-//
-// $Project: Inventory$
-// $Revision:$
-// $Date:$
-// $Log[10]$
-//
+/*
+ * $Id: LogMessageGenerator.java 1 2006-11-25 14:41:52Z amandel $
+ *
+ * Copyright 2006, The jCoderZ.org Project. All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are
+ * met:
+ *
+ *    * Redistributions of source code must retain the above copyright
+ *      notice, this list of conditions and the following disclaimer.
+ *    * Redistributions in binary form must reproduce the above
+ *      copyright notice, this list of conditions and the following
+ *      disclaimer in the documentation and/or other materials
+ *      provided with the distribution.
+ *    * Neither the name of the jCoderZ.org Project nor the names of
+ *      its contributors may be used to endorse or promote products
+ *      derived from this software without specific prior written
+ *      permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS "AS IS" AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+ * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE REGENTS AND CONTRIBUTORS
+ * BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
+ * BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+ * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+ * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
 
 package org.jcoderz.commons.taskdefs;
 
@@ -24,7 +48,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.DefaultLogger;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Task;
 
@@ -36,16 +59,26 @@ import com.luntsys.luntbuild.facades.lb12.BuildFacade;
 import com.luntsys.luntbuild.facades.lb12.ScheduleFacade;
 
 /**
- *
+ * Ant task to trigger a build on the Luntbuild system and download results
+ * afterwards.
+ * 
+ * @author Albrecht Messner
  */
 public class LuntBuildTask
   extends Task
 {
-  /** Schedule start policy: allows multiple schedules to be running simultaneously. */
+  /**
+   * Schedule start policy: allows multiple schedules to be running
+   * simultaneously.
+   */
   public static final String START_MULTIPLE = "startMultiple";
-  /** Schedule start policy: skips execution if schedule is currently running. */
+  /**
+   * Schedule start policy: skips execution if schedule is currently running.
+   */
   public static final String SKIP_IF_RUNNING = "skipIfRunning";
-  /** Schedule start policy: fails this task if schedule is currently running. */
+  /**
+   * Schedule start policy: fails this task if schedule is currently running.
+   */
   public static final String FAIL_IF_RUNNING = "failIfRunning";
   
   private static final List POLICY_LIST = new ArrayList();
@@ -72,14 +105,14 @@ public class LuntBuildTask
   private String mStartPolicy = FAIL_IF_RUNNING;
   private boolean mWaitForSchedule = true;
   private String mToDir;
-  private List mArtifacts = new ArrayList();
+  private final List mArtifacts = new ArrayList();
 
   private ILuntbuild mLuntServer;
   
   /**
    * @param luntUrl The luntUrl to set.
    */
-  public void setLuntUrl(String luntUrl)
+  public void setLuntUrl (String luntUrl)
   {
     mLuntUrl = luntUrl;
   }
@@ -87,7 +120,7 @@ public class LuntBuildTask
   /**
    * @param userName The userName to set.
    */
-  public void setUserName(String userName)
+  public void setUserName (String userName)
   {
     mUserName = userName;
   }
@@ -95,7 +128,7 @@ public class LuntBuildTask
   /**
    * @param password The password to set.
    */
-  public void setPassword(String password)
+  public void setPassword (String password)
   {
     mPassword = password;
   }
@@ -103,7 +136,7 @@ public class LuntBuildTask
   /**
    * @param projectName The projectName to set.
    */
-  public void setProjectName(String projectName)
+  public void setProjectName (String projectName)
   {
     mProjectName = projectName;
   }
@@ -111,7 +144,7 @@ public class LuntBuildTask
   /**
    * @param scheduleName The scheduleName to set.
    */
-  public void setScheduleName(String scheduleName)
+  public void setScheduleName (String scheduleName)
   {
     mScheduleName = scheduleName;
   }
@@ -119,11 +152,12 @@ public class LuntBuildTask
   /**
    * @param startPolicy The startPolicy to set.
    */
-  public void setStartPolicy(String startPolicy)
+  public void setStartPolicy (String startPolicy)
   {
     if (!POLICY_LIST.contains(startPolicy))
     {
-      throw new BuildException("Invalid start policy " + startPolicy + ", must be one of " + POLICY_LIST);
+      throw new BuildException("Invalid start policy " + startPolicy
+           + ", must be one of " + POLICY_LIST);
     }
     mStartPolicy = startPolicy;
   }
@@ -131,7 +165,7 @@ public class LuntBuildTask
   /**
    * @param waitForSchedule The waitForSchedule to set.
    */
-  public void setWaitForSchedule(boolean waitForSchedule)
+  public void setWaitForSchedule (boolean waitForSchedule)
   {
     mWaitForSchedule = waitForSchedule;
   }
@@ -139,7 +173,7 @@ public class LuntBuildTask
   /**
    * @param toDir The toDir to set.
    */
-  public void setToDir(String toDir)
+  public void setToDir (String toDir)
   {
     mToDir = toDir;
   }
@@ -148,12 +182,12 @@ public class LuntBuildTask
    * Adds an artifact for retrieval.
    * @param artifact
    */
-  public void addArtifact(Artifact artifact)
+  public void addArtifact (Artifact artifact)
   {
     mArtifacts.add(artifact);
   }
   
-  public void execute() throws BuildException
+  public void execute () throws BuildException
   {
     checkParameters();
     try
@@ -173,7 +207,8 @@ public class LuntBuildTask
         }
         else
         {
-          throw new BuildException("Can't start build because schedule is already running");
+          throw new BuildException(
+            "Can't start build because schedule is already running");
         }
       }
       else
@@ -197,9 +232,10 @@ public class LuntBuildTask
     }
   }
 
-  private void startSchedule() throws InterruptedException, IOException
+  private void startSchedule () throws InterruptedException, IOException
   {
-    log("Starting build for " + mProjectName + "/" + mScheduleName + " on server " + mLuntUrl, Project.MSG_INFO);
+    log("Starting build for " + mProjectName + "/" + mScheduleName 
+        + " on server " + mLuntUrl, Project.MSG_INFO);
     getLuntServer().triggerBuild(mProjectName, mScheduleName, getBuildParams());
 
     if (mWaitForSchedule)
@@ -208,10 +244,12 @@ public class LuntBuildTask
     }
   }
 
-  private void waitForSchedule() throws InterruptedException, IOException
+  private void waitForSchedule () throws InterruptedException, IOException
   {
     Thread.sleep(WAIT_PERIOD);
-    log("Waiting for build " + getLuntServer().getLastBuild(mProjectName, mScheduleName).getVersion() + " to finish");
+    log("Waiting for build "
+        + getLuntServer().getLastBuild(mProjectName, mScheduleName).getVersion()
+        + " to finish");
  
     while (getSchedule().getStatus() == Constants.SCHEDULE_STATUS_RUNNING)
     {
@@ -222,20 +260,24 @@ public class LuntBuildTask
     switch (termStatus)
     {
       case Constants.SCHEDULE_STATUS_SUCCESS:
-        log("LuntBuild schedule " + mProjectName + "/" + mScheduleName + " succeeded");
+        log("LuntBuild schedule " + mProjectName + "/" + mScheduleName
+            + " succeeded");
         dumpLogFile();
         retrieveArtifacts();
         break;
       case Constants.SCHEDULE_STATUS_FAILED:
-        log("LuntBuild schedule " + mProjectName + "/" + mScheduleName + " FAILED");
+        log("LuntBuild schedule " + mProjectName + "/" + mScheduleName
+            + " FAILED");
         dumpLogFile();
-        throw new BuildException("LuntBuild schedule " + mProjectName + "/" + mScheduleName + " FAILED");
+        throw new BuildException("LuntBuild schedule " + mProjectName + "/"
+            + mScheduleName + " FAILED");
       default:
-        throw new BuildException("Unexpected status for schedule " + mProjectName + "/" + mScheduleName + ": " + termStatus);
+        throw new BuildException("Unexpected status for schedule "
+            + mProjectName + "/" + mScheduleName + ": " + termStatus);
     }
   }
 
-  private ScheduleFacade getSchedule() throws MalformedURLException
+  private ScheduleFacade getSchedule () throws MalformedURLException
   {
     return getLuntServer().getScheduleByName(mProjectName, mScheduleName);
   }
@@ -244,9 +286,10 @@ public class LuntBuildTask
    * @throws IOException 
    * 
    */
-  private void retrieveArtifacts() throws IOException
+  private void retrieveArtifacts () throws IOException
   {
-    final BuildFacade currentBuild = getLuntServer().getLastBuild(mProjectName, mScheduleName);
+    final BuildFacade currentBuild
+      = getLuntServer().getLastBuild(mProjectName, mScheduleName);
     final String buildLogUrl = currentBuild.getBuildLogUrl();
     final String path = buildLogUrl.substring(0, buildLogUrl.lastIndexOf('/'));
     final String artifactsBaseUrl = path + "/artifacts/";
@@ -259,27 +302,33 @@ public class LuntBuildTask
       final File outputFile = new File(new File(mToDir), artifactName);
       if (outputFile.exists())
       {
-        throw new BuildException("Output file " + outputFile + " already exists");
+        throw new BuildException("Output file " + outputFile
+            + " already exists");
       }
       final String artifactUrl = artifactsBaseUrl + artifactName;
       log("Retrieving artifact " + artifactName);
       log("Retrieving from URL: " + artifactUrl, Project.MSG_VERBOSE);
-      log("Writing to file: " + mToDir + File.separator + outputFile, Project.MSG_VERBOSE);
-      final HttpURLConnection con = (HttpURLConnection)new URL(artifactUrl).openConnection();
+      log("Writing to file: " + mToDir + File.separator + outputFile,
+          Project.MSG_VERBOSE);
+      final HttpURLConnection con
+          = (HttpURLConnection)new URL(artifactUrl).openConnection();
       con.setDoOutput(true);
       con.addRequestProperty("Keep-alive", "false");
       
       con.connect();
       if (con.getResponseCode() != HttpURLConnection.HTTP_OK)
       {
-        throw new BuildException("Failed while retrieving artifact " + artifactUrl + ": " + con.getResponseMessage());
+        throw new BuildException("Failed while retrieving artifact "
+            + artifactUrl + ": " + con.getResponseMessage());
       }
       
       writeArtifactToFile(outputFile, con);
     }
   }
 
-  private void writeArtifactToFile(final File outputFile, final HttpURLConnection con) throws IOException, FileNotFoundException
+  private void writeArtifactToFile (
+      final File outputFile, final HttpURLConnection con)
+    throws IOException, FileNotFoundException
   {
     int read = 0;
     final byte[] buf = new byte[BUFFER_SIZE];
@@ -301,7 +350,7 @@ public class LuntBuildTask
     }
   }
 
-  private void close(InputStream inputStream)
+  private void close (InputStream inputStream)
   {
     if (inputStream != null)
     {
@@ -311,12 +360,13 @@ public class LuntBuildTask
       }
       catch (IOException x)
       {
-        log("Failed to close java.io.InputStream: " + x.getMessage(), Project.MSG_WARN);
+        log("Failed to close java.io.InputStream: " + x.getMessage(),
+            Project.MSG_WARN);
       }
     }
   }
 
-  private void close(OutputStream outputStream)
+  private void close (OutputStream outputStream)
   {
     if (outputStream != null)
     {
@@ -326,7 +376,8 @@ public class LuntBuildTask
       }
       catch (IOException x)
       {
-        log("Failed to close java.io.OutputStream: " + x.getMessage(), Project.MSG_WARN);
+        log("Failed to close java.io.OutputStream: " + x.getMessage(),
+            Project.MSG_WARN);
       }
     }
   }
@@ -336,14 +387,16 @@ public class LuntBuildTask
    * @throws IOException 
    * 
    */
-  private void dumpLogFile() throws InterruptedException, IOException
+  private void dumpLogFile () throws InterruptedException, IOException
   {
     Thread.sleep(WAIT_PERIOD);
-    final BuildFacade currentBuild = getLuntServer().getLastBuild(mProjectName, mScheduleName);
+    final BuildFacade currentBuild
+      = getLuntServer().getLastBuild(mProjectName, mScheduleName);
 
     final String buildLogUrlHtml = currentBuild.getBuildLogUrl();
     log("Build log URL (HTML format): " + buildLogUrlHtml, Project.MSG_VERBOSE);
-    final String buildLogUrlTxt = buildLogUrlHtml.substring(0, buildLogUrlHtml.lastIndexOf(".html")) + ".txt";
+    final String buildLogUrlTxt = buildLogUrlHtml.substring(0,
+        buildLogUrlHtml.lastIndexOf(".html")) + ".txt";
     log("Build log URL (Text format): " + buildLogUrlTxt, Project.MSG_VERBOSE);
 
     final URL buildLog = new URL(buildLogUrlTxt);
@@ -364,7 +417,7 @@ public class LuntBuildTask
     log("===== END Build log =====", Project.MSG_INFO);
   }
 
-  private BuildParams getBuildParams()
+  private BuildParams getBuildParams ()
   {
     final BuildParams params = new BuildParams();
     
@@ -374,7 +427,8 @@ public class LuntBuildTask
     params.setNotifyStrategy(Constants.NOTIFY_NONE);
     params.setPostbuildStrategy(Constants.POSTBUILD_NONE);
     // params.setScheduleId()
-    params.setTriggerDependencyStrategy(Constants.TRIGGER_NONE_DEPENDENT_SCHEDULES);
+    params.setTriggerDependencyStrategy(
+        Constants.TRIGGER_NONE_DEPENDENT_SCHEDULES);
     
     return params;
   }
@@ -382,7 +436,7 @@ public class LuntBuildTask
   /**
    * @param luntUrl
    */
-  private void checkNotNull(Object obj, String name) 
+  private void checkNotNull (Object obj, String name) 
   {
     if (obj == null)
     {
@@ -393,7 +447,7 @@ public class LuntBuildTask
   /**
    * 
    */
-  private void checkParameters()
+  private void checkParameters ()
   {
     checkNotNull(mLuntUrl, "luntUrl");
     checkNotNull(mUserName, "userName");
@@ -412,12 +466,13 @@ public class LuntBuildTask
       }
       if (!mWaitForSchedule)
       {
-        throw new BuildException("Can't retrieve artifacts when waitForBuild == false");
+        throw new BuildException(
+          "Can't retrieve artifacts when waitForBuild == false");
       }
     }
   }
 
-  private ILuntbuild getLuntServer() throws MalformedURLException
+  private ILuntbuild getLuntServer () throws MalformedURLException
   {
     if (mLuntServer == null)
     {
@@ -436,7 +491,7 @@ public class LuntBuildTask
     /**
      * @param name The name to set.
      */
-    public void setName(String name)
+    public void setName (String name)
     {
       mName = name;
     }
@@ -444,38 +499,9 @@ public class LuntBuildTask
     /**
      * @return Returns the name.
      */
-    public String getName()
+    public String getName ()
     {
       return mName;
     }
-  }
-
-  public static void main(String[] args)
-  {
-    final Project dummy = new Project();
-    DefaultLogger logger = new DefaultLogger();
-
-    logger.setMessageOutputLevel(Project.MSG_INFO);
-    logger.setOutputPrintStream(System.out);
-    logger.setErrorPrintStream(System.err);
-    dummy.addBuildListener(logger);
-    
-    final LuntBuildTask lbr = new LuntBuildTask();
-    lbr.setProject(dummy);
-    lbr.setProjectName("test");
-    lbr.setScheduleName("on-demand");
-    lbr.setLuntUrl("http://dev130wks0007:8080/luntbuild/app.do?service=hessian");
-    lbr.setUserName("luntbuild");
-    lbr.setPassword("geheim42");
-
-    final Artifact a1 = new Artifact();
-    a1.setName("artifact1.txt");
-    lbr.addArtifact(a1);
-    final Artifact a2 = new Artifact();
-    a2.setName("artifact2.txt");
-    lbr.addArtifact(a2);
-
-    lbr.setToDir("C:\\temp");
-    lbr.execute();
   }
 }

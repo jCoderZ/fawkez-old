@@ -67,7 +67,7 @@
 <!--  <rule ref="rulesets/controversial.xml/DefaultPackage"/> -->
 <!--  <rule ref="rulesets/controversial.xml/NullAssignment"/> -->
 <!--  <rule ref="rulesets/controversial.xml/OnlyOneReturn"/> -->
-  <rule ref="rulesets/controversial.xml/SingularField"/> <!-- See if it is ok for 3.5 Good check but many false positives-->
+<!--  <rule ref="rulesets/controversial.xml/SingularField"/> Good check but many false positives-->
   <rule ref="rulesets/controversial.xml/SuspiciousOctalEscape"/>
   <rule ref="rulesets/controversial.xml/UnnecessaryConstructor"/>
   <rule ref="rulesets/controversial.xml/UnnecessaryParentheses"/>

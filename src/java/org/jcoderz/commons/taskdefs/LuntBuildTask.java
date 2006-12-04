@@ -405,7 +405,7 @@ public class LuntBuildTask
 
     final InputStream is = con.getInputStream();
     int read = 0;
-    final byte[] buf = new byte[256];
+    final byte[] buf = new byte[BUFFER_SIZE];
     final ByteArrayOutputStream bout = new ByteArrayOutputStream();
     while ((read = is.read(buf)) > 0)
     {

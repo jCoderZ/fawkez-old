@@ -33,7 +33,6 @@
 
 package org.jcoderz.commons.taskdefs;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -50,6 +49,7 @@ import java.util.List;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Task;
+import org.jcoderz.commons.util.IoUtil;
 
 import com.caucho.hessian.client.HessianProxyFactory;
 import com.luntsys.luntbuild.facades.BuildParams;
@@ -94,8 +94,6 @@ public class LuntBuildTask
   private static final int WAIT_PERIOD = 5000;
   /** Interval to poll build server. */
   private static final int POLL_INTERVAL = 2000;
-  /** Buffer size to read from HTTP stream when retrieving artifacts. */
-  private static final int BUFFER_SIZE = 512;
 
   private String mLuntUrl;
   private String mUserName;
@@ -334,55 +332,19 @@ public class LuntBuildTask
       final File outputFile, final HttpURLConnection con)
     throws IOException, FileNotFoundException
   {
-    int read = 0;
-    final byte[] buf = new byte[BUFFER_SIZE];
     InputStream artifactInput = null;
     OutputStream artifactOutput = null;
     try
     {
       artifactInput = con.getInputStream();
       artifactOutput = new FileOutputStream(outputFile);
-      while ((read = artifactInput.read(buf)) > 0)
-      {
-        artifactOutput.write(buf, 0, read);
-      }
+      
+      IoUtil.copy(artifactInput, artifactOutput);
     }
     finally
     {
-      close(artifactInput);
-      close(artifactOutput);
-    }
-  }
-
-  private void close (InputStream inputStream)
-  {
-    if (inputStream != null)
-    {
-      try
-      {
-        inputStream.close();
-      }
-      catch (IOException x)
-      {
-        log("Failed to close java.io.InputStream: " + x.getMessage(),
-            Project.MSG_WARN);
-      }
-    }
-  }
-
-  private void close (OutputStream outputStream)
-  {
-    if (outputStream != null)
-    {
-      try
-      {
-        outputStream.close();
-      }
-      catch (IOException x)
-      {
-        log("Failed to close java.io.OutputStream: " + x.getMessage(),
-            Project.MSG_WARN);
-      }
+      IoUtil.close(artifactInput);
+      IoUtil.close(artifactOutput);
     }
   }
 
@@ -407,18 +369,20 @@ public class LuntBuildTask
     final HttpURLConnection con = (HttpURLConnection) buildLog.openConnection();
     log("Got HTTP code " + con.getResponseCode(), Project.MSG_VERBOSE);
 
-    final InputStream is = con.getInputStream();
-    int read = 0;
-    final byte[] buf = new byte[BUFFER_SIZE];
-    final ByteArrayOutputStream bout = new ByteArrayOutputStream();
-    while ((read = is.read(buf)) > 0)
+    InputStream is = null;
+    try
     {
-      bout.write(buf, 0, read);
+      is = con.getInputStream(); 
+      final byte[] data = IoUtil.readFully(is);
+      final String buildLogData = new String(data);
+      log("===== START Build log =====", Project.MSG_INFO);
+      log(buildLogData, Project.MSG_INFO);
+      log("===== END Build log =====", Project.MSG_INFO);
     }
-    final String buildLogData = new String(bout.toByteArray());
-    log("===== START Build log =====", Project.MSG_INFO);
-    log(buildLogData, Project.MSG_INFO);
-    log("===== END Build log =====", Project.MSG_INFO);
+    finally
+    {
+      IoUtil.close(is);
+    }
   }
 
   private BuildParams getBuildParams ()

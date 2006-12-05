@@ -83,9 +83,7 @@ public class XmlFilterBase
       mOutputEnabled = outputEnabled;
    }
 
-   /**
-    * @see ContentHandler#characters(char[], int, int)
-    */
+   /** {@inheritDoc} */
    public void characters (char[] ch, int start, int length)
          throws SAXException
    {
@@ -95,9 +93,7 @@ public class XmlFilterBase
       }
    }
 
-   /**
-    * @see ContentHandler#endDocument()
-    */
+   /** {@inheritDoc} */
    public void endDocument ()
          throws SAXException
    {
@@ -107,9 +103,7 @@ public class XmlFilterBase
       }
    }
 
-   /**
-    * @see ContentHandler#endElement(java.lang.String, java.lang.String, java.lang.String)
-    */
+   /** {@inheritDoc} */
    public void endElement (String namespaceURI, String localName, String qName)
          throws SAXException
    {
@@ -119,9 +113,7 @@ public class XmlFilterBase
       }
    }
 
-   /**
-    * @see org.xml.sax.ContentHandler#endPrefixMapping(java.lang.String)
-    */
+   /** {@inheritDoc} */
    public void endPrefixMapping (String prefix)
          throws SAXException
    {
@@ -131,9 +123,7 @@ public class XmlFilterBase
       }
    }
 
-   /**
-    * @see org.xml.sax.ContentHandler#ignorableWhitespace(char[], int, int)
-    */
+   /** {@inheritDoc} */
    public void ignorableWhitespace (char[] ch, int start, int length)
          throws SAXException
    {
@@ -143,9 +133,7 @@ public class XmlFilterBase
       }
    }
 
-   /**
-    * @see DTDHandler#notationDecl(java.lang.String, java.lang.String, java.lang.String)
-    */
+   /** {@inheritDoc} */
    public void notationDecl (String name, String publicId, String systemId)
          throws SAXException
    {
@@ -155,9 +143,7 @@ public class XmlFilterBase
       }
    }
 
-   /**
-    * @see org.xml.sax.ContentHandler#processingInstruction(java.lang.String, java.lang.String)
-    */
+   /** {@inheritDoc} */
    public void processingInstruction (String target, String data)
          throws SAXException
    {
@@ -166,9 +152,8 @@ public class XmlFilterBase
          mSerializer.processingInstruction(target, data);
       }
    }
-   /**
-    * @see org.xml.sax.ContentHandler#setDocumentLocator(org.xml.sax.Locator)
-    */
+
+   /** {@inheritDoc} */
    public void setDocumentLocator (Locator locator)
    {
       if (mOutputEnabled)
@@ -177,9 +162,7 @@ public class XmlFilterBase
       }
    }
 
-   /**
-    * @see org.xml.sax.ContentHandler#skippedEntity(java.lang.String)
-    */
+   /** {@inheritDoc} */
    public void skippedEntity (String name)
          throws SAXException
    {
@@ -189,9 +172,7 @@ public class XmlFilterBase
       }
    }
 
-   /**
-    *     * @see org.xml.sax.ContentHandler#startDocument()
-    */
+   /** {@inheritDoc} */
    public void startDocument ()
          throws SAXException
    {
@@ -201,9 +182,7 @@ public class XmlFilterBase
       }
    }
 
-   /**
-    * @see org.xml.sax.ContentHandler#startElement(java.lang.String, java.lang.String, java.lang.String, org.xml.sax.Attributes)
-    */
+   /** {@inheritDoc} */
    public void startElement (String namespaceURI, String localName,
          String qName, Attributes atts)
          throws SAXException
@@ -214,9 +193,7 @@ public class XmlFilterBase
       }
    }
 
-   /**
-    * @see org.xml.sax.ContentHandler#startPrefixMapping(java.lang.String, java.lang.String)
-    */
+   /** {@inheritDoc} */
    public void startPrefixMapping (String prefix, String uri)
          throws SAXException
    {
@@ -226,9 +203,7 @@ public class XmlFilterBase
       }
    }
 
-   /**
-    * @see DTDHandler#unparsedEntityDecl(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
-    */
+   /** {@inheritDoc} */
    public void unparsedEntityDecl (String name, String publicId,
          String systemId, String notationName)
          throws SAXException
@@ -238,6 +213,7 @@ public class XmlFilterBase
          mSerializer.unparsedEntityDecl(name, publicId, systemId, notationName);
       }
    }
+
 
    /**
     * Returns the used XML serializer.

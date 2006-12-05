@@ -109,7 +109,7 @@
   <rule ref="rulesets/design.xml/NonStaticInitializer"/>
   <rule ref="rulesets/design.xml/NonThreadSafeSingleton"/> <!-- CHECKME: 3.5 -->
   <rule ref="rulesets/design.xml/PositionLiteralsFirstInComparisons"/> <!-- CHECKME: 3.5 -->
-  <rule ref="rulesets/design.xml/PreserveStackTrace"/> <!-- CHECKME: 3.7 -->
+<!--  <rule ref="rulesets/design.xml/PreserveStackTrace"/> Great checker but many false positives 3.7 -->
   <rule ref="rulesets/design.xml/OptimizableToArrayCall"/>
   <rule ref="rulesets/design.xml/SimpleDateFormatNeedsLocale"/>
   <rule ref="rulesets/design.xml/SimplifyBooleanExpressions"/>

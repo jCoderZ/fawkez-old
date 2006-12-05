@@ -92,9 +92,7 @@ public class BaseException
       mLoggable = new LoggableImpl(this, messageInfo, cause);
    }
 
-   /**
-    * @see java.lang.Throwable#initCause(java.lang.Throwable)
-    */
+   /** {@inheritDoc} */
    public Throwable initCause (Throwable cause)
    {
       super.initCause(cause);
@@ -102,97 +100,73 @@ public class BaseException
       return this;
    }
 
-   /**
-    * @see Loggable#addParameter(String, Serializable)
-    */
+   /** {@inheritDoc} */
    public final void addParameter (String name, Serializable value)
    {
       mLoggable.addParameter(name, value);
    }
 
-   /**
-    * @see Loggable#getInstanceId()
-    */
+   /** {@inheritDoc} */
    public String getInstanceId ()
    {
       return mLoggable.getInstanceId();
    }
 
-   /**
-    * @see Loggable#getMessage()
-    */
+   /** {@inheritDoc} */
    public final String getMessage ()
    {
       return mLoggable.getMessage();
    }
 
-   /**
-    * @see Loggable#log()
-    */
+   /** {@inheritDoc} */
    public final void log ()
    {
       mLoggable.log();
    }
 
-   /**
-    * @see java.lang.Throwable#getCause()
-    */
+   /** {@inheritDoc} */
    public Throwable getCause ()
    {
       return mLoggable.getCause();
    }
 
-   /**
-    * @see Loggable#getEventTime()
-    */
+   /** {@inheritDoc} */
    public long getEventTime ()
    {
       return mLoggable.getEventTime();
    }
 
-   /**
-    * @see Loggable#getLogMessageInfo()
-    */
+   /** {@inheritDoc} */
    public LogMessageInfo getLogMessageInfo ()
    {
       return mLoggable.getLogMessageInfo();
    }
 
-   /**
-    * @see Loggable#getNodeId()
-    */
+   /** {@inheritDoc} */
    public String getNodeId ()
    {
       return mLoggable.getNodeId();
    }
 
-   /**
-    * @see Loggable#getParameter(String)
-    */
+   /** {@inheritDoc} */
    public List getParameter (String name)
    {
       return mLoggable.getParameter(name);
    }
 
-   /**
-    * @see Loggable#getParameterNames()
-    */
+   /** {@inheritDoc} */
    public Set getParameterNames ()
    {
       return mLoggable.getParameterNames();
    }
 
-   /**
-    * @see Loggable#getThreadId()
-    */
+   /** {@inheritDoc} */
    public long getThreadId ()
    {
       return mLoggable.getThreadId();
    }
 
-   /**
-    * @see Loggable#getTrackingNumber()
-    */
+   /** {@inheritDoc} */
    public String getTrackingNumber ()
    {
       return mLoggable.getTrackingNumber();

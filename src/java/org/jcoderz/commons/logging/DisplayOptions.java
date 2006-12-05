@@ -443,13 +443,7 @@ public final class DisplayOptions
       return mDisplayTraceLines;
    }
 
-   /**
-    * Implements basic cloning by calling the default Object.clone() method.
-    *
-    * @return A clone of this.
-    *
-    * @see java.lang.Object#clone()
-    */
+   /** {@inheritDoc} */
    public Object clone ()
    {
       try

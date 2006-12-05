@@ -101,9 +101,7 @@ public class FkConstraint
       return mRefColumns;
    }
    
-   /**
-    * @see java.lang.Object#toString()
-    */
+   /** {@inheritDoc} */
    public String toString ()
    {
       return "[FkConstraint columns: " + getColumns() + " references "

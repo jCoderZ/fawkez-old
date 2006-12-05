@@ -76,9 +76,7 @@ public class TimedCounter
       mStopTime = System.currentTimeMillis();
    }
 
-   /**
-    * @see org.jcoderz.commons.statistics.Counter#reset()
-    */
+   /** {@inheritDoc} */
    public synchronized void reset ()
    {
       super.reset();

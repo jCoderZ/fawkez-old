@@ -41,7 +41,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.RandomAccessFile;
 import java.io.Reader;
+import java.io.StringWriter;
 import java.io.Writer;
+import java.net.Socket;
 import java.nio.channels.Channel;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -223,6 +225,30 @@ public final class IoUtil
    }
 
    /**
+    * Closes the socket (safe).
+    *
+    * This method tries to close the given socket and if an IOException occurs
+    * a message with the level {@link Level#FINE} is logged. It's safe
+    * to pass a <code>null</code> reference for the argument.
+    *
+    * @param socket the socket that should be closed.
+    */
+   public static void close (Socket socket)
+   {
+      if (socket != null)
+      {
+         try
+         {
+             socket.close();
+         }
+         catch (IOException x)
+         {
+            logCloseFailedWarningMessage(Channel.class, socket.getClass(), x);
+         }
+      }
+   }
+
+   /**
     * Reads <code>expectedLength</code> bytes from the input
     * stream <code>in</code>.
     *
@@ -279,6 +305,28 @@ public final class IoUtil
       }
 
       return out.toByteArray();
+   }
+
+   /**
+    * Reads all characters from the reader <code>in</code>.
+    *
+    * @param in the Reader to read from.
+    * @return an String containing the read data
+    * @throws IOException in an I/O error occurs.
+    */
+   public static String readFully (Reader in)
+         throws IOException
+   {
+      final char[] buffer = new char[BUFFER_SIZE];
+      int read = 0;
+      final StringWriter out = new StringWriter();
+
+      while ((read = in.read(buffer)) >= 0)
+      {
+         out.write(buffer, 0, read);
+      }
+
+      return out.toString();
    }
 
    /**

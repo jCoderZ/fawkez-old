@@ -76,17 +76,13 @@ public final class WhitespaceFormat
          skip();
       }
 
-      /**
-       * @see java.util.Iterator#remove()
-       */
+      /** {@inheritDoc} */
       public void remove ()
       {
          throw new UnsupportedOperationException();
       }
 
-      /**
-       * @see java.util.Iterator#hasNext()
-       */
+      /** {@inheritDoc} */
       public boolean hasNext ()
       {
          return mBuffer.remaining() > 0;

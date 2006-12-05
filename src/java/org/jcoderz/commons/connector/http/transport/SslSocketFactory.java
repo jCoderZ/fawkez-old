@@ -238,9 +238,7 @@ public final class SslSocketFactory
       return result;
    }
 
-   /**
-    * @see org.apache.commons.httpclient.protocol.ProtocolSocketFactory#createSocket(java.lang.String, int, java.net.InetAddress, int, org.apache.commons.httpclient.params.HttpConnectionParams)
-    */
+   /** {@inheritDoc} */
    public Socket createSocket (
          String host, int port, InetAddress localAddress ,
          int localPort, HttpConnectionParams params)
@@ -258,27 +256,21 @@ public final class SslSocketFactory
       return sock;
    }
 
-   /**
-    * @see org.apache.commons.httpclient.protocol.ProtocolSocketFactory#createSocket(java.lang.String, int)
-    */
+   /** {@inheritDoc} */
    public Socket createSocket (String host, int port)
          throws IOException, UnknownHostException
    {
       throw new UnsupportedOperationException("Method not supported");
    }
 
-   /**
-    * @see org.apache.commons.httpclient.protocol.SecureProtocolSocketFactory#createSocket(java.net.Socket, java.lang.String, int, boolean)
-    */
+   /** {@inheritDoc} */
    public Socket createSocket (
          Socket socket, String host, int port, boolean autoClose)
    {
       throw new UnsupportedOperationException("Method not supported");
    }
 
-   /**
-    * @see org.apache.commons.httpclient.protocol.ProtocolSocketFactory#createSocket(java.lang.String, int, java.net.InetAddress, int)
-    */
+   /** {@inheritDoc} */
    public Socket createSocket (
          String arg0, int arg1, InetAddress arg2, int arg3)
          throws IOException, UnknownHostException

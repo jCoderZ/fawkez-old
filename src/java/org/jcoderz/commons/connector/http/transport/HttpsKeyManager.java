@@ -174,21 +174,14 @@ public class HttpsKeyManager
       return mPrivateKey;
    }
 
-   /**
-    * Gets the alias set in constructor.
-    *
-    * @see javax.net.ssl.X509KeyManager#chooseClientAlias(java.lang.String[], java.security.Principal[], java.net.Socket)
-    */
+   /** {@inheritDoc} */
    public String chooseClientAlias (
          String[] keyType, Principal[] issuers, Socket socket)
    {
       return mKeyAlias;
    }
 
-   /**
-    * Choose the server alias for the SSLServerSockets.
-    * @see javax.net.ssl.X509KeyManager#chooseServerAlias(java.lang.String, java.security.Principal[], java.net.Socket)
-    */
+   /** {@inheritDoc} */
    public String chooseServerAlias (
          String keyType, Principal[] issuers, Socket socket)
    {

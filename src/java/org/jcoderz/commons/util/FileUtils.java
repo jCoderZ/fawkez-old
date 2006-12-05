@@ -44,7 +44,6 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 
 /**
@@ -58,12 +57,6 @@ import java.util.logging.Logger;
 public final class FileUtils
 {
    private static final int RND_FILENAME_FACTOR = 100000;
-
-/** class name for use in logger */
-   private static final String CLASSNAME = FileUtils.class.getName();
-
-   /** logging facility */
-   private static final Logger logger = Logger.getLogger(CLASSNAME);
 
    private static final int BUFFER_SIZE = 4096;
 
@@ -227,21 +220,11 @@ public final class FileUtils
     * <code>null</code> reference for the argument.
     *
     * @param in the input stream that should be closed.
+    * @deprecated use IoUtil.close(InputStream)
     */
    public static void safeClose (InputStream in)
    {
-      if (in != null)
-      {
-         try
-         {
-            in.close();
-         }
-         catch (IOException x)
-         {
-            logger.log(Level.FINE, "Error while closing stream: "
-                  + in.getClass().getName() + ".close()", x);
-         }
-      }
+       IoUtil.close(in);
    }
 
    /**
@@ -253,21 +236,11 @@ public final class FileUtils
     * <code>null</code> reference for the argument.
     *
     * @param out the output stream that should be closed.
+    * @deprecated use IoUtil.close(OutputStream)
     */
    public static void safeClose (OutputStream out)
    {
-      if (out != null)
-      {
-         try
-         {
-            out.close();
-         }
-         catch (IOException x)
-         {
-            logger.log(Level.FINE, "Error while closing stream: "
-                  + out.getClass().getName() + ".close()", x);
-         }
-      }
+       IoUtil.close(out);
    }
 
    /**
@@ -278,21 +251,11 @@ public final class FileUtils
     * to pass a <code>null</code> reference for the argument.
     *
     * @param reader the reader that should be closed.
+    * @deprecated use IoUtil.close(Reader)
     */
    public static void safeClose (Reader reader)
    {
-      if (reader != null)
-      {
-         try
-         {
-            reader.close();
-         }
-         catch (IOException x)
-         {
-            logger.log(Level.FINE, "Error while closing reader: "
-                  + reader.getClass().getName() + ".close()", x);
-         }
-      }
+       IoUtil.close(reader);
    }
 
    /**
@@ -303,21 +266,11 @@ public final class FileUtils
     * to pass a <code>null</code> reference for the argument.
     *
     * @param writer the writer that should be closed.
+    * @deprecated use IoUtil.close(Writer)
     */
    public static void safeClose (Writer writer)
    {
-      if (writer != null)
-      {
-         try
-         {
-            writer.close();
-         }
-         catch (IOException x)
-         {
-            logger.log(Level.FINE, "Error while closing writer: "
-                  + writer.getClass().getName() + ".close()", x);
-         }
-      }
+       IoUtil.close(writer);
    }
 
 

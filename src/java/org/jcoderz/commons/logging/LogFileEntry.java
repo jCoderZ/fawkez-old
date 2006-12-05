@@ -77,25 +77,19 @@ public class LogFileEntry
          // nop
       }
 
-      /**
-       * @see org.apache.commons.pool.PoolableObjectFactory#makeObject()
-       */
+      /** {@inheritDoc} */
       public Object makeObject ()
       {
          return new LogFileEntry(true);
       }
 
-      /**
-       * @see org.apache.commons.pool.PoolableObjectFactory#destroyObject(java.lang.Object)
-       */
+      /** {@inheritDoc} */
       public void destroyObject (Object arg0)
       {
          // nop
       }
 
-      /**
-       * @see org.apache.commons.pool.PoolableObjectFactory#activateObject(java.lang.Object)
-       */
+      /** {@inheritDoc} */
       public void activateObject (Object arg)
       {
          // nop

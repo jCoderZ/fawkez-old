@@ -52,9 +52,7 @@ public class UserPasswordTest
    private UserPassword mUp7;
    private UserPassword mUp8;
 
-   /**
-    * @see junit.framework.TestCase#setUp()
-    */
+   /** {@inheritDoc} */
    public void setUp ()
          throws Exception
    {

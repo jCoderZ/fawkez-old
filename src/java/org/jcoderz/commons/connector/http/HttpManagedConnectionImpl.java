@@ -169,17 +169,13 @@ public class HttpManagedConnectionImpl
     *                                        (ConnectionEventListener listener
     */
 
-   /**
-    * @see javax.resource.spi.ManagedConnection#addConnectionEventListener(javax.resource.spi.ConnectionEventListener)
-    */
+   /** {@inheritDoc} */
    public void addConnectionEventListener (ConnectionEventListener listener)
    {
       mEventListeners.add(listener);
    }
 
-   /**
-    * @see javax.resource.spi.ManagedConnection#associateConnection(java.lang.Object)
-    */
+   /** {@inheritDoc} */
    public void associateConnection (Object connection)
    {
       final String methodName = "associateConnection";
@@ -210,9 +206,7 @@ public class HttpManagedConnectionImpl
       }
    }
 
-   /**
-    * @see javax.resource.spi.ManagedConnection#cleanup()
-    */
+   /** {@inheritDoc} */
    public void cleanup ()
    {
       final String methodName = "cleanup";
@@ -240,9 +234,7 @@ public class HttpManagedConnectionImpl
       }
    }
 
-   /**
-    * @see javax.resource.spi.ManagedConnection#destroy()
-    */
+   /** {@inheritDoc} */
    public void destroy ()
    {
       final String methodName = "destroy";
@@ -275,9 +267,7 @@ public class HttpManagedConnectionImpl
       }
    }
 
-   /**
-    * @see javax.resource.spi.ManagedConnection#getConnection(javax.security.auth.Subject, javax.resource.spi.ConnectionRequestInfo)
-    */
+   /** {@inheritDoc} */
    public Object getConnection (Subject subject, ConnectionRequestInfo cri)
    {
       final String methodName = "getConnection";
@@ -332,9 +322,7 @@ public class HttpManagedConnectionImpl
       return mConnectionHandle;
    }
 
-   /**
-    * @see javax.resource.spi.ManagedConnection#getLocalTransaction()
-    */
+   /** {@inheritDoc} */
    public LocalTransaction getLocalTransaction ()
          throws ResourceException
    {
@@ -342,25 +330,19 @@ public class HttpManagedConnectionImpl
       throw new NotSupportedException(messageText);
    }
 
-   /**
-    * @see javax.resource.spi.ManagedConnection#getLogWriter()
-    */
+   /** {@inheritDoc} */
    public PrintWriter getLogWriter ()
    {
       return mPrintWriter;
    }
 
-   /**
-    * @see javax.resource.spi.ManagedConnection#setLogWriter(java.io.PrintWriter)
-    */
+   /** {@inheritDoc} */
    public void setLogWriter (PrintWriter out)
    {
       mPrintWriter = out;
    }
 
-   /**
-    * @see javax.resource.spi.ManagedConnection#getMetaData()
-    */
+   /** {@inheritDoc} */
    public ManagedConnectionMetaData getMetaData ()
    {
       // it is not specified that the physical connection have to be
@@ -370,9 +352,7 @@ public class HttpManagedConnectionImpl
       return managedConnectionMetaData;
    }
 
-   /**
-    * @see javax.resource.spi.ManagedConnection#getXAResource()
-    */
+   /** {@inheritDoc} */
    public XAResource getXAResource ()
          throws ResourceException
    {
@@ -380,9 +360,7 @@ public class HttpManagedConnectionImpl
       throw new NotSupportedException(messageText);
    }
 
-   /**
-    * @see javax.resource.spi.ManagedConnection#removeConnectionEventListener(javax.resource.spi.ConnectionEventListener)
-    */
+   /** {@inheritDoc} */
    public void removeConnectionEventListener (ConnectionEventListener listener)
    {
       mEventListeners.remove(listener);

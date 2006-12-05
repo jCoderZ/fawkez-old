@@ -84,9 +84,7 @@ public class Counter
       return mCounter;
    }
 
-   /**
-    * @see org.jcoderz.commons.statistics.Resettable#reset()
-    */
+   /** {@inheritDoc} */
    public synchronized void reset ()
    {
       mCounter = 0;
@@ -100,9 +98,7 @@ public class Counter
       return mName;
    }
 
-   /**
-    * @see java.lang.Object#toString()
-    */
+   /** {@inheritDoc} */
    public String toString ()
    {
       return "[Counter: mName=" + getName() + ", mCounter=" + getCount() + "]";

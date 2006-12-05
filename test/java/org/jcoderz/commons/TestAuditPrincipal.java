@@ -47,9 +47,7 @@ public class TestAuditPrincipal
     */
    static final long serialVersionUID = 1L;
 
-   /**
-    * @see org.jcoderz.commons.AuditPrincipal#toString()
-    */
+   /** {@inheritDoc} */
    public String toString ()
    {
       return "test principal";

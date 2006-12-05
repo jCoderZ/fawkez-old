@@ -63,9 +63,7 @@ public class Base64DecoderServlet
    private final StringBuffer mStringBuffer = new StringBuffer();
    private static final int INDENT = 3;
 
-   /**
-    * @see javax.servlet.http.HttpServlet#doPost(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
-    */
+   /** {@inheritDoc} */
    protected void doPost (HttpServletRequest request,
          HttpServletResponse response)
          throws IOException
@@ -74,9 +72,7 @@ public class Base64DecoderServlet
       doGet(request, response);
    }
 
-   /**
-    * @see javax.servlet.http.HttpServlet#doGet(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
-    */
+   /** {@inheritDoc} */
    protected void doGet (HttpServletRequest request,
          HttpServletResponse response)
          throws IOException
@@ -243,9 +239,7 @@ public class Base64DecoderServlet
    }
 
 
-   /**
-    * @see javax.servlet.GenericServlet#getServletInfo()
-    */
+   /** {@inheritDoc} */
    public String getServletInfo ()
    {
       return "Simple base64 decoder servlet.";

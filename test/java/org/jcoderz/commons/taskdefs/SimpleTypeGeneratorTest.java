@@ -50,9 +50,7 @@ public class SimpleTypeGeneratorTest
    private SimpleTypeGenerator mGenerator;
    private File mDestDir;
 
-   /**
-    * @see junit.framework.TestCase#setUp()
-    */
+   /** {@inheritDoc} */
    protected void setUp ()
          throws Exception
    {

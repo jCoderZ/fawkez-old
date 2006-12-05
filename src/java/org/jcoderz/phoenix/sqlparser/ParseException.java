@@ -120,9 +120,7 @@ public final class ParseException
         return mLine;
     }
 
-    /**
-     * @see Throwable#getMessage()
-     */
+    /** {@inheritDoc} */
     public String getMessage ()
     {
         return "Parse error at line:" + getLine() + ", column:" + getColumn()

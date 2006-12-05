@@ -117,9 +117,7 @@ public final class NestedLineFormat
       basicFormat(sb, record, loggable, trackingIdSequence);
    }
 
-   /**
-    * @see org.jcoderz.commons.logging.LogLineFormat#parse(java.lang.StringBuffer, org.jcoderz.commons.logging.LogFileEntry)
-    */
+   /** {@inheritDoc} */
    public void parse (StringBuffer sb, LogFileEntry entry)
          throws ParseException
    {

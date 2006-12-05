@@ -59,9 +59,7 @@ public class Average
       mSumOfValues = 0;
    }
 
-   /**
-    * @see org.jcoderz.commons.statistics.Resettable#reset()
-    */
+   /** {@inheritDoc} */
    public synchronized void reset ()
    {
       mNumberOfValues = 0;

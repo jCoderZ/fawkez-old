@@ -49,9 +49,7 @@ public class DefaultClause
       mDefaultExpression = expr;
    }
    
-   /**
-    * @see java.lang.Object#toString()
-    */
+   /** {@inheritDoc} */
    public final String toString ()
    {
       return "[Column Default: expr=" + mDefaultExpression + "]";

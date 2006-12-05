@@ -240,7 +240,7 @@ public final class <xsl:value-of select="$classname"/>Impl
       </xsl:call-template>
    </xsl:for-each>
    
-   /** @see ServiceConfiguration#enableCaching */
+    /** {@inheritDoc} */
    public void enableCaching (boolean doCaching)
    {
       if (mCaching != doCaching)

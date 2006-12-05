@@ -88,9 +88,7 @@ public class LogExtender
    private final List mHandlers = new ArrayList();
    private final List mLoggerNames = new ArrayList();
 
-   /**
-    * @see weblogic.application.ApplicationLifecycleListener#postStop(weblogic.application.ApplicationLifecycleEvent)
-    */
+   /** {@inheritDoc} */
    public void postStop (final ApplicationLifecycleEvent appEvent)
    {
       super.postStop(appEvent);
@@ -102,9 +100,7 @@ public class LogExtender
       mLoggerNames.clear();
    }
 
-   /**
-    * @see weblogic.application.ApplicationLifecycleListener#preStart(weblogic.application.ApplicationLifecycleEvent)
-    */
+   /** {@inheritDoc} */
    public void preStart (final ApplicationLifecycleEvent appEvent)
    {
       super.preStart(appEvent);

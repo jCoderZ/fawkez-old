@@ -74,17 +74,13 @@ public final class ConfigurationClassesGenerator
       mGroups = s;
    }
 
-   /**
-    * @see org.jcoderz.commons.taskdefs.XsltBasedTask#getDefaultStyleSheet()
-    */
+   /** {@inheritDoc} */
    String getDefaultStyleSheet ()
    {
       return DEFAULT_STYLESHEET;
    }
 
-   /**
-    * @see org.jcoderz.commons.taskdefs.XsltBasedTask#setAdditionalTransformerParameters(javax.xml.transform.Transformer)
-    */
+   /** {@inheritDoc} */
    void setAdditionalTransformerParameters (Transformer transformer)
    {
       transformer.setParameter("application-short-name", mApplication);
@@ -92,9 +88,7 @@ public final class ConfigurationClassesGenerator
       transformer.setParameter("group-short-name", mGroups);
    }
 
-   /**
-    * @see org.jcoderz.commons.taskdefs.XsltBasedTask#checkAttributes()
-    */
+   /** {@inheritDoc} */
    void checkAttributes ()
          throws BuildException
    {

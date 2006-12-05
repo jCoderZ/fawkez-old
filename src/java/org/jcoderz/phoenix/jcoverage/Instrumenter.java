@@ -41,8 +41,6 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.sound.midi.Instrument;
-
 import net.sourceforge.cobertura.instrument.Main;
 
 import org.jcoderz.commons.util.FileUtils;

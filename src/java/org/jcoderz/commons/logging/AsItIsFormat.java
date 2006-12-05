@@ -70,9 +70,7 @@ public final class AsItIsFormat
       }
    }
 
-   /**
-    * @see java.text.Format#parseObject(java.lang.String, java.text.ParsePosition)
-    */
+   /** {@inheritDoc} */
    public Object parseObject (String source, ParsePosition pos)
    {
       String rc = null;
@@ -100,9 +98,7 @@ public final class AsItIsFormat
       return rc;
    }
 
-   /**
-    * @see java.text.Format#format(java.lang.Object, java.lang.StringBuffer, java.text.FieldPosition)
-    */
+   /** {@inheritDoc} */
    public StringBuffer format (
          Object obj,
          StringBuffer toAppendTo,

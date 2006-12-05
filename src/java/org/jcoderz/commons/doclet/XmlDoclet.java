@@ -1,5 +1,5 @@
 /*
- * $Id: header.txt 19 2006-01-09 14:31:50Z amandel $
+ * $Id$
  *
  * Copyright 2006, The jCoderZ.org Project. All rights reserved.
  *
@@ -111,7 +111,7 @@ public class XmlDoclet
       }
    }
 
-   /** @see Doclet#start(com.sun.javadoc.RootDoc) */
+   /** {@inheritDoc} */
    public static boolean start (RootDoc root)
    {
       if (logger.isLoggable(Level.FINER))
@@ -138,7 +138,7 @@ public class XmlDoclet
       return result;
    }
 
-   /** @see Doclet#optionLength(java.lang.String) */
+   /** {@inheritDoc} */
    public static int optionLength (String option)
    {
       if (logger.isLoggable(Level.FINER))
@@ -154,9 +154,7 @@ public class XmlDoclet
       return result;
    }
 
-   /**
-    * @see Doclet#validOptions(java.lang.String[][], com.sun.javadoc.DocErrorReporter)
-    */
+   /** {@inheritDoc} */
    public static boolean validOptions (String[][] arguments,
          DocErrorReporter reporter)
    {

@@ -68,7 +68,7 @@ public class ConfigurationServiceCommonImpl
 
 
    /**
-    * @see ConfigurationServiceCommonInterface#getBoolean(ConfigurationKey)
+    * {@inheritDoc}
     * FIXME: activate ejb tag if XDoclet BugFix is available
     * @XXXejb.interface-method view-type="remote"
     * @XXXejb.transaction type="Required"
@@ -102,7 +102,7 @@ public class ConfigurationServiceCommonImpl
 
 
    /**
-    * @see ConfigurationServiceCommonInterface#getInt(ConfigurationKey)
+    * {@inheritDoc}
     * FIXME: activate ejb tag if XDoclet BugFix is available
     * @XXXejb.interface-method view-type="remote"
     * @XXXejb.transaction type="Required"
@@ -130,7 +130,7 @@ public class ConfigurationServiceCommonImpl
 
 
    /**
-    * @see ConfigurationServiceCommonInterface#getLong(ConfigurationKey)
+    * {@inheritDoc}
     * FIXME: activate ejb tag if XDoclet BugFix is available
     * @XXXejb.interface-method view-type="remote"
     * @XXXejb.transaction type="Required"
@@ -158,7 +158,7 @@ public class ConfigurationServiceCommonImpl
 
 
    /**
-    * @see ConfigurationServiceCommonInterface#getString(ConfigurationKey)
+    * {@inheritDoc}
     * FIXME: activate ejb tag if XDoclet BugFix is available
     * @XXXejb.interface-method view-type="remote"
     * @XXXejb.transaction type="Required"
@@ -171,9 +171,6 @@ public class ConfigurationServiceCommonImpl
       return getConfigurationCacheCurrent().getString(key.toString());
    }
 
-   /**
-    * @see ConfigurationServiceInterface#addConfigurationListener(ConfigurationListener)
-    */
    protected ConfigurationCacheInterface getConfigurationCacheCurrent ()
    {
       // for database

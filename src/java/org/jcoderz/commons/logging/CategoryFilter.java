@@ -71,9 +71,7 @@ public class CategoryFilter
       }
    }
 
-   /**
-    * @see org.jcoderz.commons.logging.Filter#isPassable(org.jcoderz.commons.logging.LogItem)
-    */
+   /** {@inheritDoc} */
    public boolean isPassable (LogItem entry)
    {
       return mAllowedCategories.contains(entry.getCategory());

@@ -133,9 +133,7 @@ public abstract class ConnectionBase
       mIsCleanedUp = true;
    }
 
-   /**
-    * @see org.jcoderz.commons.connector.ConnectionHandle#changeAssociation(org.jcoderz.commons.connector.ConnectionNotificationListener)
-    */
+   /** {@inheritDoc} */
    public void changeAssociation (final ConnectionNotificationListener newCnl)
    {
       mCnl.notifyConnectionDissociated(this);

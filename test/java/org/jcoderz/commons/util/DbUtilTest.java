@@ -271,9 +271,7 @@ public class DbUtilTest
       private boolean mClearBatchCalled = true;
       private int mLastUpdated = 0;
 
-      /**
-       * @see java.lang.reflect.InvocationHandler#invoke(java.lang.Object, java.lang.reflect.Method, java.lang.Object[])
-       */
+      /** {@inheritDoc} */
       public Object invoke (Object proxy, Method method, Object[] args)
             throws Throwable
       {

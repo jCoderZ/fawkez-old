@@ -56,7 +56,7 @@ import java.util.logging.Logger;
  *
  * @author Albrecht Messner
  */
-public class LoggingProxy
+public final class LoggingProxy
       implements InvocationHandler
 {
    private final Object mRealObject;

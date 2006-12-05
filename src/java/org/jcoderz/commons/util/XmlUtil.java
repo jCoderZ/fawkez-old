@@ -60,73 +60,73 @@ public final class XmlUtil
    private static final class EmptyAttribute
          implements Attributes
    {
-      /** @see org.xml.sax.Attributes#getLength() */
+       /** {@inheritDoc} */
       public int getLength ()
       {
          return 0;
       }
 
-      /** @see org.xml.sax.Attributes#getLocalName(int) */
+      /** {@inheritDoc} */
       public String getLocalName (int index)
       {
          return null;
       }
 
-      /** @see org.xml.sax.Attributes#getQName(int) */
+      /** {@inheritDoc} */
       public String getQName (int index)
       {
          return null;
       }
 
-      /** @see org.xml.sax.Attributes#getType(int) */
+      /** {@inheritDoc} */
       public String getType (int index)
       {
          return null;
       }
 
-      /** @see org.xml.sax.Attributes#getURI(int) */
+      /** {@inheritDoc} */
       public String getURI (int index)
       {
          return null;
       }
 
-      /** @see org.xml.sax.Attributes#getValue(int) */
+      /** {@inheritDoc} */
       public String getValue (int index)
       {
          return null;
       }
 
-      /** @see org.xml.sax.Attributes#getIndex(java.lang.String) */
+      /** {@inheritDoc} */
       public int getIndex (String qName)
       {
          return -1;
       }
 
-      /** @see org.xml.sax.Attributes#getType(java.lang.String) */
+      /** {@inheritDoc} */
       public String getType (String qName)
       {
          return null;
       }
 
-      /** @see org.xml.sax.Attributes#getValue(java.lang.String) */
+      /** {@inheritDoc} */
       public String getValue (String qName)
       {
          return null;
       }
 
-      /** @see org.xml.sax.Attributes#getIndex(java.lang.String, java.lang.String) */
+      /** {@inheritDoc} */
       public int getIndex (String uri, String localName)
       {
          return -1;
       }
 
-      /** @see org.xml.sax.Attributes#getType(java.lang.String, java.lang.String) */
+      /** {@inheritDoc} */
       public String getType (String uri, String localName)
       {
          return null;
       }
 
-      /** @see org.xml.sax.Attributes#getValue(java.lang.String, java.lang.String) */
+      /** {@inheritDoc} */
       public String getValue (String uri, String localName)
       {
          return null;

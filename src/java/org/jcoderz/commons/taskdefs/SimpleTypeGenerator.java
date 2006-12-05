@@ -47,9 +47,7 @@ public final class SimpleTypeGenerator
    private static final String DEFAULT_STYLESHEET
          = "generate-simple-types.xsl";
 
-   /**
-    * @see org.jcoderz.commons.taskdefs.XsltBasedTask#getDefaultStyleSheet()
-    */
+   /** {@inheritDoc} */
    String getDefaultStyleSheet ()
    {
       return DEFAULT_STYLESHEET;

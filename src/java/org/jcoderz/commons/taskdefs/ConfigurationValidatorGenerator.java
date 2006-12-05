@@ -76,17 +76,13 @@ public final class ConfigurationValidatorGenerator
       mClassname = s;
    }
 
-   /**
-    * @see org.jcoderz.commons.taskdefs.XsltBasedTask#getDefaultStyleSheet()
-    */
+   /** {@inheritDoc} */
    String getDefaultStyleSheet ()
    {
       return DEFAULT_STYLESHEET;
    }
 
-   /**
-    * @see org.jcoderz.commons.taskdefs.XsltBasedTask#setAdditionalTransformerParameters(javax.xml.transform.Transformer)
-    */
+   /** {@inheritDoc} */
    void setAdditionalTransformerParameters (Transformer transformer)
    {
       if (mPackage != null)
@@ -99,9 +95,7 @@ public final class ConfigurationValidatorGenerator
       }
    }
 
-   /**
-    * @see org.jcoderz.commons.taskdefs.XsltBasedTask#checkAttributes()
-    */
+   /** {@inheritDoc} */
    void checkAttributes ()
          throws BuildException
    {

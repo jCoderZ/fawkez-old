@@ -427,9 +427,7 @@ public class DiagramTask
       private final List mDiagrams = new ArrayList();
       private Diagram mCurrentDiagram = null;
 
-      /**
-       * @see org.xml.sax.ContentHandler#startElement(String, String, String, Attributes)
-       */
+      /** {@inheritDoc} */
       public void startElement (String uri, String localName, String qName,
             Attributes attributes)
       {
@@ -453,9 +451,7 @@ public class DiagramTask
          }
       }
 
-      /**
-       * @see org.xml.sax.ContentHandler#endElement(String, String, String)
-       */
+      /** {@inheritDoc} */
       public void endElement (String uri, String localName, String qName)
       {
          if ("diagram".equals(localName))
@@ -469,9 +465,7 @@ public class DiagramTask
 
       }
 
-      /**
-       * @see org.xml.sax.ContentHandler#characters(char[], int, int)
-       */
+      /** {@inheritDoc} */
       public void characters (char[] ch, int start, int length)
       {
          if (mCaptureCharacters)
@@ -565,9 +559,7 @@ public class DiagramTask
          mFile = file;
       }
 
-      /**
-       * @see Object#toString()
-       */
+      /** {@inheritDoc} */
       public String toString ()
       {
          final StringBuffer sb = new StringBuffer();

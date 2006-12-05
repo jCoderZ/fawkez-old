@@ -98,11 +98,7 @@ public class ConnectorResponse
       return result;
    }
 
-   /**
-    * Dumps the value object.
-    *
-    * @see java.lang.Object#toString()
-    */
+   /** {@inheritDoc} */
    public String toString ()
    {
       final StringBuffer result = new StringBuffer();

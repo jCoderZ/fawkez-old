@@ -107,9 +107,7 @@ public class SaxonTask
       mHtmlStyleSheet = f;
    }
 
-   /**
-    * @see Java#setClassname(String)
-    */
+   /** {@inheritDoc} */
    public void setClassname (String arg0)
          throws BuildException
    {
@@ -122,9 +120,7 @@ public class SaxonTask
    }
 
 
-   /**
-    * @see org.apache.tools.ant.Task#execute()
-    */
+   /** {@inheritDoc} */
    public void execute ()
          throws BuildException
    {

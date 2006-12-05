@@ -119,9 +119,7 @@ public class FsManagedConnectionImpl
       logger.fine("Created FsManagedConnectionImpl[" + mIndex + "]");
    }
 
-   /**
-    * @see javax.resource.spi.ManagedConnection#getConnection(javax.security.auth.Subject, javax.resource.spi.ConnectionRequestInfo)
-    */
+   /** {@inheritDoc} */
    public Object getConnection (Subject subject, ConnectionRequestInfo cri)
          throws ResourceException
    {
@@ -172,9 +170,7 @@ public class FsManagedConnectionImpl
       return result;
    }
 
-   /**
-    * @see javax.resource.spi.ManagedConnection#destroy()
-    */
+   /** {@inheritDoc} */
    public void destroy ()
          throws ResourceException
    {
@@ -193,9 +189,7 @@ public class FsManagedConnectionImpl
       }
    }
 
-   /**
-    * @see javax.resource.spi.ManagedConnection#cleanup()
-    */
+   /** {@inheritDoc} */
    public void cleanup ()
          throws ResourceException
    {
@@ -213,9 +207,7 @@ public class FsManagedConnectionImpl
       }
    }
 
-   /**
-    * @see javax.resource.spi.ManagedConnection#associateConnection(java.lang.Object)
-    */
+   /** {@inheritDoc} */
    public void associateConnection (Object connection)
          throws ResourceException
    {
@@ -245,9 +237,7 @@ public class FsManagedConnectionImpl
       }
    }
 
-   /**
-    * @see javax.resource.spi.ManagedConnection#addConnectionEventListener(javax.resource.spi.ConnectionEventListener)
-    */
+   /** {@inheritDoc} */
    public void addConnectionEventListener (ConnectionEventListener cel)
    {
       logger.entering(CLASSNAME, "addConnectionEventListener", cel);
@@ -260,9 +250,7 @@ public class FsManagedConnectionImpl
       logger.exiting(CLASSNAME, "addConnectionEventListener");
    }
 
-   /**
-    * @see javax.resource.spi.ManagedConnection#removeConnectionEventListener(javax.resource.spi.ConnectionEventListener)
-    */
+   /** {@inheritDoc} */
    public void removeConnectionEventListener (ConnectionEventListener cel)
    {
       logger.entering(CLASSNAME, "removeConnectionEventListener", cel);
@@ -309,18 +297,14 @@ public class FsManagedConnectionImpl
             + "Local Transaction.");
    }
 
-   /**
-    * @see javax.resource.spi.ManagedConnection#getMetaData()
-    */
+   /** {@inheritDoc} */
    public ManagedConnectionMetaData getMetaData ()
          throws ResourceException
    {
       return mMetaData;
    }
 
-   /**
-    * @see javax.resource.spi.ManagedConnectionFactory#setLogWriter(java.io.PrintWriter)
-    */
+   /** {@inheritDoc} */
    public void setLogWriter (PrintWriter pw)
          throws ResourceException
    {
@@ -329,9 +313,7 @@ public class FsManagedConnectionImpl
       logger.exiting(CLASSNAME, "setLogWriter");
    }
 
-   /**
-    * @see javax.resource.spi.ManagedConnectionFactory#getLogWriter()
-    */
+   /** {@inheritDoc} */
    public PrintWriter getLogWriter ()
          throws ResourceException
    {
@@ -344,9 +326,7 @@ public class FsManagedConnectionImpl
       return mPrintWriter;
    }
 
-   /**
-    * @see org.jcoderz.commons.connector.ConnectionNotificationListener#notifyConnectionClosed(java.lang.Object)
-    */
+   /** {@inheritDoc} */
    public void notifyConnectionClosed (Object source)
    {
       final boolean finer = logger.isLoggable(Level.FINER);
@@ -375,9 +355,7 @@ public class FsManagedConnectionImpl
       }
    }
 
-   /**
-    * @see org.jcoderz.commons.connector.ConnectionNotificationListener#notifyConnectionErrorOccurred(java.lang.Object, java.lang.Exception)
-    */
+   /** {@inheritDoc} */
    public void notifyConnectionErrorOccurred (Object source, Exception e)
    {
       logger.entering(CLASSNAME, "notifyConnectionErrorOccurred",
@@ -396,9 +374,7 @@ public class FsManagedConnectionImpl
       logger.exiting(CLASSNAME, "notifyConnectionErrorOccurred");
    }
 
-   /**
-    * @see org.jcoderz.commons.connector.ConnectionNotificationListener#notifyConnectionDissociated(java.lang.Object)
-    */
+   /** {@inheritDoc} */
    public void notifyConnectionDissociated (Object source)
    {
       final boolean finer = logger.isLoggable(Level.FINER);
@@ -424,19 +400,13 @@ public class FsManagedConnectionImpl
       return mUp;
    }
 
-   /**
-    * @see java.lang.Object#toString()
-    */
+   /** {@inheritDoc} */
    public String toString ()
    {
       return mStringified;
    }
 
-   /**
-    * Override hashCode.
-    *
-    * @return the Objects hashcode.
-    */
+   /** {@inheritDoc} */
    public int hashCode ()
    {
       return mIndex;

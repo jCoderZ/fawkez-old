@@ -92,13 +92,7 @@ public class TemplateDescr
          private final StringBuffer mCharBuffer = new StringBuffer();
          private Parameter mParam = null;
 
-         /** 
-          * @see org.xml.sax.helpers.DefaultHandler#startElement(
-          *       java.lang.String,
-          *       java.lang.String,
-          *       java.lang.String,
-          *       org.xml.sax.Attributes)
-          */
+         /** {@inheritDoc} */
          public void startElement (
                String uri,
                String localName,
@@ -159,12 +153,7 @@ public class TemplateDescr
             }
          }
 
-         /**
-          * @see org.xml.sax.helpers.DefaultHandler#endElement(
-          *       java.lang.String,
-          *       java.lang.String,
-          *       java.lang.String)
-          */
+         /** {@inheritDoc} */
          public void endElement (String uri, String localName, String qName)
                throws SAXException
          {
@@ -218,10 +207,7 @@ public class TemplateDescr
             }
          }
 
-         /**
-          * @see org.xml.sax.helpers.DefaultHandler#characters(
-          *       char[], int, int)
-          */
+         /** {@inheritDoc} */
          public void characters (char[] ch, int start, int length)
                throws SAXException
          {
@@ -234,9 +220,7 @@ public class TemplateDescr
       parser.parse(new InputSource(sr), docHandler);
    }
 
-   /**
-    * @see java.lang.Object#toString()
-    */
+   /** {@inheritDoc} */
    public String toString ()
    {
       final StringBuffer sbuf = new StringBuffer();

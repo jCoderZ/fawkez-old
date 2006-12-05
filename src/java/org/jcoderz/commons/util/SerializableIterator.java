@@ -105,17 +105,13 @@ public final class SerializableIterator
             "Can't remove from a SerializableIterator");
    }
 
-   /**
-    * @see java.util.Iterator#hasNext()
-    */
+   /** {@inheritDoc} */
    public boolean hasNext ()
    {
       return mNextIndex < mItems.size();
    }
 
-   /**
-    * @see java.util.Iterator#next()
-    */
+   /** {@inheritDoc} */
    public Object next ()
    {
       if (mNextIndex >= mItems.size())
@@ -125,9 +121,7 @@ public final class SerializableIterator
       return mItems.get(mNextIndex++);
    }
 
-   /**
-    * @see java.lang.Object#toString()
-    */
+   /** {@inheritDoc} */
    public String toString ()
    {
       return "[SerializableIterator: " + mItems + "]";

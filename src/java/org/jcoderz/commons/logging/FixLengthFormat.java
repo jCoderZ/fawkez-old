@@ -97,9 +97,7 @@ public class FixLengthFormat
          return PADDINGS[mOrdinal];
       }
 
-      /**
-       * @see java.lang.Comparable#compareTo(java.lang.Object)
-       */
+      /** {@inheritDoc} */
       public int compareTo (Object o)
       {
          return mOrdinal - ((Padding) o).mOrdinal;

@@ -55,9 +55,7 @@ public final class DummyEntityResolver
       mTask = task;
    }
 
-   /**
-    * @see org.xml.sax.EntityResolver#resolveEntity(java.lang.String, java.lang.String)
-    */
+   /** {@inheritDoc} */
    public InputSource resolveEntity (String publicId, String systemId)
    {
       if (mTask != null)

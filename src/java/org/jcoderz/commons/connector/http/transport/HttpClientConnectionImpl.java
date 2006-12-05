@@ -136,9 +136,7 @@ public class HttpClientConnectionImpl
    private ConnectorContext mConnectorContext = null;
    private HttpRequestResponseHeader mRequestResponseHeader = null;
 
-   /**
-    * @see HttpClientConnection#establishConnection(String, int, int)
-    */
+   /** {@inheritDoc} */
    public void establishConnection (
       String uriAsString,
       int connectTimeout,
@@ -217,9 +215,7 @@ public class HttpClientConnectionImpl
       mState = HttpConnectionState.CONNECTION_ESTABLISHED;
    }
 
-   /**
-    * @see HttpClientConnection#releaseConnection()
-    */
+   /** {@inheritDoc} */
    public void releaseConnection ()
    {
       if (mState == HttpConnectionState.CONNECTION_RELEASED)
@@ -240,9 +236,7 @@ public class HttpClientConnectionImpl
       mState = HttpConnectionState.CONNECTION_RELEASED;
    }
 
-   /**
-    * @see HttpClientConnection#closeConnection()
-    */
+   /** {@inheritDoc} */
    public void closeConnection ()
    {
       if (mState != HttpConnectionState.CONNECTION_ESTABLISHED
@@ -261,9 +255,7 @@ public class HttpClientConnectionImpl
       mState = HttpConnectionState.CONNECTION_CLOSED;
    }
 
-   /**
-    * @see HttpClientConnection#execute()
-    */
+   /** {@inheritDoc} */
    public void execute ()
          throws HttpConnectionException
    {
@@ -345,18 +337,13 @@ public class HttpClientConnectionImpl
       throw hce;
    }
 
-   /**
-    * @see HttpClientConnection#setRequestBody(java.io.InputStream)
-    */
+   /** {@inheritDoc} */
    public void setRequestBody (InputStream in)
    {
       mRequestBodyInputStream = in;
    }
 
-   /**
-    *
-    * @see HttpClientConnection#getResponseBody()
-    */
+   /** {@inheritDoc} */
    public byte[] getResponseBody ()
          throws HttpEmptyResponseException
    {
@@ -383,9 +370,7 @@ public class HttpClientConnectionImpl
       return result;
    }
 
-   /**
-    * @see HttpClientConnection#getResponseHeader(java.lang.String)
-    */
+   /** {@inheritDoc} */
    public String getResponseHeader (String key)
    {
       String result = null;
@@ -398,9 +383,7 @@ public class HttpClientConnectionImpl
       return result;
    }
 
-   /**
-    * @see HttpClientConnection#initSsl(java.lang.String, java.lang.String)
-    */
+   /** {@inheritDoc} */
    public void initSsl (
          String keyAlias,
          String keyAliasPassword)
@@ -421,9 +404,7 @@ public class HttpClientConnectionImpl
       mKeyAliasPassword = keyAliasPassword;
    }
 
-   /**
-    * @see HttpClientConnection#initSsl(KeyStore, KeyStore, String, String)
-    */
+   /** {@inheritDoc} */
    public void initSsl (
          KeyStore keyStore,
          KeyStore trustStore,
@@ -440,9 +421,7 @@ public class HttpClientConnectionImpl
       mKeyAliasPassword = keyAliasPassword;
    }
 
-   /**
-    * @see org.jcoderz.commons.connector.http.transport.HttpClientConnection#setEventListener(org.jcoderz.commons.connector.http.transport.HttpConnectorEventListener, org.jcoderz.commons.connector.http.transport.ConnectorContext)
-    */
+   /** {@inheritDoc} */
    public void setEventListener (HttpConnectorEventListener listener,
          ConnectorContext context)
    {
@@ -450,9 +429,7 @@ public class HttpClientConnectionImpl
       mConnectorContext = context;
    }
 
-   /**
-    * @see org.jcoderz.commons.connector.http.transport.HttpClientConnection#setRequestResponseHeader(org.jcoderz.commons.connector.http.transport.HttpRequestResponseHeader)
-    */
+   /** {@inheritDoc} */
    public void setRequestResponseHeader (HttpRequestResponseHeader header)
    {
       mRequestResponseHeader = header;

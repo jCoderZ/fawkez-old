@@ -81,9 +81,7 @@ public final class FindBugsReportReader
       super(FINDBUGS_JAXB_CONTEXT_PATH);
    }
 
-   /**
-    * @see org.jcoderz.phoenix.report.ReportReader#parse(java.io.File)
-    */
+   /** {@inheritDoc} */
    public final void parse (File f)
       throws JAXBException
    {
@@ -98,9 +96,7 @@ public final class FindBugsReportReader
       }
    }
 
-   /**
-    * @see org.jcoderz.phoenix.report.AbstractReportReader#getItems()
-    */
+   /** {@inheritDoc} */
    public final Map getItems ()
       throws JAXBException
    {

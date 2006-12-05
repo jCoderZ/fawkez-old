@@ -68,18 +68,14 @@ public class FsManagedConnectionMetaData
       mUserName = userName;
    }
 
-   /**
-    * @see javax.resource.spi.ManagedConnectionMetaData#getEISProductName()
-    */
+   /** {@inheritDoc} */
    public String getEISProductName ()
          throws ResourceException
    {
       return EIS_PRODUCT_NAME;
    }
 
-   /**
-    * @see javax.resource.spi.ManagedConnectionMetaData#getEISProductVersion()
-    */
+   /** {@inheritDoc} */
    public String getEISProductVersion ()
          throws ResourceException
    {
@@ -98,9 +94,7 @@ public class FsManagedConnectionMetaData
       return MAX_CONNECTIONS;
    }
 
-   /**
-    * @see javax.resource.spi.ManagedConnectionMetaData#getUserName()
-    */
+   /** {@inheritDoc} */
    public String getUserName ()
          throws ResourceException
    {

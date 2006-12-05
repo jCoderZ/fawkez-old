@@ -71,9 +71,7 @@ public final class MessageIdFilter
       configure();
    }
 
-   /**
-    * @see java.util.logging.Filter#isLoggable(java.util.logging.LogRecord)
-    */
+   /** {@inheritDoc} */
    public boolean isLoggable (LogRecord record)
    {
       final boolean rc;

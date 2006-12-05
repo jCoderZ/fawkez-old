@@ -95,9 +95,7 @@ public class HttpRequestResponseHeader
       return Collections.unmodifiableMap(mResponseHeader);
    }
 
-   /**
-    * @see java.lang.Object#toString()
-    */
+   /** {@inheritDoc} */
    public String toString ()
    {
       final StringBuffer result = new StringBuffer();

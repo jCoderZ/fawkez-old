@@ -104,9 +104,7 @@ public final class HttpConnectionHelper
       mAmountOfTries = mConfig.getAmountOfTriesForwardingRequest();
    }
 
-   /**
-    * @see org.jcoderz.commons.connector.http.HttpConnection#sendAndReceive(byte[])
-    */
+   /** {@inheritDoc} */
    public byte[] sendAndReceive (byte[] message)
          throws ResourceException, ConnectorException
    {
@@ -246,9 +244,7 @@ public final class HttpConnectionHelper
       return response;
    }
 
-   /**
-    * @see org.jcoderz.commons.connector.http.HttpConnection#setEventListener(org.jcoderz.commons.connector.http.transport.HttpConnectorEventListener, org.jcoderz.commons.connector.http.transport.ConnectorContext)
-    */
+   /** {@inheritDoc} */
    public void setEventListener (HttpConnectorEventListener listener,
          ConnectorContext context)
          throws ResourceException
@@ -258,9 +254,7 @@ public final class HttpConnectionHelper
       getConnection().setEventListener(listener, context);
    }
 
-   /**
-    * @see org.jcoderz.commons.connector.http.HttpConnection#setRequestResponseHeader(org.jcoderz.commons.connector.http.transport.HttpRequestResponseHeader)
-    */
+   /** {@inheritDoc} */
    public void setRequestResponseHeader (HttpRequestResponseHeader header)
          throws ResourceException
    {
@@ -271,9 +265,7 @@ public final class HttpConnectionHelper
       }
    }
 
-   /**
-    * @see HttpConnection#close()
-    */
+   /** {@inheritDoc} */
    public void close ()
    {
       if (mConnection != null)

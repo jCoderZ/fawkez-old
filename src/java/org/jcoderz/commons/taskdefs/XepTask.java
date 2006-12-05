@@ -78,18 +78,15 @@ public class XepTask
    {
       mXepHome = dir;
    }
-   /**
-    * @see Java#setClassname(String)
-    */
+
+   /** {@inheritDoc} */
    public void setClassname (String arg0)
          throws BuildException
    {
       throw new BuildException("classname attribute is not allowed!");
    }
 
-   /**
-    * @see org.apache.tools.ant.Task#execute()
-    */
+   /** {@inheritDoc} */
    public void execute ()
          throws BuildException
    {

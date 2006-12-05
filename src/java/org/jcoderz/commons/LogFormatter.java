@@ -55,9 +55,7 @@ public class LogFormatter
 {
    private final ThreadLocal mMessageFormatters = new ThreadLocal();
 
-   /**
-    * @see java.util.logging.Formatter#format(java.util.logging.LogRecord)
-    */
+   /** {@inheritDoc} */
    public String format (LogRecord record)
    {
       final StringBuffer sb = new StringBuffer();

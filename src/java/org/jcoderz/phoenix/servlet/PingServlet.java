@@ -55,6 +55,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.jcoderz.commons.util.IoUtil;
+
 /**
  * This servlet sends a simple ping to the given host and returns a
  * 1 pixel image with a color representing the host status.
@@ -421,8 +423,8 @@ public final class PingServlet
       }
       finally
       {
-         close(dis);
-         close(t);
+         IoUtil.close(dis);
+         IoUtil.close(t);
       }
       return result;
    }
@@ -433,36 +435,6 @@ public final class PingServlet
             = new SimpleDateFormat(DATE_TIME_FORMAT, Locale.US);
       formater.setTimeZone(TIME_ZONE);
       return formater.format(new Date(time));
-   }
-
-   private static void close (Socket t)
-   {
-      if (t != null)
-      {
-         try
-         {
-            t.close();
-         }
-         catch (Exception ex)
-         {
-            // ok
-         }
-      }
-   }
-
-   private static void close (DataInputStream dis)
-   {
-      if (dis != null)
-      {
-         try
-         {
-            dis.close();
-         }
-         catch (Exception ex)
-         {
-            // ok
-         }
-      }
    }
 
    private class PingResult
@@ -483,7 +455,7 @@ public final class PingServlet
          mLastUsed = now;
       }
 
-      /** @see java.lang.Object#toString() */
+      /** {@inheritDoc} */
       public synchronized String toString ()
       {
          final StringBuffer buffer = new StringBuffer();

@@ -175,18 +175,14 @@ public final class ConfigurationCacheByPropertiesImpl
       return result;
    }
 
-   /**
-    * @see ConfigurationCacheInterface#getKeys()
-    */
+   /** {@inheritDoc} */
    public Set getKeys ()
    {
       return mConfigurationKeys;
    }
 
 
-   /**
-    * @see ConfigurationServiceInterface#addConfigurationListener(ConfigurationListener)
-    */
+   /** {@inheritDoc} */
    public void addConfigurationListener (ConfigurationListener newListener)
    {
       mRegisteredServices.add(newListener);

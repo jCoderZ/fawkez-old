@@ -59,9 +59,7 @@ final class JarArchiveUriResolver
       mTask = task;
    }
 
-   /**
-    * @see javax.xml.transform.URIResolver#resolve(java.lang.String, java.lang.String)
-    */
+   /** {@inheritDoc} */
    public Source resolve (String href, String base)
    {
       final InputStream in = JarArchiveUriResolver.class.getResourceAsStream(

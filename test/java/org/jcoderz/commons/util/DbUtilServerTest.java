@@ -53,9 +53,7 @@ public class DbUtilServerTest
 {
    private static final int TEST_BATCH_SIZE = 10;
 
-   /**
-    * @see junit.framework.TestCase#setUp()
-    */
+   /** {@inheritDoc} */
    protected void setUp ()
          throws Exception
    {

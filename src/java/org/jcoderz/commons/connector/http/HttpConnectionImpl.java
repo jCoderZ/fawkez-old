@@ -14,7 +14,7 @@
  *      disclaimer in the documentation and/or other materials
  *      provided with the distribution.
  *    * Neither the name of the jCoderZ.org Project nor the names of
- *      its contributors may be used to endorse or promote productsb
+ *      its contributors may be used to endorse or promote products
  *      derived from this software without specific prior written
  *      permission.
  *
@@ -43,15 +43,20 @@ import org.jcoderz.commons.connector.ConnectionTimeoutErrorException;
 import org.jcoderz.commons.connector.ConnectorConfiguration;
 import org.jcoderz.commons.connector.ConnectorException;
 import org.jcoderz.commons.connector.http.transport.ConnectorContext;
-import org.jcoderz.commons.connector.http.transport.HttpClientConnectionException;
-import org.jcoderz.commons.connector.http.transport.HttpConnectConnectionException;
+import org.jcoderz.commons.connector.http.transport
+        .HttpClientConnectionException;
+import org.jcoderz.commons.connector.http.transport
+        .HttpConnectConnectionException;
 import org.jcoderz.commons.connector.http.transport.HttpConnectionException;
 import org.jcoderz.commons.connector.http.transport.HttpConnectorEventListener;
 import org.jcoderz.commons.connector.http.transport.HttpEmptyResponseException;
-import org.jcoderz.commons.connector.http.transport.HttpInvalidResponseHeaderException;
+import org.jcoderz.commons.connector.http.transport
+        .HttpInvalidResponseHeaderException;
 import org.jcoderz.commons.connector.http.transport.HttpRequestResponseHeader;
-import org.jcoderz.commons.connector.http.transport.HttpServerConnectionException;
-import org.jcoderz.commons.connector.http.transport.HttpTimeoutConnectionException;
+import org.jcoderz.commons.connector.http.transport
+        .HttpServerConnectionException;
+import org.jcoderz.commons.connector.http.transport
+        .HttpTimeoutConnectionException;
 import org.jcoderz.commons.types.Url;
 import org.jcoderz.commons.util.Assert;
 
@@ -98,9 +103,7 @@ public final class HttpConnectionImpl
       mConfig = ConfigurationFactory.getConfiguration();
    }
 
-   /**
-    * @see org.jcoderz.commons.connector.http.HttpConnection#sendAndReceive(byte[])
-    */
+   /** {@inheritDoc} */
    public byte[] sendAndReceive (byte[] message)
          throws ResourceException, ConnectorException
    {
@@ -153,18 +156,14 @@ public final class HttpConnectionImpl
       return result;
    }
 
-   /**
-    * @see HttpConnection#setRequestResponseHeader(HttpRequestResponseHeader)
-    */
+   /** {@inheritDoc} */
    public void setRequestResponseHeader (HttpRequestResponseHeader header)
          throws ResourceException
    {
       getManagedConnection().setRequestResponseHeader(header);
    }
 
-   /**
-    * @see HttpConnection#setEventListener(HttpConnectorEventListener, ConnectorContext)
-    */
+   /** {@inheritDoc} */
    public void setEventListener (HttpConnectorEventListener listener,
          ConnectorContext context)
    {
@@ -277,9 +276,7 @@ public final class HttpConnectionImpl
       throw cre;
    }
 
-   /**
-    * @see HttpConnection#close()
-    */
+   /** {@inheritDoc} */
    public void close ()
    {
       final String methodName = "close";

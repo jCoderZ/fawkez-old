@@ -141,18 +141,14 @@ public abstract class Formatter
          super(i);
       }
 
-      /**
-       * @see Formatter#transform(XtremeDocs, File, File)
-       */
+      /** {@inheritDoc} */
       public void transform (XtremeDocs parent, File in, File out)
       {
          executeSaxon(parent, in, out);
          parent.log("Transformed " + in + " successfully to " + out);
       }
 
-      /**
-       * @see Formatter#getFileExtension()
-       */
+      /** {@inheritDoc} */
       public String getFileExtension ()
       {
          return "html";
@@ -177,9 +173,7 @@ public abstract class Formatter
          super(i);
       }
 
-      /**
-       * @see Formatter#transform(XtremeDocs, File, File)
-       */
+      /** {@inheritDoc} */
       public void transform (XtremeDocs parent, File in, File out)
       {
          final File tmp = new File(out.getParentFile(), out.getName() + ".fo");
@@ -220,9 +214,7 @@ public abstract class Formatter
          fop.execute();
       }
 
-      /**
-       * @see Formatter#getFileExtension()
-       */
+      /** {@inheritDoc} */
       public String getFileExtension ()
       {
          return "pdf";

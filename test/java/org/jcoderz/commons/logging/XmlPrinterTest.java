@@ -121,9 +121,7 @@ public class XmlPrinterTest
          }
       }
 
-      /**
-       * @see java.util.logging.Formatter#format(java.util.logging.LogRecord)
-       */
+      /** {@inheritDoc} */
       public String format (LogRecord record)
       {
          mCharWriter.reset();

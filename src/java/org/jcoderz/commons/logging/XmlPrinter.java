@@ -46,14 +46,6 @@ import javax.xml.bind.Marshaller;
 
 import org.apache.commons.pool.BaseKeyedPoolableObjectFactory;
 import org.apache.commons.pool.impl.StackKeyedObjectPool;
-import org.jcoderz.commons.logging.CauseType;
-import org.jcoderz.commons.logging.ExceptionType;
-import org.jcoderz.commons.logging.FrameType;
-import org.jcoderz.commons.logging.LogRecord;
-import org.jcoderz.commons.logging.LogRecordType;
-import org.jcoderz.commons.logging.ObjectFactory;
-import org.jcoderz.commons.logging.ParameterType;
-import org.jcoderz.commons.logging.StacktraceType;
 import org.jcoderz.commons.util.Assert;
 
 

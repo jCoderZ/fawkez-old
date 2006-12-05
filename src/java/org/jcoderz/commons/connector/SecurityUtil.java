@@ -172,9 +172,7 @@ public final class SecurityUtil
          mPcAction = pcAction;
       }
 
-      /**
-       * @see java.security.PrivilegedAction#run()
-       */
+      /** {@inheritDoc} */
       public Object run ()
       {
          final Object result;

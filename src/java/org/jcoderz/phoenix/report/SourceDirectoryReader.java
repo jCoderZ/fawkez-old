@@ -61,18 +61,14 @@ public final class SourceDirectoryReader
       super(JcoderzReport.JCODERZ_JAXB_CONTEXT_PATH);
    }
 
-   /**
-    * @see org.jcoderz.phoenix.report.AbstractReportReader#getItems()
-    */
+   /** {@inheritDoc} */
    protected Map getItems () 
          throws JAXBException
    {
       return Collections.unmodifiableMap(mSources);
    }
 
-   /**
-    * @see org.jcoderz.phoenix.report.ReportReader#parse(java.io.File)
-    */
+   /** {@inheritDoc} */
    public void parse (File f) 
          throws JAXBException, FileNotFoundException
    {

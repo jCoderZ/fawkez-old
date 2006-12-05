@@ -100,9 +100,7 @@ public class SqlParserTest extends TestCase
          mSqlFile = sqlFile;
       }
       
-      /**
-       * @see junit.framework.TestCase#runTest()
-       */
+      /** {@inheritDoc} */
       protected void runTest () throws Throwable
       {
          testSqlParser();

@@ -66,9 +66,7 @@ public class NumericAttribute
       return mNumber;
    }
 
-   /**
-    * @see java.lang.Object#toString()
-    */
+   /** {@inheritDoc} */
    public final String toString ()
    {
       return "[NumericAttribute: number=" + mNumber + "]";

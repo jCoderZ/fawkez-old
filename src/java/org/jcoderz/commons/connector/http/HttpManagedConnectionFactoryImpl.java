@@ -79,34 +79,26 @@ public final class HttpManagedConnectionFactoryImpl
    private Integer mMaxConnections;
 
 
-   /**
-    * @see javax.resource.spi.ManagedConnectionFactory#createConnectionFactory(javax.resource.spi.ConnectionManager)
-    */
+   /** {@inheritDoc} */
    public Object createConnectionFactory (ConnectionManager cm)
    {
       return new HttpConnectionFactoryImpl(this, cm);
    }
 
-   /**
-    * @see javax.resource.spi.ManagedConnectionFactory#createConnectionFactory()
-    */
+   /** {@inheritDoc} */
    public Object createConnectionFactory ()
    {
       return new HttpConnectionFactoryImpl(this, null);
    }
 
-   /**
-    * @see javax.resource.spi.ManagedConnectionFactory#createManagedConnection(javax.security.auth.Subject, javax.resource.spi.ConnectionRequestInfo)
-    */
+   /** {@inheritDoc} */
    public ManagedConnection createManagedConnection (
          Subject subject, ConnectionRequestInfo cri)
    {
       return new HttpManagedConnectionImpl(this, cri);
    }
 
-   /**
-    * @see javax.resource.spi.ManagedConnectionFactory#matchManagedConnections(java.util.Set, javax.security.auth.Subject, javax.resource.spi.ConnectionRequestInfo)
-    */
+   /** {@inheritDoc} */
    public ManagedConnection matchManagedConnections (
          Set connectionSet,
          Subject subject,
@@ -199,17 +191,13 @@ public final class HttpManagedConnectionFactoryImpl
       }
    }
 
-   /**
-    * @see javax.resource.spi.ManagedConnectionFactory#setLogWriter(java.io.PrintWriter)
-    */
+   /** {@inheritDoc} */
    public void setLogWriter (PrintWriter arg0)
    {
       // not used
    }
 
-   /**
-    * @see javax.resource.spi.ManagedConnectionFactory#getLogWriter()
-    */
+   /** {@inheritDoc} */
    public PrintWriter getLogWriter ()
    {
       // not used

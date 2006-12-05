@@ -165,9 +165,7 @@ public abstract class AbstractReportReader
         return result;
     }
 
-    /**
-     * @see org.jcoderz.phoenix.report.ReportReader#merge(java.util.Map)
-     */
+    /** {@inheritDoc} */
     public final void merge (Map toItems)
             throws JAXBException
     {
@@ -197,9 +195,7 @@ public abstract class AbstractReportReader
     protected abstract Map getItems ()
             throws JAXBException;
 
-    /**
-     * @see javax.xml.bind.ValidationEventHandler#handleEvent(javax.xml.bind.ValidationEvent)
-     */
+    /** {@inheritDoc} */
     public final boolean handleEvent (ValidationEvent e)
     {
         ValidationEventLocator l = e.getLocator();

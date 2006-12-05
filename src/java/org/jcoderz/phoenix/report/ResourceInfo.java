@@ -165,9 +165,7 @@ public final class ResourceInfo
         return counter;
     }
 
-    /**
-     * @see java.lang.Object#equals(java.lang.Object)
-     */
+    /** {@inheritDoc} */
     public boolean equals (Object obj)
     {
         boolean result = false;
@@ -189,9 +187,7 @@ public final class ResourceInfo
         return result;
     }
 
-    /**
-     * @see java.lang.Object#hashCode()
-     */
+    /** {@inheritDoc} */
     public int hashCode ()
     {
         if (mHashCode == -1)
@@ -259,9 +255,7 @@ public final class ResourceInfo
         return mSourcDir;
     }
 
-    /**
-     * @see java.lang.Object#toString()
-     */
+    /** {@inheritDoc} */
     public String toString ()
     {
         return "[ResourceInfo: name=" + mResourceName + ", pkg=" + mPackage

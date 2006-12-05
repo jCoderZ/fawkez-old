@@ -59,9 +59,7 @@ public class PeriodFilter
       mPeriods = periods;
    }
 
-   /**
-    * @see org.jcoderz.commons.logging.Filter#isPassable(org.jcoderz.commons.logging.LogItem)
-    */
+   /** {@inheritDoc} */
    public boolean isPassable (LogItem entry)
    {
       boolean result = true;

@@ -59,9 +59,7 @@ public class CreateSequenceStatement
       mName = name;
    }
 
-   /**
-    * @see java.lang.Object#toString()
-    */
+   /** {@inheritDoc} */
    public String toString ()
    {
       final StringBuffer sbuf = new StringBuffer();

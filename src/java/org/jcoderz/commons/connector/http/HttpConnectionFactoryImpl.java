@@ -66,9 +66,7 @@ public class HttpConnectionFactoryImpl
       mConnectionManager = cm;
    }
 
-   /**
-    * @see org.jcoderz.commons.connector.http.HttpConnectionFactory#getConnection(org.jcoderz.commons.connector.http.HttpConnectionSpec)
-    */
+   /** {@inheritDoc} */
    public HttpConnection getConnection (HttpConnectionSpec connectionSpec)
          throws ResourceException
    {
@@ -99,17 +97,13 @@ public class HttpConnectionFactoryImpl
       return connectionHandle;
    }
 
-   /**
-    * @see javax.resource.Referenceable#setReference(javax.naming.Reference)
-    */
+   /** {@inheritDoc} */
    public void setReference (Reference reference)
    {
       mReference = reference;
    }
 
-   /**
-    * @see javax.naming.Referenceable#getReference()
-    */
+   /** {@inheritDoc} */
    public Reference getReference ()
    {
       return mReference;

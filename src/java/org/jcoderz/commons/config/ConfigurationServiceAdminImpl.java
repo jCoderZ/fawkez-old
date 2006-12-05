@@ -80,8 +80,7 @@ public class ConfigurationServiceAdminImpl
 //      String PARAM_KEY_OF_GET_METHODS = "key";
 
 
-   /**
-    * @see ConfigurationServiceAdminInterface#getKeys()
+   /** {@inheritDoc} 
     *
     * @ejb.interface-method view-type="remote"
     * @ejb.transaction type="Required"
@@ -114,7 +113,7 @@ public class ConfigurationServiceAdminImpl
    //
 
    /**
-    * @see ConfigurationServiceCommonInterface#getBoolean(ConfigurationKey)
+    * {@inheritDoc}
     *
     * @ejb.interface-method view-type="remote"
     * @ejb.transaction type="Required"
@@ -130,7 +129,7 @@ public class ConfigurationServiceAdminImpl
 
 
    /**
-    * @see ConfigurationServiceCommonInterface#getInt(ConfigurationKey)
+    * {@inheritDoc}
     *
     * @ejb.interface-method view-type="remote"
     * @ejb.transaction type="Required"
@@ -146,7 +145,7 @@ public class ConfigurationServiceAdminImpl
 
 
    /**
-    * @see ConfigurationServiceCommonInterface#getLong(ConfigurationKey)
+    * {@inheritDoc}
     *
     * @ejb.interface-method view-type="remote"
     * @ejb.transaction type="Required"
@@ -162,7 +161,7 @@ public class ConfigurationServiceAdminImpl
 
 
    /**
-    * @see ConfigurationServiceCommonInterface#getString(ConfigurationKey)
+    * {@inheritDoc}
     *
     * @ejb.interface-method view-type="remote"
     * @ejb.transaction type="Required"

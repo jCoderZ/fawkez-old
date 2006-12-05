@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-   $Id: generate-jsf-converters.xsl,v 1.1 2005/11/21 14:51:01 mrumpf Exp $
+   $Id$
 
    Simple type generator. Support type-safe enumerations and restricted
    strings.
@@ -91,9 +91,7 @@ public class <xsl:value-of select="$classname"/>
    private static final String CLASSNAME = <xsl:value-of select="$classname"/>.class.getName();
    private static final Logger logger = Logger.getLogger(CLASSNAME);
 
-   /**
-    * @see javax.faces.convert.Converter#getAsObject(javax.faces.context.FacesContext, javax.faces.component.UIComponent, java.lang.String)
-    */
+   /** {@inheritDoc} */
    public Object getAsObject (FacesContext context, UIComponent component,
          String value)
    {
@@ -127,9 +125,7 @@ public class <xsl:value-of select="$classname"/>
       return result;
    }
 
-   /**
-    * @see javax.faces.convert.Converter#getAsString(javax.faces.context.FacesContext, javax.faces.component.UIComponent, java.lang.Object)
-    */
+   /** {@inheritDoc} */
    public String getAsString (FacesContext context, UIComponent component,
          Object value)
    {

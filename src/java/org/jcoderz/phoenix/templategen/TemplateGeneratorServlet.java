@@ -59,11 +59,7 @@ public class TemplateGeneratorServlet
     private static final long serialVersionUID = 1017987995368589070L;
     private static final String TEMPLATE_DIR = "templates";
    
-   /**
-    * @see javax.servlet.http.HttpServlet#doPost(
-    *       javax.servlet.http.HttpServletRequest,
-    *       javax.servlet.http.HttpServletResponse)
-    */
+    /** {@inheritDoc} */
    protected void doPost (
          HttpServletRequest request,
          HttpServletResponse response)
@@ -72,11 +68,7 @@ public class TemplateGeneratorServlet
       doService(request, response);
    }
 
-   /**
-    * @see javax.servlet.http.HttpServlet#doGet(
-    *       javax.servlet.http.HttpServletRequest,
-    *       javax.servlet.http.HttpServletResponse)
-    */
+   /** {@inheritDoc} */
    protected void doGet (
          HttpServletRequest request,
          HttpServletResponse response)
@@ -85,11 +77,7 @@ public class TemplateGeneratorServlet
       doService(request, response);
    }
 
-   /**
-    * @see javax.servlet.http.HttpServlet#doGet(
-    *       HttpServletRequest,
-    * HttpServletResponse)
-    */
+   /** {@inheritDoc} */
    protected void doService (
          HttpServletRequest request,
          HttpServletResponse response)

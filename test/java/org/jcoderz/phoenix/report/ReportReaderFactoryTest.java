@@ -56,17 +56,13 @@ public class ReportReaderFactoryTest extends TestCase
       junit.textui.TestRunner.run(ReportReaderFactoryTest.class);
    }
 
-   /*
-    * @see TestCase#setUp()
-    */
+   /** {@inheritDoc} */
    protected void setUp () throws Exception
    {
       super.setUp();
    }
 
-   /*
-    * @see TestCase#tearDown()
-    */
+   /** {@inheritDoc} */
    protected void tearDown () throws Exception
    {
       super.tearDown();

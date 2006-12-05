@@ -135,9 +135,7 @@ class FsConnectionImpl
       }
    }
 
-   /**
-    * @see org.jcoderz.commons.connector.file.FsConnection#close()
-    */
+   /** {@inheritDoc} */
    public void close ()
          throws ResourceException
    {
@@ -149,9 +147,7 @@ class FsConnectionImpl
       logger.exiting(CLASSNAME, "close");
    }
 
-   /**
-    * @see org.jcoderz.commons.connector.file.FsConnection#isExists(java.lang.String)
-    */
+   /** {@inheritDoc} */
    public boolean isExists (String file)
          throws ResourceException
    {
@@ -177,9 +173,7 @@ class FsConnectionImpl
       return rse;
    }
 
-   /**
-    * @see org.jcoderz.commons.connector.file.FsConnection#deleteFile(java.lang.String)
-    */
+   /** {@inheritDoc} */
    public boolean deleteFile (String file)
          throws ResourceException
    {
@@ -187,9 +181,7 @@ class FsConnectionImpl
       return deleteFile(new File(file));
    }
 
-   /**
-    * @see org.jcoderz.commons.connector.file.FsConnection#listFiles(java.lang.String)
-    */
+   /** {@inheritDoc} */
    public String [] listFiles (final String dir)
          throws ResourceException
    {
@@ -218,9 +210,7 @@ class FsConnectionImpl
       return result;
    }
 
-   /**
-    * @see org.jcoderz.commons.connector.file.FsConnection#renameFile(java.lang.String, java.lang.String)
-    */
+   /** {@inheritDoc} */
    public void renameFile (final String from, final String to)
          throws ResourceException
    {
@@ -232,9 +222,7 @@ class FsConnectionImpl
       logger.exiting(CLASSNAME, method);
    }
 
-   /**
-    * @see FsConnection#moveFile(String, String)
-    */
+   /** {@inheritDoc} */
    public void moveFile (final String src, final String dest)
          throws ResourceException
    {
@@ -319,9 +307,8 @@ class FsConnectionImpl
 
       logger.exiting(CLASSNAME, method);
    }
-   /**
-    * @see org.jcoderz.commons.connector.file.FsConnection#createTempFile()
-    */
+   
+   /** {@inheritDoc} */
    public String createTempFile ()
          throws ResourceException
    {
@@ -335,9 +322,7 @@ class FsConnectionImpl
       return result;
    }
 
-   /**
-    * @see org.jcoderz.commons.connector.file.FsConnection#createTempFile(java.lang.String)
-    */
+   /** {@inheritDoc} */
    public String createTempFile (final String dir)
          throws ResourceException
    {
@@ -362,9 +347,7 @@ class FsConnectionImpl
       return result;
    }
 
-   /**
-    * @see org.jcoderz.commons.connector.file.FsConnection#createFile(java.lang.String)
-    */
+   /** {@inheritDoc} */
    public boolean createFile (String file)
          throws ResourceException
    {
@@ -459,10 +442,7 @@ class FsConnectionImpl
       logger.exiting(CLASSNAME, method);
    }
 
-
-   /**
-    * @see org.jcoderz.commons.connector.file.FsConnection#renameToTempFile(java.lang.String)
-    */
+   /** {@inheritDoc} */
    public String renameToTempFile (String file)
          throws ResourceException
    {
@@ -695,9 +675,7 @@ class FsConnectionImpl
             file.getName() + Integer.toString(RANDOM.nextInt()));
    }
 
-   /**
-    * @see org.jcoderz.commons.connector.file.FsConnection#getRandomAccessFile(java.lang.String, java.lang.String)
-    */
+   /** {@inheritDoc} */
    public RandomAccessFile getRandomAccessFile (String file, String mode)
          throws ResourceException, FileNotFoundException
    {
@@ -723,9 +701,7 @@ class FsConnectionImpl
       return raf;
    }
 
-   /**
-    * @see org.jcoderz.commons.connector.file.FsConnection#getFileInputStream(java.lang.String)
-    */
+   /** {@inheritDoc} */
    public FileInputStream getFileInputStream (String file)
          throws ResourceException, FileNotFoundException
    {
@@ -932,31 +908,19 @@ class FsConnectionImpl
    }
 
 
-   /**
-    * @see java.lang.Object#toString()
-    */
+   /** {@inheritDoc} */
    public String toString ()
    {
       return mStringified;
    }
 
-   /**
-    * Override hashCode.
-    *
-    * @return the Objects hashcode.
-    */
+   /** {@inheritDoc} */
    public int hashCode ()
    {
       return mIndex;
    }
 
-   /**
-    * Indicates whether some other object is "equal to" this one.
-    *
-    * @param obj the object to compare to.
-    * @return true if this object is the same as the obj argument; false
-    *         otherwise.
-    */
+   /** {@inheritDoc} */
    public boolean equals (Object obj)
    {
       return (obj instanceof FsConnectionImpl

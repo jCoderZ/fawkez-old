@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-   $Id: libcommon.xsl,v 1.19 2005/10/10 08:53:48 mgriffel Exp $
+   $Id$
 
    Collects common XSL templates.
 
@@ -1084,17 +1084,13 @@ public final class <xsl:value-of select="$classname"/>
       return m<xsl:value-of select="$classname"/>LongObject;
    }
 
-   /**
-    * @see java.lang.Object#toString()
-    */
+   /** {@inheritDoc} */
    public String toString ()
    {
       return Long.toString(m<xsl:value-of select="$classname"/>);
    }
 
-   /**
-    * @see java.lang.Object#equals(java.lang.Object)
-    */
+   /** {@inheritDoc} */
    public boolean equals (Object obj)
    {
       return (obj instanceof <xsl:value-of select="$classname"/>
@@ -1102,9 +1098,7 @@ public final class <xsl:value-of select="$classname"/>
                == m<xsl:value-of select="$classname"/>);
    }
 
-   /**
-    * @see java.lang.Object#hashCode()
-    */
+   /** {@inheritDoc} */
    public int hashCode ()
    {
       if (mHashCode == 0)

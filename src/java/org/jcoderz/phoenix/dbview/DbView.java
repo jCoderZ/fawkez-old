@@ -65,6 +65,9 @@ import javax.naming.InitialContext;
 import javax.sql.DataSource;
 
 import org.jcoderz.commons.util.Constants;
+import org.jcoderz.commons.util.DbUtil;
+import org.jcoderz.commons.util.IoUtil;
+import org.jcoderz.commons.util.XmlUtil;
 
 
 /**
@@ -81,7 +84,6 @@ public class DbView
 
    private static final int MILLIS_PER_SECOND 
            = org.jcoderz.commons.types.Date.MILLIS_PER_SECOND;
-   private static final int READ_BUFFER_SIZE = 64 * 1024;
    private static final String SELECT_ALL_TABLES = "select * from tab";
    private static final String CLASSNAME = DbView.class.getName();
    private static final Logger logger = Logger.getLogger(CLASSNAME);
@@ -93,7 +95,6 @@ public class DbView
    private final DateFormat mDateFormater
          = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss.SSS", 
                  Constants.SYSTEM_LOCALE);
-   private final char[] mReadBuffer = new char[READ_BUFFER_SIZE];
 
    {
       mDateFormater.setTimeZone(TimeZone.getTimeZone("UTC"));
@@ -187,32 +188,8 @@ public class DbView
       }
       finally
       {
-         if (statement != null)
-         {
-            try
-            {
-               statement.close();
-            }
-            catch (SQLException x)
-            {
-               logger.log(Level.FINE,
-                     "Error during resource cleanup: "
-                     + "java.sql.PreparedStatement.close()", x);
-            }
-         }
-         if (dbConnection != null)
-         {
-            try
-            {
-               dbConnection.close();
-            }
-            catch (SQLException x)
-            {
-               logger.log(Level.FINE,
-                     "Error during resource cleanup: "
-                     + "java.sql.Connection.close()", x);
-            }
-         }
+          DbUtil.close(statement);
+          DbUtil.close(dbConnection);
       }
 
    }
@@ -251,19 +228,10 @@ public class DbView
             else if (args[i].equals("-outDir"))
             {
                mOutputDir = new File(args[++i]);
-               if (!mOutputDir.isDirectory())
-               {
-                  throw new RuntimeException("out dir must be a directory.");
-               }
             }
             else if (args[i].equals("-outFile"))
             {
                mOutputFile = new File(args[++i]);
-               if (mOutputFile.isDirectory())
-               {
-                  throw new RuntimeException(
-                        "out file must not be a directory.");
-               }
             }
             else if (args[i].equals("-dbDriver"))
             {
@@ -282,27 +250,42 @@ public class DbView
             ++i;
          }
 
-         if (mOutputDir == null && mOutputFile == null)
-         {
-            throw new IllegalArgumentException(
-                  "Need either output dir or output file.");
-         }
-         if (mSqlStatement != null && mOutputFile != null)
-         {
-            throw new IllegalArgumentException(
-                  "Need output file for sql statement.");
-         }
-         if (mSqlStatement == null && mOutputDir == null)
-         {
-            throw new IllegalArgumentException(
-                  "Need output dir for global dump.");
-         }
+         checkParameters();
       }
       catch (IndexOutOfBoundsException e)
       {
          throw new IllegalArgumentException("Missing value for "
             + args[args.length - 1]);
       }
+   }
+
+   private void checkParameters ()
+        throws IllegalArgumentException
+   {
+       if (!mOutputDir.isDirectory())
+       {
+          throw new RuntimeException("out dir must be a directory.");
+       }
+       if (mOutputFile.isDirectory())
+       {
+          throw new RuntimeException(
+                "out file must not be a directory.");
+       }
+       if (mOutputDir == null && mOutputFile == null)
+       {
+           throw new IllegalArgumentException(
+               "Need either output dir or output file.");
+       }
+       if (mSqlStatement != null && mOutputFile != null)
+       {
+           throw new IllegalArgumentException(
+              "Need output file for sql statement.");
+       }
+       if (mSqlStatement == null && mOutputDir == null)
+       {
+           throw new IllegalArgumentException(
+                   "Need output dir for global dump.");
+       }
    }
 
    public void performConvertion (File file, String query)
@@ -328,43 +311,9 @@ public class DbView
       }
       finally
       {
-         if (out != null)
-         {
-            try
-            {
-               out.close();
-            }
-            catch (RuntimeException e)
-            {
-               // save to ignore
-            }
-         }
-         if (statement != null)
-         {
-            try
-            {
-               statement.close();
-            }
-            catch (SQLException x)
-            {
-               logger.log(Level.FINE,
-                     "Error during resource cleanup: "
-                     + "java.sql.PreparedStatement.close()", x);
-            }
-         }
-         if (dbConnection != null)
-         {
-            try
-            {
-               dbConnection.close();
-            }
-            catch (SQLException x)
-            {
-               logger.log(Level.FINE,
-                     "Error during resource cleanup: "
-                     + "java.sql.Connection.close()", x);
-            }
-         }
+         IoUtil.close(out);
+         DbUtil.close(statement);
+         DbUtil.close(dbConnection);
       }
    }
 
@@ -398,30 +347,8 @@ public class DbView
       }
       finally
       {
-         if (out != null)
-         {
-            try
-            {
-               out.close();
-            }
-            catch (RuntimeException e)
-            {
-               // save to ignore
-            }
-         }
-         if (statement != null)
-         {
-            try
-            {
-               statement.close();
-            }
-            catch (SQLException x)
-            {
-               logger.log(Level.FINE,
-                     "Error during resource cleanup: "
-                     + "java.sql.PreparedStatement.close()", x);
-            }
-         }
+          IoUtil.close(out);
+          DbUtil.close(statement);
       }
    }
 
@@ -457,18 +384,18 @@ public class DbView
          throws IOException, SQLException
    {
       out.print("<result statement='");
-      out.print(attributeEncode(statement));
+      out.print(XmlUtil.attributeEscape(statement));
       out.println("'");
       if (dataSource != null)
       {
          out.print("        data-source='");
-         out.print(attributeEncode(dataSource));
+         out.print(XmlUtil.attributeEscape(dataSource));
          out.println("'");
       }
       if (dataBaseUri != null)
       {
          out.print("        db-uri='");
-         out.print(attributeEncode(dataBaseUri));
+         out.print(XmlUtil.attributeEscape(dataBaseUri));
          out.println("'");
       }
       out.print("        creation-date='");
@@ -559,7 +486,7 @@ public class DbView
       out.print("              ");
       out.print(attributeName);
       out.print("='");
-      out.print(attributeEncode(attributeValue));
+      out.print(XmlUtil.attributeEscape(attributeValue));
       out.println("'");
    }
 
@@ -661,53 +588,11 @@ public class DbView
       final Reader reader = rs.getCharacterStream(column);
       try
       {
-         result = readFully(reader);
+         result = IoUtil.readFully(reader);
       }
       finally
       {
-         saveClose(reader);
-      }
-      return result;
-   }
-
-   /**
-    * @param reader
-    */
-   private void saveClose (final Reader reader)
-   {
-      if (reader != null)
-      {
-         try
-         {
-            reader.close();
-         }
-         catch (Exception ex)
-         {
-            // save to ignore
-         }
-      }
-   }
-
-   /**
-    * Read all data in the given reader.
-    */
-   private String readFully (Reader reader)
-         throws IOException
-   {
-      final String result;
-      if (reader == null)
-      {
-         result = null;
-      }
-      else
-      {
-         mStringBuffer.setLength(0);
-         int read;
-         while ((read = reader.read(mReadBuffer)) >= 0)
-         {
-            mStringBuffer.append(mReadBuffer, 0, read);
-         }
-         result = mStringBuffer.toString();
+         IoUtil.close(reader);
       }
       return result;
    }
@@ -720,13 +605,13 @@ public class DbView
       if (object != null)
       {
          out.print("            <raw>");
-         out.print(xmlEscape(String.valueOf(object)));
+         out.print(XmlUtil.escape(String.valueOf(object)));
          out.println("</raw>");
          final String display = objectFormater(object, name, typeName);
          if (display != null)
          {
             out.print("            <display>");
-            out.print(xmlEscape(display));
+            out.print(XmlUtil.escape(display));
             out.println("</display>");
          }
       }
@@ -785,92 +670,6 @@ public class DbView
       return result;
    }
 
-   private String attributeEncode (String attribute)
-   {
-      mStringBuffer.setLength(0);
-      if (attribute == null)
-      {
-         // result.append(NULL_STR);
-      }
-      else
-      {
-         char c;
-         final int l = attribute.length();
-         for (int i = 0; i < l; i++)
-         {
-            c = attribute.charAt(i);
-            switch (c)
-            {
-               case '<':
-                  mStringBuffer.append("&lt;");
-                  break;
-               case '\'':
-                  mStringBuffer.append("&apos;");
-                  break;
-               case '&':
-                  mStringBuffer.append("&amp;");
-                  break;
-               default :
-                  if (c > Byte.MAX_VALUE)
-                  {
-                     mStringBuffer.append("&#x");
-                     mStringBuffer.append(Integer.toHexString(c));
-                     mStringBuffer.append(';');
-                  }
-                  else
-                  {
-                     mStringBuffer.append(c);
-                  }
-            }
-         }
-      }
-      return mStringBuffer.toString();
-   }
-
-   private String xmlEscape (final String str)
-   {
-      if (str == null)
-      {
-         // result.append(NULL_STR);
-      }
-      else
-      {
-         mStringBuffer.setLength(0);
-         char c;
-         final int l = str.length();
-         for (int i = 0; i < l; i++)
-         {
-            c = str.charAt(i);
-            switch (c)
-            {
-               case '<':
-                  mStringBuffer.append("&lt;");
-                  break;
-               case '&':
-                  mStringBuffer.append("&amp;");
-                  break;
-               case '\n':
-                  mStringBuffer.append(LINE_SEPARATOR);
-                  break;
-               case '\r':
-                  // ignore
-                  break;
-               default :
-                  if (c > Byte.MAX_VALUE) //  || c == '\n' || c == '\r')
-                  {
-                     mStringBuffer.append("&#x");
-                     mStringBuffer.append(Integer.toHexString(c));
-                     mStringBuffer.append(';');
-                  }
-                  else
-                  {
-                     mStringBuffer.append(c);
-                  }
-            }
-         }
-      }
-      return mStringBuffer.toString();
-   }
 
    private String display (Date d)
    {
@@ -937,7 +736,7 @@ public class DbView
     * original input is returned.
     * @param org the input to be formated.
     * @return the input in xml formated (human readable) form or the
-    * input string.
+    *   input string.
     */
    public String formatXml (String org)
    {
@@ -1008,8 +807,6 @@ public class DbView
                   case '\r':
                      break;
                   case '>':
-                     mStringBuffer.append(c);
-                     break;
                   default:
                      mStringBuffer.append(c);
                      break;

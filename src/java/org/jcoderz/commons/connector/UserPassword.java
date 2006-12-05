@@ -145,9 +145,7 @@ public final class UserPassword
       return UserPassword.EMPTY_USER_PASSWORD.equals(up);
    }
 
-   /**
-    * @see java.lang.Object#equals(java.lang.Object)
-    */
+   /** {@inheritDoc} */
    public boolean equals (Object other)
    {
       boolean result = false;
@@ -168,9 +166,7 @@ public final class UserPassword
       return result;
    }
 
-   /**
-    * @see java.lang.Object#hashCode()
-    */
+   /** {@inheritDoc} */
    public int hashCode ()
    {
       return mHashCode;
@@ -190,9 +186,7 @@ public final class UserPassword
       return equals;
    }
 
-   /**
-    * @see java.lang.Object#toString()
-    */
+   /** {@inheritDoc} */
    public String toString ()
    {
       return new StringBuffer("<UserPassword user: '").append(mUser)

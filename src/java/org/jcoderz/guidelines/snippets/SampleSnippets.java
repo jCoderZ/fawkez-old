@@ -356,9 +356,8 @@ public class SampleSnippets
              // END SNIPPET
              */
         }
-        /**
-         * @see java.lang.Comparable#compareTo(java.lang.Object)
-         */
+
+        /** {@inheritDoc} */
         public int compareTo (Object o)
         {
             // TODO Auto-generated method stub

@@ -1,5 +1,5 @@
 /*
- * $Id: header.txt 19 2006-01-09 14:31:50Z amandel $
+ * $Id$
  *
  * Copyright 2006, The jCoderZ.org Project. All rights reserved.
  *
@@ -105,7 +105,7 @@ public final class XmlDocletConfig
    private final List mLinkUrls = new ArrayList();
 
 
-   /** @see java.lang.Object#clone() */
+   /** {@inheritDoc} */
    public Object clone ()
          throws CloneNotSupportedException
    {

@@ -80,9 +80,7 @@ public class HttpConnectorBeanTest
       return setup;
    }
 
-   /**
-    * @see junit.framework.TestCase#setUp()
-    */
+   /** {@inheritDoc} */
    protected void setUp ()
          throws Exception
    {

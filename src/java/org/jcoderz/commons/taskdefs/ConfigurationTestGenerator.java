@@ -86,17 +86,13 @@ public final class ConfigurationTestGenerator
       mServerTestClass = s;
    }
 
-   /**
-    * @see org.jcoderz.commons.taskdefs.XsltBasedTask#getDefaultStyleSheet()
-    */
+   /** {@inheritDoc} */
    String getDefaultStyleSheet ()
    {
       return DEFAULT_STYLESHEET;
    }
 
-   /**
-    * @see org.jcoderz.commons.taskdefs.XsltBasedTask#setAdditionalTransformerParameters(javax.xml.transform.Transformer)
-    */
+   /** {@inheritDoc} */
    void setAdditionalTransformerParameters (Transformer transformer)
    {
       transformer.setParameter("application-short-name", mApplication);
@@ -108,9 +104,7 @@ public final class ConfigurationTestGenerator
       }
    }
 
-   /**
-    * @see org.jcoderz.commons.taskdefs.XsltBasedTask#checkAttributes()
-    */
+   /** {@inheritDoc} */
    void checkAttributes ()
          throws BuildException
    {

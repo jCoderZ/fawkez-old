@@ -108,12 +108,7 @@ public class FsConnectionFactoryImpl
       }
    }
 
-   /**
-    * Returns a connection to the File System.
-    * @return a connection to the File System.
-    * @throws ResourceException Failed to get a connection.
-    * @see FsConnectionFactory#getConnection()
-    */
+   /** {@inheritDoc} */
    public FsConnection getConnection ()
          throws ResourceException
    {
@@ -127,10 +122,7 @@ public class FsConnectionFactoryImpl
       return result;
    }
 
-
-   /**
-    * @see org.jcoderz.commons.connector.file.FsConnectionFactory#getConnection(java.util.Properties)
-    */
+   /** {@inheritDoc} */
    public FsConnection getConnection (Properties props)
          throws ResourceException
    {
@@ -170,25 +162,13 @@ public class FsConnectionFactoryImpl
       return result;
    }
 
-   /**
-    * Sets the reference for this ConnectionFactory.
-    * This method is called by deployment code.
-    *
-    * @param reference The reference for this ConnectionFactory.
-    *
-    * @see javax.resource.Referenceable#setReference(javax.naming.Reference)
-    */
+   /** {@inheritDoc} */
    public void setReference (Reference reference)
    {
       mReference = reference;
    }
 
-   /**
-    * Returns the non-null Reference of this for this ConnectionFactory.
-    * @return The non-null Reference of this for this ConnectionFactory.
-    * @throws NamingException never thrown.
-    * @see javax.naming.Referenceable#getReference()
-    */
+   /** {@inheritDoc} */
    public Reference getReference ()
          throws NamingException
    {

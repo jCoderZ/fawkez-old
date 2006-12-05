@@ -171,9 +171,7 @@ public class LoggingLevel
       mLogCallMaxLevel = Level.parse(logCallMaxLevel);
    }
 
-   /**
-    * @see com.puppycrawl.tools.checkstyle.api.Check#getDefaultTokens()
-    */
+   /** {@inheritDoc} */
    public int[] getDefaultTokens ()
    {
       final int [] rc = new int[TOKEN_LIST.length];
@@ -181,9 +179,7 @@ public class LoggingLevel
       return rc;
    }
 
-   /**
-    * @see com.puppycrawl.tools.checkstyle.api.Check#visitToken(com.puppycrawl.tools.checkstyle.api.DetailAST)
-    */
+   /** {@inheritDoc} */
    public void visitToken (final DetailAST ast)
    {
       switch (ast.getType())

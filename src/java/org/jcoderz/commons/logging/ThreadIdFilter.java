@@ -57,9 +57,7 @@ public final class ThreadIdFilter
       mAllowedThreadIds = new HashSet(threadIds);
    }
 
-   /**
-    * @see org.jcoderz.commons.logging.Filter#isPassable(org.jcoderz.commons.logging.LogItem)
-    */
+   /** {@inheritDoc} */
    public boolean isPassable (LogItem entry)
    {
       final Long id = new Long(entry.getThreadId());

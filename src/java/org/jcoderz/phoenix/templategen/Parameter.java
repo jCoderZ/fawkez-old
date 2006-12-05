@@ -162,9 +162,7 @@ public class Parameter
       }
    }
 
-   /**
-    * @see java.lang.Object#toString()
-    */
+   /** {@inheritDoc} */
    public String toString ()
    {
       return "[Parameter name=" + mName

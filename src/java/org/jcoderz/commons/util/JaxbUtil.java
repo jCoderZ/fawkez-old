@@ -279,9 +279,7 @@ public final class JaxbUtil
          return mEvents.size() != 0;
       }
 
-      /**
-       * @see javax.xml.bind.ValidationEventHandler#handleEvent(javax.xml.bind.ValidationEvent)
-       */
+      /** {@inheritDoc} */
       public boolean handleEvent (ValidationEvent event)
       {
          final String methodName = "handleEvent";

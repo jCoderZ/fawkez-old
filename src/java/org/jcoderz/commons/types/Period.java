@@ -1,5 +1,5 @@
 /*
- * $Id: header.txt 19 2006-01-09 14:31:50Z amandel $
+ * $Id$
  *
  * Copyright 2006, The jCoderZ.org Project. All rights reserved.
  *
@@ -581,9 +581,7 @@ public final class Period
       return mStartTime.after(other.getEndTime());
    }
 
-   /**
-    * @see java.lang.Object#equals(java.lang.Object)
-    */
+   /** {@inheritDoc} */
    public boolean equals (Object o)
    {
       final boolean result;
@@ -600,9 +598,7 @@ public final class Period
       return result;
    }
 
-   /**
-    * @see java.lang.Object#hashCode()
-    */
+   /** {@inheritDoc} */
    public int hashCode ()
    {
       if (mHashCode == 0)
@@ -614,9 +610,7 @@ public final class Period
       return mHashCode;
    }
 
-   /**
-    * @see java.lang.Object#toString()
-    */
+   /** {@inheritDoc} */
    public String toString ()
    {
       return mStartTime.toString() + "-" + mEndTime.toString();

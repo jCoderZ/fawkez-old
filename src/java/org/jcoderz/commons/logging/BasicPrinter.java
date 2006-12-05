@@ -73,9 +73,7 @@ public class BasicPrinter
 
    private final StringBuffer mBuffer = new StringBuffer();
 
-   /**
-    * @see org.jcoderz.commons.logging.LogPrinter#setDisplayOptions(org.jcoderz.commons.logging.DisplayOptions)
-    */
+   /** {@inheritDoc} */
    public void setDisplayOptions (DisplayOptions options)
    {
       super.setDisplayOptions(options);
@@ -86,9 +84,7 @@ public class BasicPrinter
       setNestedLineFormat();
    }
 
-   /**
-    * @see org.jcoderz.commons.logging.LogPrinter#print(java.io.PrintWriter, org.jcoderz.commons.logging.LogItem)
-    */
+   /** {@inheritDoc} */
    public void print (
          final PrintWriter printer,
          final LogItem entry)

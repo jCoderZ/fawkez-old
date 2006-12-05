@@ -310,10 +310,7 @@ public class ApiDocTask
 
         private ApiDocType mCurrentApiDocElement = null;
 
-        /**
-         * @see org.xml.sax.ContentHandler#startElement(String, String,
-         *      String, Attributes)
-         */
+        /** {@inheritDoc} */
         public void startElement (String uri, String localName, String qName,
                 Attributes attributes)
         {
@@ -334,10 +331,7 @@ public class ApiDocTask
             }
         }
 
-        /**
-         * @see org.xml.sax.ContentHandler#endElement(String, String,
-         *      String)
-         */
+        /** {@inheritDoc} */
         public void endElement (String uri, String localName, String qName)
         {
             if ("apidoc".equals(localName))
@@ -351,9 +345,7 @@ public class ApiDocTask
             }
         }
 
-        /**
-         * @see org.xml.sax.ContentHandler#characters(char[], int, int)
-         */
+        /** {@inheritDoc} */
         public void characters (char[] ch, int start, int length)
         {
             if (mCaptureCharacters)
@@ -420,9 +412,7 @@ public class ApiDocTask
             return mName;
         }
 
-        /**
-         * @see Object#toString()
-         */
+        /** {@inheritDoc} */
         public String toString ()
         {
             final StringBuffer sb = new StringBuffer();

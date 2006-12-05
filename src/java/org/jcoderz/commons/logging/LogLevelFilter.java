@@ -79,9 +79,7 @@ public class LogLevelFilter
       mFilterLevel = level;
    }
 
-   /**
-    * @see java.util.logging.Filter#isLoggable(java.util.logging.LogRecord)
-    */
+   /** {@inheritDoc} */
    public boolean isLoggable (LogRecord record)
    {
       final Loggable loggable = getLoggable(record);

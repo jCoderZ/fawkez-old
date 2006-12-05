@@ -1,5 +1,5 @@
 /*
- * $Id: header.txt 19 2006-01-09 14:31:50Z amandel $
+ * $Id$
  *
  * Copyright 2006, The jCoderZ.org Project. All rights reserved.
  *
@@ -61,9 +61,7 @@ public class TimedAverage
       mStopTime = 0;
    }
 
-   /**
-    * @see org.jcoderz.commons.statistics.Resettable#reset()
-    */
+   /** {@inheritDoc} */
    public synchronized void reset ()
    {
       super.reset();
@@ -124,9 +122,7 @@ public class TimedAverage
       return result;
    }
 
-   /**
-    * @see java.lang.Object#toString()
-    */
+   /** {@inheritDoc} */
    public String toString ()
    {
       DecimalFormat df = new DecimalFormat("0.000");

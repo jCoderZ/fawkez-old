@@ -89,9 +89,7 @@ public class CreateIndexStatement
       return mIndexName;
    }
    
-   /**
-    * @see java.lang.Object#toString()
-    */
+   /** {@inheritDoc} */
    public String toString ()
    {
       StringBuffer sbuf = new StringBuffer();

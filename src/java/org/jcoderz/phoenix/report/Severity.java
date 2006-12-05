@@ -212,9 +212,7 @@ public final class Severity
       return PRIVATE_VALUES[mOrdinal];
    }
 
-   /**
-    * @see java.lang.Comparable#compareTo(java.lang.Object)
-    */
+   /** {@inheritDoc} */
    public int compareTo (Object o)
    {
       return mOrdinal - ((Severity) o).mOrdinal;

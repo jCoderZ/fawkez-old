@@ -85,44 +85,33 @@ class AppInfoSaxHandler
       mMap.registerApplication(APPLICATION_ID_FWK, "FWK");
    }
 
-   /**
-    * @see org.xml.sax.ErrorHandler#error(org.xml.sax.SAXParseException)
-    */
+   /** {@inheritDoc} */
    public void error (SAXParseException exception)
    {
      mValidationError = true;
      mSaxParseException = exception;
    }
 
-   /**
-    * @see org.xml.sax.ErrorHandler#fatalError(org.xml.sax.SAXParseException)
-    */
+   /** {@inheritDoc} */
    public void fatalError (SAXParseException exception)
    {
       mValidationError = true;
       mSaxParseException = exception;
    }
 
-   /**
-    * @see org.xml.sax.ErrorHandler#warning(org.xml.sax.SAXParseException)
-    */
+   /** {@inheritDoc} */
    public void warning (SAXParseException exception)
    {
       // NOP
    }
 
-   /**
-    * @see org.xml.sax.ContentHandler#startDocument()
-    */
+   /** {@inheritDoc} */
    public void startDocument ()
    {
       reset();
    }
 
-   /**
-    * @throws SAXException
-    * @see org.xml.sax.ContentHandler#startElement(java.lang.String, java.lang.String, java.lang.String, org.xml.sax.Attributes)
-    */
+   /** {@inheritDoc} */
    public void startElement (String uri, String localName,
          String qName, Attributes attributes)
          throws SAXException
@@ -162,9 +151,7 @@ class AppInfoSaxHandler
       }
    }
 
-   /**
-    * @see org.xml.sax.ContentHandler#endElement(java.lang.String, java.lang.String, java.lang.String)
-    */
+   /** {@inheritDoc} */
    public void endElement (String uri, String localName, String qName)
    {
       if ("text".equals(localName))
@@ -194,9 +181,7 @@ class AppInfoSaxHandler
       }
    }
 
-   /**
-    * @see org.xml.sax.ContentHandler#characters(char[], int, int)
-    */
+   /** {@inheritDoc} */
    public void characters (char[] ch, int start, int length)
    {
       if (mCaptureCharacters)

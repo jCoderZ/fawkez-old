@@ -77,9 +77,7 @@ public final class CheckstyleReportReader
       super(CHECKSTYLE_JAXB_CONTEXT_PATH);
    }
 
-   /**
-    * @see org.jcoderz.phoenix.report.ReportReader#parse(java.io.File)
-    */
+   /** {@inheritDoc} */
    public void parse (File f)
          throws FileNotFoundException, JAXBException
    {

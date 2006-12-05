@@ -117,9 +117,7 @@ public abstract class ManagedConnectionFactoryBase
    protected abstract ManagedConnection createManagedConnectionImpl (
          UserPassword up, ConnectionRequestInfo cri);
 
-   /**
-    * @see javax.resource.spi.ManagedConnectionFactory#createManagedConnection(javax.security.auth.Subject, javax.resource.spi.ConnectionRequestInfo)
-    */
+   /** {@inheritDoc} */
    public ManagedConnection createManagedConnection (Subject subject,
          ConnectionRequestInfo cri)
          throws ResourceException
@@ -142,9 +140,7 @@ public abstract class ManagedConnectionFactoryBase
       return result;
    }
 
-   /**
-    * @see javax.resource.spi.ManagedConnectionFactory#createConnectionFactory(javax.resource.spi.ConnectionManager)
-    */
+   /** {@inheritDoc} */
    public Object createConnectionFactory (ConnectionManager cm)
          throws ResourceException
    {
@@ -157,9 +153,7 @@ public abstract class ManagedConnectionFactoryBase
       return result;
    }
 
-   /**
-    * @see javax.resource.spi.ManagedConnectionFactory#createConnectionFactory()
-    */
+   /** {@inheritDoc} */
    public Object createConnectionFactory ()
          throws ResourceException
    {
@@ -173,9 +167,7 @@ public abstract class ManagedConnectionFactoryBase
    }
 
 
-   /**
-    * @see javax.resource.spi.ManagedConnectionFactory#matchManagedConnections(java.util.Set, javax.security.auth.Subject, javax.resource.spi.ConnectionRequestInfo)
-    */
+   /** {@inheritDoc} */
    public ManagedConnection matchManagedConnections (Set set, Subject subject,
          ConnectionRequestInfo cri)
          throws ResourceException
@@ -216,9 +208,7 @@ public abstract class ManagedConnectionFactoryBase
       return result;
    }
 
-   /**
-    * @see javax.resource.spi.ManagedConnectionFactory#setLogWriter(java.io.PrintWriter)
-    */
+   /** {@inheritDoc} */
    public void setLogWriter (PrintWriter pw)
          throws ResourceException
    {
@@ -228,9 +218,7 @@ public abstract class ManagedConnectionFactoryBase
       }
    }
 
-   /**
-    * @see javax.resource.spi.ManagedConnectionFactory#getLogWriter()
-    */
+   /** {@inheritDoc} */
    public PrintWriter getLogWriter ()
          throws ResourceException
    {
@@ -277,11 +265,7 @@ public abstract class ManagedConnectionFactoryBase
       return UserPassword.fromUserPassword(mUserName, mPassword);
    }
 
-   /**
-    * Override hashCode.
-    *
-    * @return the Objects hashcode.
-    */
+   /** {@inheritDoc} */
    public int hashCode ()
    {
       // FIXME Implement this method

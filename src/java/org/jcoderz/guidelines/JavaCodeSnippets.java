@@ -191,9 +191,7 @@ public final class JavaCodeSnippets
    {
       final File[] files = dir.listFiles(new FilenameFilter()
             {
-         /**
-          * @see java.io.FilenameFilter#accept(java.io.File, java.lang.String)
-          */
+         /** {@inheritDoc} */
          public boolean accept (File dir, String name)
          {
             boolean ret = false;

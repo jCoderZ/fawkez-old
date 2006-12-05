@@ -78,36 +78,28 @@ class ConnectionFactoryBase
       mConnectionManager = cm;
    }
 
-   /**
-    * @see javax.resource.cci.ConnectionFactory#getConnection()
-    */
+   /** {@inheritDoc} */
    public Connection getConnection ()
          throws ResourceException
    {
       return null;
    }
 
-   /**
-    * @see javax.resource.cci.ConnectionFactory#getConnection(javax.resource.cci.ConnectionSpec)
-    */
+   /** {@inheritDoc} */
    public Connection getConnection (ConnectionSpec cs)
          throws ResourceException
    {
       return null;
    }
 
-   /**
-    * @see javax.resource.cci.ConnectionFactory#getRecordFactory()
-    */
+   /** {@inheritDoc} */
    public RecordFactory getRecordFactory ()
          throws ResourceException
    {
       return null;
    }
 
-   /**
-    * @see javax.resource.cci.ConnectionFactory#getMetaData()
-    */
+   /** {@inheritDoc} */
    public ResourceAdapterMetaData getMetaData ()
          throws ResourceException
    {

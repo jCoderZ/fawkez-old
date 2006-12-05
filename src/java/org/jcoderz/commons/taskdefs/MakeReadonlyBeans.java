@@ -160,9 +160,7 @@ public class MakeReadonlyBeans
       return bn;
    }
 
-   /**
-    * @see org.jcoderz.commons.taskdefs.XsltBasedTask#execute()
-    */
+   /** {@inheritDoc} */
    public void execute ()
          throws BuildException
    {

@@ -172,9 +172,7 @@ public class JmsHandler
          mXmlPrinter.setDisplayOptions(mDisplayOptions);
       }
 
-      /**
-       * @see java.util.logging.Formatter#format(java.util.logging.LogRecord)
-       */
+      /** {@inheritDoc} */
       public String format (LogRecord record)
       {
          final CharArrayWriter writer = getCharWriter();
@@ -237,9 +235,7 @@ public class JmsHandler
       connect();
    }
 
-   /**
-    * @see java.util.logging.Handler#close()
-    */
+   /** {@inheritDoc} */
    public void close ()
          throws SecurityException
    {
@@ -277,17 +273,13 @@ public class JmsHandler
       }
    }
 
-   /**
-    * @see java.util.logging.Handler#flush()
-    */
+   /** {@inheritDoc} */
    public void flush ()
    {
       // nop
    }
 
-   /**
-    * @see java.util.logging.Handler#publish(java.util.logging.LogRecord)
-    */
+   /** {@inheritDoc} */
    public void publish (final LogRecord record)
    {
       if (getFilter().isLoggable(record))

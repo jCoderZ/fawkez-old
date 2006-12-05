@@ -46,9 +46,7 @@ public class JsfConverterGenerator
    private static final String DEFAULT_STYLESHEET
          = "generate-jsf-converters.xsl";
 
-   /**
-    * @see org.jcoderz.commons.taskdefs.XsltBasedTask#getDefaultStyleSheet()
-    */
+   /** {@inheritDoc} */
    String getDefaultStyleSheet ()
    {
       return DEFAULT_STYLESHEET;

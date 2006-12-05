@@ -87,9 +87,7 @@ public class SqlScannerTest
    static class SqlFilenameFilter 
          implements FilenameFilter
    {
-      /**
-       * @see FilenameFilter#accept(java.io.File, java.lang.String)
-       */
+      /** {@inheritDoc} */
       public boolean accept (File dir, String name)
       {
          return name.endsWith(".sql");

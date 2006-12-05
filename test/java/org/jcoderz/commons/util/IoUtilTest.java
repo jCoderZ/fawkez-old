@@ -258,17 +258,13 @@ public class IoUtilTest
    {
       private boolean mIsOpen = true;
       
-      /** 
-       * @see java.nio.channels.ReadableByteChannel#read(java.nio.ByteBuffer)
-       */
+      /** {@inheritDoc} */
       public int read (ByteBuffer dst)
       {
          return 0;
       }
       
-      /** 
-       * @see java.nio.channels.Channel#close()
-       */
+      /** {@inheritDoc} */
       public void close ()
             throws IOException
       {
@@ -281,9 +277,8 @@ public class IoUtilTest
             throw new IOException();
          }
       }
-      /** 
-       * @see java.nio.channels.Channel#isOpen()
-       */
+
+      /** {@inheritDoc} */
       public boolean isOpen ()
       {
          return mIsOpen;

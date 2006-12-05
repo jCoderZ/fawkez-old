@@ -51,9 +51,7 @@ public class LogMessageGeneratorTest
    private LogMessageGenerator mGenerator;
    private File mDestDir;
 
-   /**
-    * @see junit.framework.TestCase#setUp()
-    */
+   /** {@inheritDoc} */
    protected void setUp ()
          throws Exception
    {

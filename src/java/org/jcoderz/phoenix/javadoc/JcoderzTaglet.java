@@ -104,7 +104,7 @@ public class JcoderzTaglet
      // loop through the tags
      for (int i = 0; i < TAGS.length; i++)
      {
-        Taglet t = (Taglet) tagletMap.get(TAGS[i]);
+        final Taglet t = (Taglet) tagletMap.get(TAGS[i]);
         if (t != null)
         {
            tagletMap.remove(TAGS[i]);
@@ -115,6 +115,7 @@ public class JcoderzTaglet
 
    /**
     * The name of the taglet.
+    * @return The name of the taglet.
     */
    public String getName ()
    {
@@ -213,7 +214,7 @@ public class JcoderzTaglet
 
    /**
     * Return empty string as the tags should not be shown in Javadoc.
-    *
+    * @param tag the doclet tag encountered
     * @return empty string.
     */
    public String toString (Tag tag)
@@ -223,7 +224,7 @@ public class JcoderzTaglet
 
    /**
     * Return empty string as the tags should not be shown in Javadoc.
-    *
+    * @param tags the doclet tags encountered
     * @return empty string.
     */
     public String toString (Tag[] tags)

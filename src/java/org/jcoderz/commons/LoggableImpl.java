@@ -268,9 +268,7 @@ public class LoggableImpl
       values.add(value);
    }
 
-   /**
-    * @see Loggable#getParameter(String)
-    */
+   /** {@inheritDoc} */
    public List getParameter (String name)
    {
       final List values = (List) mParameters.get(name);
@@ -287,73 +285,55 @@ public class LoggableImpl
       return result;
    }
 
-   /**
-    * @see org.jcoderz.commons.Loggable#getParameterNames()
-    */
+   /** {@inheritDoc} */
    public Set getParameterNames ()
    {
       return Collections.unmodifiableSet(mParameters.keySet());
    }
 
-   /**
-    * @see org.jcoderz.commons.Loggable#getLogMessageInfo()
-    */
+   /** {@inheritDoc} */
    public final LogMessageInfo getLogMessageInfo ()
    {
       return mLogMessageInfo;
    }
 
-   /**
-    * @see org.jcoderz.commons.Loggable#getTrackingNumber()
-    */
+   /** {@inheritDoc} */
    public final String getTrackingNumber ()
    {
       return mTrackingNumber;
    }
 
-   /**
-    * @see org.jcoderz.commons.Loggable#getEventTime()
-    */
+   /** {@inheritDoc} */
    public final long getEventTime ()
    {
       return mEventTime;
    }
 
-   /**
-    * @see org.jcoderz.commons.Loggable#getNodeId()
-    */
+   /** {@inheritDoc} */
    public final String getNodeId ()
    {
       return mNodeId;
    }
 
-   /**
-    * @see org.jcoderz.commons.Loggable#getInstanceId()
-    */
+   /** {@inheritDoc} */
    public final String getInstanceId ()
    {
       return mInstanceId;
    }
 
-   /**
-    * @see org.jcoderz.commons.Loggable#getThreadId()
-    */
+   /** {@inheritDoc} */
    public final long getThreadId ()
    {
       return mThreadId;
    }
 
-   /**
-    * @see org.jcoderz.commons.Loggable#getCause()
-    */
+   /** {@inheritDoc} */
    public Throwable getCause ()
    {
       return mCause;
    }
 
-   /**
-    * @see org.jcoderz.commons.Loggable#log()
-    */
+   /** {@inheritDoc} */
    public void log ()
    {
       getSource();
@@ -361,18 +341,14 @@ public class LoggableImpl
             getMessage(), mOuter);
    }
 
-   /**
-    * @see org.jcoderz.commons.Loggable#getMessage()
-    */
+   /** {@inheritDoc} */
    public String getMessage ()
    {
       return getLogMessageInfo().formatMessage(mParameters, new StringBuffer())
             .toString();
    }
 
-   /**
-    * @see java.lang.Object#toString()
-    */
+   /** {@inheritDoc} */
    public String toString ()
    {
       final StringBuffer sb = new StringBuffer();

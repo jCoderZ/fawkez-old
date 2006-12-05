@@ -435,27 +435,21 @@ public abstract class XsltBasedTask
        implements ErrorListener
        {
 
-    /**
-     * @see javax.xml.transform.ErrorListener#warning(javax.xml.transform.TransformerException)
-     */
+    /** {@inheritDoc} */
     public void warning (TransformerException arg0)
             throws TransformerException
     {
         throw arg0;
     }
 
-    /**
-     * @see javax.xml.transform.ErrorListener#error(javax.xml.transform.TransformerException)
-     */
+    /** {@inheritDoc} */
     public void error (TransformerException arg0)
             throws TransformerException
     {
         throw arg0;
     }
 
-    /**
-     * @see javax.xml.transform.ErrorListener#fatalError(javax.xml.transform.TransformerException)
-     */
+    /** {@inheritDoc} */
     public void fatalError (TransformerException arg0)
             throws TransformerException
     {

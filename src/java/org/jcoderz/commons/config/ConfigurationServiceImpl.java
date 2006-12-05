@@ -71,8 +71,8 @@ public class ConfigurationServiceImpl
     */
    private static final transient Logger logger = Logger.getLogger(CLASSNAME);
 
-    /**
-    * @see ConfigurationServiceInterface#addConfigurationListener(ConfigurationListener)
+   /**
+    * {@inheritDoc}
     *
     * @ejb.interface-method view-type="remote"
     * @ejb.transaction type="Required"
@@ -84,10 +84,8 @@ public class ConfigurationServiceImpl
       getConfigurationCacheCurrent().addConfigurationListener(listener);
    }
 
-
-   /**
-    * @see ConfigurationServiceInterface#getServiceConfiguration(String)
-    */
+ 
+   /** {@inheritDoc} */
    public ServiceConfiguration getServiceConfiguration (
          String classname)
          throws ArgumentMalformedException
@@ -113,7 +111,7 @@ public class ConfigurationServiceImpl
    // FIXME: This should be changed when XDoclet BugFix is available.
 
    /**
-    * @see ConfigurationServiceCommonInterface#getBoolean(ConfigurationKey)
+    * {@inheritDoc}
     *
     * @ejb.interface-method view-type="remote"
     * @ejb.transaction type="Required"
@@ -128,7 +126,7 @@ public class ConfigurationServiceImpl
 
 
    /**
-    * @see ConfigurationServiceCommonInterface#getInt(ConfigurationKey)
+    * {@inheritDoc}
     *
     * @ejb.interface-method view-type="remote"
     * @ejb.transaction type="Required"
@@ -143,7 +141,7 @@ public class ConfigurationServiceImpl
 
 
    /**
-    * @see ConfigurationServiceCommonInterface#getLong(ConfigurationKey)
+    * {@inheritDoc}
     *
     * @ejb.interface-method view-type="remote"
     * @ejb.transaction type="Required"
@@ -158,7 +156,7 @@ public class ConfigurationServiceImpl
 
 
    /**
-    * @see ConfigurationServiceCommonInterface#getString(ConfigurationKey)
+    * {@inheritDoc}
     *
     * @ejb.interface-method view-type="remote"
     * @ejb.transaction type="Required"

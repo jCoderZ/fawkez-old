@@ -151,7 +151,8 @@ public abstract class AbstractReportReader
             {
                 throw new RuntimeException(e);
             }
-            final UnmarshallerHandler un = getUnmarshaller().getUnmarshallerHandler();
+            final UnmarshallerHandler un 
+                = getUnmarshaller().getUnmarshallerHandler();
             reader.setEntityResolver(new DummyEntityResolver());
             reader.setContentHandler(un);
             reader.parse(new InputSource(in));

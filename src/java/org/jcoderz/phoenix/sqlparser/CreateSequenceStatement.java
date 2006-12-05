@@ -83,7 +83,7 @@ public class CreateSequenceStatement
       }
       sbuf.append(", no minvalue = ").append(mNoMinValue);
       sbuf.append(", cycle = ").append(mCycle);
-      sbuf.append(", cache = " ).append(mCache);
+      sbuf.append(", cache = ").append(mCache);
       sbuf.append(", order = ").append(mOrder);
       sbuf.append("]");
       return sbuf.toString();

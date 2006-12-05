@@ -42,10 +42,10 @@ import java.util.Set;
  */
 public class Template
 {
-   public final static String PARAM_START = "${";
-   public final static String PARAM_START_ESCAPED = "\\$\\{";
-   public final static String PARAM_END = "}";
-   public final static String PARAM_END_ESCAPED = "\\}";
+   public static final String PARAM_START = "${";
+   public static final String PARAM_START_ESCAPED = "\\$\\{";
+   public static final String PARAM_END = "}";
+   public static final String PARAM_END_ESCAPED = "\\}";
 
    private String mSourceName;
    private String mTargetName;

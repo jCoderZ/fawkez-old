@@ -51,7 +51,7 @@ public class FkConstraint
          String name, List columns, String refTable, List refColumns)
    {
       mName = name;
-      mColumns= columns;
+      mColumns = columns;
       mRefTable = refTable;
       mRefColumns = refColumns;
    }

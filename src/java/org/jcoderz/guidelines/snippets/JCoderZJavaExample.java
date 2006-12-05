@@ -45,19 +45,19 @@ public class JCoderZJavaExample
 {
     /* A class implementation comment can go here. */
 
-    /** MIN_WIDTH documentation comment */
+    /** MIN_WIDTH documentation comment. */
     public static final int MIN_WIDTH = 4;
 
-    /** MAX_WIDTH documentation comment */
+    /** MAX_WIDTH documentation comment. */
     public static final int MAX_WIDTH = 999;
 
-    /** BAD_PARAM documentation comment */
+    /** BAD_PARAM documentation comment. */
     public static final int BAD_PARAM = -1;
 
-    /** INTERNAL_ERROR documentation comment */
+    /** INTERNAL_ERROR documentation comment. */
     public static final int INTERNAL_ERROR = -2;
 
-    /** classVar1 documentation comment */
+    /** classVar1 documentation comment. */
     protected static int sClassVar1;
 
     /**
@@ -70,14 +70,14 @@ public class JCoderZJavaExample
 
     /**
      * classVar2 documentation comment that happens to be more than one
-     * line long
+     * line long.
      */
     private static Object sClassVar2;
 
-    /** instanceVar2 documentation comment */
+    /** instanceVar2 documentation comment. */
     protected int mInstanceVar2;
 
-    /** instanceVar3 documentation comment */
+    /** instanceVar3 documentation comment. */
     private Object[] mInstanceVar3;
 
     /**
@@ -121,7 +121,7 @@ public class JCoderZJavaExample
         if (logger.isLoggable(Level.FINER))
         {
             logger.entering(CLASS_NAME, "doSomethingElse",
-                    new Object[] { someParam });
+                    new Object[] {someParam});
         }
 
         // ...implementation goes here...

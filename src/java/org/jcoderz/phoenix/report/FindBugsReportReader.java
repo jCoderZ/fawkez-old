@@ -240,7 +240,7 @@ public final class FindBugsReportReader
       }
       else if (element instanceof Int)
       {
-        final Int i = (Int)element;
+        final Int i = (Int) element;
         ret = String.valueOf(i.getValue());
       }
       else

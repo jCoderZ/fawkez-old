@@ -38,7 +38,7 @@ package org.jcoderz.phoenix.cmpgen2;
 public class CmpGeneratorException extends Exception
 {
    /**
-    * constructor with message string
+    * Constructor with message string.
     * 
     * @param message the exception text
     */
@@ -48,7 +48,7 @@ public class CmpGeneratorException extends Exception
    }
    
    /**
-    * constructor with message and root cause
+    * Constructor with message and root cause.
     * 
     * @param message the exception text
     * @param cause the root cause

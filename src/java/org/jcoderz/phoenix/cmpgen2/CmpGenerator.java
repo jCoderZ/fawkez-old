@@ -81,7 +81,7 @@ public class CmpGenerator
    private boolean mOverwrite;
 
    /**
-    * construct CMP bean generator
+    * Construct CMP bean generator.
     *
     * @param outputDir the output directory
     * @param pkgPrefix the package prefix
@@ -190,7 +190,7 @@ public class CmpGenerator
    }
 
    /**
-    * entry method for CMP bean generator
+    * Entry method for CMP bean generator.
     *
     * @param inputFile the input file
     */
@@ -251,7 +251,7 @@ public class CmpGenerator
       StringBuffer result = new StringBuffer();
       try
       {
-         while ( (c = rdr.read()) != -1)
+         while ((c = rdr.read()) != -1)
          {
             char chr = (char) c;
             switch (chr)

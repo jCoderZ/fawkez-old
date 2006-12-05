@@ -265,7 +265,7 @@ public class SqlTransformer
          final String metaInf;
          final Map metainfMap = getMetainfMap(mObjectType);
          
-         if(metainfMap.get(mObjectName.toUpperCase()) == null)
+         if (metainfMap.get(mObjectName.toUpperCase()) == null)
          {
             metaInf = (String) metainfMap.get(DEFAULT_KEY);
          }

@@ -57,7 +57,7 @@ import org.jcoderz.phoenix.report.jaxb.ObjectFactory;
 public final class CpdReportReader
       extends AbstractReportReader
 {
-   /** JAXB context path */
+   /** JAXB context path. */
    public static final String CPD_JAXB_CONTEXT_PATH
       = "org.jcoderz.phoenix.cpd.jaxb";
 

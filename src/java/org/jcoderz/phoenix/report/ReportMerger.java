@@ -90,10 +90,10 @@ public class ReportMerger
          // merge the reports
          final Report mergedReport = new ObjectFactory().createReport();
          final Iterator iter = mReports.iterator();
-         while(iter.hasNext())
+         while (iter.hasNext())
          {
             final File reportFile = (File) iter.next();
-            logger.log(Level.FINE, "Report: "+ reportFile);
+            logger.log(Level.FINE, "Report: " + reportFile);
             try
             {
                final Report report = (Report) new ObjectFactory()

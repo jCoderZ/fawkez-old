@@ -91,123 +91,123 @@ public final class TokenType
     /** Maps a string representation to an enumerated value */
     private static final Map FROM_STRING = new HashMap();
 
-    /** The token type create */
+    /** The token type create. */
     public static final TokenType CREATE = new TokenType("create");
 
-    /** The token type table */
+    /** The token type table. */
     public static final TokenType TABLE = new TokenType("table");
 
-    /** The token type open_paren */
+    /** The token type open_paren. */
     public static final TokenType OPEN_PAREN = new TokenType("open_paren");
 
-    /** The token type close_paren */
+    /** The token type close_paren. */
     public static final TokenType CLOSE_PAREN = new TokenType("close_paren");
 
-    /** The token type identifier */
+    /** The token type identifier. */
     public static final TokenType IDENTIFIER = new TokenType("identifier");
 
-    /** The token type comma */
+    /** The token type comma. */
     public static final TokenType COMMA = new TokenType("comma");
 
-    /** The token type semicolon */
+    /** The token type semicolon. */
     public static final TokenType SEMICOLON = new TokenType("semicolon");
 
-    /** The token type slash */
+    /** The token type slash. */
     public static final TokenType SLASH = new TokenType("slash");
 
-    /** The token type whitespace */
+    /** The token type whitespace. */
     public static final TokenType WHITESPACE = new TokenType("whitespace");
 
-    /** The token type newline */
+    /** The token type newline. */
     public static final TokenType NEWLINE = new TokenType("newline");
 
-    /** The token type string_literal */
+    /** The token type string_literal. */
     public static final TokenType STRING_LITERAL = new TokenType(
             "string_literal");
 
-    /** The token type numeric_literal */
+    /** The token type numeric_literal. */
     public static final TokenType NUMERIC_LITERAL = new TokenType(
             "numeric_literal");
 
-    /** The token type comment */
+    /** The token type comment. */
     public static final TokenType COMMENT = new TokenType("comment");
 
-    /** The token type not */
+    /** The token type not. */
     public static final TokenType NOT = new TokenType("not");
 
-    /** The token type null */
+    /** The token type null. */
     public static final TokenType NULL = new TokenType("null");
 
-    /** The token type constraint */
+    /** The token type constraint. */
     public static final TokenType CONSTRAINT = new TokenType("constraint");
 
-    /** The token type primary */
+    /** The token type primary. */
     public static final TokenType PRIMARY = new TokenType("primary");
 
-    /** The token type key */
+    /** The token type key. */
     public static final TokenType KEY = new TokenType("key");
 
-    /** The token type unique */
+    /** The token type unique. */
     public static final TokenType UNIQUE = new TokenType("unique");
 
-    /** The token type check */
+    /** The token type check. */
     public static final TokenType CHECK = new TokenType("check");
 
-    /** The token type in */
+    /** The token type in. */
     public static final TokenType IN = new TokenType("in");
 
-    /** The token type eof */
+    /** The token type eof. */
     public static final TokenType EOF = new TokenType("eof");
 
-    /** The token type foreign */
+    /** The token type foreign. */
     public static final TokenType FOREIGN = new TokenType("foreign");
 
-    /** The token type default */
+    /** The token type default. */
     public static final TokenType DEFAULT = new TokenType("default");
 
-    /** The token type references */
+    /** The token type references. */
     public static final TokenType REFERENCES = new TokenType("references");
 
-    /** The token type on */
+    /** The token type on. */
     public static final TokenType ON = new TokenType("on");
 
-    /** The token type delete */
+    /** The token type delete. */
     public static final TokenType DELETE = new TokenType("delete");
 
-    /** The token type set */
+    /** The token type set. */
     public static final TokenType SET = new TokenType("set");
 
-    /** The token type cascade */
+    /** The token type cascade. */
     public static final TokenType CASCADE = new TokenType("cascade");
 
-    /** The token type enable */
+    /** The token type enable. */
     public static final TokenType ENABLE = new TokenType("enable");
 
-    /** The token type disable */
+    /** The token type disable. */
     public static final TokenType DISABLE = new TokenType("disable");
 
-    /** The token type alter */
+    /** The token type alter. */
     public static final TokenType ALTER = new TokenType("alter");
 
-    /** The token type drop */
+    /** The token type drop. */
     public static final TokenType DROP = new TokenType("drop");
 
-    /** The token type insert */
+    /** The token type insert. */
     public static final TokenType INSERT = new TokenType("insert");
 
-    /** The token type delete */
+    /** The token type delete. */
     public static final TokenType SELECT = new TokenType("select");
 
-    /** The token type index */
+    /** The token type index. */
     public static final TokenType INDEX = new TokenType("index");
 
-    /** The token type bitmap */
+    /** The token type bitmap. */
     public static final TokenType BITMAP = new TokenType("bitmap");
 
-    /** The token type sequence */
+    /** The token type sequence. */
     public static final TokenType SEQUENCE = new TokenType("sequence");
 
-    /** The token type increment */
+    /** The token type increment. */
     public static final TokenType INCREMENT = new TokenType("increment");
 
     public static final TokenType BY = new TokenType("by");
@@ -258,7 +258,7 @@ public final class TokenType
             TokenType.CACHE, TokenType.NOCACHE, TokenType.ORDER,
             TokenType.NOORDER, TokenType.OPERATOR};
 
-    /** Immutable list of the token types */
+    /** Immutable list of the token types. */
     public static final List VALUES = Collections.unmodifiableList(Arrays
             .asList(PRIVATE_VALUES));
 
@@ -296,8 +296,8 @@ public final class TokenType
      *
      * @param str the str representation of the token type to be returned.
      * @return the TokenType object represented by this str.
-     * @throws IllegalArgumentException If the given str value isn't listed in the
-     *         internal token type table
+     * @throws IllegalArgumentException If the given str value isn't listed 
+     *          in the internal token type table.
      */
     public static TokenType fromString (String str)
             throws IllegalArgumentException

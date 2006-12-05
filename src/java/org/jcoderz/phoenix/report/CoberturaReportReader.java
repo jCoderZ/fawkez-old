@@ -67,7 +67,7 @@ public class CoberturaReportReader
 
     private Coverage mReportDocument;
 
-    /** JAXB context path */
+    /** JAXB context path. */
     public static final String JCOVERAGE_JAXB_CONTEXT_PATH
             = "org.jcoderz.phoenix.coverage.jaxb";
 

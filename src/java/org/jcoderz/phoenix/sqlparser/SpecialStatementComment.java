@@ -64,7 +64,7 @@ public final class SpecialStatementComment
             + mType + ", content = " + mContent + "]";
    }
    
-   public final static SpecialStatementComment parseComment (Token t)
+   public static final SpecialStatementComment parseComment (Token t)
          throws ParseException
    {
       final String content;

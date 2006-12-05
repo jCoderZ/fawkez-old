@@ -268,7 +268,8 @@ public class ApiDocTask
         }
         catch (Exception e)
         {
-            throw new BuildException("Failed to parse " + mInFile + ": " + e, e);
+            throw new BuildException(
+                    "Failed to parse " + mInFile + ": " + e, e);
         }
         return handler;
     }

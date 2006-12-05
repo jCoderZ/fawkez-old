@@ -84,7 +84,7 @@ public final class SimplePmdFindings
       final BigDecimal bd = new BigDecimal("1");
 
       // Trigger PMD basic/UselessOperationOnImmutable
-      bd.add( new BigDecimal("10"));
+      bd.add(new BigDecimal("10"));
 
       final String s = "TEST";
       // Trigger PMD design/PositionLiteralsFirstInComparisons

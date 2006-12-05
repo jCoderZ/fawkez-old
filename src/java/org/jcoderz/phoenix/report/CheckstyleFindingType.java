@@ -197,7 +197,7 @@ public final class CheckstyleFindingType
       new CheckstyleFindingType("CS_MAGIC",
          "Dont use magics in the code.",
          "Magics make the code hard to maintain and understand. "
-         +" Define appropriate constant instead.",
+         + " Define appropriate constant instead.",
          "Dont use magic .* in the code\\.");
 
    /** 

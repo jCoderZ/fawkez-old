@@ -116,7 +116,7 @@ public final class JavaCodeSnippets
       
       for (int i = 0; i < files.length; i++)
       {
-         System.out.println("Processing file '" + files[i].getName() +"'");
+         System.out.println("Processing file '" + files[i].getName() + "'");
          generateSnippet(files[i], outDir);
       }
    }

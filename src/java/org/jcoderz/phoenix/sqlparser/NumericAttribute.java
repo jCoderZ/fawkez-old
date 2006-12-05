@@ -40,7 +40,7 @@ public class NumericAttribute
 {
    private int mNumber;
    /**
-    * create a new numeric attribute
+    * Create a new numeric attribute.
     * @param number the number represented by this attribute
     */
    public NumericAttribute (int number)
@@ -49,8 +49,7 @@ public class NumericAttribute
    }
    
    /**
-    * create a new numeric attribute
-    * 
+    * Create a new numeric attribute.
     * @param numberAsStr the number represented by this attribute, as string
     */
    public NumericAttribute (String numberAsStr)
@@ -59,7 +58,7 @@ public class NumericAttribute
    }
    
    /**
-    * returns the number of this attribute
+    * Returns the number of this attribute.
     * @return the number of this attribute
     */
    public final int getNumber ()

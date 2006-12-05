@@ -1,5 +1,5 @@
 /*
- * $Id: header.txt 19 2006-01-09 14:31:50Z amandel $
+ * $Id$
  *
  * Copyright 2006, The jCoderZ.org Project. All rights reserved.
  *
@@ -82,7 +82,7 @@ public class Average
       }
       long lastSumOfValues;
       long sumOfValues;
-      synchronized(this)
+      synchronized (this)
       {
          if (value < mMinimumValue)
          {

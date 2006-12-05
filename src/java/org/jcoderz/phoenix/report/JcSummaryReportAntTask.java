@@ -201,7 +201,7 @@ public class JcSummaryReportAntTask
          }
          if (mDestDir.exists())
          {
-            if(!mDestDir.isDirectory())
+            if (!mDestDir.isDirectory())
             {
                throw new BuildException("The destination directory '" + mDestDir
                      + "' must be folder!");
@@ -234,7 +234,7 @@ public class JcSummaryReportAntTask
          // on one day.
          final Map ymd2SummaryMap = createSummaryDbMap(summaryMap);
 
-         createFindingsChart(ymd2SummaryMap, summaryMap,"Findings");
+         createFindingsChart(ymd2SummaryMap, summaryMap, "Findings");
          createQualityChart(ymd2SummaryMap, summaryMap, "Quality");
          createLocChart(ymd2SummaryMap, summaryMap, "LOC");
 

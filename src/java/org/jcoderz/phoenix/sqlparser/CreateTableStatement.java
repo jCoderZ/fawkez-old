@@ -59,7 +59,7 @@ public class CreateTableStatement extends SqlStatement
    }
    
    /**
-    * returns all columns of this table
+    * Returns all columns of this table.
     * @return a list of ColumnSpec objects describing the columns of this table
     */
    public final List getColumns ()
@@ -68,7 +68,7 @@ public class CreateTableStatement extends SqlStatement
    }
 
    /**
-    * returns the name of this table
+    * Returns the name of this table.
     * @return the name of this table
     */
    public final String getTableName ()
@@ -77,7 +77,7 @@ public class CreateTableStatement extends SqlStatement
    }
 
    /**
-    * adds a column definition to this table
+    * Adds a column definition to this table.
     * @param column a column definition
     */
    public final void addColumn (ColumnSpec column)
@@ -86,7 +86,7 @@ public class CreateTableStatement extends SqlStatement
    }
    
    /**
-    * Retrieves a column by its name
+    * Retrieves a column by its name.
     * @param colName the name of the column
     * @return the column specification, or null
     *         if no column by that name is found
@@ -107,7 +107,7 @@ public class CreateTableStatement extends SqlStatement
    }
 
    /**
-    * returns a readable string representation
+    * Returns a readable string representation.
     * @return a readable string representation 
     */
    public final String toString ()

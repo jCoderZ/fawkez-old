@@ -55,9 +55,9 @@ public class ArgumentMalformedException
     
     private static String generateMessage (String param, String value, String hint)
     {
-        return "The given argument is at least partly malformed. " + 
-            "Argument '" + param + "' cannot be set to " + 
-            "value '" + value + "'. Detailed description: " + hint + ".";
+        return "The given argument is at least partly malformed. " 
+        + "Argument '" + param + "' cannot be set to " 
+        + "value '" + value + "'. Detailed description: " + hint + ".";
     }
 
 }

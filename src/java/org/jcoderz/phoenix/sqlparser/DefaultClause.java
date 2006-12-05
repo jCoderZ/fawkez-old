@@ -41,7 +41,7 @@ public class DefaultClause
    private final String mDefaultExpression;
    
    /**
-    * Allocate a DefaultClause object
+    * Allocate a DefaultClause object.
     * @param expr the SQL expression represented by this default clause
     */
    public DefaultClause (String expr)

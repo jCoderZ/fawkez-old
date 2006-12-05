@@ -40,6 +40,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.jcoderz.commons.util.Constants;
 import org.jcoderz.phoenix.sqlparser.ColumnSpec;
 import org.jcoderz.phoenix.sqlparser.NumericAttribute;
 
@@ -164,14 +165,15 @@ public final class TypeMapping
          // no character type, try to find a numeric type
          if (javaType == null)
          {
-            List sqlTypeAttributes = column.getDatatypeAttributes();
+            final List sqlTypeAttributes = column.getDatatypeAttributes();
             int att1 = 0, att2 = 0;
             if (sqlTypeAttributes.size() > 0)
             {
                att1 = ((NumericAttribute) sqlTypeAttributes.get(0)).getNumber();
                if (sqlTypeAttributes.size() > 1)
                {
-                  att2 = ((NumericAttribute) sqlTypeAttributes.get(1)).getNumber();
+                  att2 = ((NumericAttribute) sqlTypeAttributes.get(1))
+                      .getNumber();
                }
             }
             javaType =
@@ -184,15 +186,15 @@ public final class TypeMapping
       else
       {
          // a java type has been specified
-         String loadMethod = column.getLoadMethod();
+         final String loadMethod = column.getLoadMethod();
          if (loadMethod != null)
          {
             // hey! it's a complex type
             // the "simple" java type can be found in the signature of the
             // load method
-            int openParen = loadMethod.indexOf("(");
-            int closeParen = loadMethod.indexOf(")");
-            if (  openParen == -1
+            final int openParen = loadMethod.indexOf("(");
+            final int closeParen = loadMethod.indexOf(")");
+            if (openParen == -1
                || closeParen == -1
                || closeParen <= openParen)
             {
@@ -217,8 +219,7 @@ public final class TypeMapping
       // ok, now we've got a java type. if it is a primitive type
       // and the column is nullable, then we must use the wrapper object
       // instead
-      if (  isPrimitiveType(javaType)
-         && !column.isNotNull())
+      if (isPrimitiveType(javaType) && !column.isNotNull())
       {
          javaType = primitiveToObject(javaType);
       }
@@ -233,19 +234,19 @@ public final class TypeMapping
    }
 
    /**
-    * returns everything after the last dot in a type name
+    * Returns everything after the last dot in a type name.
     * @param typeName a java type name
     * @return the unqualified type name, or the argument if
     *         it was not a qualified java type name
     */
    public static String unqualifyType (String typeName)
    {
-      int dotIndex = typeName.lastIndexOf(".");
+      final int dotIndex = typeName.lastIndexOf(".");
       return typeName.substring(dotIndex + 1);
    }
 
    /**
-    * returns the fully qualified java type to which an SQL type is mapped
+    * Returns the fully qualified java type to which an SQL type is mapped.
     * 
     * @param sqlType the name of the sql type
     * @return the FQ type name of the java type, or null if this method can not
@@ -255,7 +256,7 @@ public final class TypeMapping
    {
       String javaType;
       
-      String s = sqlType.toUpperCase();
+      final String s = sqlType.toUpperCase();
       if (STRING_TYPE_SET.contains(s))
       {
          javaType = String.class.getName();
@@ -281,7 +282,7 @@ public final class TypeMapping
    }
    
    /**
-    * returns a type mapping for numeric types
+    * Returns a type mapping for numeric types.
     * 
     * @param sqlType the name of the sql type
     * @param precision the precision of the sql type
@@ -294,11 +295,12 @@ public final class TypeMapping
       int scale)
    {
       String javaType;
-      String s = sqlType.toUpperCase();
+      final String s = sqlType.toUpperCase(Constants.SYSTEM_LOCALE);
 
       if (precision < 0 || scale < 0)
       {
-         throw new IllegalArgumentException("Scale and precision must be non-negative");
+         throw new IllegalArgumentException(
+                 "Scale and precision must be non-negative");
       }
 
       if (NUMERIC_TYPE_SET.contains(s))
@@ -332,7 +334,7 @@ public final class TypeMapping
    }
    
    /**
-    * determines whether a given type is primitive
+    * Determines whether a given type is primitive.
     * 
     * @param type the name of a java type
     * @return true if the type is primitive, false otherwise
@@ -348,7 +350,7 @@ public final class TypeMapping
    }
 
    /**
-    * maps a java primitive type to its corresponding wrapper object
+    * Maps a java primitive type to its corresponding wrapper object.
     * @param primitiveType the name of a primitive type
     * @return the corresponding wrapper object
     * @throws IllegalArgumentException if primitiveType is not a primitive type
@@ -375,25 +377,3 @@ public final class TypeMapping
    }
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

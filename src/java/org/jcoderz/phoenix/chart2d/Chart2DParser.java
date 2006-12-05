@@ -120,7 +120,7 @@ public class Chart2DParser implements ContentHandler
          throws SAXException
    {
       dispatch(true);
-      mContext.push(new Object[] { qname, new AttributesImpl(attrs) });
+      mContext.push(new Object[] {qname, new AttributesImpl(attrs)});
       if ("GraphLabelsLinesStyle".equals(name))
       {
          mHandler.handleGraphLabelsLinesStyle(attrs);

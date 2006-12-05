@@ -41,6 +41,15 @@ import junit.framework.TestCase;
  */
 public class ReportReaderFactoryTest extends TestCase
 {
+    /**
+     * Constructor for ReportReaderFactoryTest.
+     * @param arg0
+     */
+    public ReportReaderFactoryTest (String arg0)
+    {
+       super(arg0);
+    }
+
 
    public static void main (String[] args)
    {
@@ -61,15 +70,6 @@ public class ReportReaderFactoryTest extends TestCase
    protected void tearDown () throws Exception
    {
       super.tearDown();
-   }
-
-   /**
-    * Constructor for ReportReaderFactoryTest.
-    * @param arg0
-    */
-   public ReportReaderFactoryTest (String arg0)
-   {
-      super(arg0);
    }
 
    public void testCreateReader ()

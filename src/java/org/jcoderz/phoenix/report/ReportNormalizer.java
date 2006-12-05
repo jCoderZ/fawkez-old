@@ -141,8 +141,8 @@ public final class ReportNormalizer
                = ReportReaderFactory.createReader(report.getReportFormat());
             logger.fine("Processing report " + report.getReportFormat()
                   + " '" + report.getFilename() + "'");
-            if (report.getFilename().length() != 0 ||
-                  report.getFilename().isDirectory())
+            if (report.getFilename().length() != 0 
+                    || report.getFilename().isDirectory())
             {
                reportReader.parse(report.getFilename());
                reportReader.merge(items);

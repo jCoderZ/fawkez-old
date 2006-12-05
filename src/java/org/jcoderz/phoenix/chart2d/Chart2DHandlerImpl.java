@@ -997,7 +997,7 @@ public class Chart2DHandlerImpl implements Chart2DHandler
             m = props.getClass().getDeclaredMethod(setterName,
                   new Class[] {String.class});
 
-            m.invoke(props, new Object[] { value });
+            m.invoke(props, new Object[] {value});
          }
          catch (Exception ex)
          {

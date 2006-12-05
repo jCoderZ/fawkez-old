@@ -64,7 +64,7 @@ public class ColumnSpec
    private String mAnnotation;
 
    /**
-    * returns the name of this column
+    * Returns the name of this column.
     * @return the name of this column
     */
    public final String getColumnName ()
@@ -73,7 +73,7 @@ public class ColumnSpec
    }
 
    /**
-    * sets the name of this column
+    * Sets the name of this column.
     * @param string the name of this column
     */
    public final void setColumnName (String string)
@@ -82,7 +82,7 @@ public class ColumnSpec
    }
 
    /**
-    * returns the data type for this column
+    * Returns the data type for this column.
     * @return the data type for this column
     */
    public final String getColumnType ()
@@ -92,8 +92,7 @@ public class ColumnSpec
 
 
    /**
-    * sets the data type for this column
-    * 
+    * Sets the data type for this column.
     * @param string the data type
     */
    public final void setColumnType (String string)
@@ -103,10 +102,8 @@ public class ColumnSpec
 
    
    /**
-    * Returns a list of all attributes of this colspec
-    * 
+    * Returns a list of all attributes of this colspec.
     * The elements of this list are of type ColumnAttribute.
-    * 
     * @return a list of all attributes of this colspec
     */
    public final List getAttributes ()
@@ -116,7 +113,6 @@ public class ColumnSpec
 
    /**
     * Adds an attribute to this column spec.
-    * 
     * @param attr the attribute to add
     */
    public final void addAttribute (ColumnAttribute attr)
@@ -125,8 +121,7 @@ public class ColumnSpec
    }
 
    /**
-    * Adds an attribute to the datatype of this colspec
-    * 
+    * Adds an attribute to the datatype of this colspec.
     * @param attr the datatype attribute that should be added
     */
    public final void addDatatypeAttribute (ColumnAttribute attr)
@@ -135,8 +130,7 @@ public class ColumnSpec
    }
 
    /**
-    * Returns the datatype attributes of this colspec
-    * 
+    * Returns the datatype attributes of this colspec.
     * @return a list of datatype attributes
     */
    public final List getDatatypeAttributes ()
@@ -145,7 +139,7 @@ public class ColumnSpec
    }
 
    /**
-    * returns the java type to which this column maps
+    * Returns the java type to which this column maps.
     * @return the java type to which this column maps
     */
    public final String getJavaType ()
@@ -154,7 +148,7 @@ public class ColumnSpec
    }
 
    /**
-    * sets the java type for this column
+    * Sets the java type for this column.
     * @param type the java type for this column
     */
    public final void setJavaType (String type)
@@ -163,7 +157,7 @@ public class ColumnSpec
    }
 
    /**
-    * returns the method used when loading the custom type from the db
+    * Returns the method used when loading the custom type from the db.
     * @return the method used when loading the custom type from the db
     */
    public final String getLoadMethod ()
@@ -172,7 +166,7 @@ public class ColumnSpec
    }
 
    /**
-    * sets the method used when loading the custom type from the db
+    * Sets the method used when loading the custom type from the db.
     * @param methodName the method used when loading the custom type from the db
     */
    public final void setLoadMethod (String methodName)
@@ -181,7 +175,7 @@ public class ColumnSpec
    }
 
    /**
-    * returns the method used when storing the type to the db
+    * Returns the method used when storing the type to the db.
     * @return the method used when storing the type to the db
     */
    public final String getStoreMethod ()
@@ -190,7 +184,7 @@ public class ColumnSpec
    }
 
    /**
-    * sets the method used when storing the type to the db
+    * Sets the method used when storing the type to the db.
     * @param methodName the method used when storing the type to the db
     */
    public final void setStoreMethod (String methodName)
@@ -199,7 +193,7 @@ public class ColumnSpec
    }
 
    /**
-    * returns whether this column is not null
+    * Returns whether this column is not null.
     * @return true if this column is not null, false otherwise
     */
    public final boolean isNotNull ()
@@ -208,7 +202,7 @@ public class ColumnSpec
    }
    
    /**
-    * set whether this column is not null
+    * Set whether this column is not null.
     * @param b flag indicating whether this column is not null
     */
    public final void setNotNull (boolean b)
@@ -217,7 +211,7 @@ public class ColumnSpec
    }
 
    /**
-    * returns whether this column is primary key
+    * Returns whether this column is primary key.
     * @return true if this column is primary key, false otherwise
     */
    public final boolean isPrimaryKey ()
@@ -226,8 +220,7 @@ public class ColumnSpec
    }
 
    /**
-    * set whether this column is primary key or not
-    * 
+    * Set whether this column is primary key or not.
     * @param b flag indicating whether this column is primary key
     */
    public final void setPrimaryKey (boolean b)

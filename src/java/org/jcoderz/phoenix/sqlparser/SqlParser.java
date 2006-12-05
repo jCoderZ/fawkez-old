@@ -95,7 +95,7 @@ public class SqlParser
    private SpecialAnnotationComment mStatementAnnotation;
 
    /**
-    * Create a new SQL Parser
+    * Create a new SQL Parser.
     *
     * @param scanner the SQL Scanner that delivers tokens to this parser
     */
@@ -127,9 +127,9 @@ public class SqlParser
 
       if (logger.isLoggable(Level.FINER))
       {
-         Exception x = new Exception();
+         final Exception x = new Exception();
          int index = 1;
-         StackTraceElement caller = x.getStackTrace()[index];
+         final StackTraceElement caller = x.getStackTrace()[index];
          StackTraceElement callerParent = null;
          try
          {
@@ -158,7 +158,7 @@ public class SqlParser
    }
 
    /**
-    * read tokens from the scanner until EOF and parse them
+    * Read tokens from the scanner until EOF and parse them.
     *
     * @return a list of parsed SQL statements
     * @throws ParseException if an error occurs
@@ -166,14 +166,14 @@ public class SqlParser
    public final List parse ()
       throws ParseException
    {
-      List tableObjects = new ArrayList();
-      List indexObjects = new ArrayList();
-      List sequenceObjects = new ArrayList();
+      final List tableObjects = new ArrayList();
+      final List indexObjects = new ArrayList();
+      final List sequenceObjects = new ArrayList();
 
       Token token;
       while ((token = getNextToken()).getType() != TokenType.EOF)
       {
-         SqlStatement stmt = handleStartOfStatement(token);
+         final SqlStatement stmt = handleStartOfStatement(token);
          if (stmt != null)
          {
             if (stmt instanceof CreateTableStatement)
@@ -192,14 +192,15 @@ public class SqlParser
          }
       }
 
-      for (Iterator it = indexObjects.iterator(); it.hasNext(); )
+      for (final Iterator it = indexObjects.iterator(); it.hasNext(); )
       {
-         CreateIndexStatement stmt = (CreateIndexStatement) it.next();
-         String tname = stmt.getTableName();
+         final CreateIndexStatement stmt = (CreateIndexStatement) it.next();
+         final String tname = stmt.getTableName();
          boolean found = false;
-         for (Iterator it2 = tableObjects.iterator(); it2.hasNext(); )
+         for (final Iterator it2 = tableObjects.iterator(); it2.hasNext(); )
          {
-            CreateTableStatement stmt2 = (CreateTableStatement) it2.next();
+            final CreateTableStatement stmt2 
+                = (CreateTableStatement) it2.next();
             if (stmt2.getTableName().equalsIgnoreCase(tname))
             {
                stmt2.addIndex(stmt);
@@ -217,7 +218,7 @@ public class SqlParser
          }
       }
 
-      List result = new ArrayList();
+      final List result = new ArrayList();
       result.addAll(tableObjects);
       result.addAll(sequenceObjects);
       return result;
@@ -267,7 +268,7 @@ public class SqlParser
       Token token = getNextToken();
       SqlStatement result = null;
 
-      TokenType type = token.getType();
+      final TokenType type = token.getType();
 
       // we can only parse CREATE TABLE and CREATE INDEX statements
       if (type == TokenType.TABLE)
@@ -353,7 +354,8 @@ public class SqlParser
          }
 
          token = assertNextToken(TokenType.IDENTIFIER);
-         CreateIndexStatement stmt = new CreateIndexStatement(token.getValue());
+         final CreateIndexStatement stmt 
+             = new CreateIndexStatement(token.getValue());
          stmt.setUnique(isUnique);
          parseCreateIndexStatement(stmt);
          result = stmt;
@@ -362,7 +364,7 @@ public class SqlParser
       else if (type == TokenType.SEQUENCE)
       {
          token = assertNextToken(TokenType.IDENTIFIER);
-         CreateSequenceStatement stmt
+         final CreateSequenceStatement stmt
                = new CreateSequenceStatement(token.getValue());
 
          parseCreateSequenceStatement(stmt);
@@ -395,7 +397,7 @@ public class SqlParser
       Token token;
       while ((token = getNextToken()).getType() != TokenType.SEMICOLON)
       {
-         TokenType type = token.getType();
+         final TokenType type = token.getType();
          if (type == TokenType.INCREMENT)
          {
             assertNextToken(TokenType.BY);
@@ -494,7 +496,7 @@ public class SqlParser
    private void parseRelationalPropOrComment (CreateTableStatement createStmt)
       throws ParseException
    {
-      Token token = getNextToken();
+      final Token token = getNextToken();
       if (isStartOfOutOfLineConstraint(token))
       {
          // delegate
@@ -522,7 +524,7 @@ public class SqlParser
    private void parseColumnSpec (CreateTableStatement createStmt)
          throws ParseException
    {
-      ColumnSpec colSpec = new ColumnSpec();
+      final ColumnSpec colSpec = new ColumnSpec();
 
       // column name
       Token token = assertNextToken(TokenType.IDENTIFIER);
@@ -552,7 +554,8 @@ public class SqlParser
          if (token.getType() == TokenType.COMMA)
          {
             token = assertNextToken(TokenType.NUMERIC_LITERAL);
-            colSpec.addDatatypeAttribute(new NumericAttribute(token.getValue()));
+            colSpec.addDatatypeAttribute(
+                    new NumericAttribute(token.getValue()));
             assertNextToken(TokenType.CLOSE_PAREN);
          }
          else if (token.getType() != TokenType.CLOSE_PAREN)
@@ -608,8 +611,8 @@ public class SqlParser
    private void parseStatementComment ()
          throws ParseException
    {
-      Token token = assertNextToken(TokenType.COMMENT);
-      String val = token.getValue();
+      final Token token = assertNextToken(TokenType.COMMENT);
+      final String val = token.getValue();
 
       if (val.indexOf("@cmpgen") != -1)
       {
@@ -633,8 +636,8 @@ public class SqlParser
 
    private void parseColumnComment () throws ParseException
    {
-      Token token = assertNextToken(TokenType.COMMENT);
-      String str = token.getValue();
+      final Token token = assertNextToken(TokenType.COMMENT);
+      final String str = token.getValue();
       if (str.indexOf("@cmpgen") != -1)
       {
          if (mSpecialColumnComment == null)
@@ -687,7 +690,7 @@ public class SqlParser
          // default clause: DEFAULT expr
          // read until end of EXPR, which is either a comma,
          // a closing parentheses or the start of an inline constraint
-         StringBuffer defltExpr = new StringBuffer();
+         final StringBuffer defltExpr = new StringBuffer();
          mScanner.setReportWhitespace(true);
          while (true)
          {
@@ -713,7 +716,8 @@ public class SqlParser
             }
          }
          mScanner.setReportWhitespace(false);
-         DefaultClause dfltClause = new DefaultClause(defltExpr.toString());
+         final DefaultClause dfltClause 
+             = new DefaultClause(defltExpr.toString());
          colSpec.addAttribute(dfltClause);
       }
       else if (isStartOfInlineConstraint(token))
@@ -800,7 +804,7 @@ public class SqlParser
       }
       else if (type == TokenType.CHECK)
       {
-         StringBuffer checkCondition = new StringBuffer();
+         final StringBuffer checkCondition = new StringBuffer();
          assertNextToken(TokenType.OPEN_PAREN);
          mScanner.setReportWhitespace(true);
          checkCondition.append(eatUntilClosingParen());
@@ -812,7 +816,8 @@ public class SqlParser
       }
       else if (type == TokenType.REFERENCES)
       {
-         String refTable = assertNextToken(TokenType.IDENTIFIER).getValue();
+         final String refTable 
+             = assertNextToken(TokenType.IDENTIFIER).getValue();
          String refColumn = null;
 
          token = getNextToken();
@@ -853,7 +858,7 @@ public class SqlParser
             pushToken(token);
          }
 
-         FkConstraint constraint = new FkConstraint(
+         final FkConstraint constraint = new FkConstraint(
                constraintName, column.getColumnName(), refTable, refColumn);
          stmt.addFkConstraint(constraint);
          logger.finer("Parsed inline constraint " + constraintName + ": "
@@ -866,7 +871,7 @@ public class SqlParser
 
    private boolean isStartOfInlineConstraint (Token token)
    {
-      TokenType type = token.getType();
+      final TokenType type = token.getType();
       return type == TokenType.NOT
             || type == TokenType.NULL
             || type == TokenType.UNIQUE
@@ -878,7 +883,7 @@ public class SqlParser
 
    private boolean isStartOfOutOfLineConstraint (Token token)
    {
-      TokenType type = token.getType();
+      final TokenType type = token.getType();
       return type == TokenType.CONSTRAINT
             || type == TokenType.UNIQUE
             || type == TokenType.PRIMARY
@@ -889,7 +894,7 @@ public class SqlParser
    private StringBuffer eatUntilClosingParen ()
       throws ParseException
    {
-      StringBuffer sbuf = new StringBuffer();
+      final StringBuffer sbuf = new StringBuffer();
 
       Token token;
       while ((token = getNextToken()).getType() != TokenType.CLOSE_PAREN)
@@ -897,7 +902,7 @@ public class SqlParser
          sbuf.append(token.getValue());
          if (token.getType() == TokenType.OPEN_PAREN)
          {
-            StringBuffer nested = eatUntilClosingParen();
+            final StringBuffer nested = eatUntilClosingParen();
             sbuf.append(nested);
             token = assertNextToken(TokenType.CLOSE_PAREN);
             sbuf.append(token.getValue());
@@ -954,7 +959,7 @@ public class SqlParser
       {
          // UNIQUE ( column [, column...] )
          assertNextToken(TokenType.OPEN_PAREN);
-         List uniqueCols = new ArrayList();
+         final List uniqueCols = new ArrayList();
          while ((token = getNextToken()).getType() != TokenType.CLOSE_PAREN)
          {
             if (token.getType() != TokenType.COMMA)
@@ -971,7 +976,7 @@ public class SqlParser
          // PRIMARY KEY ( column [, column...] )
          assertNextToken(TokenType.KEY);
          assertNextToken(TokenType.OPEN_PAREN);
-         List pkCols = new ArrayList();
+         final List pkCols = new ArrayList();
          while ((token = getNextToken()).getType() != TokenType.CLOSE_PAREN)
          {
             if (token.getType() != TokenType.COMMA)
@@ -990,7 +995,7 @@ public class SqlParser
       else if (type == TokenType.CHECK)
       {
          token = assertNextToken(TokenType.OPEN_PAREN);
-         StringBuffer checkCondition = new StringBuffer();
+         final StringBuffer checkCondition = new StringBuffer();
          checkCondition.append(token.getValue());
          mScanner.setReportWhitespace(true);
          checkCondition.append(eatUntilClosingParen());
@@ -1021,8 +1026,8 @@ public class SqlParser
    private void parseConstraintState ()
          throws ParseException
    {
-      Token token = getNextToken();
-      TokenType type = token.getType();
+      final Token token = getNextToken();
+      final TokenType type = token.getType();
       if (type == TokenType.ENABLE
             || type == TokenType.DISABLE)
       {
@@ -1054,7 +1059,7 @@ public class SqlParser
       //    [ (ENABLE | DISABLE) ]
       assertNextToken(TokenType.KEY);
       assertNextToken(TokenType.OPEN_PAREN);
-      List fkCols = new ArrayList();
+      final List fkCols = new ArrayList();
       while ((token = getNextToken()).getType() != TokenType.CLOSE_PAREN)
       {
          if (token.getType() != TokenType.COMMA)
@@ -1064,8 +1069,8 @@ public class SqlParser
       }
       assertNextToken(TokenType.REFERENCES);
       token = assertNextToken(TokenType.IDENTIFIER);
-      String refTable = token.getValue();
-      List refColumns = new ArrayList();
+      final String refTable = token.getValue();
+      final List refColumns = new ArrayList();
       token = getNextToken();
       if (token.getType() == TokenType.OPEN_PAREN)
       {
@@ -1146,7 +1151,7 @@ public class SqlParser
          // uff, we're done
          pushToken(token);
          
-         FkConstraint constraint = new FkConstraint(
+         final FkConstraint constraint = new FkConstraint(
                constraintName, fkCols, refTable, refColumns);
          stmt.addFkConstraint(constraint);
          logger.finer("Parsed OOL constraint "
@@ -1167,10 +1172,10 @@ public class SqlParser
    private void addUniqueColumns (CreateTableStatement statement, List ukCols)
          throws ParseException
    {
-      for (Iterator it = ukCols.iterator(); it.hasNext(); )
+      for (final Iterator it = ukCols.iterator(); it.hasNext(); )
       {
-         String colName = (String) it.next();
-         ColumnSpec col = statement.getColumnByName(colName);
+         final String colName = (String) it.next();
+         final ColumnSpec col = statement.getColumnByName(colName);
          if (col == null)
          {
             throw new ParseException("Column " + colName + " not found",
@@ -1192,10 +1197,10 @@ public class SqlParser
       // first check that no primary key exists
       checkForPrimaryKey(statement);
 
-      for (Iterator it = pkCols.iterator(); it.hasNext(); )
+      for (final Iterator it = pkCols.iterator(); it.hasNext(); )
       {
-         String colName = (String) it.next();
-         ColumnSpec col = statement.getColumnByName(colName);
+         final String colName = (String) it.next();
+         final ColumnSpec col = statement.getColumnByName(colName);
          if (col == null)
          {
             throw new ParseException("Column " + colName + " not found",
@@ -1214,9 +1219,10 @@ public class SqlParser
    private void checkForPrimaryKey (CreateTableStatement statement)
       throws ParseException
    {
-      for (Iterator it = statement.getColumns().iterator(); it.hasNext(); )
+      for (final Iterator it = statement.getColumns().iterator(); 
+          it.hasNext(); )
       {
-         ColumnSpec col = (ColumnSpec) it.next();
+         final ColumnSpec col = (ColumnSpec) it.next();
          if (col.isPrimaryKey())
          {
             throw new ParseException(col.getColumnName()
@@ -1236,7 +1242,7 @@ public class SqlParser
    {
       // final String methodName = "assertNextToken(TokenType)";
       // logger.entering(CLASSNAME, methodName, expectedType);
-      Token nextToken = getNextToken();
+      final Token nextToken = getNextToken();
       if (nextToken.getType() != expectedType)
       {
          throw new ParseException(
@@ -1276,7 +1282,7 @@ public class SqlParser
    }
 
    /**
-    * main method is just to test parser
+    * Main method is just to test parser.
     *
     * @param args command line arguments
     * @throws Exception if something goes wrong
@@ -1284,9 +1290,9 @@ public class SqlParser
    public static void main (String[] args)
       throws Exception
    {
-      FileInputStream fin = new FileInputStream(args[0]);
-      SqlScanner scanner = new SqlScanner(fin);
-      SqlParser parser = new SqlParser(scanner);
+      final FileInputStream fin = new FileInputStream(args[0]);
+      final SqlScanner scanner = new SqlScanner(fin);
+      final SqlParser parser = new SqlParser(scanner);
       parser.parse();
    }
 }

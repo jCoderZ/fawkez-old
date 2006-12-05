@@ -56,6 +56,10 @@ import org.jcoderz.phoenix.report.jaxb.ObjectFactory;
 public class JCoverageReportReader
       extends AbstractReportReader
 {
+    /** JAXB context path. */
+    public static final String JCOVERAGE_JAXB_CONTEXT_PATH
+       = "org.jcoderz.phoenix.jcoverage.jaxb";
+
    private static final transient String CLASSNAME
       = JCoverageReportReader.class.getName();
 
@@ -64,10 +68,6 @@ public class JCoverageReportReader
 
    private Coverage mReportDocument;
 
-   /** JAXB context path */
-   public static final String JCOVERAGE_JAXB_CONTEXT_PATH
-      = "org.jcoderz.phoenix.jcoverage.jaxb";
-
 
    JCoverageReportReader ()
       throws JAXBException
@@ -75,9 +75,7 @@ public class JCoverageReportReader
       super(JCOVERAGE_JAXB_CONTEXT_PATH);
    }
 
-   /**
-    * @see org.jcoderz.phoenix.report.ReportReader#parse(File)
-    */
+   /** {@inheritDoc} */
    public final void parse (File f)
       throws JAXBException
    {
@@ -92,29 +90,26 @@ public class JCoverageReportReader
       }
    }
 
-   /**
-    * @see org.jcoderz.phoenix.report.AbstractReportReader#getItems()
-    */
+   /** {@inheritDoc} */
    public final Map getItems ()
       throws JAXBException
    {
-      Map itemMap = new HashMap();
-
-      List files = mReportDocument.getClazzes();
-
+      final Map itemMap = new HashMap();
+      final List files = mReportDocument.getClazzes();
       final String baseDir = mReportDocument.getSrc() + File.separator;
 
-      for (Iterator iterator = files.iterator(); iterator.hasNext(); )
+      for (final Iterator iterator = files.iterator(); iterator.hasNext(); )
       {
-         Clazz clazz = (Clazz) iterator.next();
+         final Clazz clazz = (Clazz) iterator.next();
          logger.finer("Processing class '" + clazz.getName() + "'");
-         String javaFile = clazzname2Filename (clazz.getName());
-         List itemList = new ArrayList();
+         final String javaFile = clazzname2Filename (clazz.getName());
+         final List itemList = new ArrayList();
 
-         for (Iterator i = clazz.getCoveredLines().iterator(); i.hasNext(); )
+         for (final Iterator i = clazz.getCoveredLines().iterator(); 
+             i.hasNext(); )
          {
-            LineType line = (LineType) i.next();
-            Item item = new ObjectFactory().createItem();
+            final LineType line = (LineType) i.next();
+            final Item item = new ObjectFactory().createItem();
             item.setOrigin(Origin.COVERAGE);
             item.setCounter(line.getHits());
             item.setLine(line.getNumber());
@@ -130,7 +125,7 @@ public class JCoverageReportReader
          {
             if (itemMap.containsKey(info))
             {
-               List l = (List) itemMap.get(info);
+               final List l = (List) itemMap.get(info);
                l.addAll(itemList);
             }
             else
@@ -140,20 +135,16 @@ public class JCoverageReportReader
          }
          else
          {
-            logger.finer("Ignoring findings for resource " + baseDir + javaFile);
+            logger.finer(
+                    "Ignoring findings for resource " + baseDir + javaFile);
          }
       }
 
       return itemMap;
    }
 
-   /**
-    * @param string
-    * @return
-    */
    private final String clazzname2Filename (String c)
    {
       return c.replaceAll("\\.", "/") + ".java";
    }
-
 }

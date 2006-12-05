@@ -46,6 +46,15 @@ public class FindingType
    private final String mDescription;
 
 
+   protected FindingType (String symbol, String shortText, String description)
+   {
+      mSymbol = symbol.intern();
+      mShortText = shortText;
+      mDescription = description;
+      FINDING_TYPES.put(mSymbol, this);
+   }
+
+
    public static FindingType fromString (String symbol)
    {
       new LazyInit();
@@ -56,14 +65,6 @@ public class FindingType
          result = new FindingType(symbol, symbol, symbol);
       }
       return result;
-   }
-
-   protected FindingType (String symbol, String shortText, String description)
-   {
-      mSymbol = symbol.intern();
-      mShortText = shortText;
-      mDescription = description;
-      FINDING_TYPES.put(mSymbol, this);
    }
 
    public String getSymbol ()

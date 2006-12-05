@@ -48,7 +48,7 @@ public class Counter
    private long mCounter = 0;
 
    /**
-    * Constructor
+    * Constructor.
     * @param name the counter's name
     */
    public Counter (String name)

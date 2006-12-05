@@ -52,7 +52,8 @@ import org.jcoderz.commons.util.XmlUtil;
  */
 public final class JavaCodeSnippets
 {
-   private static final String JAVA_CODE_SNIPPET_XML = "code-snippet-catalog.xml";
+   private static final String JAVA_CODE_SNIPPET_XML 
+           = "code-snippet-catalog.xml";
    private static final String NEWLINE = System.getProperty("line.separator");
    private static final String BEGIN_SNIPPET_TAG = "BEGIN SNIPPET:";
    private static final int NUMBER_OF_ARGUMENTS = 2;
@@ -71,7 +72,7 @@ public final class JavaCodeSnippets
             usage ();
          }
 
-         JavaCodeSnippets jcs = new JavaCodeSnippets();
+         final JavaCodeSnippets jcs = new JavaCodeSnippets();
       
          final File srcDir = new File(args[0]);      
          final File outDir = new File(args[1]);
@@ -211,8 +212,8 @@ public final class JavaCodeSnippets
       out.println();
       for (int i = 0; i < files.length; i++)
       {
-         File file = files[i];
-         String s = file.getName();
+         final File file = files[i];
+         final String s = file.getName();
          String n = s;
          if (s.lastIndexOf('.') != -1)
          {

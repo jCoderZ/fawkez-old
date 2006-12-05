@@ -110,10 +110,8 @@ public class TimedCounter
     */
    public synchronized double getFrequency ()
    {
-      long duration = getDuration();
+      final long duration = getDuration();
       double result = 0;
-
-
       final double durationInSec = duration / (double) Date.MILLIS_PER_SECOND;
 
       if (durationInSec > 0)
@@ -123,14 +121,12 @@ public class TimedCounter
       return result;
    }
 
-   /**
-    * @see java.lang.Object#toString()
-    */
+   /** {@inheritDoc} */
    public String toString ()
    {
-      DecimalFormat df = new DecimalFormat("0.000");
+      final DecimalFormat df = new DecimalFormat("0.000");
 
-      StringBuffer sbuf = new StringBuffer();
+      final StringBuffer sbuf = new StringBuffer();
       sbuf.append("[TimedCounter name=").append(getName());
       sbuf.append(", duration=").append(getDuration());
       sbuf.append(", count=").append(getCount());

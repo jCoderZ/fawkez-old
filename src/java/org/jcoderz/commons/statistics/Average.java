@@ -156,12 +156,10 @@ public class Average
       return mNumberOfValues;
    }
 
-   /**
-    * @see java.lang.Object#toString()
-    */
+   /** {@inheritDoc} */
    public String toString ()
    {
-      StringBuffer sbuf = new StringBuffer();
+      final StringBuffer sbuf = new StringBuffer();
       sbuf.append("[Average ").append(mName);
       sbuf.append(" count=").append(getCount());
       sbuf.append(", min=").append(getMinimum());

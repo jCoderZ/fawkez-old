@@ -114,9 +114,7 @@ public final class SqlScanner
       return getNextToken();
    }
 
-   /**
-    * @see org.jcoderz.phoenix.sqlparser.ScannerInterface#nextToken()
-    */
+   /** {@inheritDoc} */
    private Token getNextToken ()
          throws ParseException
    {
@@ -351,12 +349,8 @@ public final class SqlScanner
 
    private static boolean isSpecialCharacter (char c)
    {
-      if (Character.isWhitespace(c) || c == '(' || c == ')'
-            || c == ';' || c == ',' || c == '-')
-      {
-         return true;
-      }
-      return false;
+      return (Character.isWhitespace(c) || c == '(' || c == ')'
+            || c == ';' || c == ',' || c == '-');
    }
 
    private Token eatNewline (int c)
@@ -376,7 +370,9 @@ public final class SqlScanner
             reset();
          }
          ++mLine; mColumn = 0;
-         t = new Token(TokenType.NEWLINE, asString(Constants.CARRIAGE_RETURN_CHAR) + asString(Constants.LINE_FEED_CHAR));
+         t = new Token(TokenType.NEWLINE, 
+                 asString(Constants.CARRIAGE_RETURN_CHAR) 
+                 + asString(Constants.LINE_FEED_CHAR));
       }
       else
       {
@@ -456,7 +452,8 @@ public final class SqlScanner
 
    private static boolean isNewlineChar (char c)
    {
-      return (c == Constants.LINE_FEED_CHAR || c == Constants.CARRIAGE_RETURN_CHAR);
+      return (c == Constants.LINE_FEED_CHAR 
+              || c == Constants.CARRIAGE_RETURN_CHAR);
    }
 
    /**

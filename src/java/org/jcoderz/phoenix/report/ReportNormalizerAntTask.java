@@ -80,7 +80,9 @@ public final class ReportNormalizerAntTask
    private final List mReportFiles = new ArrayList();
    /** The Java Commandline */
    private final CommandlineJava mCommandline = new CommandlineJava();
-   /** List of source directories of type JcoderzReportAntTask.SourceDirectory */
+   /** 
+    * List of source directories of type JcoderzReportAntTask.SourceDirectory. 
+    */
    private final List mSourceDirectories = new ArrayList();
 
    /** Debug output flag */
@@ -426,13 +428,17 @@ public final class ReportNormalizerAntTask
        */
       private boolean testIfCondition ()
       {
+         final boolean result;
          if ("".equals(mIfCondition))
          {
-             return true;
+             result = true;
          }
-
-         final String test = getProject().replaceProperties(mIfCondition);
-         return getProject().getProperty(test) != null;
+         else
+         {
+             final String test = getProject().replaceProperties(mIfCondition);
+             result = getProject().getProperty(test) != null;
+         }
+         return result;
       }
    }
 

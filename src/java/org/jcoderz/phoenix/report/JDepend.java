@@ -76,7 +76,7 @@ public final class JDepend
    public static void main (String[] args) 
          throws ClassNotFoundException, FileNotFoundException
    {
-      JDepend main = new JDepend();
+      final JDepend main = new JDepend();
       main.parseArgs(args);  
       main.findClasses();
       main.writeDotFile();
@@ -115,7 +115,8 @@ public final class JDepend
          }
          else
          {
-            throw new IllegalArgumentException("Unknown parameter '" + args[i] + "'");
+            throw new IllegalArgumentException(
+                    "Unknown parameter '" + args[i] + "'");
          } 
          ++i;
       }
@@ -132,10 +133,14 @@ public final class JDepend
       System.err.println("   )=- The Java Dependency Checker -=(");
       System.err.println();
       System.err.println("Usage:");
-      System.err.println(" -classes DIR      ... path to class directory [build/classes]");
-      System.err.println(" -out FILE         ... path to the output file [out.dot]");
-      System.err.println(" -include PATTERN  ... regex for include packages [.*]");
-      System.err.println(" -exclude PATTERN  ... regex for exclude packages []");
+      System.err.println(
+              " -classes DIR      ... path to class directory [build/classes]");
+      System.err.println(
+              " -out FILE         ... path to the output file [out.dot]");
+      System.err.println(
+              " -include PATTERN  ... regex for include packages [.*]");
+      System.err.println(
+              " -exclude PATTERN  ... regex for exclude packages []");
       System.err.println("");
       System.exit(-1);
    }
@@ -143,14 +148,17 @@ public final class JDepend
    public void writeDotFile () 
          throws FileNotFoundException
    {
-      final PrintWriter out = new PrintWriter(new FileOutputStream(mOutputFilename));
+      final PrintWriter out 
+          = new PrintWriter(new FileOutputStream(mOutputFilename));
       out.println("digraph G  {\n" 
             + "  center=\"\"\n" 
             + "  node[width=.25,hight=.375,fontsize=10,shape=box]");
-      for (Iterator iterator = mPackageDependency.iterator(); iterator.hasNext();)
+      for (final Iterator iterator = mPackageDependency.iterator(); 
+          iterator.hasNext();)
       {
-         PackageDependency d = (PackageDependency) iterator.next();
-         out.println("   " + d.toDotString() + " [fontname=\"verdana\", fontcolor=\"black\", fontsize=10.0];");
+         final PackageDependency d = (PackageDependency) iterator.next();
+         out.println("   " + d.toDotString() 
+             + " [fontname=\"verdana\", fontcolor=\"black\", fontsize=10.0];");
       }
       out.println("}");
       out.close();
@@ -159,17 +167,17 @@ public final class JDepend
    private void visit (String clazz) 
          throws ClassNotFoundException
    {
-      JavaClass javaClass = REPOSITORY.loadClass(clazz);
-      ConstantPool constantPool = javaClass.getConstantPool();
+      final JavaClass javaClass = REPOSITORY.loadClass(clazz);
+      final ConstantPool constantPool = javaClass.getConstantPool();
       mAllClasses.add(clazz);
       propeller();
-      Constant[] constant = constantPool.getConstantPool();
+      final Constant[] constant = constantPool.getConstantPool();
       for (int i = 0; i < constant.length; i++)
       {
-         Constant c = constant[i];
+         final Constant c = constant[i];
          if (c instanceof ConstantClass)
          {
-            ConstantClass constantClass = (ConstantClass) c;
+             final ConstantClass constantClass = (ConstantClass) c;
            
             String newClazz 
                = (String) constantClass.getConstantValue(constantPool);
@@ -215,7 +223,8 @@ public final class JDepend
    private void propeller ()
    {
       System.out.print("\b");
-      System.out.print(PROPELLER_CHARS[mPropellerIndex++ % PROPELLER_CHARS.length]);
+      System.out.print(
+              PROPELLER_CHARS[mPropellerIndex++ % PROPELLER_CHARS.length]);
    }
 
    public void findClasses ()
@@ -228,7 +237,7 @@ public final class JDepend
 
    private void findClasses (File dir, String pkg) 
    {
-      File[] files = dir.listFiles();
+      final File[] files = dir.listFiles();
       for (int i = 0; i < files.length; i++)
       {
          if (files[i].isDirectory())
@@ -249,7 +258,8 @@ public final class JDepend
          {
             final String filename = files[i].getName();
             final String clazz = pkg + "." 
-                  + filename.substring(0, filename.length() - ".class".length());
+                  + filename.substring(0, 
+                          filename.length() - ".class".length());
             try
             {
                visit(clazz);
@@ -265,8 +275,8 @@ public final class JDepend
    
    public static final class ClassDependency
    {
-      final String mClazz;
-      final String mDependsClazz;
+      private final String mClazz;
+      private final String mDependsClazz;
 
       ClassDependency (String c, String dc)
       {
@@ -284,23 +294,20 @@ public final class JDepend
          return "\"" + mClazz + "\"" +  " -> " + "\"" + mDependsClazz + "\"";
       }
 
-      /**
-       * @see java.lang.Object#equals(java.lang.Object)
-       */
+      /** {@inheritDoc} */
       public boolean equals (Object obj)
       {
          if (! (obj instanceof JDepend.ClassDependency))
          {
             return false;
          }
-         JDepend.ClassDependency o = (JDepend.ClassDependency) obj;
+         final JDepend.ClassDependency o = (JDepend.ClassDependency) obj;
          
-         return o.mClazz.equals(mClazz) && o.mDependsClazz.equals(mDependsClazz);
+         return o.mClazz.equals(mClazz) 
+                 && o.mDependsClazz.equals(mDependsClazz);
       }
       
-      /**
-       * @see java.lang.Object#hashCode()
-       */
+      /** {@inheritDoc} */
       public int hashCode ()
       {
          return mClazz.hashCode() + mDependsClazz.hashCode();
@@ -309,8 +316,8 @@ public final class JDepend
 
    public static final class PackageDependency
    {
-      final String mPackage;
-      final String mDependsPackage;
+      private final String mPackage;
+      private final String mDependsPackage;
 
       PackageDependency (String c, String dc)
       {
@@ -325,26 +332,24 @@ public final class JDepend
 
       public String toDotString ()
       {
-         return "\"" + mPackage + "\"" +  " -> " + "\"" + mDependsPackage + "\"";
+         return "\"" + mPackage + "\"" +  " -> " + "\"" 
+                 + mDependsPackage + "\"";
       }
 
-      /**
-       * @see java.lang.Object#equals(java.lang.Object)
-       */
+      /** {@inheritDoc} */
       public boolean equals (Object obj)
       {
          if (! (obj instanceof JDepend.PackageDependency))
          {
             return false;
          }
-         JDepend.PackageDependency o = (JDepend.PackageDependency) obj;
+         final JDepend.PackageDependency o = (JDepend.PackageDependency) obj;
          
-         return o.mPackage.equals(mPackage) && o.mDependsPackage.equals(mDependsPackage);
+         return o.mPackage.equals(mPackage) 
+             && o.mDependsPackage.equals(mDependsPackage);
       }
       
-      /**
-       * @see java.lang.Object#hashCode()
-       */
+      /** {@inheritDoc} */
       public int hashCode ()
       {
          return mPackage.hashCode() + mDependsPackage.hashCode();

@@ -94,9 +94,9 @@ public class CreateTableStatement extends SqlStatement
    public final ColumnSpec getColumnByName (String colName)
    {
       ColumnSpec result = null;
-      for (Iterator it = mColumns.iterator(); it.hasNext(); )
+      for (final Iterator it = mColumns.iterator(); it.hasNext(); )
       {
-         ColumnSpec col = (ColumnSpec) it.next();
+         final ColumnSpec col = (ColumnSpec) it.next();
          if (col.getColumnName().equalsIgnoreCase(colName))
          {
             result = col;
@@ -112,13 +112,13 @@ public class CreateTableStatement extends SqlStatement
     */
    public final String toString ()
    {
-      StringBuffer sbuf = new StringBuffer();
+      final StringBuffer sbuf = new StringBuffer();
       sbuf.append("[CREATE TABLE Statement: name=").append(mTableName);
       sbuf.append(", bean name=").append(mBeanName);
       sbuf.append(", annotation=").append(getAnnotation());
-      for (Iterator it = mColumns.iterator(); it.hasNext();)
+      for (final Iterator it = mColumns.iterator(); it.hasNext();)
       {
-         ColumnSpec col = (ColumnSpec) it.next();
+         final ColumnSpec col = (ColumnSpec) it.next();
          sbuf.append(",\n   col=").append(col);
       }
       sbuf.append("]");
@@ -175,9 +175,6 @@ public class CreateTableStatement extends SqlStatement
       mAdditionalJavadoc = additionalJavadoc;
    }
 
-   /**
-    * @param b
-    */
    public void setOptimisticVersionCount (boolean b)
    {
       mOptimisticVersionCount = b;

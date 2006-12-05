@@ -41,9 +41,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 
-import org.jcoderz.commons.BusinessImpact;
-import org.jcoderz.commons.Category;
-
 
 /**
  * This abstract class implements the interface
@@ -131,25 +128,25 @@ public abstract class LogMessageInfoImpl
 
    // LogMessageInfo interface
 
-   /** @see org.jcoderz.commons.LogMessageInfo#getSymbol() */
+   /** {@inheritDoc} */
    public final String getSymbol ()
    {
       return mErrorSymbol;
    }
 
-   /** @see org.jcoderz.commons.LogMessageInfo#getLogLevel() */
+   /** {@inheritDoc} */
    public final Level getLogLevel ()
    {
       return mLogLevel;
    }
 
-   /** @see org.jcoderz.commons.LogMessageInfo#getMessagePattern() */
+   /** {@inheritDoc} */
    public final String getMessagePattern ()
    {
       return mMessagePattern;
    }
 
-   /** @see org.jcoderz.commons.LogMessageInfo#formatMessage(Map, StringBuffer) */
+   /** {@inheritDoc} */
    public final StringBuffer formatMessage (Map parameters, StringBuffer buffer)
    {
       final MessageFormat formatter = new MessageFormat(getMessagePattern());
@@ -178,57 +175,49 @@ public abstract class LogMessageInfoImpl
             buffer != null ? buffer : new StringBuffer(), null);
    }
 
-   /** @see LogMessageInfo#getSolution() */
+   /** {@inheritDoc} */
    public final String getSolution ()
    {
       return mSolution;
    }
 
-   /** @see LogMessageInfo#getBusinessImpact() */
+   /** {@inheritDoc} */
    public final BusinessImpact getBusinessImpact ()
    {
       return mBusinessImpact;
    }
 
-   /** @see LogMessageInfo#getCategory() */
+   /** {@inheritDoc} */
    public final Category getCategory ()
    {
       return mCategory;
    }
 
-   /** @see LogMessageInfo#getParameterList() */
+   /** {@inheritDoc} */
    public final List getParameterList ()
    {
       return mParameters;
    }
 
-   /**
-    * @see LogMessageInfo#getAppName()
-    */
+   /** {@inheritDoc} */
    public String getAppName ()
    {
       return mApplicationName;
    }
 
-   /**
-    * @see LogMessageInfo#getAppNameAbbreviation()
-    */
+   /** {@inheritDoc} */
    public String getAppNameAbbreviation ()
    {
       return mApplicationNameAbbreviation;
    }
 
-   /**
-    * @see LogMessageInfo#getGroupName()
-    */
+   /** {@inheritDoc} */
    public String getGroupName ()
    {
       return mGroupName;
    }
 
-   /**
-    * @see LogMessageInfo#getGroupNameAbbreviation()
-    */
+   /** {@inheritDoc} */
    public String getGroupNameAbbreviation ()
    {
       return mGroupNameAbbreviation;

@@ -52,12 +52,13 @@ import net.sourceforge.chart2d.LegendProperties;
 import net.sourceforge.chart2d.MultiColorsProperties;
 import net.sourceforge.chart2d.Object2DProperties;
 
+import org.jcoderz.commons.util.IoUtil;
 import org.jcoderz.phoenix.report.jaxb.File;
 import org.jcoderz.phoenix.report.jaxb.Item;
 import org.jcoderz.phoenix.report.jaxb.Report;
 
 /**
- * TODO: Extend this class to run historic tool on existing reports
+ * TODO: Extend this class to run historic tool on existing reports.
  * 
  * @author Andreas Mandel
  */
@@ -198,8 +199,8 @@ public final class StatisticCollector
       sb.append("   <packagelevelxml>\n");
       while (j.hasNext())
       {
-         String pkg = (String) j.next();
-         Summary summary = (Summary) packages.get(pkg);
+         final String pkg = (String) j.next();
+         final Summary summary = (Summary) packages.get(pkg);
          sb.append("      <package name='");
          sb.append(pkg);
          sb.append("' ");
@@ -216,8 +217,8 @@ public final class StatisticCollector
       sb.append("   <servicelevelxml>\n");
       while (l.hasNext())
       {
-         String pkg = (String) l.next();
-         Summary summary = (Summary) serviceLevelMap.get(pkg);
+         final String pkg = (String) l.next();
+         final Summary summary = (Summary) serviceLevelMap.get(pkg);
          sb.append("      <service name='");
          sb.append(pkg);
          sb.append("' ");
@@ -237,17 +238,7 @@ public final class StatisticCollector
       }
       finally
       {
-         if (w != null)
-         {
-            try
-            {
-               w.close();
-            }
-            catch (IOException ex)
-            {
-               // ignored
-            }
-         }
+          IoUtil.close(w);
       }
    }
 
@@ -371,9 +362,8 @@ public final class StatisticCollector
       counter.addLoc(currentFile.getLoc());
       while (i.hasNext())
       {
-         Item item = (Item) i.next();
-
-         Severity severity = item.getSeverity();
+         final Item item = (Item) i.next();
+         final Severity severity = item.getSeverity();
 
          if (severity == Severity.ERROR)
          {
@@ -411,22 +401,23 @@ public final class StatisticCollector
      //<-- Begin Chart2D configuration -->
 
      //Configure object properties
-     Object2DProperties object2DProps = new Object2DProperties();
+     final Object2DProperties object2DProps = new Object2DProperties();
      object2DProps.setObjectTitleText ("LOC by " + level);
 
      //Configure chart properties
-     Chart2DProperties chart2DProps = new Chart2DProperties();
+     final Chart2DProperties chart2DProps = new Chart2DProperties();
      chart2DProps.setChartDataLabelsPrecision (1);
 
      //Configure legend properties
-     LegendProperties legendProps = new LegendProperties();
-     String[] legendLabels = {"Production", "Test"};
+     final LegendProperties legendProps = new LegendProperties();
+     final String[] legendLabels = {"Production", "Test"};
      legendProps.setLegendLabelsTexts (legendLabels);
 
      //Configure graph chart properties
-     GraphChart2DProperties graphChart2DProps = new GraphChart2DProperties();
+     final GraphChart2DProperties graphChart2DProps 
+             = new GraphChart2DProperties();
 
-     Set labels = new TreeSet(src.keySet());
+     final Set labels = new TreeSet(src.keySet());
      labels.addAll(test.keySet());
 
      if (labels.size() == 0)
@@ -434,9 +425,9 @@ public final class StatisticCollector
         throw new RuntimeException("No packages found for chart!");
      }
 
-     String [] labelsLongAxisLabels
+     final String [] labelsLongAxisLabels
            = (String[]) labels.toArray(new String[]{});
-     String [] labelsAxisLabels
+     final String [] labelsAxisLabels
            = cutPackages(labelsLongAxisLabels);
 
      graphChart2DProps.setLabelsAxisLabelsTexts(labelsAxisLabels);
@@ -446,7 +437,7 @@ public final class StatisticCollector
            GraphChart2DProperties.CENTERED);
 
      //Configure graph properties
-     GraphProperties graphProps = new GraphProperties();
+     final GraphProperties graphProps = new GraphProperties();
      graphProps.setGraphBarsExistence(false);
      graphProps.setGraphDotsExistence(true);
      graphProps.setGraphAllowComponentAlignment(true);
@@ -464,10 +455,11 @@ public final class StatisticCollector
      }
 
      //Configure graph component colors
-     MultiColorsProperties multiColorsProps = new MultiColorsProperties();
+     final MultiColorsProperties multiColorsProps 
+         = new MultiColorsProperties();
 
      //Configure chart
-     LBChart2D chart2D = new LBChart2D();
+     final LBChart2D chart2D = new LBChart2D();
      chart2D.setObject2DProperties (object2DProps);
      chart2D.setChart2DProperties (chart2DProps);
      chart2D.setLegendProperties (legendProps);
@@ -510,31 +502,32 @@ public final class StatisticCollector
      //<-- Begin Chart2D configuration -->
 
      //Configure object properties
-     Object2DProperties object2DProps = new Object2DProperties();
+     final Object2DProperties object2DProps = new Object2DProperties();
      object2DProps.setObjectTitleText ("Quality by " + level);
 
      //Configure chart properties
-     Chart2DProperties chart2DProps = new Chart2DProperties();
+     final Chart2DProperties chart2DProps = new Chart2DProperties();
      chart2DProps.setChartDataLabelsPrecision(0);
 
      //Configure legend properties
-     LegendProperties legendProps = new LegendProperties();
-     String[] legendLabels = {"Error", "Warning", "Info", "Coverage"};
+     final LegendProperties legendProps = new LegendProperties();
+     final String[] legendLabels = {"Error", "Warning", "Info", "Coverage"};
      legendProps.setLegendLabelsTexts (legendLabels);
 
      //Configure graph chart properties
-     GraphChart2DProperties graphChart2DProps = new GraphChart2DProperties();
+     final GraphChart2DProperties graphChart2DProps 
+             = new GraphChart2DProperties();
 
-     Set labels = new TreeSet(src.keySet());
+     final Set labels = new TreeSet(src.keySet());
 
      if (labels.size() == 0)
      {
         throw new RuntimeException("No packages found for chart!");
      }
 
-     String [] labelsLongAxisLabels
+     final String [] labelsLongAxisLabels
            = (String[]) labels.toArray(new String[]{});
-     String [] labelsAxisLabels
+     final String [] labelsAxisLabels
            = cutPackages(labelsLongAxisLabels);
 
      graphChart2DProps.setLabelsAxisLabelsTexts(labelsAxisLabels);
@@ -544,7 +537,7 @@ public final class StatisticCollector
            GraphChart2DProperties.CENTERED);
 
      //Configure graph properties
-     GraphProperties graphProps = new GraphProperties();
+     final GraphProperties graphProps = new GraphProperties();
      graphProps.setGraphBarsExistence(false);
      graphProps.setGraphDotsExistence(true);
      graphProps.setGraphAllowComponentAlignment(true);
@@ -587,7 +580,8 @@ public final class StatisticCollector
      }
 
      //Configure graph component colors
-     MultiColorsProperties multiColorsProps = new MultiColorsProperties();
+     final MultiColorsProperties multiColorsProps 
+             = new MultiColorsProperties();
 
      multiColorsProps.setColorsCustomize(true);
 
@@ -600,7 +594,7 @@ public final class StatisticCollector
            });
 
      //Configure chart
-     LBChart2D chart2D = new LBChart2D();
+     final LBChart2D chart2D = new LBChart2D();
      chart2D.setObject2DProperties (object2DProps);
      chart2D.setChart2DProperties (chart2DProps);
      chart2D.setLegendProperties (legendProps);

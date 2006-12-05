@@ -53,6 +53,7 @@ import javax.xml.transform.TransformerFactoryConfigurationError;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import org.jcoderz.commons.util.FileUtils;
+import org.jcoderz.commons.util.IoUtil;
 
 /**
  * Provides merging of findbugs, pmd, checkstyle, cpd, and cobertura
@@ -168,7 +169,7 @@ public final class ReportNormalizer
       // XML report
       final OutputStream out = new FileOutputStream(mOutFile);
       myReport.write(out, items);
-      FileUtils.safeClose(out);
+      IoUtil.close(out);
 
       // apply filters to the report
       if (mFilterFile != null)
@@ -204,7 +205,7 @@ public final class ReportNormalizer
       final FileOutputStream out = new FileOutputStream(tempOutputFile);
       transformer.transform(new StreamSource(mOutFile),
            new StreamResult(out));
-      FileUtils.safeClose(out);
+      IoUtil.close(out);
       FileUtils.copyFile(tempOutputFile, mOutFile); 
       FileUtils.delete(tempOutputFile); 
    }
@@ -216,8 +217,10 @@ public final class ReportNormalizer
     * <ul>
     *   <li><code>-jcoverage jvoveragereport.xml</code> (http://???)</li>
     *   <li><code>-cobertura coberturareport.xml</code> (http://???)</li>
-    *   <li><code>-checkstyle checkstylereport.xml</code> (http://checkstyle.sf.net)</li>
-    *   <li><code>-findbugs findbugsreport.xml</code> (http://findbugs.sf.net)</li>
+    *   <li><code>-checkstyle checkstylereport.xml</code> 
+    *       (http://checkstyle.sf.net)</li>
+    *   <li><code>-findbugs findbugsreport.xml</code> 
+    *       (http://findbugs.sf.net)</li>
     *   <li><code>-pmd pmdreport.xml</code> (http://pmd.sf.net)</li>
     *   <li><code>-cpd cpdreport.xml</code> (http://))))</li>
     * </ul>
@@ -317,7 +320,7 @@ public final class ReportNormalizer
             }
             else if (args[i].equals("-out"))
             {
-               File out = new File(args[i + 1]);
+               final File out = new File(args[i + 1]);
                if (out.isDirectory())
                {
                   mOutFile
@@ -330,7 +333,8 @@ public final class ReportNormalizer
             }
             else
             {
-               throw new IllegalArgumentException("Invalid argument '" + args[i]  + "'");
+               throw new IllegalArgumentException(
+                       "Invalid argument '" + args[i]  + "'");
             }
 
             ++i;

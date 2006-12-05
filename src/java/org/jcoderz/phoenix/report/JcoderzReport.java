@@ -50,20 +50,21 @@ import org.jcoderz.phoenix.report.jaxb.Report;
 public final class JcoderzReport
    extends AbstractReportReader
 {
-   private static final transient String CLASSNAME
+    /** JAXB context path. */
+    public static final String JCODERZ_JAXB_CONTEXT_PATH
+       = "org.jcoderz.phoenix.report.jaxb";
+
+    
+    private static final transient String CLASSNAME
       = JcoderzReport.class.getName();
 
-   private static final transient Logger logger
+    private static final transient Logger logger
       = Logger.getLogger(CLASSNAME);
 
-   /** JAXB context path. */
-   public static final String JCODERZ_JAXB_CONTEXT_PATH
-      = "org.jcoderz.phoenix.report.jaxb";
+    private final Report mReport = new ObjectFactory().createReport();
 
-   private final Report mReport = new ObjectFactory().createReport();
-
-   /** The report level. */
-   private ReportLevel mLevel = ReportLevel.PROD;
+    /** The report level. */
+    private ReportLevel mLevel = ReportLevel.PROD;
 
 
    JcoderzReport ()
@@ -73,9 +74,7 @@ public final class JcoderzReport
    }
 
 
-   /**
-    * @see org.jcoderz.phoenix.report.AbstractReportReader#getItems()
-    */
+   /** {@inheritDoc} */
    public Map getItems ()
       throws JAXBException
    {
@@ -94,9 +93,7 @@ public final class JcoderzReport
    }
 
 
-   /**
-    * @see org.jcoderz.phoenix.report.ReportReader#parse(File)
-    */
+   /** {@inheritDoc} */
    public void parse (File f)
       throws JAXBException
    {
@@ -133,13 +130,14 @@ public final class JcoderzReport
    public void addItems (ReportLevel level, Map items)
       throws JAXBException
    {
-      Map files = items;
+      final Map files = items;
 
-      for (Iterator iterator = files.keySet().iterator(); iterator.hasNext(); )
+      for (final Iterator iterator = files.keySet().iterator(); 
+          iterator.hasNext(); )
       {
          final ResourceInfo info = (ResourceInfo) iterator.next();
-         List itemList = (List) files.get(info);
-         org.jcoderz.phoenix.report.jaxb.File f
+         final List itemList = (List) files.get(info);
+         final org.jcoderz.phoenix.report.jaxb.File f
             = new org.jcoderz.phoenix.report.jaxb.ObjectFactory().createFile();
          f.setName(info.getResourceName());
          f.setClassname(info.getClassname());

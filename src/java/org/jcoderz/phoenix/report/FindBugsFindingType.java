@@ -74,16 +74,17 @@ public final class FindBugsFindingType extends FindingType
    {
       try
       {
-         JAXBContext jaxbContext
+         final JAXBContext jaxbContext
             = JAXBContext.newInstance(FINDBUGS_MESSAGE_JAXB_CONTEXT,
                FindBugsFindingType.class.getClassLoader());
-         Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+         final Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
          logger.finest("Try to unmarshalling " + FINDBUGS_MESSAGE_FILE);
-         MessageCollection messageCollection
+         final MessageCollection messageCollection
             = (MessageCollection) unmarshaller.unmarshal(
-                  FindBugsFindingType.class.getClassLoader().getResourceAsStream(
-                     FINDBUGS_MESSAGE_FILE));
-         for (Iterator iterator = messageCollection.getContent().iterator();
+                  FindBugsFindingType.class.getClassLoader()
+                      .getResourceAsStream(FINDBUGS_MESSAGE_FILE));
+         for (final Iterator iterator 
+                 = messageCollection.getContent().iterator();
               iterator.hasNext(); )
          {
              final Object obj = iterator.next();
@@ -97,12 +98,13 @@ public final class FindBugsFindingType extends FindingType
       }
       catch (Exception e)
       {
-         throw new RuntimeException("Cannot initialize FindBugsFindingTypes", e);
+         throw new RuntimeException(
+                 "Cannot initialize FindBugsFindingTypes", e);
       }
    }
 
    /**
-    * @return
+    * @return the message pattern associated to this finding type.
     */
    public final String getMessagePattern ()
    {

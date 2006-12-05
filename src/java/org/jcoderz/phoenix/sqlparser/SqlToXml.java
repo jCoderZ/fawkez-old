@@ -57,17 +57,17 @@ public class SqlToXml
    public void transformSqlToXml ()
          throws FileNotFoundException, ParseException
    {
-      ScannerInterface scanner
+      final ScannerInterface scanner
             = new SqlScanner(new FileInputStream(mInputFile));
-      SqlParser parser = new SqlParser(scanner);
+      final SqlParser parser = new SqlParser(scanner);
 
-      PrintWriter pw = new PrintWriter(new FileOutputStream(mOutputFile));
+      final PrintWriter pw = new PrintWriter(new FileOutputStream(mOutputFile));
       pw.println("<tables>");
 
-      List statements  = parser.parse();
-      for (Iterator it = statements.iterator(); it.hasNext(); )
+      final List statements  = parser.parse();
+      for (final Iterator it = statements.iterator(); it.hasNext(); )
       {
-         SqlStatement stmt = (SqlStatement) it.next();
+         final SqlStatement stmt = (SqlStatement) it.next();
          if (stmt instanceof CreateTableStatement)
          {
             transformStatementToXml((CreateTableStatement) stmt, pw);
@@ -83,7 +83,8 @@ public class SqlToXml
       pw.close();
    }
 
-   private void transformStatementToXml (CreateSequenceStatement stmt, PrintWriter pw)
+   private void transformStatementToXml (CreateSequenceStatement stmt, 
+           PrintWriter pw)
    {
       pw.println("<sequence name=\"" + stmt.getName() + "\">");
       pw.println("   <desc>");
@@ -92,10 +93,8 @@ public class SqlToXml
       pw.println("</sequence>");
    }
 
-   /**
-    * @param stmt
-    */
-   private void transformStatementToXml (CreateTableStatement stmt, PrintWriter out)
+   private void transformStatementToXml (CreateTableStatement stmt, 
+           PrintWriter out)
    {
       out.println("<table name=\"" + stmt.getTableName() + "\">");
       
@@ -104,14 +103,14 @@ public class SqlToXml
          out.println(stmt.getAnnotation());         
       }
       
-      for (Iterator it = stmt.getColumns().iterator(); it.hasNext(); )
+      for (final Iterator it = stmt.getColumns().iterator(); it.hasNext(); )
       {
-         ColumnSpec column = (ColumnSpec) it.next();
+         final ColumnSpec column = (ColumnSpec) it.next();
          out.print("   <column "
                + "name=\"" + column.getColumnName() + "\" "
                + "type=\"" + column.getColumnType());
          StringBuffer sbuf = null;
-         for (Iterator it2 = column.getDatatypeAttributes().iterator();
+         for (final Iterator it2 = column.getDatatypeAttributes().iterator();
                it2.hasNext(); )
          {
             if (sbuf == null)
@@ -123,7 +122,7 @@ public class SqlToXml
             {
                sbuf.append(",");
             }
-            NumericAttribute attr = (NumericAttribute) it2.next();
+            final NumericAttribute attr = (NumericAttribute) it2.next();
             sbuf.append(attr.getNumber());
          }
          if (sbuf != null)
@@ -152,19 +151,21 @@ public class SqlToXml
          out.println("   </column>");
       }
 
-      for (Iterator it = stmt.getFkConstraints().iterator(); it.hasNext(); )
+      for (final Iterator it = stmt.getFkConstraints().iterator(); 
+          it.hasNext(); )
       {
-         FkConstraint fk = (FkConstraint) it.next();
+         final FkConstraint fk = (FkConstraint) it.next();
          out.println("   <fk name=\"" + fk.getName() + "\""
                + " references=\"" + fk.getRefTable() + "\">");
          out.println("      <columns>");
-         for (Iterator it2 = fk.getColumns().iterator(); it2.hasNext(); )
+         for (final Iterator it2 = fk.getColumns().iterator(); it2.hasNext(); )
          {
             out.println("         <col>" + it2.next() + "</col>");
          }
          out.println("      </columns>");
          out.println("      <refcolumns>");
-         for (Iterator it2 = fk.getRefColumns().iterator(); it2.hasNext(); )
+         for (final Iterator it2 = fk.getRefColumns().iterator(); 
+             it2.hasNext(); )
          {
             out.println("         <col>" + it2.next() + "</col>");
          }
@@ -172,9 +173,9 @@ public class SqlToXml
          out.println("   </fk>");
       }
       
-      for (Iterator it = stmt.getIndexes().iterator(); it.hasNext(); )
+      for (final Iterator it = stmt.getIndexes().iterator(); it.hasNext(); )
       {
-         CreateIndexStatement idxStmt = (CreateIndexStatement) it.next();
+         final CreateIndexStatement idxStmt = (CreateIndexStatement) it.next();
          out.println("   <index name=\"" + idxStmt.getIndexName() + "\">");
          if (idxStmt.isUnique())
          {
@@ -227,7 +228,7 @@ public class SqlToXml
          usage();
       }
       
-      SqlToXml transformer = new SqlToXml(inputFile, outputFile);
+      final SqlToXml transformer = new SqlToXml(inputFile, outputFile);
       try
       {
          transformer.transformSqlToXml();

@@ -102,14 +102,14 @@ public final class HTMLRenderAntTask
 
          // FIXME: . is not correct if the build process was started from a
          //    different dir (which is true in cc build)
-         File outDir = mOut == null 
+         final File outDir = mOut == null 
                ? new File(mBaseDir , "build/report-" + mName) : mOut;
          outDir.mkdirs();
          argList.add("-outDir");
          argList.add(outDir.getCanonicalPath());
 
          argList.add("-report");
-         File reportFile = new File(outDir, "jcoderz-merged-report.xml");
+         final File reportFile = new File(outDir, "jcoderz-merged-report.xml");
          argList.add(reportFile.getCanonicalPath());
 
          // FIXME: . is not correct if the build process was started from a

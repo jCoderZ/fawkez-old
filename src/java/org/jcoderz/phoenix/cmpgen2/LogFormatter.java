@@ -50,13 +50,11 @@ public class LogFormatter
 
    private static final int MAX_METHOD_LENGTH = 25;
 
-   /**
-    * @see java.util.logging.Formatter#format(LogRecord)
-    */
+   /** {@inheritDoc} */
    public final String format (LogRecord record)
    {
-      String date = sDateFormat.format(new Date());
-      StringBuffer sbuf = new StringBuffer();
+      final String date = sDateFormat.format(new Date());
+      final StringBuffer sbuf = new StringBuffer();
       sbuf.append(date).append(" ");
       // sbuf.append(Thread.currentThread().getName()).append(" ");
       sbuf.append(padSourceMethod(record.getSourceMethodName())).append(" ");
@@ -64,8 +62,8 @@ public class LogFormatter
       sbuf.append(formatMessage(record));
       if (record.getThrown() != null)
       {
-         StringWriter sw = new StringWriter();
-         PrintWriter pw = new PrintWriter(sw);
+         final StringWriter sw = new StringWriter();
+         final PrintWriter pw = new PrintWriter(sw);
          record.getThrown().printStackTrace(pw);
          pw.flush();
          sbuf.append("\n").append(sw.getBuffer().toString());
@@ -76,21 +74,24 @@ public class LogFormatter
 
    private String padSourceMethod (String sourceMethod)
    {
+      final String result;
       if (sourceMethod.length() > MAX_METHOD_LENGTH)
       {
-         return sourceMethod.substring(0, MAX_METHOD_LENGTH);
+          result = sourceMethod.substring(0, MAX_METHOD_LENGTH);
       }
       else
       {
-         StringBuffer sbuf = new StringBuffer();
+         final StringBuffer sbuf = new StringBuffer();
          sbuf.append(sourceMethod);
          {
-            for (int i = 0; i < (MAX_METHOD_LENGTH - sourceMethod.length()); i++)
+            for (int i = 0; i < (MAX_METHOD_LENGTH - sourceMethod.length()); 
+                i++)
             {
                sbuf.append(" ");
             }
          }
-         return sbuf.toString();
+         result = sbuf.toString();
       }
+      return result;
    }
 }

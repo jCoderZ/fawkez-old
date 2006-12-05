@@ -926,7 +926,8 @@ public class JcReportAntTask
       public File executePmd (File reportDir, File srcDir, File clsDir)
       {
          mTask.log("Creating pmd command line...");
-         final CommandlineJava cmd = createCommandlineJava(mCommandline, mMaxHeap);
+         final CommandlineJava cmd 
+             = createCommandlineJava(mCommandline, mMaxHeap);
 
          cmd.createArgument().setFile(srcDir);
 
@@ -998,7 +999,8 @@ public class JcReportAntTask
       public File executeCpd (File reportDir, File srcDir, File clsDir)
       {
          mTask.log("Creating cpd command line...");
-         final CommandlineJava cmd = createCommandlineJava(mCommandline, mMaxHeap);
+         final CommandlineJava cmd 
+             = createCommandlineJava(mCommandline, mMaxHeap);
 
          cmd.createArgument().setFile(srcDir);
 
@@ -1118,14 +1120,15 @@ public class JcReportAntTask
        */
       public Path createAuxclasspath ()
       {
-         mAuxPath = mCommandline.createClasspath(mTask.getProject()).createPath();
+         mAuxPath = mCommandline.createClasspath(
+                 mTask.getProject()).createPath();
          return mAuxPath;
       }
 
 
       /**
        * Executes the findbugs tool in a separate process.
-       *
+       * <pre>
        * maxheap:
        *   -maxHeap size    Maximum Java heap size in megabytes (default=256)
        *
@@ -1141,18 +1144,18 @@ public class JcReportAntTask
        *     -high           report only high priority warnings
        *
        * config:
-       *   -exclude <filter file>     include only bugs matching given filter
+       *   -exclude &lt;filter file>     include only bugs matching given filter
        *
        * internally:
-       *   -outputFile <filename>       Save output in named file
+       *   -outputFile &lt;filename>       Save output in named file
        *   -xml[:withMessages]          XML output (optionally with messages)
        *
        * auxclasspath:
-       *   -auxclasspath <classpath>    set aux classpath for analysis
+       *   -auxclasspath &lt;classpath>    set aux classpath for analysis
        *
        * report: sourcepath
-       *   -sourcepath <source path>    set source path for analyzed classes
-       * 
+       *   -sourcepath &lt;source path>    set source path for analyzed classes
+       * </pre>
        * The target assumes that all libs needed by findbugs are on the 
        * classpath and the plugins are set via pluginlist element.
        * 
@@ -1247,7 +1250,8 @@ public class JcReportAntTask
       public File executeCheckstyle (File reportDir, File srcDir, File clsPath)
       {
          mTask.log("Creating checkstyle command line...");
-         final CommandlineJava cmd = createCommandlineJava(mCommandline, mMaxHeap);
+         final CommandlineJava cmd 
+             = createCommandlineJava(mCommandline, mMaxHeap);
 
          cmd.createArgument().setValue("-o");
          final File outFile = new File(reportDir, "checkstyle.xml");
@@ -1312,7 +1316,8 @@ public class JcReportAntTask
       public File executeCobertura (File reportDir, File srcDir, File clsPath)
       {
          mTask.log("Creating cobertura command line...");
-         final CommandlineJava cmd = createCommandlineJava(mCommandline, mMaxHeap);
+         final CommandlineJava cmd 
+             = createCommandlineJava(mCommandline, mMaxHeap);
 
          File dataFile = null;
          if (mDatafile == null)

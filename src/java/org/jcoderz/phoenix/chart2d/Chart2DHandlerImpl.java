@@ -821,6 +821,7 @@ public class Chart2DHandlerImpl implements Chart2DHandler
         final Pattern pat = Pattern.compile(TIME_PATTERN);
         final Matcher mat = pat.matcher(value);
         logDebug("grops " + value);
+        String result = value;
         if (mat.matches())
         {
             int minutes = 0;
@@ -835,10 +836,10 @@ public class Chart2DHandlerImpl implements Chart2DHandler
                 seconds = Integer.parseInt(
                     mat.group(TIME_PATTERN_SECONDS_GROUP));
             }
-            value = String.valueOf(
+            result = String.valueOf(
                     Date.SECONDS_PER_MINUTE * minutes + seconds);
         }
-        return value;
+        return result;
     }
 
    private String resolveXpath (String fileName, String xpath) 
@@ -1121,6 +1122,7 @@ public class Chart2DHandlerImpl implements Chart2DHandler
       }
       catch (Exception ex)
       {
+          // no match
       }
 
       return c;
@@ -1195,6 +1197,7 @@ public class Chart2DHandlerImpl implements Chart2DHandler
             }
             catch (Exception exxx)
             {
+                // no match
             }
          }
       }

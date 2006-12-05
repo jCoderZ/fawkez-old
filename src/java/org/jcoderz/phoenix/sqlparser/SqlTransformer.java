@@ -58,13 +58,13 @@ import org.jcoderz.phoenix.sqlparser.jaxb.Table;
 public class SqlTransformer
 {
    private static final String DEFAULT_KEY = "default";
+   private static final int INITIAL = 0;
+   private static final int IN_CREATE = 1;
    private final File mInputFile;
    private final File mOutputFile;
    private File mMetainfFile;
    private final boolean mForce;
    
-   private static final int INITIAL = 0;
-   private static final int IN_CREATE = 1;
    private int mState;
    private TokenType mObjectType;
    private String mObjectName;
@@ -159,11 +159,12 @@ public class SqlTransformer
       //System.out.println("SqlCommentFilter: transforming "
       //      + mInputFile + " to " + mOutputFile);
 
-      ScannerInterface scanner
+      final ScannerInterface scanner
             = new SqlScanner(new FileInputStream(mInputFile));
       scanner.setReportWhitespace(true);
       
-      PrintWriter p2w = new PrintWriter(new FileOutputStream(mOutputFile));
+      final PrintWriter p2w 
+              = new PrintWriter(new FileOutputStream(mOutputFile));
 
       Token token;
       StringBuffer sbuf = new StringBuffer();
@@ -171,12 +172,12 @@ public class SqlTransformer
       {
          parserHook(token, sbuf);
 
-         TokenType type = token.getType();
+         final TokenType type = token.getType();
 
          // System.out.println("Token: " + token);
          if (type == TokenType.NEWLINE)
          {
-            String s = sbuf.toString();
+            final String s = sbuf.toString();
             if (! (s.trim().length() == 0))
             {
                // System.out.println("Writing : '" + s + "'");
@@ -397,7 +398,7 @@ public class SqlTransformer
             return result;
          }
       };
-      File[] inFiles = inDir.listFiles(ff);
+      final File[] inFiles = inDir.listFiles(ff);
       list.addAll(Arrays.asList(inFiles));
       return list;
    }
@@ -512,15 +513,15 @@ public class SqlTransformer
    
    private static class Options
    {
-      String mInputFile = null;
-      String mOutputFile = null;
-      boolean mUseFiles = false;
+      private String mInputFile = null;
+      private String mOutputFile = null;
+      private boolean mUseFiles = false;
       
-      String mInDir = null;
-      String mOutDir = null;
-      boolean mUseDirs = false;
+      private String mInDir = null;
+      private String mOutDir = null;
+      private boolean mUseDirs = false;
       
-      String mMetainfFile = null;
-      boolean mForce = false;
+      private String mMetainfFile = null;
+      private boolean mForce = false;
    }
 }

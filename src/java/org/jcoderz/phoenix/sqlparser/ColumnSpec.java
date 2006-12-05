@@ -243,12 +243,10 @@ public class ColumnSpec
       mIsUnique = isUnique;
    }   
    
-   /**
-    * @see java.lang.String#toString()
-    */
+   /** {@inheritDoc} */
    public final String toString ()
    {
-      StringBuffer sbuf = new StringBuffer();
+      final StringBuffer sbuf = new StringBuffer();
       sbuf.append("[ColumnSpec name=").append(mColumnName);
       sbuf.append(", sqlType=").append(mColumnType);
       sbuf.append(", javaType=").append(mJavaType);
@@ -266,22 +264,19 @@ public class ColumnSpec
       {
          sbuf.append(", unique");
       }
-      for (Iterator it = mDatatypeAttributes.iterator(); it.hasNext(); )
+      for (final Iterator it = mDatatypeAttributes.iterator(); it.hasNext(); )
       {
-         ColumnAttribute attr = (ColumnAttribute) it.next();
+         final ColumnAttribute attr = (ColumnAttribute) it.next();
          sbuf.append(",\n      Data Type Attribute: ").append(attr);
       }
-      for (Iterator it = mAttributes.iterator(); it.hasNext(); )
+      for (final Iterator it = mAttributes.iterator(); it.hasNext(); )
       {
-         ColumnAttribute attr = (ColumnAttribute) it.next();
+         final ColumnAttribute attr = (ColumnAttribute) it.next();
          sbuf.append(",\n      Column Attribute: ").append(attr);
       }
       return sbuf.toString();
    }
 
-   /**
-    * @param string
-    */
    public void setAnnotation (String annotation)
    {
       mAnnotation = annotation;

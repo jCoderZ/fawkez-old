@@ -56,7 +56,8 @@ import javax.servlet.http.HttpServletResponse;
 public class TemplateGeneratorServlet
       extends HttpServlet
 {
-   private static final String TEMPLATE_DIR = "templates";
+    private static final long serialVersionUID = 1017987995368589070L;
+    private static final String TEMPLATE_DIR = "templates";
    
    /**
     * @see javax.servlet.http.HttpServlet#doPost(
@@ -94,7 +95,7 @@ public class TemplateGeneratorServlet
          HttpServletResponse response)
          throws ServletException, IOException
    {
-      String action = request.getParameter("action");
+      final String action = request.getParameter("action");
       if (action == null)
       {
          // give a selection of all registered templates
@@ -123,7 +124,7 @@ public class TemplateGeneratorServlet
    {
       response.setContentType("text/html");
 
-      PrintWriter pw = new PrintWriter(response.getOutputStream());
+      final PrintWriter pw = new PrintWriter(response.getOutputStream());
       pw.println("<HTML><HEAD><TITLE>Error</TITLE></HEAD>");
       pw.println("<BODY><H1>Error:</H1>");
       pw.println(errorText);
@@ -135,18 +136,18 @@ public class TemplateGeneratorServlet
          HttpServletRequest request,
          HttpServletResponse response) throws ServletException, IOException
    {
-      TemplateGenerator templateGen = getTemplateGenerator(request);
-      String template = request.getParameter("template");
+      final TemplateGenerator templateGen = getTemplateGenerator(request);
+      final String template = request.getParameter("template");
 
-      PrintWriter pw = new PrintWriter(response.getOutputStream());
+      final PrintWriter pw = new PrintWriter(response.getOutputStream());
       pw.println("Parametrizing template " + template);
 
-      Map paramMap = new HashMap();
-      for (Iterator it = templateGen.getParameterList().iterator();
+      final Map paramMap = new HashMap();
+      for (final Iterator it = templateGen.getParameterList().iterator();
             it.hasNext(); )
       {
-         Parameter param = (Parameter) it.next();
-         String paramValue = request.getParameter(param.getName());
+         final Parameter param = (Parameter) it.next();
+         final String paramValue = request.getParameter(param.getName());
          if (paramValue == null || paramValue.length() == 0)
          {
             writeError(response, "ERROR: value for parameter "
@@ -161,7 +162,7 @@ public class TemplateGeneratorServlet
       
       try
       {
-         byte[] templateZip = templateGen.parametrizeTemplates(paramMap);
+         final byte[] templateZip = templateGen.parametrizeTemplates(paramMap);
          response.setContentType("application/zip");
          response.setHeader("Content-Disposition",
             "attachment; filename=\"" + template + ".zip\"");
@@ -180,11 +181,11 @@ public class TemplateGeneratorServlet
          HttpServletResponse response) throws IOException, ServletException
    {
 
-      TemplateGenerator templateGen = getTemplateGenerator(request);
-      String template = request.getParameter("template");
+      final TemplateGenerator templateGen = getTemplateGenerator(request);
+      final String template = request.getParameter("template");
 
       response.setContentType("text/html");
-      PrintWriter pw = new PrintWriter(response.getOutputStream());
+      final PrintWriter pw = new PrintWriter(response.getOutputStream());
       pw.println("<HTML><HEAD><TITLE>" + template + " Template Form"
             + "</TITLE></HEAD>");
       pw.println("<BODY>");
@@ -198,10 +199,10 @@ public class TemplateGeneratorServlet
       pw.println("<tr><th>Parameter</th><th>Value</th>"
             + "<th>Description</th></tr>");
       
-      for (Iterator it = templateGen.getParameterList().iterator();
+      for (final Iterator it = templateGen.getParameterList().iterator();
             it.hasNext(); )
       {
-         Parameter param = (Parameter) it.next();
+         final Parameter param = (Parameter) it.next();
          
          pw.println("<tr>");
          pw.println("<td>" + param.getName() + "</td>");
@@ -246,18 +247,18 @@ public class TemplateGeneratorServlet
    {
       response.setContentType("text/html");
 
-      File templateDir = getTemplateDirectory();
+      final File templateDir = getTemplateDirectory();
          
-      FileFilter templateFilter = new FileFilter()
+      final FileFilter templateFilter = new FileFilter()
       {
          public boolean accept (File file)
          {
             return file.getName().endsWith(".zip");
          }
       };
-      File[] templates = templateDir.listFiles(templateFilter);
+      final File[] templates = templateDir.listFiles(templateFilter);
          
-      PrintWriter pw = new PrintWriter(response.getOutputStream());
+      final PrintWriter pw = new PrintWriter(response.getOutputStream());
       pw.println("<HTML><HEAD><TITLE>Template List</TITLE></HEAD>");
       pw.println("<BODY>");
       if (templates != null && templates.length > 0)
@@ -267,8 +268,8 @@ public class TemplateGeneratorServlet
          for (int i = 0; i < templates.length; i++)
          {
             pw.println("<tr>");
-            String template = templates[i].getName();
-            String baseName
+            final String template = templates[i].getName();
+            final String baseName
                   = template.substring(
                         0, template.length() - ".zip".length());
                
@@ -277,7 +278,8 @@ public class TemplateGeneratorServlet
             pw.print(baseName);
             pw.println("</a></td>");
             
-            TemplateZip tz = new TemplateZip(templates[i].getAbsolutePath());
+            final TemplateZip tz 
+                = new TemplateZip(templates[i].getAbsolutePath());
             try
             {
                tz.readTemplateFile();
@@ -305,23 +307,24 @@ public class TemplateGeneratorServlet
 
    private File getTemplateDirectory ()
    {
-      String realPath = getServletContext().getRealPath("/");
-      File baseDir = new File(realPath);
-      File templateDir = new File(baseDir, TEMPLATE_DIR);
+      final String realPath = getServletContext().getRealPath("/");
+      final File baseDir = new File(realPath);
+      final File templateDir = new File(baseDir, TEMPLATE_DIR);
       return templateDir;
    }
    
    private TemplateGenerator getTemplateGenerator (HttpServletRequest request)
          throws ServletException
    {
-      String template = request.getParameter("template");
+      final String template = request.getParameter("template");
       if (template == null)
       {
          throw new ServletException("Parameter 'template' missing");
       }
 
-      String templateFileName = template + ".zip";
-      File templateFile = new File(getTemplateDirectory(), templateFileName);
+      final String templateFileName = template + ".zip";
+      final File templateFile 
+          = new File(getTemplateDirectory(), templateFileName);
 
       if (! templateFile.exists())
       {

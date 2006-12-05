@@ -90,7 +90,7 @@ public class TemplateZip
          final String baseName = entryFile.getName();
 
          int read;
-         byte[] buffer = new byte[READ_BUFFER_SIZE];
+         final byte[] buffer = new byte[READ_BUFFER_SIZE];
          final ByteArrayOutputStream data = new ByteArrayOutputStream();
          while ((read = zin.read(buffer)) != -1)
          {

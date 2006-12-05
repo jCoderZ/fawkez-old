@@ -51,6 +51,7 @@ import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
 import org.jcoderz.commons.util.FileUtils;
+import org.jcoderz.commons.util.IoUtil;
 import org.jcoderz.phoenix.report.jaxb.ObjectFactory;
 import org.jcoderz.phoenix.report.jaxb.Report;
 
@@ -131,7 +132,8 @@ public class ReportMerger
          {
             final File filterFile = (File) iter.next();
             logger.log(Level.FINE, "Filter: " + filterFile);
-            final TransformerFactory tFactory = TransformerFactory.newInstance();
+            final TransformerFactory tFactory 
+                = TransformerFactory.newInstance();
       
             final Transformer transformer = tFactory.newTransformer(
                   new StreamSource(filterFile));
@@ -143,7 +145,7 @@ public class ReportMerger
             final FileOutputStream out = new FileOutputStream(tempOutputFile);
             transformer.transform(new StreamSource(mOutFile),
                  new StreamResult(out));
-            FileUtils.safeClose(out);
+            IoUtil.close(out);
             FileUtils.copyFile(tempOutputFile, mOutFile); 
             FileUtils.delete(tempOutputFile);
          }
@@ -186,7 +188,7 @@ public class ReportMerger
             }
             else if (args[i].equals("-out"))
             {
-               File out = new File(args[i + 1]);
+               final File out = new File(args[i + 1]);
                if (out.isDirectory())
                {
                   out.mkdirs();
@@ -200,7 +202,8 @@ public class ReportMerger
             }
             else
             {
-               throw new IllegalArgumentException("Invalid argument '" + args[i]  + "'");
+               throw new IllegalArgumentException(
+                       "Invalid argument '" + args[i]  + "'");
             }
       
             ++i;

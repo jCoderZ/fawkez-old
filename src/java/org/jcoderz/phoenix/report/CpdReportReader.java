@@ -79,39 +79,34 @@ public final class CpdReportReader
       super(CPD_JAXB_CONTEXT_PATH);
    }
 
-   /**
-    * @see org.jcoderz.phoenix.report.ReportReader#parse(java.io.File)
-    */
+   /** {@inheritDoc} */
    public void parse (File f) throws JAXBException, FileNotFoundException
    {
       mReportDocument = (PmdCpd) getUnmarshaller().unmarshal(
             new FileInputStream(f));
    }
 
-   /**
-    * @see org.jcoderz.phoenix.report.AbstractReportReader#getItems()
-    */
+   /** {@inheritDoc} */
    protected Map getItems () throws JAXBException
    {
       final Map result = new HashMap();
 
-      for (Iterator iterator = mReportDocument.getDuplication().iterator();
+      for (final Iterator iterator 
+              = mReportDocument.getDuplication().iterator();
            iterator.hasNext();)
       {
-         Duplication duplication
-            = (Duplication) iterator.next();
-
+         final Duplication duplication = (Duplication) iterator.next();
          final List filez = duplication.getFile();
          for (int i = 0; i < filez.size(); i++)
          {
-            org.jcoderz.phoenix.cpd.jaxb.File file
+            final org.jcoderz.phoenix.cpd.jaxb.File file
                = (org.jcoderz.phoenix.cpd.jaxb.File) filez.get(i);
 
             final String key = normalizeFileName(file.getPath());
             final ResourceInfo info = ResourceInfo.lookup(key);
             if (info != null)
             {
-               Item item = new ObjectFactory().createItem();
+               final Item item = new ObjectFactory().createItem();
                item.setMessage(constructMessage(i, filez, duplication));
                item.setOrigin(Origin.CPD);
                item.setSeverity(Severity.CPD);
@@ -163,7 +158,7 @@ public final class CpdReportReader
             continue; // skip current finding
          }
 
-         org.jcoderz.phoenix.cpd.jaxb.File file
+         final org.jcoderz.phoenix.cpd.jaxb.File file
                = (org.jcoderz.phoenix.cpd.jaxb.File) filez.get(i);
 
          final ResourceInfo info = ResourceInfo.lookup(file.getPath());

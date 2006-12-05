@@ -55,7 +55,7 @@ public final class JCoverageInputStream
    public JCoverageInputStream (InputStream in)
       throws IOException
    {
-      ByteArrayOutputStream out = new ByteArrayOutputStream();
+      final ByteArrayOutputStream out = new ByteArrayOutputStream();
       int c = 0;
       boolean isString = false;
       while ((c = in.read()) != -1)
@@ -90,22 +90,19 @@ public final class JCoverageInputStream
       mPatchInputStream = new ByteArrayInputStream(out.toByteArray());
    }
    
-   /**
-    * @see java.io.InputStream#read()
-    */
+   /** {@inheritDoc} */
    public int read () throws IOException
    {
       return mPatchInputStream.read();
    }
 
-   /**
-    * @see java.io.InputStream#read(byte[], int, int)
-    */
+   /** {@inheritDoc} */
    public int read (byte[] b, int off, int len) throws IOException
    {
       return mPatchInputStream.read(b, off, len);
    }
    
+   /** {@inheritDoc} */
    public void close () 
          throws IOException
    {

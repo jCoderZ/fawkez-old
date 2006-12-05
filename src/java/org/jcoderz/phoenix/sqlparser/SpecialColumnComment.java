@@ -35,10 +35,10 @@ package org.jcoderz.phoenix.sqlparser;
 import java.util.StringTokenizer;
 
 /**
- * this class represents a special comment in the following form
+ * This class represents a special comment in the following form
  * -- &amp;cmpgen.java-type org.jcoderz.ipp.Msisdn
  * -- &amp;cmpgen.storeMethod="toString()"
- * -- &amp;cmpgen.loadMethod="fromString(java.lang.String)"
+ * -- &amp;cmpgen.loadMethod="fromString(java.lang.String)".
  *
  * @author Albrecht Messner
  */
@@ -53,6 +53,7 @@ public class SpecialColumnComment
    private String mWeblogicColumnType;
    private boolean mSkipInInterface = false;
 
+   /** {@inheritDoc} */
    public final String toString ()
    {
       return "[SpecialColumnComment "
@@ -63,13 +64,13 @@ public class SpecialColumnComment
    }
    
    /**
-    * parse a special comment
+    * Parse a special comment.
     * @param t the token to parse
     * @throws ParseException if the comment has a syntax error
     */
    public final void parseComment (Token t) throws ParseException
    {
-      String s = t.getValue();
+      final String s = t.getValue();
       if (s.indexOf("@cmpgen") != -1)
       {
          if (s.indexOf("java-type") != -1)
@@ -150,7 +151,7 @@ public class SpecialColumnComment
    
    private String getValue (String s)
    {
-      StringTokenizer tok = new StringTokenizer(s, "=");
+      final StringTokenizer tok = new StringTokenizer(s, "=");
       tok.nextToken(); // just skip first token
       String secondPart = tok.nextToken();
       secondPart = secondPart.trim();
@@ -166,7 +167,7 @@ public class SpecialColumnComment
    }
 
    /**
-    * returns the period field name
+    * Returns the period field name.
     * @return the period field name
     */
    public final String getPeriodFieldName ()
@@ -175,7 +176,7 @@ public class SpecialColumnComment
    }
 
    /**
-    * returns the end date column
+    * Returns the end date column.
     * @return the end date column
     */
    public final String getPeriodEndDateColumn ()
@@ -184,7 +185,7 @@ public class SpecialColumnComment
    }
 
    /**
-    * returns the currency column
+    * Returns the currency column.
     * @return the currency column
     */
    public final String getCurrencyColumn ()
@@ -193,7 +194,7 @@ public class SpecialColumnComment
    }
 
    /**
-    * returns the java type
+    * Returns the java type.
     * @return the java type
     */
    public final String getJavaType ()
@@ -202,7 +203,7 @@ public class SpecialColumnComment
    }
 
    /**
-    * returns the load method
+    * Returns the load method.
     * @return the load method
     */
    public final String getLoadMethod ()
@@ -211,7 +212,7 @@ public class SpecialColumnComment
    }
 
    /**
-    * returns the store method
+    * Returns the store method.
     * @return the store method
     */
    public final String getStoreMethod ()
@@ -220,7 +221,7 @@ public class SpecialColumnComment
    }
 
    /**
-    * check whether all required fields have been set
+    * Check whether all required fields have been set.
     * @throws ParseException if the comment is invalid
     */
    public final void validate () throws ParseException
@@ -268,7 +269,7 @@ public class SpecialColumnComment
    }
    
    /**
-    * check whether the field mJavaType has been set
+    * Check whether the field mJavaType has been set.
     * @return true if the field is not-null, false otherwise
     */
    public final boolean isSetJavaType ()
@@ -277,7 +278,7 @@ public class SpecialColumnComment
    }   
 
    /**
-    * check whether the field mStoreMethod has been set
+    * Check whether the field mStoreMethod has been set.
     * @return true if the field is not-null, false otherwise
     */
    public final boolean isSetStoreMethod ()
@@ -286,7 +287,7 @@ public class SpecialColumnComment
    }   
 
    /**
-    * check whether the field mLoadMethod has been set
+    * Check whether the field mLoadMethod has been set.
     * @return true if the field is not-null, false otherwise
     */
    public final boolean isSetLoadMethod ()
@@ -295,7 +296,7 @@ public class SpecialColumnComment
    }
    
    /**
-    * check whether the field mCurrencyColumn has been set
+    * Check whether the field mCurrencyColumn has been set.
     * @return true if the field is not-null, false otherwise
     */
    public final boolean isSetCurrencyColumn ()
@@ -304,7 +305,7 @@ public class SpecialColumnComment
    }
 
    /**
-    * check whether the field mPeriodFieldName has been set
+    * Check whether the field mPeriodFieldName has been set.
     * @return true if the field is not-null, false otherwise
     */
    public final boolean isSetPeriodFieldName ()
@@ -313,7 +314,7 @@ public class SpecialColumnComment
    }
 
    /**
-    * check whether the field mPeriodEndDateColumn has been set
+    * Check whether the field mPeriodEndDateColumn has been set.
     * @return true if the field is not-null, false otherwise
     */
    public final boolean isSetPeriodEndDateColumn ()

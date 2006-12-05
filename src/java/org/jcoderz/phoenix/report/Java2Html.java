@@ -508,8 +508,8 @@ public final class Java2Html
       }
       finally
       {
-         FileUtils.safeClose(in);
-         FileUtils.safeClose(out);
+         IoUtil.close(in);
+         IoUtil.close(out);
       }
    }
 
@@ -1352,7 +1352,7 @@ public final class Java2Html
       final Set packages = new TreeSet(order);
       packages.addAll(mPackageSummary.values());
 
-      Iterator i = packages.iterator();
+      final Iterator i = packages.iterator();
       int pos = 0;
       while (i.hasNext())
       {

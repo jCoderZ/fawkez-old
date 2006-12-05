@@ -60,16 +60,17 @@ import org.jcoderz.phoenix.report.jaxb.ObjectFactory;
 public class CoberturaReportReader
         extends AbstractReportReader
 {
-    private static final transient String CLASSNAME = CoberturaReportReader.class
-            .getName();
+    /** JAXB context path. */
+    public static final String JCOVERAGE_JAXB_CONTEXT_PATH
+            = "org.jcoderz.phoenix.coverage.jaxb";
+
+    private static final transient String CLASSNAME 
+        = CoberturaReportReader.class.getName();
 
     private static final transient Logger logger = Logger.getLogger(CLASSNAME);
 
     private Coverage mReportDocument;
 
-    /** JAXB context path. */
-    public static final String JCOVERAGE_JAXB_CONTEXT_PATH
-            = "org.jcoderz.phoenix.coverage.jaxb";
 
     CoberturaReportReader ()
             throws JAXBException
@@ -77,9 +78,7 @@ public class CoberturaReportReader
         super(JCOVERAGE_JAXB_CONTEXT_PATH);
     }
 
-    /**
-     * @see org.jcoderz.phoenix.report.ReportReader#parse(java.io.File)
-     */
+    /** {@inheritDoc} */
     public final void parse (File f)
             throws JAXBException
     {
@@ -93,13 +92,11 @@ public class CoberturaReportReader
         }
     }
 
-    /**
-     * @see org.jcoderz.phoenix.report.AbstractReportReader#getItems()
-     */
+    /** {@inheritDoc} */
     public final Map getItems ()
         throws JAXBException
     {
-        Map itemMap = new HashMap();
+        final Map itemMap = new HashMap();
 
         final String baseDir = mReportDocument.getSources().getSource().get(0)
                 + File.separator;
@@ -126,8 +123,8 @@ public class CoberturaReportReader
     {
         logger.finer("Processing class '" + clazz.getName() + "'");
 
-        String javaFile = clazzname2Filename(clazz.getName());
-        List itemList = new ArrayList();
+        final String javaFile = clazzname2Filename(clazz.getName());
+        final List itemList = new ArrayList();
 
         for (final Iterator methodIterator = clazz.getMethods().getMethod()
                 .iterator(); methodIterator.hasNext();)
@@ -138,7 +135,7 @@ public class CoberturaReportReader
             {
                 final LineType line = (LineType) lineIterator.next();
 
-                Item item = new ObjectFactory().createItem();
+                final Item item = new ObjectFactory().createItem();
                 item.setOrigin(Origin.COVERAGE);
                 item.setCounter(line.getHits());
                 item.setLine(line.getNumber());

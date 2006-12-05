@@ -130,8 +130,8 @@ public final class FindingsSummary
       public static void createOverallContent (Writer out) throws IOException
       {
          final FindingSummary[] allFindings 
-                 = (FindingSummary[]) getFindingsSummary().getFindings().values().
-                     toArray(new FindingSummary[0]);
+                 = (FindingSummary[]) getFindingsSummary().getFindings()
+                     .values().toArray(new FindingSummary[0]);
 
          out.write("<h1><a href='index.html'>View by Classes</a></h1>");
          out.write("<h1>Findings - Overview</h1>");

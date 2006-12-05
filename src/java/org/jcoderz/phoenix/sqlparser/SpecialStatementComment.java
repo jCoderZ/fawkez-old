@@ -58,7 +58,8 @@ public final class SpecialStatementComment
       mType = type;
    }
    
-   public final String toString ()
+   /** {@inheritDoc} */
+   public String toString ()
    {
       return "[SpecialStatementComment: type = "
             + mType + ", content = " + mContent + "]";
@@ -70,7 +71,7 @@ public final class SpecialStatementComment
       final String content;
       final int type;
       final SpecialStatementComment result;
-      String s = t.getValue();
+      final String s = t.getValue();
       if (s.indexOf("@cmpgen") == -1)
       {
          // not a special comment
@@ -137,7 +138,7 @@ public final class SpecialStatementComment
    
    private static String getValue (String s)
    {
-      StringTokenizer tok = new StringTokenizer(s, "=");
+      final StringTokenizer tok = new StringTokenizer(s, "=");
       tok.nextToken(); // just skip first token
       String secondPart = tok.nextToken();
       secondPart = secondPart.trim();

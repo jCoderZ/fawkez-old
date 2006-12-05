@@ -183,7 +183,7 @@ public class CmpGenerator
          usage("Mandatory parameter missing");
       }
 
-      CmpGenerator generator =
+      final CmpGenerator generator =
          new CmpGenerator(
                outputDir, pkgPrefix, dataSource, templateDir, overwrite);
       generator.generateCmpBeans(inputFile);
@@ -207,13 +207,13 @@ public class CmpGenerator
       {
          setUp();
 
-         FileInputStream fin = new FileInputStream(inputFile);
-         SqlScanner sqlScanner = new SqlScanner(fin);
-         SqlParser sqlParser = new SqlParser(sqlScanner);
-         List sqlStatements = sqlParser.parse();
-         for (Iterator it = sqlStatements.iterator(); it.hasNext();)
+         final FileInputStream fin = new FileInputStream(inputFile);
+         final SqlScanner sqlScanner = new SqlScanner(fin);
+         final SqlParser sqlParser = new SqlParser(sqlScanner);
+         final List sqlStatements = sqlParser.parse();
+         for (final Iterator it = sqlStatements.iterator(); it.hasNext();)
          {
-            SqlStatement statement = (SqlStatement) it.next();
+            final SqlStatement statement = (SqlStatement) it.next();
             if (statement instanceof CreateTableStatement)
             {
                // mBeanImportList.clear();
@@ -245,15 +245,15 @@ public class CmpGenerator
     */
    public String sqlNameToJavaName (String sqlName)
    {
-      StringReader rdr = new StringReader(sqlName);
+      final StringReader rdr = new StringReader(sqlName);
       int c;
       boolean capitalizeNext = true;
-      StringBuffer result = new StringBuffer();
+      final StringBuffer result = new StringBuffer();
       try
       {
          while ((c = rdr.read()) != -1)
          {
-            char chr = (char) c;
+            final char chr = (char) c;
             switch (chr)
             {
                case '_':
@@ -298,17 +298,17 @@ public class CmpGenerator
       {
          str = s;
       }
-      char c = str.charAt(0);
+      final char c = str.charAt(0);
+      final String result;
       if (Character.isUpperCase(c))
       {
-         return str;
+          result = str;
       }
       else
       {
-         String result = String.valueOf(Character.toUpperCase(c))
-               + str.substring(1);
-         return result;
+         result = String.valueOf(Character.toUpperCase(c)) + str.substring(1);
       }
+      return result;
    }
 
    public String getUnqualifiedJavaType (ColumnSpec column)
@@ -416,7 +416,8 @@ public class CmpGenerator
       velocityProps.put(RuntimeConstants.RESOURCE_LOADER, "file");
       velocityProps.put("file.resource.loader.class",
             "org.apache.velocity.runtime.resource.loader.FileResourceLoader");
-      velocityProps.put(RuntimeConstants.FILE_RESOURCE_LOADER_PATH, mTemplateDir);
+      velocityProps.put(RuntimeConstants.FILE_RESOURCE_LOADER_PATH, 
+              mTemplateDir);
       velocityProps.put(RuntimeConstants.VM_LIBRARY, "macros.vm");
       // velocityProps.put("runtime.log", "/tmp/velocity.log");
       velocityProps.put(RuntimeConstants.RUNTIME_LOG_LOGSYSTEM_CLASS,
@@ -424,7 +425,7 @@ public class CmpGenerator
                   ? "org.apache.velocity.runtime.log.SimpleLog4JLogSystem"
                   : "org.apache.velocity.runtime.log.NullLogSystem");
       Velocity.init(velocityProps);
-      VelocityContext ctx = new VelocityContext();
+      final VelocityContext ctx = new VelocityContext();
       ctx.put("stmt", stmt);
       ctx.put("baseName", baseName);
       ctx.put("package", mPackagePrefix);
@@ -450,7 +451,7 @@ public class CmpGenerator
             mOutputBaseDirectory + " is not a directory");
       }
 
-      StringTokenizer tok = new StringTokenizer(mPackagePrefix, ".");
+      final StringTokenizer tok = new StringTokenizer(mPackagePrefix, ".");
 
       while (tok.hasMoreTokens())
       {
@@ -465,9 +466,10 @@ public class CmpGenerator
    private boolean hasPrimaryKey (CreateTableStatement statement)
    {
       boolean hasPrimaryKey = false;
-      for (Iterator it = statement.getColumns().iterator(); it.hasNext(); )
+      for (final Iterator it = statement.getColumns().iterator(); 
+          it.hasNext(); )
       {
-         ColumnSpec column = (ColumnSpec) it.next();
+         final ColumnSpec column = (ColumnSpec) it.next();
          if (column.isPrimaryKey())
          {
             hasPrimaryKey = true;
@@ -490,9 +492,10 @@ public class CmpGenerator
    {
       boolean needHelper = false;
 
-      for (Iterator it = statement.getColumns().iterator(); it.hasNext(); )
+      for (final Iterator it = statement.getColumns().iterator(); 
+          it.hasNext(); )
       {
-         ColumnSpec column = (ColumnSpec) it.next();
+         final ColumnSpec column = (ColumnSpec) it.next();
          if (column.getJavaType() != null)
          {
             if (column.getStoreMethod() != null)
@@ -514,10 +517,11 @@ public class CmpGenerator
          throws CmpGeneratorException
    {
       final Set beanImportList = new TreeSet();
-      for (Iterator it = statement.getColumns().iterator(); it.hasNext(); )
+      for (final Iterator it = statement.getColumns().iterator(); 
+          it.hasNext(); )
       {
-         ColumnSpec column = (ColumnSpec) it.next();
-         String javaType = TypeMapping.getJavaType(column, true);
+         final ColumnSpec column = (ColumnSpec) it.next();
+         final String javaType = TypeMapping.getJavaType(column, true);
          if (javaType != null
                && !javaType.startsWith("java.lang")
                && !TypeMapping.isPrimitiveType(javaType))
@@ -535,10 +539,11 @@ public class CmpGenerator
          throws CmpGeneratorException
    {
       final Set helperImportList = new TreeSet();
-      for (Iterator it = statement.getColumns().iterator(); it.hasNext(); )
+      for (final Iterator it = statement.getColumns().iterator(); 
+          it.hasNext(); )
       {
-         ColumnSpec column = (ColumnSpec) it.next();
-         String javaType = TypeMapping.getJavaType(column, true);
+         final ColumnSpec column = (ColumnSpec) it.next();
+         final String javaType = TypeMapping.getJavaType(column, true);
          if (javaType != null
                && !javaType.equals("java.sql.Date") // don't import date since
                                                     // refs to date are always
@@ -548,7 +553,7 @@ public class CmpGenerator
          {
             helperImportList.add(javaType);
          }
-         String complexType = column.getJavaType();
+         final String complexType = column.getJavaType();
          if (complexType != null
                && !complexType.startsWith("java.lang")
                && !TypeMapping.isPrimitiveType(complexType))
@@ -566,9 +571,7 @@ public class CmpGenerator
       return helperImportList;
    }
 
-   /**
-    * @see java.lang.Object#toString()
-    */
+   /** {@inheritDoc} */
    public String toString ()
    {
       return "[Phoenix CmpGenerator " + getVersion() + "]";

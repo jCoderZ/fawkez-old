@@ -37,10 +37,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 
-import org.jcoderz.commons.BusinessImpact;
-import org.jcoderz.commons.Category;
-
-
 
 /**
  * Interface for the log message info data structure.

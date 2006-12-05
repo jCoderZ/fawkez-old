@@ -77,7 +77,9 @@ public final class JcoderzReportAntTask
    private final List mReportFiles = new ArrayList();
    /** The Java Commandline */
    private final CommandlineJava mCommandline = new CommandlineJava();
-   /** List of source directories of type JcoderzReportAntTask.SourceDirectory */
+   /** 
+    * List of source directories of type JcoderzReportAntTask.SourceDirectory. 
+    */
    private final List mSourceDirectories = new ArrayList();
 
    /** Debug output flag */

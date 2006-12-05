@@ -76,7 +76,7 @@ public class Template
 
    private Set getAllParameters ()
    {
-      Set parameters = new HashSet();
+      final Set parameters = new HashSet();
       findParameters(parameters, mTemplateString);
       findParameters(parameters, mTargetName);
 
@@ -85,11 +85,11 @@ public class Template
 
    public Set getParameters ()
    {
-      Set parameters = getAllParameters();
+      final Set parameters = getAllParameters();
 
-      for (Iterator it = parameters.iterator(); it.hasNext(); )
+      for (final Iterator it = parameters.iterator(); it.hasNext(); )
       {
-         String param = (String) it.next();
+         final String param = (String) it.next();
          if (param.startsWith("jcoderz_header"))
          {
             it.remove();
@@ -114,16 +114,16 @@ public class Template
    {
       String parametrizedTemplate = s;
 
-      Set parameters = getAllParameters();
+      final Set parameters = getAllParameters();
 
-      for (Iterator it = parameters.iterator(); it.hasNext(); )
+      for (final Iterator it = parameters.iterator(); it.hasNext(); )
       {
-         String key = (String) it.next();
+         final String key = (String) it.next();
          String value = (String) map.get(key);
 
          if (key.startsWith("jcoderz_header"))
          {
-            String headerType = key.substring(key.lastIndexOf("_") + 1);
+            final String headerType = key.substring(key.lastIndexOf("_") + 1);
             value = TemplateGenerator.getJcoderzHeader(headerType);
          }
 
@@ -133,7 +133,7 @@ public class Template
                   "No replacement found for parameter " + key);
          }
 
-         String variable = PARAM_START_ESCAPED + key + PARAM_END_ESCAPED;
+         final String variable = PARAM_START_ESCAPED + key + PARAM_END_ESCAPED;
          // System.out.println("Replacing " + key + " with " + value);
 
          value = escapeString(value);
@@ -146,11 +146,11 @@ public class Template
 
    private String escapeString (String unescaped)
    {
-      StringBuffer result = new StringBuffer();
+      final StringBuffer result = new StringBuffer();
 
       for (int i = 0; i < unescaped.length(); i++)
       {
-         char c = unescaped.charAt(i);
+         final char c = unescaped.charAt(i);
          switch (c)
          {
             case '\\':
@@ -175,14 +175,14 @@ public class Template
             PARAM_START, paramStartPos)) != -1)
       {
          paramStartPos += PARAM_START.length();
-         int paramEndPos = s.indexOf(PARAM_END, paramStartPos);
+         final int paramEndPos = s.indexOf(PARAM_END, paramStartPos);
          if (paramEndPos == -1)
          {
             throw new IllegalArgumentException(
                   "No matching close tag found for opening tag at "
                   + paramStartPos);
          }
-         String paramName = s.substring(paramStartPos, paramEndPos);
+         final String paramName = s.substring(paramStartPos, paramEndPos);
          parameters.add(paramName);
          paramStartPos = paramEndPos + 1;
       }

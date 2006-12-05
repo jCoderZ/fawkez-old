@@ -522,7 +522,8 @@ public final class CheckstyleFindingType
             = (CheckstyleMessages) unmarshaller.unmarshal(
                   CheckstyleFindingType.class.getClassLoader().
                       getResourceAsStream(CHECKSTYLE_MESSAGE_FILE));
-         for (Iterator iterator = messageCollection.getFindingType().iterator();
+         for (final Iterator iterator 
+                     = messageCollection.getFindingType().iterator();
               iterator.hasNext(); )
          {
             final FindingData e = (FindingData) iterator.next();

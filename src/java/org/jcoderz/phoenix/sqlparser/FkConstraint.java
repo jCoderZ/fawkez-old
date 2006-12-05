@@ -60,11 +60,11 @@ public class FkConstraint
          String name, String column, String refTable, String refColumn)
    {
       mName = name;
-      List colList = new ArrayList();
+      final List colList = new ArrayList();
       colList.add(column);
       mColumns = colList;
       mRefTable = refTable;
-      List refList = new ArrayList();
+      final List refList = new ArrayList();
       refList.add(refColumn);
       mRefColumns = refList;
    }

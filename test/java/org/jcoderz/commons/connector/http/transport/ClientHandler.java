@@ -741,7 +741,7 @@ public class ClientHandler
       buffer.append(mResponseBody);
 
       // ..for dumping
-      StringBuffer strbuf = new StringBuffer();
+      final StringBuffer strbuf = new StringBuffer();
       strbuf.append("\n-- RESPONSE --\n");
       strbuf.append(buffer.toString());
       strbuf.append("\n--------------\n");

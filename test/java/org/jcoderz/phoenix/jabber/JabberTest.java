@@ -44,7 +44,7 @@ public class JabberTest
    public void testMain () 
          throws Exception
    {
-      String message = "Phoenix testcase run by " 
+      final String message = "Phoenix testcase run by " 
             + System.getProperty("user.name") + "@"
             + InetAddress.getLocalHost().getHostName()
             + " with jdk " + System.getProperty("java.vm.vendor") + "/"

@@ -57,11 +57,10 @@ public class Base64DecoderServlet
       extends HttpServlet
 {
    private static final long serialVersionUID = 1L;
-
    private static final String ENCODED_PARAMETER_NAME = "encoded";
+   private static final int INDENT = 3;
 
    private final StringBuffer mStringBuffer = new StringBuffer();
-   private static final int INDENT = 3;
 
    /** {@inheritDoc} */
    protected void doPost (HttpServletRequest request,
@@ -77,7 +76,7 @@ public class Base64DecoderServlet
          HttpServletResponse response)
          throws IOException
    {
-      PrintWriter out = response.getWriter();
+      final PrintWriter out = response.getWriter();
       final String encodedData = request.getParameter(ENCODED_PARAMETER_NAME);
       final byte[] data = Base64Util.decode(encodedData);
 

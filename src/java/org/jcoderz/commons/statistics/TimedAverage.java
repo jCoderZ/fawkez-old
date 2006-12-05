@@ -109,12 +109,9 @@ public class TimedAverage
     */
    public synchronized double getFrequency ()
    {
-      long duration = getDuration();
+      final long duration = getDuration();
+      final double durationInSec = duration / (double) Date.MILLIS_PER_SECOND;
       double result = 0;
-
-
-      double durationInSec = duration / (double) Date.MILLIS_PER_SECOND;
-
       if (durationInSec > 0)
       {
          result = getCount() / durationInSec;
@@ -125,9 +122,8 @@ public class TimedAverage
    /** {@inheritDoc} */
    public String toString ()
    {
-      DecimalFormat df = new DecimalFormat("0.000");
-
-      StringBuffer sbuf = new StringBuffer();
+      final DecimalFormat df = new DecimalFormat("0.000");
+      final StringBuffer sbuf = new StringBuffer();
       sbuf.append("[TimedAverage name=").append(getName());
       sbuf.append(", duration=").append(getDuration());
       sbuf.append(", count=").append(getCount());

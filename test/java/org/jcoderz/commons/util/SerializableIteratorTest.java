@@ -74,10 +74,6 @@ public class SerializableIteratorTest
       assertEquals("wrong # of items in iterator", testData.length, count);
    }
 
-   /**
-    *
-    * @throws Exception
-    */
    public void testContentsAndBoundaries ()
          throws Exception
    {
@@ -113,10 +109,10 @@ public class SerializableIteratorTest
       hs.add("bilbo");
       hs.add("aragorn");
 
-      Iterator it = SerializableIterator.fromCollection(hs);
+      final Iterator it = SerializableIterator.fromCollection(hs);
       while (it.hasNext())
       {
-         String s = (String) it.next();
+         final String s = (String) it.next();
          assertTrue("String must be in test data", hs.contains(s));
       }
    }

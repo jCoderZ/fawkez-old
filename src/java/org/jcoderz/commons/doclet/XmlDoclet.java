@@ -164,7 +164,7 @@ public class XmlDoclet
                "validOptions(String[][], DocErrorReporter)",
                new Object[] {ArraysUtil.toString(arguments), reporter});
       }
-      boolean result = true;
+      final boolean result = true;
       final Iterator i = Arrays.asList(arguments).iterator();
       while (i.hasNext())
       {

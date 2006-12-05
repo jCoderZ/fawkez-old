@@ -82,7 +82,7 @@ public class TemplateGenerator
       final ZipOutputStream archive = new ZipOutputStream(bos);
 
       // check values
-      for (Iterator it = mTemplateZip.getDescription()
+      for (final Iterator it = mTemplateZip.getDescription()
             .getParameterList().iterator(); it.hasNext(); )
       {
          final Parameter p = (Parameter) it.next();
@@ -95,7 +95,8 @@ public class TemplateGenerator
          p.checkValue(val);
       }
 
-      for (Iterator it = mTemplateZip.getTemplates().iterator(); it.hasNext(); )
+      for (final Iterator it = mTemplateZip.getTemplates().iterator(); 
+          it.hasNext(); )
       {
          final Template t = (Template) it.next();
          final String parametrizedTemplate = t.parametrize(parameterMap);

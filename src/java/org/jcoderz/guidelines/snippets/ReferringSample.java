@@ -46,7 +46,7 @@ public class ReferringSample
 
     public static void xyz ()
     {
-        ReferringSample anObject = new ReferringSample();
+        final ReferringSample anObject = new ReferringSample();
         // BEGIN SNIPPET: ReferringSample.xml
         classMethod();
         ReferringSample.classMethod();

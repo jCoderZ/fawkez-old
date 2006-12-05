@@ -171,8 +171,8 @@ public abstract class AbstractReportReader
     {
         final Map myResourceList = getItems();
 
-        for (Iterator iterator = myResourceList.keySet().iterator(); iterator
-                .hasNext();)
+        for (final Iterator iterator = myResourceList.keySet().iterator(); 
+                iterator.hasNext();)
         {
             final ResourceInfo info = (ResourceInfo) iterator.next();
             List items = (List) toItems.get(info);
@@ -198,8 +198,8 @@ public abstract class AbstractReportReader
     /** {@inheritDoc} */
     public final boolean handleEvent (ValidationEvent e)
     {
-        ValidationEventLocator l = e.getLocator();
-        StringBuffer sb = new StringBuffer();
+        final ValidationEventLocator l = e.getLocator();
+        final StringBuffer sb = new StringBuffer();
         sb.append("[ValidationEvent:");
         sb.append(", message=");
         sb.append(e.getMessage());

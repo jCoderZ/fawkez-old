@@ -46,7 +46,7 @@ public class SqlToXmlTest
          throws Exception
    {
       final String basedir = System.getProperty("basedir", ".");
-      SqlToXml transformer = new SqlToXml(
+      final SqlToXml transformer = new SqlToXml(
             basedir + File.separator + "test/data/config_create_table.sql", 
             basedir + File.separator + "build/config_create_table.xml");
       transformer.transformSqlToXml();

@@ -92,12 +92,12 @@ public class CreateIndexStatement
    /** {@inheritDoc} */
    public String toString ()
    {
-      StringBuffer sbuf = new StringBuffer();
+      final StringBuffer sbuf = new StringBuffer();
       sbuf.append("[CREATE INDEX Statement: Index name = ").append(mIndexName);
       sbuf.append(", table = ").append(mTableName);
-      for (Iterator it = mColumnNames.iterator(); it.hasNext(); )
+      for (final Iterator it = mColumnNames.iterator(); it.hasNext(); )
       {
-         String colName = (String) it.next();
+         final String colName = (String) it.next();
          sbuf.append(", column = " + colName);
       }
       sbuf.append("]");

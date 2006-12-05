@@ -83,6 +83,7 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 
 import org.jcoderz.commons.util.Assert;
+import org.jcoderz.commons.util.Constants;
 import org.jcoderz.commons.util.EmptyIterator;
 import org.jcoderz.commons.util.FileUtils;
 import org.jcoderz.commons.util.IoUtil;
@@ -222,7 +223,7 @@ public final class Java2Html
     * @return the string "odd" if the given number is odd, "even" 
     *     otherwise.
     */
-   public static final String toOddEvenString (int number)
+   public static String toOddEvenString (int number)
    {
        return PATTERN[number % PATTERN_SIZE];
    }
@@ -588,19 +589,12 @@ public final class Java2Html
             }
             else if (args[i].equals("-loglevel"))
             {
-               mLogLevel = Level.parse(args[i + 1]);
-               final Handler[] handlers = Logger.getLogger("").getHandlers();
-               for (int index = 0; index < handlers.length; index++)
-               {
-                  handlers[index].setLevel(mLogLevel);
-               }
-               logger.fine("Setting log level: " + mLogLevel);
-               logger.setLevel(mLogLevel);
+               setLoglevel(args[i + 1]);
             }
             else
             {
-               throw new IllegalArgumentException("Invalid argument '" + args[i]
-                     + "'");
+               throw new IllegalArgumentException(
+                       "Invalid argument '" + args[i] + "'");
             }
             i += 1 /* command */ + 1 /* argument */;
          }
@@ -620,6 +614,18 @@ public final class Java2Html
          ex.initCause(e);
          throw ex;
       }
+   }
+
+   private void setLoglevel (String loglevel)
+   {
+       mLogLevel = Level.parse(loglevel);
+       final Handler[] handlers = Logger.getLogger("").getHandlers();
+       for (int index = 0; index < handlers.length; index++)
+       {
+          handlers[index].setLevel(mLogLevel);
+       }
+       logger.fine("Setting log level: " + mLogLevel);
+       logger.setLevel(mLogLevel);
    }
 
    /**
@@ -1352,9 +1358,61 @@ public final class Java2Html
       {
          pos++;
          final FileSummary pkg = (FileSummary) i.next();
+         final boolean isLast = !i.hasNext();
+         appendPackageLink(bw, pkg, filename, pos, isLast);
+      }
+      bw.write("</tbody></table>");
+
+      // findings with no line number...
+      createUnassignedFindingsTable(bw);
+
+      bw.write("<h1>Java Files</h1>");
+      createClassListTable(bw, mAllFiles, true, order);
+
+      bw.write("</body></html>");
+      bw.close();
+   }
+
+    private void createUnassignedFindingsTable (final BufferedWriter bw)
+        throws IOException
+    {
+        if (!mGlobalFindings.isEmpty())
+        {
+            bw.write("<h1>Unassigned findings</h1>");
+            bw.write("<table border='0' cellpadding='0' cellspacing='0'"
+                    + " width='95%'>");
+            final Iterator i = mGlobalFindings.iterator();
+            int row = 0;
+            while (i.hasNext())
+            {
+                final org.jcoderz.phoenix.report.jaxb.File file 
+                    = (org.jcoderz.phoenix.report.jaxb.File) i.next();
+                final Iterator j = file.getItem().iterator();
+                while (j.hasNext())
+                 {
+                    row++;
+                    final Item item = (Item) j.next();
+                    bw.write("<tr class='");
+                    bw.write(item.getSeverity().toString());
+                    bw.write(Java2Html.toOddEvenString(row));
+                    bw.write("'><td class='unassigned-filename'>");
+                    bw.write(cutPath(file.getName()));
+                    bw.write("</td><td class='unassigned-data' width='100%'>");
+                    bw.write(item.getMessage());
+                    bw.write("</td></tr>");
+                 }
+             }
+            bw.write("</table>");
+        }
+    }
+
+    private void appendPackageLink (final BufferedWriter bw, 
+            final FileSummary pkg, final String filename, final int pos, 
+            final boolean isLast)
+        throws IOException
+    {
          final String name = pkg.getPackage();
          final String subdir = name.replaceAll("\\.", "/");
-         final boolean isLast = !i.hasNext();
          bw.write("<tr class='" + Java2Html.toOddEvenString(pos) 
                + "'><td class='classname");
          appendIf(bw, isLast, LAST_MARKER);
@@ -1379,42 +1437,7 @@ public final class Java2Html
          bw.write("' width='100'>");
          bw.write(pkg.getPercentBar());
          bw.write("</td></tr>" + NEWLINE);
-      }
-      bw.write("</tbody></table>");
-
-      // findings with no line number...
-      bw.write("<h1>Unassigned findings</h1>");
-      bw.write("<table border='0' cellpadding='0' cellspacing='0'"
-            + " width='95%'>");
-      i = mGlobalFindings.iterator();
-      int row = 0;
-      while (i.hasNext())
-      {
-         final org.jcoderz.phoenix.report.jaxb.File
-            file = (org.jcoderz.phoenix.report.jaxb.File) i.next();
-         final Iterator j = file.getItem().iterator();
-         while (j.hasNext())
-         {
-            row++;
-            final Item item = (Item) j.next();
-            bw.write("<tr class='");
-            bw.write(item.getSeverity().toString());
-            bw.write(Java2Html.toOddEvenString(row));
-            bw.write("'><td class='unassigned-filename'>");
-            bw.write(cutPath(file.getName()));
-            bw.write("</td><td class='unassigned-data' width='100%'>");
-            bw.write(item.getMessage());
-            bw.write("</td></tr>");
-         }
-      }
-      bw.write("</table>");
-
-      bw.write("<h1>Java Files</h1>");
-      createClassListTable(bw, mAllFiles, true, order);
-
-      bw.write("</body></html>");
-      bw.close();
-   }
+    }
 
    /**
     * Writes a html header to the given output stream.
@@ -1468,7 +1491,8 @@ public final class Java2Html
    private String cutPath (String fileName)
    {
       String result = fileName;
-      if (fileName.toLowerCase().startsWith(mProjectHome.toLowerCase()))
+      if (fileName.toLowerCase(Constants.SYSTEM_LOCALE)
+              .startsWith(mProjectHome.toLowerCase(Constants.SYSTEM_LOCALE)))
       {
          result = fileName.substring(mProjectHome.length());
       }
@@ -1477,20 +1501,21 @@ public final class Java2Html
 
    private String getCvsLink (String absFile)
    {
+      String result;
       if (mCvsBase == null || mProjectHome == null)
       {
-         return null;
+         result = null;
       }
-
-      String result;
-      if (absFile.toLowerCase().startsWith(mProjectHome.toLowerCase()))
+      else if (absFile.toLowerCase(Constants.SYSTEM_LOCALE)
+              .startsWith(mProjectHome.toLowerCase(Constants.SYSTEM_LOCALE)))
       {
          result = absFile.substring(mProjectHome.length());
       }
       else
       {
          absFile = (new java.io.File(absFile)).getAbsolutePath();
-         if (absFile.toLowerCase().startsWith(mProjectHome.toLowerCase()))
+         if (absFile.toLowerCase(Constants.SYSTEM_LOCALE)
+                 .startsWith(mProjectHome.toLowerCase(Constants.SYSTEM_LOCALE)))
          {
             result = absFile.substring(mProjectHome.length());
          }
@@ -1643,46 +1668,7 @@ public final class Java2Html
             pos++;
             final FileSummary file = (FileSummary) i.next();
             final boolean isLast = !i.hasNext();
-            final String name;
-            final String link;
-            if (fullPackageNames)
-            {
-               name = file.getPackage() + '.' + file.getClassname();
-               link = file.getPackage().replaceAll("\\.", "/") + "/"
-                       + file.getClassname() + ".html";
-            }
-            else
-            {
-               name = file.getClassname();
-               link = file.getClassname() + ".html";
-            }
-            bw.write("<tr class='");
-            bw.write(Java2Html.toOddEvenString(pos));
-            bw.write("'><td class='classname");
-            appendIf(bw, isLast, LAST_MARKER);
-            bw.write("'><a href='");
-            bw.write(link);
-            bw.write("'>");
-            bw.write(name);
-            bw.write("</a></td>");
-            hitsCell(bw, String.valueOf(file.getNumberOfFindings()), isLast);
-            hitsCell(bw, String.valueOf(file.getLinesOfCode()), isLast);
-            if (mCoverageData)
-            {
-               hitsCell(bw, String.valueOf(file.getCoverage()) + "%", isLast);
-               bw.write("<td valign='middle' class='hits");
-               appendIf(bw, isLast, LAST_MARKER);
-               bw.write("' width='100'>");
-               bw.write(file.getCoverageBar());
-               bw.write("</td>");
-            }
-            hitsCell(bw, String.valueOf(file.getQuality()) + "%", isLast);
-            bw.write("<td valign='middle' class='code");
-            appendIf(bw, isLast, LAST_MARKER);
-            bw.write("' width='100'>");
-            bw.write(file.getPercentBar());
-            bw.write("</td></tr>");
-            bw.write(NEWLINE);
+            appendClassLink(bw, file, fullPackageNames, pos, isLast);
          }
          bw.write("</tbody>");
          bw.write("</table>");
@@ -1692,6 +1678,52 @@ public final class Java2Html
          bw.write("EMPTY!?");
       }
    }
+
+    private void appendClassLink (BufferedWriter bw, final FileSummary file, 
+            boolean fullPackageNames, int pos, final boolean isLast)
+        throws IOException
+    {
+        final String name;
+        final String link;
+        if (fullPackageNames)
+        {
+           name = file.getPackage() + '.' + file.getClassname();
+           link = file.getPackage().replaceAll("\\.", "/") + "/"
+                   + file.getClassname() + ".html";
+        }
+        else
+        {
+           name = file.getClassname();
+           link = file.getClassname() + ".html";
+        }
+        bw.write("<tr class='");
+        bw.write(Java2Html.toOddEvenString(pos));
+        bw.write("'><td class='classname");
+        appendIf(bw, isLast, LAST_MARKER);
+        bw.write("'><a href='");
+        bw.write(link);
+        bw.write("'>");
+        bw.write(name);
+        bw.write("</a></td>");
+        hitsCell(bw, String.valueOf(file.getNumberOfFindings()), isLast);
+        hitsCell(bw, String.valueOf(file.getLinesOfCode()), isLast);
+        if (mCoverageData)
+        {
+           hitsCell(bw, String.valueOf(file.getCoverage()) + "%", isLast);
+           bw.write("<td valign='middle' class='hits");
+           appendIf(bw, isLast, LAST_MARKER);
+           bw.write("' width='100'>");
+           bw.write(file.getCoverageBar());
+           bw.write("</td>");
+        }
+        hitsCell(bw, String.valueOf(file.getQuality()) + "%", isLast);
+        bw.write("<td valign='middle' class='code");
+        appendIf(bw, isLast, LAST_MARKER);
+        bw.write("' width='100'>");
+        bw.write(file.getPercentBar());
+        bw.write("</td></tr>");
+        bw.write(NEWLINE);
+    }
 
    private String fileNameForOrder (Comparator order)
    {

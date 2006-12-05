@@ -76,7 +76,7 @@ public class DbView
 {
    public static final String DATASOURCE = "java:comp/env/jdbc/svs/db";
 
-   /** Line seperator to be used in output files. */
+   /** Line separator to be used in output files. */
    public static final String LINE_SEPARATOR = Constants.LINE_SEPARATOR;
 
    private static final int MILLIS_PER_SECOND 
@@ -91,7 +91,8 @@ public class DbView
    private final StringBuffer mStringBuffer = new StringBuffer();
    private final Map mTypeMapper = new HashMap();
    private final DateFormat mDateFormater
-         = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss.SSS");
+         = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss.SSS", 
+                 Constants.SYSTEM_LOCALE);
    private final char[] mReadBuffer = new char[READ_BUFFER_SIZE];
 
    {
@@ -892,11 +893,11 @@ public class DbView
       {
          result = null;
       }
-      else if (str.indexOf("<") != -1)
+      else if (str.indexOf('<') != -1)
       {
          final String detect = str.trim();
-         if (detect.indexOf("<") == 0
-               && detect.lastIndexOf(">") == (detect.length() - 1))
+         if (detect.indexOf('<') == 0
+               && detect.lastIndexOf('>') == (detect.length() - 1))
          {
             result = formatXml(str);
          }
@@ -969,7 +970,7 @@ public class DbView
                            }
                            else
                            {
-                              mStringBuffer.append("\n");
+                              mStringBuffer.append('\n');
                               indent -= INDENT;
                               indent(indent, mStringBuffer);
                               mStringBuffer.append("</");
@@ -980,16 +981,16 @@ public class DbView
                         case '!':
                            if (t != 1)
                            {
-                              mStringBuffer.append("\n");
+                              mStringBuffer.append('\n');
                            }
-                           mStringBuffer.append("<");
+                           mStringBuffer.append('<');
                            mStringBuffer.append(c);
                            break;
                         default:
                            nestedTag = false;
-                           mStringBuffer.append("\n");
+                           mStringBuffer.append('\n');
                            indent(indent, mStringBuffer);
-                           mStringBuffer.append("<");
+                           mStringBuffer.append('<');
                            mStringBuffer.append(c);
                            indent += INDENT;
                            break;
@@ -1035,7 +1036,7 @@ public class DbView
       }
    }
 
-   private class TypeMapper
+   private static class TypeMapper
    {
       private final Class mTypeClass;
       private final Method mFromDb;

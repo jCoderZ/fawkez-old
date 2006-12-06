@@ -155,7 +155,7 @@ public class BasicPrinter
       final StringBuffer pattern = new StringBuffer(FIRST_MSG_ITEM);
       for (int i = 1; i < formats.length; ++i)
       {
-         pattern.append(" {").append(i).append("}");
+         pattern.append(" {").append(i).append('}');
       }
       mStackTraceFormat = new MessageFormat(pattern.toString());
       mStackTraceFormat.setFormats(formats);
@@ -170,7 +170,7 @@ public class BasicPrinter
       final StringBuffer pattern = new StringBuffer(FIRST_MSG_ITEM);
       for (int i = 1; i < formats.length; ++i)
       {
-         pattern.append(" {").append(i).append("}");
+         pattern.append(" {").append(i).append('}');
       }
       mTraceLineFormat = new MessageFormat(pattern.toString());
       mTraceLineFormat.setFormats(formats);
@@ -185,7 +185,7 @@ public class BasicPrinter
       final StringBuffer pattern = new StringBuffer(FIRST_MSG_ITEM);
       for (int i = 1; i < formats.length; ++i)
       {
-         pattern.append(" {").append(i).append("}");
+         pattern.append(" {").append(i).append('}');
       }
       mLogMessageFormat = new MessageFormat(pattern.toString());
       mLogMessageFormat.setFormats(formats);
@@ -202,9 +202,9 @@ public class BasicPrinter
       int i;
       for (i = 1; i < formats.length - 1; ++i)
       {
-         pattern.append(" {").append(i).append("}");
+         pattern.append(" {").append(i).append('}');
       }
-      pattern.append(": \t{").append(i).append("}");
+      pattern.append(": \t{").append(i).append('}');
       mParameterLineFormat = new MessageFormat(pattern.toString());
       mParameterLineFormat.setFormats(formats);
    }
@@ -219,9 +219,9 @@ public class BasicPrinter
       int i = 0;
       for (i = 0; i < formats.length - 1; ++i)
       {
-         pattern.append("{").append(i).append("} ");
+         pattern.append('{').append(i).append("} ");
       }
-      pattern.append("Caused by: {").append(i).append("}");
+      pattern.append("Caused by: {").append(i).append('}');
       mNestedLineFormat = new MessageFormat(pattern.toString());
       mNestedLineFormat.setFormats(formats);
    }
@@ -557,7 +557,7 @@ public class BasicPrinter
       {
          if (getDisplayOptions().displaySourceClass())
          {
-            rc = source.append(".");
+            rc = source.append('.');
          }
          source.append(sourceMethod);
          if (sourceMethod.indexOf('(') < 0)

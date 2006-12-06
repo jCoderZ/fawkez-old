@@ -422,7 +422,7 @@ public class ApiDocTask
             sb.append(mClasses);
             sb.append(" description: '");
             sb.append(mDescription);
-            sb.append("'");
+            sb.append('\'');
             return sb.toString();
         }
 

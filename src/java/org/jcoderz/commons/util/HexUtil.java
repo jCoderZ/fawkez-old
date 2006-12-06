@@ -251,9 +251,9 @@ public final class HexUtil
          {
             lineBuffer.setLength(0);
             charBuffer.setLength(0);
-            charBuffer.append("|");
+            charBuffer.append('|');
             lineBuffer.append(offsetToHex(offset));
-            lineBuffer.append(" ");
+            lineBuffer.append(' ');
             final int end = (offset + DUMP_BYTES_PER_LINE < data.length
                   ? offset + DUMP_BYTES_PER_LINE
                   : data.length);
@@ -261,11 +261,11 @@ public final class HexUtil
             {
                final byte b = data[i];
                lineBuffer.append(bytesToHex(new byte[] {b}));
-               lineBuffer.append(" ");
+               lineBuffer.append(' ');
 
                if (i - offset == DUMP_BYTES_PER_COLUMN - 1)
                {
-                  lineBuffer.append(" ");
+                  lineBuffer.append(' ');
                }
                final char c = (char) b;
                if ((! Character.isISOControl(c))
@@ -275,11 +275,11 @@ public final class HexUtil
                }
                else
                {
-                  charBuffer.append(".");
+                  charBuffer.append('.');
                }
             }
             padBuffer(lineBuffer);
-            charBuffer.append("|");
+            charBuffer.append('|');
             dumpBuffer.append(lineBuffer);
             dumpBuffer.append(charBuffer);
             dumpBuffer.append(Constants.LINE_SEPARATOR);
@@ -294,7 +294,7 @@ public final class HexUtil
    {
       while (sbuf.length() < DUMP_BUFFER_SIZE)
       {
-         sbuf.append(" ");
+         sbuf.append(' ');
       }
    }
 

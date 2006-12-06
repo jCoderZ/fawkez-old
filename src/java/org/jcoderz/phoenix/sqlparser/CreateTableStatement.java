@@ -121,7 +121,7 @@ public class CreateTableStatement extends SqlStatement
          final ColumnSpec col = (ColumnSpec) it.next();
          sbuf.append(",\n   col=").append(col);
       }
-      sbuf.append("]");
+      sbuf.append(']');
       return sbuf.toString();
    }
    /**

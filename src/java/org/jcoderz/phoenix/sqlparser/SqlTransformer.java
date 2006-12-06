@@ -195,7 +195,7 @@ public class SqlTransformer
             if (type == TokenType.SEMICOLON)
             {
                // separate statements with an empty line
-               sbuf.append("\n");
+               sbuf.append('\n');
             }
          }
       }
@@ -275,7 +275,7 @@ public class SqlTransformer
             metaInf = (String) metainfMap.get(mObjectName.toUpperCase());
          }
 
-         out.append("\n");
+         out.append('\n');
          out.append(metaInf);
       }
    }

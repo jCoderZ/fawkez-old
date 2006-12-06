@@ -69,10 +69,6 @@ public final class CpdReportReader
 
    private PmdCpd mReportDocument;
 
-   /**
-    * @param jaxbContext
-    * @throws JAXBException
-    */
    public CpdReportReader ()
          throws JAXBException
    {

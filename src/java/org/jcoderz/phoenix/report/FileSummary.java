@@ -135,33 +135,33 @@ public final class FileSummary
       result.append(getClassname());
       result.append("{ LOC:");
       result.append(mLinesOfCode);
-      result.append("(");
+      result.append('(');
       result.append(mPercentOk);
       result.append("%), ");
       result.append(Severity.INFO.toString());
-      result.append(":");
+      result.append(':');
       result.append(mInfo);
-      result.append("(");
+      result.append('(');
       result.append(mPercentInfo);
       result.append("%), ");
       result.append(Severity.COVERAGE.toString());
-      result.append(":");
+      result.append(':');
       result.append(mCoverage);
       result.append(" of ");
       result.append(mCoveredLinesOfCode);
-      result.append("(");
+      result.append('(');
       result.append(mPercentCoverage);
       result.append("%), ");
       result.append(Severity.WARNING.toString());
-      result.append(":");
+      result.append(':');
       result.append(mWarning);
-      result.append("(");
+      result.append('(');
       result.append(mPercentWarning);
       result.append("%), ");
       result.append(Severity.ERROR.toString());
-      result.append(":");
+      result.append(':');
       result.append(mError);
-      result.append("(");
+      result.append('(');
       result.append(mPercentError);
       result.append("%)}");
       return result.toString();
@@ -241,9 +241,6 @@ public final class FileSummary
       return fullClassname;
    }
 
-   /**
-    * @return
-    */
    public String getHtmlLink ()
    {
       return mDetailedFile;

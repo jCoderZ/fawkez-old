@@ -284,7 +284,7 @@ public final class StatisticCollector
       sb.append(FileSummary.calculateQuality(summary.getLoc(),
                   summary.getInfo(), summary.getWarning(),
                   summary.getError(), summary.getCoverage()));
-      sb.append("'");
+      sb.append('\'');
    }
 
    private String getService (String pkg)

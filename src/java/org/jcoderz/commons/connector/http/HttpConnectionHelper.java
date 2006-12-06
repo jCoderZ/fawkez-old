@@ -381,10 +381,10 @@ public final class HttpConnectionHelper
             failures.append(pos);
             failures.append("_EXCEPTION_WAS ");
             failures.append(String.valueOf(e));
-            failures.append("\n");
+            failures.append('\n');
             failures.append("stacktrace:");
             failures.append(getStackTrace(e, null));
-            failures.append("\n");
+            failures.append('\n');
          }
          result = new ConnectionTimeoutErrorException(
             mConnectionSpec.getUrl(), failures.toString());
@@ -408,17 +408,17 @@ public final class HttpConnectionHelper
       else
       {
          buffer = result;
-         buffer.append("\n");
+         buffer.append('\n');
          buffer.append("Caused by:");
          buffer.append(ex.toString());
       }
-      buffer.append("\n");
+      buffer.append('\n');
       int ix = 0;
       while (ix < stack.length)
       {
          final StackTraceElement stackElement = stack[ix];
          buffer.append(stackElement.toString());
-         buffer.append("\n");
+         buffer.append('\n');
          ix++;
       }
       final Throwable cause = ex.getCause();

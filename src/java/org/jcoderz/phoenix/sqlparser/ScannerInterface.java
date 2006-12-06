@@ -40,7 +40,7 @@ package org.jcoderz.phoenix.sqlparser;
 public interface ScannerInterface
 {
    /**
-    * Returns the next token
+    * Returns the next token.
     * @return the next token
     * @throws ParseException if a syntax error is encountered
     */
@@ -59,7 +59,7 @@ public interface ScannerInterface
    int getColumn ();
    
    /**
-    * switch white space reporting on/off
+    * switch white space reporting on/off.
     * @param b white space reporting flag
     */
    void setReportWhitespace (boolean b);

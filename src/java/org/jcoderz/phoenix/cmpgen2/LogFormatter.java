@@ -55,10 +55,10 @@ public class LogFormatter
    {
       final String date = sDateFormat.format(new Date());
       final StringBuffer sbuf = new StringBuffer();
-      sbuf.append(date).append(" ");
-      // sbuf.append(Thread.currentThread().getName()).append(" ");
-      sbuf.append(padSourceMethod(record.getSourceMethodName())).append(" ");
-      sbuf.append(record.getLevel()).append(" ");
+      sbuf.append(date).append(' ');
+      // sbuf.append(Thread.currentThread().getName()).append(' ');
+      sbuf.append(padSourceMethod(record.getSourceMethodName())).append(' ');
+      sbuf.append(record.getLevel()).append(' ');
       sbuf.append(formatMessage(record));
       if (record.getThrown() != null)
       {
@@ -66,9 +66,9 @@ public class LogFormatter
          final PrintWriter pw = new PrintWriter(sw);
          record.getThrown().printStackTrace(pw);
          pw.flush();
-         sbuf.append("\n").append(sw.getBuffer().toString());
+         sbuf.append('\n').append(sw.getBuffer().toString());
       }
-      sbuf.append("\n");
+      sbuf.append('\n');
       return sbuf.toString();
    }
 
@@ -87,7 +87,7 @@ public class LogFormatter
             for (int i = 0; i < (MAX_METHOD_LENGTH - sourceMethod.length()); 
                 i++)
             {
-               sbuf.append(" ");
+               sbuf.append(' ');
             }
          }
          result = sbuf.toString();

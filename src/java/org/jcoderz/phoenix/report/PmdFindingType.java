@@ -170,7 +170,7 @@ public final class PmdFindingType
     * Returns the priority.
     * @return the priority.
     */
-   public final int getPriority ()
+   public int getPriority ()
    {
       return mPriority;
    }

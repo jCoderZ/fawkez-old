@@ -134,7 +134,7 @@ public class LogViewerTest
       {
          sb.append(start);
       }
-      sb.append(",");
+      sb.append(',');
       if (end != null)
       {
          sb.append(end);

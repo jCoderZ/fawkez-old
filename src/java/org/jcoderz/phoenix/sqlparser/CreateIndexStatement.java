@@ -100,7 +100,7 @@ public class CreateIndexStatement
          final String colName = (String) it.next();
          sbuf.append(", column = " + colName);
       }
-      sbuf.append("]");
+      sbuf.append(']');
       return sbuf.toString();
    }
    /**

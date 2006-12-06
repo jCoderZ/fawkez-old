@@ -219,7 +219,7 @@ public abstract class AbstractReportReader
         sb.append(l.getOffset());
         sb.append(", URL=");
         sb.append(l.getURL());
-        sb.append("]");
+        sb.append(']');
 
         System.err.println(sb.toString());
 

@@ -238,11 +238,6 @@ public class CmpGenerator
       }
    }
 
-   /**
-    *
-    * @param tableName
-    * @return
-    */
    public String sqlNameToJavaName (String sqlName)
    {
       final StringReader rdr = new StringReader(sqlName);
@@ -284,8 +279,8 @@ public class CmpGenerator
     * This method capitalizes the first character of the given string and,
     * assuming that the argument is usually a java type, also takes care
     * of arrays by replacing "[]" with "Array".
-    * @param s
-    * @return
+    * @param s input to be modified.
+    * @return adapted String.
     */
    public String capitalize (String s)
    {

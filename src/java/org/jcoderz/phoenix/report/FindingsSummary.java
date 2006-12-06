@@ -525,21 +525,21 @@ public final class FindingsSummary
          public String findingsToString ()
          {
             final StringBuffer sb = new StringBuffer();
-            sb.append("{");
+            sb.append('{');
             final Iterator i = mFindingsInFile.iterator();
             while (i.hasNext())
             {
                final Item finding = (Item) i.next();
-               sb.append("@");
+               sb.append('@');
                sb.append(finding.getLine());
-               sb.append(":");
+               sb.append(':');
                sb.append(finding.getColumn());
                if (i.hasNext())
                {
                   sb.append(", ");
                }
             }
-            sb.append("}");
+            sb.append('}');
             return sb.toString();
          }
 

@@ -116,18 +116,18 @@ public class SqlToXml
             if (sbuf == null)
             {
                sbuf = new StringBuffer();
-               sbuf.append("(");
+               sbuf.append('(');
             }
             else
             {
-               sbuf.append(",");
+               sbuf.append(',');
             }
             final NumericAttribute attr = (NumericAttribute) it2.next();
             sbuf.append(attr.getNumber());
          }
          if (sbuf != null)
          {
-            sbuf.append(")");
+            sbuf.append(')');
             out.print(sbuf);
          }
          

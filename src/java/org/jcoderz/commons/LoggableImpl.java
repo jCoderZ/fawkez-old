@@ -85,7 +85,7 @@ import org.jcoderz.commons.util.ThrowableUtil;
  * @author Andreas Mandel
  */
 public class LoggableImpl
-      implements Serializable
+      implements Serializable, Loggable
 {
    /** Name of this class. */
    public static final String CLASSNAME = LoggableImpl.class.getName();
@@ -354,7 +354,7 @@ public class LoggableImpl
       final StringBuffer sb = new StringBuffer();
       getLogMessageInfo().formatMessage(mParameters, sb);
       sb.append(hashCode());
-      sb.append("@");
+      sb.append('@');
       sb.append(CLASSNAME);
       return sb.toString();
    }

@@ -77,8 +77,9 @@ public final class Jabber
    }
 
    /**
-    * Shortcut to {@link Jabber.JabberConnection#say(String)}.
-    * @see Jabber.JabberConnection#say(String)
+    * Sends the given text message to the GroupChat
+    * @param message the message to send.
+    * @throws RuntimeException if sending fails (even after retry).
     */
    public static void say (String msg)
    {

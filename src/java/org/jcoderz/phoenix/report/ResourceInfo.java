@@ -206,7 +206,7 @@ public final class ResourceInfo
      *
      * @return the linesOfCode.
      */
-    public final int getLinesOfCode ()
+    public int getLinesOfCode ()
     {
         if (mLinesOfCode == -1)
         {
@@ -230,7 +230,7 @@ public final class ResourceInfo
      *
      * @return the package.
      */
-    public final String getPackage ()
+    public String getPackage ()
     {
         return mPackage;
     }
@@ -240,7 +240,7 @@ public final class ResourceInfo
      *
      * @return the resourceName.
      */
-    public final String getResourceName ()
+    public String getResourceName ()
     {
         return mResourceName;
     }
@@ -250,7 +250,7 @@ public final class ResourceInfo
      *
      * @return the sourcDir.
      */
-    public final String getSourcDir ()
+    public String getSourcDir ()
     {
         return mSourcDir;
     }
@@ -266,7 +266,7 @@ public final class ResourceInfo
      * Returns the class name.
      * @return the class name.
      */
-    public final String getClassname ()
+    public String getClassname ()
     {
         return mClassname;
     }

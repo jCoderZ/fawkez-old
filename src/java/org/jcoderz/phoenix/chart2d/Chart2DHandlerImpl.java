@@ -981,8 +981,7 @@ public class Chart2DHandlerImpl implements Chart2DHandler
       }
    }
 
-   /** {@inheritDoc} */
-   public void setProperties (Object props, final Attributes meta)
+   private void setProperties (Object props, final Attributes meta)
    {
       int i = meta.getLength() - 1;
 
@@ -1103,8 +1102,7 @@ public class Chart2DHandlerImpl implements Chart2DHandler
       }
    }
 
-   /** {@inheritDoc} */
-   public Color getColor (String col)
+   private Color getColor (String col)
    {
       Color c = null;
 
@@ -1128,8 +1126,7 @@ public class Chart2DHandlerImpl implements Chart2DHandler
       return c;
    }
 
-   /** {@inheritDoc} */
-   public Dimension getDimension (String val)
+   private Dimension getDimension (String val)
    {
       final double w = Double.parseDouble(val.substring(0, val.indexOf('x')));
       final double h = Double.parseDouble(val.substring(1 + val.indexOf('x')));
@@ -1138,8 +1135,8 @@ public class Chart2DHandlerImpl implements Chart2DHandler
       return d;
    }
 
-   /** {@inheritDoc} */
-   public Integer getInteger (String value, Object properties) throws Exception
+   private Integer getInteger (String value, Object properties) 
+       throws Exception
    {
       int i;
 
@@ -1166,8 +1163,7 @@ public class Chart2DHandlerImpl implements Chart2DHandler
       return Integer.valueOf(i);
    }
 
-   /** {@inheritDoc} */
-   public AlphaComposite getAlphaComposite (String value, Object properties)
+   private AlphaComposite getAlphaComposite (String value, Object properties)
          throws Exception
    {
       AlphaComposite alpha = null;

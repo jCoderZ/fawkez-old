@@ -228,7 +228,7 @@ public class TemplateDescr
       sbuf.append("\n   description=").append(mDescription);
       sbuf.append("\n   files=").append(mFiles.toString());
       sbuf.append("\n   parameters=").append(mParameterMap.toString());
-      sbuf.append("]");
+      sbuf.append(']');
       return sbuf.toString();
    }
 }

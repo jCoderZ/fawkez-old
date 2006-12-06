@@ -138,7 +138,7 @@ public class XmlDoclet
       return result;
    }
 
-   /** {@inheritDoc} */
+   /** @see XmlDocletConfig#optionLength(String) */
    public static int optionLength (String option)
    {
       if (logger.isLoggable(Level.FINER))
@@ -154,7 +154,6 @@ public class XmlDoclet
       return result;
    }
 
-   /** {@inheritDoc} */
    public static boolean validOptions (String[][] arguments,
          DocErrorReporter reporter)
    {

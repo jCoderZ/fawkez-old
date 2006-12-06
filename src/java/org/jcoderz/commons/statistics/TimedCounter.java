@@ -129,7 +129,7 @@ public class TimedCounter
       sbuf.append(", duration=").append(getDuration());
       sbuf.append(", count=").append(getCount());
       sbuf.append(", freq=").append(df.format(getFrequency()));
-      sbuf.append("]");
+      sbuf.append(']');
       return sbuf.toString();
    }
 }

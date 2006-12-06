@@ -50,10 +50,10 @@ import java.io.Serializable;
 public final class TransactionId
     implements Comparable, Serializable
 {
-    /** Name of this type */
+    /** Name of this type. */
     public static final String TYPE_NAME = "TX_ID";
 
-    /** Bit mask used for hashcode generation */
+    /** Bit mask used for hashcode generation. */
     private static final int NUMBER_OF_BITS_PER_INT = 32;
 
     private static final int BUFFER_SIZE = 4096;

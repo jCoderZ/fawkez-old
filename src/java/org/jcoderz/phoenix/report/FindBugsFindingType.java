@@ -106,7 +106,7 @@ public final class FindBugsFindingType extends FindingType
    /**
     * @return the message pattern associated to this finding type.
     */
-   public final String getMessagePattern ()
+   public String getMessagePattern ()
    {
       return mMessagePattern;
    }

@@ -131,7 +131,7 @@ public class TimedAverage
       sbuf.append(", avg=").append(getAverage());
       sbuf.append(", max=").append(getMaximum());
       sbuf.append(", freq=").append(df.format(getFrequency()));
-      sbuf.append("]");
+      sbuf.append(']');
       return sbuf.toString();
    }
 }

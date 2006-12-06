@@ -292,7 +292,7 @@ public final class StringUtil
       final StringBuffer sbuf = new StringBuffer(s);
       while (sbuf.length() < minLength)
       {
-         sbuf.append(" ");
+         sbuf.append(' ');
       }
       if (sbuf.length() > maxLength)
       {

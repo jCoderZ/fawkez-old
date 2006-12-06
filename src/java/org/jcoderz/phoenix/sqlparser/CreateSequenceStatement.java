@@ -83,7 +83,7 @@ public class CreateSequenceStatement
       sbuf.append(", cycle = ").append(mCycle);
       sbuf.append(", cache = ").append(mCache);
       sbuf.append(", order = ").append(mOrder);
-      sbuf.append("]");
+      sbuf.append(']');
       return sbuf.toString();
    }
 

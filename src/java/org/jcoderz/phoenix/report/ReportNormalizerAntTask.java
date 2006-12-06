@@ -94,7 +94,7 @@ public final class ReportNormalizerAntTask
     * This directory is used to store the XML/HTML report file(s).
     * @param dir The output directory to set.
     */
-   public final void setOut (File dir)
+   public void setOut (File dir)
    {
       mOut = dir;
    }
@@ -105,7 +105,7 @@ public final class ReportNormalizerAntTask
     *
     * @param f The filter file.
     */
-   public final void setFilter (File f)
+   public void setFilter (File f)
    {
       mFilter = f;
    }
@@ -114,7 +114,7 @@ public final class ReportNormalizerAntTask
     * Sets the projectName to given <code>projectName</code>.
     * @param projectName The projectName to set.
     */
-   public final void setName (String projectName)
+   public void setName (String projectName)
    {
       mName = projectName;
    }
@@ -123,7 +123,7 @@ public final class ReportNormalizerAntTask
     * Sets the level to given <code>level</code>.
     * @param level The level to set.
     */
-   public final void setLevel (String level)
+   public void setLevel (String level)
    {
       mLevel = ReportLevel.fromString(level);
    }
@@ -449,7 +449,7 @@ public final class ReportNormalizerAntTask
        * Returns the sourceDir.
        * @return the sourceDir.
        */
-      public final String getDir ()
+      public String getDir ()
       {
          return mSourceDir;
       }
@@ -458,7 +458,7 @@ public final class ReportNormalizerAntTask
        * Sets the sourceDir to given <code>sourceDir</code>.
        * @param sourceDir The sourceDir to set.
        */
-      public final void setDir (String sourceDir)
+      public void setDir (String sourceDir)
       {
          mSourceDir = sourceDir;
       }

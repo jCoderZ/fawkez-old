@@ -262,15 +262,6 @@ public class DbView
    private void checkParameters ()
         throws IllegalArgumentException
    {
-       if (!mOutputDir.isDirectory())
-       {
-          throw new RuntimeException("out dir must be a directory.");
-       }
-       if (mOutputFile.isDirectory())
-       {
-          throw new RuntimeException(
-                "out file must not be a directory.");
-       }
        if (mOutputDir == null && mOutputFile == null)
        {
            throw new IllegalArgumentException(
@@ -285,6 +276,15 @@ public class DbView
        {
            throw new IllegalArgumentException(
                    "Need output dir for global dump.");
+       }
+       if (!mOutputDir.isDirectory())
+       {
+          throw new RuntimeException("out dir must be a directory.");
+       }
+       if (mOutputFile.isDirectory())
+       {
+          throw new RuntimeException(
+                "out file must not be a directory.");
        }
    }
 

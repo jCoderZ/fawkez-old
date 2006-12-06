@@ -42,7 +42,7 @@ import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.jcoderz.commons.util.FileUtils;
+import org.jcoderz.commons.util.IoUtil;
 
 /**
  * Creates a HTML line by line view on the given Java file.
@@ -109,11 +109,11 @@ public class HtmlView
    private final List mStringList = new ArrayList();
    private final List mLines = new ArrayList();
    private final StringBuffer mFileData = new StringBuffer();
+   private final StringBuffer mStringBuffer = new StringBuffer();
    private File mSourceFile;
    private int mNumberOfLines = -1;
    private String mClassname;
    private String mPackage;
-   private StringBuffer mStringBuffer = new StringBuffer();
 
    /**
     * Creates a new HtmlView object.
@@ -309,7 +309,7 @@ public class HtmlView
       }
       finally
       {
-          FileUtils.safeClose(br);
+          IoUtil.close(br);
       }
       if (i != '\n')
       {
@@ -490,15 +490,15 @@ public class HtmlView
       while (st.hasMoreTokens() && mClassname == null)
       {
          final String token = st.nextToken();
-         if (token.equals("class"))
+         if ("class".equals(token))
          {
              mClassname = readNextNonNbspToken(st);
          }
-         else if (token.equals("interface"))
+         else if ("interface".equals(token))
          {
              mClassname = readNextNonNbspToken(st);
          }
-         else if (token.equals("package"))
+         else if ("package".equals(token))
          {
              mPackage = readNextNonNbspToken(st);
          }
@@ -518,7 +518,7 @@ public class HtmlView
    {
        String result = st.nextToken();
        while (st.hasMoreTokens() 
-               && (result.equals("#160") || result.equals("nbsp")))
+               && ("#160".equals(result) || "nbsp".equals(result)))
        {
            // new string to release rest of memory used for the file
            result = new String(st.nextToken());

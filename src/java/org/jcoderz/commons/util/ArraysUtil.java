@@ -104,7 +104,7 @@ public final class ArraysUtil
                buf.append(String.valueOf(array[i]));
             }
          }
-         buf.append("]");
+         buf.append(']');
          result = buf.toString();
       }
       return result;

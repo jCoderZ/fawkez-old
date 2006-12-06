@@ -199,7 +199,7 @@ public abstract class XsltBasedTask
          version.append(fawkezProps.getProperty("version"));
          version.append(", [");
          version.append(fawkezProps.getProperty("cvs_name"));
-         version.append("]");
+         version.append(']');
       }
       catch (Exception x)
       {

@@ -173,7 +173,7 @@ public class Base64DecoderServlet
                            }
                            else
                            {
-                              mStringBuffer.append("\n");
+                              mStringBuffer.append('\n');
                               indent -= INDENT;
                               indent(indent, mStringBuffer);
                               mStringBuffer.append("</");
@@ -184,16 +184,16 @@ public class Base64DecoderServlet
                         case '!':
                            if (t != 1)
                            {
-                              mStringBuffer.append("\n");
+                              mStringBuffer.append('\n');
                            }
-                           mStringBuffer.append("<");
+                           mStringBuffer.append('<');
                            mStringBuffer.append(c);
                            break;
                         default:
                            nestedTag = false;
-                           mStringBuffer.append("\n");
+                           mStringBuffer.append('\n');
                            indent(indent, mStringBuffer);
-                           mStringBuffer.append("<");
+                           mStringBuffer.append('<');
                            mStringBuffer.append(c);
                            indent += INDENT;
                            break;

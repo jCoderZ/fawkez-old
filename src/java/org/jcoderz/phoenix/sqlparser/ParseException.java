@@ -46,7 +46,7 @@ public final class ParseException
     final int mColumn;
 
     /**
-     * Create a new ParseException
+     * Create a new ParseException.
      * 
      * @param line the source line where the exception occured
      * @param column the source column where the exception occured
@@ -59,7 +59,7 @@ public final class ParseException
     }
 
     /**
-     * Create a new ParseException
+     * Create a new ParseException.
      * 
      * @param message a message describing the problem
      * @param line the source line where the exception occured
@@ -73,7 +73,7 @@ public final class ParseException
     }
 
     /**
-     * Create a new ParseException
+     * Create a new ParseException.
      * 
      * @param cause the throwable that initiated this exception
      * @param line the source line where the exception occured
@@ -87,7 +87,7 @@ public final class ParseException
     }
 
     /**
-     * Create a new ParseException
+     * Create a new ParseException.
      * 
      * @param message a message describing the problem
      * @param cause the throwable that initiated this exception

@@ -60,81 +60,51 @@ public class Parameter
       mMultiLine = multiLine;
    }
 
-   /**
-    * @return
-    */
    public int getMaxLength ()
    {
       return mMaxLength;
    }
 
-   /**
-    * @return
-    */
    public int getMinLength ()
    {
       return mMinLength;
    }
 
-   /**
-    * @return
-    */
    public boolean isMultiLine ()
    {
       return mMultiLine;
    }
 
-   /**
-    * @return
-    */
    public String getName ()
    {
       return mName;
    }
 
-   /**
-    * @return
-    */
    public String getDescription ()
    {
       return mDescription;
    }
 
-   /**
-    * @param string
-    */
    public void setDescription (String string)
    {
       mDescription = string;
    }
 
-   /**
-    * @return
-    */
    public String getDefaultValue ()
    {
       return mDefaultValue;
    }
 
-   /**
-    * @return
-    */
    public String getRegexp ()
    {
       return mRegexp;
    }
 
-   /**
-    * @param string
-    */
    public void setDefaultValue (String string)
    {
       mDefaultValue = string;
    }
 
-   /**
-    * @param string
-    */
    public void setRegexp (String string)
    {
       mRegexp = string;

@@ -359,7 +359,7 @@ class AppInfoSaxHandler
       {
          final StringBuffer sb = new StringBuffer();
          sb.append(mName);
-         sb.append(" ");
+         sb.append(' ');
          sb.append(mMap);
          return sb.toString();
       }

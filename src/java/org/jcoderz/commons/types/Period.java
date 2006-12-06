@@ -66,7 +66,7 @@ public final class Period
    private static final String DATE_PARAMETER = "date";
 
    /** Lazy init hash code. */
-   private transient int mHashCode;
+   private transient int mHashCode = 0;
 
    /** The start time of the period. */
    private final Date mStartTime;

@@ -238,7 +238,7 @@ public final class PingServlet
                      {
                         check(result.getHostname()); // update entry not list?
                      };
-                  }.start();
+                  } .start();
                }
             }
 
@@ -437,7 +437,7 @@ public final class PingServlet
       return formater.format(new Date(time));
    }
 
-   private class PingResult
+   private static class PingResult
    {
       private final String mHostname;
       private long mResult;

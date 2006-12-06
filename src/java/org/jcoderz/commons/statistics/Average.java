@@ -163,7 +163,7 @@ public class Average
       sbuf.append(", min=").append(getMinimum());
       sbuf.append(", avg=").append(getAverage());
       sbuf.append(", max=").append(getMaximum());
-      sbuf.append("]");
+      sbuf.append(']');
       return sbuf.toString();
    }
 

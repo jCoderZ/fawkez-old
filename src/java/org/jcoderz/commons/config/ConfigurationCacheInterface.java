@@ -73,7 +73,9 @@ public interface ConfigurationCacheInterface
     */
    Set getKeys ();
 
-   /** {@inheritDoc} */
+   /** 
+    * @see ConfigurationServiceInterface#addConfigurationListener(ConfigurationListener)
+    */
    void addConfigurationListener (ConfigurationListener newListener);
 
    /**

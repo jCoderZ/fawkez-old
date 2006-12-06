@@ -207,11 +207,11 @@ public class MakeReadonlyBeans
       {
          if (sbuf.length() == 0)
          {
-            sbuf.append("|");
+            sbuf.append('|');
          }
          final ReadOnlyBean bean = (ReadOnlyBean) it.next();
          sbuf.append(bean.getName());
-         sbuf.append("|");
+         sbuf.append('|');
       }
       if (sbuf.length() == 0)
       {

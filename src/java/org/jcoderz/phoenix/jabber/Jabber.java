@@ -89,12 +89,12 @@ public final class Jabber
    private static class JabberConnection
    {
       private final String mHostname;
-      private String mJabberUserName = "cruise.control";
-      private String mJabberUserPassword = "cruise";
-      private String mJabberServerName = "www.jcoderz.org";
-      private String mJabberHostAddress = "www.jcoderz.org";
+      private String mJabberUserName = "cc";
+      private String mJabberUserPassword = "cc42";
+      private String mJabberServerName = "jabber.org";
+      private String mJabberHostAddress = "jabber.org";
       private int mJabberHostPort = JABBER_DEFAULT_PORT;
-      private String mJabberMucName = "cruising@conf.jcoderz.org";
+      private String mJabberMucName = "jcoderz@conference.jabber.org";
 
       private String mJabberMucAlias;
 

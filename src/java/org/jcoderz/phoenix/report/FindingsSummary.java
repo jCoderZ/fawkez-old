@@ -171,6 +171,8 @@ public final class FindingsSummary
 
             out.write("<a href='");
             out.write(summary.createFindingDetailFilename());
+            out.write("' title='");
+            out.write(summary.getFindingType().getSymbol());
             out.write("'>");
    //         if (summary.isFindingsHaveSameMessage()
    //               && summary.getFindingMessage() != null)
@@ -358,7 +360,9 @@ public final class FindingsSummary
          out.write("<h1><a href='index.html'>View by Classes</a></h1>");
          out.write("<h1><a href='findings.html'>Findings - Overview</a></h1>");
 
-         out.write("<h1>");
+         out.write("<h1 title='");
+         out.write(getFindingType().getSymbol());
+         out.write("'>");
 
          out.write(getSeverity().toString());
          out.write(" ");

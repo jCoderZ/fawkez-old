@@ -286,7 +286,7 @@ public class JcSummaryReportAntTask
 
          fos.flush();
          FileUtils.safeClose(pw);
-         FileUtils.safeClose(fos);
+         FileUtils.close(fos);
       }
       catch (IOException ex)
       {

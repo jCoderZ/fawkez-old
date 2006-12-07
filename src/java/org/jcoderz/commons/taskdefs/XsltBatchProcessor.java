@@ -53,8 +53,8 @@ import org.jcoderz.commons.util.IoUtil;
 public class XsltBatchProcessor
       extends Task
 {
-   private String mStyleSheet;
-   private FileSet mFiles;
+   private String mStyleSheet = "default.xsl";
+   private FileSet mFiles = new FileSet();
    private boolean mResolveExternalEntities = true;
 
    /** terminate ant build on error. */
@@ -70,16 +70,28 @@ public class XsltBatchProcessor
       mFailOnError = b;
    }
 
+   /**
+    * Set the XSL Stylesheet to use.
+    * @param f The name of the XSL Stylesheet file.
+    * @see XsltBasedTask#getDefaultStyleSheet()
+    */
    public void setXsl (String f)
    {
       mStyleSheet = f;
    }
 
+   /**
+    * XML files that are used as input documents for the transformation.
+    * @param fs fileset of XML files.
+    */
    public void addFiles (FileSet fs)
    {
       mFiles = fs;
    }
 
+   /**
+    * {@inheritDoc}
+    */
    public void execute ()
          throws BuildException
    {
@@ -93,8 +105,9 @@ public class XsltBatchProcessor
             }
          };
 
+         final Project myProject = getProject();
          final DirectoryScanner ds
-               = mFiles.getDirectoryScanner(getProject());
+               = mFiles.getDirectoryScanner(myProject);
          final String[] includedFiles = ds.getIncludedFiles();
          for (int i = 0; i < includedFiles.length; i++)
          {
@@ -109,11 +122,11 @@ public class XsltBatchProcessor
             {
                throw new BuildException("Failed to create temp file: " + e, e);
             }
-            xsltTask.setProject(getProject());
+            xsltTask.setProject(myProject);
             xsltTask.setTaskName("xslt");
             xsltTask.setIn(orig);
             xsltTask.setOut(out);
-            xsltTask.setDestdir(getProject().getBaseDir());
+            xsltTask.setDestdir(myProject.getBaseDir());
             xsltTask.setForce(true);
             xsltTask.setFailonerror(mFailOnError);
             xsltTask.resolveExternalEntities(mResolveExternalEntities);

@@ -171,11 +171,11 @@ public class DiagramTask
          while (iterator.hasNext())
          {
             final Diagram diagram = (Diagram) iterator.next();
-            if (diagram.getType().equals("class"))
+            if ("class".equals(diagram.getType()))
             {
                generateUmlDiagram(diagram);
             }
-            else if (diagram.getType().equals("ER"))
+            else if ("ER".equals(diagram.getType()))
             {
                generateEntityRelationshipDiagram(diagram);
             }

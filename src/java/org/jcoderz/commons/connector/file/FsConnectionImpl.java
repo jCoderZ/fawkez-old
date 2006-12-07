@@ -422,11 +422,8 @@ class FsConnectionImpl
                logger.throwing(CLASSNAME, method, re);
                throw re;
             }
-            else
-            {
-               logger.finer("Created all necessary parant directories "
-                     + parent.toString());
-            }
+            logger.finer("Created all necessary parant directories " 
+                  + parent.toString());
          }
          catch (java.lang.SecurityException se)
          {

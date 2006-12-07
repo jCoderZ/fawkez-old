@@ -131,8 +131,8 @@ public final class FileUtils
       }
       finally
       {
-         safeClose(in);
-         safeClose(out);
+         close(in);
+         close(out);
       }
    }
 
@@ -222,7 +222,7 @@ public final class FileUtils
     * @param in the input stream that should be closed.
     * @deprecated use IoUtil.close(InputStream)
     */
-   public static void safeClose (InputStream in)
+   public static void close (InputStream in)
    {
        IoUtil.close(in);
    }
@@ -238,7 +238,7 @@ public final class FileUtils
     * @param out the output stream that should be closed.
     * @deprecated use IoUtil.close(OutputStream)
     */
-   public static void safeClose (OutputStream out)
+   public static void close (OutputStream out)
    {
        IoUtil.close(out);
    }

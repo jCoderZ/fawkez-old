@@ -74,10 +74,8 @@ public final class ReportNormalizer
    private File mProjectHome;
    private String mProjectName = "Unknown Project";
    private File mOutFile;
-   private File mOutDir;
    private Level mLogLevel = Level.INFO;
    private ReportLevel mLevel = ReportLevel.PROD;
-   private boolean mHaveCoverageReport = false;
 
    /**
     * The XSL stylesheet that can be used to filter
@@ -94,7 +92,6 @@ public final class ReportNormalizer
    {
       mProjectHome = new File(".").getCanonicalFile();
       mOutFile = new File(JCODERZ_REPORT_XML);
-      mOutDir = new File(".").getCanonicalFile();
    }
 
    /**

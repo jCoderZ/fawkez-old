@@ -115,8 +115,8 @@ public final class JarUtils
          }
          finally
          {
-            FileUtils.safeClose(out);
-            FileUtils.safeClose(in);
+            FileUtils.close(out);
+            FileUtils.close(in);
          }
       }
    }
@@ -138,7 +138,7 @@ public final class JarUtils
       }
       finally
       {
-         FileUtils.safeClose(jarArchive);
+         FileUtils.close(jarArchive);
       }
    }
 
@@ -184,7 +184,7 @@ public final class JarUtils
          }
          finally
          {
-            FileUtils.safeClose(in);
+            FileUtils.close(in);
          }
          archive.closeEntry();
       }

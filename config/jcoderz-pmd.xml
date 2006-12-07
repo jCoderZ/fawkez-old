@@ -175,7 +175,7 @@
 <!-- =================================================================== -->
   <rule ref="rulesets/migrating.xml/AvoidAssertAsIdentifier"/> <!-- CHECKME: 3.5 -->
   <rule ref="rulesets/migrating.xml/AvoidEnumAsIdentifier"/> <!-- CHECKME: 3.5 -->
-  <rule ref="rulesets/migrating.xml/IntegerInstantiation"/> <!-- CHECKME: 3.5 -->
+<!--  <rule ref="rulesets/migrating.xml/IntegerInstantiation"/> Disabled because it enforces jdk 1.5 code CHECKME: 3.5 -->
   <rule ref="rulesets/migrating.xml/ReplaceEnumerationWithIterator"/> <!-- CHECKME: 3.5 -->
   <rule ref="rulesets/migrating.xml/ReplaceHashtableWithMap"/> <!-- CHECKME: 3.5 -->
   <rule ref="rulesets/migrating.xml/ReplaceVectorWithList"/> <!-- CHECKME: 3.5 -->

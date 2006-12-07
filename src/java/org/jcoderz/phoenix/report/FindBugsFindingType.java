@@ -32,6 +32,7 @@
  */
 package org.jcoderz.phoenix.report;
 
+
 import java.util.Iterator;
 import java.util.logging.Logger;
 
@@ -42,6 +43,7 @@ import javax.xml.bind.Unmarshaller;
 import org.jcoderz.phoenix.findbugs.message.jaxb.BugPatternType;
 import org.jcoderz.phoenix.findbugs.message.jaxb.MessageCollection;
 
+
 /**
  * Holds and registers findbugs specific detectors.
  * 
@@ -49,84 +51,85 @@ import org.jcoderz.phoenix.findbugs.message.jaxb.MessageCollection;
  */
 public final class FindBugsFindingType extends FindingType
 {
-   private static final transient String CLASSNAME
-      = FindBugsFindingType.class.getName();
-   private static final transient Logger logger
-      = Logger.getLogger(CLASSNAME);
+    private static final String CLASSNAME 
+        = FindBugsFindingType.class.getName();
 
-   private static final String FINDBUGS_MESSAGE_JAXB_CONTEXT
-      = "org.jcoderz.phoenix.findbugs.message.jaxb";
+    private static final Logger logger = Logger.getLogger(CLASSNAME);
 
-   /** FindBugs coreplugin. */ 
-   private static final String FINDBUGS_MESSAGE_FILE
-      = "org/jcoderz/phoenix/findbugs/messages.xml";
+    private static final String FINDBUGS_MESSAGE_JAXB_CONTEXT 
+        = "org.jcoderz.phoenix.findbugs.message.jaxb";
 
-   /** FindBugs fb-contrib plugin. */ 
-   private static final String FB_CONTRIB_MESSAGE_FILE
-      = "org/jcoderz/phoenix/findbugs/fb-contrib-messages.xml";
-   
-   private final String mMessagePattern;
+    /** FindBugs coreplugin. */
+    private static final String FINDBUGS_MESSAGE_FILE 
+        = "org/jcoderz/phoenix/findbugs/messages.xml";
 
-   private FindBugsFindingType (String symbol, String shortText,
-                                String description, String messagePattern)
-   {
-      super(symbol, shortText, description);
-      mMessagePattern = messagePattern;
-   }
-   
-   private FindBugsFindingType (BugPatternType e)
-   {
-      this(e.getType(), e.getShortDescription(),
-            e.getDetails(), e.getLongDescription());
-   }
+    /** FindBugs fb-contrib plugin. */
+    private static final String FB_CONTRIB_MESSAGE_FILE 
+        = "org/jcoderz/phoenix/findbugs/fb-contrib-messages.xml";
 
-   /**
-    *
-    */
-   public static void initialize ()
-   {
-      try
-      {
-         registerDetectors(FINDBUGS_MESSAGE_FILE);
-         registerDetectors(FB_CONTRIB_MESSAGE_FILE);
-      }
-      catch (Exception e)
-      {
-         throw new RuntimeException(
-                 "Cannot initialize FindBugsFindingTypes", e);
-      }
-   }
+    private final String mMessagePattern;
 
-   private static void registerDetectors(String messagesFile) throws JAXBException
-   {
-      final JAXBContext jaxbContext
-         = JAXBContext.newInstance(FINDBUGS_MESSAGE_JAXB_CONTEXT,
-            FindBugsFindingType.class.getClassLoader());
+    private FindBugsFindingType (String symbol, String shortText,
+            String description, String messagePattern)
+    {
+        super(symbol, shortText, description);
+        mMessagePattern = messagePattern;
+    }
 
-      logger.finest("Try to unmarshalling " + messagesFile);
-      
-      final Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
-      final MessageCollection messageCollection
-         = (MessageCollection) unmarshaller.unmarshal(
-               FindBugsFindingType.class.getClassLoader().getResourceAsStream(
-                     messagesFile));
-      
-      for (final Iterator iterator = messageCollection.getContent().iterator();
-           iterator.hasNext(); )
-      {
-          final Object obj = iterator.next();
-          if (obj instanceof BugPatternType)
-          {
-             new FindBugsFindingType((BugPatternType) obj);
-          }
-      }
-   }
+    private FindBugsFindingType (BugPatternType e)
+    {
+        this(e.getType(), e.getShortDescription(), e.getDetails(), 
+                e.getLongDescription());
+    }
 
-   /**
-    * @return the message pattern associated to this finding type.
-    */
-   public String getMessagePattern ()
-   {
-      return mMessagePattern;
-   }
+    /**
+     * Call this method to register all findbugs detectors.
+     */
+    public static void initialize ()
+    {
+        try
+        {
+            registerDetectors(FINDBUGS_MESSAGE_FILE);
+            registerDetectors(FB_CONTRIB_MESSAGE_FILE);
+        }
+        catch (JAXBException e)
+        {
+            throw new RuntimeException(
+                    "Cannot initialize FindBugsFindingTypes", e);
+        }
+    }
+
+    /**
+     * @return the message pattern associated to this finding type.
+     */
+    public String getMessagePattern ()
+    {
+        return mMessagePattern;
+    }
+
+    private static void registerDetectors (String messagesFile)
+            throws JAXBException
+    {
+        final JAXBContext jaxbContext 
+            = JAXBContext.newInstance(FINDBUGS_MESSAGE_JAXB_CONTEXT,
+                    FindBugsFindingType.class.getClassLoader());
+
+        logger.finest("Try to unmarshalling " + messagesFile);
+
+        final Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+        final MessageCollection messageCollection 
+            = (MessageCollection) unmarshaller.unmarshal(
+                    FindBugsFindingType.class.getClassLoader()
+                        .getResourceAsStream(messagesFile));
+
+        for (final Iterator iter = messageCollection.getContent().iterator(); 
+                iter.hasNext();)
+        {
+            final Object obj = iter.next();
+            if (obj instanceof BugPatternType)
+            {
+                new FindBugsFindingType((BugPatternType) obj);
+            }
+        }
+    }
 }

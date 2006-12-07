@@ -1160,7 +1160,7 @@ public class Chart2DHandlerImpl implements Chart2DHandler
          }
       }
 
-      return Integer.valueOf(i);
+      return new Integer(i);
    }
 
    private AlphaComposite getAlphaComposite (String value, Object properties)

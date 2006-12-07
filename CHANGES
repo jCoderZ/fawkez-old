@@ -1,6 +1,7 @@
 Fawkez 1.0.1 'Unnamed'  
 
   * Fixed bugs: #10
+  * added fb-contrib support #14
   * added up-to-date check for retrieve-3rd-party-libs target
 
 Fawkez 1.0 'going public' (November 26, 2006)

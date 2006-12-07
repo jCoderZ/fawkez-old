@@ -53,4 +53,15 @@ public class FindBugsFindingTypeTest
           FindBugsFindingType.fromString("DM_NUMBER_CTOR").getDescription());
     }
     
+    /**
+     * Tests if finding type initialisation for fb-conrib works.
+     */
+    public void testFbContribFindingType ()
+    {
+       FindBugsFindingType.initialize();
+       assertNotNull("Message must be defined.", 
+             FindBugsFindingType.fromString(
+                   "LEST_LOST_EXCEPTION_STACK_TRACE").getDescription());
+    }
+    
 }

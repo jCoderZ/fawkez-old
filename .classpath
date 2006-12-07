@@ -6,7 +6,6 @@
 	<classpathentry kind="src" path="test/java"/>
 	<classpathentry kind="src" path="tools/java"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="lib/eclipse/tools.jar"/>
 	<classpathentry kind="lib" path="lib/default/ant/ant.jar"/>
 	<classpathentry kind="lib" path="lib/default/antlr/antlr.jar"/>
 	<classpathentry kind="lib" path="lib/default/asm/asm.jar"/>
@@ -53,5 +52,6 @@
 	<classpathentry kind="lib" path="lib/default/batik-1.5-fop/batik-1.5-fop.jar"/>
 	<classpathentry kind="lib" path="lib/luntbuild/hessian-3.0.8.jar"/>
 	<classpathentry kind="lib" path="lib/luntbuild/luntbuild-api.jar"/>
+	<classpathentry kind="var" path="JAVA_HOME/lib/tools.jar"/>
 	<classpathentry kind="output" path="eclipse/bin"/>
 </classpath>

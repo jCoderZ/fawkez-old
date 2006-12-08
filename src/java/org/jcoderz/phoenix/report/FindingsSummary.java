@@ -42,6 +42,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.jcoderz.commons.util.XmlUtil;
 import org.jcoderz.phoenix.report.jaxb.Item;
 
 /**
@@ -374,7 +375,7 @@ public final class FindingsSummary
                && getFindingMessage() != null)
          {
             out.write("<h2>");
-            out.write(getFindingMessage());
+            out.write(XmlUtil.escape(getFindingMessage()));
             out.write("</h2>\n");
          }
 
@@ -422,7 +423,7 @@ public final class FindingsSummary
                out.write("'>");
                if (!isFindingsHaveSameMessage() && item.getMessage() != null)
                {
-                  out.write(item.getMessage());
+                  out.write(XmlUtil.escape(item.getMessage()));
                }
                out.write("&#160;[");
                out.write(Integer.toString(item.getLine()));

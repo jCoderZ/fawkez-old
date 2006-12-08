@@ -142,7 +142,7 @@ public final class FindingsSummary
 
          final Iterator i = Arrays.asList(allFindings).iterator();
          out.write("<table border='0' cellpadding='0' cellspacing='0' "
-                 + "width='95%'>");
+                 + "width='95%' summary='Summary of all findings.'>");
          int row = 0;
          while (i.hasNext())
          {
@@ -154,8 +154,7 @@ public final class FindingsSummary
                currentSeverity = summary.getSeverity();
                out.write("Severity: ");
                out.write(currentSeverity.toString());
-               out.write("</div>\n");
-               out.write("</td></tr>");
+               out.write("\n</td></tr>");
                row = 0;
             }
             row++;
@@ -183,8 +182,7 @@ public final class FindingsSummary
             {
                out.write(summary.getFindingType().getShortText());
             }
-            out.write("</td>");
-            out.write("</tr>");
+            out.write("</a></td></tr>\n");
          }
          out.write("</table>");
       }
@@ -395,7 +393,7 @@ public final class FindingsSummary
 
          out.write("<p />");
          out.write("<table border='0' cellpadding='0' cellspacing='0' " 
-                 + "width='95%'>");
+                 + "width='95%' summary='Places of this finding.'>");
 
          while (i.hasNext())
          {
@@ -443,7 +441,7 @@ public final class FindingsSummary
                   out.write("<br />");
                }
             }
-            out.write("</td></tr>");
+            out.write("</td></tr>\n");
          }
          out.write("</table>\n");
       }

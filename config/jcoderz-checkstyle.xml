@@ -31,9 +31,11 @@
    -->
 
    <!-- Checks whether files end with a new line. [new] -->
+   <!-- No need with SVN... And always confusing false positives.
    <module name="NewlineAtEndOfFile">
       <property name="severity" value="warning"/>
    </module>
+      -->
 
    <!-- Performs a line-by-line comparison of all code lines and
         reports  duplicate code, i.e. a sequence of lines that differ

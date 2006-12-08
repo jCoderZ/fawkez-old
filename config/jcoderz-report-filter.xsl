@@ -147,6 +147,27 @@
       </item>
    </xs:template>
 
+   <!-- Main type classes. -->
+   <xs:template
+      match="/report/file[@classname = 'DbView'
+                       or @classname = 'SqlTransformer'
+                       or @classname = 'CmpGenerator'
+                       or @classname = 'SqlToXml'
+                       or @classname = 'JavaCodeSnippets'
+                       or @classname = 'LogViewer'
+                       or @classname = 'Chart2DHandlerImpl'
+                       or @classname = 'SqlScanner'
+                       or @classname = 'TemplateZip'
+                       or @classname = 'JDepend']/
+                   item[@finding-type = 'SystemPrintln'
+                     or @finding-type = 'AvoidPrintStackTrace']">
+      <item>
+         <xs:apply-templates select="@*"/>
+         <xs:attribute name="severity">filtered</xs:attribute>
+         <xs:attribute name="severity-reason">main class</xs:attribute>
+      </item>
+   </xs:template>
+
    <xs:template
       match="/report/file[@classname = 'StringUtilTest'
                        or @classname = 'IoUtilTest']/

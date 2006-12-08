@@ -50,6 +50,7 @@ import org.jcoderz.commons.ArgumentMalformedException;
 import org.jcoderz.commons.util.ArraysUtil;
 import org.jcoderz.commons.util.IoUtil;
 import org.jcoderz.commons.util.StringUtil;
+import org.jcoderz.commons.util.XmlUtil;
 
 import com.sun.javadoc.ClassDoc;
 import com.sun.javadoc.ConstructorDoc;
@@ -744,7 +745,7 @@ public class XmlDoclet
       {
          label = "";
       }
-      elementEncode(label);
+      XmlUtil.escape(label);
       mOut.write("</see>");
    }
 
@@ -862,91 +863,8 @@ public class XmlDoclet
          mOut.write(" ");
          mOut.write(name);
          mOut.write("='");
-         attributeEncode(value);
+         XmlUtil.attributeEscape(value);
          mOut.write("'");
-      }
-   }
-
-   // TODO: Move to XmlUtils
-   private void elementEncode (String in)
-         throws IOException
-   {
-      final StringBuffer buf = new StringBuffer();
-      if (in == null)
-      {
-         // result.append(NULL_STR);
-      }
-      else
-      {
-         buf.setLength(0);
-         char c;
-         final int l = in.length();
-         for (int i = 0; i < l; i++)
-         {
-            c = in.charAt(i);
-            switch (c)
-            {
-               case '<':
-                  mOut.write("&lt;");
-                  break;
-               case '&':
-                  mOut.write("&amp;");
-                  break;
-               default :
-                  if (c > Byte.MAX_VALUE) //  || c == '\n' || c == '\r')
-                  {
-                     mOut.write("&#x");
-                     mOut.write(Integer.toHexString(c));
-                     mOut.write(';');
-                  }
-                  else
-                  {
-                     mOut.write(c);
-                  }
-            }
-         }
-      }
-   }
-
-   // TODO: Move to XmlUtils
-   private void attributeEncode (String in)
-         throws IOException
-   {
-      if (in == null)
-      {
-         // result.append(NULL_STR);
-      }
-      else
-      {
-         char c;
-         final int l = in.length();
-         for (int i = 0; i < l; i++)
-         {
-            c = in.charAt(i);
-            switch (c)
-            {
-               case '<':
-                  mOut.write("&lt;");
-                  break;
-               case '\'':
-                  mOut.write("&apos;");
-                  break;
-               case '&':
-                  mOut.write("&amp;");
-                  break;
-               default :
-                  if (c > Byte.MAX_VALUE)
-                  {
-                     mOut.write("&#x");
-                     mOut.write(Integer.toHexString(c));
-                     mOut.write(';');
-                  }
-                  else
-                  {
-                     mOut.write(c);
-                  }
-            }
-         }
       }
    }
 

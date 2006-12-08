@@ -59,10 +59,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -404,13 +405,6 @@ public final class Java2Html
 
          try
          {
-            /*
-            if (file.getName().endsWith("Test.java")
-                 || file.getName().indexOf("\\test\\") != -1 )
-            {
-               logger.fine("Ignoring test class " + file.getName());
-            }
-            else */
             if (file.getName().endsWith(".java"))
             {
                // TODO parentDir = project-home (from jcoderz report xml)
@@ -499,12 +493,12 @@ public final class Java2Html
       catch (FileNotFoundException ex)
       {
          throw new RuntimeException("Can not find output folder '"
-            + mOutDir + "'.");
+            + mOutDir + "'.", ex);
       }
       catch (IOException ex)
       {
          throw new RuntimeException("Could not copy resource '"
-            + resource + "'.");
+            + resource + "'.", ex);
       }
       finally
       {
@@ -532,7 +526,7 @@ public final class Java2Html
             if (in == null)
             {
                throw new RuntimeException("Can not find stylesheet file '"
-                     + mStyle + "'.");
+                     + mStyle + "'.", ex);
             }
          }
       }
@@ -546,48 +540,48 @@ public final class Java2Html
       {
          for (int i = 0; i < args.length; )
          {
-            if (args[i].equals("-outDir"))
+            if ("-outDir".equals(args[i]))
             {
                setOutDir(new java.io.File(args[i + 1]));
             }
-            else if (args[i].equals("-report"))
+            else if ("-report".equals(args[i]))
             {
                setInputFile(new java.io.File(args[i + 1]));
             }
-            else if (args[i].equals("-projectHome"))
+            else if ("-projectHome".equals(args[i]))
             {
                setProjectHome(new java.io.File(args[i + 1]));
             }
-            else if (args[i].equals("-projectName"))
+            else if ("-projectName".equals(args[i]))
             {
                setProjectName(args[i + 1]);
             }
-            else if (args[i].equals("-cvsBase"))
+            else if ("-cvsBase".equals(args[i]))
             {
                setCvsBase(args[i + 1]);
             }
-            else if (args[i].equals("-timestamp"))
+            else if ("-timestamp".equals(args[i]))
             {
                setTimestamp(args[i + 1]);
             }
-            else if (args[i].equals("-wikiBase"))
+            else if ("-wikiBase".equals(args[i]))
             {
                setWikiBase(args[i + 1]);
             }
-            else if (args[i].equals("-reportStyle"))
+            else if ("-reportStyle".equals(args[i]))
             {
                setStyle(args[i + 1]);
             }
-            else if (args[i].equals("-noCoverage"))
+            else if ("-noCoverage".equals(args[i]))
             {
                setCoverageData(false);
                i -= 1;
             }
-            else if (args[i].equals("-packageBase"))
+            else if ("-packageBase".equals(args[i]))
             {
               setPackageBase(args[i + 1]);
             }
-            else if (args[i].equals("-loglevel"))
+            else if ("-loglevel".equals(args[i]))
             {
                setLoglevel(args[i + 1]);
             }
@@ -640,36 +634,37 @@ public final class Java2Html
       {
          final FindingsSummary.FindingSummary summary
               = (FindingsSummary.FindingSummary) i.next();
-
-         final String filename = summary.createFindingDetailFilename();
-         final FileWriter fw = new FileWriter(
-               new java.io.File(mOutDir, filename));
-         final BufferedWriter out = new BufferedWriter(fw);
-
-         htmlHeader(out, "Finding-" + summary.getFindingType().getSymbol()
-                  + "-report " + mProjectName, "");
-
-         summary.createFindingTypeContent(out);
-
-         out.write("</body></html>");
-         out.close();
+         BufferedWriter out = null;
+         try
+         {
+             final String filename = summary.createFindingDetailFilename();
+             out = openWriter(filename);
+             htmlHeader(out, "Finding-" + summary.getFindingType().getSymbol()
+                      + "-report " + mProjectName, "");
+             summary.createFindingTypeContent(out);
+             out.write("</body></html>");
+         }
+         finally
+         {
+             IoUtil.close(out);
+         }
       }
    }
 
-   /**
-    *
-    */
    private void createFindingsSummary () throws IOException
    {
-      final FileWriter fw = new FileWriter(
-            new java.io.File(mOutDir, "findings.html"));
-      final BufferedWriter out = new BufferedWriter(fw);
-
-      htmlHeader(out, "Finding report " + mProjectName, "");
-
-      FindingsSummary.createOverallContent(out);
-      out.write("</body></html>");
-      out.close();
+      BufferedWriter out = null;
+      try
+      {
+          out = openWriter("findings.html");
+          htmlHeader(out, "Finding report " + mProjectName, "");
+          FindingsSummary.createOverallContent(out);
+          out.write("</body></html>");
+      }
+      finally
+      {
+          IoUtil.close(out);
+      }
    }
 
    /**
@@ -702,9 +697,7 @@ public final class Java2Html
          final java.io.File dir = new java.io.File(mOutDir, subdir);
          dir.mkdirs();
 
-         final FileWriter fw = new FileWriter(
-               new java.io.File(dir, mClassname + ".html"));
-         bw = new BufferedWriter(fw);
+         bw = openWriter(dir, mClassname + ".html");
 
          final FileSummary summary
                = createFileSummary(mHtmlView.getNumberOfLines(), subdir);
@@ -774,6 +767,8 @@ public final class Java2Html
          bw.write("<table width='95%' cellpadding='0' cellspacing='0' "
                + "border='0'>\n");
          int rowCounter = 0;
+         
+         final String relativeRoot = relativeRoot(mPackage, "");
 
          // findings with no line number or uncovered jet
          final Iterator remainder = mFindingsInFile.values().iterator();
@@ -790,18 +785,11 @@ public final class Java2Html
                   pos++;
                   rowCounter++;
 
-                  final String imageSource
-                        = relativeRoot(mPackage, getImage(item.getSeverity()));
-
                   bw.write("<tr class='findings-");
                   bw.write(Java2Html.toOddEvenString(rowCounter));
                   bw.write("row'>\n");
                   bw.write("   <td class='findings-image'>\n");
-                  bw.write("      <img border='0' title='" + item.getSeverity()
-                        + " [" + item.getOrigin() + "]' "
-                        + " alt='"
-                        + item.getSeverity().toString().substring(0, 1) + "' "
-                        + "src='" + imageSource + "' />\n");
+                  appendSeverityImage(bw, item, relativeRoot);
                   bw.write("   </td>\n");
                   bw.write("   <td class='findings-id'>\n");
                   bw.write("      <a name='FINDING" + pos + "' />\n");
@@ -832,19 +820,12 @@ public final class Java2Html
             rowCounter++;
 
             final String link = "#LINE" + item.getLine();
-            final String imageSource
-                  = relativeRoot(mPackage, getImage(item.getSeverity()));
-
 
             bw.write("<tr class='findings-");
             bw.write(Java2Html.toOddEvenString(rowCounter));
             bw.write("row'>\n");
             bw.write("   <td class='findings-image'>\n");
-            bw.write("      <a href='" + link + "' >\n");
-            bw.write("         <img border='0' title='" + item.getSeverity()
-                  + " [" + item.getOrigin() + "]' "
-                  + "src='" + imageSource + "' />\n");
-            bw.write("      </a>\n");
+            appendSeverityImage(bw, item, relativeRoot);
             bw.write("   </td>\n");
             bw.write("   <td class='findings-id'>\n");
             bw.write("      <a name='FINDING" + pos + "' />\n");
@@ -896,35 +877,59 @@ public final class Java2Html
    }
 
    /**
-    * @param severity
-    * @return
+    * Generates a image related to the severity of the given Item.
+    * The image links back to the general finding page of the item. 
+    * @param w the writer where to write the output to.
+    * @param item the item to be documented.
+    * @param root the relative path from the page generated to the root dir.
+    * @throws IOException if the datas could not be written to the given 
+    *     writer.
     */
+   private void appendSeverityImage (Writer w, Item item, String root) 
+       throws IOException
+   {
+       w.write("<a href='");
+       w.write(root);
+       w.write(FindingsSummary.getFindingsSummary()
+               .getFindingSummary(item).createFindingDetailFilename());
+       w.write("'><img border='0' title='");
+       w.write(String.valueOf(item.getSeverity()));
+       w.write(" [");
+       w.write(String.valueOf(item.getOrigin()));
+       w.write("]' alt='");
+       w.write(item.getSeverity().toString().substring(0, 1));
+       w.write("' src='");
+       w.write(root);
+       w.write(getImage(item.getSeverity()));
+       w.write("' /></a>\n");
+   }
+
    private String getImage (Severity severity)
    {
       final String result;
       if (severity == Severity.INFO)
       {
-         result = "/images/icon_info.gif";
+         result = "images/icon_info.gif";
       }
       else if (severity == Severity.WARNING)
       {
-         result = "/images/icon_warning.gif";
+         result = "images/icon_warning.gif";
       }
       else if (severity == Severity.FILTERED)
       {
-         result = "/images/icon_filter.gif";
+         result = "images/icon_filter.gif";
       }
       else if (severity == Severity.FALSE_POSITIVE)
       {
-         result = "/images/icon_false.gif";
+         result = "images/icon_false.gif";
       }
       else if (severity == Severity.CPD)
       {
-         result = "/images/icon_cpd.gif";
+         result = "images/icon_cpd.gif";
       }
       else
       {
-         result = "/images/icon_error.gif";
+         result = "images/icon_error.gif";
       }
       return result;
    }
@@ -1231,21 +1236,22 @@ public final class Java2Html
       final java.io.File dir = new java.io.File(mOutDir, subdir);
       dir.mkdirs();
 
-      final FileWriter fw = new FileWriter(new java.io.File(dir, filename));
-      final BufferedWriter bw = new BufferedWriter(fw);
-
-      htmlHeader(bw, packageName, packageName);
-
-      bw.write("<h1><a href='" + relativeRoot(packageName, filename)
-         + "'>Project-Report "
-         + mProjectName + "</a></h1>");
-      bw.write("<h2>Packagesummary " + packageName + "</h2>");
-
-
-      createClassListTable(bw, pkg, false, order);
-
-      bw.write("</body></html>");
-      bw.close();
+      BufferedWriter bw = null;
+      try
+      {
+          bw = openWriter(dir, filename);
+          htmlHeader(bw, packageName, packageName);
+          bw.write("<h1><a href='" + relativeRoot(packageName, filename)
+             + "'>Project-Report "
+             + mProjectName + "</a></h1>");
+          bw.write("<h2>Packagesummary " + packageName + "</h2>");
+          createClassListTable(bw, pkg, false, order);
+          bw.write("</body></html>");
+      }
+      finally
+      {
+          IoUtil.close(bw);
+      }
    }
 
    private void createFullSummary ()
@@ -1260,117 +1266,123 @@ public final class Java2Html
          throws IOException
    {
       final String filename = fileNameForOrder(order);
-      final FileWriter fw = new FileWriter(new java.io.File(mOutDir, filename));
-      final BufferedWriter bw = new BufferedWriter(fw);
-
-      htmlHeader(bw, "Project Report " + mProjectName, "");
-
-      bw.write("<h1>Project Report " + mProjectName + "</h1>");
-
-      bw.write("<table border='0' cellpadding='2' cellspacing='0' "
-            + "width='95%'>");
-      bw.write("<thead><tr><th>");
-      if (filename != SORT_BY_PACKAGE_INDEX)
+      final BufferedWriter bw = openWriter(filename);;
+      try
       {
-         bw.write("<a href='" + SORT_BY_PACKAGE_INDEX
-               + "' title='Sort by name'>");
+          htmlHeader(bw, "Project Report " + mProjectName, "");
+    
+          bw.write("<h1>Project Report " + mProjectName + "</h1>");
+    
+          bw.write("<table border='0' cellpadding='2' cellspacing='0' "
+                + "width='95%'>");
+          bw.write("<thead><tr><th>");
+          if (filename != SORT_BY_PACKAGE_INDEX)
+          {
+             bw.write("<a href='" + SORT_BY_PACKAGE_INDEX
+                   + "' title='Sort by name'>");
+          }
+          bw.write("Package");
+          if (filename != SORT_BY_PACKAGE_INDEX)
+          {
+             bw.write("</a>");
+          }
+          bw.write("</th><th>findings</th>");
+          bw.write("<th>files</th><th>lines</th>");
+          if (mCoverageData)
+          {
+             bw.write("<th>%</th><th>");
+             if (filename != SORT_BY_COVERAGE_INDEX)
+             {
+                bw.write("<a href='" + SORT_BY_COVERAGE_INDEX
+                      + "' title='Sort by coverage'>");
+             }
+             bw.write("Coverage");
+             if (filename != SORT_BY_COVERAGE_INDEX)
+             {
+                bw.write("</a>");
+             }
+             bw.write("</th>");
+          }
+          bw.write("<th>%</th><th class='remainder'>");
+          if (filename != SORT_BY_QUALITY_INDEX)
+          {
+             bw.write("<a href='" + SORT_BY_QUALITY_INDEX
+                   + "' title='Sort by quality'>");
+          }
+          bw.write("Quality");
+          if (filename != SORT_BY_QUALITY_INDEX)
+          {
+             bw.write("</a>");
+          }
+          bw.write("</th></tr></thead>");
+          bw.write("<tbody>");
+          bw.write(NEWLINE);
+          bw.write("<tr class='odd'><td class='classname" + LAST_MARKER + "'>");
+          bw.write("Overall summary");
+          bw.write("</td>");
+          hitsCell(bw, String.valueOf(mGlobalSummary.getNumberOfFindings()), 
+                  true);
+          hitsCell(bw, String.valueOf(mGlobalSummary.getNumberOfFiles()), true);
+          hitsCell(bw, String.valueOf(mGlobalSummary.getLinesOfCode()), true);
+          if (mCoverageData)
+          {
+             hitsCell(bw, String.valueOf(mGlobalSummary.getCoverage()) + "%", 
+                     true);
+             bw.write("<td valign='middle' class='hits" + LAST_MARKER
+                   + "' width='100'>");
+             bw.write(mGlobalSummary.getCoverageBar());
+             bw.write("</td>");
+          }
+          hitsCell(bw, String.valueOf(mGlobalSummary.getQuality()) + "%", true);
+          bw.write("<td valign='middle' class='code" + LAST_MARKER
+                + "' width='100'>");
+          bw.write(mGlobalSummary.getPercentBar());
+          bw.write("</td></tr>");
+          bw.write(NEWLINE);
+          bw.write("</tbody>");
+          bw.write("</table>");
+    
+          bw.write("<h1><a href='findings.html'>View by Finding</a></h1>");
+    
+          bw.write("<h1>Packages</h1>");
+          bw.write("<table border='0' cellpadding='2' cellspacing='0' "
+                + "width='95%'>");
+          bw.write("<thead><tr><th>Package</th>"
+             + "<th>findings</th><th>files</th><th>lines</th>");
+          if (mCoverageData)
+          {
+             bw.write("<th>%</th><th>Coverage</th>");
+          }
+          bw.write("<th>%</th><th class='remainder'>Quality</th></tr></thead>");
+          bw.write("<tbody>");
+          bw.write(NEWLINE);
+    
+          final Set packages = new TreeSet(order);
+          packages.addAll(mPackageSummary.values());
+    
+          final Iterator i = packages.iterator();
+          int pos = 0;
+          while (i.hasNext())
+          {
+             pos++;
+             final FileSummary pkg = (FileSummary) i.next();
+             final boolean isLast = !i.hasNext();
+             appendPackageLink(bw, pkg, filename, pos, isLast);
+          }
+          bw.write("</tbody></table>");
+    
+          // findings with no line number...
+          createUnassignedFindingsTable(bw);
+    
+          bw.write("<h1>Java Files</h1>");
+          createClassListTable(bw, mAllFiles, true, order);
+    
+          bw.write("</body></html>");
       }
-      bw.write("Package");
-      if (filename != SORT_BY_PACKAGE_INDEX)
+      finally
       {
-         bw.write("</a>");
+          IoUtil.close(bw);
       }
-      bw.write("</th><th>findings</th>");
-      bw.write("<th>files</th><th>lines</th>");
-      if (mCoverageData)
-      {
-         bw.write("<th>%</th><th>");
-         if (filename != SORT_BY_COVERAGE_INDEX)
-         {
-            bw.write("<a href='" + SORT_BY_COVERAGE_INDEX
-                  + "' title='Sort by coverage'>");
-         }
-         bw.write("Coverage");
-         if (filename != SORT_BY_COVERAGE_INDEX)
-         {
-            bw.write("</a>");
-         }
-         bw.write("</th>");
-      }
-      bw.write("<th>%</th><th class='remainder'>");
-      if (filename != SORT_BY_QUALITY_INDEX)
-      {
-         bw.write("<a href='" + SORT_BY_QUALITY_INDEX
-               + "' title='Sort by quality'>");
-      }
-      bw.write("Quality");
-      if (filename != SORT_BY_QUALITY_INDEX)
-      {
-         bw.write("</a>");
-      }
-      bw.write("</th></tr></thead>");
-      bw.write("<tbody>");
-      bw.write(NEWLINE);
-      bw.write("<tr class='odd'><td class='classname" + LAST_MARKER + "'>");
-      bw.write("Overall summary");
-      bw.write("</td>");
-      hitsCell(bw, String.valueOf(mGlobalSummary.getNumberOfFindings()), true);
-      hitsCell(bw, String.valueOf(mGlobalSummary.getNumberOfFiles()), true);
-      hitsCell(bw, String.valueOf(mGlobalSummary.getLinesOfCode()), true);
-      if (mCoverageData)
-      {
-         hitsCell(bw, String.valueOf(mGlobalSummary.getCoverage()) + "%", true);
-         bw.write("<td valign='middle' class='hits" + LAST_MARKER
-               + "' width='100'>");
-         bw.write(mGlobalSummary.getCoverageBar());
-         bw.write("</td>");
-      }
-      hitsCell(bw, String.valueOf(mGlobalSummary.getQuality()) + "%", true);
-      bw.write("<td valign='middle' class='code" + LAST_MARKER
-            + "' width='100'>");
-      bw.write(mGlobalSummary.getPercentBar());
-      bw.write("</td></tr>");
-      bw.write(NEWLINE);
-      bw.write("</tbody>");
-      bw.write("</table>");
-
-      bw.write("<h1><a href='findings.html'>View by Finding</a></h1>");
-
-      bw.write("<h1>Packages</h1>");
-      bw.write("<table border='0' cellpadding='2' cellspacing='0' "
-            + "width='95%'>");
-      bw.write("<thead><tr><th>Package</th>"
-         + "<th>findings</th><th>files</th><th>lines</th>");
-      if (mCoverageData)
-      {
-         bw.write("<th>%</th><th>Coverage</th>");
-      }
-      bw.write("<th>%</th><th class='remainder'>Quality</th></tr></thead>");
-      bw.write("<tbody>");
-      bw.write(NEWLINE);
-
-      final Set packages = new TreeSet(order);
-      packages.addAll(mPackageSummary.values());
-
-      final Iterator i = packages.iterator();
-      int pos = 0;
-      while (i.hasNext())
-      {
-         pos++;
-         final FileSummary pkg = (FileSummary) i.next();
-         final boolean isLast = !i.hasNext();
-         appendPackageLink(bw, pkg, filename, pos, isLast);
-      }
-      bw.write("</tbody></table>");
-
-      // findings with no line number...
-      createUnassignedFindingsTable(bw);
-
-      bw.write("<h1>Java Files</h1>");
-      createClassListTable(bw, mAllFiles, true, order);
-
-      bw.write("</body></html>");
-      bw.close();
    }
 
     private void createUnassignedFindingsTable (final BufferedWriter bw)
@@ -1448,11 +1460,12 @@ public final class Java2Html
    private void htmlHeader (BufferedWriter bw, String title, String packageName)
         throws IOException
    {
-      bw.write("<?xml version='1.0' encoding='ISO-8859-1'?>" + NEWLINE
-         + "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" "
-         + "\"DTD/xhtml1-transitional.dtd\">" + NEWLINE
+      bw.write("<?xml version='1.0' encoding='UTF-8'?>" + NEWLINE
+         + "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" "
+         + NEWLINE
+         + "\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">" + NEWLINE
          + "<html xmlns='http://www.w3.org/1999/xhtml' xml:lang='en'"
-         + "lang='en'>" + NEWLINE
+         + " lang='en'>" + NEWLINE
          + "<head>" + NEWLINE
          + "\t<title>");
       bw.write(title);
@@ -1484,8 +1497,8 @@ public final class Java2Html
          }
       }
       rootDir.append(page);
-
-      return rootDir.toString();
+      
+      return rootDir.toString().replaceAll("//", "/");
    }
 
    private String cutPath (String fileName)
@@ -1774,5 +1787,40 @@ public final class Java2Html
       {
          bw.write(str);
       }
+   }
+   
+   private BufferedWriter openWriter (String filename) 
+       throws IOException
+   {
+       return openWriter(mOutDir, filename);
+   }
+
+   private BufferedWriter openWriter (File dir, String filename) 
+       throws IOException
+   {
+       FileOutputStream fos = null;
+       OutputStreamWriter osw = null;
+       BufferedWriter result = null;
+       try
+       {
+           fos = new FileOutputStream(new java.io.File(dir, filename));
+           osw = new OutputStreamWriter(fos, Constants.ENCODING_UTF8);
+           result = new BufferedWriter(osw);
+       }
+       catch (RuntimeException ex)
+       {
+           IoUtil.close(result);
+           IoUtil.close(osw);
+           IoUtil.close(fos);
+           throw ex;
+       }
+       catch (IOException ex)
+       {
+           IoUtil.close(result);
+           IoUtil.close(osw);
+           IoUtil.close(fos);
+           throw ex;
+       }
+       return result;
    }
 }

@@ -55,9 +55,9 @@ import org.xml.sax.helpers.DefaultHandler;
 public class TemplateDescr
 {
    private String mDescription = null;
-   private Map mParameterMap = new HashMap();
-   private List mParameterList = new ArrayList();
-   private Map mFiles = new HashMap();
+   private final Map mParameterMap = new HashMap();
+   private final List mParameterList = new ArrayList();
+   private final Map mFiles = new HashMap();
 
    public TemplateDescr ()
    {

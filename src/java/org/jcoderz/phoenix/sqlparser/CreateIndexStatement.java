@@ -42,12 +42,12 @@ import java.util.List;
 public class CreateIndexStatement
       extends SqlStatement
 {
-   private String mIndexName;
+   private final String mIndexName;
    private String mTableName;
    
    private boolean mIsUnique;
    
-   private List mColumnNames;
+   private final List mColumnNames;
    
    public CreateIndexStatement (String indexName)
    {

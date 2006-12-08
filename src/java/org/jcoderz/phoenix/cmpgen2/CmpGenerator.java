@@ -73,12 +73,12 @@ public class CmpGenerator
    private static final String ARRAY_MAGIC = "[]";
    private static final int ARRAY_MAGIC_LENGTH = ARRAY_MAGIC.length();
 
-   private String mOutputBaseDirectory;
-   private String mPackagePrefix;
-   private String mDataSource;
+   private final String mOutputBaseDirectory;
+   private final String mPackagePrefix;
+   private final String mDataSource;
    private File mOutputDirectory;
-   private String mTemplateDir;
-   private boolean mOverwrite;
+   private final String mTemplateDir;
+   private final boolean mOverwrite;
 
    /**
     * Construct CMP bean generator.

@@ -70,7 +70,7 @@ extends TestCase
         assertEquals("3rd nesting level unexpected", in, sax.getCause());
     }
 
-    /** Test the magic get cause detection code for certain Throwables */
+    /** Test the magic get cause detection code for certain Throwables. */
     public void testGetCauseDetection ()
     {
         getCauseDetectionTestHelper(SAXException.class, "getException");
@@ -87,7 +87,7 @@ extends TestCase
         final Method m 
         = ThrowableUtil.findGetCauseMethod(ex.getMethods());
         assertNotNull("Could not get getCause method for " + ex.getName(), m);
-        assertEquals("Differen method expected for getCause in " + ex.getName(), 
+        assertEquals("Differen method expected for getCause in " + ex.getName(),
                 methodName, m.getName());
     }
 

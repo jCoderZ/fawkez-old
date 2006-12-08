@@ -91,7 +91,7 @@ public class SqlParser
    private SpecialColumnComment mSpecialColumnComment;
    private SpecialAnnotationComment mColumnAnnotation;
 
-   private List mSpecialStatementComments = new ArrayList();
+   private final List mSpecialStatementComments = new ArrayList();
    private SpecialAnnotationComment mStatementAnnotation;
 
    /**

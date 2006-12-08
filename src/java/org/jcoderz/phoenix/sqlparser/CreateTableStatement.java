@@ -41,17 +41,17 @@ import java.util.List;
  */
 public class CreateTableStatement extends SqlStatement
 {
-   private String mTableName;
+   private final String mTableName;
    private String mBeanName;
    private String mAdditionalJavadoc;
    private boolean mOptimisticVersionCount;
    private boolean mSkipAppserverSupport;
    
-   private List mColumns = new ArrayList();
+   private final List mColumns = new ArrayList();
 
-   private List mIndexes = new ArrayList();
+   private final List mIndexes = new ArrayList();
    
-   private List mFkConstraints = new ArrayList();
+   private final List mFkConstraints = new ArrayList();
    
    public CreateTableStatement (String tableName)
    {

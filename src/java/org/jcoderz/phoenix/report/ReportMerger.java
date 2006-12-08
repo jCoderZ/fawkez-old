@@ -68,8 +68,8 @@ public class ReportMerger
    
    private Level mLogLevel;
    private File mOutFile;
-   private List mReports = new ArrayList();
-   private List mFilters = new ArrayList();
+   private final List mReports = new ArrayList();
+   private final List mFilters = new ArrayList();
 
    
    public void merge ()

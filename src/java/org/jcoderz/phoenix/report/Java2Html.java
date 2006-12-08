@@ -743,7 +743,7 @@ public final class Java2Html
             final boolean isLast = currentLine == lastLine;
             appendIf(bw, currentLine == lastLine, LAST_MARKER);
             bw.write("'><a name='LINE" + currentLine + "' />");
-            bw.write("" + currentLine);
+            bw.write(String.valueOf(currentLine));
             bw.write("</td>");
             hitsCell(bw, String.valueOf(getHits(currentLine)), isLast);
             bw.write("<td class='note");
@@ -834,7 +834,7 @@ public final class Java2Html
             bw.write("   </td>\n");
             bw.write("   <td class='findings-line-number' align='right'>\n");
             bw.write("      <a href='" + link + "' >\n");
-            bw.write("" +      item.getLine());
+            bw.write(String.valueOf(item.getLine()));
             bw.write("      </a>\n");
             bw.write("   </td>\n");
             bw.write("   <td class='findings-line-number' align='center'>\n");
@@ -842,7 +842,7 @@ public final class Java2Html
             bw.write("   </td>\n");
             bw.write("   <td class='findings-line-number' align='left'>\n");
             bw.write("      <a href='" + link + "' >\n");
-            bw.write("" +      item.getColumn());
+            bw.write(String.valueOf(item.getColumn()));
             bw.write("      </a>\n");
             bw.write("   </td>\n");
             bw.write("   <td width='100%' class='findings-data'>\n");

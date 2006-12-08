@@ -47,8 +47,8 @@ import org.jcoderz.commons.util.IoUtil;
  */
 public class SqlToXml
 {
-   private File mInputFile;
-   private File mOutputFile;
+   private final File mInputFile;
+   private final File mOutputFile;
    
    public SqlToXml (String inFileName, String outFileName)
    {

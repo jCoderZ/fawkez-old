@@ -53,7 +53,7 @@ public class SerializableIteratorTest
       extends TestCase
 {
    /**
-    * Tests serialization of the SerializableIterator
+    * Tests serialization of the SerializableIterator.
     * @throws Exception if the testcase fails
     */
    public void testSerialization ()
@@ -103,7 +103,7 @@ public class SerializableIteratorTest
 
    public void testWithCollection ()
    {
-      final HashSet hs = new HashSet();
+      final Set hs = new HashSet();
       hs.add("gandalf");
       hs.add("frodo");
       hs.add("bilbo");

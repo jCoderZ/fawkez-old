@@ -47,9 +47,9 @@ public class Template
    public static final char PARAM_END = '}';
    public static final String PARAM_END_ESCAPED = "\\}";
 
-   private String mSourceName;
+   private final String mSourceName;
+   private final String mTemplateString;
    private String mTargetName;
-   private String mTemplateString;
 
    public Template (String sourceName, String templateString)
    {

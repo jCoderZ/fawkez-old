@@ -42,7 +42,7 @@ package org.jcoderz.commons.statistics;
 public class Counter
    implements Resettable
 {
-   private String mName;
+   private final String mName;
 
    /** Stores the counter's value. */
    private long mCounter = 0;

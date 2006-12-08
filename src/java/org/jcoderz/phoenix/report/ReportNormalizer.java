@@ -348,8 +348,8 @@ public final class ReportNormalizer
 
    private static final class SourceReport
    {
-      private ReportFormat mReportFormat;
-      private File mFilename;
+      private final ReportFormat mReportFormat;
+      private final File mFilename;
 
       SourceReport (ReportFormat r, String f)
       {

@@ -39,10 +39,10 @@ import java.util.regex.Pattern;
  */
 public class Parameter
 {
-   private String mName;
-   private int mMinLength;
-   private int mMaxLength;
-   private boolean mMultiLine;
+   private final String mName;
+   private final int mMinLength;
+   private final int mMaxLength;
+   private final boolean mMultiLine;
 
    private String mDescription;
    private String mDefaultValue;

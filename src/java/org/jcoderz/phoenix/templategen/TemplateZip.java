@@ -57,10 +57,10 @@ public class TemplateZip
    private static final String DESCRIPTION_FILE = "template.xml";
    private static final int READ_BUFFER_SIZE = 1024;
 
-   private List mTemplateList;
+   private final List mTemplateList;
    private TemplateDescr mDescription;
 
-   private String mFileName;
+   private final String mFileName;
 
    public TemplateZip (String fileName)
    {

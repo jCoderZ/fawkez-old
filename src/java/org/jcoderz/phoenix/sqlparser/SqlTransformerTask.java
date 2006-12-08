@@ -54,7 +54,7 @@ public class SqlTransformerTask
       extends MatchingTask
 {
    /** list of input files. */
-   private List mFilesets = new ArrayList();
+   private final List mFilesets = new ArrayList();
    /** the output directory. */
    private File mOutputDir;
    /** terminate ant build on error. */

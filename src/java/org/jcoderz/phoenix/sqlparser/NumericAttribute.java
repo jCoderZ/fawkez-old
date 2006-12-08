@@ -35,10 +35,10 @@ package org.jcoderz.phoenix.sqlparser;
 /**
  * @author Albrecht Messner
  */
-public class NumericAttribute
+public final class NumericAttribute
    extends ColumnAttribute
 {
-   private int mNumber;
+   private final int mNumber;
    /**
     * Create a new numeric attribute.
     * @param number the number represented by this attribute

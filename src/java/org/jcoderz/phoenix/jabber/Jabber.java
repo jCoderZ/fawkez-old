@@ -99,7 +99,7 @@ public final class Jabber
       private int mJabberHostPort = JABBER_DEFAULT_PORT;
       private String mJabberMucName = "jcoderz@conference.jabber.org";
 
-      private String mJabberMucAlias;
+      private final String mJabberMucAlias;
 
       private XMPPConnection mConnection;
       private GroupChat mGroupChat;

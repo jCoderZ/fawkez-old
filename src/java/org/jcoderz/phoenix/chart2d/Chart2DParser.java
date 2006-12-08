@@ -106,12 +106,14 @@ public class Chart2DParser implements ContentHandler
    public final void startDocument () 
          throws SAXException
    {
+      // NOOP
    }
 
    /** {@inheritDoc} */
    public final void endDocument () 
          throws SAXException
    {
+      // NOOP
    }
 
    /** {@inheritDoc} */
@@ -254,30 +256,35 @@ public class Chart2DParser implements ContentHandler
    public final void ignorableWhitespace (char[] chars, int start, int len)
          throws SAXException
    {
+        // NOOP
    }
 
    /** {@inheritDoc} */
    public final void processingInstruction (String target, String data) 
          throws SAXException
    {
+       // NOOP
    }
 
    /** {@inheritDoc} */
    public final void startPrefixMapping (final String prefix, final String uri) 
          throws SAXException
    {
+       // NOOP
    }
 
    /** {@inheritDoc} */
    public final void endPrefixMapping (final String prefix)
          throws SAXException
    {
+       // NOOP
    }
 
    /** {@inheritDoc} */
    public final void skippedEntity (String name) 
          throws SAXException
    {
+       // NOOP
    }
 
    private void dispatch (final boolean fireOnlyIfMixed) 

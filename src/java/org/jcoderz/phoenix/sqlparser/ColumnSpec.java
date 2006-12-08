@@ -54,8 +54,8 @@ public class ColumnSpec
    private boolean mPeriodDefined = false;
    private boolean mSkipInInterface = false;
    
-   private List mDatatypeAttributes = new ArrayList();
-   private List mAttributes = new ArrayList();
+   private final List mDatatypeAttributes = new ArrayList();
+   private final List mAttributes = new ArrayList();
    
    private boolean mIsNotNull = false;
    private boolean mIsPrimaryKey = false;

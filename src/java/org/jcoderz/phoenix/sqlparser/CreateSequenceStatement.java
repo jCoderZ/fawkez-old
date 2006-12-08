@@ -38,8 +38,9 @@ package org.jcoderz.phoenix.sqlparser;
 public class CreateSequenceStatement
       extends SqlStatement
 {
-    private static final int DEFAULT_SEQUENCE_CACHE = 20; 
-   private String mName;
+   private static final int DEFAULT_SEQUENCE_CACHE = 20; 
+   
+   private final String mName;
 
    private long mIncrementBy = 1;
    private Long mStartWith;

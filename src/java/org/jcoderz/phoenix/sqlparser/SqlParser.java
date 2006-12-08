@@ -80,7 +80,7 @@ public class SqlParser
       }
       catch (ParseException e)
       {
-         throw new RuntimeException("This must not happen!");
+         throw new RuntimeException("This must not happen!", e);
       }
    }
 

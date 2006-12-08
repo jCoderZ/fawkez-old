@@ -215,7 +215,7 @@ public final class JavaCodeSnippets
          String n = s;
          if (s.lastIndexOf('.') != -1)
          {
-            n = s.substring(0, s.lastIndexOf("."));
+            n = s.substring(0, s.lastIndexOf('.'));
          }
          out.println("<!ENTITY " + n + " SYSTEM \"" + s + "\">");
          

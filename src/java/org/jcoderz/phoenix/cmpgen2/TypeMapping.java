@@ -151,7 +151,7 @@ public final class TypeMapping
     * @return the simple java type used to store the column in the db
     * @throws CmpGeneratorException if no type mapping can be found
     */
-   public static final String getJavaType (
+   public static String getJavaType (
          ColumnSpec column,
          boolean fullyQualified)
          throws CmpGeneratorException
@@ -192,8 +192,8 @@ public final class TypeMapping
             // hey! it's a complex type
             // the "simple" java type can be found in the signature of the
             // load method
-            final int openParen = loadMethod.indexOf("(");
-            final int closeParen = loadMethod.indexOf(")");
+            final int openParen = loadMethod.indexOf('(');
+            final int closeParen = loadMethod.indexOf(')');
             if (openParen == -1
                || closeParen == -1
                || closeParen <= openParen)
@@ -241,7 +241,7 @@ public final class TypeMapping
     */
    public static String unqualifyType (String typeName)
    {
-      final int dotIndex = typeName.lastIndexOf(".");
+      final int dotIndex = typeName.lastIndexOf('.');
       return typeName.substring(dotIndex + 1);
    }
 
@@ -252,11 +252,11 @@ public final class TypeMapping
     * @return the FQ type name of the java type, or null if this method can not
     *         find a type mapping
     */
-   public static final String getTypeMapping (String sqlType)
+   public static String getTypeMapping (String sqlType)
    {
       String javaType;
       
-      final String s = sqlType.toUpperCase();
+      final String s = sqlType.toUpperCase(Constants.SYSTEM_LOCALE);
       if (STRING_TYPE_SET.contains(s))
       {
          javaType = String.class.getName();
@@ -289,7 +289,7 @@ public final class TypeMapping
     * @param scale the scale of the sql type, or 0 if no scale given
     * @return the name of the appropriate java type
     */
-   public static final String getNumberTypeMapping (
+   public static String getNumberTypeMapping (
       String sqlType,
       int precision,
       int scale)
@@ -339,7 +339,7 @@ public final class TypeMapping
     * @param type the name of a java type
     * @return true if the type is primitive, false otherwise
     */
-   public static final boolean isPrimitiveType (String type)
+   public static boolean isPrimitiveType (String type)
    {
       boolean result = false;
       if (JAVA_PRIMITIVE_TYPE_SET.contains(type))
@@ -355,7 +355,7 @@ public final class TypeMapping
     * @return the corresponding wrapper object
     * @throws IllegalArgumentException if primitiveType is not a primitive type
     */
-   public static final String primitiveToObject (String primitiveType)
+   public static String primitiveToObject (String primitiveType)
    {
       if (!isPrimitiveType(primitiveType))
       {

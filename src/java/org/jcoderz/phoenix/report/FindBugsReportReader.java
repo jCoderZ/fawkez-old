@@ -66,11 +66,9 @@ public final class FindBugsReportReader
    public static final String FINDBUGS_JAXB_CONTEXT_PATH
       = "org.jcoderz.phoenix.findbugs.jaxb";
 
-   private static final transient String CLASSNAME
-      = FindBugsReportReader.class.getName();
+   private static final String CLASSNAME = FindBugsReportReader.class.getName();
 
-   private static final transient Logger logger
-      = Logger.getLogger(CLASSNAME);
+   private static final Logger logger = Logger.getLogger(CLASSNAME);
 
    private BugCollection mReportDocument;
 
@@ -82,7 +80,7 @@ public final class FindBugsReportReader
    }
 
    /** {@inheritDoc} */
-   public final void parse (File f)
+   public void parse (File f)
       throws JAXBException
    {
       try
@@ -97,7 +95,7 @@ public final class FindBugsReportReader
    }
 
    /** {@inheritDoc} */
-   public final Map getItems ()
+   public Map getItems ()
       throws JAXBException
    {
       final Map itemMap = new HashMap();
@@ -249,9 +247,9 @@ public final class FindBugsReportReader
    private String convertToRelativeJavaFile (String clzznm)
    {
       String clazzname = clzznm;
-      if (clazzname.indexOf("$") != -1) // inner clazz
+      if (clazzname.indexOf('$') != -1) // inner clazz
       {
-         clazzname = clazzname.substring(0, clazzname.indexOf("$"));
+         clazzname = clazzname.substring(0, clazzname.indexOf('$'));
       }
       return clazzname.replace('.', File.separatorChar) + ".java";
    }

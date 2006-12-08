@@ -73,11 +73,10 @@ class FsConnectionImpl
 
 
    /** The full qualified name of this class. */
-   private static final transient String CLASSNAME = FsConnectionImpl.class
-         .getName();
+   private static final String CLASSNAME = FsConnectionImpl.class.getName();
 
    /** The logger to use. */
-   private static final transient Logger logger = Logger.getLogger(CLASSNAME);
+   private static final Logger logger = Logger.getLogger(CLASSNAME);
 
    /** Random instance to use for generating of backup file names. */
    private static final Random RANDOM = new Random();

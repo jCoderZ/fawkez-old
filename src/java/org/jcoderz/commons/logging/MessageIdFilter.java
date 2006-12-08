@@ -52,8 +52,7 @@ public final class MessageIdFilter
       extends LogFilterBase
 {
    /** The full qualified name of this class. */
-   private static final transient String CLASSNAME
-         = MessageIdFilter.class.getName();
+   private static final String CLASSNAME = MessageIdFilter.class.getName();
 
    private static final String HEX_PREFIX = "0x";
    private static final int HEX_NUMBER_BASE = 16;

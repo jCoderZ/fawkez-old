@@ -49,10 +49,8 @@ import org.apache.tools.ant.taskdefs.MatchingTask;
 public final class HTMLRenderAntTask
       extends MatchingTask
 {
-   private static final transient String CLASSNAME
-      = HTMLRenderAntTask.class.getName();
-   private static final transient Logger logger
-      = Logger.getLogger(CLASSNAME);
+   private static final String CLASSNAME = HTMLRenderAntTask.class.getName();
+   private static final Logger logger = Logger.getLogger(CLASSNAME);
 
    private File mBaseDir = null;
    /** Output directory for XML/HTML report. */
@@ -68,12 +66,12 @@ public final class HTMLRenderAntTask
     *
     * @param dir The output directory to set
     */
-   public final void setOut (File dir)
+   public void setOut (File dir)
    {
       mOut = dir;
    }
 
-   public final void setBaseDir (File dir)
+   public void setBaseDir (File dir)
    {
       mBaseDir = dir;
    }

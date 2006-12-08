@@ -62,15 +62,12 @@ public class ConfigurationServiceAdminImpl
       extends ConfigurationServiceCommonImpl
       implements ConfigurationServiceAdminInterface
 {
-   /** class name for use in logging */
-   private static final transient String CLASSNAME
+   /** class name for use in logging. */
+   private static final String CLASSNAME
          = ConfigurationServiceAdminImpl.class.getName();
 
-   /**
-    * class logger
-    */
-   private static final transient Logger logger
-         = Logger.getLogger(CLASSNAME);
+   /** Class logger. */
+   private static final Logger logger = Logger.getLogger(CLASSNAME);
 
    /**
     * Name of a parameter in a few get.. methods.

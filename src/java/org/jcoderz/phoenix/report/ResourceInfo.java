@@ -58,9 +58,8 @@ public final class ResourceInfo
    /** holds a map from resource name to ResourceInfo */
     private static final Map RESOURCES = new HashMap();
 
-    private static final transient String CLASSNAME = ResourceInfo.class
-            .getName();
-    private static final transient Logger logger = Logger.getLogger(CLASSNAME);
+    private static final String CLASSNAME = ResourceInfo.class.getName();
+    private static final Logger logger = Logger.getLogger(CLASSNAME);
 
     private final String mResourceName;
     private final String mPackage;

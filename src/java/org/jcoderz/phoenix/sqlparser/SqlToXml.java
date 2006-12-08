@@ -40,6 +40,8 @@ import java.io.PrintWriter;
 import java.util.Iterator;
 import java.util.List;
 
+import org.jcoderz.commons.util.IoUtil;
+
 /**
  * @author Albrecht Messner
  */
@@ -60,27 +62,31 @@ public class SqlToXml
       final ScannerInterface scanner
             = new SqlScanner(new FileInputStream(mInputFile));
       final SqlParser parser = new SqlParser(scanner);
-
       final PrintWriter pw = new PrintWriter(new FileOutputStream(mOutputFile));
-      pw.println("<tables>");
-
-      final List statements  = parser.parse();
-      for (final Iterator it = statements.iterator(); it.hasNext(); )
+      try
       {
-         final SqlStatement stmt = (SqlStatement) it.next();
-         if (stmt instanceof CreateTableStatement)
-         {
-            transformStatementToXml((CreateTableStatement) stmt, pw);
-         }
-         else if (stmt instanceof CreateSequenceStatement)
-         {
-            transformStatementToXml((CreateSequenceStatement) stmt, pw);
-         }
+          pw.println("<tables>");
+    
+          final List statements  = parser.parse();
+          for (final Iterator it = statements.iterator(); it.hasNext(); )
+          {
+             final SqlStatement stmt = (SqlStatement) it.next();
+             if (stmt instanceof CreateTableStatement)
+             {
+                transformStatementToXml((CreateTableStatement) stmt, pw);
+             }
+             else if (stmt instanceof CreateSequenceStatement)
+             {
+                transformStatementToXml((CreateSequenceStatement) stmt, pw);
+             }
+          }
+          
+          pw.println("</tables>");
       }
-      
-      pw.println("</tables>");
-      pw.flush();
-      pw.close();
+      finally
+      {
+          IoUtil.close(pw);
+      }
    }
 
    private void transformStatementToXml (CreateSequenceStatement stmt, 

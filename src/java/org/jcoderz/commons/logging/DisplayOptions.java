@@ -443,18 +443,10 @@ public final class DisplayOptions
       return mDisplayTraceLines;
    }
 
-   /** {@inheritDoc} */
-   public Object clone ()
+   /** {@inheritDoc} */ 
+   public Object clone () 
+       throws CloneNotSupportedException
    {
-      try
-      {
-         return super.clone();
-      }
-      catch (CloneNotSupportedException cex)
-      {
-         // should  never occur, since this implements Clonable.
-         throw new AssertionError("Caught CloneNotSupportedException even when"
-               + " implementing Clonable");
-      }
+       return super.clone();
    }
 }

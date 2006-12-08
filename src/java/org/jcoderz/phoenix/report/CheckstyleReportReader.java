@@ -63,11 +63,10 @@ public final class CheckstyleReportReader
    public static final String CHECKSTYLE_JAXB_CONTEXT_PATH
       = "org.jcoderz.phoenix.checkstyle.jaxb";
 
-   private static final transient String CLASSNAME
-      = CheckstyleReportReader.class.getName();
+   private static final String CLASSNAME 
+       = CheckstyleReportReader.class.getName();
 
-   private static final transient Logger logger
-      = Logger.getLogger(CLASSNAME);
+   private static final Logger logger = Logger.getLogger(CLASSNAME);
 
    private Checkstyle mReportDocument;
 

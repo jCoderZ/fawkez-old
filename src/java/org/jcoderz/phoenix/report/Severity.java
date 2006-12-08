@@ -158,7 +158,7 @@ public final class Severity
       catch (ArrayIndexOutOfBoundsException e)
       {
          throw new IllegalArgumentException(
-            "Illegal int representation of Severity");
+            "Illegal int representation of Severity", e);
       }
    }
 

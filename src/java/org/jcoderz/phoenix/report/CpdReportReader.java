@@ -61,11 +61,8 @@ public final class CpdReportReader
    public static final String CPD_JAXB_CONTEXT_PATH
       = "org.jcoderz.phoenix.cpd.jaxb";
 
-   private static final transient String CLASSNAME
-         = CpdReportReader.class.getName();
-
-   private static final transient Logger logger
-         = Logger.getLogger(CLASSNAME);
+   private static final String CLASSNAME = CpdReportReader.class.getName();
+   private static final Logger logger = Logger.getLogger(CLASSNAME);
 
    private PmdCpd mReportDocument;
 

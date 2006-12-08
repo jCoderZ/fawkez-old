@@ -44,7 +44,7 @@ public class Template
 {
    public static final String PARAM_START = "${";
    public static final String PARAM_START_ESCAPED = "\\$\\{";
-   public static final String PARAM_END = "}";
+   public static final char PARAM_END = '}';
    public static final String PARAM_END_ESCAPED = "\\}";
 
    private String mSourceName;
@@ -123,7 +123,7 @@ public class Template
 
          if (key.startsWith("jcoderz_header"))
          {
-            final String headerType = key.substring(key.lastIndexOf("_") + 1);
+            final String headerType = key.substring(key.lastIndexOf('_') + 1);
             value = TemplateGenerator.getJcoderzHeader(headerType);
          }
 

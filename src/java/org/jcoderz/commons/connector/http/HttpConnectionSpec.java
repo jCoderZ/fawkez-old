@@ -50,7 +50,7 @@ public final class HttpConnectionSpec
    /** The target connection point */
    private final Url mUrl;
    /** The canonic string of this connection specification */
-   private transient String mCanonicKey = null;
+   private String mCanonicKey = null;
 
 
    /**

@@ -48,6 +48,9 @@ import java.util.Map;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
+
+import org.jcoderz.commons.util.Constants;
+import org.jcoderz.commons.util.IoUtil;
 import org.jcoderz.phoenix.sqlparser.jaxb.Index;
 import org.jcoderz.phoenix.sqlparser.jaxb.SqlMetainf;
 import org.jcoderz.phoenix.sqlparser.jaxb.Table;
@@ -158,54 +161,57 @@ public class SqlTransformer
    {
       //System.out.println("SqlCommentFilter: transforming "
       //      + mInputFile + " to " + mOutputFile);
-
-      final ScannerInterface scanner
-            = new SqlScanner(new FileInputStream(mInputFile));
-      scanner.setReportWhitespace(true);
-      
-      final PrintWriter p2w 
-              = new PrintWriter(new FileOutputStream(mOutputFile));
-
-      Token token;
-      StringBuffer sbuf = new StringBuffer();
-      while ((token = scanner.nextToken()).getType() != TokenType.EOF)
+      PrintWriter p2w = null; 
+      final FileInputStream in = new FileInputStream(mInputFile);
+      try
       {
-         parserHook(token, sbuf);
-
-         final TokenType type = token.getType();
-
-         // System.out.println("Token: " + token);
-         if (type == TokenType.NEWLINE)
-         {
-            final String s = sbuf.toString();
-            if (! (s.trim().length() == 0))
-            {
-               // System.out.println("Writing : '" + s + "'");
-               p2w.println(s);
-            }
-            else
-            {
-               // System.out.println("Skipping: '" + s + "'");
-            }
-            sbuf = new StringBuffer();
-         }
-         else if (type != TokenType.COMMENT)
-         {
-            sbuf.append(token.getValue());
-            if (type == TokenType.SEMICOLON)
-            {
-               // separate statements with an empty line
-               sbuf.append('\n');
-            }
-         }
+          final ScannerInterface scanner = new SqlScanner(in);
+          scanner.setReportWhitespace(true);
+          p2w = new PrintWriter(new FileOutputStream(mOutputFile));
+    
+          Token token;
+          final StringBuffer sbuf = new StringBuffer();
+          while ((token = scanner.nextToken()).getType() != TokenType.EOF)
+          {
+             parserHook(token, sbuf);
+    
+             final TokenType type = token.getType();
+    
+             // System.out.println("Token: " + token);
+             if (type == TokenType.NEWLINE)
+             {
+                final String s = sbuf.toString();
+                if (! (s.trim().length() == 0))
+                {
+                   // System.out.println("Writing : '" + s + "'");
+                   p2w.println(s);
+                }
+                else
+                {
+                   // System.out.println("Skipping: '" + s + "'");
+                }
+                sbuf.setLength(0);
+             }
+             else if (type != TokenType.COMMENT)
+             {
+                sbuf.append(token.getValue());
+                if (type == TokenType.SEMICOLON)
+                {
+                   // separate statements with an empty line
+                   sbuf.append('\n');
+                }
+             }
+          }
+          if (! (sbuf.toString().trim().length() == 0))
+          {
+             p2w.println(sbuf.toString());
+          }
       }
-      if (! (sbuf.toString().trim().length() == 0))
+      finally
       {
-         p2w.println(sbuf.toString());
+          IoUtil.close(p2w);
+          IoUtil.close(in);
       }
-      
-      p2w.flush();
-      p2w.close();
    }
 
    private void parserHook (Token token, StringBuffer out)
@@ -266,7 +272,8 @@ public class SqlTransformer
          final String metaInf;
          final Map metainfMap = getMetainfMap(mObjectType);
          
-         if (metainfMap.get(mObjectName.toUpperCase()) == null)
+         if (metainfMap.get(mObjectName.toUpperCase(
+                 Constants.SYSTEM_LOCALE)) == null)
          {
             metaInf = (String) metainfMap.get(DEFAULT_KEY);
          }
@@ -326,7 +333,8 @@ public class SqlTransformer
                   "Table " + tab.getName() + " exists twice in "
                   + mMetainfFile.getName());
          }
-         mTableMap.put(tab.getName().toUpperCase(), tab.getValue());
+         mTableMap.put(tab.getName().toUpperCase(Constants.SYSTEM_LOCALE), 
+                 tab.getValue());
       }
       
       mIndexMap.put(DEFAULT_KEY, metaInf.getCreateIndex().getDefault());

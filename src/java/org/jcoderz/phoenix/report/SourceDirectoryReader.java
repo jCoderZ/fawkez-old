@@ -47,11 +47,10 @@ import javax.xml.bind.JAXBException;
 public final class SourceDirectoryReader 
       extends AbstractReportReader
 {
-   private static final transient String CLASSNAME
-      = SourceDirectoryReader.class.getName();
+   private static final String CLASSNAME 
+           = SourceDirectoryReader.class.getName();
 
-   private static final transient Logger logger
-      = Logger.getLogger(CLASSNAME);
+   private static final Logger logger = Logger.getLogger(CLASSNAME);
    
    private final Map mSources = new HashMap();
    

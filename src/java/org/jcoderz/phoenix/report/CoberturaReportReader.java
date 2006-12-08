@@ -64,10 +64,10 @@ public class CoberturaReportReader
     public static final String JCOVERAGE_JAXB_CONTEXT_PATH
             = "org.jcoderz.phoenix.coverage.jaxb";
 
-    private static final transient String CLASSNAME 
-        = CoberturaReportReader.class.getName();
+    private static final String CLASSNAME 
+            = CoberturaReportReader.class.getName();
 
-    private static final transient Logger logger = Logger.getLogger(CLASSNAME);
+    private static final Logger logger = Logger.getLogger(CLASSNAME);
 
     private Coverage mReportDocument;
 

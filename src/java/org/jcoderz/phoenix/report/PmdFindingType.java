@@ -53,10 +53,8 @@ import org.jcoderz.phoenix.pmd.ruleset.jaxb.Ruleset;
 public final class PmdFindingType
       extends FindingType
 {
-   private static final transient String CLASSNAME
-      = PmdFindingType.class.getName();
-   private static final transient Logger logger
-      = Logger.getLogger(CLASSNAME);
+   private static final String CLASSNAME = PmdFindingType.class.getName();
+   private static final Logger logger = Logger.getLogger(CLASSNAME);
 
    private static final String PMD_RULESET_JAXB_CONTEXT
       = "org.jcoderz.phoenix.pmd.ruleset.jaxb";

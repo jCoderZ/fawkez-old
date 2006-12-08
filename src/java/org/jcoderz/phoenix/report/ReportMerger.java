@@ -63,10 +63,8 @@ import org.jcoderz.phoenix.report.jaxb.Report;
  */
 public class ReportMerger
 {
-   private static final transient String CLASSNAME
-      = ReportNormalizer.class.getName();
-   private static final transient Logger logger
-      = Logger.getLogger(CLASSNAME);
+   private static final String CLASSNAME = ReportNormalizer.class.getName();
+   private static final Logger logger = Logger.getLogger(CLASSNAME);
    
    private Level mLogLevel;
    private File mOutFile;
@@ -213,12 +211,12 @@ public class ReportMerger
       catch (IndexOutOfBoundsException e)
       {
          throw new IllegalArgumentException("Missing value for "
-            + args[args.length - 1]);
+            + args[args.length - 1], e);
       }
       catch (IOException e)
       {
          throw new IllegalArgumentException("Wrong out folder "
-            + args[args.length - 1]);
+            + args[args.length - 1], e);
       }
    }
 

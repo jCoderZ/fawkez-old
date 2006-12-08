@@ -49,15 +49,12 @@ import org.jcoderz.commons.util.Constants;
 public class ConfigurationServiceCommonImpl
       implements ConfigurationServiceCommonInterface
 {
-   /** class name for use in logging */
-   private static final transient
-      String CLASSNAME = ConfigurationServiceCommonImpl.class.getName();
+   /** class name for use in logging. */
+   private static final String CLASSNAME 
+           = ConfigurationServiceCommonImpl.class.getName();
 
-   /**
-    * class logger
-    */
-   private static final transient Logger logger
-         = Logger.getLogger(CLASSNAME);
+   /** class logger. */
+   private static final Logger logger = Logger.getLogger(CLASSNAME);
 
    /**
     * Name of a parameter in a few get.. methods.

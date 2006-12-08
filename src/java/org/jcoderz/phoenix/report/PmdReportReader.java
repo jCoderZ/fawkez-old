@@ -62,10 +62,9 @@ public final class PmdReportReader
     public static final String PMD_JAXB_CONTEXT_PATH
             = "org.jcoderz.phoenix.pmd.jaxb";
 
-    private static final transient String CLASSNAME
-            = PmdReportReader.class.getName();
+    private static final String CLASSNAME = PmdReportReader.class.getName();
 
-    private static final transient Logger logger = Logger.getLogger(CLASSNAME);
+    private static final Logger logger = Logger.getLogger(CLASSNAME);
 
     private static final int PRIORITY_HIGH = 1;
     private static final int PRIORITY_MEDIUM_HIGH = 2;

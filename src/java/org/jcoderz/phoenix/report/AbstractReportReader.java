@@ -67,10 +67,8 @@ import org.xml.sax.XMLReader;
 public abstract class AbstractReportReader
         implements ReportReader, ValidationEventHandler
 {
-    private static final transient String CLASSNAME = AbstractReportReader.class
-            .getName();
-
-    private static final transient Logger logger = Logger.getLogger(CLASSNAME);
+    private static final String CLASSNAME = AbstractReportReader.class.getName();
+    private static final Logger logger = Logger.getLogger(CLASSNAME);
 
     private final JAXBContext mJaxbContext;
     private Marshaller mMarshaller = null;
@@ -235,9 +233,9 @@ public abstract class AbstractReportReader
     protected final String normalizeFileName (String filename)
     {
         final String newFilename;
-        if (filename.indexOf("$") != -1)
+        if (filename.indexOf('$') != -1)
         {
-            newFilename = filename.substring(0, filename.indexOf("$"))
+            newFilename = filename.substring(0, filename.indexOf('$'))
                     + ".java";
             logger.fine("Changing resource filename from " + filename + " to "
                     + newFilename);

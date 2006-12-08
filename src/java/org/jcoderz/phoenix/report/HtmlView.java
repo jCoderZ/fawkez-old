@@ -379,13 +379,17 @@ public class HtmlView
          }
 
          commentBuffer.setLength(0);
-         commentBuffer.append("<span class='" + type + "'>");
+         commentBuffer.append("<span class='");
+         commentBuffer.append(type);
+         commentBuffer.append("'>");
          int lastPos = 0;
          int pos = 0;
-         while ((pos = comment.indexOf("\n", lastPos)) != -1)
+         while ((pos = comment.indexOf('\n', lastPos)) != -1)
          {
             commentBuffer.append(comment.substring(lastPos, pos));
-            commentBuffer.append("</span>\n<span class='" + type + "'>");
+            commentBuffer.append("</span>\n<span class='");
+            commentBuffer.append(type);
+            commentBuffer.append("'>");
             lastPos = pos + 1;
          }
          commentBuffer.append(comment.substring(lastPos));

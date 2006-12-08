@@ -71,11 +71,11 @@ public class FsManagedConnectionImpl
       implements ManagedConnection, ConnectionNotificationListener
 {
    /** The full qualified name of this class. */
-   private static final transient String CLASSNAME
-         = FsManagedConnectionImpl.class.getName();
+   private static final String CLASSNAME 
+           = FsManagedConnectionImpl.class.getName();
 
    /** The logger to use. */
-   private static final transient Logger logger = Logger.getLogger(CLASSNAME);
+   private static final Logger logger = Logger.getLogger(CLASSNAME);
    private static final Random RANDOM = new Random();
 
    private final FsManagedConnectionMetaData mMetaData;

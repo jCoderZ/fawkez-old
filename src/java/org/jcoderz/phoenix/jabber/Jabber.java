@@ -66,7 +66,7 @@ public final class Jabber
 
    /**
     * Shortcut to send message directly from the command line.
-    * TODO: Allow different chat server
+    * TODO: Allow different chat server.
     * @param args
     * @throws Exception
     */
@@ -77,8 +77,8 @@ public final class Jabber
    }
 
    /**
-    * Sends the given text message to the GroupChat
-    * @param message the message to send.
+    * Sends the given text message to the GroupChat.
+    * @param msg the message to send.
     * @throws RuntimeException if sending fails (even after retry).
     */
    public static void say (String msg)
@@ -88,6 +88,9 @@ public final class Jabber
 
    private static class JabberConnection
    {
+      private static final JabberConnection INSTANCE = new JabberConnection();
+      private static final int GRACEFUL_PERIOD = 1000;
+      
       private final String mHostname;
       private String mJabberUserName = "cc";
       private String mJabberUserPassword = "cc42";
@@ -100,9 +103,6 @@ public final class Jabber
 
       private XMPPConnection mConnection;
       private GroupChat mGroupChat;
-
-      private static final JabberConnection INSTANCE = new JabberConnection();
-      private static final int GRACEFUL_PERIOD = 1000;
 
       JabberConnection ()
       {

@@ -37,6 +37,7 @@ import java.io.File;
 import javax.xml.transform.Transformer;
 
 import org.apache.tools.ant.BuildException;
+import org.jcoderz.commons.util.Constants;
 
 /**
  * Ant task that generates the configuration initialization files
@@ -85,7 +86,7 @@ public final class ConfigurationInitFileGenerator
     */
    public void setMode (String s)
    {
-      mMode = s.toUpperCase();
+      mMode = s.toUpperCase(Constants.SYSTEM_LOCALE);
    }
 
    /** {@inheritDoc} */

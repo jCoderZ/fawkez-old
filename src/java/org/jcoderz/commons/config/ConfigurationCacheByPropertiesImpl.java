@@ -55,13 +55,13 @@ public final class ConfigurationCacheByPropertiesImpl
    /**
     * Name of this class
     */
-   private static final transient
-      String CLASSNAME = ConfigurationCacheByPropertiesImpl.class.getName();
+   private static final String CLASSNAME 
+           = ConfigurationCacheByPropertiesImpl.class.getName();
 
    /**
     * Logger for this class
     */
-   private static final transient Logger logger = Logger.getLogger(CLASSNAME);
+   private static final Logger logger = Logger.getLogger(CLASSNAME);
 
    /**
     * The resource bundle where the config data is cached.

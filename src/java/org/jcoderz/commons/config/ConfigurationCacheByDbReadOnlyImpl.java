@@ -54,16 +54,12 @@ import org.jcoderz.commons.EntityNotFoundException;
 public final class ConfigurationCacheByDbReadOnlyImpl
       implements ConfigurationCacheInterface
 {
-   /**
-    * Name of this class
-    */
-   private static final transient
-      String CLASSNAME = ConfigurationCacheByDbReadOnlyImpl.class.getName();
+   /** Name of this class. */
+   private static final String CLASSNAME 
+           = ConfigurationCacheByDbReadOnlyImpl.class.getName();
 
-   /**
-    * Logger for this class
-    */
-   private static final transient Logger logger = Logger.getLogger(CLASSNAME);
+   /** Logger for this class. */
+   private static final Logger logger = Logger.getLogger(CLASSNAME);
 
    /** The mutex object to synchronize the config keys map. */
    private static final Object MUTEX_KEYS = new Object();

@@ -48,11 +48,9 @@ public class LogLevelFilter
       extends LogFilterBase
 {
    /** The full qualified name of this class. */
-   private static final transient String CLASSNAME
-         = LogLevelFilter.class.getName();
+   private static final String CLASSNAME = LogLevelFilter.class.getName();
 
-   private static final String LOGLEVEL_PROPERTY_NAME
-         = CLASSNAME + ".level";
+   private static final String LOGLEVEL_PROPERTY_NAME = CLASSNAME + ".level";
 
    private final Level mFilterLevel;
 

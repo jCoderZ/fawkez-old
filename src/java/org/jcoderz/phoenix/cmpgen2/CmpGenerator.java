@@ -51,6 +51,7 @@ import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
 import org.apache.velocity.runtime.RuntimeConstants;
+import org.jcoderz.commons.util.IoUtil;
 import org.jcoderz.phoenix.sqlparser.ColumnSpec;
 import org.jcoderz.phoenix.sqlparser.CreateTableStatement;
 import org.jcoderz.phoenix.sqlparser.SqlParser;
@@ -65,10 +66,9 @@ import org.jcoderz.phoenix.sqlparser.SqlStatement;
 public class CmpGenerator
 {
    /** The full qualified name of this class. */
-   private static final transient String CLASSNAME
-         = CmpGenerator.class.getName();
+   private static final String CLASSNAME = CmpGenerator.class.getName();
    /** The logger to use. */
-   private static final transient Logger logger = Logger.getLogger(CLASSNAME);
+   private static final Logger logger = Logger.getLogger(CLASSNAME);
 
    private static final String ARRAY_MAGIC = "[]";
    private static final int ARRAY_MAGIC_LENGTH = ARRAY_MAGIC.length();
@@ -391,9 +391,14 @@ public class CmpGenerator
                "Output file " + outputFile + " already exists");
       }
       final FileWriter fout = new FileWriter(outputFile);
-      fout.write(data);
-      fout.flush();
-      fout.close();
+      try
+      {
+          fout.write(data);
+      }
+      finally
+      {
+          IoUtil.close(fout);
+      }
       logger.info("Wrote file " + outputFile + " successfully");
    }
 

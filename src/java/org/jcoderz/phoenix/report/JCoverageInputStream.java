@@ -45,10 +45,8 @@ import java.util.logging.Logger;
 public final class JCoverageInputStream 
    extends InputStream
 {
-   private static final transient String CLASSNAME 
-      = JCoverageInputStream.class.getName();
-   private static final transient Logger logger 
-      = Logger.getLogger(CLASSNAME);
+   private static final String CLASSNAME = JCoverageInputStream.class.getName();
+   private static final Logger logger = Logger.getLogger(CLASSNAME);
    
    private InputStream mPatchInputStream;
    

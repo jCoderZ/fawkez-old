@@ -52,7 +52,14 @@ public abstract class LogPrinter
     */
    public void setDisplayOptions (DisplayOptions options)
    {
-      mDisplayOptions = (DisplayOptions) options.clone();
+      try
+      {
+          mDisplayOptions = (DisplayOptions) options.clone();
+      }
+      catch (CloneNotSupportedException e)
+      {
+          throw new RuntimeException("Unexpected exception caught.", e);
+      }
    }
 
    /**

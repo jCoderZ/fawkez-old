@@ -193,13 +193,13 @@ public class HttpClientConnectionImpl
       catch (URIException ue)
       {
          final ArgumentMalformedException ame = new ArgumentMalformedException(
-            "uriAsString", uriAsString, ue.getMessage());
+            "uriAsString", uriAsString, ue.getMessage(), ue);
          throw ame;
       }
       catch (IllegalArgumentException iae)
       {
          final ArgumentMalformedException ame = new ArgumentMalformedException(
-            "uriAsString", uriAsString, iae.getMessage());
+            "uriAsString", uriAsString, iae.getMessage(), iae);
          throw ame;
       }
       mHttpClient = new HttpClient();

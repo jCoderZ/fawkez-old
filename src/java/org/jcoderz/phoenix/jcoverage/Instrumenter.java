@@ -53,11 +53,9 @@ import org.jcoderz.commons.util.JarUtils;
  */
 public final class Instrumenter
 {
-   private static final transient String CLASSNAME
-      = Instrumenter.class.getName();
+   private static final String CLASSNAME = Instrumenter.class.getName();
 
-   private static final transient Logger logger
-      = Logger.getLogger(CLASSNAME);
+   private static final Logger logger = Logger.getLogger(CLASSNAME);
 
    private final ConfigurationParameters mConfig;
 
@@ -131,7 +129,7 @@ public final class Instrumenter
       catch (IndexOutOfBoundsException e)
       {
          throw new IllegalArgumentException("Missing value for " 
-               + args[args.length - 1]);
+               + args[args.length - 1], e);
       }
       
       // FIXME: checkFileExists(result.getArchive());
@@ -158,7 +156,7 @@ public final class Instrumenter
     * Run JCoverage instrumentation on the archive file.
     * @throws IOException in case of an I/O error.
     */
-   public final void instrument () 
+   public void instrument () 
          throws IOException
    {
       instrument(mConfig.getArchive());
@@ -169,7 +167,7 @@ public final class Instrumenter
     * @param f file to instrument.
     * @throws IOException in case of an I/O error.
     */
-   public final void instrument (File f) 
+   public void instrument (File f) 
          throws IOException
    {
       if (isArchive(f))
@@ -280,7 +278,7 @@ public final class Instrumenter
       if (file.isFile())
       {
          final String className = FileUtils.getRelativePath(basePath, file);
-         if (className.endsWith(".class") && className.indexOf("$") == -1
+         if (className.endsWith(".class") && className.indexOf('$') == -1
                && className.matches(".*org.jcoderz.*"))
          {
             //className = className.substring(

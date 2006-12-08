@@ -109,7 +109,7 @@ public final class JDepend
          }
          else if (args[i].startsWith("-h") 
                   || args[i].startsWith("--h") 
-                  || args[i].indexOf("?") != -1)
+                  || args[i].indexOf('?') != -1)
          {
             help();
          }
@@ -254,7 +254,7 @@ public final class JDepend
             findClasses(files[i], newpkg);
          }
          else if (files[i].getName().endsWith(".class") 
-                  && files[i].getName().indexOf("$") == -1)
+                  && files[i].getName().indexOf('$') == -1)
          {
             final String filename = files[i].getName();
             final String clazz = pkg + "." 
@@ -321,8 +321,8 @@ public final class JDepend
 
       PackageDependency (String c, String dc)
       {
-         mPackage = c.substring(0, c.lastIndexOf("."));
-         mDependsPackage = dc.substring(0, dc.lastIndexOf("."));
+         mPackage = c.substring(0, c.lastIndexOf('.'));
+         mDependsPackage = dc.substring(0, dc.lastIndexOf('.'));
       }
       
       public String toString ()

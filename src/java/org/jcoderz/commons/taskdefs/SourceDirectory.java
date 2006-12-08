@@ -46,7 +46,7 @@ public final class SourceDirectory
     * Returns the sourceDir.
     * @return the sourceDir.
     */
-   public final File getDir ()
+   public File getDir ()
    {
       return mSourceDir;
    }
@@ -55,7 +55,7 @@ public final class SourceDirectory
     * Sets the sourceDir to given <code>sourceDir</code>.
     * @param sourceDir The sourceDir to set.
     */
-   public final void setDir (File sourceDir)
+   public void setDir (File sourceDir)
    {
       mSourceDir = sourceDir;
    }

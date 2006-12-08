@@ -66,11 +66,9 @@ public final class SslSocketFactory
       implements SecureProtocolSocketFactory
 {
    /** The class name used for logging */
-   private static final String
-         CLASSNAME = SslSocketFactory.class.getName();
+   private static final String CLASSNAME = SslSocketFactory.class.getName();
    /** The logger in use */
-   private static final transient Logger
-         logger = Logger.getLogger(CLASSNAME);
+   private static final Logger logger = Logger.getLogger(CLASSNAME);
 
    /** Cache for SSLSocketFactories */
    private static final ThreadLocal SSL_SOCKET_FACTORIES = new ThreadLocal();

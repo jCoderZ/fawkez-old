@@ -55,11 +55,9 @@ public final class JcoderzReport
        = "org.jcoderz.phoenix.report.jaxb";
 
     
-    private static final transient String CLASSNAME
-      = JcoderzReport.class.getName();
+    private static final String CLASSNAME = JcoderzReport.class.getName();
 
-    private static final transient Logger logger
-      = Logger.getLogger(CLASSNAME);
+    private static final Logger logger = Logger.getLogger(CLASSNAME);
 
     private final Report mReport = new ObjectFactory().createReport();
 

@@ -62,6 +62,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.naming.Context;
 import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.sql.DataSource;
 
 import org.jcoderz.commons.util.Constants;
@@ -77,6 +78,7 @@ import org.jcoderz.commons.util.XmlUtil;
  */
 public class DbView
 {
+   /** Default database jndi name. */ 
    public static final String DATASOURCE = "java:comp/env/jdbc/svs/db";
 
    /** Line separator to be used in output files. */
@@ -201,19 +203,19 @@ public class DbView
       {
          for (int i = 0; i < args.length; )
          {
-            if (args[i].equals("-sql"))
+            if ("-sql".equals(args[i]))
             {
                mSqlStatement = args[++i];
             }
-            else if (args[i].equals("-dbUrl"))
+            else if ("-dbUrl".equals(args[i]))
             {
                mDbUrl = args[++i];
             }
-            else if (args[i].equals("-dbUser"))
+            else if ("-dbUser".equals(args[i]))
             {
                mDbUser = args[++i];
             }
-            else if (args[i].equals("-dbPasswd"))
+            else if ("-dbPasswd".equals(args[i]))
             {
                mDbPasswd = args[++i];
             }
@@ -225,19 +227,19 @@ public class DbView
                final String toDisplay = args[++i];
                addTypeMapping(rowname, classname, fromDbType, toDisplay);
             }
-            else if (args[i].equals("-outDir"))
+            else if ("-outDir".equals(args[i]))
             {
                mOutputDir = new File(args[++i]);
             }
-            else if (args[i].equals("-outFile"))
+            else if ("-outFile".equals(args[i]))
             {
                mOutputFile = new File(args[++i]);
             }
-            else if (args[i].equals("-dbDriver"))
+            else if ("-dbDriver".equals(args[i]))
             {
                mDbDriver = args[++i];
             }
-            else if (args[i].equals("-loglevel"))
+            else if ("-loglevel".equals(args[i]))
             {
                mLogLevel = Level.parse(args[i + 1]);
                Logger.getLogger("").setLevel(mLogLevel);
@@ -352,13 +354,12 @@ public class DbView
       }
    }
 
-   private Connection getConnectionFromDataSource ()
-         throws Exception
+   private Connection getConnectionFromDataSource () 
+       throws NamingException, SQLException
    {
       final Context ctx = new InitialContext();
       final DataSource ds = (DataSource) ctx.lookup(DATASOURCE);
-      final Connection con = ds.getConnection();
-      return con;
+      return ds.getConnection();
    }
 
    private Connection getConnectionFromDbUrl ()

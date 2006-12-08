@@ -634,11 +634,10 @@ public final class Java2Html
       {
          final FindingsSummary.FindingSummary summary
               = (FindingsSummary.FindingSummary) i.next();
-         BufferedWriter out = null;
+         final String filename = summary.createFindingDetailFilename();
+         final BufferedWriter out = openWriter(filename);
          try
          {
-             final String filename = summary.createFindingDetailFilename();
-             out = openWriter(filename);
              htmlHeader(out, "Finding-" + summary.getFindingType().getSymbol()
                       + "-report " + mProjectName, "");
              summary.createFindingTypeContent(out);
@@ -653,10 +652,9 @@ public final class Java2Html
 
    private void createFindingsSummary () throws IOException
    {
-      BufferedWriter out = null;
+      final BufferedWriter out = openWriter("findings.html");
       try
       {
-          out = openWriter("findings.html");
           htmlHeader(out, "Finding report " + mProjectName, "");
           FindingsSummary.createOverallContent(out);
           out.write("</body></html>");
@@ -1236,10 +1234,9 @@ public final class Java2Html
       final java.io.File dir = new java.io.File(mOutDir, subdir);
       dir.mkdirs();
 
-      BufferedWriter bw = null;
+      final BufferedWriter bw = openWriter(dir, filename);;
       try
       {
-          bw = openWriter(dir, filename);
           htmlHeader(bw, packageName, packageName);
           bw.write("<h1><a href='" + relativeRoot(packageName, filename)
              + "'>Project-Report "

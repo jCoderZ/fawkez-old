@@ -705,11 +705,14 @@ public final class Java2Html
 
          htmlHeader(bw, mClassname, mPackage);
 
-         bw.write("<h1><a href='" + relativeRoot(mPackage)
-               + "'>Project Report: "
-               + mProjectName + "</a></h1>" + NEWLINE);
-         bw.write("<h2><a href ='index.html'>Packagesummary "
-               + mPackage + "</a></h2>" + NEWLINE);
+         bw.write("<h1><a href='");
+         bw.write(relativeRoot(mPackage));
+         bw.write("'>Project Report: ");
+         bw.write(mProjectName);
+         bw.write("</a></h1>" + NEWLINE);
+         bw.write("<h2><a href ='index.html'>Packagesummary ");
+         bw.write(mPackage);
+         bw.write("</a></h2>" + NEWLINE);
 
          final String cvsLink = getCvsLink(inFile.getAbsolutePath());
          if (cvsLink != null)
@@ -1234,7 +1237,7 @@ public final class Java2Html
       final java.io.File dir = new java.io.File(mOutDir, subdir);
       dir.mkdirs();
 
-      final BufferedWriter bw = openWriter(dir, filename);;
+      final BufferedWriter bw = openWriter(dir, filename);
       try
       {
           htmlHeader(bw, packageName, packageName);
@@ -1263,7 +1266,7 @@ public final class Java2Html
          throws IOException
    {
       final String filename = fileNameForOrder(order);
-      final BufferedWriter bw = openWriter(filename);;
+      final BufferedWriter bw = openWriter(filename);
       try
       {
           htmlHeader(bw, "Project Report " + mProjectName, "");
@@ -1457,10 +1460,11 @@ public final class Java2Html
    private void htmlHeader (BufferedWriter bw, String title, String packageName)
         throws IOException
    {
-      bw.write("<?xml version='1.0' encoding='UTF-8'?>" + NEWLINE
-         + "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" "
+       bw.write("<?xml version='1.0' encoding='UTF-8'?>" + NEWLINE
+         + "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" "
          + NEWLINE
-         + "\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">" + NEWLINE
+         + "\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">" 
+         + NEWLINE
          + "<html xmlns='http://www.w3.org/1999/xhtml' xml:lang='en'"
          + " lang='en'>" + NEWLINE
          + "<head>" + NEWLINE
@@ -1735,7 +1739,7 @@ public final class Java2Html
         bw.write(NEWLINE);
     }
 
-   private String fileNameForOrder (Comparator order)
+   private static String fileNameForOrder (Comparator order)
    {
       String filename;
       if (order instanceof FileSummary.SortByPackage)

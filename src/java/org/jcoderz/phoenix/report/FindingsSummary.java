@@ -36,6 +36,7 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -52,8 +53,9 @@ import org.jcoderz.phoenix.report.jaxb.Item;
  *
  * @author Andreas Mandel
  */
-public final class FindingsSummary
+final class FindingsSummary
 {
+   /** Singleton type findings collector. */
    private static FindingsSummary sFindingsSummary = new FindingsSummary();
 
    private final Map mFindings = new HashMap();
@@ -73,6 +75,31 @@ public final class FindingsSummary
       return sFindingsSummary;
    }
 
+   /**
+    * Generates a key unique for kind of the given finding.
+    * @param finding item where to generate the key for.
+    * @return a key unique for kind of the given finding.
+    */
+    public static String getKeyForFinding (Item finding)
+    {
+        return finding.getFindingType() + "_"
+                  + finding.getSeverity().toString();
+    }
+
+    /**
+     * Generates a key unique for kind of the given finding type and 
+     *          severity.
+     * @param findingType the type to generate the key for.
+     * @param severity the severity to generate the key for.
+     * @return a key unique for kind of the given finding type and
+     *          severity.
+     */
+     public static String getKeyForFinding (FindingType findingType,
+             Severity severity)
+     {
+         return findingType.getSymbol() + "_" + severity.toString();
+     }
+    
    /**
     * Adds the finding to the findings data structure.
     * All references and counters are updated.
@@ -96,16 +123,22 @@ public final class FindingsSummary
    public FindingSummary getFindingSummary (FindingType findingType,
          Severity severity)
    {
-      final FindingSummary result
-         = (FindingSummary) mFindings.get(
-               findingType.getSymbol() + "_" + severity.toString());
-      return result;
+       return (FindingSummary) mFindings.get(
+               getKeyForFinding(findingType, severity));
    }
 
+   /**
+    * Returns the FindingSummary appropriate to hold findings of the 
+    * type of the given Item.
+    * If no such summary capsule exists yet, a new one is generated and 
+    * returned.
+    * @param item the item where to return a summary for.
+    * @return the FindingSummary appropriate to hold findings of the 
+    *     type of the given Item.
+    */
    public FindingSummary getFindingSummary (Item item)
    {
-      final String key
-         = item.getFindingType() + "_" + item.getSeverity().toString();
+      final String key = getKeyForFinding(item);
       // cast to make sure we get an exception once item.getFindingType
       // returns a real FindingType
       FindingSummary result = (FindingSummary) mFindings.get(key);
@@ -117,22 +150,39 @@ public final class FindingsSummary
       return result;
    }
 
-   public Map getFindings ()
+   /**
+    * Returns the map mapping from the type/severity string to stored
+    * FindingSummary objects.
+    * The returned map is immutable. Stored objects MUST not be 
+    * modified. 
+    * @return the map mapping from the type/severity string to stored
+    * FindingSummary objects.
+    */
+   Map getFindings ()
    {
       return Collections.unmodifiableMap(mFindings);
    }
 
+   /** {@inheritDoc} */
    public String toString ()
    {
       return "[FindingsSummary: " + mFindings + "(" + mOverallCounter + ")]";
    }
 
-
-      public static void createOverallContent (Writer out) throws IOException
-      {
-         final FindingSummary[] allFindings 
-                 = (FindingSummary[]) getFindingsSummary().getFindings()
-                     .values().toArray(new FindingSummary[0]);
+    /**
+     * Generates a page that lists all findings, that links to the 
+     * detailed finding pages. The content is ordered by severity and
+     * number of occurrences.
+     * @param out the writer where to write the html data to.
+     * @throws IOException if the data can not be written.
+     */
+    static void createOverallContent (Writer out) throws IOException
+    {
+        final Collection colAllFindings 
+                = getFindingsSummary().getFindings().values(); 
+        final FindingSummary[] allFindings 
+                = (FindingSummary[]) colAllFindings.toArray(
+                        new FindingSummary[colAllFindings.size()]);
 
          out.write("<h1><a href='index.html'>View by Classes</a></h1>");
          out.write("<h1>Findings - Overview</h1>");
@@ -162,7 +212,7 @@ public final class FindingsSummary
             out.write("<tr class='" + currentSeverity
                   + Java2Html.toOddEvenString(row) + "'>");
             out.write("<td class='finding-counter'>");
-            out.write("" + summary.getCounter());
+            out.write(String.valueOf(summary.getCounter()));
             out.write("</td>");
             out.write("<td class='finding-origin'>");
             out.write(summary.getOrigin().toString());
@@ -194,7 +244,7 @@ public final class FindingsSummary
     * Holds all findings of a specific type.
     * @author Andreas Mandel
     */
-   public final class FindingSummary implements Comparable
+   final class FindingSummary implements Comparable
    {
       private final Map mOccurrences = new HashMap();
       private final Severity mSeverity;
@@ -204,11 +254,15 @@ public final class FindingsSummary
       private final String mFindingMessage;
       private final FindingType mFindingType;
 
+      /**
+       * Creates a new FindingSummary to collect findings similiar
+       * to the given finding.
+       * @param finding the reference Item for the types of findings 
+       *     collected in this summary. 
+       */
       public FindingSummary (Item finding)
       {
-         final String key
-               = finding.getFindingType() + "_"
-                  + finding.getSeverity().toString();
+         final String key = getKeyForFinding(finding);
          mFindingType = FindingType.fromString(finding.getFindingType());
          mSeverity = finding.getSeverity();
          mOrigin = finding.getOrigin();
@@ -225,7 +279,7 @@ public final class FindingsSummary
       }
 
       /**
-       * @return Returns the counter.
+       * @return Returns the origin of the findings.
        */
       public Origin getOrigin ()
       {
@@ -302,6 +356,7 @@ public final class FindingsSummary
          getOccurrence(summary).addFinding(finding);
       }
 
+      /** {@inheritDoc} */
       public String toString ()
       {
          return "[" + mFindingType + "(" + mSeverity
@@ -311,11 +366,11 @@ public final class FindingsSummary
 
 
       /**
+       * {@inheritDoc}
        * Be aware that the order (result of {@link #compareTo} can change
        * if new findings are added.
        * The order is from severe with most findings to info with
        * fewer findings.
-       * @see java.lang.Comparable#compareTo(java.lang.Object)
        */
       public int compareTo (Object o)
       {
@@ -383,16 +438,15 @@ public final class FindingsSummary
          {
             out.write("<a href='" + getWikiPrefix()
                   + getFindingType().getSymbol()
-                  + "'>Further info on the wiki.</a>");
+                  + "'>Further info on the wiki.</a>\n");
          }
 
-         out.write("<p>");
+         out.write("<blockquote>\n");
          out.write(getFindingType().getDescription());
-         out.write("</p>");
+         out.write("</blockquote>\n");
 
          final Iterator i = Arrays.asList(allFindings).iterator();
 
-         out.write("<p />");
          out.write("<table border='0' cellpadding='0' cellspacing='0' " 
                  + "width='95%' summary='Places of this finding.'>");
 
@@ -465,10 +519,10 @@ public final class FindingsSummary
        *
        * @author Andreas Mandel
        */
-      public final class FindingOccurrence implements Comparable
+      final class FindingOccurrence implements Comparable
       {
-         final FileSummary mFileSummary;
-         final List mFindingsInFile = new ArrayList();
+         private final FileSummary mFileSummary;
+         private final List mFindingsInFile = new ArrayList();
 
          private FindingOccurrence (FileSummary summary)
          {
@@ -519,6 +573,7 @@ public final class FindingsSummary
             return mFindingsInFile.size();
          }
 
+         /** {@inheritDoc} */
          public String toString ()
          {
             return "[" + getClassname() + ": " + findingsToString()
@@ -546,11 +601,11 @@ public final class FindingsSummary
             return sb.toString();
          }
 
-         /**
+         /** 
+          * {@inheritDoc}
           * Be aware that the order (result of {@link #compareTo} can change
           * if new findings are added.
           * The order is from most findings to fewer findings.
-          * @see java.lang.Comparable#compareTo(java.lang.Object)
           */
          public int compareTo (Object o)
          {

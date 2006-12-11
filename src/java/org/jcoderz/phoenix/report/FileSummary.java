@@ -513,7 +513,7 @@ public final class FileSummary
          sb.append(notCovered);
          sb.append("%\" height=\"10\"></td></tr>");
       }
-      sb.append("</table>");
+      sb.append("</tr></table>");
       return sb.toString();
    }
 

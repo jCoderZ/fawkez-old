@@ -234,16 +234,16 @@ a.cvs:active { color:#0000EE; background-color:#FFFF99; font-weight:bold; }
 
 /* unassigned findings */
 
-.unassigned-filename { font-family:courier; }
+.unassigned-filename { font-family:courier,monospace; }
 .unassigned-data { padding:2px; padding-left:10px; font-family:arial,helvetica,sans-serif; font-size:10pt; color:#000000; }
 
 /* findingtype details */
 .findingtype-counter { padding:5px;padding-top:20px;font-weight:bold; text-align:right; }
-.findingtype-class { padding:5px;padding-top:20px;font-weight:bold; text-align:left; font-family:courier; font-size:12pt;}
+.findingtype-class { padding:5px;padding-top:20px;font-weight:bold; text-align:left; font-family:courier,monospace; font-size:12pt;}
 .findingtype-data { line-height: 122%;background-color:#e0e0e0;padding:2px; padding-left:50px; font-family:arial,helvetica,sans-serif; font-size:10pt; color:#000000; }
 
 /* findings overview */
-.findingheader {padding:10px; padding-top:15px; font-family: verdana, arial, sans-serif;font-size: 12pt;font-style: bold;color: #990099;}
+.findingheader {padding:10px; padding-top:15px; font-family: verdana, arial, sans-serif; font-size: 12pt; font-weight: bold; color: #990099;}
 .finding-counter { text-align:right; }
 .finding-origin { padding:2px; padding-left:10px; padding-right:10px;}
 .finding-data { padding-left:10px;}
@@ -252,7 +252,7 @@ a.cvs:active { color:#0000EE; background-color:#FFFF99; font-weight:bold; }
 font-family: verdana, arial, sans-serif;
 font-size: 14pt;
 line-height: 100%;
-font-style: bold;
+font-weight: bold;
 letter-spacing:3pt;
 word-spacing:6pt;
 padding:10px; padding-top:20px; 
@@ -265,7 +265,7 @@ padding:10px; padding-top:20px;
 .findings-evenrow { background-color:#e6e6fa }
 .findings-image { text-align:center; padding-left:3px;}
 .findings-id { padding-bottom:3px; padding-top:3px; padding-left:10px; padding-right:10px; font-family:arial,helvetica,sans-serif; font-size:10pt; color:#000000; }
-.findings-line-number { font-family:courier; font-size:10pt; color:#000000; }
+.findings-line-number { font-family:courier,monospace; font-size:10pt; color:#000000; }
 .findings-data { padding-left:10px; font-family:arial,helvetica,sans-serif; font-size:10pt; color:#000000; }
 /* used for the numbers linking to the hints.*/
 .checkstylenote { color:#0000EE; background-color:#FFFF99; font-size:7pt; }

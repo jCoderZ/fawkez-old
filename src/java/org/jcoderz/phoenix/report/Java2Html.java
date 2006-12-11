@@ -1369,7 +1369,7 @@ public final class Java2Html
              final boolean isLast = !i.hasNext();
              appendPackageLink(bw, pkg, filename, pos, isLast);
           }
-          bw.write("</tbody></table>");
+          bw.write("</tbody></table>\n");
     
           // findings with no line number...
           createUnassignedFindingsTable(bw);
@@ -1388,32 +1388,37 @@ public final class Java2Html
     private void createUnassignedFindingsTable (final BufferedWriter bw)
         throws IOException
     {
-        if (!mGlobalFindings.isEmpty())
+        boolean tableOpened = false;
+        final Iterator i = mGlobalFindings.iterator();
+        int row = 0;
+        while (i.hasNext())
         {
-            bw.write("<h1>Unassigned findings</h1>");
-            bw.write("<table border='0' cellpadding='0' cellspacing='0'"
-                    + " width='95%'>");
-            final Iterator i = mGlobalFindings.iterator();
-            int row = 0;
-            while (i.hasNext())
-            {
-                final org.jcoderz.phoenix.report.jaxb.File file 
-                    = (org.jcoderz.phoenix.report.jaxb.File) i.next();
-                final Iterator j = file.getItem().iterator();
-                while (j.hasNext())
-                 {
-                    row++;
-                    final Item item = (Item) j.next();
-                    bw.write("<tr class='");
-                    bw.write(item.getSeverity().toString());
-                    bw.write(Java2Html.toOddEvenString(row));
-                    bw.write("'><td class='unassigned-filename'>");
-                    bw.write(cutPath(file.getName()));
-                    bw.write("</td><td class='unassigned-data' width='100%'>");
-                    bw.write(item.getMessage());
-                    bw.write("</td></tr>");
-                 }
+            final org.jcoderz.phoenix.report.jaxb.File file 
+                = (org.jcoderz.phoenix.report.jaxb.File) i.next();
+            final Iterator j = file.getItem().iterator();
+            while (j.hasNext())
+             {
+                row++;
+                final Item item = (Item) j.next();
+                if (!tableOpened)
+                {
+                    bw.write("<h1>Unassigned findings</h1>");
+                    bw.write("<table border='0' cellpadding='0' " 
+                        + "cellspacing='0' width='95%'>");
+                    tableOpened = true;
+                }
+                bw.write("<tr class='");
+                bw.write(item.getSeverity().toString());
+                bw.write(Java2Html.toOddEvenString(row));
+                bw.write("'><td class='unassigned-filename'>");
+                bw.write(cutPath(file.getName()));
+                bw.write("</td><td class='unassigned-data' width='100%'>");
+                bw.write(item.getMessage());
+                bw.write("</td></tr>");
              }
+         }
+        if (tableOpened)
+        {
             bw.write("</table>");
         }
     }

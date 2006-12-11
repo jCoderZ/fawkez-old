@@ -499,7 +499,7 @@ public class JcSummaryReportAntTask
       final int loc = Integer.parseInt(strtok.nextToken());
       final int codeloc = Integer.parseInt(strtok.nextToken());
       final double quality = Double.parseDouble(strtok.nextToken());
-      final File summaryFile = new File(baseDir, "" + timestamp
+      final File summaryFile = new File(baseDir, String.valueOf(timestamp)
             + File.separator + "summary.xml");
       if (summaryFile.exists() && summaryFile.isFile())
       {
@@ -957,14 +957,14 @@ public class JcSummaryReportAntTask
    
    private String extractDay (long timestamp)
    {
-      final String ts = "" + timestamp;
+      final String ts = String.valueOf(timestamp);
       return ts.substring(YEAR_LEN + MONTH_LEN, YEAR_LEN + MONTH_LEN + DAY_LEN);
    }
 
 
    private String extractTime (long timestamp)
    {
-      final String ts = "" + timestamp;
+      final String ts = String.valueOf(timestamp);
       final int start_pos = YEAR_LEN + MONTH_LEN + DAY_LEN;
       return ts.substring(start_pos, start_pos + HOUR_LEN) + ":"
             + ts.substring(start_pos + HOUR_LEN, start_pos + HOUR_LEN

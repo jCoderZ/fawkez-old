@@ -59,10 +59,6 @@ public class TemplateDescr
    private final List mParameterList = new ArrayList();
    private final Map mFiles = new HashMap();
 
-   public TemplateDescr ()
-   {
-   }
-
    public String getDescription ()
    {
       return mDescription;
@@ -102,7 +98,7 @@ public class TemplateDescr
          {
             try
             {
-               if (qName.equals("parameter"))
+               if ("parameter".equals(qName))
                {
                   final String name = attributes.getValue("name");
                   final int minLength
@@ -114,12 +110,12 @@ public class TemplateDescr
                         .booleanValue();
                   mParam = new Parameter(name, minLength, maxLength, multiLine);
                }
-               else if (qName.equals("description"))
+               else if ("description".equals(qName))
                {
                   mCharBuffer.setLength(0);
                }
-               else if (qName.equals("default")
-                     || qName.equals("regexp"))
+               else if ("default".equals(qName)
+                     || "regexp".equals(qName))
                {
                   if (mParam == null)
                   {
@@ -129,17 +125,12 @@ public class TemplateDescr
                   }
                   mCharBuffer.setLength(0);
                }
-               else if (qName.equals("file"))
+               else if ("file".equals(qName))
                {
                   final String source = attributes.getValue("source");
                   final String target = attributes.getValue("target");
                   mFiles.put(source, target);
                }
-            }
-            catch (NumberFormatException e)
-            {
-               e.printStackTrace();
-               throw e;
             }
             catch (SAXException e)
             {
@@ -227,7 +218,8 @@ public class TemplateDescr
       sbuf.append("[ParameterDescription");
       sbuf.append("\n   description=").append(mDescription);
       sbuf.append("\n   files=").append(mFiles.toString());
-      sbuf.append("\n   parameters=").append(mParameterMap.toString());
+      sbuf.append("\n   parameters=");
+      sbuf.append(mParameterMap.toString());
       sbuf.append(']');
       return sbuf.toString();
    }

@@ -1015,7 +1015,7 @@ public class JcReportAntTask
          cmd.createArgument().setFile(srcDir);
 
          cmd.createArgument().setValue("--minimum-tokens");
-         cmd.createArgument().setValue("" + mMinimumtokens);
+         cmd.createArgument().setValue(String.valueOf(mMinimumtokens));
 
          final File outFile = new File(reportDir, "cpd.xml");
          FileOutputStream fos = null;

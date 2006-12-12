@@ -745,7 +745,7 @@ public class XmlDoclet
       {
          label = "";
       }
-      XmlUtil.escape(label);
+      mOut.write(XmlUtil.escape(label));
       mOut.write("</see>");
    }
 
@@ -863,7 +863,7 @@ public class XmlDoclet
          mOut.write(" ");
          mOut.write(name);
          mOut.write("='");
-         XmlUtil.attributeEscape(value);
+         mOut.write(XmlUtil.attributeEscape(value));
          mOut.write("'");
       }
    }

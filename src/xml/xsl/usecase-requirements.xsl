@@ -146,11 +146,72 @@
   </section>
 </xsl:template>
 
-   <xsl:template match="req:entity">
-      <itemizedlist>
-         <title>referenced entities</title>
-         <xsl:apply-templates select="req:attribute[req:objectreference]"/>
-      </itemizedlist>
+   <xsl:template match="req:entity">      
+      <table frame="all">
+         <title>entity summary</title>
+         <tgroup cols='5' align='left' colsep='1' rowsep='1'>
+            <colspec colname="c1"/>
+            <colspec colname="c2"/>
+            <colspec colname="c3"/>
+            <colspec colname="c4"/>
+            <colspec colname="c5"/>
+            <spanspec spanname="hspan" namest="c2" nameend="c5" align="left"/>
+            <spanspec spanname="hspan2" namest="c1" nameend="c5" align="center"/>
+            <tbody>
+               <row>
+                  <entry spanname="hspan2">
+                     <emphasis role="bold"><xsl:value-of select="req:name"/></emphasis>
+                  </entry>
+               </row>
+               <row>
+                  <entry>
+                     <emphasis role="bold">Constraints</emphasis>
+                  </entry>
+                  <entry spanname="hspan">
+                     <xsl:value-of select="req:constraints"/>
+                  </entry>
+               </row>
+               <row>
+                  <entry>
+                     <emphasis role="bold">Attribute</emphasis>
+                  </entry>
+                  <entry>
+                     <emphasis role="bold">Reference To</emphasis>
+                  </entry>
+                  <entry>
+                     <emphasis role="bold">Relation</emphasis>
+                  </entry>
+                  <entry>
+                     <emphasis role="bold">Constraints</emphasis>
+                  </entry>
+                  <entry>
+                     <emphasis role="bold">Pattern</emphasis>
+                  </entry>
+               </row>
+               <xsl:for-each select="req:attribute">
+                  <row>
+                     <entry>
+                        <xsl:value-of select="req:name"/>
+                     </entry>
+                     <entry>
+                        <xsl:apply-templates select="req:objectreference"/>
+                     </entry>
+                     <entry>
+                        <xsl:if test="req:objectreference">
+                           <xsl:value-of select="req:objectreference/req:linkstart"/><xsl:text> : </xsl:text><xsl:value-of select="req:objectreference/req:linkend"/>
+                        </xsl:if>
+                     </entry>
+                     <entry>
+                        <xsl:value-of select="req:constraints"/>
+                     </entry>
+                     <entry>
+                        <xsl:value-of select="req:pattern"/>
+                     </entry>
+                  </row>
+               </xsl:for-each>
+           </tbody>
+         </tgroup>
+      </table>
       
       <xsl:variable name="f" select="concat('images/', ../req:key)"/>
       <mediaobject  id="{concat('diagram-', ../req:key)}">

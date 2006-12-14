@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-            xmlns:docbook="http://docbook.org/ns/docbook"
-            xmlns:req="req"
-            targetNamespace="req">
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:docbook="http://docbook.org/ns/docbook" xmlns:req="req" targetNamespace="req">
    <xsd:import schemaLocation="http://www.docbook.org/xsd/4.2/docbook.xsd"/>
 
-   <xsd:simpleType name='requirementPriority'>
-      <xsd:restriction base='xsd:string'>
-         <xsd:pattern value='High|Medium|Low'/>
+   <xsd:simpleType name="requirementPriority">
+      <xsd:restriction base="xsd:string">
+         <xsd:pattern value="High|Medium|Low"/>
       </xsd:restriction>
    </xsd:simpleType>
    
@@ -78,6 +75,8 @@
             <xsd:element ref="req:alternative_name" minOccurs="0" maxOccurs="1"/>
             <xsd:element ref="req:pattern" minOccurs="1" maxOccurs="1"/>
             <xsd:element ref="req:objectreference" minOccurs="0" maxOccurs="1"/>
+            <xsd:element ref="req:constraints" minOccurs="0" maxOccurs="1"/>
+            <xsd:element ref="req:description" minOccurs="0" maxOccurs="1"/>
          </xsd:sequence>
       </xsd:complexType>
    </xsd:element>

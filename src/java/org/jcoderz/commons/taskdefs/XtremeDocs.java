@@ -68,6 +68,7 @@ public class XtremeDocs
    private static final String APIDOC_DIR = "apidoc";
    private static final String DEFAULT_COMPANY_NAME = "jCoderZ.org";
    private static final String DEFAULT_COMPANY_LOGO = "jcoderz-org";
+   private static final boolean DEFAULT_VALIDATION_ONLY_FLAG = false;
    
    /** The output directory. */
    private File mOutDir;
@@ -92,6 +93,8 @@ public class XtremeDocs
    private String mCompanyName = DEFAULT_COMPANY_NAME;
    /** company logo without suffix */
    private String mCompanyLogo = DEFAULT_COMPANY_LOGO;
+   /** flag for execution of validation tasks only */
+   private boolean mValidationOnly = DEFAULT_VALIDATION_ONLY_FLAG;
 
    void setXdocTransformerParams (Transformer transformer)
    {
@@ -155,16 +158,25 @@ public class XtremeDocs
     * Set the name of the company or organisation.
     * @param companyName The mCompanyName to set.
     */
-   public void setCompanyName (String companyName)
+   public void setCompanyName(String companyName)
    {
       mCompanyName = companyName;
+   }
+   
+   /**
+    * Set the flag, wether only validation should be executed or not.
+    * @param validationOnly The mValidationOnly to set.
+    */
+   public void setValidationOnly(boolean validationOnly)
+   {
+      mValidationOnly = validationOnly;
    }
 
    /**
     * Set the name of the company logo without suffix.
     * @param companyLogo The mCompanyLogo to set.
     */
-   public void setCompanyLogo (String companyLogo)
+   public void setCompanyLogo(String companyLogo)
    {
       mCompanyLogo = companyLogo;
    }
@@ -263,14 +275,21 @@ public class XtremeDocs
          }
          else if ("UseCase".equals(mType))
          {
-            generateUseCaseDiagrams(filePassOne, imageDir);
+            if (!mValidationOnly)
+            {
+               generateUseCaseDiagrams(filePassOne, imageDir);
+            }
          }
          else
          {
             throw new RuntimeException("Unsupported type " + mType);
          }
-         rasterizeSvgFiles(imageDir); // 4 HTML
-         scaleSvgImages(imageDir); // 4 PDF
+         
+         if (!mValidationOnly)
+         {
+            rasterizeSvgFiles(imageDir); // 4 HTML
+            scaleSvgImages(imageDir); // 4 PDF
+         }
 
          final File docBookFile = transformPassTwo(filePassOne);
          renderDocBook(docBookFile);
@@ -531,12 +550,12 @@ public class XtremeDocs
 
    private static final class Rasterizer
    {
-      private Rasterizer ()
+      private Rasterizer()
       {
          // utility class -- provides only static methods
       }
 
-      public static void rasterize (File in, File out)
+      public static void rasterize(File in, File out)
             throws TranscoderException, IOException
       {
          final OutputStream ostream = new FileOutputStream(out);

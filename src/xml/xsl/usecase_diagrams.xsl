@@ -70,13 +70,25 @@ digraph G {
           <xsl:apply-templates select="//req:entity[../req:category/req:secondary = $sec_cat]" mode="complete"/>       
        </xsl:if>
     </xsl:for-each>
+    <xsl:call-template name="check_duplicate_references"/>
+    
 }
        </redirect:write>
    </xsl:template>
    
+   <xsl:template name="check_duplicate_references">
+      <xsl:for-each select="//req:objectreference">
+         <xsl:variable name="dm_root_id" select="../../../req:key"/>
+         <xsl:variable name="link_to"  select="req:ref/@id"/>
+         <xsl:if test="//req:objectreference[not(../../../req:key = $dm_root_id) and req:ref/@id = $dm_root_id and ../../../req:key = $link_to]">
+            <xsl:comment>WARNING: entities <xsl:value-of select="$dm_root_id"/> and <xsl:value-of select="$link_to"/> are referencing to each other</xsl:comment>
+         </xsl:if>
+      </xsl:for-each>
+   </xsl:template>
+   
    <xsl:template match="req:entity" mode="complete">
        "<xsl:value-of select="../req:key"/>" [
-                label = "{<xsl:value-of select="req:name"/>|<xsl:apply-templates select="req:attribute[not(req:objectreference)]"/>|}"
+                label = "{<xsl:value-of select="req:name"/>|<xsl:apply-templates select="req:attribute[not(req:objectreference)]"/>|<xsl:apply-templates select="req:attribute[req:objectreference]"/>}"
         ]
         
       <xsl:for-each select="req:attribute[req:objectreference]">
@@ -86,14 +98,12 @@ digraph G {
          <xsl:if test="//req:requirement[req:key = $dm_id]/req:entity">
             <!-- xsl:apply-templates select="//req:requirement[req:key = $dm_id]/req:entity"/-->
             
-            edge [
-                   arrowhead = "none"
-   
-                   headlabel = "<xsl:value-of select="req:objectreference/req:linkend"/>"
-                   taillabel = "<xsl:value-of select="req:objectreference/req:linkstart"/>"
-           ]
-           
-           "<xsl:value-of select="../../req:key"/>" -&gt; "<xsl:value-of select="$dm_id"/>";  
+           <xsl:call-template name="create_edge">
+              <xsl:with-param name="link_from"  select="../../req:key"/>
+              <xsl:with-param name="link_to"    select="$dm_id"/>
+              <xsl:with-param name="link_end"   select="req:objectreference/req:linkend"/>
+              <xsl:with-param name="link_start" select="req:objectreference/req:linkstart"/>
+           </xsl:call-template>
         </xsl:if>
         
       </xsl:for-each>
@@ -123,7 +133,7 @@ digraph G {
    
    <xsl:template match="req:entity" mode="dm_category">
        "<xsl:value-of select="../req:key"/>" [
-                label = "{<xsl:value-of select="req:name"/>|<xsl:apply-templates select="req:attribute[not(req:objectreference)]"/>|}"
+                label = "{<xsl:value-of select="req:name"/>|<xsl:apply-templates select="req:attribute[not(req:objectreference)]"/>|<xsl:apply-templates select="req:attribute[req:objectreference]"/>}"
         ]
         
       <xsl:for-each select="req:attribute[req:objectreference]">
@@ -132,15 +142,13 @@ digraph G {
          <!-- only show entities, if referenced entity is within documents scope (referenced in root file) -->
          <xsl:if test="//req:requirement[req:key = $dm_id]/req:entity">
             <xsl:apply-templates select="//req:requirement[req:key = $dm_id]/req:entity"/>
-            
-            edge [
-                   arrowhead = "none"
-   
-                   headlabel = "<xsl:value-of select="req:objectreference/req:linkend"/>"
-                   taillabel = "<xsl:value-of select="req:objectreference/req:linkstart"/>"
-           ]
-           
-           "<xsl:value-of select="../../req:key"/>" -&gt; "<xsl:value-of select="$dm_id"/>";  
+
+           <xsl:call-template name="create_edge">
+              <xsl:with-param name="link_from"  select="../../req:key"/>
+              <xsl:with-param name="link_to"    select="$dm_id"/>
+              <xsl:with-param name="link_end"   select="req:objectreference/req:linkend"/>
+              <xsl:with-param name="link_start" select="req:objectreference/req:linkstart"/>
+           </xsl:call-template>
         </xsl:if>
         
       </xsl:for-each>
@@ -237,14 +245,12 @@ digraph G {
          <xsl:variable name="dm_id" select="req:objectreference/req:ref/@id"/>
          <xsl:apply-templates select="//req:requirement[req:key = $dm_id]/req:entity"/>
          
-         edge [
-                arrowhead = "none"
-
-                headlabel = "<xsl:value-of select="req:objectreference/req:linkend"/>"
-                taillabel = "<xsl:value-of select="req:objectreference/req:linkstart"/>"
-        ]
-        
-        "<xsl:value-of select="../../req:key"/>" -&gt; "<xsl:value-of select="$dm_id"/>";  
+        <xsl:call-template name="create_edge">
+           <xsl:with-param name="link_from"  select="../../req:key"/>
+           <xsl:with-param name="link_to"    select="$dm_id"/>
+           <xsl:with-param name="link_end"   select="req:objectreference/req:linkend"/>
+           <xsl:with-param name="link_start" select="req:objectreference/req:linkstart"/>
+        </xsl:call-template>
         
       </xsl:for-each>
       
@@ -252,14 +258,12 @@ digraph G {
          <xsl:variable name="dm_id" select="../../../req:key"/>
          <xsl:apply-templates select="//req:requirement[req:key = $dm_id]/req:entity"/>
          
-         edge [
-                arrowhead = "none"
-
-                headlabel = "<xsl:value-of select="req:linkend"/>"
-                taillabel = "<xsl:value-of select="req:linkstart"/>"
-        ]
-        
-        "<xsl:value-of select="$dm_id"/>" -&gt; "<xsl:value-of select="$dm_root_id"/>";
+        <xsl:call-template name="create_edge">
+           <xsl:with-param name="link_from"  select="$dm_id"/>
+           <xsl:with-param name="link_to"    select="$dm_root_id"/>
+           <xsl:with-param name="link_end"   select="req:linkend"/>
+           <xsl:with-param name="link_start" select="req:linkstart"/>
+        </xsl:call-template>
                                
       </xsl:for-each>
       
@@ -296,26 +300,37 @@ digraph G {
       
       <xsl:for-each select="//req:objectreference[../../../req:key = $referenced_node]">
          <xsl:if test="req:ref/@id = $dm_root_id">
-            edge [
-                arrowhead = "none"
-
-                headlabel = "<xsl:value-of select="//req:objectreference[../../../req:key = $referencing_node and req:ref/@id = $referenced_node]/req:linkend"/>"
-                taillabel = "<xsl:value-of select="//req:objectreference[../../../req:key = $referencing_node and req:ref/@id = $referenced_node]/req:linkstart"/>"
-                ]
-        
-           "<xsl:value-of select="$referencing_node"/>" -&gt; "<xsl:value-of select="$referenced_node"/>";
+           <xsl:call-template name="create_edge">
+              <xsl:with-param name="link_from"  select="$referencing_node"/>
+              <xsl:with-param name="link_to"    select="$referenced_node"/>
+              <xsl:with-param name="link_end"   select="//req:objectreference[../../../req:key = $referencing_node and req:ref/@id = $referenced_node]/req:linkend"/>
+              <xsl:with-param name="link_start" select="//req:objectreference[../../../req:key = $referencing_node and req:ref/@id = $referenced_node]/req:linkstart"/>
+           </xsl:call-template>
          </xsl:if>
       </xsl:for-each>
       <xsl:for-each select="//req:objectreference[../../../req:key = $dm_root_id and req:ref/@id = $referenced_node]">
-         edge [
+           <xsl:call-template name="create_edge">
+              <xsl:with-param name="link_from"  select="$referencing_node"/>
+              <xsl:with-param name="link_to"    select="$referenced_node"/>
+              <xsl:with-param name="link_end"   select="//req:objectreference[../../../req:key = $referencing_node and req:ref/@id = $referenced_node]/req:linkend"/>
+              <xsl:with-param name="link_start" select="//req:objectreference[../../../req:key = $referencing_node and req:ref/@id = $referenced_node]/req:linkstart"/>
+           </xsl:call-template>
+      </xsl:for-each>
+   </xsl:template>
+   
+   <xsl:template name="create_edge">
+      <xsl:param name="link_from"/>
+      <xsl:param name="link_to"/>
+      <xsl:param name="link_start"/>
+      <xsl:param name="link_end"/>
+      edge [
                 arrowhead = "none"
 
-                headlabel = "<xsl:value-of select="//req:objectreference[../../../req:key = $referencing_node and req:ref/@id = $referenced_node]/req:linkend"/>"
-                taillabel = "<xsl:value-of select="//req:objectreference[../../../req:key = $referencing_node and req:ref/@id = $referenced_node]/req:linkstart"/>"
+                headlabel = "<xsl:value-of select="$link_end"/>"
+                taillabel = "<xsl:value-of select="$link_start"/>"
                 ]
         
-           "<xsl:value-of select="$referencing_node"/>" -&gt; "<xsl:value-of select="$referenced_node"/>";
-      </xsl:for-each>
+      "<xsl:value-of select="$link_from"/>" -&gt; "<xsl:value-of select="$link_to"/>";
    </xsl:template>
          
    <xsl:template match="req:attribute[not(req:objectreference)]"><xsl:text>+ </xsl:text><xsl:value-of select="req:name"/><xsl:text> : </xsl:text><xsl:value-of select="req:pattern"/><xsl:text>\l</xsl:text></xsl:template>

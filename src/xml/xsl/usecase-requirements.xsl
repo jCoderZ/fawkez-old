@@ -208,6 +208,11 @@
                         <xsl:value-of select="req:pattern"/>
                      </entry>
                   </row>
+                  <xsl:if test="req:description">
+                     <row>
+                        <entry spanname="hspan2"><xsl:value-of select="req:description"/></entry>
+                     </row>
+                  </xsl:if>
                </xsl:for-each>
            </tbody>
          </tgroup>

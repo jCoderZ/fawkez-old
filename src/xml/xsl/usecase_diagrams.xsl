@@ -51,6 +51,7 @@ digraph G {
     edge [
             fontname = "Bitstream Vera Sans"
             fontsize = 8
+            weight = 10
     ]
 
     <xsl:for-each select="//req:requirement/req:category/req:secondary[generate-id() = generate-id(key('unique-category-secondary-key', .))]">    
@@ -226,7 +227,7 @@ digraph G {
    
    <xsl:template match="req:entity">
       "<xsl:value-of select="../req:key"/>" [
-                label = "{<xsl:value-of select="req:name"/>|<xsl:apply-templates select="req:attribute[not(req:objectreference)]"/>|}"
+                label = "{<xsl:value-of select="req:name"/>|<xsl:apply-templates select="req:attribute[not(req:objectreference)]"/>|<xsl:apply-templates select="req:attribute[req:objectreference]"/>}"
         ]
    </xsl:template>
    
@@ -317,7 +318,8 @@ digraph G {
       </xsl:for-each>
    </xsl:template>
          
-   <xsl:template match="req:attribute"><xsl:text>+ </xsl:text><xsl:value-of select="req:name"/><xsl:text> : </xsl:text><xsl:value-of select="req:pattern"/><xsl:text>\l</xsl:text></xsl:template>
+   <xsl:template match="req:attribute[not(req:objectreference)]"><xsl:text>+ </xsl:text><xsl:value-of select="req:name"/><xsl:text> : </xsl:text><xsl:value-of select="req:pattern"/><xsl:text>\l</xsl:text></xsl:template>
+   <xsl:template match="req:attribute[req:objectreference]"><xsl:text>+ </xsl:text><xsl:value-of select="req:name"/><xsl:text> : </xsl:text><xsl:value-of select="req:objectreference/req:linkstart"/>/<xsl:value-of select="req:objectreference/req:linkend"/><xsl:text>\l</xsl:text></xsl:template>
 
    <!-- Use Case flow diagram -->
 

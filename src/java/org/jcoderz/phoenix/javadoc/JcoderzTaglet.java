@@ -74,6 +74,8 @@ public class JcoderzTaglet
        "jcoderz.dbms-table",
        "jcoderz.ds-jndi-name",
        "jcoderz.finder-method",
+       "jsp.attribute",
+       "jsp.tag",
        "web.ejb-ref",
        "web.servlet",
        "web.servlet-mapping",

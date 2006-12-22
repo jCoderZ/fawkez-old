@@ -365,6 +365,10 @@ digraph G {
 
    <xsl:apply-templates select="uc:extension"/>
      label = "Extension Pathes";
+     
+   <xsl:call-template name="display_referents">
+      <xsl:with-param name="usecase_id" select="@id"/>
+   </xsl:call-template>
 }
 
      </redirect:write>
@@ -424,47 +428,71 @@ digraph G {
 
    <xsl:template match="uc:step">
      <xsl:variable name="next" select="position() + 1"/>
-     <xsl:apply-templates select="uc:ref[starts-with(@id,'UC')]">
+     <xsl:apply-templates select="descendant-or-self::uc:ref[starts-with(@id,'UC')]">
         <xsl:with-param name="next" select="$next"/>
      </xsl:apply-templates>
    </xsl:template>
 
-   <xsl:template match="uc:success/uc:step/uc:ref">
+   <xsl:template match="uc:success/uc:step//uc:ref">
       <xsl:param name="next"/>
      <!-- if you are coming from the basic path, the actor is in the relationship, otherwise the underlying extension path -->
       <xsl:choose>
          <xsl:when test="contains(@id, '-E')">
            <!-- extension relation from extension to use case -->
-           "<xsl:value-of select="../../../@id"/>-<xsl:value-of select="../@id"/>: <xsl:value-of select="../@desc"/>" -&gt; "<xsl:value-of select="substring-after(substring-after(@id,'-'),'-')"/>"
-
-           "<xsl:value-of select="substring-after(substring-after(@id,'-'),'-')"/>" -&gt; "<xsl:value-of select="../../../@id"/>-<xsl:value-of select="../../uc:step[position() = $next]/@id"/>: <xsl:value-of select="../../uc:step[position() = $next]/@desc"/>"
+           "<xsl:value-of select="ancestor-or-self::uc:usecase/@id"/>-<xsl:value-of select="ancestor-or-self::uc:step/@id"/>: <xsl:value-of select="ancestor-or-self::uc:step/@desc"/>" -&gt; "<xsl:value-of select="substring-after(substring-after(@id,'-'),'-')"/>"
+           
+           "<xsl:value-of select="substring-after(substring-after(@id,'-'),'-')"/>" -&gt; "<xsl:value-of select="ancestor-or-self::uc:usecase/@id"/>-<xsl:value-of select="ancestor-or-self::uc:usecase/uc:success/uc:step[position() = $next]/@id"/>: <xsl:value-of select="ancestor-or-self::uc:usecase/uc:success/uc:step[position()=$next]/@desc"/>"
           <!-- relation from 'secondary actor' to extension path -->
           <xsl:if test="@actor">
              "<xsl:value-of select="@actor"/>" -&gt; "<xsl:value-of select="@id"/>"
           </xsl:if>
         </xsl:when>
         <xsl:otherwise>
-           "<xsl:value-of select="../../../@id"/>-<xsl:value-of select="../@id"/>: <xsl:value-of select="../@desc"/>" -&gt; "<xsl:call-template name="lookup_name"><xsl:with-param name="key" select="@id"/></xsl:call-template>"
+           "<xsl:value-of select="ancestor-or-self::uc:usecase/@id"/>-<xsl:value-of select="ancestor-or-self::uc:step/@id"/>: <xsl:value-of select="ancestor-or-self::uc:step/@desc"/>" -&gt; "<xsl:call-template name="lookup_name"><xsl:with-param name="key" select="@id"/></xsl:call-template>"
         </xsl:otherwise>
       </xsl:choose>
       <xsl:text>;</xsl:text>
    </xsl:template>
 
-   <xsl:template match="uc:extension/uc:step/uc:ref">
+   <xsl:template match="uc:extension/uc:step//uc:ref">
      <!-- if you are coming from the basic path, the actor is in the relationship, otherwise the underlying extension path -->
       <xsl:choose>
         <xsl:when test="contains(@id, '-E')">
-            "<xsl:value-of select="../../../@id"/>-<xsl:value-of select="../../@id"/>: <xsl:value-of select="../../@name"/>" -&gt; "<xsl:value-of select="substring-after(substring-after(@id,'-'),'-')"/>"
+            "<xsl:value-of select="ancestor-or-self::uc:usecase/@id"/>-<xsl:value-of select="ancestor-or-self::uc:extension/@id"/>: <xsl:value-of select="ancestor-or-self::uc:extension/@name"/>" -&gt; "<xsl:value-of select="substring-after(substring-after(@id,'-'),'-')"/>"
          <!-- relation from 'secondary actor' to extension path -->
          <xsl:if test="@actor">
             "<xsl:value-of select="@actor"/>" -&gt; "<xsl:value-of select="@id"/>"
          </xsl:if>
         </xsl:when>
         <xsl:otherwise>
-          "<xsl:value-of select="../../../@id"/>-<xsl:value-of select="../../@id"/>: <xsl:value-of select="../../@name"/>" -&gt; "<xsl:call-template name="lookup_name"><xsl:with-param name="key" select="@id"/></xsl:call-template>"
+          "<xsl:value-of select="ancestor-or-self::uc:usecase/@id"/>-<xsl:value-of select="ancestor-or-self::uc:extension/@id"/>: <xsl:value-of select="ancestor-or-self::uc:extension/@name"/>" -&gt; "<xsl:call-template name="lookup_name"><xsl:with-param name="key" select="@id"/></xsl:call-template>"
         </xsl:otherwise>
      </xsl:choose>
       <xsl:text>;</xsl:text>
+   </xsl:template>
+   
+   <xsl:template name="display_referents">
+      <xsl:param name="usecase_id"/>
+      <xsl:if test="//uc:usecase//uc:ref[(@id = $usecase_id or contains(@id,concat($usecase_id, '-'))) and not(ancestor-or-self::uc:usecase/@id = $usecase_id)]">
+         <xsl:for-each select="//uc:usecase//uc:ref[(@id = $usecase_id or contains(@id,concat($usecase_id, '-'))) and not(ancestor-or-self::uc:usecase/@id = $usecase_id)]">
+            <xsl:variable name="destination">
+               <xsl:call-template name="lookup_name">
+                  <xsl:with-param name="key" select="@id"/>
+               </xsl:call-template>
+            </xsl:variable>
+            <xsl:variable name="source_id">
+               <xsl:if test="ancestor-or-self::uc:usecase"><xsl:value-of select="ancestor-or-self::uc:usecase/@id"/></xsl:if>
+               <xsl:if test="ancestor-or-self::uc:extension"><xsl:text>-</xsl:text><xsl:value-of select="ancestor-or-self::uc:extension/@id"/></xsl:if>
+               <xsl:if test="ancestor-or-self::uc:step"><xsl:text>-</xsl:text><xsl:value-of select="ancestor-or-self::uc:step/@id"/></xsl:if>
+            </xsl:variable>
+            <xsl:variable name="source">
+               <xsl:call-template name="lookup_name">
+                  <xsl:with-param name="key" select="$source_id"/>
+               </xsl:call-template>
+            </xsl:variable>
+            "<xsl:value-of select="$source"/>" -> "<xsl:value-of select="$destination"/>";             
+         </xsl:for-each>
+      </xsl:if>
    </xsl:template>
 
    <xsl:template name="lookup_name">
@@ -479,6 +507,9 @@ digraph G {
         <xsl:when test="contains($key,'-E')">
            <xsl:variable name="ext" select="concat('E', substring-after($key, '-E'))"/>
            <xsl:value-of select="$key"/><xsl:text>: </xsl:text><xsl:value-of select="//uc:usecase[@id = $from_uc]/uc:extension[@id = $ext]/@name"/>
+        </xsl:when>
+        <xsl:when test="not(contains(substring-after($key,'UC-'),'-'))">
+           <xsl:value-of select="$key"/>
         </xsl:when>
         <xsl:otherwise>
            <xsl:variable name="ext" select="substring-after(substring-after($key, '-'), '-')"/>

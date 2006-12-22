@@ -33,7 +33,7 @@
       <uc:step id="1" desc="">System prompts for user and password.</uc:step>
 		<uc:step id="2" desc="">Merchant enters username and password and submits.</uc:step>
       <uc:step id="3" desc="">System checks username. <uc:ref id="UC-14-E2"/></uc:step>
-      <uc:step id="4" desc="">System checks password. <uc:ref id="UC-14-E3"/></uc:step>
+      <uc:step id="4" desc="Description of the step">System checks password. <uc:ref id="UC-14-E3"/></uc:step>
       <uc:step id="5" desc="">System returns to caller (calling use case).</uc:step>
 	</uc:success>
    <uc:extension id="E1" name="INVALID USERNAME">

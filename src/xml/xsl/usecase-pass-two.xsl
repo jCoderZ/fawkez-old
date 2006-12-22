@@ -316,6 +316,9 @@
             <itemizedlist>
               <xsl:apply-templates select="uc:precondition"/>
             </itemizedlist>
+            <xsl:call-template name="list_referents">
+               <xsl:with-param name="usecase_id" select="@id"/>
+            </xsl:call-template>
          </section>
 
          <section>
@@ -469,6 +472,27 @@
          </xsl:otherwise>
       </xsl:choose>
       <xsl:apply-templates select="/uc:usecases/chapter"/>
+   </xsl:template>
+   
+   <xsl:template name="list_referents">
+      <xsl:param name="usecase_id"/>
+      <xsl:if test="//uc:usecase//uc:ref[(@id = $usecase_id or contains(@id,concat($usecase_id, '-'))) and not(ancestor-or-self::uc:usecase/@id = $usecase_id)]">
+         <para><emphasis role="bold">referencing use cases</emphasis></para>
+         <itemizedlist>
+            <xsl:for-each select="//uc:usecase//uc:ref[(@id = $usecase_id or contains(@id,concat($usecase_id, '-'))) and not(ancestor-or-self::uc:usecase/@id = $usecase_id)]">
+               <listitem>
+                  <para>
+                     <xsl:variable name="source">
+                        <xsl:if test="ancestor-or-self::uc:usecase"><xsl:value-of select="ancestor-or-self::uc:usecase/@id"/></xsl:if>
+                        <xsl:if test="ancestor-or-self::uc:extension"><xsl:text>-</xsl:text><xsl:value-of select="ancestor-or-self::uc:extension/@id"/></xsl:if>
+                        <xsl:if test="ancestor-or-self::uc:step"><xsl:text>-</xsl:text><xsl:value-of select="ancestor-or-self::uc:step/@id"/></xsl:if>
+                     </xsl:variable>
+                     <xsl:text> [</xsl:text><xref linkend="{$source}"/><xsl:text>] </xsl:text>
+                  </para>
+               </listitem>               
+            </xsl:for-each>
+         </itemizedlist>
+      </xsl:if>
    </xsl:template>
 
       <!-- BEGIN: generic copy -->

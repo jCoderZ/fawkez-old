@@ -41,14 +41,14 @@
 		</uc:step>
 		<uc:step id="7" desc="Check Duplicate Accounts">System checks for an account already existing. <uc:ref id="UC-10-E2"/>
 		</uc:step>
-		<uc:step id="8" desc="Generate Reg. Code">System generates registration code.</uc:step>
+		<uc:step id="8" desc="Generate Reg. Code">System generates registration code. Dummy reference to other use case step <uc:ref id="UC-25-4"/></uc:step>
 		<uc:step id="9" desc="Send Reg Code SMS">System sends SMS containing registration code to MSISDN. <uc:ref id="UC-10-E4"/>
 		</uc:step>
 		<uc:step id="10" desc="Ask For Reg Code">System asks for registration code.</uc:step>
 		<uc:step id="11" desc="Submit Reg Code">Consumer enters registration code and submits form. (Requirement: <uc:ref id="HLF_090"/>) <uc:ref id="UC-10-E5"/>
 		</uc:step>
 		<uc:step id="12" desc="Ask For Personal Data">System asks for consumer personal data. <uc:ref id="HLF_005"/>
-			<!-- itemizedlist>
+			<itemizedlist>
 				<listitem>
                <para>first name</para>
             </listitem>
@@ -56,33 +56,12 @@
                <para>last name</para>
             </listitem>
 				<listitem>
-               <para>e-mail adress</para>
-            </listitem>
-				<listitem>
-               <para>repeat e-mail Adress</para>
-            </listitem>
-				<listitem>
-               <para>login name</para>
-            </listitem>
-				<listitem>
-               <para>password <uc:ref id="HLF_006"/></para>
+               <para>password <uc:ref id="UC-10-E3"/></para>
 				</listitem>
-				<listitem>
-               </para>repeat password</para>
-            </listitem>
-				<listitem>
-               <para>personal greeting, which will be used in further conversation (e.g. Hello Yeti)</para>
-            </listitem>
-				<listitem>
-              <para>menu to choose security question (e.g. your mother's maiden name)</para>
-            </listitem>
-				<listitem>
-               <para>answer to security question</para>
-            </listitem>
 				<listitem>
                <para>confirmation of the terms and conditions.</para>
             </listitem>
-			</itemizedlist>   -->
+			</itemizedlist>
 		</uc:step>
 		<uc:step id="13" desc="Submit Data">After filling out the form the consumer submits.</uc:step>
 		<uc:step id="14" desc="Verfiy Data">System verifies given master data.<uc:ref id="UC-10-E6"/>

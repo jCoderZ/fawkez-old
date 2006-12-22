@@ -190,9 +190,18 @@
                </row>
                <xsl:for-each select="req:attribute">
                   <row>
-                     <entry>
-                        <xsl:value-of select="req:name"/>
-                     </entry>
+                     <xsl:choose>
+                        <xsl:when test="req:description">
+                           <entry morerows='1' valign='middle'>
+                              <xsl:value-of select="req:name"/>
+                           </entry>
+                        </xsl:when>
+                        <xsl:otherwise>
+                           <entry>
+                              <xsl:value-of select="req:name"/>
+                           </entry>
+                        </xsl:otherwise>
+                     </xsl:choose>
                      <entry>
                         <xsl:apply-templates select="req:objectreference"/>
                      </entry>
@@ -210,7 +219,7 @@
                   </row>
                   <xsl:if test="req:description">
                      <row>
-                        <entry spanname="hspan2"><xsl:value-of select="req:description"/></entry>
+                        <entry spanname="hspan"><xsl:value-of select="req:description"/></entry>
                      </row>
                   </xsl:if>
                </xsl:for-each>
@@ -226,6 +235,11 @@
           <imageobject  role="html">
              <imagedata  format="PNG"  fileref="{concat($f, '.png')}"/>
           </imageobject>
+          <caption>
+             <para>
+                Domain Model diagram for entity <xsl:value-of select="../req:key"/><xsl:text> </xsl:text><xsl:value-of select="req:name"/>.
+             </para>
+          </caption>
        </mediaobject>
    </xsl:template>
    

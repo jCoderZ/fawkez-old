@@ -1,9 +1,9 @@
 Fawkez 1.0.1 'Unnamed'  
 
+  * Added new severity levels as proposed in #16
   * Fixed bugs: #10
   * added fb-contrib support #14
   * added up-to-date check for retrieve-3rd-party-libs target
 
 Fawkez 1.0 'going public' (November 26, 2006)
 https://www.jcoderz.org/fawkez/browser/tags/FAWKEZ_1_0_0
-   

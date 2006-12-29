@@ -32,42 +32,44 @@
  */
 package org.jcoderz.phoenix.report;
 
-import java.io.ObjectStreamException;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import edu.umd.cs.findbugs.Detector;
 
 /**
  * Enumerated type of a severity.
  *
- * Instances of this class are immutable.
+ * <p>Instances of this class are immutable.</p>
  *
- * The following severities are defined:
- * <ul>
- *    <li>Severity.FILTERED</li>
- *    <li>Severity.FALSE_POSITIVE</li>
- *    <li>Severity.OK</li>
- *    <li>Severity.INFO</li>
- *    <li>Severity.WARNING</li>
- *    <li>Severity.ERROR</li>
- *    <li>Severity.COVERAGE</li>
- *    <li>Severity.CPD</li>
- * </ul>
- *
+ * <p>The following severities are defined:
+ * <ol>
+ *    <li>{@link #ERROR}</li>
+ *    <li>{@link #CPD}</li>
+ *    <li>{@link #WARNING}</li>
+ *    <li>{@link #DESIGN}</li>
+ *    <li>{@link #CODE_STYLE}</li>
+ *    <li>{@link #INFO}</li>
+ *    <li>{@link #COVERAGE}</li>
+ *    <li>{@link #FILTERED}</li>
+ * </ol>
+ * </p>
+ * 
  * @author Andreas Mandel
  */
 public final class Severity
    implements Serializable, Comparable
 {
-   private static final long serialVersionUID = 1L;
+    /**
+     * Scale of the penalty points. One penalty point marks  
+     * <code>1 / PENALTY_SCALE</code> lines as bad.  
+     */
+    public static final int PENALTY_SCALE = 10;
 
-   /** The name of the severity */
-   private final transient String mName;
+   private static final long serialVersionUID = 2L;
 
    /** Ordinal of next severity to be created. */
    private static int sNextOrdinal = 0;
@@ -75,42 +77,93 @@ public final class Severity
    /** Assign a ordinal to this severity. */
    private final int mOrdinal = sNextOrdinal++;
 
+   /** 
+    * The penalty for violations of this severity level.
+    */
+   private final transient int mPenalty;
+   
+   /** The name of the severity */
+   private final transient String mName;
+
    /** Maps a string representation to an enumerated value. */
    private static final Map FROM_STRING = new HashMap();
 
-   /** The severity filtered. */
-   public static final Severity FILTERED
-      = new Severity("filtered");
+   /** 
+    * Severity for filtered findings.
+    * <p>Findings that are not appropriate for whatever reason 
+    * (ex. being a false positive) should get this level assigned by 
+    * the filtering style sheet.</p>  
+    * <p>A finding of this severity marks no lines of code as bad.</p>
+    */
+   public static final Severity FILTERED = new Severity("filtered", 0);
 
-   /** The severity false-positive. */
-   public static final Severity FALSE_POSITIVE
-      = new Severity("false-positive");
+   /** 
+    * Severity level used to denote no finding.
+    */
+   public static final Severity OK = new Severity("ok", 0);
 
-   /** The severity none. */
-   public static final Severity OK
-      = new Severity("ok");
+   /** 
+    * Severity for informational finders like to-do markers or code
+    * that uses outdated API which should be updated but has no side
+    * effect. 
+    * <p>A finding of this severity marks no lines of code as bad.</p>
+    */
+   public static final Severity INFO = new Severity("info", 0);
 
-   /** The severity info. */
-   public static final Severity INFO
-      = new Severity("info");
+   /** 
+    * Severity for code-style type of findings.
+    * <p>All finders that report indentation, position of braces or this
+    * kind of violation should use this level. There is no deeper 
+    * differentiation for this type of findings.</p>  
+    * <p>A finding of this severity marks 0.5 lines of code as bad.</p>
+    */
+   public static final Severity CODE_STYLE = new Severity("code-style", 5);
 
-   /** The severity coverage. */
-   public static final Severity COVERAGE
-      = new Severity("coverage");
+   /** 
+    * Severity for code that is not covered by test cases.
+    * <p>If code coverage is enabled each line with a coverage of 0 
+    * gets marked with this violation.</p> 
+    * <p>A finding of this severity marks 0.8 lines of code as bad.</p>
+    */
+   public static final Severity COVERAGE = new Severity("coverage", 8);
 
-   /** The severity cpd. */
-   public static final Severity CPD
-      = new Severity("cpd");
+   /** 
+    * This severity level is for design related findings.
+    * <p>Inheritance problems or broken implementation of standard methods
+    * should get this severity level, unless {@link #ERROR} or 
+    * {@link #WARNING} fits better.</p>  
+    * <p>A finding of this severity marks three lines of code as bad.</p>
+    */
+   public static final Severity DESIGN = new Severity("design", 30);
 
-   /** The severity warning. */
-   public static final Severity WARNING
-      = new Severity("warning");
+   /** 
+    * Warning level severities.
+    * <p>A finding of this severity marks 5 lines of code as bad.</p>
+    */
+   public static final Severity WARNING = new Severity("warning", 50);
 
-   /** The severity error. */
-   public static final Severity ERROR
-      = new Severity("error");
+   /** 
+    * Detected copied &amp; pasted code.
+    * <p>The copy and paste detector detected a number of similar lines 
+    * at a different position. This should be refactored immediately.</p>
+    * <p>A finding of this severity marks 10 lines of code as bad.</p>
+    */
+   public static final Severity CPD = new Severity("cpd", 100);
 
-   /** The maximum possible severity. */
+   /**
+    * Severe findings requiring immediate action.
+    * <p>Findings of this severity are serious errors. Finders that detect 
+    * style or design violations or finders that produce a certain number 
+    * of false positives must not use this severity.</p>
+    * <p>Findings of this severity should prevent a project from being 
+    * released. A severity of this level marks 10 lines as bad.</p>
+    */
+   public static final Severity ERROR = new Severity("error", 100);
+
+   /** 
+    * The maximum possible severity. 
+    * Is {@link #ERROR}.
+    */
    public static final Severity MAX_SEVERITY = ERROR;
 
    /** The maximum possible severity as int. */
@@ -120,12 +173,13 @@ public final class Severity
    private static final Severity[] PRIVATE_VALUES =
       {
          Severity.FILTERED,
-         Severity.FALSE_POSITIVE,
          Severity.OK,
-         Severity.INFO,
          Severity.COVERAGE,
-         Severity.CPD,
+         Severity.INFO,
+         Severity.CODE_STYLE,
+         Severity.DESIGN,
          Severity.WARNING,
+         Severity.CPD,
          Severity.ERROR
       };
 
@@ -134,9 +188,10 @@ public final class Severity
       Collections.unmodifiableList(Arrays.asList(PRIVATE_VALUES));
 
    /** Private Constructor. */
-   private Severity (String name)
+   private Severity (String name, int penalty)
    {
       mName = name;
+      mPenalty = penalty;
       FROM_STRING.put(mName, this);
    }
 
@@ -203,15 +258,16 @@ public final class Severity
    }
 
    /**
-    * Resolves instances being deserialized to a single instance
-    * per severity.
+    * Returns the penalty assigned to findings of this severity.
+    * The number is the ten times the number of lines a finding of this
+    * severity should mark as bad.
+    * @return the penalty assigned to this severity.
     */
-   private Object readResolve ()
-      throws ObjectStreamException
+   public int getPenalty ()
    {
-      return PRIVATE_VALUES[mOrdinal];
+       return mPenalty;
    }
-
+   
    /** {@inheritDoc} */
    public int compareTo (Object o)
    {
@@ -229,10 +285,10 @@ public final class Severity
          switch (Integer.parseInt(priority))
          {
              case Detector.IGNORE_PRIORITY:
-                 ret = Severity.FALSE_POSITIVE;
+                 ret = Severity.FILTERED;
                  break;
              case Detector.EXP_PRIORITY:
-                 /* fall throug */
+                 /* fall through */
              case Detector.LOW_PRIORITY:
                ret = Severity.INFO;
                break;
@@ -265,7 +321,7 @@ public final class Severity
       {
           ret = String.valueOf(Detector.NORMAL_PRIORITY);
       }
-      else if (Severity.FALSE_POSITIVE == this)
+      else if (Severity.FILTERED == this)
       {
           ret = String.valueOf(Detector.IGNORE_PRIORITY);
       }
@@ -294,5 +350,14 @@ public final class Severity
          result = other;
       }
       return result;
+   }
+
+   /**
+    * Resolves instances being de-serialized to a single instance
+    * per severity.
+    */
+   private Object readResolve ()
+   {
+      return PRIVATE_VALUES[mOrdinal];
    }
 }

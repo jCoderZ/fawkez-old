@@ -907,32 +907,7 @@ public final class Java2Html
 
    private String getImage (Severity severity)
    {
-      final String result;
-      if (severity == Severity.INFO)
-      {
-         result = "images/icon_info.gif";
-      }
-      else if (severity == Severity.WARNING)
-      {
-         result = "images/icon_warning.gif";
-      }
-      else if (severity == Severity.FILTERED)
-      {
-         result = "images/icon_filter.gif";
-      }
-      else if (severity == Severity.FALSE_POSITIVE)
-      {
-         result = "images/icon_false.gif";
-      }
-      else if (severity == Severity.CPD)
-      {
-         result = "images/icon_cpd.gif";
-      }
-      else
-      {
-         result = "images/icon_error.gif";
-      }
-      return result;
+      return "images/icon_" + severity.toString() + ".gif";
    }
 
    private FileSummary createFileSummary (final int linesCount,
@@ -1113,17 +1088,13 @@ public final class Java2Html
          }
          else if (item.getSeverity() == Severity.FILTERED)
          {
-            items.remove(); // will never see this again!
-         }
-         else if (item.getSeverity() == Severity.FALSE_POSITIVE)
-         {
             // not listen with the code but in the global section below the
             // code.
          }
          else
          {
             mHandledFindings.add(item);
-            // create tha magic icon string with a hyperlink
+            // create the magic icon string with a hyperlink
             mGetIconsStringBuffer.setLength(0);
             mGetIconsStringBuffer.append("<a href='#FINDING");
             mGetIconsStringBuffer.append(mHandledFindings.size());
@@ -1147,7 +1118,7 @@ public final class Java2Html
                mFindingsInCurrentLine.put(pos,
                      mGetIconsStringBuffer.toString());
             }
-            items.remove(); // item was handeled fully
+            items.remove(); // item was handled fully
          }
       }
       if (icons.length() == 0)
@@ -1159,7 +1130,7 @@ public final class Java2Html
 
 
    /**
-    * Replaces leading whitespaces by a none breakable html string
+    * Replaces leading whitespace by a none breakable html string
     * (entity).
     * Uses <code>mStringBuffer</code> as temporary string buffer.
     * @param in The string to modify.

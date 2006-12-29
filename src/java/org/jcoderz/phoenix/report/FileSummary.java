@@ -34,61 +34,46 @@ package org.jcoderz.phoenix.report;
 
 import java.io.Serializable;
 import java.util.Comparator;
+import java.util.Iterator;
+import org.jcoderz.commons.util.Assert;
 
 /**
- * This class encapsulates data collected for a file or a group of files.
+ * This class encapsulates all finding information collected for a 
+ * file or a group of files.
  *
+ * <p>This class also allows to perform the magic quality calculation for 
+ * the data collected in the summary.</p>
+ * 
  * @author Andreas Mandel
  */
 public final class FileSummary
       implements Comparable
 {
-   /** 
-    * Penalty weight for info level findings. One finding of this type
-    * "destroys" the given number of good lines.
-    */ 
-   public static final int INFO_WEIGHT = 0;
-
-   /** 
-    * Penalty weight for coverage level findings. One finding of this type
-    * "destroys" the given number of good lines.
-    */ 
-   public static final int COVERAGE_FAILURE_WEIGHT = 1;
-
-   /** 
-    * Penalty weight for warning level findings. One finding of this type
-    * "destroys" the given number of good lines.
-    */ 
-   public static final int WARNING_WEIGHT = 4;
-
-   /** 
-    * Penalty weight for error level findings. One finding of this type
-    * "destroys" the given number of good lines.
-    */ 
-   public static final int ERROR_WEIGHT = 12;
-
    /** Constant for percentage calculation 1% = 1 / MAX_PERCENTAGE. */
    private static final int MAX_PERCENTAGE = 100;
 
    private int mFiles = 0;
 
-   private boolean mPercentUpToDate = false;
+   /** Lines of code in the file. */
    private int mLinesOfCode;
+   
+   /** 
+    * Lines of code in the file that contain coverage information that is
+    * not 0.
+    */ 
    private int mCoveredLinesOfCode;
-   private int mFiltered;
-   private int mFalsePositive;
-   private int mInfo;
-   private int mCoverage;
-   private int mWarning;
-   private int mError;
-   private int mCpd;
+   /**
+    * Holds the number of violations for each severity level. 
+    */
+   private int[] mViolations = new int[Severity.VALUES.size()];
 
-
-   private int mPercentOk;
-   private int mPercentInfo;
-   private int mPercentCoverage;
-   private int mPercentWarning;
-   private int mPercentError;
+   /** 
+    * Percentage values for the violations.
+    * Data stored in here is only valid if <code>mPercentUpToDate</code> 
+    * is true.
+    */   
+   private int[] mPercent = new int[Severity.VALUES.size()];
+   private boolean mPercentUpToDate = false;
 
    private final String mClassname;
    private final String mPackage;
@@ -136,50 +121,42 @@ public final class FileSummary
       result.append("{ LOC:");
       result.append(mLinesOfCode);
       result.append('(');
-      result.append(mPercentOk);
-      result.append("%), ");
-      result.append(Severity.INFO.toString());
-      result.append(':');
-      result.append(mInfo);
-      result.append('(');
-      result.append(mPercentInfo);
-      result.append("%), ");
-      result.append(Severity.COVERAGE.toString());
-      result.append(':');
-      result.append(mCoverage);
-      result.append(" of ");
-      result.append(mCoveredLinesOfCode);
-      result.append('(');
-      result.append(mPercentCoverage);
-      result.append("%), ");
-      result.append(Severity.WARNING.toString());
-      result.append(':');
-      result.append(mWarning);
-      result.append('(');
-      result.append(mPercentWarning);
-      result.append("%), ");
-      result.append(Severity.ERROR.toString());
-      result.append(':');
-      result.append(mError);
-      result.append('(');
-      result.append(mPercentError);
-      result.append("%)}");
+      result.append(mViolations[Severity.OK.toInt()]);
+      result.append("%)");
+      final Iterator i = Severity.VALUES.iterator();
+      while (i.hasNext())
+      {
+          final Severity s = (Severity) i.next();
+          if (mViolations[s.toInt()] != 0)
+          {
+              result.append(", ");
+              result.append(s.toString());
+              result.append(':');
+              result.append(mViolations[s.toInt()]);
+              result.append('(');
+              result.append(mPercent[s.toInt()]);
+              result.append("%)");
+          }
+      }
+      result.append('}');
       return result.toString();
    }
 
+   /**
+    * Add the counters of an other FileSummary to this one.
+    * @param other the FileSummary be added.
+    */
    public void add (FileSummary other)
    {
-      mLinesOfCode += other.mLinesOfCode;
-      mInfo += other.mInfo;
-      mCoverage += other.mCoverage;
-      mWarning += other.mWarning;
-      mError += other.mError;
-      mCoveredLinesOfCode += other.mCoveredLinesOfCode;
-      mPercentUpToDate = false;
-      mFiltered += other.mFiltered;
-      mFalsePositive += other.mFalsePositive;
-      mFiles++;
-   }
+       for (int i = 0; i < mViolations.length; i++)
+       {
+           mViolations[i] += other.mViolations[i];
+       }
+       mLinesOfCode += other.mLinesOfCode;
+       mCoveredLinesOfCode += other.mCoveredLinesOfCode;
+       mPercentUpToDate = false;
+       mFiles++;
+    }
 
    public void addCoveredLine ()
    {
@@ -187,45 +164,19 @@ public final class FileSummary
       mCoveredLinesOfCode++;
    }
 
+   /**
+    * Increments the counter for the given severity in this summary.  
+    * @param severity the severity of the counter to be incremented.
+    */
    public void addViolation (Severity severity)
    {
-      mPercentUpToDate = false;
-      if (severity == Severity.INFO)
-      {
-         mInfo++;
-      }
-      else if (severity == Severity.COVERAGE)
-      {
-         mCoverage++;
-      }
-      else if (severity == Severity.WARNING)
-      {
-         mWarning++;
-      }
-      else if (severity == Severity.ERROR)
-      {
-         mError++;
-      }
-      else if (severity == Severity.FALSE_POSITIVE)
-      {
-         mFalsePositive++;
-      }
-      else if (severity == Severity.FILTERED)
-      {
-         mFiltered++;
-      }
-      else if (severity == Severity.CPD)
-      {
-         mCpd++;
-      }
-      else
-      {
-         throw new RuntimeException("Unknown severity " + severity);
-      }
+       Assert.notNull(severity, "severity");
+       mPercentUpToDate = false;
+       mViolations[severity.toInt()]++;
    }
 
    /**
-    * @return the full classname including package declaration.
+    * @return the full class name including package declaration.
     */
    public String getFullClassname ()
    {
@@ -265,91 +216,78 @@ public final class FileSummary
       // errors
       if (mLinesOfCode != 0)
       {
-         mPercentError = (mError * MAX_PERCENTAGE * ERROR_WEIGHT)
-               / mLinesOfCode;
-         if (mError > 0 && mPercentError == 0)
-         {
-            mPercentError = 1;
-         }
-         if (mPercentError > remainingPercentage)
-         {
-            mPercentError = remainingPercentage;
-         }
-         remainingPercentage -= mPercentError;
-         // warning
-         mPercentWarning = (mWarning * MAX_PERCENTAGE * WARNING_WEIGHT)
-              / mLinesOfCode;
-         if (mWarning > 0 && mPercentWarning == 0)
-         {
-            mPercentWarning = 1;
-         }
-         if (mPercentWarning > remainingPercentage)
-         {
-            mPercentWarning = remainingPercentage;
-         }
-         remainingPercentage -= mPercentWarning;
-         // coverage
-         if (mCoverageData)
-         {
-            calcPercentCoverage(remainingPercentage);
-            remainingPercentage -= mPercentCoverage;
-         }
-         else
-         {
-            mPercentCoverage = 0;
-         }
-         // info
-         mPercentInfo = (mInfo * MAX_PERCENTAGE * INFO_WEIGHT)
-               / mLinesOfCode;
-         if (mInfo > 0 && mPercentInfo == 0)
-         {
-            mPercentInfo = 1;
-         }
-         if (mPercentInfo > remainingPercentage)
-         {
-            mPercentInfo = remainingPercentage;
-         }
-         remainingPercentage -= mPercentInfo;
+          for (int i = Severity.ERROR.toInt(); i > Severity.INFO.toInt(); i--)
+          {
+              int percent;
+              
+              if (i == Severity.COVERAGE.toInt())
+              {
+                  percent = calcPercentCoverage();
+              }
+              else
+              {
+                  percent = calcPercentage(
+                      mViolations[i] * Severity.fromInt(i).getPenalty(),
+                      mLinesOfCode * Severity.PENALTY_SCALE);
+              }
+              // do not round to 0.
+              if (mViolations[i] > 0 && percent == 0)
+              {
+                  percent = 1;
+              }
+              if (percent > remainingPercentage)
+              {
+                  percent = remainingPercentage;
+              }
+              mPercent[i] = percent;
+              remainingPercentage -= percent;
+          }
       }
-      mPercentOk = remainingPercentage;
+      else
+      {
+          for (int i = Severity.ERROR.toInt(); i > Severity.INFO.toInt(); i--)
+          {
+              mPercent[i] = 0;
+          }
+      }
+      mPercent[Severity.OK.toInt()] = remainingPercentage;
       mPercentUpToDate = true;
    }
 
    /**
     * Calculates the penalty percentage of the coverage tests.
-    * The maximum persentage returned is the 
-    * <code>remainingPercentage</code> given as argument.
-    * The members <code>mCoveredLinesOfCode</code> and 
-    * <code>mCoverage</code> should be uptodate before caling 
-    * this method.
-    * @param remainingPercentage the maximum penalti percentage 
-    *     that is available.
     */
-   private void calcPercentCoverage (int remainingPercentage)
+   private int calcPercentCoverage ()
    {
-      if ((mCoveredLinesOfCode + mCoverage) == 0)
-      {  // no coverage info at all!
-         // TODO: Count as 0% or 100%???
-//                  mPercentCoverage = remainingPercentage;
-//                  remainingPercentage = 0;
-         // -> no coverage is ok...
-         mPercentCoverage = 0;
-      }
-      else
-      {
-         mPercentCoverage
-               = (mCoverage * MAX_PERCENTAGE * COVERAGE_FAILURE_WEIGHT)
-                  / (mCoveredLinesOfCode + mCoverage);
-         if (mCoverage > 0 && mPercentCoverage == 0)
-         {
-            mPercentCoverage = 1;
-         }
-         if (mPercentCoverage > remainingPercentage)
-         {
-            mPercentCoverage = remainingPercentage;
-         }
-      }
-   }
+       final int coverageViolationPercentage;
+       final int notCoveredLines = mViolations[Severity.COVERAGE.toInt()];
+       if (!mCoverageData)
+       {  
+           coverageViolationPercentage = 0;
+       }
+       else 
+       {
+           coverageViolationPercentage = calcPercentage(
+               notCoveredLines * Severity.COVERAGE.getPenalty(),
+               Severity.PENALTY_SCALE 
+                   * (mCoveredLinesOfCode + notCoveredLines)); 
+       }
+       return coverageViolationPercentage;
+    }
+   
+    private static int calcPercentage (int part, int all)
+    {
+        final int result;
+        if (all == 0)
+        {
+            result = 0;
+        }
+        else
+        {
+            result = part * MAX_PERCENTAGE / all;
+        }
+        return result;
+    }
 
    /**
     * Returns the magic quality as percentage int. 
@@ -362,8 +300,7 @@ public final class FileSummary
       int quality = 0;
       if (mLinesOfCode > 0)
       {
-         quality = calcUnwhightedQuality(mLinesOfCode, mInfo, mWarning, mError, 
-                     mCoverage);
+         quality = calcUnweightedQuality(mLinesOfCode, mViolations);
          quality = (quality * MAX_PERCENTAGE) / mLinesOfCode;
       }
       return quality;
@@ -378,24 +315,22 @@ public final class FileSummary
    public float getQualityAsFloat ()
    {
        // might be we should cache the result?
-       return FileSummary.calculateQuality (mLinesOfCode, mInfo, mWarning,
-               mError, mCoverage);
+       return FileSummary.calculateQuality (mLinesOfCode, mViolations);
    }
 
-   public static float calculateQuality (int loc, int info, int warning,
-         int error, int coverage)
+   public static float calculateQuality (int loc, int[] violations)
    {
       float quality = 0;
       if (loc > 0)
       {
-         quality = calcUnwhightedQuality(loc, info, warning, error, coverage);
+         quality = calcUnweightedQuality(loc, violations);
          quality = (quality * MAX_PERCENTAGE) / loc;
       }
       return quality;
    }
 
    /**
-    * Calculates the unwighted quality points scored for the code.
+    * Calculates the unweighted quality points scored for the code.
     * Maximum returned is <code>loc</code> the minimum is <code>0</code>.
     * @param loc total number of lines of code. This is also the maximum 
     *         that might be returned by this method.
@@ -403,63 +338,47 @@ public final class FileSummary
     * @param warning number of warning level findings.
     * @param error number of error level findings.
     * @param coverage number of coverage level findings.
-    * @return the unwighted quality score.
+    * @return the unweighted quality score.
     */
-   private static int calcUnwhightedQuality (int loc, int info, int warning, 
-        int error, int coverage)
+   private static int calcUnweightedQuality (int loc, int[] violations)
    {
-       int quality = loc; // lines of code
-
-       // not covered lines are bad this
-       // not files with no coverage test at all get no penalty here!
-       quality -= info * INFO_WEIGHT;
-       quality -= coverage * COVERAGE_FAILURE_WEIGHT;
-       quality -= warning * WARNING_WEIGHT; // warning lines are worse
-       quality -= error * ERROR_WEIGHT; // error lines are errors
+       Assert.assertEquals(
+           "Violations array length must match number of severities.", 
+           Severity.VALUES.size(), violations.length);
+       int quality = loc * Severity.PENALTY_SCALE; // lines of code
+       for (int i = 0; i < Severity.VALUES.size() && quality > 0; i++)
+       {
+           // not covered lines are bad this
+           // not files with no coverage test at all get no penalty here!
+           quality -= violations[i] * Severity.fromInt(i).getPenalty();
+       }
        if (quality < 0)
        {
           quality = 0;
        }
+       else
+       {
+           quality /= Severity.PENALTY_SCALE;
+       }
        return quality;
    }
-
-   
    
    public String getPercentBar ()
    {
       calcPercent();
       final StringBuffer sb = new StringBuffer();
-      sb.append("<table width='100%' cellspacing='0' cellpadding='0'>"
-            + "<tr valign='middle'>");
-      if (mPercentOk > 0)
+      sb.append("<table width='100%' cellspacing='0' cellpadding='0' " 
+            + "summary='quality-bar'><tr valign='middle'>");
+      for (int i = Severity.OK.toInt(); i < Severity.MAX_SEVERITY_INT; i++)
       {
-         sb.append("<td class=\"ok\" width='");
-         sb.append(mPercentOk);
-         sb.append("%' height='10'></td>");
-      }
-      if (mPercentInfo > 0)
-      {
-         sb.append("<td class=\"info\" width='");
-         sb.append(mPercentInfo);
-         sb.append("%' height=\"10\"></td>");
-      }
-      if (mPercentCoverage > 0)
-      {
-         sb.append("<td class=\"coverage\" width=\"");
-         sb.append(mPercentCoverage);
-         sb.append("%\" height=\"10\"></td>");
-      }
-      if (mPercentWarning > 0)
-      {
-         sb.append("<td class=\"warning\" width=\"");
-         sb.append(mPercentWarning);
-         sb.append("%\" height=\"10\"></td>");
-      }
-      if (mPercentError > 0)
-      {
-         sb.append("<td class=\"error\" width=\"");
-         sb.append(mPercentError);
-         sb.append("%\" height=\"10\"></td>");
+          if (mPercent[i] > 0)
+          {
+             sb.append("<td class='");
+             sb.append(Severity.fromInt(i).toString());
+             sb.append("' width='");
+             sb.append(mPercent[i]);
+             sb.append("%' height='10'></td>");
+          }
       }
       sb.append("</tr></table>");
       return sb.toString();
@@ -467,31 +386,40 @@ public final class FileSummary
 
    public int getCoverage ()
    {
-      int notCovered;
-      if (mCoveredLinesOfCode != 0)
-      {
-         notCovered = (mCoverage * MAX_PERCENTAGE)
-              / (mCoveredLinesOfCode + mCoverage);
-         if ((notCovered == 0) && (mCoverage != 0))
-         {  // below 1% -> round up to 1%
-            notCovered = 1;
-         }
-      }
-      else if (mCoverage != 0)
-      {
-         notCovered = MAX_PERCENTAGE;
-      }
-      else // no coverage at all (might be interface...
-      {
-         notCovered = 0;
-      }
-      return MAX_PERCENTAGE - notCovered;
+       Assert.assertTrue("Unexpected call if no coverage data is available.", 
+           mCoverageData);
+
+       final int notCoveredLinesOfCode = mViolations[Severity.COVERAGE.toInt()];
+       
+       int notCovered;
+       if (mCoveredLinesOfCode != 0)
+       {
+           notCovered = (notCoveredLinesOfCode * MAX_PERCENTAGE)
+              / (mCoveredLinesOfCode + notCoveredLinesOfCode);
+           if ((notCovered == 0) && (notCoveredLinesOfCode > 0))
+           {  // below 1% -> round up to 1%
+               notCovered = 1;
+           }
+       }
+       else if (notCoveredLinesOfCode > 0)
+       {
+           notCovered = MAX_PERCENTAGE;
+       }
+       else // no coverage at all (might be interface...
+       {
+           notCovered = 0;
+       }
+       return MAX_PERCENTAGE - notCovered;
    }
 
    public int getNumberOfFindings ()
    {
-      // coverage is not part of this number any more.
-      return mInfo + mWarning + mError;
+       int sum = 0;
+       for (int i = 0; i < Severity.COVERAGE.toInt(); i++)
+       {
+           sum += mViolations[i];
+       }
+       return sum;
    }
 
    public String getCoverageBar ()
@@ -499,24 +427,25 @@ public final class FileSummary
       final int notCovered = MAX_PERCENTAGE - getCoverage();
 
       final StringBuffer sb = new StringBuffer();
-      sb.append("<table width='100%' cellspacing='0' cellpadding='0'>"
-            + "<tr valign='middle'>");
+      sb.append("<table width='100%' cellspacing='0' cellpadding='0' "
+            + "summary='coverage-bar'><tr valign='middle'>");
       if (notCovered < MAX_PERCENTAGE)
       {
-         sb.append("<td class=\"ok\" width=\"");
+         sb.append("<td class='ok' width='");
          sb.append(MAX_PERCENTAGE - notCovered);
-         sb.append("%\" height=\"10\"></td>");
+         sb.append("%' height='10'></td>");
       }
       if (notCovered != 0)
       {
-         sb.append("<td class=\"error\" width=\"");
+         sb.append("<td class='error' width='");
          sb.append(notCovered);
-         sb.append("%\" height=\"10\"></td></tr>");
+         sb.append("%' height='10'></td></tr>");
       }
       sb.append("</tr></table>");
       return sb.toString();
    }
 
+   /** {@inheritDoc} */
    public int compareTo (Object o)
    {
       int result = 0;
@@ -534,6 +463,25 @@ public final class FileSummary
       }
       return result;
    }
+
+   /** 
+    * @deprecated This method does not support the new severity levels. 
+    */
+   public static float calculateQuality (int loc, int info, int warning, 
+       int error, int coverage)
+   {
+       final int[] violations = new int[Severity.VALUES.size()];
+       violations[Severity.INFO.toInt()] = info;
+       violations[Severity.COVERAGE.toInt()] = coverage;
+       violations[Severity.WARNING.toInt()] = warning;
+       violations[Severity.ERROR.toInt()] = error;
+       return FileSummary.calculateQuality(loc, violations);
+   }
+   
+   /**
+    * Comparator that allows to sort the FileSummary by name of the package.
+    * @author Andreas Mandel
+    */
    static class SortByPackage implements Comparator, Serializable
    {
       private static final long serialVersionUID = 2244367340241672131L;
@@ -543,6 +491,11 @@ public final class FileSummary
          return ((FileSummary) o1).compareTo(o2);
       }
    }
+
+   /**
+    * Comparator that allows to sort the FileSummary by quality.
+    * @author Andreas Mandel
+    */
    static class SortByQuality implements Comparator, Serializable
    {
       private static final long serialVersionUID = 1718175789352629538L;
@@ -567,6 +520,11 @@ public final class FileSummary
          return result;
       }
    }
+
+   /**
+    * Comparator that allows to sort the FileSummary by coverage.
+    * @author Andreas Mandel
+    */
    static final class SortByCoverage implements Comparator, Serializable
    {
       private static final long serialVersionUID = -4275903074787742250L;

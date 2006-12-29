@@ -52,13 +52,19 @@ tr.cpdeven td { background:#d0f0d0; }
 /* Percent bar colors */
 tr.odd td.ok { background:green }
 tr.odd td.info { background:#e0f0ff; }
+tr.odd td.code-style { background:#e0f0ff; }
 tr.odd td.coverage { background:#ffffc0; }
+tr.odd td.design { background:#d7c7ff; }
 tr.odd td.warning { background:#d7c7ff; }
+tr.odd td.cpd { background:#d7c7ff; }
 tr.odd td.error { background:red }
 tr.even td.ok { background:green }
 tr.even td.info { background:#e0f0ff; }
+tr.even td.code-style { background:#e0f0ff; }
 tr.even td.coverage { background:#ffffc0; }
+tr.even td.design { background:#d7c7ff; }
 tr.even td.warning { background:#d7c7ff; }
+tr.even td.cpd { background:#d7c7ff; }
 tr.even td.error { background:red }
 
 

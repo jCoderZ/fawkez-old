@@ -20,13 +20,14 @@
       </xsd:annotation>
       <xsd:restriction base='xsd:string'>
          <xsd:enumeration value='filtered'/>
-         <xsd:enumeration value='false-positive'/>
          <xsd:enumeration value='ok'/>
-         <xsd:enumeration value='info'/>
-         <xsd:enumeration value='warning'/>
-         <xsd:enumeration value='error'/>
          <xsd:enumeration value='coverage'/>
+         <xsd:enumeration value='info'/>
+         <xsd:enumeration value='code-style'/>
+         <xsd:enumeration value='design'/>
+         <xsd:enumeration value='warning'/>
          <xsd:enumeration value='cpd'/>
+         <xsd:enumeration value='error'/>
       </xsd:restriction>
    </xsd:simpleType>
 

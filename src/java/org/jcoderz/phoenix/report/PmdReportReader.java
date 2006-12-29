@@ -132,7 +132,7 @@ public final class PmdReportReader
             final Item item = new ObjectFactory().createItem();
             item.setMessage(violation.getValue().trim());
             item.setOrigin(Origin.PMD);
-            item.setSeverity(mapPriority(violation.getPriority()));
+            item.setSeverity(mapPriority(violation));
             item.setFindingType(violation.getRule());
             item.setLine(violation.getLine());
 
@@ -141,26 +141,27 @@ public final class PmdReportReader
         return items;
     }
 
-    private Severity mapPriority (int pmdPriority)
+    private Severity mapPriority (Violation violation)
     {
         final Severity ret;
-
-        switch (pmdPriority)
+        
+        switch (violation.getPriority())
         {
             case PRIORITY_HIGH:
                 ret = Severity.ERROR;
                 break;
-
             case PRIORITY_MEDIUM_HIGH:
-            case PRIORITY_MEDIUM:
                 ret = Severity.WARNING;
                 break;
-
+            case PRIORITY_MEDIUM:
+                ret = Severity.DESIGN;
+                break;
             case PRIORITY_MEDIUM_LOW:
+                ret = Severity.CODE_STYLE;
+                break;
             case PRIORITY_LOW:
                 ret = Severity.INFO;
                 break;
-
             default:
                 ret = Severity.WARNING;
         }

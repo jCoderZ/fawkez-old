@@ -4,13 +4,29 @@
   <description>
       This ruleset checks the jCoderZ Java code for bad stuff
    </description>
+   <!-- priorities are maped to JcReport priorities as follows:
+         5: INFO
+         4: CODE_STYLE
+         3: DESIGN
+         2: WARNING
+         1: ERROR
+     -->
 <!-- =================================================================== -->
 <!--basic-->
 <!-- =================================================================== -->
-  <rule ref="rulesets/basic.xml/AvoidDecimalLiteralsInBigDecimalConstructor"/> <!-- CHECKME: 3.5 -->
-  <rule ref="rulesets/basic.xml/AvoidThreadGroup"/> <!-- CHECKME: 3.6 -->
+  <rule ref="rulesets/basic.xml/AvoidDecimalLiteralsInBigDecimalConstructor"> 
+  		<!-- CHECKME: 3.5 -->
+  		<priority>4</priority>
+  </rule>
+  <rule ref="rulesets/basic.xml/AvoidThreadGroup"> 
+  		<!-- CHECKME: 3.6 -->
+  		<priority>4</priority>
+  </rule>
 <!--  <rule ref="rulesets/basic.xml/BooleanInstantiation"/> -->
-  <rule ref="rulesets/basic.xml/ClassCastExceptionWithToArray"/> <!-- CHECKME: 3.5 -->
+  <rule ref="rulesets/basic.xml/ClassCastExceptionWithToArray"> 
+  		<!-- CHECKME: 3.5 -->
+  		<priority>4</priority>
+  </rule>
 <!--   <rule ref="rulesets/basic.xml/CollapsibleIfStatements"/> -->
 <!--  <rule ref="rulesets/basic.xml/DoubleCheckedLocking"/> -->
 <!--  <rule ref="rulesets/basic.xml/EmptyCatchBlock"/> -->
@@ -22,31 +38,69 @@
 <!--  <rule ref="rulesets/basic.xml/EmptySynchronizedBlock"/> -->
 <!--  <rule ref="rulesets/basic.xml/EmptyTryBlock"/> -->
 <!--  <rule ref="rulesets/basic.xml/EmptyWhileStmt"/> -->
-  <rule ref="rulesets/basic.xml/ForLoopShouldBeWhileLoop"/>
-  <rule ref="rulesets/basic.xml/JumbledIncrementer"/>
-  <rule ref="rulesets/basic.xml/MisplacedNullCheck"/> <!-- CHECKME: 3.5 -->
+  <rule ref="rulesets/basic.xml/ForLoopShouldBeWhileLoop">
+  		<priority>4</priority>
+  </rule>
+  <rule ref="rulesets/basic.xml/JumbledIncrementer">
+  		<priority>4</priority>
+  </rule>
+  <rule ref="rulesets/basic.xml/MisplacedNullCheck"> 
+  		<!-- CHECKME: 3.5 -->
+  		<priority>4</priority>
+  </rule>
 <!--  <rule ref="rulesets/basic.xml/OverrideBothEqualsAndHashcode"/> Detected by Findbugs -->
-  <rule ref="rulesets/basic.xml/ReturnFromFinallyBlock"/>
-  <rule ref="rulesets/basic.xml/UnconditionalIfStatement"/>
-  <rule ref="rulesets/basic.xml/UnnecessaryConversionTemporary"/>
-  <rule ref="rulesets/basic.xml/UnnecessaryFinalModifier"/>
-  <rule ref="rulesets/basic.xml/UnnecessaryReturn"/>
-  <rule ref="rulesets/basic.xml/UnusedNullCheckInEquals"/> <!-- CHECKME: 3.5 -->
-  <rule ref="rulesets/basic.xml/UselessOperationOnImmutable"/> <!-- CHECKME: 3.5 -->
-  <rule ref="rulesets/basic.xml/UselessOverridingMethod"/> <!-- CHECKME: 3.5 -->
+  <rule ref="rulesets/basic.xml/ReturnFromFinallyBlock">
+  		<priority>3</priority>
+  </rule>
+  <rule ref="rulesets/basic.xml/UnconditionalIfStatement">
+  		<priority>3</priority>
+  </rule>
+  <rule ref="rulesets/basic.xml/UnnecessaryConversionTemporary">
+  		<priority>3</priority>
+  </rule>
+  <rule ref="rulesets/basic.xml/UnnecessaryFinalModifier">
+  		<priority>4</priority>
+  </rule>
+  <rule ref="rulesets/basic.xml/UnnecessaryReturn">
+  		<priority>4</priority>
+  </rule>
+  <rule ref="rulesets/basic.xml/UnusedNullCheckInEquals"> 
+  		<!-- CHECKME: 3.5 -->
+  		<priority>4</priority>
+  </rule>
+  <rule ref="rulesets/basic.xml/UselessOperationOnImmutable"> 
+  		<!-- CHECKME: 3.5 -->
+  		<priority>2</priority>
+  </rule>
+  <rule ref="rulesets/basic.xml/UselessOverridingMethod"> 
+  		<!-- CHECKME: 3.5 -->
+  		<priority>3</priority>
+  </rule>
 <!-- =================================================================== -->
 <!--braces-->
 <!-- =================================================================== -->
-  <rule ref="rulesets/braces.xml/ForLoopsMustUseBraces"/>
-  <rule ref="rulesets/braces.xml/IfElseStmtsMustUseBraces"/>
-  <rule ref="rulesets/braces.xml/IfStmtsMustUseBraces"/>
+  <rule ref="rulesets/braces.xml/ForLoopsMustUseBraces">
+  		<priority>4</priority>
+  </rule>
+  <rule ref="rulesets/braces.xml/IfElseStmtsMustUseBraces">
+  		<priority>4</priority>
+  </rule>
+  <rule ref="rulesets/braces.xml/IfStmtsMustUseBraces">
+  		<priority>4</priority>
+  </rule>
 <!--  <rule ref="rulesets/braces.xml/WhileLoopsMustUseBraces"/> -->
 <!-- =================================================================== -->
 <!--clone-->
 <!-- =================================================================== -->
-  <rule ref="rulesets/clone.xml/CloneMethodMustImplementCloneable"/>
-  <rule ref="rulesets/clone.xml/CloneThrowsCloneNotSupportedException"/>
-  <rule ref="rulesets/clone.xml/ProperCloneImplementation"/>
+  <rule ref="rulesets/clone.xml/CloneMethodMustImplementCloneable">
+  		<priority>2</priority>
+  </rule>
+  <rule ref="rulesets/clone.xml/CloneThrowsCloneNotSupportedException">
+  		<priority>2</priority>
+  </rule>
+  <rule ref="rulesets/clone.xml/ProperCloneImplementation">
+  		<priority>1</priority>
+  </rule>
 <!-- =================================================================== -->
 <!--codesize-->
 <!-- =================================================================== -->
@@ -54,28 +108,44 @@
 <!--  <rule ref="rulesets/codesize.xml/ExcessiveClassLength"/> -->
 <!--  <rule ref="rulesets/codesize.xml/ExcessiveMethodLength"/>-->
 <!--  <rule ref="rulesets/codesize.xml/ExcessiveParameterList"/> -->
-  <rule ref="rulesets/codesize.xml/ExcessivePublicCount"/>
+  <rule ref="rulesets/codesize.xml/ExcessivePublicCount">
+  		<priority>4</priority>
+  </rule>
 <!--  <rule ref="rulesets/codesize.xml/TooManyFields"/> -->
 <!-- =================================================================== -->
 <!--controversial-->
 <!-- =================================================================== -->
 <!--  <rule ref="rulesets/controversial.xml/AssignmentInOperand"/> -->
 <!--  <rule ref="rulesets/controversial.xml/AtLeastOneConstructor"/> -->
-	  <rule ref="rulesets/controversial.xml/BooleanInversion"/> <!-- Checkme 3.5 -->
+  <rule ref="rulesets/controversial.xml/BooleanInversion"> 
+    <!-- Checkme 3.5 -->
+	<priority>4</priority>
+  </rule>  		
 <!--  <rule ref="rulesets/controversial.xml/CallSuperInConstructor"/> -->
 <!--  <rule ref="rulesets/controversial.xml/DontImportSun"/> -->
 <!--  <rule ref="rulesets/controversial.xml/DefaultPackage"/> -->
 <!--  <rule ref="rulesets/controversial.xml/NullAssignment"/> -->
 <!--  <rule ref="rulesets/controversial.xml/OnlyOneReturn"/> -->
 <!--  <rule ref="rulesets/controversial.xml/SingularField"/> Good check but many false positives-->
-  <rule ref="rulesets/controversial.xml/SuspiciousOctalEscape"/>
-  <rule ref="rulesets/controversial.xml/UnnecessaryConstructor"/>
-  <rule ref="rulesets/controversial.xml/UnnecessaryParentheses"/>
-  <rule ref="rulesets/controversial.xml/UnusedModifier"/>
+  <rule ref="rulesets/controversial.xml/SuspiciousOctalEscape">
+	 <priority>4</priority>
+  </rule>  		
+  <rule ref="rulesets/controversial.xml/UnnecessaryConstructor">
+	 <priority>4</priority>
+  </rule>  		
+  <rule ref="rulesets/controversial.xml/UnnecessaryParentheses">
+	 <priority>4</priority>
+  </rule>  		
+  <rule ref="rulesets/controversial.xml/UnusedModifier">
+	 <priority>4</priority>
+  </rule>  		
 <!-- =================================================================== -->
 <!--coupling-->
 <!-- =================================================================== -->
-  <rule ref="rulesets/coupling.xml/CouplingBetweenObjects"/>
+  <rule ref="rulesets/coupling.xml/CouplingBetweenObjects">
+ 	 <priority>3</priority>
+  </rule>  		
+ 
 <!--  <rule ref="rulesets/coupling.xml/ExcessiveImports"/> -->
 <!--  <rule ref="rulesets/coupling.xml/LooseCoupling"/> -->
 <!-- =================================================================== -->
@@ -86,44 +156,107 @@
 <!--design-->
 <!-- =================================================================== -->
 <!--  <rule ref="rulesets/design.xml/AccessorClassGeneration"/> -->
-  <rule ref="rulesets/design.xml/AssignmentToNonFinalStatic"/> <!-- CHECKME: 3.0 -->
-  <rule ref="rulesets/design.xml/AvoidConstantsInterface"/> <!-- CHECKME: 3.5 -->
+  <rule ref="rulesets/design.xml/AssignmentToNonFinalStatic"> 
+  		<!-- CHECKME: 3.0 -->
+	 <priority>3</priority>
+  </rule>  		
+  <rule ref="rulesets/design.xml/AvoidConstantsInterface"> 
+    <!-- CHECKME: 3.5 -->
+	 <priority>3</priority>
+  </rule>  		
 <!--  <rule ref="rulesets/design.xml/AvoidDeeplyNestedIfStmts"/> -->
-  <rule ref="rulesets/design.xml/AvoidInstanceofChecksInCatchClause"/>
-  <rule ref="rulesets/design.xml/AvoidProtectedFieldInFinalClass"/>
-  <rule ref="rulesets/design.xml/AvoidReassigningParameters"/>
+  <rule ref="rulesets/design.xml/AvoidInstanceofChecksInCatchClause">
+	 <priority>4</priority>
+  </rule>  		
+  <rule ref="rulesets/design.xml/AvoidProtectedFieldInFinalClass">
+	 <priority>4</priority>
+  </rule>  		
+  <rule ref="rulesets/design.xml/AvoidReassigningParameters">
+	 <priority>4</priority>
+  </rule>  		
 <!--  <rule ref="rulesets/design.xml/AvoidSynchronizedAtMethodLevel"/> -->
-  <rule ref="rulesets/design.xml/BadComparison"/>
+  <rule ref="rulesets/design.xml/BadComparison">
+	 <priority>2</priority>
+  </rule>  		
 <!--  <rule ref="rulesets/design.xml/CloseResource"/> -->
 <!--  <rule ref="rulesets/design.xml/ConfusingTernary"/> -->
-  <rule ref="rulesets/design.xml/ConstructorCallsOverridableMethod"/>
-  <rule ref="rulesets/design.xml/DefaultLabelNotLastInSwitchStmt"/>
+  <rule ref="rulesets/design.xml/ConstructorCallsOverridableMethod">
+	 <priority>3</priority>
+  </rule>  		
+  <rule ref="rulesets/design.xml/DefaultLabelNotLastInSwitchStmt">
+	 <priority>4</priority>
+  </rule>  		
 <!--  <rule ref="rulesets/design.xml/EqualsNull"/> -->
-  <rule ref="rulesets/design.xml/FinalFieldCouldBeStatic"/>
-  <rule ref="rulesets/design.xml/IdempotentOperations"/> <!-- test -->
-  <rule ref="rulesets/design.xml/ImmutableField"/>
-  <rule ref="rulesets/design.xml/InstantiationToGetClass"/>
-  <rule ref="rulesets/design.xml/MissingBreakInSwitch"/>
+  <rule ref="rulesets/design.xml/FinalFieldCouldBeStatic">
+	 <priority>3</priority>
+  </rule>  		
+  <rule ref="rulesets/design.xml/IdempotentOperations"> <!-- test -->
+	 <priority>4</priority>
+  </rule>  		
+  <rule ref="rulesets/design.xml/ImmutableField">
+	 <priority>4</priority>
+  </rule>  		
+  <rule ref="rulesets/design.xml/InstantiationToGetClass">
+	 <priority>3</priority>
+  </rule>  		
+  <rule ref="rulesets/design.xml/MissingBreakInSwitch">
+  	 <priority>4</priority>
+  </rule>  		
+  
 <!--  <rule ref="rulesets/design.xml/MissingStaticMethodInNonInstantiatableClass"/>  -->
-  <rule ref="rulesets/design.xml/NonCaseLabelInSwitchStatement"/>
-  <rule ref="rulesets/design.xml/NonStaticInitializer"/>
-  <rule ref="rulesets/design.xml/NonThreadSafeSingleton"/> <!-- CHECKME: 3.5 -->
-  <rule ref="rulesets/design.xml/PositionLiteralsFirstInComparisons"/> <!-- CHECKME: 3.5 -->
+  <rule ref="rulesets/design.xml/NonCaseLabelInSwitchStatement">
+  	 <priority>4</priority>
+  </rule>  		
+  <rule ref="rulesets/design.xml/NonStaticInitializer">
+  	 <priority>4</priority>
+  </rule>  		
+  <rule ref="rulesets/design.xml/NonThreadSafeSingleton"> 
+    <!-- CHECKME: 3.5 -->
+    <priority>3</priority>
+  </rule>  		
+  <rule ref="rulesets/design.xml/PositionLiteralsFirstInComparisons"> 
+  	 <!-- CHECKME: 3.5 -->
+    <priority>4</priority>
+  </rule>  		
 <!--  <rule ref="rulesets/design.xml/PreserveStackTrace"/> Great checker but many false positives 3.7 -->
-  <rule ref="rulesets/design.xml/OptimizableToArrayCall"/>
-  <rule ref="rulesets/design.xml/SimpleDateFormatNeedsLocale"/>
-  <rule ref="rulesets/design.xml/SimplifyBooleanExpressions"/>
+  <rule ref="rulesets/design.xml/OptimizableToArrayCall">
+    <priority>4</priority>
+  </rule>  		
+  <rule ref="rulesets/design.xml/SimpleDateFormatNeedsLocale">
+     <priority>4</priority>
+  </rule>  		
+  <rule ref="rulesets/design.xml/SimplifyBooleanExpressions">
+      <priority>4</priority>
+  </rule>  		
 <!--  <rule ref="rulesets/design.xml/SimplifyConditional"/> -->
 <!--  <rule ref="rulesets/design.xml/SimplifyBooleanReturns"/> -->
-  <rule ref="rulesets/design.xml/SwitchDensity"/>
+  <rule ref="rulesets/design.xml/SwitchDensity">
+    <priority>4</priority>
+  </rule>  		
 <!--  <rule ref="rulesets/design.xml/SwitchStmtsShouldHaveDefault"/> -->
-  <rule ref="rulesets/design.xml/UncommentedEmptyMethod"/> <!-- CHECKME: 3.5 -->
-  <rule ref="rulesets/design.xml/UncommentedEmptyConstructor"/> <!-- CHECKME: 3.5 -->
-  <rule ref="rulesets/design.xml/UnnecessaryLocalBeforeReturn"/> <!-- CHECKME: 3.5 -->
-  <rule ref="rulesets/design.xml/UnsynchronizedStaticDateFormatter"/> <!-- CHECKME: 3.6 -->
-  <rule ref="rulesets/design.xml/UseLocaleWithCaseConversions"/>
-  <rule ref="rulesets/design.xml/UseNotifyAllInsteadOfNotify"/>
-<!--  <rule ref="rulesets/design.xml/UseSingleton"/> -->
+  <rule ref="rulesets/design.xml/UncommentedEmptyMethod"> 
+    <!-- CHECKME: 3.5 -->
+    <priority>4</priority>
+  </rule>  		
+  <rule ref="rulesets/design.xml/UncommentedEmptyConstructor">
+    <!-- CHECKME: 3.5 -->
+    <priority>4</priority>
+  </rule>  		
+  <rule ref="rulesets/design.xml/UnnecessaryLocalBeforeReturn">
+    <!-- CHECKME: 3.5 -->
+    <priority>4</priority>
+  </rule>  		
+  <rule ref="rulesets/design.xml/UnsynchronizedStaticDateFormatter"> 
+  	 <!-- CHECKME: 3.6 -->
+    <priority>2</priority>
+  </rule>  		
+  <rule ref="rulesets/design.xml/UseLocaleWithCaseConversions">
+    <priority>4</priority>
+  </rule>  		
+  <rule ref="rulesets/design.xml/UseNotifyAllInsteadOfNotify">
+    <priority>3</priority>
+  </rule>  		
+  <!--  <rule ref="rulesets/design.xml/UseSingleton"/> -->
 	
 <!-- =================================================================== -->
 <!--favorites-->
@@ -131,17 +264,32 @@
 <!-- =================================================================== -->
 <!--finalizers-->
 <!-- =================================================================== -->
-  <rule ref="rulesets/finalizers.xml/AvoidCallingFinalize"/>
-  <rule ref="rulesets/finalizers.xml/EmptyFinalizer"/>
-  <rule ref="rulesets/finalizers.xml/FinalizeDoesNotCallSuperFinalize"/>
-  <rule ref="rulesets/finalizers.xml/FinalizeOnlyCallsSuperFinalize"/>
-  <rule ref="rulesets/finalizers.xml/FinalizeOverloaded"/>
-  <rule ref="rulesets/finalizers.xml/FinalizeShouldBeProtected"/>
+  <rule ref="rulesets/finalizers.xml/AvoidCallingFinalize">
+    <priority>3</priority>
+  </rule>  		
+  <rule ref="rulesets/finalizers.xml/EmptyFinalizer">
+    <priority>4</priority>
+  </rule>  		
+  <rule ref="rulesets/finalizers.xml/FinalizeDoesNotCallSuperFinalize">
+    <priority>3</priority>
+  </rule>  		
+  <rule ref="rulesets/finalizers.xml/FinalizeOnlyCallsSuperFinalize">
+    <priority>4</priority>
+  </rule>  		
+  <rule ref="rulesets/finalizers.xml/FinalizeOverloaded">
+     <priority>3</priority>
+  </rule>  		
+  <rule ref="rulesets/finalizers.xml/FinalizeShouldBeProtected">
+    <priority>4</priority>
+  </rule>  		
+  
 <!-- =================================================================== -->
 <!--imports-->
 <!-- =================================================================== -->
 <!--  <rule ref="rulesets/imports.xml/DontImportJavaLang"/> -->
-  <rule ref="rulesets/imports.xml/DuplicateImports"/>
+  <rule ref="rulesets/imports.xml/DuplicateImports">
+    <priority>4</priority>
+  </rule>  		  
 <!--  <rule ref="rulesets/imports.xml/ImportFromSamePackage"/> -->
 <!--  <rule ref="rulesets/imports.xml/UnusedImports"/> -->
 <!-- =================================================================== -->
@@ -152,53 +300,112 @@
 <!-- =================================================================== -->
 <!--junit-->
 <!-- =================================================================== -->
-  <rule ref="rulesets/junit.xml/JUnitAssertionsShouldIncludeMessage"/>
-  <rule ref="rulesets/junit.xml/JUnitSpelling"/>
-  <rule ref="rulesets/junit.xml/JUnitStaticSuite"/>
+  <rule ref="rulesets/junit.xml/JUnitAssertionsShouldIncludeMessage">
+    <priority>4</priority>
+  </rule>  		  
+  <rule ref="rulesets/junit.xml/JUnitSpelling">
+    <priority>4</priority>
+  </rule>  		  
+  <rule ref="rulesets/junit.xml/JUnitStaticSuite">
+    <priority>4</priority>
+  </rule>  		  
 <!-- many false positives  <rule ref="rulesets/junit.xml/JUnitTestsShouldIncludeAssert"/> -->
-  <rule ref="rulesets/junit.xml/SimplifyBooleanAssertion"/> <!-- CHECKME: 3.6 -->
+  <rule ref="rulesets/junit.xml/SimplifyBooleanAssertion"> 
+    <!-- CHECKME: 3.6 -->
+    <priority>4</priority>
+  </rule>  		  
 <!--  <rule ref="rulesets/junit.xml/TestClassWithoutTestCases"/> -->
-  <rule ref="rulesets/junit.xml/UnnecessaryBooleanAssertion"/>
-  <rule ref="rulesets/junit.xml/UseAssertEqualsInsteadOfAssertTrue"/>
-  <rule ref="rulesets/junit.xml/UseAssertNullInsteadOfAssertTrue"/> <!-- CHECKME: 3.5 -->
-  <rule ref="rulesets/junit.xml/UseAssertSameInsteadOfAssertTrue"/>
+  <rule ref="rulesets/junit.xml/UnnecessaryBooleanAssertion">
+    <priority>4</priority>
+  </rule>  		  
+  <rule ref="rulesets/junit.xml/UseAssertEqualsInsteadOfAssertTrue">
+    <priority>4</priority>
+  </rule>  		  
+  <rule ref="rulesets/junit.xml/UseAssertNullInsteadOfAssertTrue"> 
+  	 <!-- CHECKME: 3.5 -->
+    <priority>4</priority>
+  </rule>  		  
+  <rule ref="rulesets/junit.xml/UseAssertSameInsteadOfAssertTrue">
+    <priority>4</priority>
+  </rule>  		  
 
    <!-- =================================================================== -->
 <!--logging-java-->
 <!-- =================================================================== -->
-  <rule ref="rulesets/logging-java.xml/AvoidPrintStackTrace"/> <!-- CHECKME: 3.5 -->
-  <rule ref="rulesets/logging-java.xml/LoggerIsNotStaticFinal"/>
-  <rule ref="rulesets/logging-java.xml/MoreThanOneLogger"/>
-  <rule ref="rulesets/logging-java.xml/SystemPrintln"/>
+  <rule ref="rulesets/logging-java.xml/AvoidPrintStackTrace"> 
+    <!-- CHECKME: 3.5 -->
+    <priority>3</priority>
+  </rule>  		  
+  <rule ref="rulesets/logging-java.xml/LoggerIsNotStaticFinal">
+    <priority>3</priority>
+  </rule>  		  
+  <rule ref="rulesets/logging-java.xml/MoreThanOneLogger">
+    <priority>3</priority>
+  </rule>  		  
+  <rule ref="rulesets/logging-java.xml/SystemPrintln">
+    <priority>3</priority>
+  </rule>  		  
 <!-- =================================================================== -->
 <!-- Migration ruleset -->
 <!-- =================================================================== -->
-  <rule ref="rulesets/migrating.xml/AvoidAssertAsIdentifier"/> <!-- CHECKME: 3.5 -->
-  <rule ref="rulesets/migrating.xml/AvoidEnumAsIdentifier"/> <!-- CHECKME: 3.5 -->
+  <rule ref="rulesets/migrating.xml/AvoidAssertAsIdentifier"> 
+    <!-- CHECKME: 3.5 -->
+    <priority>3</priority>
+  </rule>  		  
+  <rule ref="rulesets/migrating.xml/AvoidEnumAsIdentifier"> 
+    <!-- CHECKME: 3.5 -->
+    <priority>3</priority>
+  </rule>  		  
 <!--  <rule ref="rulesets/migrating.xml/IntegerInstantiation"/> Disabled because it enforces jdk 1.5 code CHECKME: 3.5 -->
-  <rule ref="rulesets/migrating.xml/ReplaceEnumerationWithIterator"/> <!-- CHECKME: 3.5 -->
-  <rule ref="rulesets/migrating.xml/ReplaceHashtableWithMap"/> <!-- CHECKME: 3.5 -->
-  <rule ref="rulesets/migrating.xml/ReplaceVectorWithList"/> <!-- CHECKME: 3.5 -->
+  <rule ref="rulesets/migrating.xml/ReplaceEnumerationWithIterator"> 
+    <!-- CHECKME: 3.5 -->
+    <priority>4</priority>
+  </rule>  		  
+  <rule ref="rulesets/migrating.xml/ReplaceHashtableWithMap">
+    <!-- CHECKME: 3.5 -->
+    <priority>4</priority>
+  </rule>  		  
+  <rule ref="rulesets/migrating.xml/ReplaceVectorWithList">
+    <!-- CHECKME: 3.5 -->
+    <priority>4</priority>
+  </rule>  		  
 <!-- =================================================================== -->
 <!--naming-->
 <!-- =================================================================== -->
 <!--  <rule ref="rulesets/naming.xml/AbstractNaming"/> -->
-  <rule ref="rulesets/naming.xml/AvoidDollarSigns"/>
+  <rule ref="rulesets/naming.xml/AvoidDollarSigns">
+    <priority>4</priority>
+  </rule>  		  
 <!--  <rule ref="rulesets/naming.xml/AvoidFieldNameMatchingMethodName"/> -->
 <!--  <rule ref="rulesets/naming.xml/AvoidFieldNameMatchingTypeName"/> -->
-  <rule ref="rulesets/naming.xml/AvoidNonConstructorMethodsWithClassName"/>
+  <rule ref="rulesets/naming.xml/AvoidNonConstructorMethodsWithClassName">
+    <priority>4</priority>
+  </rule>  		  
 <!--  <rule ref="rulesets/naming.xml/ClassNamingConventions"/> -->
 <!--  <rule ref="rulesets/naming.xml/LongVariable"/> -->
 <!--  <rule ref="rulesets/naming.xml/MethodNamingConventions"/> -->
 <!--  <rule ref="rulesets/naming.xml/MethodWithSameNameAsEnclosingClass"/> -->
-  <rule ref="rulesets/naming.xml/MisleadingVariableName"/> <!-- CHECKME: 3.5 -->
-  <rule ref="rulesets/naming.xml/NoPackage"/> <!-- CHECKME: 3.5 -->
-  <rule ref="rulesets/naming.xml/PackageCase"/> <!-- CHECKME: 3.5 -->
+  <rule ref="rulesets/naming.xml/MisleadingVariableName"> 
+    <!-- CHECKME: 3.5 -->
+    <priority>4</priority>
+  </rule>  		  
+  <rule ref="rulesets/naming.xml/NoPackage"> 
+    <!-- CHECKME: 3.5 -->
+    <priority>3</priority>
+  </rule>  		  
+  <rule ref="rulesets/naming.xml/PackageCase">
+    <!-- CHECKME: 3.5 -->
+    <priority>4</priority>
+  </rule>  		  
 <!--  <rule ref="rulesets/naming.xml/ShortMethodName"/> -->
 <!--  <rule ref="rulesets/naming.xml/ShortVariable"/> -->
-  <rule ref="rulesets/naming.xml/SuspiciousConstantFieldName"/>
+  <rule ref="rulesets/naming.xml/SuspiciousConstantFieldName">
+    <priority>4</priority>
+  </rule>  		  
 <!--  <rule ref="rulesets/naming.xml/SuspiciousEqualsMethodName"/> -->
-  <rule ref="rulesets/naming.xml/SuspiciousHashcodeMethodName"/>
+  <rule ref="rulesets/naming.xml/SuspiciousHashcodeMethodName">
+    <priority>4</priority>
+  </rule>  		  
 <!--  <rule ref="rulesets/naming.xml/VariableNamingConventions"/> -->
 <!-- =================================================================== -->
 <!--newrules-->
@@ -206,14 +413,26 @@
 <!-- =================================================================== -->
 <!--Optimization Rules -->
 <!-- =================================================================== -->
-  <rule ref="rulesets/optimizations.xml/AvoidArrayLoops"/> <!-- CHECKME: 3.5 -->
+  <rule ref="rulesets/optimizations.xml/AvoidArrayLoops"> 
+    <!-- CHECKME: 3.5 -->
+    <priority>4</priority>
+  </rule>  		  
 <!--  <rule ref="rulesets/optimizations.xml/AvoidInstantiatingObjectsInLoops"/> -->
 <!--  <rule ref="rulesets/optimizations.xml/LocalVariableCouldBeFinal"/> -->
 <!--   <rule ref="rulesets/optimizations.xml/MethodArgumentCouldBeFinal"/> -->
-  <rule ref="rulesets/optimizations.xml/SimplifyStartsWith"/>
-  <rule ref="rulesets/optimizations.xml/UseArraysAsList"/> <!-- Checkme: 3.5 -->
-  <rule ref="rulesets/optimizations.xml/UseArrayListInsteadOfVector"/>
-  <rule ref="rulesets/optimizations.xml/UseStringBufferForStringAppends"/>
+  <rule ref="rulesets/optimizations.xml/SimplifyStartsWith">
+    <priority>4</priority>
+  </rule>  		  
+  <rule ref="rulesets/optimizations.xml/UseArraysAsList"> 
+    <!-- Checkme: 3.5 -->
+    <priority>4</priority>
+  </rule>  		  
+  <rule ref="rulesets/optimizations.xml/UseArrayListInsteadOfVector">
+    <priority>4</priority>
+  </rule>  		  
+  <rule ref="rulesets/optimizations.xml/UseStringBufferForStringAppends">
+    <priority>4</priority>
+  </rule>  		  
 <!-- =================================================================== -->
 <!--scratchpad-->
 <!-- =================================================================== -->
@@ -221,36 +440,71 @@
 <!--Security Code Guidelines-->
 <!-- =================================================================== -->
 <!--  <rule ref="rulesets/sunsecure.xml/ArrayIsStoredDirectly"/> -->
-  <rule ref="rulesets/sunsecure.xml/MethodReturnsInternalArray"/>
+  <rule ref="rulesets/sunsecure.xml/MethodReturnsInternalArray">
+    <priority>3</priority>
+  </rule>  		  
 <!-- =================================================================== -->
 <!--strictexception-->
 <!-- =================================================================== -->
-  <rule ref="rulesets/strictexception.xml/AvoidCatchingNPE"/>
+  <rule ref="rulesets/strictexception.xml/AvoidCatchingNPE">
+    <priority>3</priority>
+  </rule>  		  
 <!--  <rule ref="rulesets/strictexception.xml/AvoidCatchingThrowable"/> -->
 <!-- CHECKME: nice checker but we don't want the RuntimeException 
    <rule ref="rulesets/strictexception.xml/AvoidThrowingRawExceptionTypes "/>
    <rule ref="rulesets/strictexception.xml/AvoidThrowingNullPointerException"/> -->
 <!--  <rule ref="rulesets/strictexception.xml/ExceptionAsFlowControl"/> -->
-  <rule ref="rulesets/strictexception.xml/SignatureDeclareThrowsException"/>
+  <rule ref="rulesets/strictexception.xml/SignatureDeclareThrowsException">
+    <priority>3</priority>
+  </rule>  		  
 <!-- =================================================================== -->
 <!--strings-->
 <!-- =================================================================== -->
-  <rule ref="rulesets/strings.xml/AppendCharacterWithChar"/> <!-- CHECKME: 3.5 -->
-  <rule ref="rulesets/strings.xml/AvoidDuplicateLiterals"/>
-  <rule ref="rulesets/strings.xml/ConsecutiveLiteralAppends"/> <!-- CHECKME: 3.5 -->
-  <rule ref="rulesets/strings.xml/StringInstantiation"/>
+  <rule ref="rulesets/strings.xml/AppendCharacterWithChar">
+    <!-- CHECKME: 3.5 -->
+    <priority>5</priority>
+  </rule>  		  
+  <rule ref="rulesets/strings.xml/AvoidDuplicateLiterals">
+    <priority>5</priority>
+  </rule>  		  
+  <rule ref="rulesets/strings.xml/ConsecutiveLiteralAppends"> 
+    <!-- CHECKME: 3.5 -->
+    <priority>5</priority>
+  </rule>  		  
+  <rule ref="rulesets/strings.xml/StringInstantiation">
+    <priority>5</priority>
+  </rule>  		  
 <!--  <rule ref="rulesets/strings.xml/StringToString"/> -->
-  <rule ref="rulesets/strings.xml/InefficientEmptyStringCheck"/> <!-- CHECKME: 3.6 -->
-  <rule ref="rulesets/strings.xml/InefficientStringBuffering"/>
-  <rule ref="rulesets/strings.xml/InsufficientStringBufferDeclaration"/> <!-- CHECKME: 3.6 -->
-  <rule ref="rulesets/strings.xml/UnnecessaryCaseChange"/> <!-- CHECKME: 3.5 -->
-  <rule ref="rulesets/strings.xml/UseIndexOfChar"/> <!-- CHECKME: 3.5 -->
-  <rule ref="rulesets/strings.xml/UseStringBufferLength"/> <!-- CHECKME: 3.5 -->
+  <rule ref="rulesets/strings.xml/InefficientEmptyStringCheck"> 
+    <!-- CHECKME: 3.6 -->
+    <priority>5</priority>
+  </rule>  		  
+  <rule ref="rulesets/strings.xml/InefficientStringBuffering">
+    <priority>5</priority>
+  </rule>  		  
+  <rule ref="rulesets/strings.xml/InsufficientStringBufferDeclaration">
+    <!-- CHECKME: 3.6 -->
+    <priority>5</priority>
+  </rule>  		  
+  <rule ref="rulesets/strings.xml/UnnecessaryCaseChange">
+    <!-- CHECKME: 3.5 -->
+    <priority>5</priority>
+  </rule>  		  
+  <rule ref="rulesets/strings.xml/UseIndexOfChar">
+    <!-- CHECKME: 3.5 -->
+    <priority>5</priority>
+  </rule>  		  
+  <rule ref="rulesets/strings.xml/UseStringBufferLength">
+    <!-- CHECKME: 3.5 -->
+    <priority>5</priority>
+  </rule>  		  
 <!-- =================================================================== -->
 <!--unusedcode-->
 <!-- =================================================================== -->
 <!--  <rule ref="rulesets/unusedcode.xml/UnusedFormalParameter"/> -->
 <!--  <rule ref="rulesets/unusedcode.xml/UnusedLocalVariable"/> -->
 <!--  <rule ref="rulesets/unusedcode.xml/UnusedPrivateField"/> -->
-  <rule ref="rulesets/unusedcode.xml/UnusedPrivateMethod"/>
+  <rule ref="rulesets/unusedcode.xml/UnusedPrivateMethod">
+    <priority>5</priority>
+  </rule>  		  
 </ruleset>

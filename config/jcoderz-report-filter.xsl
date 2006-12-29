@@ -120,7 +120,7 @@
                    item[@finding-type = 'SuspiciousConstantFieldName']">
       <item>
          <xs:apply-templates select="@*"/>
-         <xs:attribute name="severity">false-positive</xs:attribute>
+         <xs:attribute name="severity">filtered</xs:attribute>
          <xs:attribute name="severity-reason">Constant declared in interface false positive.</xs:attribute>
       </item>
    </xs:template>
@@ -252,7 +252,7 @@
                   [contains(@message, 'mParameters')]">
       <item>
          <xs:apply-templates select="@*"/>
-         <xs:attribute name="severity">false-positive</xs:attribute>
+         <xs:attribute name="severity">filtered</xs:attribute>
          <xs:attribute name="severity-reason">Map implementation is assumed to be always serializable.</xs:attribute>
       </item>
    </xs:template>

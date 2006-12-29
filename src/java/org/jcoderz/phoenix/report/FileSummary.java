@@ -36,6 +36,8 @@ import java.io.Serializable;
 import java.util.Comparator;
 import java.util.Iterator;
 import org.jcoderz.commons.util.Assert;
+import org.jcoderz.phoenix.report.jaxb.File;
+import org.jcoderz.phoenix.report.jaxb.Item;
 
 /**
  * This class encapsulates all finding information collected for a 
@@ -384,6 +386,16 @@ public final class FileSummary
       return sb.toString();
    }
 
+   /**
+    * Returns the number of violations for the given severity.
+    * @param severity the severity to check.
+    * @return the number of violations for the given severity
+    */
+   public int getViolations (Severity severity)
+   {
+       return mViolations[severity.toInt()];
+   }
+
    public int getCoverage ()
    {
        Assert.assertTrue("Unexpected call if no coverage data is available.", 
@@ -445,6 +457,23 @@ public final class FileSummary
       return sb.toString();
    }
 
+   /** 
+    * Adds the counters from the given file to this summary.
+    * @param file the data to be added.
+    */
+   public void add (File file)
+   {
+       final Iterator i = file.getItem().iterator();
+       mFiles++;
+       mLinesOfCode += file.getLoc(); 
+       while (i.hasNext())
+       {
+          final Item item = (Item) i.next();
+          final Severity severity = item.getSeverity();
+          addViolation(severity);
+       }
+   }
+   
    /** {@inheritDoc} */
    public int compareTo (Object o)
    {

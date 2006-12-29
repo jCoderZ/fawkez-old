@@ -65,6 +65,7 @@ public final class CheckstyleFindingType
       = "org/jcoderz/phoenix/checkstyle/checkstyle-messages.xml";
 
    private final String mMessagePattern;
+   private final Severity mSeverity;
 
    static
    {
@@ -78,7 +79,8 @@ public final class CheckstyleFindingType
    public static final CheckstyleFindingType CS_INTERFACE_TYPE =
       new CheckstyleFindingType("CS_INTERFACE_TYPE", "Interface type.",
          "Interfaces should describe a type and hence have methods.",
-         "interfaces should describe a type and hence have methods.");
+         "interfaces should describe a type and hence have methods.",
+         Severity.DESIGN);
 
    /** 
     * Checkstyle finding type that relates to:
@@ -187,7 +189,8 @@ public final class CheckstyleFindingType
       new CheckstyleFindingType("CS_TODO",
          "Comment matches to-do format.",
          "Comment matches to-do format.",
-         "Comment matches to-do format '.*'\\.");
+         "Comment matches to-do format '.*'\\.",
+         Severity.INFO);
 
    /** 
     * Checkstyle finding type that relates to:
@@ -258,7 +261,7 @@ public final class CheckstyleFindingType
       new CheckstyleFindingType("CS_HIDDEN_FIELD",
          "A field is hidden.",
          "A field is hidden.",
-         "'.*' hides a field\\.");
+         "'.*' hides a field\\.", Severity.DESIGN);
 
    /** 
     * Checkstyle finding type that relates to:
@@ -289,7 +292,8 @@ public final class CheckstyleFindingType
       new CheckstyleFindingType("CS_MAX_LEN_METHOD",
          "Method length exceeds the maximum allowed length.",
          "A Method should have a moderate length...",
-         "Method length is [\\.,0-9]+ lines \\(max allowed is [0-9]+\\)\\.");
+         "Method length is [\\.,0-9]+ lines \\(max allowed is [0-9]+\\)\\.",
+         Severity.DESIGN);
 
    /** 
     * Checkstyle finding type that relates to:
@@ -300,7 +304,8 @@ public final class CheckstyleFindingType
          "Length of anonymous inner class exceeds the maximum allowed length.",
          "A anonymous inner class should have a moderate length...",
          "Anonymous inner class length is [0-9]+ lines "
-         + "\\(max allowed is [0-9]+\\)\\.");
+         + "\\(max allowed is [0-9]+\\)\\.",
+         Severity.DESIGN);
 
    /** 
     * Checkstyle finding type that relates to:
@@ -335,13 +340,14 @@ public final class CheckstyleFindingType
 
    /** 
     * Checkstyle finding type that relates to:
-    * <i>Deeply nested trys</i>.
+    * <i>Deeply nested tries</i>.
     */
    public static final CheckstyleFindingType CS_NESTED_TRY_DEPTH =
       new CheckstyleFindingType("CS_NESTED_TRY_DEPTH",
-         "Deeply nested trys.",
+         "Deeply nested tries.",
          "The nesting level for the try/catches is to deep.",
-         "Nested try depth is [0-9]+ \\(max allowed is [0-9]+\\)\\.");
+         "Nested try depth is [0-9]+ \\(max allowed is [0-9]+\\)\\.",
+         Severity.DESIGN);
 
    /** 
     * Checkstyle finding type that relates to:
@@ -351,8 +357,9 @@ public final class CheckstyleFindingType
       new CheckstyleFindingType("CS_NUMBER_OF_PARAMETERS",
          "Too many parameters.",
          "Too many parameters.",
-         "More than [0-9]+ parameters\\.");
-
+         "More than [0-9]+ parameters\\.",
+         Severity.DESIGN);
+   
    /** 
     * Checkstyle finding type that relates to:
     * <i>Method unused</i>.
@@ -432,7 +439,8 @@ public final class CheckstyleFindingType
          "Invalid log level for trace log.",
          "Trace log messages should have log level smaller than info, for "
             + "higher severity use predefined log messages.",
-         "Maximum allowed log level for trace log is '.*' but was '.*'\\.");
+         "Maximum allowed log level for trace log is '.*' but was '.*'\\.",
+         Severity.DESIGN);
 
    /** 
     * Checkstyle finding type that relates to:
@@ -464,18 +472,22 @@ public final class CheckstyleFindingType
           "Avoid redundant code.",
           "Redundant '.*' modifier\\.");
 
-   /** 
-    * Checkstyle finding type that relates to:
-    * <i>Local variable unused</i>.
-    */
    private CheckstyleFindingType (String symbol, String shortText,
-         String description, String messagePattern)
+         String description, String messagePattern, Severity severity)
    {
       super(symbol, shortText, description);
       mMessagePattern = messagePattern;
+      mSeverity = severity;
       CHECKSTYLE_FINDING_TYPES.add(this);
    }
 
+    private CheckstyleFindingType (String symbol, String shortText,
+        String description, String messagePattern)
+    {
+        this(symbol, shortText, description, messagePattern, 
+            Severity.CODE_STYLE);
+    }
+   
    /**
     * Reads the given message and tries to find a matching finding type.
     * @param message the message to read.
@@ -499,6 +511,12 @@ public final class CheckstyleFindingType
       return result;
    }
 
+   /** @return the severity assigned to findings of this type by default. */
+   public Severity getSeverity ()
+   {
+       return mSeverity;
+   }
+   
    /**
     * @return Returns the messagePattern.
     */

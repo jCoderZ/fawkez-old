@@ -171,11 +171,15 @@ public final class CheckstyleReportReader
                detectFindingTypeForMessage(error.getMessage());
             if (type == null)
             {
-               item.setFindingType("checkstyle"); // FIXME: define type
+               item.setFindingType("checkstyle");
+               logger.log(Level.INFO, "Could not find finding type for " 
+                   + "Checkstyle finding with message '" + error.getMessage()
+                   + "'.");
             }
             else
             {
                item.setFindingType(type.getSymbol());
+               item.setSeverity(((CheckstyleFindingType) type).getSeverity());
             }
 
             ret.add(item);

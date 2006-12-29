@@ -66,9 +66,12 @@ public final class StatisticCollector
 {
    private static final int MAX_SERVICE_PACKAGES = 15;
    private static final int ROW_ERROR = 0;
-   private static final int ROW_WARNING = 1;
-   private static final int ROW_INFO = 2;
-   private static final int ROW_COVERAGE = 3;
+   private static final int ROW_CPD = 1;
+   private static final int ROW_WARNING = 2;
+   private static final int ROW_DESIGN = 3;
+   private static final int ROW_CODE_STYLE = 4;
+   private static final int ROW_INFO = 5;
+   private static final int ROW_COVERAGE = 6;
    private static final int PERCENT = 100;
    private static final int LARGE_IMAGE_WIDTH = 1000;
    private static final int LARGE_IMAGE_HEIGHT = 600;
@@ -181,12 +184,12 @@ public final class StatisticCollector
       final StringBuffer sb = new StringBuffer();
 
 
-      final Summary all = new Summary();
+      final FileSummary all = new FileSummary(null, null, true);
       final Iterator i = packages.values().iterator();
 
       while (i.hasNext())
       {
-         all.add((Summary) i.next());
+         all.add((FileSummary) i.next());
       }
 
       sb.append("<findingsummary ");
@@ -200,7 +203,7 @@ public final class StatisticCollector
       while (j.hasNext())
       {
          final String pkg = (String) j.next();
-         final Summary summary = (Summary) packages.get(pkg);
+         final FileSummary summary = (FileSummary) packages.get(pkg);
          sb.append("      <package name='");
          sb.append(pkg);
          sb.append("' ");
@@ -218,7 +221,7 @@ public final class StatisticCollector
       while (l.hasNext())
       {
          final String pkg = (String) l.next();
-         final Summary summary = (Summary) serviceLevelMap.get(pkg);
+         final FileSummary summary = (FileSummary) serviceLevelMap.get(pkg);
          sb.append("      <service name='");
          sb.append(pkg);
          sb.append("' ");
@@ -250,13 +253,14 @@ public final class StatisticCollector
       while (k.hasNext())
       {
          final String pkg = (String) k.next();
-         final Summary summary = (Summary) packages.get(pkg);
+         final FileSummary summary = (FileSummary) packages.get(pkg);
          final String service = getService(pkg);
 
-         Summary serviceSummary = (Summary) serviceLevelMap.get(service);
+         FileSummary serviceSummary 
+             = (FileSummary) serviceLevelMap.get(service);
          if (serviceSummary == null)
          {
-            serviceSummary = new Summary();
+            serviceSummary = new FileSummary(null, service, true);
             serviceLevelMap.put(service, serviceSummary);
          }
          serviceSummary.add(summary);
@@ -264,26 +268,26 @@ public final class StatisticCollector
       return serviceLevelMap;
    }
 
-   private void fillSummaryLine (final StringBuffer sb, Summary summary)
+   private void fillSummaryLine (final StringBuffer sb, FileSummary summary)
    {
       sb.append("timestamp='");
       sb.append(mTimestamp);
-      sb.append("' error='");
-      sb.append(summary.getError());
-      sb.append("' warning='");
-      sb.append(summary.getWarning());
-      sb.append("' info='");
-      sb.append(summary.getInfo());
-      sb.append("' coverage='");
-      sb.append(summary.getCoverage());
+      sb.append("' ");
+      for (int i = 0; i < Severity.VALUES.size(); i++)
+      {
+          final Severity currentSeverity = Severity.fromInt(i);
+          sb.append(currentSeverity.toString());          
+          sb.append("='");
+          sb.append(summary.getViolations(currentSeverity));
+          sb.append("' ");
+      }
       sb.append("' loc='");
-      sb.append(summary.getLoc());
+      sb.append(summary.getLinesOfCode());
       sb.append("' codeLoc='");
-      sb.append(summary.getCodeLoc());
+      sb.append(summary.getCoverage() 
+          + summary.getViolations(Severity.COVERAGE));
       sb.append("' quality='");
-      sb.append(FileSummary.calculateQuality(summary.getLoc(),
-                  summary.getInfo(), summary.getWarning(),
-                  summary.getError(), summary.getCoverage()));
+      sb.append(summary.getQualityAsFloat());
       sb.append('\'');
    }
 
@@ -337,13 +341,13 @@ public final class StatisticCollector
       }
    }
 
-   private Summary addToMap (final Map map, final File file)
+   private FileSummary addToMap (final Map map, final File file)
    {
       final String pkg = file.getPackage();
-      Summary counter = (Summary) map.get(pkg);
+      FileSummary counter = (FileSummary) map.get(pkg);
       if (counter == null)
       {
-         counter = new Summary();
+         counter = new FileSummary(null, pkg, true);
          map.put(pkg, counter);
       }
       calculateSummary(file, counter);
@@ -355,37 +359,9 @@ public final class StatisticCollector
     * @param currentFile the file structure.
     * @param counter the counter structure.
     */
-   private void calculateSummary (File currentFile, Summary counter)
+   private void calculateSummary (File currentFile, FileSummary counter)
    {
-      final Iterator i = currentFile.getItem().iterator();
-
-      counter.addLoc(currentFile.getLoc());
-      while (i.hasNext())
-      {
-         final Item item = (Item) i.next();
-         final Severity severity = item.getSeverity();
-
-         if (severity == Severity.ERROR)
-         {
-            counter.addError();
-         }
-         else if (severity == Severity.WARNING)
-         {
-            counter.addWarning();
-         }
-         else if (severity == Severity.INFO)
-         {
-            counter.addInfo();
-         }
-         else if (severity == Severity.COVERAGE)
-         {
-            if (item.getCounter() == 0)
-            {
-               counter.addCoverage();
-            }
-            counter.addCodeLoc();
-         }
-      }
+       counter.add(currentFile);
    }
 
    /**
@@ -511,7 +487,9 @@ public final class StatisticCollector
 
      //Configure legend properties
      final LegendProperties legendProps = new LegendProperties();
-     final String[] legendLabels = {"Error", "Warning", "Info", "Coverage"};
+     final String[] legendLabels = {
+         "Error", "C&P", "Warning", "Design", "Code Style", 
+         "Info", "Coverage"};
      legendProps.setLegendLabelsTexts (legendLabels);
 
      //Configure graph chart properties
@@ -550,15 +528,25 @@ public final class StatisticCollector
      // fill data....
      for (int j = 0; j < dataset.getNumCats(); ++j)
      {
-        final Summary sum = (Summary) src.get(labelsLongAxisLabels[j]);
-        if (sum != null && sum.getLoc() != 0)
+        final FileSummary sum = (FileSummary) src.get(labelsLongAxisLabels[j]);
+        if (sum != null && sum.getLinesOfCode() != 0)
         {
-           final float loc = sum.getLoc();
-           final float codeLoc = sum.getCodeLoc();
+           final float loc = sum.getLinesOfCode();
+           final float codeLoc = sum.getCoverage() 
+               + sum.getViolations(Severity.COVERAGE);
 
-           dataset.set(ROW_ERROR, j, 0, (PERCENT * sum.getError()) / loc);
-           dataset.set(ROW_WARNING, j, 0, (PERCENT * sum.getWarning()) / loc);
-           dataset.set(ROW_INFO, j, 0, (PERCENT * sum.getInfo()) / loc);
+           dataset.set(ROW_ERROR, j, 0, 
+               (PERCENT * sum.getViolations(Severity.ERROR)) / loc);
+           dataset.set(ROW_CPD, j, 0, 
+               (PERCENT * sum.getViolations(Severity.CPD)) / loc);
+           dataset.set(ROW_WARNING, j, 0, 
+               (PERCENT * sum.getViolations(Severity.WARNING)) / loc);
+           dataset.set(ROW_DESIGN, j, 0, 
+               (PERCENT * sum.getViolations(Severity.DESIGN)) / loc);
+           dataset.set(ROW_CODE_STYLE, j, 0, 
+               (PERCENT * sum.getViolations(Severity.CODE_STYLE)) / loc);
+           dataset.set(ROW_INFO, j, 0, 
+               (PERCENT * sum.getViolations(Severity.INFO)) / loc);
 
            if (codeLoc != 0)
            {
@@ -573,7 +561,10 @@ public final class StatisticCollector
         else
         {
            dataset.set(ROW_ERROR, j, 0, 0);
+           dataset.set(ROW_CPD, j, 0, 0);
            dataset.set(ROW_WARNING, j, 0, 0);
+           dataset.set(ROW_DESIGN, j, 0, 0);
+           dataset.set(ROW_CODE_STYLE, j, 0, 0);
            dataset.set(ROW_INFO, j, 0, 0);
            dataset.set(ROW_COVERAGE, j, 0, 0);
         }
@@ -588,6 +579,9 @@ public final class StatisticCollector
      multiColorsProps.setColorsCustom(new Color[]
            {
               Color.RED,
+              Color.BLUE,
+              Color.ORANGE,
+              Color.YELLOW,
               Color.YELLOW,
               Color.CYAN,
               Color.MAGENTA
@@ -629,12 +623,12 @@ public final class StatisticCollector
     */
    private float getCounter (Map src, String string)
    {
-      final Summary counter = (Summary) src.get(string);
+      final FileSummary counter = (FileSummary) src.get(string);
       final int result;
 
       if (counter != null)
       {
-         result = counter.getLoc();
+         result = counter.getLinesOfCode();
       }
       else
       {
@@ -672,126 +666,4 @@ public final class StatisticCollector
       return result;
    }
 
-   /**
-    * Simple modifiable int wrapper.
-    * @author Andreas Mandel
-    */
-   private static final class Summary
-   {
-      private int mLoc;
-      private int mInfo;
-      private int mWarning;
-      private int mError;
-      private int mCoverage;
-      private int mFiltered;
-      private int mFalsePositive;
-      /** Lines of code reported by coverage test. */
-      private int mCodeLoc;
-
-      public void addLoc (int value)
-      {
-         mLoc += value;
-      }
-      public void add (Summary summary)
-      {
-         addFiltered(summary.getFiltered());
-         addFalsePositive(summary.getFalsePositive());
-         addInfo(summary.getInfo());
-         addWarning(summary.getWarning());
-         addError(summary.getError());
-         addCoverage(summary.getCoverage());
-         addLoc(summary.getLoc());
-         addCodeLoc(summary.getCodeLoc());
-
-      }
-      public void addCodeLoc (int value)
-      {
-         mCodeLoc += value;
-      }
-      public void addInfo (int value)
-      {
-         mInfo += value;
-      }
-      public void addWarning (int value)
-      {
-         mWarning += value;
-      }
-      public void addError (int value)
-      {
-         mError += value;
-      }
-      public void addCoverage (int value)
-      {
-         mCoverage += value;
-      }
-      public void addFiltered (int value)
-      {
-         mFiltered += value;
-      }
-      public void addFalsePositive (int value)
-      {
-         mFalsePositive += value;
-      }
-      public void addInfo ()
-      {
-         mInfo += 1;
-      }
-      public void addWarning ()
-      {
-         mWarning += 1;
-      }
-      public void addError ()
-      {
-         mError += 1;
-      }
-      public void addCodeLoc ()
-      {
-         mCodeLoc += 1;
-      }
-      public void addCoverage ()
-      {
-         mCoverage += 1;
-      }
-      public void addFiltered ()
-      {
-         mFiltered += 1;
-      }
-      public void addFalsePositive ()
-      {
-         mFalsePositive += 1;
-      }
-
-      public int getLoc ()
-      {
-         return mLoc;
-      }
-      public int getCodeLoc ()
-      {
-         return mCodeLoc;
-      }
-      public int getInfo ()
-      {
-         return mInfo;
-      }
-      public int getWarning ()
-      {
-         return mWarning;
-      }
-      public int getError ()
-      {
-         return mError;
-      }
-      public int getCoverage ()
-      {
-         return mCoverage;
-      }
-      public int getFiltered ()
-      {
-         return mFiltered;
-      }
-      public int getFalsePositive ()
-      {
-         return mFalsePositive;
-      }
-   }
 }

@@ -24,8 +24,7 @@
   </rule>
 <!--  <rule ref="rulesets/basic.xml/BooleanInstantiation"/> -->
   <rule ref="rulesets/basic.xml/ClassCastExceptionWithToArray"> 
-  		<!-- CHECKME: 3.5 -->
-  		<priority>4</priority>
+  		<priority>1</priority>
   </rule>
 <!--   <rule ref="rulesets/basic.xml/CollapsibleIfStatements"/> -->
 <!--  <rule ref="rulesets/basic.xml/DoubleCheckedLocking"/> -->
@@ -45,8 +44,7 @@
   		<priority>4</priority>
   </rule>
   <rule ref="rulesets/basic.xml/MisplacedNullCheck"> 
-  		<!-- CHECKME: 3.5 -->
-  		<priority>4</priority>
+  		<priority>2</priority>
   </rule>
 <!--  <rule ref="rulesets/basic.xml/OverrideBothEqualsAndHashcode"/> Detected by Findbugs -->
   <rule ref="rulesets/basic.xml/ReturnFromFinallyBlock">

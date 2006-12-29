@@ -1,6 +1,25 @@
-<!-- This is a FindBugs exclude file and must be specified by using the '-excelude' parameter -->
-<Match classregex=".*" >
-    <!-- SS - UnreadFields, UPM - FindUncalledPrivateMethods -->
-    <BugCode name="SS,UPM" />
+<!-- This is a FindBugs exclude file and must be specified by using the 
+     '-exclude' parameter or the config attribute of the jcsummary task -->
+<FindBugsFilter>
+<Match>
+    <!-- SS - UnreadFields -->
+    <BugCode name="SS"/>
 </Match>
-
+<Match>
+    <!-- UPM - FindUncalledPrivateMethods -->
+    <BugCode name="UPM"/>
+</Match>
+<!-- Contrib finders. -->
+<Match>
+    <!-- CBX - CUSTOM_BUILT_XML -->
+    <BugCode name="CBX"/>
+</Match>
+<Match>
+    <!-- DRE - DECLARED_RUNTIME_EXCEPTION-->
+    <BugCode name="DRE"/>
+</Match>
+<Match>
+    <!-- Method appears to call the same method on the same object redundantly -->
+    <BugCode name="PRMC"/>
+</Match>
+</FindBugsFilter>

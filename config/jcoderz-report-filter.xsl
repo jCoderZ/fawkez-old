@@ -125,18 +125,19 @@
       </item>
    </xs:template>
 
-   <!-- *** Severity level changes *** -->
-   <!-- High coupling is info. -->
+   <!-- FILTER -->
    <xs:template
-      match="/report/file/item[@finding-type = 'CouplingBetweenObjects']">
+      match="/report/file[@classname = 'BaseRuntimeException'
+                       or @classname = 'BaseException'
+                       or @classname = 'LogEvent']/
+                   item[@finding-type = 'cpd']">
       <item>
          <xs:apply-templates select="@*"/>
-         <xs:attribute name="severity">info</xs:attribute>
-         <xs:attribute name="severity-reason">This finding detects and marks classes with a high coupling.</xs:attribute>
+         <xs:attribute name="severity">filtered</xs:attribute>
+         <xs:attribute name="severity-reason">Delegation code can not be externalized further.</xs:attribute>
       </item>
    </xs:template>
 
-   <!-- FILTER -->
    <xs:template
       match="/report/file[@classname = 'StringUtil']/
                    item[@finding-type = 'ES_COMPARING_STRINGS_WITH_EQ']">

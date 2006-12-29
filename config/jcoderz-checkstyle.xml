@@ -541,7 +541,7 @@
          <property name="basicOffset" value="4"/>
          <property name="severity" value="warning"/>
       </module>
-
+      -->
 
 
       <!-- Checks for Usage -->

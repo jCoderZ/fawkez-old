@@ -250,7 +250,7 @@ public final class Jabber
             mConnection = new XMPPConnection (// CHECKME: new SSLXMPPConnection(
                   mJabberHostAddress, mJabberHostPort, mJabberServerName);
             mGroupChat = null;
-            logger.info("New connection to jabber server. TLS: "
+            logger.fine("New connection to jabber server. TLS: "
                   + mConnection.isUsingTLS() + " secure: "
                   + mConnection.isSecureConnection());
             if (!mConnection.isConnected())
@@ -263,14 +263,14 @@ public final class Jabber
          {
             mConnection.login(mJabberUserName, mJabberUserPassword, mHostname);
             mGroupChat = null;
-            logger.info("Login to jabber server. ("
+            logger.fine("Login to jabber server. ("
                   + mConnection.isAuthenticated() + ").");
          }
 
          if (mGroupChat == null)
          {
             mGroupChat = mConnection.createGroupChat(mJabberMucName);
-            logger.info("New group chat generated.");
+            logger.fine("New group chat generated.");
          }
 
          if (!mGroupChat.isJoined())
@@ -280,7 +280,7 @@ public final class Jabber
             {
                Thread.sleep(GRACEFUL_PERIOD);
             }
-            logger.info("Joined to group chat. (" + mGroupChat.isJoined()
+            logger.fine("Joined to group chat. (" + mGroupChat.isJoined()
                   + ").");
          }
       }

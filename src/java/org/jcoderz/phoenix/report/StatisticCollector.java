@@ -281,7 +281,7 @@ public final class StatisticCollector
           sb.append(summary.getViolations(currentSeverity));
           sb.append("' ");
       }
-      sb.append("' loc='");
+      sb.append(" loc='");
       sb.append(summary.getLinesOfCode());
       sb.append("' codeLoc='");
       sb.append(summary.getCoverage() 

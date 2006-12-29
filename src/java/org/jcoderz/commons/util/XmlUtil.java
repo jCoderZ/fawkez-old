@@ -45,8 +45,11 @@ public final class XmlUtil
     * Immutable and always empty version of a
     * {@link org.xml.sax.Attributes} object.
     */
-   public static final Attributes EMPTY_ATTRIBUTES = new EmptyAttribute();
+    public static final Attributes EMPTY_ATTRIBUTES = new EmptyAttribute();
 
+    private static final int INDENT = 2;
+    private static final String SPACES = "                           ";
+    
    /** No instances. */
    private XmlUtil ()
    {
@@ -229,4 +232,114 @@ public final class XmlUtil
       return sb.toString();
    }
 
+   /**
+    * Simple xml formatter.
+    * This code might fail for several input. In this case the
+    * original input is returned.
+    * @param org the input to be formated.
+    * @return the input in xml formated (human readable) form or the
+    *   input string.
+    */
+   public static String formatXml (String org)
+   {
+      String result = org;
+      final StringBuffer sb = new StringBuffer(); 
+
+      boolean nestedTag = false;
+      try
+      {
+         final String in = org.trim();
+         if (in.charAt(0) == '<') // && sb.charAt(1) == '?')
+         {
+            int indent = 0;
+            for (int t = 0; t < in.length(); t++)
+            {
+               char c = in.charAt(t);
+
+               switch (c)
+               {
+                  case '<':
+                     t++;
+                     c = in.charAt(t);
+                     switch (c)
+                     {
+                        case '/':
+                           if (!nestedTag)
+                           {
+                              indent -= INDENT;
+                              sb.append("</");
+                           }
+                           else
+                           {
+                              sb.append('\n');
+                              indent -= INDENT;
+                              indent(indent, sb);
+                              sb.append("</");
+                           }
+                           nestedTag = true;
+                           break;
+                        case '?':
+                        case '!':
+                           if (t != 1)
+                           {
+                               sb.append('\n');
+                           }
+                           sb.append('<');
+                           sb.append(c);
+                           break;
+                        default:
+                           nestedTag = false;
+                           if (sb.length() > 0)
+                           {
+                               sb.append('\n');
+                           }
+                           indent(indent, sb);
+                           sb.append('<');
+                           sb.append(c);
+                           indent += INDENT;
+                           break;
+                     }
+                     break;
+                  case '/':
+                      sb.append(c);
+                     if (in.charAt(t + 1) == '>')
+                     {
+                        indent -= INDENT;
+                        nestedTag = true;
+                     }
+                     break;
+                  case '\n':
+                  case '\r':
+                     break;
+                  case '>':
+                  default:
+                      sb.append(c);
+                     break;
+               }
+            }
+            result = sb.toString();
+         }
+      }
+      catch (Exception ex)
+      {
+         result = org;
+         // CHECKME: Nicer exception handling no formated output...
+      }
+      return result;
+   }
+
+   private static void indent (final int i, StringBuffer b)
+   {
+       if (i > SPACES.length())
+       {
+           b.append(SPACES);
+           indent(i - SPACES.length(), b);
+       }
+       else
+       {
+           b.append(SPACES.substring(0, i));
+       }
+   }
+
+   
 }

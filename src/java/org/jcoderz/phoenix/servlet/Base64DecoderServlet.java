@@ -58,9 +58,6 @@ public class Base64DecoderServlet
 {
    private static final long serialVersionUID = 1L;
    private static final String ENCODED_PARAMETER_NAME = "encoded";
-   private static final int INDENT = 3;
-
-   private final StringBuffer mStringBuffer = new StringBuffer();
 
    /** {@inheritDoc} */
    protected void doPost (HttpServletRequest request,
@@ -118,7 +115,8 @@ public class Base64DecoderServlet
          throws IOException
    {
       out.println("<hr />");
-      final String xml = formatXml(new String(data, Constants.ENCODING_UTF8));
+      final String xml 
+          = XmlUtil.formatXml(new String(data, Constants.ENCODING_UTF8));
       if (xml != null)
       {
          out.println("<pre>");
@@ -134,109 +132,6 @@ public class Base64DecoderServlet
       out.println("</pre>");
       out.println("<hr />");
    }
-
-   /**
-    * Simple xml formatter,
-    * This code might fail for several input. In this case the
-    * null is returned.
-    * @param org the input to be formated.
-    * @return the input in xml formated (human readable) form or null
-    */
-   public String formatXml (String org)
-   {
-      String result = null;
-
-      boolean nestedTag = false;
-      try
-      {
-         final String in = org.trim();
-         if (in.charAt(0) == '<') // && sb.charAt(1) == '?')
-         {
-            int indent = 0;
-            mStringBuffer.setLength(0);
-            for (int t = 0; t < in.length(); t++)
-            {
-               char c = in.charAt(t);
-
-               switch (c)
-               {
-                  case '<':
-                     t++;
-                     c = in.charAt(t);
-                     switch (c)
-                     {
-                        case '/':
-                           if (!nestedTag)
-                           {
-                              indent -= INDENT;
-                              mStringBuffer.append("</");
-                           }
-                           else
-                           {
-                              mStringBuffer.append('\n');
-                              indent -= INDENT;
-                              indent(indent, mStringBuffer);
-                              mStringBuffer.append("</");
-                           }
-                           nestedTag = true;
-                           break;
-                        case '?':
-                        case '!':
-                           if (t != 1)
-                           {
-                              mStringBuffer.append('\n');
-                           }
-                           mStringBuffer.append('<');
-                           mStringBuffer.append(c);
-                           break;
-                        default:
-                           nestedTag = false;
-                           mStringBuffer.append('\n');
-                           indent(indent, mStringBuffer);
-                           mStringBuffer.append('<');
-                           mStringBuffer.append(c);
-                           indent += INDENT;
-                           break;
-                     }
-                     break;
-                  case '/':
-                     mStringBuffer.append(c);
-                     if (in.charAt(t + 1) == '>')
-                     {
-                        indent -= INDENT;
-                        nestedTag = true;
-                     }
-                     break;
-                  case '\n':
-                  case '\r':
-                     break;
-                  case '>':
-                     mStringBuffer.append(c);
-                     break;
-                  default:
-                     mStringBuffer.append(c);
-                     break;
-               }
-            }
-            result = mStringBuffer.toString();
-         }
-      }
-      catch (Exception ex)
-      {
-         result = null;
-         // no formatted output...
-      }
-      return result;
-   }
-
-   private static void indent (final int i, StringBuffer b)
-   {
-      for (int j = i; j > 0; j--)
-      {
-         b.append(' ');
-      }
-   }
-
 
    /** {@inheritDoc} */
    public String getServletInfo ()

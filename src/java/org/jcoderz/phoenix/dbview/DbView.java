@@ -89,10 +89,7 @@ public class DbView
    private static final String SELECT_ALL_TABLES = "select * from tab";
    private static final String CLASSNAME = DbView.class.getName();
    private static final Logger logger = Logger.getLogger(CLASSNAME);
-   private static final int INDENT = 3;
 
-
-   private final StringBuffer mStringBuffer = new StringBuffer();
    private final Map mTypeMapper = new HashMap();
    private final DateFormat mDateFormater
          = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss.SSS", 
@@ -699,7 +696,7 @@ public class DbView
          if (detect.indexOf('<') == 0
                && detect.lastIndexOf('>') == (detect.length() - 1))
          {
-            result = formatXml(str);
+            result = XmlUtil.formatXml(str);
          }
          else
          {
@@ -729,109 +726,6 @@ public class DbView
          d = null;
       }
       return d;
-   }
-
-   /**
-    * Simple xml formatter,
-    * This code might fail for several input. In this case the
-    * original input is returned.
-    * @param org the input to be formated.
-    * @return the input in xml formated (human readable) form or the
-    *   input string.
-    */
-   public String formatXml (String org)
-   {
-      String result = org;
-
-      boolean nestedTag = false;
-      try
-      {
-         final String in = org.trim();
-         if (in.charAt(0) == '<') // && sb.charAt(1) == '?')
-         {
-            int indent = 0;
-            mStringBuffer.setLength(0);
-            for (int t = 0; t < in.length(); t++)
-            {
-               char c = in.charAt(t);
-
-               switch (c)
-               {
-                  case '<':
-                     t++;
-                     c = in.charAt(t);
-                     switch (c)
-                     {
-                        case '/':
-                           if (!nestedTag)
-                           {
-                              indent -= INDENT;
-                              mStringBuffer.append("</");
-                           }
-                           else
-                           {
-                              mStringBuffer.append('\n');
-                              indent -= INDENT;
-                              indent(indent, mStringBuffer);
-                              mStringBuffer.append("</");
-                           }
-                           nestedTag = true;
-                           break;
-                        case '?':
-                        case '!':
-                           if (t != 1)
-                           {
-                              mStringBuffer.append('\n');
-                           }
-                           mStringBuffer.append('<');
-                           mStringBuffer.append(c);
-                           break;
-                        default:
-                           nestedTag = false;
-                           mStringBuffer.append('\n');
-                           indent(indent, mStringBuffer);
-                           mStringBuffer.append('<');
-                           mStringBuffer.append(c);
-                           indent += INDENT;
-                           break;
-                     }
-                     break;
-                  case '/':
-                     mStringBuffer.append(c);
-                     if (in.charAt(t + 1) == '>')
-                     {
-                        indent -= INDENT;
-                        nestedTag = true;
-                     }
-                     break;
-                  case '\n':
-                  case '\r':
-                     break;
-                  case '>':
-                  default:
-                     mStringBuffer.append(c);
-                     break;
-               }
-            }
-            result = mStringBuffer.toString();
-         }
-      }
-      catch (Exception ex)
-      {
-         result = org;
-         // no foramted output...
-      }
-
-
-      return result;
-   }
-
-   private static void indent (final int i, StringBuffer b)
-   {
-      for (int j = i; j > 0; j--)
-      {
-         b.append(' ');
-      }
    }
 
    private static class TypeMapper

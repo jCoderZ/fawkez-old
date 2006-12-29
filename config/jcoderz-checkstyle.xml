@@ -398,10 +398,10 @@
       <!-- Ensures that the setUp(), tearDown()methods are named correctly,
            have no arguments, return void and are either public or protected.
            Also ensures that suite() is named correctly, have no arguments,
-           return junit.framewotk.Test, public and static. -->
+           return junit.framewotk.Test, public and static. 
       <module name="JUnitTestCase">
          <property name="severity" value="warning"/>
-      </module>
+      </module> -->
 
       <!-- Restrict the number of return statements. -->
       <module name="ReturnCount">
@@ -535,13 +535,13 @@
       </module>
 
       <!-- Checks correct indentation of Java Code. -->
-      <!-- DISABLED [mig]
+      <!-- DISABLED [mig] (caused 43752 findings in current code [am])
       <module name="Indentation">
-         <property name="caseIndent" value="3"/>
-         <property name="basicOffset" value="3"/>
+         <property name="caseIndent" value="0"/>
+         <property name="basicOffset" value="4"/>
          <property name="severity" value="warning"/>
       </module>
-      -->
+
 
 
       <!-- Checks for Usage -->

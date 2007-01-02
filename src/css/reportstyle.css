@@ -32,22 +32,24 @@ line-height: 100%;
 /* code lines with different infos */
 tr.odd td { background:#e0e0e0; }
 tr.even td { background:#ffffff; }
-tr.false-positiveodd td { background:#e0e0e0; }
-tr.false-positiveeven td { background:#f7f7f7; }
 tr.filteredodd td { background:#e0e0e0; }
 tr.filteredeven td { background:#f7f7f7; }
 tr.okodd td { background:#e0e0e0; }
 tr.okeven td { background:#ffffff; }
-tr.infoodd td { background:#e0f0ff; }
-tr.infoeven td { background:#f0f7ff; }
-tr.coverageodd td { background:#ffffc0; }
+tr.infoodd td { background:#b0b0e0; }
+tr.infoeven td { background:#d0d0ff; }
+tr.code-styleodd td { background:#e0e070; }
+tr.code-styleeven td { background:#fff080; }
+tr.coverageodd td { background:#e0e0c0; }
 tr.coverageeven td { background:#ffffe0; }
-tr.warningodd td { background:#d7c7ff; }
-tr.warningeven td { background:#e7d7ff; }
-tr.errorodd td { background:#ffd0c0; }
-tr.erroreven td { background:#ffe0d0; }
+tr.designodd td {  background:#e0d020; }
+tr.designeven td { background:#fff040; }
+tr.warningodd td { background:#e08020; }
+tr.warningeven td { background:#ffa040; }
 tr.cpdodd td { background: #c0e0c0; }
 tr.cpdeven td { background:#d0f0d0; }
+tr.errorodd td { background:#e08080; }
+tr.erroreven td { background:#ff4040; }
 
 /* Percent bar colors */
 tr.odd td.ok { background:green }

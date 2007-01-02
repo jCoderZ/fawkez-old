@@ -38,6 +38,7 @@ import java.util.logging.Logger;
 
 import org.jivesoftware.smack.GroupChat;
 import org.jivesoftware.smack.XMPPConnection;
+import org.jivesoftware.smack.XMPPException;
 
 /**
  * Simply sends a jabber message in a jabber group.
@@ -67,11 +68,9 @@ public final class Jabber
    /**
     * Shortcut to send message directly from the command line.
     * TODO: Allow different chat server.
-    * @param args
-    * @throws Exception
+    * @param args the message to send.
     */
    public static void main (String[] args)
-         throws Exception
    {
       JabberConnection.getInstance().say(args[0]);
    }
@@ -192,19 +191,11 @@ public final class Jabber
          }
       }
 
-      public void finalize ()
-            throws Throwable
-      {
-         clear();
-         super.finalize();
-      }
-
-
       /**
        * Checks and ensures that a connection is established.
        * @throws RuntimeException if connecting fails (even after retry).
        */
-      public void checkConnection ()
+      public synchronized void checkConnection ()
             throws RuntimeException
       {
          try
@@ -240,9 +231,15 @@ public final class Jabber
          }
       }
 
+      protected void finalize ()
+          throws Throwable
+      {
+          clear();
+          super.finalize();
+      }
 
-      private void checkConnectionRaw ()
-            throws Exception
+      private void checkConnectionRaw () 
+          throws XMPPException, InterruptedException
       {
          if (mConnection == null || !mConnection.isConnected())
          {
@@ -280,8 +277,8 @@ public final class Jabber
             {
                Thread.sleep(GRACEFUL_PERIOD);
             }
-            logger.fine("Joined to group chat. (" + mGroupChat.isJoined()
-                  + ").");
+            logger.fine("Joined to group chat. (" + mGroupChat.isJoined() 
+                + ").");
          }
       }
 
@@ -296,7 +293,7 @@ public final class Jabber
          }
          catch (Exception ex)
          {
-            // be silent
+            logger.log(Level.FINEST, "Exception while leaving groupchat.", ex);
          }
          mGroupChat = null;
          try
@@ -308,7 +305,8 @@ public final class Jabber
          }
          catch (Exception ex)
          {
-            // be silent
+             logger.log(Level.FINEST, 
+                 "Exception while closing jabber connection.", ex);
          }
          mConnection = null;
       }

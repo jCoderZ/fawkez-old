@@ -158,10 +158,10 @@
   		<!-- CHECKME: 3.0 -->
 	 <priority>3</priority>
   </rule>  		
+<!-- Covered by Checkstyle. (CS_INTERFACE_TYPE)
   <rule ref="rulesets/design.xml/AvoidConstantsInterface"> 
-    <!-- CHECKME: 3.5 -->
 	 <priority>3</priority>
-  </rule>  		
+  </rule> -->
 <!--  <rule ref="rulesets/design.xml/AvoidDeeplyNestedIfStmts"/> -->
   <rule ref="rulesets/design.xml/AvoidInstanceofChecksInCatchClause">
 	 <priority>4</priority>

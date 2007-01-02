@@ -458,26 +458,28 @@ public final class Java2Html
 
    private void copyIcons ()
    {
-      final String[] resources = new String[] {"icon_cpd.gif", "icon_error.gif",
-            "icon_false.gif", "icon_filter.gif", "icon_info.gif",
-            "icon_warning.gif"};
-
       // create images sub-folder
       final File outDir = new File(mOutDir, "images");
       outDir.mkdirs();
 
-      for (int i = 0; i < resources.length; i++)
+      for (int i = 0; i < Severity.VALUES.size(); i++)
       {
-         final InputStream in = this.getClass().getResourceAsStream(
-               resources[i]);
-         if (in != null)
-         {
-            copyResource(in, resources[i], outDir);
-         }
-         else
-         {
-            logger.warning("Could not find resource '" + resources[i] + "'!");
-         }
+          final Severity s = Severity.fromInt(i);
+          if (s.equals(Severity.OK) || s.equals(Severity.COVERAGE))
+          {
+              continue;
+          }
+          final String name = "icon_" + s.toString() + ".gif";
+          final InputStream in 
+                  = this.getClass().getResourceAsStream(name);
+          if (in != null)
+          {
+              copyResource(in, name, outDir);
+          }
+          else
+          {
+              logger.warning("Could not find resource '" + name + "'!");
+          }
       }
    }
 

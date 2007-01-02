@@ -897,7 +897,7 @@
 	        todir="${build.dir}/doc"/>
    </target>
 
-	<target name="doc" depends="javadoc, guideline-java, sad" 
+	<target name="doc" depends="javadoc, guideline-java, sad, usecase" 
 		description="Build Docomentation"/>
 	
    <!-- =================================================================== -->

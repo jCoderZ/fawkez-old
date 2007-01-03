@@ -111,7 +111,7 @@
                 projectbase="${base.dir}"
                 tempfolder="${base.dir}/build/jcreport"
                 maxheap="128"
-                debug="true">
+                debug="false">
          <classpath refid="jcreport.classpath"/>
          <reports>   
             <report name="fawkez-test"
@@ -136,9 +136,8 @@
             </pmd>
             <cpd minimumtokens="100">
                <classpath refid="pmd.classpath"/>
-            </cpd> <!-- FindCircularDependencies,RuntimeExceptionCapture -->
-            <findbugs 
-                      maxheap="512"
+            </cpd>
+            <findbugs maxheap="256"
                       effort="max"
                       debug="false"
                		 omitVisitors="RuntimeExceptionCapture,UnreadFields,FindUncalledPrivateMethods,CustomBuiltXML,DeclaredRuntimeException,PossiblyRedundantMethodCalls"

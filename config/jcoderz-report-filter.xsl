@@ -234,18 +234,6 @@
       </item>
    </xs:template>
 
-   <!-- Disable findbugs finder. -->
-   <xs:template
-      match="/report/file/item[@finding-type = 'DLS_DEAD_LOCAL_STORE'
-                            or @finding-type = 'CD_CIRCULAR_DEPENDENCY'
-                            or @finding-type = 'REC_CATCH_EXCEPTION']">
-      <item>
-         <xs:apply-templates select="@*"/>
-         <xs:attribute name="severity">filtered</xs:attribute>
-         <xs:attribute name="severity-reason">Finder generates false positives or is not used.</xs:attribute>
-      </item>
-   </xs:template>
-
    <!-- *** Specific false positive *** -->
    <xs:template
       match="/report/file[@classname = 'LoggableImpl']/

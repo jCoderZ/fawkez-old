@@ -111,7 +111,7 @@
                 projectbase="${base.dir}"
                 tempfolder="${base.dir}/build/jcreport"
                 maxheap="128"
-                debug="false">
+                debug="true">
          <classpath refid="jcreport.classpath"/>
          <reports>   
             <report name="fawkez-test"
@@ -136,11 +136,12 @@
             </pmd>
             <cpd minimumtokens="100">
                <classpath refid="pmd.classpath"/>
-            </cpd>
-            <findbugs config="${findbugs.rules}"
+            </cpd> <!-- FindCircularDependencies,RuntimeExceptionCapture -->
+            <findbugs 
                       maxheap="512"
                       effort="max"
                       debug="false"
+               		 omitVisitors="RuntimeExceptionCapture,UnreadFields,FindUncalledPrivateMethods,CustomBuiltXML,DeclaredRuntimeException,PossiblyRedundantMethodCalls"
                       warninglevel="low">
                <classpath refid="findbugs.classpath"/>
                <auxclasspath refid="findbugs.aux.classpath"/>
@@ -166,7 +167,7 @@
               variable is set and if use this as command -->
       <exec executable="cmd.exe" spawn="true" os="Windows XP">
          <arg value="/C" />
-         <arg file="${build.dir}/report-fawkez/index.html"/>
+         <arg file="${build.dir}/build/doc/findings-report/index.html"/>
       </exec>
    </target>
 

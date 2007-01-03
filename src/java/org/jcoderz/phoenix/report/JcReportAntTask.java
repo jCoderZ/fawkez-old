@@ -51,6 +51,7 @@ import org.apache.tools.ant.types.CommandlineJava;
 import org.apache.tools.ant.types.Path;
 import org.jcoderz.commons.types.Date;
 import org.jcoderz.commons.util.FileUtils;
+import org.jcoderz.commons.util.StringUtil;
 
 /**
  * This is the Ant task for the Jcoderz Report.
@@ -1042,6 +1043,7 @@ public class JcReportAntTask
       private String mConfig;
       private String mWarninglevel = "medium";
       private String mEffort = "default";
+      private String mOmitVisitors = "";
       private Path mAuxPath;
       private boolean mFindBugsDebug = false;
       /** 
@@ -1064,6 +1066,11 @@ public class JcReportAntTask
       public void setDebug (Boolean debug)
       {
           mFindBugsDebug = debug.booleanValue();
+      }
+
+      public void setOmitVisitors (String omitVisitors)
+      {
+         mOmitVisitors = omitVisitors;
       }
 
       public void setConfig (String config)
@@ -1182,6 +1189,11 @@ public class JcReportAntTask
          cmd.createArgument().setValue("-pluginList");
          cmd.createArgument().setPath(mPluginList);
          
+         if (!StringUtil.isEmptyOrNull(mOmitVisitors))
+         {
+             cmd.createArgument().setValue("-omitVisitors");
+             cmd.createArgument().setValue(mOmitVisitors);
+         }
          
 
          final File outFile = new File(reportDir, "findbugs.xml");

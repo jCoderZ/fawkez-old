@@ -136,11 +136,11 @@
             </pmd>
             <cpd minimumtokens="100">
                <classpath refid="pmd.classpath"/>
-            </cpd>
+            </cpd> <!-- Could not disable UnreadFields cause further dependencies -->
             <findbugs maxheap="256"
                       effort="max"
                       debug="false"
-               		 omitVisitors="RuntimeExceptionCapture,UnreadFields,FindUncalledPrivateMethods,CustomBuiltXML,DeclaredRuntimeException,PossiblyRedundantMethodCalls"
+               		 omitVisitors="RuntimeExceptionCapture,FindUncalledPrivateMethods,CustomBuiltXML,DeclaredRuntimeException,PossiblyRedundantMethodCalls"
                       warninglevel="low">
                <classpath refid="findbugs.classpath"/>
                <auxclasspath refid="findbugs.aux.classpath"/>

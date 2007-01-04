@@ -82,7 +82,7 @@
             <artifact name="asm-util-3.0" type="jar"/>
             <artifact name="asm-xml-3.0" type="jar"/>        
         </dependency>
-        <dependency org="fb-contrib" name="fb-contrib" rev="3.0.5"/>
+        <dependency org="fb-contrib" name="fb-contrib" rev="3.0.6"/>
 <!--    Use if update to 1.1.3 is available in repository
         <dependency org="findbugs" name="findbugs" rev="1.0.0"/>
 	    I asume all this can be droped?

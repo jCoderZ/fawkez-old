@@ -117,7 +117,7 @@ public final class FindBugsReportReader
          final List objectMessageList = new ArrayList();
 
          item.setMessage(bugInstance.getLongMessage());
-         
+         boolean topLevelSourceLineRead = false;
          for (final Iterator iter = list.iterator(); iter.hasNext();)
          {
             final Object element = iter.next();
@@ -165,15 +165,23 @@ public final class FindBugsReportReader
                // informative other lines rather than the buginstance.
                // Til we know how to get the correct line we should leave it
                // like that. (see also http://tinyurl.com/ycol9h ff.)
-               if (item.isSetLine() && item.getLine() > 0)
+               if (topLevelSourceLineRead 
+                   && item.isSetLine() && item.getLine() > 0)
                {
                    continue;
                }
                logger.finer("Adding source line information to item "
                      + item.getFindingType());
                final SourceLine sourceLine = (SourceLine) element;
-               item.setLine(sourceLine.getStart());
-               item.setEndLine(sourceLine.getEnd());
+               if (sourceLine.isSetStart())
+               {
+                   item.setLine(sourceLine.getStart());
+                   topLevelSourceLineRead = true;
+                   if (sourceLine.isSetEnd())
+                   {
+                       item.setEndLine(sourceLine.getEnd());
+                   }
+               }
             }
             else if (element instanceof Method)
             {
@@ -187,8 +195,14 @@ public final class FindBugsReportReader
                         + " to item " + item.getFindingType());
                   final SourceLineType sourceLine
                         = ((Method) element).getSourceLine();
-                  item.setLine(sourceLine.getStart());
-                  item.setEndLine(sourceLine.getEnd());
+                  if (sourceLine.isSetStart())
+                  {
+                      item.setLine(sourceLine.getStart());
+                      if (sourceLine.isSetEnd())
+                      {
+                          item.setEndLine(sourceLine.getEnd());
+                      }
+                  }
                }
             }
          }

@@ -159,10 +159,16 @@ public final class FindBugsReportReader
             else if (element instanceof SourceLine)
             {
                // Can be more specific info so allow override
-               // if (item.isSetLine())
-               // {
-               //    continue;
-               // }
+               // if given data is not concrete. 
+               // There are finders like IL_INFINITE_LOOP which
+               // report additional SourceLine items that point to 
+               // informative other lines rather than the buginstance.
+               // Til we know how to get the correct line we should leave it
+               // like that. (see also http://tinyurl.com/ycol9h ff.)
+               if (item.isSetLine() && item.getLine() > 0)
+               {
+                   continue;
+               }
                logger.finer("Adding source line information to item "
                      + item.getFindingType());
                final SourceLine sourceLine = (SourceLine) element;

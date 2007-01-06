@@ -22,9 +22,21 @@
   		<!-- CHECKME: 3.6 -->
   		<priority>4</priority>
   </rule>
+  <rule ref="rulesets/basic.xml/AvoidUsingOctalValues"> 
+  		<!-- CHECKME: 3.9 -->
+  		<priority>4</priority>
+  </rule>    
+  <rule ref="rulesets/basic.xml/BigIntegerInstantiation"> 
+  		<!-- CHECKME: 3.9 -->
+  		<priority>4</priority>
+  </rule>  
 <!--  <rule ref="rulesets/basic.xml/BooleanInstantiation"/> -->
   <rule ref="rulesets/basic.xml/ClassCastExceptionWithToArray"> 
   		<priority>1</priority>
+  </rule>
+  <rule ref="rulesets/basic.xml/BrokenNullCheck"> 
+  		<!-- CHECKME: 3.8 -->
+  		<priority>2</priority>
   </rule>
 <!--   <rule ref="rulesets/basic.xml/CollapsibleIfStatements"/> -->
 <!--  <rule ref="rulesets/basic.xml/DoubleCheckedLocking"/> -->
@@ -109,6 +121,22 @@
   <rule ref="rulesets/codesize.xml/ExcessivePublicCount">
   		<priority>4</priority>
   </rule>
+  <rule ref="rulesets/codesize.xml/NcssConstructorCount"> 
+  		<!-- CHECKME: 3.9 -->
+  		<priority>4</priority>
+  </rule>    
+  <rule ref="rulesets/codesize.xml/NcssMethodCount"> 
+  		<!-- CHECKME: 3.9 -->
+  		<priority>4</priority>
+  </rule>    
+  <rule ref="rulesets/codesize.xml/NcssTypeCount"> 
+  		<!-- CHECKME: 3.9 -->
+  		<priority>4</priority>
+  </rule>    
+  <rule ref="rulesets/codesize.xml/NPathComplexity"> 
+  		<!-- CHECKME: 3.9 -->
+  		<priority>4</priority>
+  </rule>    
 <!--  <rule ref="rulesets/codesize.xml/TooManyFields"/> -->
 <!-- =================================================================== -->
 <!--controversial-->
@@ -248,6 +276,10 @@
   	 <!-- CHECKME: 3.6 -->
     <priority>2</priority>
   </rule>  		
+  <rule ref="rulesets/design.xml/UseCollectionIsEmpty"> 
+  		<!-- CHECKME: 3.9 -->
+  		<priority>3</priority>
+  </rule>    
   <rule ref="rulesets/design.xml/UseLocaleWithCaseConversions">
     <priority>4</priority>
   </rule>  		
@@ -421,6 +453,10 @@
   <rule ref="rulesets/optimizations.xml/SimplifyStartsWith">
     <priority>4</priority>
   </rule>  		  
+  <rule ref="rulesets/optimizations.xml/UnnecessaryWrapperObjectCreation"> 
+  		<!-- CHECKME: 3.8 -->
+  		<priority>4</priority>
+  </rule>
   <rule ref="rulesets/optimizations.xml/UseArraysAsList"> 
     <!-- Checkme: 3.5 -->
     <priority>4</priority>
@@ -448,6 +484,9 @@
     <priority>3</priority>
   </rule>  		  
 <!--  <rule ref="rulesets/strictexception.xml/AvoidCatchingThrowable"/> -->
+<!--  <rule ref="rulesets/strictexception.xml/AvoidRethrowingException"> 
+  		<priority>3</priority>
+  </rule> -->
 <!-- CHECKME: nice checker but we don't want the RuntimeException 
    <rule ref="rulesets/strictexception.xml/AvoidThrowingRawExceptionTypes "/>
    <rule ref="rulesets/strictexception.xml/AvoidThrowingNullPointerException"/> -->
@@ -469,6 +508,10 @@
     <!-- CHECKME: 3.5 -->
     <priority>5</priority>
   </rule>  		  
+  <rule ref="rulesets/strings.xml/StringBufferInstantiationWithChar"> 
+  		<!-- CHECKME: 3.9 -->
+  		<priority>5</priority>
+  </rule>    
   <rule ref="rulesets/strings.xml/StringInstantiation">
     <priority>5</priority>
   </rule>  		  
@@ -492,6 +535,9 @@
     <!-- CHECKME: 3.5 -->
     <priority>5</priority>
   </rule>  		  
+<!--  <rule ref="rulesets/strings.xml/UselessStringValueOf"> 
+  		<priority>4</priority>
+  </rule> -->
   <rule ref="rulesets/strings.xml/UseStringBufferLength">
     <!-- CHECKME: 3.5 -->
     <priority>5</priority>

@@ -58,6 +58,8 @@
       <path id="pmd.classpath">
          <fileset dir="${base.dir}/lib">
             <include name="default/pmd/*.jar"/>
+            <include name="default/asm/*.jar"/>
+            <include name="default/backport-util-concurrent/*.jar"/>
             <include name="default/jaxen/*.jar"/>
             <include name="default/oro/*.jar"/>
          </fileset>
@@ -66,6 +68,7 @@
       <path id="findbugs.classpath">
          <fileset dir="${base.dir}/lib">
             <include name="default/findbugs/*.jar"/>
+            <include name="default/asm/*.jar"/>
             <include name="default/dom4j/*.jar"/>
             <include name="default/jaxen/*.jar"/>
             <exclude name="**/coreplugin.jar"/>
@@ -79,9 +82,12 @@
       <!-- This is the auxiliary classpath used by findbugs -->   
       <path id="findbugs.aux.classpath">
          <path location="${base.dir}/build/classes"/>
+         <path location="${env.JAVA_HOME}/lib/tools.jar"/>
          <fileset dir="${base.dir}/lib">
             <include name="default/chart2d/*.jar"/>
             <include name="default/jaxb/*.jar"/>
+            <include name="default/log4j/*.jar"/>
+            <include name="default/commons-beanutils/*.jar"/>
             <include name="default/commons-httpclient/*.jar"/>
             <include name="default/commons-cli/*.jar"/>
             <include name="default/commons-pool/*.jar"/>

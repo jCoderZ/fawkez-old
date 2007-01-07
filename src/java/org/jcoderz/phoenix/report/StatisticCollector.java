@@ -54,7 +54,6 @@ import net.sourceforge.chart2d.Object2DProperties;
 
 import org.jcoderz.commons.util.IoUtil;
 import org.jcoderz.phoenix.report.jaxb.File;
-import org.jcoderz.phoenix.report.jaxb.Item;
 import org.jcoderz.phoenix.report.jaxb.Report;
 
 /**
@@ -184,7 +183,7 @@ public final class StatisticCollector
       final StringBuffer sb = new StringBuffer();
 
 
-      final FileSummary all = new FileSummary(null, null, true);
+      final FileSummary all = new FileSummary();
       final Iterator i = packages.values().iterator();
 
       while (i.hasNext())
@@ -260,7 +259,7 @@ public final class StatisticCollector
              = (FileSummary) serviceLevelMap.get(service);
          if (serviceSummary == null)
          {
-            serviceSummary = new FileSummary(null, service, true);
+            serviceSummary = new FileSummary(service);
             serviceLevelMap.put(service, serviceSummary);
          }
          serviceSummary.add(summary);
@@ -347,7 +346,7 @@ public final class StatisticCollector
       FileSummary counter = (FileSummary) map.get(pkg);
       if (counter == null)
       {
-         counter = new FileSummary(null, pkg, true);
+         counter = new FileSummary(pkg);
          map.put(pkg, counter);
       }
       calculateSummary(file, counter);

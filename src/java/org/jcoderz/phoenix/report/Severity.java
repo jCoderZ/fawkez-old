@@ -42,7 +42,17 @@ import edu.umd.cs.findbugs.Detector;
 
 /**
  * Enumerated type of a severity.
+ * 
+ * <p>The severity of a finding shall reflect the urgency of a 
+ * fix needed. Higher severity levels require more urgent actions
+ * where lower levels might denote findings that are for information
+ * only.</p> 
  *
+ * <p>This class also defines the weight of a finding 
+ * ({@link #getPenalty()} and thus 
+ * how much the quality is affected by the finding of
+ * this severity.</p>
+ *    
  * <p>Instances of this class are immutable.</p>
  *
  * <p>The following severities are defined:
@@ -220,9 +230,10 @@ public final class Severity
    /**
     * Creates a Severity object from its String representation.
     *
-    * @param str the str representation of the severity to be returned.
-    * @return the Severity object represented by this str.
-    * @throws IllegalArgumentException If the given str value isn't listed 
+    * @param str the string representation of the severity to be 
+    *   returned.
+    * @return the Severity object represented by this string.
+    * @throws IllegalArgumentException If the given string value isn't listed 
     *     in the internal severity table
     */
    public static Severity fromString (String str)
@@ -239,7 +250,6 @@ public final class Severity
 
    /**
     * Returns the int representation of this severity.
-    *
     * @return the int representation of this severity.
     */
    public int toInt ()
@@ -249,7 +259,6 @@ public final class Severity
 
    /**
     * Returns the String representation of this severity.
-    *
     * @return the String representation of this severity.
     */
    public String toString ()
@@ -272,6 +281,19 @@ public final class Severity
    public int compareTo (Object o)
    {
       return mOrdinal - ((Severity) o).mOrdinal;
+   }
+
+   /** {@inheritDoc} */
+   public boolean equals (Object o)
+   {
+      return (o instanceof Severity) 
+          && (mOrdinal == ((Severity) o).mOrdinal);
+   }
+   
+   /** {@inheritDoc} */
+   public int hashCode ()
+   {
+      return mOrdinal;
    }
 
    /**

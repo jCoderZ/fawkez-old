@@ -328,7 +328,7 @@ final class FindingsSummary
       public FindingOccurrence getOccurrence (FileSummary fileSummary)
       {
          FindingOccurrence result =
-            getOccurrence(fileSummary.getFullClassname());
+            getOccurrence(fileSummary.getFullClassName());
 
          if (result == null)
          {
@@ -383,12 +383,9 @@ final class FindingsSummary
          return result;
       }
 
-      /**
-       * @return Returns the occurrences.
-       */
       private void addOccurrence (FindingOccurrence occurrence)
       {
-         mOccurrences.put(occurrence.getFullClassname(), occurrence);
+         mOccurrences.put(occurrence.getFullClassName(), occurrence);
       }
 
       private FindingOccurrence getOccurrence (String filename)
@@ -461,7 +458,7 @@ final class FindingsSummary
 //            out.write("<a href='");
 //            out.write(occurrence.getHtmlLink());
 //            out.write("'>");
-            out.write(occurrence.getFullClassname());
+            out.write(occurrence.getFullClassName());
             out.write("</td></tr>");
 
             out.write("<tr><td class='findingtype-data' colspan='2'>");
@@ -551,16 +548,16 @@ final class FindingsSummary
          }
 
          /**
-          * @return Classname including package.
+          * @return ClassName including package.
           */
-         public String getFullClassname ()
+         public String getFullClassName ()
          {
-            return mFileSummary.getFullClassname();
+            return mFileSummary.getFullClassName();
          }
 
-         public String getClassname ()
+         public String getClassName ()
          {
-            return mFileSummary.getClassname();
+            return mFileSummary.getClassName();
          }
 
          public String getHtmlLink ()
@@ -576,7 +573,7 @@ final class FindingsSummary
          /** {@inheritDoc} */
          public String toString ()
          {
-            return "[" + getClassname() + ": " + findingsToString()
+            return "[" + getClassName() + ": " + findingsToString()
                   + "(" + mFindingsInFile.size() + ")]";
          }
 

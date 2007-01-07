@@ -97,7 +97,6 @@ import org.jcoderz.phoenix.report.jaxb.Report;
  * TODO: Refactor!
  * TODO: Link to current build
  * TODO: Link to CC home
- * TODO: css cleanup
  * TODO: Add @media printer???
  * TODO: Add doku
  * TODO: Codestyle
@@ -380,9 +379,9 @@ public final class Java2Html
    }
 
    /**
-    * Starts the actual genaration process.
+    * Starts the actual generation process.
     * @throws JAXBException if the xmp parsing fails.
-    * @throws IOException if a IO problem occures.
+    * @throws IOException if a IO problem occurs.
     */
    public void process ()
          throws JAXBException, IOException
@@ -392,9 +391,8 @@ public final class Java2Html
                   this.getClass().getClassLoader());
       final Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
       unmarshaller.setValidating(true);
-      final Report
-         report = (Report) unmarshaller.unmarshal(mInputData);
-      mGlobalSummary = new FileSummary("Global Summary", "all", mCoverageData);
+      final Report report = (Report) unmarshaller.unmarshal(mInputData);
+      mGlobalSummary = new FileSummary();
 
       final Iterator files = report.getFile().iterator();
 
@@ -674,7 +672,6 @@ public final class Java2Html
     */
    private void java2html (java.io.File inFile,
          org.jcoderz.phoenix.report.jaxb.File data)
-         throws FileNotFoundException
    {
 
       mCurrentFindings.clear();
@@ -1185,8 +1182,7 @@ public final class Java2Html
 
       if (packageSummary == null)
       {
-         packageSummary =
-            new FileSummary("Package Summary", mPackage, mCoverageData);
+         packageSummary = new FileSummary(mPackage);
          mPackageSummary.put(summary.getPackage(), packageSummary);
       }
       packageSummary.add(summary);
@@ -1527,7 +1523,7 @@ public final class Java2Html
 
    private String addLineItems (String line)
    {
-      if (mFindingsInCurrentLine.size() != 0)
+      if (mFindingsInCurrentLine.isEmpty())
       {
          return line;
       }
@@ -1560,7 +1556,7 @@ public final class Java2Html
             {
                final String finding
                      = (String) mFindingsInCurrentLine.remove(
-                        new Integer(pos));
+                         new Integer(pos));
                if (finding != null)
                {
                   result.append(finding);
@@ -1602,7 +1598,7 @@ public final class Java2Html
       {
          final String filename = fileNameForOrder(order);
          final FileSummary[] summaries =
-            (FileSummary[]) files.toArray(new FileSummary[0]);
+            (FileSummary[]) files.toArray(new FileSummary[files.size()]);
 
          Arrays.sort(summaries, order);
 
@@ -1679,14 +1675,14 @@ public final class Java2Html
         final String link;
         if (fullPackageNames)
         {
-           name = file.getPackage() + '.' + file.getClassname();
+           name = file.getPackage() + '.' + file.getClassName();
            link = file.getPackage().replaceAll("\\.", "/") + "/"
-                   + file.getClassname() + ".html";
+                   + file.getClassName() + ".html";
         }
         else
         {
-           name = file.getClassname();
-           link = file.getClassname() + ".html";
+           name = file.getClassName();
+           link = file.getClassName() + ".html";
         }
         bw.write("<tr class='");
         bw.write(Java2Html.toOddEvenString(pos));

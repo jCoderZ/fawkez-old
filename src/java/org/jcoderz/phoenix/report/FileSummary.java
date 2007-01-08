@@ -476,13 +476,21 @@ public final class FileSummary
         return MAX_PERCENTAGE - notCovered;
     }
 
-    /** @return the number of violations summed up in this summary. */ 
+    /** 
+     * All findings that are between {@link Severity#INFO} and 
+     * {@link Severity#ERROR} but not {@link Severity#COVERAGE}
+     * are counted. 
+     * @return the number of violations summed up in this summary. 
+     */ 
     public int getNumberOfFindings ()
     {
         int sum = 0;
-        for (int i = 0; i < Severity.COVERAGE.toInt(); i++)
+        for (int i = Severity.INFO.toInt(); i <= Severity.ERROR.toInt(); i++)
         {
-            sum += mViolations[i];
+            if (i != Severity.COVERAGE.toInt())
+            {
+                sum += mViolations[i];
+            }
         }
         return sum;
     }

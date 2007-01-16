@@ -87,7 +87,7 @@ digraph G {
          <!-- only show entities, if referenced entity is within documents scope (referenced in root file) -->
          <xsl:if test="$role_name = $actor_id">
            "<xsl:value-of select="../../../@id"/>" [
-                label = "<xsl:value-of select="concat(concat(../../../@id,' '),../../../uc:name))"/>";
+                label = "<xsl:value-of select="../../../@id"/><xsl:text> </xsl:text><xsl:value-of select="../../../uc:name"/>";
                 shape = "box";
            ]  
             

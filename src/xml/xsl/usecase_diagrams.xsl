@@ -27,8 +27,223 @@
       <xsl:apply-templates select="req:requirement[req:category/req:primary = 'Domain Model']"/>
       <xsl:apply-templates select="//uc:usecases" mode="dm"/>
       <xsl:apply-templates select="//uc:usecases" mode="dm_category"/>
+      <xsl:apply-templates select="//uc:usecases" mode="roles"/>
+      <xsl:apply-templates select="//uc:usecases" mode="roles_category"/>
+      <xsl:apply-templates select="req:requirement[starts-with(req:category/req:primary, 'Role')]" 
+                           mode="role"/>
    </xsl:template>
    
+   
+   <!-- Roles Dependency and usecases diagram (complete) -->
+   
+   <xsl:template match="uc:usecases" mode="roles">
+      <xsl:variable name="file"><xsl:value-of
+         select="$imagedir"/>/roles_model.dot</xsl:variable>
+
+       <redirect:write file="{$file}">
+
+digraph G {
+    fontname = "Bitstream Vera Sans"
+    fontsize = 8
+    
+    node [
+            fontname = "Bitstream Vera Sans"
+            fontsize = 8
+            shape = "record"
+            fillcolor = "yellow"
+    ]
+
+    edge [
+            fontname = "Bitstream Vera Sans";
+            fontsize = 8;
+            weight = 10;
+    ]
+
+    <xsl:for-each select="//req:requirement/req:category/req:secondary[generate-id() = generate-id(key('unique-category-secondary-key', .))]">    
+       <xsl:variable name="sec_cat" select="."/>
+       <xsl:if test="//req:role[../req:category/req:secondary = $sec_cat and starts-with(../req:category/req:primary, 'Role')]">
+          subgraph cluster<xsl:value-of select="position()"/> {
+             label = "<xsl:value-of select="$sec_cat"/>";
+          <xsl:apply-templates select="//req:role[../req:category/req:secondary = $sec_cat]" mode="complete"/>       
+          }
+       </xsl:if>
+    </xsl:for-each>
+    <xsl:apply-templates select="//req:role[not(../req:category/req:secondary)]" mode="complete"/>
+    
+}
+       </redirect:write>
+   </xsl:template>
+   
+   <xsl:template match="req:role" mode="complete">
+       "<xsl:value-of select="../req:key"/>" [
+                label = "<xsl:value-of select="req:name"/>"
+        ]
+        <xsl:variable name="role_name" select="req:name"/>
+        
+      <xsl:for-each select="//uc:usecase/uc:actors/uc:primary/uc:name">
+         <xsl:variable name="actor_id" select="."/>
+         <xsl:variable name="role_id" select="//req:requirement[req:role/req:name = $actor_id]/req:key"/>
+         
+         <!-- only show entities, if referenced entity is within documents scope (referenced in root file) -->
+         <xsl:if test="$role_name = $actor_id">
+           "<xsl:value-of select="../../../@id"/>" [
+                label = "<xsl:value-of select="concat(concat(../../../@id,' '),../../../uc:name))"/>";
+                shape = "box";
+           ]  
+            
+           <xsl:call-template name="create_edge">
+              <xsl:with-param name="link_from"      select="$role_id"/>
+              <xsl:with-param name="link_to"        select="../../../@id"/>
+              <xsl:with-param name="link_end"       select="''"/>
+              <xsl:with-param name="link_start"     select="''"/>
+              <xsl:with-param name="link_arrowhead" select="'normal'"/>
+           </xsl:call-template>
+        </xsl:if>
+        
+      </xsl:for-each>
+      
+      <xsl:for-each select="req:superior/req:ref">
+         <xsl:variable name="superior_id" select="@id"/>     
+         <xsl:variable name="superior_name" select="//req:role/req:name[../../req:key = $superior_id]"/>
+         <xsl:variable name="role_id" select="//req:requirement[req:role/req:name = $role_name]/req:key"/>
+         
+         <xsl:call-template name="create_edge">
+            <xsl:with-param name="link_from"      select="$superior_id"/>
+            <xsl:with-param name="link_to"        select="$role_id"/>
+            <xsl:with-param name="link_end"       select="''"/>
+            <xsl:with-param name="link_start"     select="''"/>
+            <xsl:with-param name="link_arrowhead" select="'normal'"/>
+         </xsl:call-template>
+        
+      </xsl:for-each>
+   </xsl:template>
+   
+   <xsl:template match="uc:usecases" mode="roles_category">
+      <xsl:for-each select="//req:requirement/req:category/req:secondary[generate-id() = generate-id(key('unique-category-secondary-key', .))]">
+         <xsl:if test="//req:requirement/req:category/req:secondary[starts-with(../req:primary, 'Role')]">
+            <xsl:variable name="sec_cat" select="."/>
+            <xsl:call-template name="roles_model">
+               <xsl:with-param name="secondary_category" select="."/>
+               <xsl:with-param name="tertiary_category" select="''"/>
+            </xsl:call-template>
+            <xsl:for-each select="//req:requirement/req:category/req:tertiary[generate-id() = generate-id(key('unique-category-tertiary-key', .))]">
+               <xsl:if test="//req:requirement/req:category/req:tertiary[starts-with(../req:primary,'Role') and ../req:secondary = $sec_cat]">
+                  <xsl:call-template name="roles_model">
+                     <xsl:with-param name="secondary_category" select="$sec_cat"/>
+                     <xsl:with-param name="tertiary_category" select="."/>
+                  </xsl:call-template>
+               </xsl:if>
+            </xsl:for-each>
+         </xsl:if>
+      </xsl:for-each>
+   </xsl:template>
+   
+   <xsl:template name="roles_model">
+      <xsl:param name="secondary_category"/>
+      <xsl:param name="tertiary_category"/>
+      <xsl:variable name="file">
+         <xsl:choose>
+            <xsl:when test="$tertiary_category = ''"><xsl:value-of
+                  select="$imagedir"/>/<xsl:value-of
+                  select="$secondary_category"/>_roles_model.dot</xsl:when>
+            <xsl:otherwise><xsl:value-of
+                  select="$imagedir"/>/<xsl:value-of
+                  select="$secondary_category"/>_<xsl:value-of
+                  select="$tertiary_category"/>_roles_model.dot</xsl:otherwise>
+         </xsl:choose>
+      </xsl:variable>
+      
+
+       <redirect:write file="{$file}">
+
+digraph G {
+    fontname = "Bitstream Vera Sans"
+    fontsize = 8
+    
+    node [
+            fontname = "Bitstream Vera Sans"
+            fontsize = 8
+            shape = "record"
+            fillcolor = "yellow"
+    ]
+
+    edge [
+            fontname = "Bitstream Vera Sans"
+            fontsize = 8
+    ]
+    
+    <xsl:if test="$tertiary_category = ''">
+       <xsl:if test="//req:role[../req:category/req:secondary = $secondary_category and starts-with(../req:category/req:primary, 'Role')]">
+          subgraph cluster<xsl:value-of select="position()"/> {
+             label = "<xsl:value-of select="$secondary_category"/>";
+          <xsl:apply-templates select="//req:role[../req:category/req:secondary = $secondary_category]" mode="complete"/>       
+          }
+       </xsl:if>
+    </xsl:if>
+    <xsl:if test="not($tertiary_category = '')">
+       <xsl:if test="//req:role[../req:category/req:secondary = $secondary_category and starts-with(../req:category/req:primary, 'Role')]">
+          subgraph cluster<xsl:value-of select="position()"/> {
+             label = "<xsl:value-of select="$secondary_category"/>";
+          <xsl:apply-templates select="//req:role[../req:category/req:secondary = $secondary_category  and ../req:category/req:tertiary = $tertiary_category]" mode="complete"/>       
+          }
+       </xsl:if>
+    </xsl:if>
+}
+       </redirect:write>
+   </xsl:template>
+   
+   <!-- Roles UML class diagram (single) -->
+   
+   <xsl:template match="req:requirement" mode="role">
+      <xsl:variable name="file"><xsl:value-of
+         select="$imagedir"/>/<xsl:value-of
+         select="req:key"/>.dot</xsl:variable>
+
+       <redirect:write file="{$file}">
+
+digraph G {
+    fontname = "Bitstream Vera Sans"
+    fontsize = 8
+
+    node [
+            fontname = "Bitstream Vera Sans"
+            fontsize = 8
+            shape = "record"    
+    ]
+
+    edge [
+            fontname = "Bitstream Vera Sans"
+            fontsize = 8
+    ]
+    
+    <xsl:apply-templates select="req:role" mode="complete"/>
+    
+    <xsl:variable name="role_id" select="req:key"/>
+    <xsl:for-each select="req:role/req:superior">
+       <xsl:variable name="superior_id" select="req:ref/@id"/>
+       "<xsl:value-of select="$superior_id"/>" [
+                label = "<xsl:value-of select="//req:requirement[req:key = $superior_id]/req:role/req:name"/>"
+        ]
+    </xsl:for-each>
+    
+    <xsl:for-each select="//req:superior[req:ref/@id = $role_id]">
+       <xsl:variable name="subordinate_id" select="../../req:key"/>
+       "<xsl:value-of select="$subordinate_id"/>" [
+                label = "<xsl:value-of select="//req:requirement[req:key = $subordinate_id]/req:role/req:name"/>"
+        ]
+        <xsl:call-template name="create_edge">
+            <xsl:with-param name="link_from"      select="$role_id"/>
+            <xsl:with-param name="link_to"        select="$subordinate_id"/>
+            <xsl:with-param name="link_end"       select="''"/>
+            <xsl:with-param name="link_start"     select="''"/>
+            <xsl:with-param name="link_arrowhead" select="'normal'"/>
+         </xsl:call-template>
+    </xsl:for-each>
+       
+}
+       </redirect:write>
+   </xsl:template>
+      
    <!-- Requirements UML class diagram (complete) -->
    
    <xsl:template match="uc:usecases" mode="dm">
@@ -323,8 +538,9 @@ digraph G {
       <xsl:param name="link_to"/>
       <xsl:param name="link_start"/>
       <xsl:param name="link_end"/>
+      <xsl:param name="link_arrowhead" select="'none'"/>
       edge [
-                arrowhead = "none"
+                arrowhead = "<xsl:value-of select="$link_arrowhead"/>"
 
                 headlabel = "<xsl:value-of select="$link_end"/>"
                 taillabel = "<xsl:value-of select="$link_start"/>"

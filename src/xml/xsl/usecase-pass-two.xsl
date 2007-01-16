@@ -26,7 +26,6 @@
    <xsl:key name="primary-actor-group" match="uc:primary" use="uc:name"/>
    <xsl:key name="secondary-actor-group" match="uc:secondary" use="uc:name"/>
    <xsl:key name="issue-group" match="uc:usecase" use="@id"/>
-   <xsl:key name="scope-group" match="uc:usecase" use="uc:scope"/>
 
     <xsl:template match="uc:usecases">
        <book lang="{info/@lang}" status="final">
@@ -79,8 +78,11 @@
              </section>
              </xsl:if>
           </chapter>
+          
+          <!-- Requirements -->
+          <xsl:call-template name="req:requirements"/>
 
-          <chapter id="Actors">
+          <appendix id="Actors">
           <title>All Actors</title>
           <section id="all_primary_actors">
             <title>Primary Actors</title>
@@ -102,10 +104,12 @@
                </tgroup>
             </informaltable>
           </section>
-        </chapter>
+        </appendix>
 
-        <!-- Requirements -->
-        <xsl:call-template name="req:requirements"/>
+        <appendix id="Roles UC List">
+          <title>Mapping Use Cases to Roles</title>
+          <xsl:call-template name="uc:list_roles_usecases"/>
+        </appendix>
 
         <appendix id="Use Case Revisions">
           <title>Use Case Revision</title>

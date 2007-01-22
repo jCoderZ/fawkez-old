@@ -319,7 +319,8 @@
    </xsl:template>
    
    <xsl:template match="req:superior" mode="subordinate">
-      <xsl:text> [</xsl:text><xref linkend="{../../req:key}"/><xsl:text>] </xsl:text>
+      <xsl:text> [</xsl:text><xref linkend="{../../req:key}"/><xsl:text>]
+      </xsl:text>
    </xsl:template>
    
    <xsl:template name="uc:list_acting_use_cases_indirect">
@@ -338,7 +339,8 @@
    <xsl:template name="uc:list_acting_use_cases">
       <xsl:param name="role_name"/>
       <xsl:for-each select="//uc:usecase/uc:actors/uc:primary[uc:name = $role_name]">
-         <xsl:text> [</xsl:text><xref linkend="{../../@id}"/><xsl:text>] </xsl:text>
+         <xsl:text> [</xsl:text><xref linkend="{../../@id}"/><xsl:text>]
+         </xsl:text>
       </xsl:for-each>
    </xsl:template>
    
@@ -398,7 +400,7 @@
                   <entry spanname="hspan">
                      <xsl:variable name="role_name" select="req:name"/>
                      <xsl:for-each select="//uc:usecase/uc:actors/uc:primary[uc:name = $role_name]">
-                        <xsl:text> [</xsl:text><xref linkend="{../../@id}"/><xsl:text>] </xsl:text>
+                        <xsl:text> [</xsl:text><xref linkend="{../../@id}"/><xsl:text>]</xsl:text>
                      </xsl:for-each>
                   </entry>
                </row>

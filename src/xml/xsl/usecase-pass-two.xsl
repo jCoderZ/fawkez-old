@@ -394,13 +394,17 @@
 
    <xsl:template name="uc:actor_list">
      <xsl:param name="actor_type" select="'Primary'"/>
+         <xsl:variable name="actor_name" select="uc:name"/>
          <itemizedlist>
          <indexterm>
             <primary>Actor</primary>
             <secondary><xsl:value-of select="$actor_type"/></secondary>
             <tertiary><xsl:value-of select="uc:name"/></tertiary>
           </indexterm>
-            <listitem><para><xsl:value-of select="$actor_type"/>: <xsl:value-of select="uc:name"/>
+            <listitem><para><xsl:choose>
+                  <xsl:when test="//req:role[req:name = $actor_name]"><xsl:value-of select="$actor_type"/>: <xsl:text> [</xsl:text><xref linkend="{//req:role[req:name = $actor_name]/../req:key}"/><xsl:text>]</xsl:text></xsl:when>
+                  <xsl:otherwise><xsl:value-of select="$actor_type"/>: no role for actor <xsl:value-of select="$actor_name"/></xsl:otherwise>
+                  </xsl:choose>
                 <itemizedlist>
                    <xsl:for-each select="uc:channel">
                  <indexterm>

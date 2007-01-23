@@ -45,6 +45,7 @@
 digraph G {
     fontname = "Bitstream Vera Sans"
     fontsize = 8
+    rankdir = "LR";
     
     node [
             fontname = "Bitstream Vera Sans"
@@ -58,23 +59,30 @@ digraph G {
             fontsize = 8;
             weight = 10;
     ]
+    
+    <xsl:apply-templates select="//req:role[not(../req:category/req:secondary)]" mode="complete">
+       <xsl:with-param name="suppress_uc" select="'true'"/>
+    </xsl:apply-templates>
 
     <xsl:for-each select="//req:requirement/req:category/req:secondary[generate-id() = generate-id(key('unique-category-secondary-key', .))]">    
        <xsl:variable name="sec_cat" select="."/>
        <xsl:if test="//req:role[../req:category/req:secondary = $sec_cat and starts-with(../req:category/req:primary, 'Role')]">
           subgraph cluster<xsl:value-of select="position()"/> {
              label = "<xsl:value-of select="$sec_cat"/>";
-          <xsl:apply-templates select="//req:role[../req:category/req:secondary = $sec_cat]" mode="complete"/>       
+          <xsl:apply-templates select="//req:role[../req:category/req:secondary = $sec_cat]" mode="complete">       
+             <xsl:with-param name="suppress_uc" select="'true'"/>
+          </xsl:apply-templates>
           }
        </xsl:if>
     </xsl:for-each>
-    <xsl:apply-templates select="//req:role[not(../req:category/req:secondary)]" mode="complete"/>
+    
     
 }
        </redirect:write>
    </xsl:template>
    
    <xsl:template match="req:role" mode="complete">
+       <xsl:param name="suppress_uc" select="'false'"/>
        "<xsl:value-of select="../req:key"/>" [
                 label = "<xsl:value-of select="req:name"/>"
         ]
@@ -86,18 +94,21 @@ digraph G {
          
          <!-- only show entities, if referenced entity is within documents scope (referenced in root file) -->
          <xsl:if test="$role_name = $actor_id">
-           "<xsl:value-of select="../../../@id"/>" [
-                label = "<xsl:value-of select="../../../@id"/><xsl:text> </xsl:text><xsl:value-of select="../../../uc:name"/>";
-                shape = "box";
-           ]  
+           <xsl:if test="not($suppress_uc = 'true')">
+              "<xsl:value-of select="../../../@id"/>" [
+                   label = "<xsl:value-of select="../../../@id"/><xsl:text> </xsl:text><xsl:value-of select="../../../uc:name"/>";
+                   shape = "ellipse";
+              ]  
+          
             
-           <xsl:call-template name="create_edge">
-              <xsl:with-param name="link_from"      select="$role_id"/>
-              <xsl:with-param name="link_to"        select="../../../@id"/>
-              <xsl:with-param name="link_end"       select="''"/>
-              <xsl:with-param name="link_start"     select="''"/>
-              <xsl:with-param name="link_arrowhead" select="'normal'"/>
-           </xsl:call-template>
+              <xsl:call-template name="create_edge">
+                 <xsl:with-param name="link_from"      select="$role_id"/>
+                 <xsl:with-param name="link_to"        select="../../../@id"/>
+                 <xsl:with-param name="link_end"       select="''"/>
+                 <xsl:with-param name="link_start"     select="''"/>
+                 <xsl:with-param name="link_arrowhead" select="'normal'"/>
+              </xsl:call-template>
+           </xsl:if>
         </xsl:if>
         
       </xsl:for-each>
@@ -176,8 +187,13 @@ digraph G {
        <xsl:if test="//req:role[../req:category/req:secondary = $secondary_category and starts-with(../req:category/req:primary, 'Role')]">
           subgraph cluster<xsl:value-of select="position()"/> {
              label = "<xsl:value-of select="$secondary_category"/>";
-          <xsl:apply-templates select="//req:role[../req:category/req:secondary = $secondary_category]" mode="complete"/>       
+          <xsl:apply-templates select="//req:role[../req:category/req:secondary = $secondary_category]" mode="complete"/>
           }
+          <xsl:for-each select="//req:role[not(../req:category/req:secondary = $secondary_category) and ../req:key = //req:role[../req:category/req:secondary = $secondary_category]/req:superior/req:ref/@id]">
+             "<xsl:value-of select="../req:key"/>" [
+                label = "<xsl:value-of select="req:name"/>"
+             ]
+          </xsl:for-each>       
        </xsl:if>
     </xsl:if>
     <xsl:if test="not($tertiary_category = '')">
@@ -186,6 +202,11 @@ digraph G {
              label = "<xsl:value-of select="$secondary_category"/>";
           <xsl:apply-templates select="//req:role[../req:category/req:secondary = $secondary_category  and ../req:category/req:tertiary = $tertiary_category]" mode="complete"/>       
           }
+          <xsl:for-each select="//req:role[not(../req:category/req:secondary = $secondary_category  and ../req:category/req:tertiary = $tertiary_category) and ../req:key = //req:role[../req:category/req:secondary = $secondary_category  and ../req:category/req:tertiary = $tertiary_category]/req:superior/req:ref/@id]">
+             "<xsl:value-of select="../req:key"/>" [
+                label = "<xsl:value-of select="req:name"/>"
+             ]
+          </xsl:for-each>
        </xsl:if>
     </xsl:if>
 }

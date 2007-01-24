@@ -31,122 +31,134 @@
        <book lang="{info/@lang}" status="final">
           <xsl:apply-templates select="uc:info"/>
 
-          <chapter id="usecases">
-             <title>Use Cases</title>
-             <xsl:if test="uc:usecase[@level='Summary' and not(@change_request)]">
+          <xsl:if test="//uc:usecase">
+             <chapter id="usecases">
+                <title>Use Cases</title>
+                <xsl:if test="uc:usecase[@level='Summary' and not(@change_request)]">
+                   <section>
+                      <title>Summary Level</title>
+                      <xsl:for-each select="//uc:usecase[@level='Summary' and not(@change_request) and generate-id() = generate-id(key('scope-group', uc:scope))]">
+                         <xsl:variable name="scope_id" select="uc:scope"/>
+                         <section>
+                            <title><xsl:value-of select="uc:scope"/></title>
+                            <xsl:apply-templates select="//uc:usecase[@level='Summary' and not(@change_request) and uc:scope=$scope_id]"/>
+                         </section>
+                      </xsl:for-each>
+                   </section>
+                </xsl:if>
+                <xsl:if test="uc:usecase[@level='UserGoal' and not(@change_request)]">
                 <section>
-                   <title>Summary Level</title>
-                   <xsl:for-each select="//uc:usecase[@level='Summary' and not(@change_request) and generate-id() = generate-id(key('scope-group', uc:scope))]">
-                      <xsl:variable name="scope_id" select="uc:scope"/>
-                      <section>
-                         <title><xsl:value-of select="uc:scope"/></title>
-                         <xsl:apply-templates select="//uc:usecase[@level='Summary' and not(@change_request) and uc:scope=$scope_id]"/>
-                      </section>
-                   </xsl:for-each>
+                  <title>User Goal Level</title>
+                  <xsl:for-each select="//uc:usecase[@level='UserGoal' and not(@change_request) and generate-id() = generate-id(key('scope-group', uc:scope))]">
+                     <xsl:variable name="scope_id" select="uc:scope"/>
+                     <section>
+                        <title><xsl:value-of select="uc:scope"/></title>
+                        <xsl:apply-templates select="//uc:usecase[@level='UserGoal' and not(@change_request) and uc:scope=$scope_id]"/>
+                     </section>
+                  </xsl:for-each>
                 </section>
-             </xsl:if>
-             <xsl:if test="uc:usecase[@level='UserGoal' and not(@change_request)]">
-             <section>
-               <title>User Goal Level</title>
-               <xsl:for-each select="//uc:usecase[@level='UserGoal' and not(@change_request) and generate-id() = generate-id(key('scope-group', uc:scope))]">
-                  <xsl:variable name="scope_id" select="uc:scope"/>
-                  <section>
-                     <title><xsl:value-of select="uc:scope"/></title>
-                     <xsl:apply-templates select="//uc:usecase[@level='UserGoal' and not(@change_request) and uc:scope=$scope_id]"/>
-                  </section>
-               </xsl:for-each>
-             </section>
-             </xsl:if>
-             <xsl:if test="uc:usecase[@level='Component' and not(@change_request)]">
-             <section>
-               <title>Component Level</title>
-               <xsl:for-each select="//uc:usecase[@level='Component' and not(@change_request) and generate-id() = generate-id(key('scope-group', uc:scope))]">
-                  <xsl:variable name="scope_id" select="uc:scope"/>
-                  <section>
-                     <title><xsl:value-of select="uc:scope"/></title>
-                     <xsl:apply-templates select="//uc:usecase[@level='Component' and not(@change_request) and uc:scope=$scope_id]"/>
-                  </section>
-               </xsl:for-each>
-             </section>
-             </xsl:if>
-             <xsl:if test="uc:usecase[@change_request]">
-             <section>
-               <title>Change Requests</title>
-               <xsl:apply-templates select="uc:usecase[@change_request]" >
-                  <xsl:sort select="@change_request"/>
-               </xsl:apply-templates>
-             </section>
-             </xsl:if>
-          </chapter>
+                </xsl:if>
+                <xsl:if test="uc:usecase[@level='Component' and not(@change_request)]">
+                <section>
+                  <title>Component Level</title>
+                  <xsl:for-each select="//uc:usecase[@level='Component' and not(@change_request) and generate-id() = generate-id(key('scope-group', uc:scope))]">
+                     <xsl:variable name="scope_id" select="uc:scope"/>
+                     <section>
+                        <title><xsl:value-of select="uc:scope"/></title>
+                        <xsl:apply-templates select="//uc:usecase[@level='Component' and not(@change_request) and uc:scope=$scope_id]"/>
+                     </section>
+                  </xsl:for-each>
+                </section>
+                </xsl:if>
+                <xsl:if test="uc:usecase[@change_request]">
+                <section>
+                  <title>Change Requests</title>
+                  <xsl:apply-templates select="uc:usecase[@change_request]" >
+                     <xsl:sort select="@change_request"/>
+                  </xsl:apply-templates>
+                </section>
+                </xsl:if>
+             </chapter>
+          </xsl:if>
           
           <!-- Requirements -->
           <xsl:call-template name="req:requirements"/>
 
-          <appendix id="Actors">
-          <title>All Actors</title>
-          <section id="all_primary_actors">
-            <title>Primary Actors</title>
-            <informaltable>
-               <tgroup cols="2">
-                 <tbody>
-                     <xsl:call-template name="uc:list_primary_actors"/>
-                 </tbody>
-               </tgroup>
-            </informaltable>
-          </section>
-          <section id="all_secondary_actors">
-            <title>Secondary Actors</title>
-            <informaltable>
-               <tgroup cols="2">
-                 <tbody>
-                         <xsl:call-template name="uc:list_secondary_actors"/>
-                 </tbody>
-               </tgroup>
-            </informaltable>
-          </section>
-        </appendix>
+          <xsl:if test="//uc:actors">
+             <appendix id="Actors">
+             <title>All Actors</title>
+             <section id="all_primary_actors">
+               <title>Primary Actors</title>
+               <informaltable>
+                  <tgroup cols="2">
+                    <tbody>
+                        <xsl:call-template name="uc:list_primary_actors"/>
+                    </tbody>
+                  </tgroup>
+               </informaltable>
+             </section>
+             <section id="all_secondary_actors">
+               <title>Secondary Actors</title>
+               <informaltable>
+                  <tgroup cols="2">
+                    <tbody>
+                            <xsl:call-template name="uc:list_secondary_actors"/>
+                    </tbody>
+                  </tgroup>
+               </informaltable>
+             </section>
+           </appendix>
+        </xsl:if>
 
-        <appendix id="Roles UC List">
-          <title>Mapping Use Cases to Roles</title>
-          <xsl:call-template name="uc:list_roles_usecases"/>
-        </appendix>
+        <xsl:if test="//req:role">
+           <appendix id="Roles UC List">
+             <title>Mapping Use Cases to Roles</title>
+             <xsl:call-template name="uc:list_roles_usecases"/>
+           </appendix>
+        </xsl:if>
 
-        <appendix id="Use Case Revisions">
-          <title>Use Case Revision</title>
-          <informaltable>
-               <tgroup cols="3">
-                 <colspec colwidth="2.5cm"/>
-                      <colspec colwidth="3cm"/>
-                 <tbody>
-                         <xsl:apply-templates select="//uc:usecase" mode="revision_list"/>
-                 </tbody>
-               </tgroup>
-            </informaltable>
-        </appendix>
+        <xsl:if test="//uc:usecase">
+           <appendix id="Use Case Revisions">
+             <title>Use Case Revision</title>
+             <informaltable>
+                  <tgroup cols="3">
+                    <colspec colwidth="2.5cm"/>
+                         <colspec colwidth="3cm"/>
+                    <tbody>
+                            <xsl:apply-templates select="//uc:usecase" mode="revision_list"/>
+                    </tbody>
+                  </tgroup>
+               </informaltable>
+           </appendix>
+        </xsl:if>
 
-        <appendix id="Open Issues">
-          <title>Open Issues</title>
-          <section>
-             <title>Issues for Use Cases</title>
-             <xsl:apply-templates select="//uc:usecases" mode="issue_list"/>
-          </section>
-          <section>
-             <title>Issues for Requirements</title>
-             <xsl:apply-templates select="//req:requirement" mode="issue_list"/>
-          </section>
-        </appendix>
+        <xsl:if test="//uc:open_issue or //req:open_issue">
+           <appendix id="Open Issues">
+             <title>Open Issues</title>
+             <section>
+                <title>Issues for Use Cases</title>
+                <xsl:apply-templates select="//uc:usecases" mode="issue_list"/>
+             </section>
+             <section>
+                <title>Issues for Requirements</title>
+                <xsl:apply-templates select="//req:requirement" mode="issue_list"/>
+             </section>
+           </appendix>
+        </xsl:if>
 
-        <appendix id="Priorities">
-          <title>Priorities</title>
-          <informaltable>
-             <tgroup cols="2">
-                <colspec colwidth="2.5cm"/>
-                <tbody>
-                   <xsl:apply-templates select="//uc:usecase" mode="priority_list"/>
-                 </tbody>
-             </tgroup>
-          </informaltable>
-        </appendix>
+        <xsl:if test="//uc:usecase">
+           <appendix id="Priorities">
+             <title>Priorities</title>
+             <informaltable>
+                <tgroup cols="2">
+                   <colspec colwidth="2.5cm"/>
+                   <tbody>
+                      <xsl:apply-templates select="//uc:usecase" mode="priority_list"/>
+                    </tbody>
+                </tgroup>
+             </informaltable>
+           </appendix>
+        </xsl:if>
 
         <index></index>
 

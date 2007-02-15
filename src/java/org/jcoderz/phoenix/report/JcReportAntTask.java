@@ -1348,7 +1348,7 @@ public class JcReportAntTask
          }
 
          cmd.createArgument().setValue("--destination");
-         final File outFile = new File(reportDir, "coberturareport.xml");
+         final File outFile = new File(reportDir, "coverage.xml");
          cmd.createArgument().setFile(reportDir);
 
          // We always write checkstyle reports in XML format 

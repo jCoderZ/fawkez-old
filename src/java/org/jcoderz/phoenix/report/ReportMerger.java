@@ -210,13 +210,17 @@ public class ReportMerger
       }
       catch (IndexOutOfBoundsException e)
       {
-         throw new IllegalArgumentException("Missing value for "
-            + args[args.length - 1], e);
+         final IllegalArgumentException ex = new IllegalArgumentException(
+            "Missing value for " + args[args.length - 1]);
+         ex.initCause(e);
+         throw ex;
       }
       catch (IOException e)
       {
-         throw new IllegalArgumentException("Wrong out folder "
-            + args[args.length - 1], e);
+         final IllegalArgumentException ex = new IllegalArgumentException(
+            "Wrong out folder " + args[args.length - 1]);
+         ex.initCause(e);
+         throw ex;
       }
    }
 

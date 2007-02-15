@@ -253,8 +253,10 @@ public class DbView
       }
       catch (IndexOutOfBoundsException e)
       {
-         throw new IllegalArgumentException("Missing value for "
-            + args[args.length - 1], e);
+         final IllegalArgumentException ex = new IllegalArgumentException(
+            "Missing value for " + args[args.length - 1]);
+         ex.initCause(e);
+         throw ex;
       }
    }
 

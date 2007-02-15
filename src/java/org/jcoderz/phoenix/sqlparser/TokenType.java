@@ -286,8 +286,10 @@ public final class TokenType
         }
         catch (ArrayIndexOutOfBoundsException e)
         {
-            throw new IllegalArgumentException(
-                    "Illegal int representation of TokenType", e);
+            final IllegalArgumentException ex = new IllegalArgumentException(
+                    "Illegal int representation of TokenType");
+            ex.initCause(e);
+            throw ex;
         }
     }
 

@@ -215,9 +215,11 @@ public final class HexUtil
          {
             final char c1 = s.charAt(count * CHARS_PER_BYTE);
             final char c2 = s.charAt(count * CHARS_PER_BYTE + 1);
-            throw new IllegalArgumentException(
+            final IllegalArgumentException e = new IllegalArgumentException(
                   "'" + c1 + c2
-                  + "' is not a valid hex representation of a byte", ex);
+                  + "' is not a valid hex representation of a byte");
+            ex.initCause(e);
+            throw e;
          }
       }
       return result;

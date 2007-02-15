@@ -63,7 +63,7 @@
        <xsd:restriction base='xsd:string'>
       <xsd:enumeration value='prod'/>
       <xsd:enumeration value='test'/>
-      <xsd:enumeration value='tools'/>
+      <xsd:enumeration value='misc'/>
       <!-- Might need to open this up to allow dynamic addition of new
            source types -->
      </xsd:restriction>

@@ -98,27 +98,24 @@ public class JcSummaryReportAntTask
    private static final int YEAR_LEN = 4;
    private static final int MONTH_LEN = 2;
    private static final int DAY_LEN = 2;
-   private static final int HOUR_LEN = 2;
-   private static final int MINUTE_LEN = 2;
 
    private static final int ROW_ERROR = 0;
-   private static final int ROW_WARNING = 1;
-   private static final int ROW_INFO = 2;
-   private static final int ROW_COVERAGE = 3;
-   private static final int ROW_FILTERED = 4;
+   private static final int ROW_CPD = 1;
+   private static final int ROW_WARNING = 2;
+   private static final int ROW_DESIGN = 3;
+   private static final int ROW_COVERAGE = 4;
    private static final int ROW_CODESTYLE = 5;
-   private static final int ROW_DESIGN = 6;
-   private static final int ROW_CPD = 7;
+   private static final int ROW_INFO = 6;
+   private static final int ROW_FILTERED = 7;
 
    private static final int ROW_LOC = 0;
-   private static final int ROW_CODELOC = 1;
 
    private static final int ROW_QUALITY = 0;
 
    private static final int LARGE_IMAGE_WIDTH = 800;
    private static final int LARGE_IMAGE_HEIGHT = 600;
-   private static final int SMALL_IMAGE_WIDTH = 400;
-   private static final int SMALL_IMAGE_HEIGHT = 300;
+   private static final int SMALL_IMAGE_WIDTH = 300;
+   private static final int SMALL_IMAGE_HEIGHT = 234;
    private static final Dimension LARGE_SIZE
          = new Dimension(LARGE_IMAGE_WIDTH, LARGE_IMAGE_HEIGHT);
    private static final Dimension SMALL_SIZE
@@ -594,7 +591,7 @@ public class JcSummaryReportAntTask
          throw new RuntimeException("No reports found for chart!");
       }
 
-      final String[] legendLabels = {"Loc", "CodeLoc"};
+      final String[] legendLabels = {"Loc"};
       
       // Configure dataset
       final Dataset dataset = new Dataset(legendLabels.length,
@@ -609,14 +606,13 @@ public class JcSummaryReportAntTask
          final Summary sum = (Summary) summaryMap.get(ts);
 
          dataset.set(ROW_LOC, i, 0, sum.getLoc());
-         dataset.set(ROW_CODELOC, i, 0, sum.getCodeLoc());
          i++;
       }
 
       final GraphChart2DProperties graphChart2DProps
             = createGraphChart2DProperties(labelsAxisLabels, title);
       final MultiColorsProperties multiColorsProps
-            = createMultiColorsProperties(new Color[] {Color.BLUE, Color.PINK});
+            = createMultiColorsProperties(new Color[] {new Color(115, 117, 255)});
       createChart(title, legendLabels, dataset, graphChart2DProps, multiColorsProps);
    }
 
@@ -652,13 +648,13 @@ public class JcSummaryReportAntTask
         final Summary sum = (Summary) summaryMap.get(ts);
 
         dataset.set(ROW_ERROR, i, 0, sum.getError());
-        dataset.set(ROW_WARNING, i, 0, sum.getWarning());
-        dataset.set(ROW_INFO, i, 0, sum.getInfo());
-        dataset.set(ROW_COVERAGE, i, 0, sum.getCoverage());
-        dataset.set(ROW_FILTERED, i, 0, sum.getFiltered());
-        dataset.set(ROW_CODESTYLE, i, 0, sum.getCodestyle());
-        dataset.set(ROW_DESIGN, i, 0, sum.getDesign());
         dataset.set(ROW_CPD, i, 0, sum.getCpd());
+        dataset.set(ROW_WARNING, i, 0, sum.getWarning());
+        dataset.set(ROW_DESIGN, i, 0, sum.getDesign());
+        dataset.set(ROW_COVERAGE, i, 0, sum.getCoverage());
+        dataset.set(ROW_CODESTYLE, i, 0, sum.getCodestyle());
+        dataset.set(ROW_INFO, i, 0, sum.getInfo());
+        dataset.set(ROW_FILTERED, i, 0, sum.getFiltered());
         i++;
      }
 
@@ -666,14 +662,14 @@ public class JcSummaryReportAntTask
            = createGraphChart2DProperties(labelsAxisLabels, title);
      final MultiColorsProperties multiColorsProps
            = createMultiColorsProperties(new Color[] {
-              new Color(255, 64, 64),
-              new Color(255, 160, 64),
-              new Color(208, 208, 255),
-              new Color(255, 255, 224),
-              Color.WHITE,
-              new Color(255, 240, 128),
-              new Color(255, 240, 128),
-              new Color(208, 240, 208)
+              new Color(255, 65, 66),
+              new Color(214, 243, 214),
+              new Color(255, 162, 66),
+              new Color(255, 243, 66),
+              new Color(255, 255, 231),
+              new Color(255, 243, 132),
+              new Color(214, 211, 255),
+              new Color(247, 247, 247)
               });
      createChart(title, legendLabels, dataset, graphChart2DProps, 
              multiColorsProps);
@@ -787,7 +783,6 @@ public class JcSummaryReportAntTask
    {
       try
       {
-         // TODO: Refactor to reduce complexity
          final FileOutputStream fos = new FileOutputStream(
                new File(mDestDir, "index.html"));
          final PrintWriter pw = new PrintWriter(fos);
@@ -797,46 +792,61 @@ public class JcSummaryReportAntTask
          pw.println("<style type=\"text/css\">");
          pw.println("<!--");
          
-         pw.println("hr { width: 100%; height: 1px; border-style: none; "
-               + "background-color: black; }"); 
-         pw.println("a { text-decoration: underline; }"); 
-         pw.println("a:hover { text-decoration: none; }"); 
-         pw.println("table { border-collapse: collapse; }"); 
-         pw.println("table.month { border: 1px solid black; margin: 1em; "
-               + "background-color: #eeeeee; }");
-         pw.println("td.day_even { background-color: #bbbbbb; width: 1.5em; "
-               + "text-align: center; padding: 0.2em; }");
-         pw.println("td.day_odd { background-color: #cccccc; width: 1.5em; "
-               + "text-align: center; padding: 0.2em; }");
+         pw.println("body { font-family: verdana, tahoma; }");
          pw.println("img { border:none; }");
-         pw.println("div.datelink { text-align:left; color: black; }"); 
-         pw.println("div.error { text-align:left; color: #FF4040; }"); 
-         pw.println("div.warning { text-align:left; color: #FFA040; }"); 
-         pw.println("div.info { text-align:left; color: #D0D0FF; }"); 
-         pw.println("div.coverage { text-align:left; color: #FFFFE0; }"); 
-         pw.println("div.filtered { text-align:left; color: #E0E0E0; }"); 
-         pw.println("div.codestyle { text-align:left; color: #FFF080; }"); 
-         pw.println("div.design { text-align:left; color: #FFF040; }"); 
-         pw.println("div.cpd { text-align:left; color: #D0F0D0; }"); 
+         pw.println("a { text-decoration: none; }");
+         pw.println("a:hover { text-decoration: underline; }");
+
+         pw.println(".bold { font-weight: bold; }");
+         pw.println("table { border-collapse: collapse; "
+              + "border: 1px solid black; text-align: right; }");
+         pw.println("table td { padding: 5px; border-collapse: collapse; "
+              + "border: 1px solid black; font-size: small; vertical-align: top; }");
+         pw.println("td.month { padding: 10px; border: 1px solid black; "
+              + "margin: 1em; background-color: #eeeeee; text-align: left; font-size: large; }");
+         pw.println("td.day_odd { background: #aaaaaa; }");
+         pw.println("td.day_even { background: #cccccc; }");
+         pw.println("td.quality_odd { background:#88b888; }");
+         pw.println("td.quality_even { background:#88e888; }");
+         pw.println("td.loc_odd { background:#7777cf; }");
+         pw.println("td.loc_even { background:#7777ff; }");
+         pw.println("td.filtered_odd { background:#e0e0e0; }");
+         pw.println("td.filtered_even { background:#f7f7f7; }");
+         pw.println("td.ok_odd { background:#e0e0e0; }");
+         pw.println("td.ok_even { background:#ffffff; }");
+         pw.println("td.info_odd { background:#b0b0e0; }");
+         pw.println("td.info_even { background:#d0d0ff; }");
+         pw.println("td.codestyle_odd { background:#e0e070; }");
+         pw.println("td.codestyle_even { background:#fff080; }");
+         pw.println("td.coverage_odd { background:#e0e0c0; }");
+         pw.println("td.coverage_even { background:#ffffe0; }");
+         pw.println("td.design_odd {  background:#e0d020; }");
+         pw.println("td.design_even { background:#fff040; }");
+         pw.println("td.warning_odd { background:#e08020; }");
+         pw.println("td.warning_even { background:#ffa040; }");
+         pw.println("td.cpd_odd { background: #c0e0c0; }");
+         pw.println("td.cpd_even { background:#d0f0d0; }");
+         pw.println("td.error_odd { background:#e08080; }");
+         pw.println("td.error_even { background:#ff4040; }");
 
          pw.println("-->");
          pw.println("</style>");
          pw.println("<body>");
-         pw.println("<table><tr><td>");
-         pw.println("<a href=\"findings.png\"><img src=\"findings_small.png\">"
-               + "</a>");
-         pw.println("</td><td>");
-         pw.println("<a href=\"quality.png\"><img src=\"quality_small.png\">"
-               + "</a>");
-         pw.println("</td><td>");
-         pw.println("<a href=\"loc.png\"><img src=\"loc_small.png\">"
-               + "</a>");
-         pw.println("</td></tr></table>");
 
-         pw.println("<table><tr><td>");
+         pw.println("<table>");
+
+         pw.println("<tr>");
+         pw.println("<td colspan=\"4\">");
+         pw.println("<a href=\"findings.png\"><img src=\"findings_small.png\"></a>");
+         pw.println("</td><td colspan=\"4\">");
+         pw.println("<a href=\"quality.png\"><img src=\"quality_small.png\"></a>");
+         pw.println("</td><td colspan=\"3\">");
+         pw.println("<a href=\"loc.png\"><img src=\"loc_small.png\"></a>");
+         pw.println("</td>");
+         pw.println("</tr>");
+
 
          final Map yearMap = (Map) summaryDbMap;
-         // TODO: Move to method
          final List sortedYearList = new ArrayList();
          sortedYearList.addAll(yearMap.keySet());
          Collections.sort(sortedYearList);
@@ -848,7 +858,6 @@ public class JcSummaryReportAntTask
             log("Rendering detail tables for year " + year);
 
             final Map monthMap = (Map) summaryDbMap.get(year);
-            // TODO: Move to method
             final List sortedMonthList = new ArrayList();
             sortedMonthList.addAll(monthMap.keySet());
             Collections.sort(sortedMonthList);
@@ -859,11 +868,22 @@ public class JcSummaryReportAntTask
                final Integer month = (Integer) monthIter.next();
                log("Rendering detail table for month " + month);
 
-               pw.println("<table class=\"month\">");
-               pw.println("<tr><td>"
-                     + MONTHS[month.intValue() - 1]
-                     + " " + year +  "</td></tr>");
-               pw.println("<tr class=\"daytable\">");
+               pw.println("<tr><td class=\"month bold\" colspan=\"11\">"
+                   + MONTHS[month.intValue() - 1]
+                   + " " + year + "</td></tr>");
+               pw.println("<tr>");
+               pw.println("  <td class=\"day_even bold\">Date</td>");
+               pw.println("  <td class=\"quality_even bold\">Quality</td>");
+               pw.println("  <td class=\"loc_even bold\">Loc</td>");
+               pw.println("  <td class=\"error_even bold\">Error</td>");
+               pw.println("  <td class=\"cpd_even bold\">Cpd</td>");
+               pw.println("  <td class=\"warning_even bold\">Warning</td>");
+               pw.println("  <td class=\"design_even bold\">Design</td>");
+               pw.println("  <td class=\"coverage_even bold\">Coverage</td>");
+               pw.println("  <td class=\"codestyle_even bold\">Codestyle</td>");
+               pw.println("  <td class=\"info_even bold\">Info</td>");
+               pw.println("  <td class=\"filtered_even bold\">Filtered</td>");
+               pw.println("</tr>");
 
                int i = 0;
                final Map dayMap = (Map) monthMap.get(month);
@@ -871,31 +891,6 @@ public class JcSummaryReportAntTask
                sortedDayList.addAll(dayMap.keySet());
                Collections.sort(sortedDayList);
                final Iterator dayIter = sortedDayList.iterator();
-               int counter = 0;
-               long errors = 0;
-               long warnings = 0;
-               long info = 0;
-               long coverage = 0;
-               long filtered = 0;
-               long codestyle = 0;
-               long design = 0;
-               long cpd = 0;
-               long startErrors = 0;
-               long startWarnings = 0;
-               long startInfo = 0;
-               long startCoverage = 0;
-               long startFiltered = 0;
-               long startCodestyle = 0;
-               long startDesign = 0;
-               long startCpd = 0;
-               long endErrors = 0;
-               long endWarnings = 0;
-               long endInfo = 0;
-               long endCoverage = 0;
-               long endFiltered = 0;
-               long endCodestyle = 0;
-               long endDesign = 0;
-               long endCpd = 0;
                while (dayIter.hasNext())
                {
                   final Integer day = (Integer) dayIter.next();
@@ -904,146 +899,38 @@ public class JcSummaryReportAntTask
                   final Iterator reportsIter = reportsList.iterator();
                   while (reportsIter.hasNext())
                   {
+                     pw.println("<tr>");
+
                      final Summary sum = (Summary) reportsIter.next();
+                     String suffix = "odd";
                      if ((i & 1) == 0)
                      {
-                        pw.print("<td class=\"day_even\">");
+                        suffix = "even";
                      }
-                     else
-                     {
-                        pw.print("<td class=\"day_odd\">");
-                     }
-                     pw.print("<div class=\"datelink\">");
-                     if (sum.getSummaryXml() != null)
-                     {
-                        pw.print("<a href=\"" + sum.getTimestamp()
-                              + "/index.html\">");
-                     }
-                     pw.print(extractDay(sum.getTimestamp()) + "."
-                           + month + ".<br/>"
-                           + extractTime(sum.getTimestamp()));
-                     if (sum.getSummaryXml() != null)
-                     {
-                        pw.print("</a>");
-                     }
-                     pw.print("</div><hr/>");
-                     pw.print("<div class=\"error\">" + sum.getError()
-                           + "</div>");
-                     pw.print("<div class=\"warning\">" + sum.getWarning()
-                           + "</div>");
-                     pw.print("<div class=\"info\">" + sum.getInfo()
-                           + "</div>");
-                     pw.print("<div class=\"coverage\">" + sum.getCoverage()
-                           + "</div>");
-                     pw.print("<div class=\"filtered\">" + sum.getFiltered()
-                           + "</div>");
-                     pw.print("<div class=\"codestyle\">" + sum.getCodestyle()
-                           + "</div>");
-                     pw.print("<div class=\"design\">" + sum.getDesign()
-                           + "</div>");
-                     pw.print("<div class=\"cpd\">" + sum.getCpd()
-                           + "</div></td>");
+
+                     pw.println(wrapTimestamp(sum, suffix));
+
+                     pw.println(wrapValue(sum.getQuality(), "quality", suffix));
+                     pw.println(wrapValue(sum.getLoc(), "loc", suffix));
+
+                     pw.println(wrapValue(sum, sum.getError(), "error", suffix));
+                     pw.println(wrapValue(sum, sum.getCpd(), "cpd", suffix));
+                     pw.println(wrapValue(sum, sum.getWarning(), "warning", suffix));
+                     pw.println(wrapValue(sum, sum.getDesign(), "design", suffix));
+                     pw.println(wrapValue(sum, sum.getCoverage(), "coverage", suffix));
+                     pw.println(wrapValue(sum, sum.getCodestyle(), "codestyle", suffix));
+                     pw.println(wrapValue(sum, sum.getInfo(), "info", suffix));
+                     pw.println(wrapValue(sum, sum.getFiltered(), "filtered", suffix));
+
+                     pw.println("</tr>");
+
                      i++;
-                     if (startErrors == 0)
-                     {
-                        startErrors = sum.getError();
-                     }
-                     if (startWarnings == 0)
-                     {
-                        startWarnings = sum.getWarning();
-                     }
-                     if (startInfo == 0)
-                     {
-                        startInfo = sum.getInfo();
-                     }
-                     if (startCoverage == 0)
-                     {
-                        startCoverage = sum.getCoverage();
-                     }
-                     if (startFiltered == 0)
-                     {
-                        startFiltered = sum.getFiltered();
-                     }
-                     if (startCodestyle == 0)
-                     {
-                        startCodestyle = sum.getCodestyle();
-                     }
-                     if (startDesign == 0)
-                     {
-                        startDesign = sum.getDesign();
-                     }
-                     if (startCpd == 0)
-                     {
-                        startCpd = sum.getCpd();
-                     }
-                     endErrors = sum.getError();
-                     endWarnings = sum.getWarning();
-                     endInfo = sum.getInfo();
-                     endCoverage = sum.getCoverage();
-                     endFiltered = sum.getFiltered();
-                     endCodestyle = sum.getCodestyle();
-                     endDesign = sum.getDesign();
-                     endCpd = sum.getCpd();
-
-                     errors += sum.getError();
-                     warnings += sum.getWarning();
-                     info += sum.getInfo();
-                     coverage += sum.getCoverage();
-                     filtered += sum.getFiltered();
-                     codestyle += sum.getCodestyle();
-                     design += sum.getDesign();
-                     cpd += sum.getCpd();
-
-                     counter++;
                   }
                }
-               pw.println("</tr>");
-               pw.println("<tr><td style=\"vertical-align:top;\">");
-               int errorsAvg = (int) errors / counter;
-               int warningsAvg = (int) warnings / counter;
-               int infoAvg = (int) info / counter;
-               int coverageAvg = (int) coverage / counter;
-               int filteredAvg = (int) filtered / counter;
-               int codestyleAvg = (int) codestyle / counter;
-               int designAvg = (int) design / counter;
-               int cpdAvg = (int) cpd / counter;
-               pw.println("<b>Average</b>"
-                     + "<div class=\"error\">Errors: " + errorsAvg
-                     + "</div><div class=\"warning\">Warnings: " + warningsAvg
-                     + "</div><div class=\"info\">Info: " + infoAvg
-                     + "</div><div class=\"coverage\">Coverage: " + coverageAvg
-                     + "</div><div class=\"filtered\">Filtered: " + filteredAvg
-                     + "</div><div class=\"codestyle\">Codestyle: " + codestyleAvg
-                     + "</div><div class=\"design\">Design: " + designAvg
-                     + "</div><div class=\"cpd\">Cpd: " + cpdAvg + "</div>");
-               pw.println("</td>");
-               pw.println("<td style=\"vertical-align:top;\">");
-               
-               long deltaErrors = endErrors - startErrors;
-               long deltaWarnings = endWarnings - startWarnings;
-               long deltaInfo = endInfo - startInfo;
-               long deltaCoverage = endCoverage - startCoverage;
-               long deltaFiltered = endFiltered - startFiltered;
-               long deltaCodestyle = endCodestyle - startCodestyle;
-               long deltaDesign = endDesign - startDesign;
-               long deltaCpd = endCpd - startCpd;
-               pw.println("<b>Tendency</b>"
-                  + "<div class=\"error\">Errors: " + (deltaErrors >= 0 ? "+" : "-") + deltaErrors
-                  + "</div><div class=\"warning\">Warnings: " + (deltaWarnings >= 0 ? "+" : "-") + deltaWarnings
-                  + "</div><div class=\"info\">Info: " +  (deltaInfo >= 0 ? "+" : "-") + deltaInfo
-                  + "</div><div class=\"coverage\">Coverage: " +  (deltaCoverage >= 0 ? "+" : "-") + deltaCoverage
-                  + "</div><div class=\"filtered\">Filtered: " + (deltaFiltered >= 0 ? "+" : "-") + deltaFiltered
-                  + "</div><div class=\"codestyle\">Codestyle: " + (deltaCodestyle >= 0 ? "+" : "-") + deltaCodestyle
-                  + "</div><div class=\"design\">Design: " +  (deltaDesign >= 0 ? "+" : "-") + deltaDesign
-                  + "</div><div class=\"cpd\">Cpd: " +  (deltaCpd >= 0 ? "+" : "-") + deltaCpd + "</div>");
-
-               pw.println("</td>");
-               pw.println("</tr>");
-               pw.println("</table>");
             }
          }
 
-         pw.println("</td></tr></table>");
+         pw.println("</table>");
          pw.println("</body>");
          pw.println("</html>");
          pw.close();
@@ -1056,7 +943,87 @@ public class JcSummaryReportAntTask
       }
    }
 
-   
+
+   private String wrapTimestamp (Summary sum, String oddeven)
+   {
+      final StringBuffer sb = new StringBuffer();
+      sb.append("<td class=\"day_");
+      sb.append(oddeven);
+      sb.append("\">");
+      if (sum.getSummaryXml() != null)
+      {
+         sb.append("<a href=\"");
+         sb.append(sum.getTimestamp());
+         sb.append("/index.html\">");
+      }
+      sb.append(extractDay(sum.getTimestamp()));
+      sb.append(".");
+      sb.append(extractMonth(sum.getTimestamp()));
+      sb.append(".");
+      sb.append(extractYear(sum.getTimestamp()));
+      if (sum.getSummaryXml() != null)
+      {
+         sb.append("</a>");
+      }
+      return sb.toString();
+   }
+
+
+   private String wrapValue (Summary sum, int value, String severity, String oddeven)
+   {
+      final StringBuffer sb = new StringBuffer();
+      sb.append("<td class=\"");
+      sb.append(severity);
+      sb.append("_");
+      sb.append(oddeven);
+      sb.append("\">");
+      if (sum.getSummaryXml() != null)
+      {
+         sb.append("<a href=\"" + sum.getTimestamp()
+               + "/findings.html");
+         sb.append("#");
+         sb.append(severity);
+         sb.append("\">");
+      }
+      sb.append(value);
+      if (sum.getSummaryXml() != null)
+      {
+         sb.append("</a>");
+      }
+      sb.append("</td>");
+      return sb.toString();
+   }
+
+
+   private String wrapValue (int value, String severity, String oddeven)
+   {
+      final StringBuffer sb = new StringBuffer();
+      sb.append("<td class=\"");
+      sb.append(severity);
+      sb.append("_");
+      sb.append(oddeven);
+      sb.append("\">");
+      sb.append(value);
+      sb.append("</td>");
+      return sb.toString();
+   }
+
+
+   private String wrapValue (double value, String severity, String oddeven)
+   {
+      final StringBuffer sb = new StringBuffer();
+      sb.append("<td class=\"");
+      sb.append(severity);
+      sb.append("_");
+      sb.append(oddeven);
+      sb.append("\">");
+      sb.append(value);
+      sb.append("%");
+      sb.append("</td>");
+      return sb.toString();
+   }
+
+
    private String extractDay (long timestamp)
    {
       final String ts = String.valueOf(timestamp);
@@ -1064,13 +1031,17 @@ public class JcSummaryReportAntTask
    }
 
 
-   private String extractTime (long timestamp)
+   private String extractMonth (long timestamp)
    {
       final String ts = String.valueOf(timestamp);
-      final int start_pos = YEAR_LEN + MONTH_LEN + DAY_LEN;
-      return ts.substring(start_pos, start_pos + HOUR_LEN) + ":"
-            + ts.substring(start_pos + HOUR_LEN, start_pos + HOUR_LEN
-               + MINUTE_LEN);
+      return ts.substring(YEAR_LEN, YEAR_LEN + MONTH_LEN);
+   }
+
+
+   private String extractYear (long timestamp)
+   {
+      final String ts = String.valueOf(timestamp);
+      return ts.substring(0, YEAR_LEN);
    }
 
 

@@ -203,6 +203,7 @@ final class FindingsSummary
             {
                out.write("<tr><td colspan='3' class='severityheader'>");
                currentSeverity = summary.getSeverity();
+               out.write("<a name='" + currentSeverity.toString() + "'/>");
                out.write("Severity: ");
                out.write(currentSeverity.toString());
                out.write("\n</td></tr>");

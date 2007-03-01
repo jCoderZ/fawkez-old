@@ -196,16 +196,20 @@ public final class FileSummary
      * @param error number of error level findings.
      * @param coverage number of coverage level findings.
      * @return the unweighted quality score.
-     * @deprecated This method does not support the new severity levels. 
      */
     public static float calculateQuality (int loc, int info, int warning, 
-        int error, int coverage)
+        int error, int coverage, int filtered, int codestyle, int design,
+        int cpd)
     {
         final int[] violations = new int[Severity.VALUES.size()];
         violations[Severity.INFO.toInt()] = info;
         violations[Severity.COVERAGE.toInt()] = coverage;
         violations[Severity.WARNING.toInt()] = warning;
         violations[Severity.ERROR.toInt()] = error;
+        violations[Severity.FILTERED.toInt()] = filtered;
+        violations[Severity.CODE_STYLE.toInt()] = codestyle;
+        violations[Severity.DESIGN.toInt()] = design;
+        violations[Severity.CPD.toInt()] = cpd;
         return FileSummary.calculateQuality(loc, violations);
     }
 

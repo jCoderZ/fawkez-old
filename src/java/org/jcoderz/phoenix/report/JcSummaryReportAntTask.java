@@ -91,7 +91,7 @@ public class JcSummaryReportAntTask
    extends Task
 {
    /** The number of columns in the CSV file. */
-   private static final int COLUMN_COUNT = 8;
+   private static final int COLUMN_COUNT = 12;
    private static final String[] MONTHS = new String[] {"January", "February",
          "March", "April", "Mai", "June", "July", "August", "September",
          "October", "November", "December"};
@@ -105,6 +105,10 @@ public class JcSummaryReportAntTask
    private static final int ROW_WARNING = 1;
    private static final int ROW_INFO = 2;
    private static final int ROW_COVERAGE = 3;
+   private static final int ROW_FILTERED = 4;
+   private static final int ROW_CODESTYLE = 5;
+   private static final int ROW_DESIGN = 6;
+   private static final int ROW_CPD = 7;
 
    private static final int ROW_LOC = 0;
    private static final int ROW_CODELOC = 1;
@@ -261,7 +265,7 @@ public class JcSummaryReportAntTask
          final FileOutputStream fos = new FileOutputStream(summaryDbFile);
          final PrintWriter pw = new PrintWriter(fos);
          pw.println("Timestamp;Error;Warning;Info;"
-               + "Coverage;Loc;CodeLoc;Quality");
+               + "Coverage;Loc;CodeLoc;Filtered;Codestyle;Design;Cpd;Quality");
    
          // Sort the keySet before writing the CSV file
          final Set keySet = summaryMap.keySet();
@@ -279,9 +283,14 @@ public class JcSummaryReportAntTask
             pw.print(sum.getCoverage() + ";");
             pw.print(sum.getLoc() + ";");
             pw.print(sum.getCodeLoc() + ";");
+            pw.print(sum.getFiltered() + ";");
+            pw.print(sum.getCodestyle() + ";");
+            pw.print(sum.getDesign() + ";");
+            pw.print(sum.getCpd() + ";");
             pw.println(FileSummary.calculateQuality(sum.getLoc(),
-                  sum.getInfo(), sum.getWarning(),
-                  sum.getError(), sum.getCoverage()));
+                  sum.getInfo(), sum.getWarning(), sum.getError(),
+                  sum.getCoverage(), sum.getFiltered(),
+                  sum.getCodestyle(), sum.getDesign(), sum.getCpd()));
          }
 
          fos.flush();
@@ -399,22 +408,31 @@ public class JcSummaryReportAntTask
          {
              ts = folderTimestamp.longValue();
          }
+
+         final int filtered = Integer.parseInt(
+            attrs.getNamedItem("filtered").getNodeValue().trim());
+         final int coverage = Integer.parseInt(
+            attrs.getNamedItem("coverage").getNodeValue().trim());
+         final int info = Integer.parseInt(
+            attrs.getNamedItem("info").getNodeValue().trim());
+         final int codestyle = Integer.parseInt(
+            attrs.getNamedItem("code-style").getNodeValue().trim());
+         final int design = Integer.parseInt(
+            attrs.getNamedItem("design").getNodeValue().trim());
+         final int warning = Integer.parseInt(
+            attrs.getNamedItem("warning").getNodeValue().trim());
+         final int cpd = Integer.parseInt(
+            attrs.getNamedItem("cpd").getNodeValue().trim());
          final int error = Integer.parseInt(
                attrs.getNamedItem("error").getNodeValue().trim());
-         final int warning = Integer.parseInt(
-               attrs.getNamedItem("warning").getNodeValue().trim());
-         final int info = Integer.parseInt(
-               attrs.getNamedItem("info").getNodeValue().trim());
-         final int coverage = Integer.parseInt(
-               attrs.getNamedItem("coverage").getNodeValue().trim());
          final int loc = Integer.parseInt(
                attrs.getNamedItem("loc").getNodeValue().trim());
          final int codeloc = Integer.parseInt(
                attrs.getNamedItem("codeLoc").getNodeValue().trim());
          final double quality = Double.parseDouble(
                attrs.getNamedItem("quality").getNodeValue());
-         sum = new Summary(ts, error, warning, info, coverage,
-               loc, codeloc, quality, summaryXml);
+         sum = new Summary(ts, error, warning, info, coverage, loc, codeloc,
+               filtered, codestyle, design, cpd, quality, summaryXml);
       }
       catch (ParserConfigurationException ex)
       {
@@ -498,13 +516,18 @@ public class JcSummaryReportAntTask
       final int coverage = Integer.parseInt(strtok.nextToken());
       final int loc = Integer.parseInt(strtok.nextToken());
       final int codeloc = Integer.parseInt(strtok.nextToken());
+      final int filtered = Integer.parseInt(strtok.nextToken());
+      final int codestyle = Integer.parseInt(strtok.nextToken());
+      final int design = Integer.parseInt(strtok.nextToken());
+      final int cpd = Integer.parseInt(strtok.nextToken());
       final double quality = Double.parseDouble(strtok.nextToken());
       final File summaryFile = new File(baseDir, String.valueOf(timestamp)
             + File.separator + "summary.xml");
       if (summaryFile.exists() && summaryFile.isFile())
       {
          summary = new Summary(timestamp, error, warning, info, coverage, loc,
-            codeloc, quality, summaryFile);
+            codeloc, filtered, codestyle, design, cpd,
+            quality, summaryFile);
       }
       else
       {
@@ -613,7 +636,8 @@ public class JcSummaryReportAntTask
         throw new RuntimeException("No reports found for chart!");
      }
 
-     final String[] legendLabels = {"Error", "Warning", "Info", "Coverage"};
+     final String[] legendLabels = {"Error", "Warning", "Info", "Coverage",
+         "Filtered", "Codestyle", "Design", "Cpd"};
      
      // Configure dataset
      final Dataset dataset = new Dataset(legendLabels.length,
@@ -631,14 +655,26 @@ public class JcSummaryReportAntTask
         dataset.set(ROW_WARNING, i, 0, sum.getWarning());
         dataset.set(ROW_INFO, i, 0, sum.getInfo());
         dataset.set(ROW_COVERAGE, i, 0, sum.getCoverage());
+        dataset.set(ROW_FILTERED, i, 0, sum.getFiltered());
+        dataset.set(ROW_CODESTYLE, i, 0, sum.getCodestyle());
+        dataset.set(ROW_DESIGN, i, 0, sum.getDesign());
+        dataset.set(ROW_CPD, i, 0, sum.getCpd());
         i++;
      }
 
      final GraphChart2DProperties graphChart2DProps
            = createGraphChart2DProperties(labelsAxisLabels, title);
      final MultiColorsProperties multiColorsProps
-           = createMultiColorsProperties(new Color[] {Color.RED, Color.YELLOW,
-              Color.CYAN, Color.MAGENTA});
+           = createMultiColorsProperties(new Color[] {
+              new Color(255, 64, 64),
+              new Color(255, 160, 64),
+              new Color(208, 208, 255),
+              new Color(255, 255, 224),
+              Color.WHITE,
+              new Color(255, 240, 128),
+              new Color(255, 240, 128),
+              new Color(208, 240, 208)
+              });
      createChart(title, legendLabels, dataset, graphChart2DProps, 
              multiColorsProps);
    }
@@ -774,10 +810,14 @@ public class JcSummaryReportAntTask
                + "text-align: center; padding: 0.2em; }");
          pw.println("img { border:none; }");
          pw.println("div.datelink { text-align:left; color: black; }"); 
-         pw.println("div.error { text-align:left; color: red; }"); 
-         pw.println("div.warning { text-align:left; color: yellow; }"); 
-         pw.println("div.info { text-align:left; color: cyan; }"); 
-         pw.println("div.coverage { text-align:left; color: magenta; }"); 
+         pw.println("div.error { text-align:left; color: #FF4040; }"); 
+         pw.println("div.warning { text-align:left; color: #FFA040; }"); 
+         pw.println("div.info { text-align:left; color: #D0D0FF; }"); 
+         pw.println("div.coverage { text-align:left; color: #FFFFE0; }"); 
+         pw.println("div.filtered { text-align:left; color: #E0E0E0; }"); 
+         pw.println("div.codestyle { text-align:left; color: #FFF080; }"); 
+         pw.println("div.design { text-align:left; color: #FFF040; }"); 
+         pw.println("div.cpd { text-align:left; color: #D0F0D0; }"); 
 
          pw.println("-->");
          pw.println("</style>");
@@ -836,14 +876,26 @@ public class JcSummaryReportAntTask
                long warnings = 0;
                long info = 0;
                long coverage = 0;
+               long filtered = 0;
+               long codestyle = 0;
+               long design = 0;
+               long cpd = 0;
                long startErrors = 0;
                long startWarnings = 0;
                long startInfo = 0;
                long startCoverage = 0;
+               long startFiltered = 0;
+               long startCodestyle = 0;
+               long startDesign = 0;
+               long startCpd = 0;
                long endErrors = 0;
                long endWarnings = 0;
                long endInfo = 0;
                long endCoverage = 0;
+               long endFiltered = 0;
+               long endCodestyle = 0;
+               long endDesign = 0;
+               long endCpd = 0;
                while (dayIter.hasNext())
                {
                   final Integer day = (Integer) dayIter.next();
@@ -882,6 +934,14 @@ public class JcSummaryReportAntTask
                      pw.print("<div class=\"info\">" + sum.getInfo()
                            + "</div>");
                      pw.print("<div class=\"coverage\">" + sum.getCoverage()
+                           + "</div>");
+                     pw.print("<div class=\"filtered\">" + sum.getFiltered()
+                           + "</div>");
+                     pw.print("<div class=\"codestyle\">" + sum.getCodestyle()
+                           + "</div>");
+                     pw.print("<div class=\"design\">" + sum.getDesign()
+                           + "</div>");
+                     pw.print("<div class=\"cpd\">" + sum.getCpd()
                            + "</div></td>");
                      i++;
                      if (startErrors == 0)
@@ -900,14 +960,40 @@ public class JcSummaryReportAntTask
                      {
                         startCoverage = sum.getCoverage();
                      }
+                     if (startFiltered == 0)
+                     {
+                        startFiltered = sum.getFiltered();
+                     }
+                     if (startCodestyle == 0)
+                     {
+                        startCodestyle = sum.getCodestyle();
+                     }
+                     if (startDesign == 0)
+                     {
+                        startDesign = sum.getDesign();
+                     }
+                     if (startCpd == 0)
+                     {
+                        startCpd = sum.getCpd();
+                     }
                      endErrors = sum.getError();
                      endWarnings = sum.getWarning();
                      endInfo = sum.getInfo();
                      endCoverage = sum.getCoverage();
+                     endFiltered = sum.getFiltered();
+                     endCodestyle = sum.getCodestyle();
+                     endDesign = sum.getDesign();
+                     endCpd = sum.getCpd();
+
                      errors += sum.getError();
                      warnings += sum.getWarning();
                      info += sum.getInfo();
                      coverage += sum.getCoverage();
+                     filtered += sum.getFiltered();
+                     codestyle += sum.getCodestyle();
+                     design += sum.getDesign();
+                     cpd += sum.getCpd();
+
                      counter++;
                   }
                }
@@ -917,11 +1003,19 @@ public class JcSummaryReportAntTask
                int warningsAvg = (int) warnings / counter;
                int infoAvg = (int) info / counter;
                int coverageAvg = (int) coverage / counter;
+               int filteredAvg = (int) filtered / counter;
+               int codestyleAvg = (int) codestyle / counter;
+               int designAvg = (int) design / counter;
+               int cpdAvg = (int) cpd / counter;
                pw.println("<b>Average</b>"
                      + "<div class=\"error\">Errors: " + errorsAvg
                      + "</div><div class=\"warning\">Warnings: " + warningsAvg
                      + "</div><div class=\"info\">Info: " + infoAvg
-                     + "</div><div class=\"coverage\">Coverage: " + coverageAvg + "</div>");
+                     + "</div><div class=\"coverage\">Coverage: " + coverageAvg
+                     + "</div><div class=\"filtered\">Filtered: " + filteredAvg
+                     + "</div><div class=\"codestyle\">Codestyle: " + codestyleAvg
+                     + "</div><div class=\"design\">Design: " + designAvg
+                     + "</div><div class=\"cpd\">Cpd: " + cpdAvg + "</div>");
                pw.println("</td>");
                pw.println("<td style=\"vertical-align:top;\">");
                
@@ -929,11 +1023,19 @@ public class JcSummaryReportAntTask
                long deltaWarnings = endWarnings - startWarnings;
                long deltaInfo = endInfo - startInfo;
                long deltaCoverage = endCoverage - startCoverage;
+               long deltaFiltered = endFiltered - startFiltered;
+               long deltaCodestyle = endCodestyle - startCodestyle;
+               long deltaDesign = endDesign - startDesign;
+               long deltaCpd = endCpd - startCpd;
                pw.println("<b>Tendency</b>"
                   + "<div class=\"error\">Errors: " + (deltaErrors >= 0 ? "+" : "-") + deltaErrors
                   + "</div><div class=\"warning\">Warnings: " + (deltaWarnings >= 0 ? "+" : "-") + deltaWarnings
                   + "</div><div class=\"info\">Info: " +  (deltaInfo >= 0 ? "+" : "-") + deltaInfo
-                  + "</div><div class=\"coverage\">Coverage: " +  (deltaCoverage >= 0 ? "+" : "-") + deltaCoverage + "</div>");
+                  + "</div><div class=\"coverage\">Coverage: " +  (deltaCoverage >= 0 ? "+" : "-") + deltaCoverage
+                  + "</div><div class=\"filtered\">Filtered: " + (deltaFiltered >= 0 ? "+" : "-") + deltaFiltered
+                  + "</div><div class=\"codestyle\">Codestyle: " + (deltaCodestyle >= 0 ? "+" : "-") + deltaCodestyle
+                  + "</div><div class=\"design\">Design: " +  (deltaDesign >= 0 ? "+" : "-") + deltaDesign
+                  + "</div><div class=\"cpd\">Cpd: " +  (deltaCpd >= 0 ? "+" : "-") + deltaCpd + "</div>");
 
                pw.println("</td>");
                pw.println("</tr>");
@@ -981,6 +1083,10 @@ public class JcSummaryReportAntTask
    {
       private final long mTimestamp;
       private final int mError;
+      private final int mFiltered;
+      private final int mDesign;
+      private final int mCodestyle;
+      private final int mCpd;
       private final int mWarning;
       private final int mInfo;
       private final int mCoverage;
@@ -991,8 +1097,13 @@ public class JcSummaryReportAntTask
       private final File mSummaryXml;
 
       public Summary (long timestamp, int error, int warning, int info,
-            int coverage, int loc, int codeloc, double quality)
+            int coverage, int loc, int codeloc, int filtered,
+            int codestyle, int design, int cpd, double quality)
       {
+         mFiltered = filtered;
+         mCodestyle = codestyle;
+         mDesign = design;
+         mCpd = cpd;
          mTimestamp = timestamp;
          mError = error;
          mWarning = warning;
@@ -1005,8 +1116,14 @@ public class JcSummaryReportAntTask
       }
 
       public Summary (long timestamp, int error, int warning, int info,
-            int coverage, int loc, int codeloc, double quality, File summaryXml)
+            int coverage, int loc, int codeloc, int filtered,
+            int codestyle, int design, int cpd, 
+            double quality, File summaryXml)
       {
+         mFiltered = filtered;
+         mCodestyle = codestyle;
+         mDesign = design;
+         mCpd = cpd;
          mTimestamp = timestamp;
          mError = error;
          mWarning = warning;
@@ -1041,6 +1158,26 @@ public class JcSummaryReportAntTask
       public int getCoverage ()
       {
          return mCoverage;
+      }
+
+      public int getFiltered ()
+      {
+         return mFiltered;
+      }
+
+      public int getCodestyle ()
+      {
+         return mCodestyle;
+      }
+
+      public int getDesign ()
+      {
+         return mDesign;
+      }
+
+      public int getCpd ()
+      {
+         return mCpd;
       }
 
       public int getLoc ()
@@ -1099,6 +1236,8 @@ public class JcSummaryReportAntTask
       {
          return "[" + mTimestamp + ", " + mError + ", " + mWarning + ", "
                + mInfo + ", " + mCoverage + ", " + mLoc + ", " + mCodeLoc
+               + ", " + mFiltered + ", " + mCodestyle + ", "
+               + mDesign + ", " + mCpd
                + ", " + mQuality + ", " + mSummaryXml + "]";
       }
    }
@@ -1131,37 +1270,4 @@ public class JcSummaryReportAntTask
          return result;
       }   
    }
-
-   
-   //
-   // test-code
-   //
-
-   public void log (String msg)
-   {
-      boolean stdout = false;
-      try
-      {
-        super.log(msg);
-      }
-      catch (NullPointerException ex)
-      {
-         stdout = true;
-      }
-      if (stdout)
-      {
-         System.out.println(msg);
-      }
-   }
-
-   public static void main (String[] args)
-   {
-      final JcSummaryReportAntTask jcSum = new JcSummaryReportAntTask();
-      jcSum.setName("fawkez-summary");
-      jcSum.setDest("c:/temp/findings-report/xxx");
-      jcSum.setSummary("c:/temp/findings-report/history.csv");  
-      jcSum.setBaseDir("c:/temp/findings-report/");
-      jcSum.execute();
-   }
-
 }

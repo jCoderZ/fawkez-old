@@ -472,6 +472,49 @@ public final class CheckstyleFindingType
           "Avoid redundant code.",
           "Redundant '.*' modifier\\.");
 
+  /** 
+   * Checkstyle finding type that relates to:
+   * <i>Javadoc Pattern</i>.
+   */
+  public static final CheckstyleFindingType CS_JAVADOC_PATTERN =
+      new CheckstyleFindingType("CS_JAVADOC_PATTERN",
+         "Javadoc pattern violation.",
+         "The javadoc tag does not comply to the required pattern.",
+         "Type Javadoc tag .* must match pattern '.*'\\.");
+
+  /** 
+   * Checkstyle finding type that relates to:
+   * <i>Redundant throws with subclass.</i>.
+   */
+  public static final CheckstyleFindingType CS_REDUNDANT_THROWS_SUBCLASS =
+      new CheckstyleFindingType("CS_REDUNDANT_THROWS_SUBCLASS",
+         "Redundant throws declaration of a subclass.",
+         "The throws statement already contains the superclass and so" 
+         + "declaring a subclass is redundant.",
+         "Redundant throws: '.*' is subclass of '.*'\\.");
+
+  /** 
+   * Checkstyle finding type that relates to:
+   * <i>Redundant throws with unchecked exception.</i>.
+   */
+  public static final CheckstyleFindingType CS_REDUNDANT_THROWS_UNCHECKED =
+      new CheckstyleFindingType("CS_REDUNDANT_THROWS_UNCHECKED",
+         "Throws declaration of a unchecked exception is not needed.",
+         "Throws declaration of a unchecked exception is not needed.",
+         "Redundant throws: '.*' is unchecked exception\\.");
+  
+  /** 
+   * A internal checkstyle exception was triggered we shoulds also 
+   * report this!
+   */
+  public static final CheckstyleFindingType CS_EXCEPTION =
+      new CheckstyleFindingType("CS_EXCEPTION",
+         "Checkstyle analysis exception.",
+         "Exception during checkstyle analysis. There seems to be "
+         + "something strange here. One often problem is a reference to a "
+         + "Unknown or not visible class in Javadoc.",
+         "Got an exception - .*\\.");
+  
    private CheckstyleFindingType (String symbol, String shortText,
          String description, String messagePattern, Severity severity)
    {
@@ -480,6 +523,8 @@ public final class CheckstyleFindingType
       mSeverity = severity;
       CHECKSTYLE_FINDING_TYPES.add(this);
    }
+   
+    
 
     private CheckstyleFindingType (String symbol, String shortText,
         String description, String messagePattern)

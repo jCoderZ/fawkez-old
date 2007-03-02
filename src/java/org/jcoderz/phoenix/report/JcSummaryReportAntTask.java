@@ -890,6 +890,7 @@ public class JcSummaryReportAntTask
                final List sortedDayList = new ArrayList();
                sortedDayList.addAll(dayMap.keySet());
                Collections.sort(sortedDayList);
+               Collections.reverse(sortedDayList);
                final Iterator dayIter = sortedDayList.iterator();
                while (dayIter.hasNext())
                {

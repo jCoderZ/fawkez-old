@@ -266,5 +266,57 @@
          </p>
          </section>
       </section>
+      <section>
+         <title>Customization</title>
+         <p>The XSL stylesheet that is used to generate the code 
+         provides some extension hooks. These hooks can be used
+         to customize the generated code. The following hooks are 
+         currently available:
+         <ul>
+            <li>simple-enum-generator-import-hook</li>
+            <li>restricted-string-import-hook</li>
+            <li>restricted-long-import-hook</li>
+            <li>regex-string-import-hook</li>
+         </ul>
+         </p>
+         <p>
+         In the following example, the implementation of the classes
+         <tt>ArgumentMalformedException</tt> and <tt>Assert</tt> are
+         changed to use your local project classes. Note: The signature
+         of the changed classes must match the signature of the 
+         existing classes.
+         </p><p>
+         Create a new XSL stylesheet file that looks like the following code
+         snippet:</p>
+         <pre>
+&lt;?xml version="1.0" encoding="UTF-8"?>
+&lt;xsl:stylesheet
+   version="1.0"
+   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+   xmlns:xs="http://www.w3.org/2001/XMLSchema"
+   xmlns:redirect="http://xml.apache.org/xalan/redirect"
+   xmlns:xalan2="http://xml.apache.org/xslt"
+   extension-element-prefixes="redirect">
+
+&lt;xsl:import href="generate-simple-types.xsl"/>
+
+&lt;xsl:output method="text" 
+            encoding="ISO-8859-1"/>
+
+&lt;xsl:strip-space elements="*"/>
+
+&lt;xsl:param name="outdir" select="'.'"/>
+
+&lt;xsl:template name="simple-enum-generator-import-hook">
+import com.foo.bar.ArgumentMalformedException;
+import com.foo.bar.util.Assert;
+&lt;/xsl:template>
+
+&lt;/xsl:stylesheet>
+         </pre>
+         <p>Finally add the attribute <tt>xsl</tt> in the Ant task to point
+         to this new stylesheet.</p>
+         
+      </section>
    </section>   
 </module>

@@ -372,14 +372,26 @@ public abstract class XsltBasedTask
 
    private InputStream getXslFileAsStream ()
    {
-      final InputStream xslStream
-            = XsltBasedTask.class.getResourceAsStream(mXslFile);
-
-      if (xslStream == null)
-      {
-         throw new BuildException("Cannot locate stylesheet " + mXslFile);
-      }
-      return xslStream;
+      final InputStream result;
+      final InputStream xslStream 
+          = XsltBasedTask.class.getResourceAsStream(mXslFile);
+        if (xslStream == null)
+        {
+            try
+            {
+                final InputStream xslFile = new FileInputStream(mXslFile);
+                result = xslFile;
+            }
+            catch (FileNotFoundException e)
+            {
+                throw new BuildException("Cannot locate stylesheet " + mXslFile);
+            }
+        }
+        else
+        {
+            result = xslStream;
+        }
+        return result;
    }
 
    /**

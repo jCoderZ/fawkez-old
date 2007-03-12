@@ -1,5 +1,6 @@
 Fawkez 1.0.1 'Unnamed'  
 
+  * New features: #34
   * Added new severity levels as proposed in #16
   * Fixed bugs: #10
   * added fb-contrib support #14 (V3.0.5)

@@ -618,9 +618,7 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.List;
 
-import org.jcoderz.commons.ArgumentMalformedException;
-import org.jcoderz.commons.util.Assert;
-
+<xsl:call-template name="simple-enum-generator-import-hook"/>
 
 /**
  * <xsl:value-of select="$class-javadoc"/>
@@ -767,6 +765,11 @@ public final class <xsl:value-of select="$classname"/>
 }
 </xsl:template>
 
+<xsl:template name="simple-enum-generator-import-hook" priority="-1">
+import org.jcoderz.commons.ArgumentMalformedException;
+import org.jcoderz.commons.util.Assert;
+</xsl:template>
+
 <!-- ===============================================================
      Restricted string generator
      =============================================================== -->
@@ -783,9 +786,9 @@ package <xsl:value-of select="$package"/>;
 
 
 import java.io.Serializable;
-import org.jcoderz.commons.ArgumentMalformedException;<xsl:if test="$token-type">
-import org.jcoderz.commons.util.XsdUtil;</xsl:if>
-import org.jcoderz.commons.util.Assert;
+<xsl:call-template name="restricted-string-import-hook">
+   <xsl:with-param name="token-type" select="$token-type"/>
+</xsl:call-template>
 
 /**
  * Holds the <xsl:value-of select="$classname"/>.
@@ -907,6 +910,13 @@ public final class <xsl:value-of select="$classname"/>
 }
 </xsl:template>
 
+<xsl:template name="restricted-string-import-hook" priority="-1">
+<xsl:param name="token-type" select="''"/>
+import org.jcoderz.commons.ArgumentMalformedException;<xsl:if test="$token-type">
+import org.jcoderz.commons.util.XsdUtil;</xsl:if>
+import org.jcoderz.commons.util.Assert;
+</xsl:template>
+
 <!-- ===============================================================
      Restricted long generator
      =============================================================== -->
@@ -922,10 +932,8 @@ package <xsl:value-of select="$package"/>;
 
 import java.io.Serializable;
 
-import org.jcoderz.commons.ArgumentMalformedException;
 import org.jcoderz.commons.util.HashCodeUtil;
-import org.jcoderz.commons.util.RandomUtil;
-import org.jcoderz.commons.util.Assert;
+<xsl:call-template name="restricted-long-import-hook" />
 
 /**
  * Holds the <xsl:value-of select="$classname"/>.
@@ -1110,6 +1118,12 @@ public final class <xsl:value-of select="$classname"/>
 }
 </xsl:template>
 
+<xsl:template name="restricted-long-import-hook" priority="-1">
+import org.jcoderz.commons.ArgumentMalformedException;
+import org.jcoderz.commons.util.RandomUtil;
+import org.jcoderz.commons.util.Assert;
+</xsl:template>
+
 <!-- ===============================================================
      String that must match a regex.
      =============================================================== -->
@@ -1127,8 +1141,7 @@ package <xsl:value-of select="$package"/>;
 
 import java.io.Serializable;
 import java.util.regex.Pattern;
-import org.jcoderz.commons.ArgumentMalformedException;
-import org.jcoderz.commons.util.Assert;
+<xsl:call-template name="regex-string-import-hook"/>
 
 /**
  * Type-safe string type.
@@ -1242,10 +1255,15 @@ public final class <xsl:value-of select="$classname"/>
 }
 </xsl:template>
 
+<xsl:template name="regex-string-import-hook" priority="-1">
+import org.jcoderz.commons.ArgumentMalformedException;
+import org.jcoderz.commons.util.Assert;
+</xsl:template>
+
 <!-- ===============================================================
      Outputs the jCoderZ Java copyright header
      =============================================================== -->
-<xsl:template name="java-copyright-header">
+<xsl:template name="java-copyright-header" priority="-1">
 <xsl:text>/*
  * Generated source file, not in CVS repository
  * Copyright (C) 2006, The jCoderZ Project. All rights reserved.

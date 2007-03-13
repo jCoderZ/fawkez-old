@@ -124,8 +124,10 @@ public class LogMessageGeneratorTest
    /** Tests the Ant task. */
    public void testExecuteBadXslFile ()
    {
-      mGenerator.setXsl(getBaseDir() + "/src/xml/xsl/libcommon.xsl");
-      executeAndExpectBuildException("missing out file.");
+      mGenerator.setXsl(null);
+      executeAndExpectBuildException("missing xsl file.");
+      mGenerator.setXsl("foo.xsl");
+      executeAndExpectBuildException("bogus xsl file.");
    }
 
    /**

@@ -554,9 +554,11 @@ public class JcSummaryReportAntTask
       // Configure dataset
       final Dataset dataset = new Dataset(legendLabels.length,
          summaryMap.size(), 1);
-
       final List labelsAxisLabels = new ArrayList();
-      final Iterator iter = summaryMap.keySet().iterator();
+      final List sortedKeyList = new ArrayList();
+      sortedKeyList.addAll(summaryMap.keySet());
+      Collections.sort(sortedKeyList);
+      final Iterator iter = sortedKeyList.iterator();
       int i = 0;
       while (iter.hasNext())
       {
@@ -597,7 +599,10 @@ public class JcSummaryReportAntTask
       final Dataset dataset = new Dataset(legendLabels.length,
          summaryMap.size(), 1);
       final List labelsAxisLabels = new ArrayList();
-      final Iterator iter = summaryMap.keySet().iterator();
+      final List sortedKeyList = new ArrayList();
+      sortedKeyList.addAll(summaryMap.keySet());
+      Collections.sort(sortedKeyList);
+      final Iterator iter = sortedKeyList.iterator();
       int i = 0;
       while (iter.hasNext())
       {
@@ -639,7 +644,10 @@ public class JcSummaryReportAntTask
      final Dataset dataset = new Dataset(legendLabels.length,
         summaryMap.size(), 1);
      final List labelsAxisLabels = new ArrayList();
-     final Iterator iter = summaryMap.keySet().iterator();
+     final List sortedKeyList = new ArrayList();
+     sortedKeyList.addAll(summaryMap.keySet());
+     Collections.sort(sortedKeyList);
+     final Iterator iter = sortedKeyList.iterator();
      int i = 0;
      while (iter.hasNext())
      {

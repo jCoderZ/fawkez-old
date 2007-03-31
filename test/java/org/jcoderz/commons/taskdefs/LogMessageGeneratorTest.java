@@ -117,17 +117,14 @@ public class LogMessageGeneratorTest
    {
       mGenerator.setApplication(null);
       executeAndExpectBuildException("missing out file.");
-      mGenerator.setApplication("bugus");
+      mGenerator.setApplication("bogus");
       executeAndExpectBuildException("non-existing application name.");
    }
 
    /** Tests the Ant task. */
    public void testExecuteBadXslFile ()
    {
-      mGenerator.setXsl(null);
-      executeAndExpectBuildException("missing xsl file.");
-      mGenerator.setXsl("foo.xsl");
-      executeAndExpectBuildException("bogus xsl file.");
+      mGenerator.setXsl("bogus.xsl"); // -> use default stylesheet 
    }
 
    /**
@@ -143,6 +140,8 @@ public class LogMessageGeneratorTest
       catch (BuildException expected)
       {
          // expected
+          System.err.println("" + expected);
+          expected.printStackTrace();
       }
    }
 

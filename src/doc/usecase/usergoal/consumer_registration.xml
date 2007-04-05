@@ -44,9 +44,11 @@
 		<uc:step id="8" desc="Generate Reg. Code">System generates registration code. Dummy reference to other use case step <uc:ref id="UC-25-4"/></uc:step>
 		<uc:step id="9" desc="Send Reg Code SMS">System sends SMS containing registration code to MSISDN. <uc:ref id="UC-10-E4"/>
 		</uc:step>
-		<uc:step id="10" desc="Ask For Reg Code">System asks for registration code.</uc:step>
+		<uc:step issue="issue1243" id="10" desc="Ask For Reg Code">System asks for registration code.</uc:step>
 		<uc:step id="11" desc="Submit Reg Code">Consumer enters registration code and submits form. (Requirement: <uc:ref id="HLF_090"/>) <uc:ref id="UC-10-E5"/>
 		</uc:step>
+      <uc:step issue="issue0815" id="11" desc="Submit Reg Code">This step should't be seen! (Requirement: <uc:ref id="HLF_090"/>) <uc:ref id="UC-10-E5"/>
+      </uc:step>
 		<uc:step id="12" desc="Ask For Personal Data">System asks for consumer personal data. <uc:ref id="HLF_005"/>
 			<itemizedlist>
 				<listitem>

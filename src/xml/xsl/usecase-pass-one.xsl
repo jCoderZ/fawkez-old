@@ -23,11 +23,16 @@
 
 <!-- BEGIN: generic copy -->
 <xsl:template match="*">
-   <xsl:copy>
-      <xsl:apply-templates select="@*"/>
-      <xsl:apply-templates
-         select="*|comment()|text()|processing-instruction()"/>
-   </xsl:copy>
+   <xsl:if test="(@issue and @issue = //uc:usecases/uc:info/@issue) or (not(@issue) or @issue='')">
+      <xsl:copy>
+         <xsl:apply-templates select="@*"/>
+         <xsl:apply-templates
+            select="*|comment()|text()|processing-instruction()"/>
+      </xsl:copy>
+   </xsl:if>
+   <xsl:if test="@issue and (not(//uc:usecases/uc:info/@issue) or //uc:usecases/uc:info/@issue = '')">
+      <xsl:message>[ERROR] It is not allowed to use "issue" attributes without having defined the "issue" attribute in the root file!</xsl:message>
+   </xsl:if>
 </xsl:template>
 
 <xsl:template match="@*">

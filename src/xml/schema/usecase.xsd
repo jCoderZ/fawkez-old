@@ -47,6 +47,7 @@
    <xsd:element name="ref">
       <xsd:complexType>
          <xsd:attribute name="id" type="xsd:string" use="required"/>
+         <xsd:attribute name="issue" type="xsd:string"/>
       </xsd:complexType>
    </xsd:element>
    
@@ -57,6 +58,7 @@
             <xsd:element ref="uc:name" minOccurs="0" maxOccurs="100"/>         
             <xsd:element ref="uc:channel" minOccurs="0" maxOccurs="100"/>         
          </xsd:sequence>
+         <xsd:attribute name="issue" type="xsd:string"/>
       </xsd:complexType>
    </xsd:element>
    
@@ -66,6 +68,7 @@
             <xsd:element ref="uc:name" minOccurs="0" maxOccurs="100"/>         
             <xsd:element ref="uc:channel" minOccurs="0" maxOccurs="100"/>         
          </xsd:sequence>
+         <xsd:attribute name="issue" type="xsd:string"/>
       </xsd:complexType>
    </xsd:element>
    
@@ -88,6 +91,7 @@
          </xsd:sequence>
          <xsd:attribute name="id" type="uc:stepId" use="required"/>
          <xsd:attribute name="desc" type="xsd:string" use="required"/>
+         <xsd:attribute name="issue" type="xsd:string"/>
       </xsd:complexType>
    </xsd:element>
    
@@ -96,6 +100,7 @@
         <xsd:sequence>
            <xsd:group ref="uc:content"/>
          </xsd:sequence>
+         <xsd:attribute name="issue" type="xsd:string"/>
       </xsd:complexType>
    </xsd:element>
    
@@ -104,6 +109,7 @@
          <xsd:sequence> 
             <xsd:group ref="uc:content"/>
           </xsd:sequence>
+          <xsd:attribute name="issue" type="xsd:string"/>
        </xsd:complexType>
     </xsd:element>
    
@@ -113,6 +119,7 @@
    	    <xsd:element ref="uc:step" minOccurs="0" maxOccurs="100"/>
           <xsd:group ref="uc:content"/>
    	  </xsd:sequence>
+        <xsd:attribute name="issue" type="xsd:string"/>
       </xsd:complexType>
    </xsd:element>
 
@@ -123,6 +130,7 @@
        </xsd:sequence>
        <xsd:attribute name="id" type="xsd:string" use="required"/>
        <xsd:attribute name="name" type="xsd:string" use="required"/>  
+       <xsd:attribute name="issue" type="xsd:string"/>
       </xsd:complexType> 
    </xsd:element>
 
@@ -132,6 +140,7 @@
            <xsd:element ref="uc:primary" minOccurs="1" maxOccurs="1"/>
            <xsd:element ref="uc:secondary" minOccurs="1" maxOccurs="100"/>
          </xsd:sequence>
+         <xsd:attribute name="issue" type="xsd:string"/>
       </xsd:complexType>
    </xsd:element>
 
@@ -141,6 +150,7 @@
            <xsd:element ref="uc:success"/>
            <xsd:element ref="uc:minimal"/>
          </xsd:sequence>
+         <xsd:attribute name="issue" type="xsd:string"/>
       </xsd:complexType>
    </xsd:element>
 
@@ -169,14 +179,16 @@
          </xsd:sequence>
          <xsd:attribute name="id" type="uc:useCaseId" use="required"/>
          <xsd:attribute name="level" type="uc:useCaseLevel" use="required"/>
+         <xsd:attribute name="issue" type="xsd:string"/>
       </xsd:complexType>
    </xsd:element>
    
    <xsd:element name="info">
       <xsd:complexType>
-         <xsd:attribute name="project"     type="xsd:string" use="required"/>
-         <xsd:attribute name="version"     type="xsd:string" use="required"/>
+         <xsd:attribute name="project"     type="xsd:string"  use="required"/>
+         <xsd:attribute name="version"     type="xsd:string"  use="required"/>
          <xsd:attribute name="useTemplate" type="xsd:boolean" default="false"/>
+         <xsd:attribute name="issue"       type="xsd:string"/>
       </xsd:complexType>
    </xsd:element>
 

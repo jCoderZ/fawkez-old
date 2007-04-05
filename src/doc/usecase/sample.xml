@@ -8,7 +8,7 @@
                                 http://www.jcoderz.org/xsd/xdoc/requirements-SNAPSHOT.xsd
                                 uc
                                 http://www.jcoderz.org/xsd/xdoc/usecase-SNAPSHOT.xsd">
-   <uc:info project="Sample" version="0.1" template="true"/>
+   <uc:info project="Sample" version="0.1" template="true" issue="issue1243"/>
    <bookinfo>
       <!-- injected into the docbook bookinfo element -->
       <authorgroup>

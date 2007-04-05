@@ -160,7 +160,9 @@
            </appendix>
         </xsl:if>
 
-        <index></index>
+        <xsl:if test="//indexterm">
+           <index></index>
+        </xsl:if>
 
        </book>
     </xsl:template>

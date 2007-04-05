@@ -450,7 +450,7 @@
       
    <xsl:template name="uc:list_acting_use_cases_indirect_upwards">
       <xsl:param name="role_name"/>
-      <xsl:for-each select="//req:role[../req:key = //req:role[req:name = $role_name]/req:superior/req:ref/@id]">
+      <xsl:for-each select="//req:role[../req:key = //req:role[normalize-space(req:name) = $role_name]/req:superior/req:ref/@id]">
          <xsl:text> [</xsl:text><xref linkend="{../req:key}"/><xsl:text>] </xsl:text>
          <!-- deep recusrive list of use cases -->
          <xsl:call-template name="uc:list_acting_use_cases_indirect_upwards">
@@ -473,8 +473,8 @@
                            <xsl:value-of select="uc:name"/><xsl:text> : </xsl:text>
                         </entry>
                         <entry>
-                           <xsl:variable name="role_name" select="uc:actors/uc:primary/uc:name"/>
-                           <xsl:text> [</xsl:text><xref linkend="{//req:requirement[req:role/req:name = $role_name]/req:key}"/><xsl:text>] </xsl:text>
+                           <xsl:variable name="role_name" select="normalize-space(uc:actors/uc:primary/uc:name)"/>
+                           <xsl:text> [</xsl:text><xref linkend="{//req:requirement[normalize-space(req:role/req:name) = $role_name]/req:key}"/><xsl:text>] </xsl:text>
                            <xsl:call-template name="uc:list_acting_use_cases_indirect_upwards">
                               <xsl:with-param name="role_name" select="$role_name"/>
                            </xsl:call-template>

@@ -84,13 +84,13 @@ digraph G {
    <xsl:template match="req:role" mode="complete">
        <xsl:param name="suppress_uc" select="'false'"/>
        "<xsl:value-of select="../req:key"/>" [
-                label = "<xsl:value-of select="req:name"/>"
+                label = "<xsl:value-of select="normalize-space(req:name)"/>"
         ]
-        <xsl:variable name="role_name" select="req:name"/>
+        <xsl:variable name="role_name" select="normalize-space(req:name)"/>
         
       <xsl:for-each select="//uc:usecase/uc:actors/uc:primary/uc:name">
-         <xsl:variable name="actor_id" select="."/>
-         <xsl:variable name="role_id" select="//req:requirement[req:role/req:name = $actor_id]/req:key"/>
+         <xsl:variable name="actor_id" select="normalize-space(.)"/>
+         <xsl:variable name="role_id" select="//req:requirement[normalize-space(req:role/req:name) = normalize-space($actor_id)]/req:key"/>
          
          <!-- only show entities, if referenced entity is within documents scope (referenced in root file) -->
          <xsl:if test="$role_name = $actor_id">
@@ -116,7 +116,7 @@ digraph G {
       <xsl:for-each select="req:superior/req:ref">
          <xsl:variable name="superior_id" select="@id"/>     
          <xsl:variable name="superior_name" select="//req:role/req:name[../../req:key = $superior_id]"/>
-         <xsl:variable name="role_id" select="//req:requirement[req:role/req:name = $role_name]/req:key"/>
+         <xsl:variable name="role_id" select="//req:requirement[normalize-space(req:role/req:name) = $role_name]/req:key"/>
          
          <xsl:call-template name="create_edge">
             <xsl:with-param name="link_from"      select="$superior_id"/>
@@ -191,7 +191,7 @@ digraph G {
           }
           <xsl:for-each select="//req:role[not(../req:category/req:secondary = $secondary_category) and ../req:key = //req:role[../req:category/req:secondary = $secondary_category]/req:superior/req:ref/@id]">
              "<xsl:value-of select="../req:key"/>" [
-                label = "<xsl:value-of select="req:name"/>"
+                label = "<xsl:value-of select="normalize-space(req:name)"/>"
              ]
           </xsl:for-each>       
        </xsl:if>
@@ -204,7 +204,7 @@ digraph G {
           }
           <xsl:for-each select="//req:role[not(../req:category/req:secondary = $secondary_category  and ../req:category/req:tertiary = $tertiary_category) and ../req:key = //req:role[../req:category/req:secondary = $secondary_category  and ../req:category/req:tertiary = $tertiary_category]/req:superior/req:ref/@id]">
              "<xsl:value-of select="../req:key"/>" [
-                label = "<xsl:value-of select="req:name"/>"
+                label = "<xsl:value-of select="normalize-space(req:name)"/>"
              ]
           </xsl:for-each>
        </xsl:if>
@@ -595,7 +595,7 @@ digraph G {
         label = "Actors";
     }
    label = "<xsl:value-of select="@id"/><xsl:text> </xsl:text><xsl:value-of select="uc:name"/>";
-   "<xsl:value-of select="uc:actors/uc:primary/uc:name"/>" -> "<xsl:value-of select="@id"/>" [color = "white"];
+   "<xsl:value-of select="normalize-space(uc:actors/uc:primary/uc:name)"/>" -> "<xsl:value-of select="@id"/>" [color = "white"];
 
    <xsl:apply-templates select="uc:success"/>
      label = "Success Pathes";

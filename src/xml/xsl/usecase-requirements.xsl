@@ -179,6 +179,15 @@
       </tgroup>
       </informaltable>
     </para>
+    <xsl:variable name="r" select="req:key"/>
+    <xsl:if test="//uc:usecase//uc:ref[@id = $r]">
+       <para>
+          This requirement is referenced by following use cases:
+          <itemizedlist>
+             <xsl:apply-templates select="//uc:usecase[descendant-or-self::uc:ref[@id = $r]]" mode="ref_to_req"/>
+          </itemizedlist>
+       </para>
+    </xsl:if>
     <para><xsl:apply-templates select="req:description"/></para>
     <para><xsl:apply-templates select="req:entity"/></para>
     <para><xsl:apply-templates select="req:role"/></para>
@@ -191,6 +200,10 @@
        </para>
     </xsl:if>
   </section>
+</xsl:template>
+
+<xsl:template match="uc:usecase" mode="ref_to_req">
+   <listitem><xref linkend="{@id}"/></listitem>
 </xsl:template>
 
    <xsl:template match="req:entity">      

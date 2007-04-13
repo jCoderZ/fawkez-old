@@ -30,7 +30,7 @@
 		<uc:minimal>none yet</uc:minimal>
 	</uc:guarantees>
 	<uc:success>
-		<uc:step id="1" desc="">Consumer views transaction history. <uc:ref id="UC-22"/></uc:step>
+		<uc:step id="1" desc="">Consumer views transaction history. <uc:ref id="UC-22"/><uc:ref id="F-11"/></uc:step>
       <uc:step id="2" desc="">Consumer triggers a dispute. <uc:ref id="UC-23"/></uc:step>
       <uc:step id="3" desc="">Consumer blocks a payment instrument. <uc:ref id="UC-24"/></uc:step>
 	</uc:success>

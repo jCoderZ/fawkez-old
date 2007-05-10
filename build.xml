@@ -118,7 +118,9 @@
 | ${ant.version}
 | ${os.name}/${os.arch}/${os.version}
 | file.encoding=${file.encoding}  language=${user.language}  build.debug=${build.debug}
-| CLASSPATH=${env.CLASSPATH}
+| CLASSPATH=${java.class.path}
+| BOOTCLASSPATH=${sun.boot.class.path}
+| CWD=${user.dir}
 +-----------------------------------------------------------------+
 </echo>
         <property name="dump-info-done" value="true"/>

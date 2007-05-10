@@ -248,8 +248,8 @@
    <xsd:attribute name='classname'  type='xsd:string' use='required'/>
    <xsd:attribute name='name'       type='xsd:string' use='required'/>
    <xsd:attribute name='signature'  type='xsd:string' use='required'/>
-   <xsd:attribute name='role' use='optional' type="xsd:string"/>
-   <xsd:attribute name='isStatic' use='optional' type="xsd:boolean"/>
+   <xsd:attribute name='role'       use='optional' type="xsd:string"/>
+   <xsd:attribute name='isStatic'   use='optional' type="xsd:boolean"/>
   </xsd:complexType>
  </xsd:element>
 
@@ -259,6 +259,7 @@
     <xsd:element ref="Message" minOccurs="0" />
    </xsd:sequence>
    <xsd:attribute name='descriptor'  type='xsd:string' use='required'/>
+   <xsd:attribute name='role' use='optional' type="xsd:string"/>
   </xsd:complexType>
  </xsd:element>
 	

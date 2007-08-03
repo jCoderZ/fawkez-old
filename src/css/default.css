@@ -1,30 +1,30 @@
 /* Default */
 
-font {font-family:arial,helvetica,sans-serif !important}
-font {font-size:12pt}
+font {font-family:arial,helvetica,sans-serif !important;}
+font {font-size:12pt;}
 
 a {
    text-decoration:none
 }
 
 a:visited {
-   color:#96C
+   color:#96C;
 }
 
 a:link,a.named:visited,a:visited,a:visited {
-   color:#594FBF
+   color:#594FBF;
 }
 a:hover,b.error,span.error {
-   text-decoration:underline
+   text-decoration:underline;
 }
 
 body,th,td,p,div,span,a,input,select,textarea,ul,ol,dl,h1,h2,h3,h4,h5,h6,li,big,small,b {
-   font-family:arial,helvetica,sans-serif
-   font-size:12pt
+   font-family:arial,helvetica,sans-serif;
+   font-size:12pt;
 }
 code,kbd,tt,pre,code a,kbd a,tt a,pre a,code span,kbd span,tt span,pre span {
-   font-family:monaco,courier,"courier new"
-   font-size:12pt
+   font-family:monaco,courier,"courier new";
+   font-size:10pt;
 }
 
 pre.programlisting {

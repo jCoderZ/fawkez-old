@@ -28,7 +28,13 @@
    <xsl:key name="issue-group" match="uc:usecase" use="@id"/>
 
     <xsl:template match="uc:usecases">
-       <book lang="{info/@lang}" status="final">
+       <xsl:variable name="book_state">
+          <xsl:choose>
+             <xsl:when test="info/@state"><xsl:value-of select="info/@state"/></xsl:when>
+             <xsl:otherwise>draft</xsl:otherwise>
+          </xsl:choose>
+       </xsl:variable>
+       <book lang="{info/@lang}" status="{$book_state}">
           <xsl:apply-templates select="uc:info"/>
 
           <xsl:if test="//uc:usecase">

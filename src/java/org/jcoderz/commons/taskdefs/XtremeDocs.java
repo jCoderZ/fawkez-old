@@ -278,6 +278,7 @@ public class XtremeDocs
             if (!mValidationOnly)
             {
                generateUseCaseDiagrams(filePassOne, imageDir);
+               exportToXmi(filePassOne, imageDir);
             }
          }
          else
@@ -400,6 +401,38 @@ public class XtremeDocs
       task.setIn(filePassOne);
       task.setForce(true); // FIXME
       final File outFile = new File(mOutDir, "use-case-diagrams" + ".tmp");
+      task.setOut(outFile);
+      task.setFailonerror(mFailOnError);
+      task.setDestdir(outFile.getParentFile());
+      task.execute();
+
+      // .dot files -> .svg files
+      AntTaskUtil.renderDotFiles(this, imageDir, mFailOnError);
+   }
+   
+   private void exportToXmi (File filePassOne, final File imageDir)
+   {
+      final XsltBasedTask task = new XsltBasedTask()
+      {
+         String getDefaultStyleSheet ()
+         {
+            return "usecase_xmi_export.xsl";
+         }
+
+         void setAdditionalTransformerParameters (Transformer transformer)
+         {
+            transformer.setParameter(
+                  "basedir", getProject().getBaseDir().toString());
+            transformer.setParameter(
+                  "imagedir", imageDir.toString());
+         }
+
+      };
+      task.setProject(getProject());
+      task.setTaskName("uc-xmi");
+      task.setIn(filePassOne);
+      task.setForce(true); // FIXME
+      final File outFile = new File(mOutDir, "use-case-xmi" + ".tmp");
       task.setOut(outFile);
       task.setFailonerror(mFailOnError);
       task.setDestdir(outFile.getParentFile());

@@ -21,18 +21,21 @@
    <xsl:key name="unique-category-primary-key" match="req:requirement/req:category/req:primary" use="."/>
    <xsl:key name="unique-category-secondary-key" match="req:requirement/req:category/req:secondary" use="."/>
    <xsl:key name="unique-category-tertiary-key" match="req:requirement/req:category/req:tertiary" use="."/>
+   
+   <xsl:variable name="dummy" select="sdfdsfdsfsdfsdfsdfsdf"/>
 
    <xsl:template match="uc:usecases">
       <xsl:apply-templates select="uc:usecase"/>
       <xsl:apply-templates select="req:requirement[req:category/req:primary = 'Domain Model']"/>
+      <xsl:apply-templates select="req:requirement[req:category/req:primary = 'Domain Model']" mode="xmi"/>
       <xsl:apply-templates select="//uc:usecases" mode="dm"/>
       <xsl:apply-templates select="//uc:usecases" mode="dm_category"/>
+      <xsl:apply-templates select="//uc:usecases" mode="dm_global_cat"/>
       <xsl:apply-templates select="//uc:usecases" mode="roles"/>
       <xsl:apply-templates select="//uc:usecases" mode="roles_category"/>
       <xsl:apply-templates select="req:requirement[starts-with(req:category/req:primary, 'Role')]" 
                            mode="role"/>
    </xsl:template>
-   
    
    <!-- Roles Dependency and usecases diagram (complete) -->
    
@@ -345,6 +348,140 @@ digraph G {
       </xsl:for-each>
    </xsl:template>
    
+   <!-- Requirements UML class diagram (global categories) -->
+   
+   <xsl:template match="uc:usecases" mode="dm_global_cat">
+      <xsl:variable name="file"><xsl:value-of
+         select="$imagedir"/>/domain_model_global_cat.dot</xsl:variable>
+
+       <redirect:write file="{$file}">
+
+digraph G {
+    fontname = "Bitstream Vera Sans"
+    fontsize = 8
+    
+    node [
+            fontname = "Bitstream Vera Sans"
+            fontsize = 8
+            shape = "record"
+            fillcolor = "yellow"
+    ]
+
+    edge [
+            fontname = "Bitstream Vera Sans"
+            fontsize = 8
+            weight = 10
+    ]
+
+    <xsl:for-each select="//req:requirement/req:category/req:secondary[generate-id() = generate-id(key('unique-category-secondary-key', .))]">    
+       <xsl:variable name="sec_cat" select="."/>
+       <xsl:if test="//req:entity[../req:category/req:secondary = $sec_cat and ../req:category/req:primary = 'Domain Model']">
+          subgraph cluster<xsl:value-of select="position()"/> {
+             label = "<xsl:value-of select="$sec_cat"/>";
+             <xsl:variable name="pos" select="position()"/>
+             
+             <xsl:choose>
+                <xsl:when test="//req:requirement/req:category/req:tertiary[../req:secondary = $sec_cat and ../req:primary = 'Domain Model']">
+                   <xsl:for-each select="//req:requirement/req:category/req:tertiary[../req:secondary = $sec_cat and generate-id() = generate-id(key('unique-category-tertiary-key', .))]">
+                      <xsl:variable name="ter_cat" select="."/>
+                      <xsl:if test="//req:entity[../req:category/req:tertiary = $ter_cat and ../req:category/req:secondary = $sec_cat and ../req:category/req:primary = 'Domain Model']">
+                         "<xsl:value-of select="$sec_cat"/>" [label="", color="white"];
+                         subgraph cluster<xsl:value-of select="concat($pos, position())"/> {
+                            label = "<xsl:value-of select="$ter_cat"/>";
+                            "<xsl:value-of select="$sec_cat"/>_<xsl:value-of select="$ter_cat"/>" [label="", color="white"];
+                         }
+                      </xsl:if>
+                   </xsl:for-each>
+                </xsl:when>
+                <xsl:otherwise>
+                   "<xsl:value-of select="$sec_cat"/>" [label="", color="white"];
+                </xsl:otherwise>
+             </xsl:choose>
+          }
+       </xsl:if>
+    </xsl:for-each>
+        
+    <xsl:for-each select="//req:requirement/req:category/req:secondary[generate-id() = generate-id(key('unique-category-secondary-key', .))]">    
+       <xsl:variable name="sec_cat" select="."/>
+       <xsl:if test="//req:entity[../req:category/req:secondary = $sec_cat and ../req:category/req:primary = 'Domain Model']">
+          <xsl:variable name="pos" select="position()"/>
+             
+          <xsl:choose>
+             <xsl:when test="//req:requirement/req:category/req:tertiary[../req:secondary = $sec_cat and ../req:primary = 'Domain Model']">
+                <xsl:for-each select="//req:requirement/req:category/req:tertiary[../req:secondary = $sec_cat and generate-id() = generate-id(key('unique-category-tertiary-key', .))]">
+                   <xsl:variable name="ter_cat" select="."/>
+                   
+                   
+                   <xsl:call-template name="link_categories">
+                      <xsl:with-param name="sec_cat_in" select="$sec_cat"/>
+                      <xsl:with-param name="ter_cat_in" select="$ter_cat"/>
+                   </xsl:call-template>
+                   <!-- 
+                   <xsl:if test="//req:entity[../req:category/req:tertiary = $ter_cat and ../req:category/req:secondary = $sec_cat and ../req:category/req:primary = 'Domain Model']">
+                      <xsl:apply-templates select="//req:entity[../req:category/req:tertiary = $ter_cat and ../req:category/req:secondary = $sec_cat and ../req:category/req:primary = 'Domain Model']"
+                                           mode="category_link"/>
+                   </xsl:if>
+                    -->
+                   
+                </xsl:for-each>
+             </xsl:when>
+             <xsl:otherwise>
+                <xsl:call-template name="link_categories">
+                      <xsl:with-param name="sec_cat_in" select="$sec_cat"/>
+                   </xsl:call-template>
+             </xsl:otherwise>
+          </xsl:choose>
+       </xsl:if>
+    </xsl:for-each>      
+  
+}
+       </redirect:write>
+   </xsl:template>
+   
+   <xsl:template name="link_categories">
+      <xsl:param name="sec_cat_in" select="$dummy"/>
+      <xsl:param name="ter_cat_in" select="$dummy"/>
+      
+      <xsl:for-each select="//req:requirement/req:category/req:secondary[../req:primary = 'Domain Model' and not(. = $sec_cat_in)]">
+         <xsl:variable name="sec_cat" select="."/>
+         <xsl:variable name="key" select="../../req:key"/>
+         
+         <xsl:choose>
+             <xsl:when test="../req:tertiary[not(. = $ter_cat_in)]">
+                <xsl:for-each select="../req:tertiary[not(. = $ter_cat_in)]">
+                   <xsl:variable name="ter_cat" select="."/>
+                   <xsl:choose>
+                      <xsl:when test="//req:requirement[req:category/req:primary = 'Domain Model' and req:category/req:secondary = $sec_cat_in and req:category/req:tertiary = $ter_cat_in]/req:entity//req:ref[@id = $key]">
+                         "<xsl:value-of select="$sec_cat"/>_<xsl:value-of select="$ter_cat"/>" -&gt; "<xsl:value-of select="$sec_cat_in"/>_<xsl:value-of select="$ter_cat_in"/>";
+                      </xsl:when> 
+                      <xsl:when test="//req:requirement[req:category/req:primary = 'Domain Model' and req:category/req:secondary = $sec_cat_in]/req:entity//req:ref[@id = $key]">
+                         "<xsl:value-of select="$sec_cat"/>_<xsl:value-of select="$ter_cat"/>" -&gt; "<xsl:value-of select="$sec_cat_in"/>";
+                      </xsl:when> 
+                      <!-- xsl:when test="//req:requirement[req:category/req:primary = 'Domain Model']/req:entity//req:ref[@id = $key]">
+                         "<xsl:value-of select="$sec_cat"/>_<xsl:value-of select="$ter_cat"/>" -&gt; "Global Entities (without categories)";
+                      </xsl:when --> 
+                   </xsl:choose>                  
+                </xsl:for-each>
+             </xsl:when>
+             <xsl:otherwise>
+                <xsl:choose>
+                   <xsl:when test="//req:requirement[req:category/req:primary = 'Domain Model' and req:category/req:secondary = $sec_cat_in and req:category/req:tertiary = $ter_cat_in]/req:entity//req:ref[@id = $key]">
+                      "<xsl:value-of select="$sec_cat"/>" -&gt; "<xsl:value-of select="$sec_cat_in"/>_<xsl:value-of select="$ter_cat_in"/>";
+                   </xsl:when> 
+                   <xsl:when test="//req:requirement[req:category/req:primary = 'Domain Model' and req:category/req:secondary = $sec_cat_in]/req:entity//req:ref[@id = $key]">
+                      "<xsl:value-of select="$sec_cat"/>" -&gt; "<xsl:value-of select="$sec_cat_in"/>";
+                   </xsl:when> 
+                   <!--xsl:when test="//req:requirement[req:category/req:primary = 'Domain Model']/req:entity//req:ref[@id = $key]">
+                      "<xsl:value-of select="$sec_cat"/>" -&gt; "Global Entities (without categories)";
+                   </xsl:when--> 
+                </xsl:choose>
+             </xsl:otherwise>
+          </xsl:choose>
+         
+      </xsl:for-each>
+      
+   </xsl:template>
+
    <!-- Requirements UML class diagram (every category and sub-category) -->
    
    <xsl:template match="uc:usecases" mode="dm_category">

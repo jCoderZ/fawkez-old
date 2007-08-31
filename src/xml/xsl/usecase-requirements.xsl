@@ -37,8 +37,24 @@
               <xsl:variable name="category" select="."/>
               
               <xsl:if test="$category = 'Domain Model'">
+                 <!-- 
                  <section>
-                    <title>Complete Domain Model</title>
+                    <title>Complete Domain Model - Overview</title>
+                    <para>
+                       <xsl:variable name="f" select="concat('images/', 'domain_model_global_cat')"/>
+                       <mediaobject  id="{concat('diagram-', 'domain_model_global_cat')}">
+                          <imageobject  role="fo">
+                              <imagedata  format="SVG"  fileref="{concat($f, '.svg')}"/>
+                           </imageobject>
+                           <imageobject  role="html">
+                              <imagedata  format="PNG"  fileref="{concat($f, '.png')}"/>
+                           </imageobject>
+                        </mediaobject>
+                     </para>
+                  </section>
+                   -->
+                  <section>
+                    <title>Complete Domain Model - Detailed</title>
                     <para>
                        <xsl:variable name="f" select="concat('images/', 'domain_model')"/>
                        <mediaobject  id="{concat('diagram-', 'domain_model')}">
@@ -172,8 +188,12 @@
       <colspec colwidth='1.5in'/>
       <colspec colwidth='4in'/>
       <tbody>
-        <row><entry><emphasis role="bold">Priority:</emphasis></entry><entry><xsl:value-of select="req:priority"/></entry></row>
-        <row><entry><emphasis role="bold">Status:</emphasis></entry><entry><xsl:value-of select="req:status"/></entry></row>
+        <xsl:if test="req:priority">
+           <row><entry><emphasis role="bold">Priority:</emphasis></entry><entry><xsl:value-of select="req:priority"/></entry></row>
+        </xsl:if>
+        <xsl:if test="req:status">
+           <row><entry><emphasis role="bold">Status:</emphasis></entry><entry><xsl:value-of select="req:status"/></entry></row>
+        </xsl:if>
         <row><entry><emphasis role="bold">Release Version:</emphasis></entry><entry><xsl:value-of select="req:version"/></entry></row>
       </tbody>
       </tgroup>
@@ -249,7 +269,7 @@
                   </entry>
                </row>
                <xsl:for-each select="req:attribute">
-                  <row>
+                  <row id="{concat(concat(../../req:key,'-'),req:name)}" title="{req:name}">
                      <xsl:choose>
                         <xsl:when test="req:description">
                            <entry morerows='1' valign='middle'>

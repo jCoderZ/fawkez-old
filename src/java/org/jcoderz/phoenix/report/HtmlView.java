@@ -46,9 +46,9 @@ import org.jcoderz.commons.util.IoUtil;
 
 /**
  * Creates a HTML line by line view on the given Java file.
- * HTML code for eclipse style colors>
+ * HTML code for eclipse style colors.
  * <pre>
- *   &gt;style type="text/css">
+ *   &lt;style type="text/css">
  *  .multi-line-comment { color:#3F7F5F; }
  *  .single-line-comment { color:#3F7F5F; }
  *  .string { color:#2A00FF; }
@@ -56,11 +56,10 @@ import org.jcoderz.commons.util.IoUtil;
  *  .javadoc { color:#3F5FBF; }
  *  .javadoc-keyword { color:#7F9FBF; font-weight:bold; }
  *  .javadoc-html { color:#7F9F9F; }
- *  &gt;/style>
+ *  &lt;/style>
  * </pre>
  *
  * TODO: Support for annotations & type variables.
- * TODO: Support usage of tab characters
  * TODO: Document original source of this code
  * 
  * @author Andreas Mandel
@@ -114,6 +113,7 @@ public class HtmlView
    private int mNumberOfLines = -1;
    private String mClassname;
    private String mPackage;
+   private int mTabIndent = 4;
 
    /**
     * Creates a new HtmlView object.
@@ -143,8 +143,16 @@ public class HtmlView
          throws IOException
    {
       privateReset(file);
-  }
+   }
 
+   /**
+    * Sets the tab indent to be used when reading source files.
+    * @param int tabIndent the tab width to be used when reading source files.
+    */
+   public void setTabIndent (int tabIndent)
+   {
+       mTabIndent = tabIndent;
+   }
 
    /**
     * Returns the given line if available or null if no such line
@@ -292,18 +300,24 @@ public class HtmlView
       try
       {
          br = new BufferedReader(new FileReader(mSourceFile));
+         int linePos = 0;
          while ((i = br.read()) >= 0)
          {
             switch (i)
             {
-               case '&':  mFileData.append("&amp;");  break;
-               case '>':  mFileData.append("&gt;");   break;
-               case '<':  mFileData.append("&lt;");   break;
-               case ' ':  mFileData.append("&#160;"); break;
-               case '\t': mFileData.append("&#160;&#160;&#160;&#160;"); break;
+               case '&':  mFileData.append("&amp;");  linePos++; break;
+               case '>':  mFileData.append("&gt;");   linePos++; break;
+               case '<':  mFileData.append("&lt;");   linePos++; break;
+               case ' ':  mFileData.append("&#160;"); linePos++; break;
+               case '\t': 
+                   while (++linePos % mTabIndent != 0)
+                   {
+                       mFileData.append("&#160;"); 
+                   }
+                   break;
                case '\r': break;
-               case '\n': linesCount++;
-               default:   mFileData.append((char) i);
+               case '\n': linePos=0; linesCount++;
+               default:   linePos++; mFileData.append((char) i);
             }
          }
       }

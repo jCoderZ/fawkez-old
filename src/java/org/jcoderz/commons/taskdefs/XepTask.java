@@ -93,6 +93,7 @@ public class XepTask
       // TODO: check attributes.
 
       final FileSet fs = new FileSet();
+      fs.setProject(getProject());
       fs.setDir(new File(mXepHome, "/lib"));
       fs.setIncludes("*.jar");
       createClasspath().addFileset(fs);

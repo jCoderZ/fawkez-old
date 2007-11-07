@@ -233,6 +233,7 @@ public class ApiDocTask
     {
         final FileSet filez = new FileSet();
         filez.setDir(path);
+        filez.setProject(getProject());
         final Iterator i = diagram.classList().iterator();
         while (i.hasNext())
         {
@@ -243,6 +244,7 @@ public class ApiDocTask
             log("Adding Source file " + pathName, Project.MSG_VERBOSE);
             entry.setName(pathName);
         }
+        log("Source files: " + filez, Project.MSG_VERBOSE);
         return filez;
     }
 

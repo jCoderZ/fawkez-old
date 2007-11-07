@@ -52,11 +52,10 @@ import org.apache.tools.ant.taskdefs.Javadoc.DocletParam;
 import org.apache.tools.ant.types.FileSet;
 import org.apache.tools.ant.types.Path;
 import org.apache.tools.ant.types.PatternSet.NameEntry;
+import org.jcoderz.phoenix.sqlparser.SqlToXml;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.helpers.DefaultHandler;
-
-import org.jcoderz.phoenix.sqlparser.SqlToXml;
 
 /**
  * Generates UML diagrams.
@@ -342,6 +341,7 @@ public class DiagramTask
    private FileSet addClasses (final Diagram diagram, File path)
    {
       final FileSet filez = new FileSet();
+      filez.setProject(getProject());
       filez.setDir(path);
       final Iterator i = diagram.classList().iterator();
       while (i.hasNext())

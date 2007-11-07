@@ -166,6 +166,7 @@ static-catalog=yes
       <java taskname="saxon" fork="true" failonerror="true"
             dir="${build.dir}/docbook"
             classname="com.icl.saxon.StyleSheet">
+         <jvmarg value="-Djava.awt.headless=true"/>
          <arg value="-x"/>
          <arg value="org.apache.xml.resolver.tools.ResolvingXMLReader"/>
          <arg value="-y"/>
@@ -192,6 +193,7 @@ static-catalog=yes
       <java taskname="xalan" fork="true" failonerror="true"
             dir="${build.dir}/docbook"
             classname="org.apache.xalan.xslt.Process">
+         <jvmarg value="-Djava.awt.headless=true"/>
          <arg value="-ENTITYRESOLVER"/>
          <arg value="com.sun.resolver.tools.CatalogResolver"/>
          <arg value="-URIRESOLVER"/>

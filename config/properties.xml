@@ -45,7 +45,7 @@
    <!-- Name settings -->
    <property name="Name"               value="fawkeZ" />
    <property name="name"               value="fawkez" />
-   <property name="copyright.year"     value="2006" />
+   <property name="copyright.year"     value="2007" />
    <property name="project.package"     value="org.jcoderz.commons" />
    <property name="project.package.path" value="org/jcoderz/commons" />
 

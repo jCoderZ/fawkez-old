@@ -218,7 +218,7 @@ public final class HexUtil
             final IllegalArgumentException e = new IllegalArgumentException(
                   "'" + c1 + c2
                   + "' is not a valid hex representation of a byte");
-            ex.initCause(e);
+            e.initCause(ex);
             throw e;
          }
       }

@@ -898,6 +898,33 @@
 	   <copy file="${build.dir}/fawkez-${DSTAMP}${TSTAMP}.tar.gz"
 	        todir="${build.dir}/doc"/>
    </target>
+   
+   <target name="tarball-with-libs" 
+      depends="dist, doc, tarball-with-libs-nodeps"/>
+   <target name="tarball-with-libs-nodeps" depends="prepare">
+      <!-- grrrh, no update mode available for the tar task -->
+      <property name="tarball"
+                value="${build.dir}/fawkez-${DSTAMP}${TSTAMP}.tar.gz"/>
+      <tar tarfile="${tarball}"
+           compression="gzip">
+         <tarfileset dir="${dist.dir}" mode="755" prefix="fawkez-${version}/">
+            <include name="*.sh"/>
+            <include name="bin/*.sh" />
+         </tarfileset>
+         <tarfileset dir="${dist.dir}" prefix="fawkez-${version}/">
+            <include name="**"/>
+            <exclude name="*.sh"/>
+            <exclude name="bin/*.sh" />
+         </tarfileset>
+         <tarfileset dir="${base.dir}/lib/default" 
+               prefix="fawkez-${version}/lib/ext">
+            <include name="**"/>
+         </tarfileset>
+      </tar>
+   	<mkdir dir="${build.dir}/doc"/>
+	   <copy file="${build.dir}/fawkez-${DSTAMP}${TSTAMP}.tar.gz"
+	        todir="${build.dir}/doc"/>
+   </target>
 
 	<target name="doc" depends="javadoc, guideline-java, sad, usecase" 
 		description="Build Docomentation"/>

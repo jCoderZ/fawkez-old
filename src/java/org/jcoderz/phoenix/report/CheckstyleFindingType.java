@@ -504,6 +504,17 @@ public final class CheckstyleFindingType
          "Redundant throws: '.*' is unchecked exception\\.");
   
   /** 
+   * Checkstyle finding type that relates to:
+   * <i>Boolean expression complexity is ... (max allowed is ...).</i>.
+   */
+  public static final CheckstyleFindingType CS_BOOLEAN_EXPRESSION_COMPLEXITY =
+      new CheckstyleFindingType("CS_BOOLEAN_EXPRESSION_COMPLEXITY",
+          "Boolean expression is too complex.",
+          "Boolean expression is too complex. " 
+          + "Too many conditions leads to code that is difficult to read and hence debug and maintain.",
+          "Boolean expression complexity is .* \\(max allowed is .*\\)\\.");
+  
+  /** 
    * A internal checkstyle exception was triggered we shoulds also 
    * report this!
    */

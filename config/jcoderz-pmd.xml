@@ -408,9 +408,6 @@
   </rule>  		  
 <!--  <rule ref="rulesets/naming.xml/AvoidFieldNameMatchingMethodName"/> -->
 <!--  <rule ref="rulesets/naming.xml/AvoidFieldNameMatchingTypeName"/> -->
-  <rule ref="rulesets/naming.xml/AvoidNonConstructorMethodsWithClassName">
-    <priority>4</priority>
-  </rule>  		  
 <!--  <rule ref="rulesets/naming.xml/ClassNamingConventions"/> -->
 <!--  <rule ref="rulesets/naming.xml/LongVariable"/> -->
 <!--  <rule ref="rulesets/naming.xml/MethodNamingConventions"/> -->

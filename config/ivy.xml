@@ -63,16 +63,16 @@
         </dependency>
         <dependency org="junit.org" name="junit" rev="3.8.1"/>
         <dependency org="junit.org" name="xmlunit" rev="1.0"/>
-	<dependency org="w3c" name="jtidy" rev="4aug2000r7-dev"/>
-	<dependency org="asm" name="asm" rev="3.0">
+        <dependency org="w3c" name="jtidy" rev="4aug2000r7-dev"/>
+        <dependency org="asm" name="asm" rev="3.0">
             <artifact name="asm-3.0" type="jar"/>
             <artifact name="asm-analysis-3.0" type="jar"/>
             <artifact name="asm-commons-3.0" type="jar"/>
             <artifact name="asm-tree-3.0" type="jar"/>
             <artifact name="asm-util-3.0" type="jar"/>
             <artifact name="asm-xml-3.0" type="jar"/>
-   </dependency>
-        <dependency org="pmd" name="pmd" rev="3.9"/>
+        </dependency>
+        <dependency org="pmd" name="pmd" rev="4.1"/>
         <dependency org="jaxen" name="jaxen" rev="1.1-beta-8"/>
         <dependency org="saxpath" name="saxpath" rev="1.0-FCS"/>
         <dependency org="dom4j" name="dom4j" rev="1.6.1"/>

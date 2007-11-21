@@ -17,7 +17,8 @@
 
     PREREQUISITES
 
-        * Java Development Kit >= 1.4.0
+        * Java Development Kit >= 1.4.0 and
+        * JRE >= 1.5.0 for the jCoderZ Report
         * Ant >= 1.6.5
 
     THIRD PARTY DEPENDENCY

@@ -1,7 +1,7 @@
 Fawkez 1.2 'Charlie X'  
 
   * New features: 
-  * Update to FindBugs 1.2.1
+  * Update to FindBugs 1.3 (#45) (JRE 5 required)
   * Fixed bugs: #43
   * Updated fb-contrib to 3.4.1
 

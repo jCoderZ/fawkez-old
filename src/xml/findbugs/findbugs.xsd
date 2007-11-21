@@ -352,7 +352,7 @@
          </xsd:annotation>
    </xsd:attribute>         
    <xsd:attribute name='interface' use='required' type='xsd:string'/>
-   <xsd:attribute name='sourceFile' use='required' type='xsd:string'/>
+   <xsd:attribute name='sourceFile' use='optional' type='xsd:string'/>
    <xsd:attribute name='size' use='required' type='xsd:int'/>
    <xsd:attribute name='bugs' use='required' type='xsd:int'/>
    <xsd:attribute name='priority_1' use='optional' type='xsd:int'/>

@@ -44,11 +44,15 @@
   <xsd:complexType>
     <xsd:simpleContent>
      <xsd:extension base="xsd:string">
-       <xsd:attribute name='line' type='xsd:int' use='required'/>
+       <xsd:attribute name='beginline' type='xsd:int' use='required'/>
+       <xsd:attribute name='endline' type='xsd:int' use='required'/>
+       <xsd:attribute name='begincolumn' type='xsd:int' use='required'/>
+       <xsd:attribute name='endcolumn' type='xsd:int' use='required'/>
        <xsd:attribute name='rule' type='xsd:string' use='required'/>
        <xsd:attribute name='ruleset' type='xsd:string' use='required'/>
        <xsd:attribute name='package' type='xsd:string' use='required'/>
        <xsd:attribute name='externalInfoUrl' type='xsd:string' use='optional'/>
+       <xsd:attribute name='variable' type='xsd:string' use='optional'/>
        <xsd:attribute name='class' type='xsd:string' use='optional'>
            <xsd:annotation>
                    <xsd:appinfo>
@@ -91,7 +95,7 @@
    </xsd:sequence>
    <xsd:attribute name='version' type='xsd:string' use='required'/>
    <xsd:attribute name='timestamp' type='xsd:string' use='required'/>
-   <xsd:attribute name='elapsedTime' type='xsd:string' use='required'/>
+   <xsd:attribute name='elapsedTime' type='xsd:string' use='optional'/>
   </xsd:complexType>
  </xsd:element>
 

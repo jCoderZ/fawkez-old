@@ -134,7 +134,10 @@ public final class PmdReportReader
             item.setOrigin(Origin.PMD);
             item.setSeverity(mapPriority(violation));
             item.setFindingType(violation.getRule());
-            item.setLine(violation.getLine());
+            item.setLine(violation.getBeginline());
+            item.setEndLine(violation.getEndline());
+            item.setColumn(violation.getBegincolumn());
+            item.setEndColumn(violation.getEndcolumn());
 
             items.add(item);
         }

@@ -42,6 +42,8 @@ import java.awt.Color;
  */
 public class FindbugsFindings
 {
+    private static String sLock = "LOCK";
+
     /**
      * Method to demonstrate the finder that detects calls to equals
      * with different classes. 
@@ -56,5 +58,11 @@ public class FindbugsFindings
             throw new RuntimeException(
                     "Ups, this should never happen, JDK bug?");
         }
+
+        synchronized (sLock) 
+        {
+            // a test
+        }
+
     }
 }

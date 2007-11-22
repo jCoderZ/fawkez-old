@@ -127,6 +127,16 @@
 
    <!-- FILTER -->
    <xs:template
+      match="/report/file/
+                   item[@finding-type = 'EXS_EXCEPTION_SOFTENING_NO_CONSTRAINTS']">
+      <item>
+         <xs:apply-templates select="@*"/>
+         <xs:attribute name="severity">info</xs:attribute>
+         <xs:attribute name="severity-reason">Many false positives.</xs:attribute>
+      </item>
+   </xs:template>
+
+   <xs:template
       match="/report/file[@classname = 'BaseRuntimeException'
                        or @classname = 'BaseException'
                        or @classname = 'LogEvent']/

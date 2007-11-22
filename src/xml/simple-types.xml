@@ -57,6 +57,7 @@
          <value>Findbugs</value>
          <value>Coverage</value>
          <value>CPD</value>
+         <value>System</value>
       </enumeration>
 
       <enumeration

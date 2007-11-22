@@ -54,6 +54,8 @@ import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import org.jcoderz.commons.util.FileUtils;
 import org.jcoderz.commons.util.IoUtil;
+import org.jcoderz.phoenix.report.jaxb.Item;
+import org.jcoderz.phoenix.report.jaxb.ObjectFactory;
 
 /**
  * Provides merging of findbugs, pmd, checkstyle, cpd, and cobertura
@@ -132,9 +134,9 @@ public final class ReportNormalizer
             + " reports ...");
       for (final Iterator iterator = reportList.iterator(); iterator.hasNext();)
       {
+          final SourceReport report = (SourceReport) iterator.next();
          try
          {
-            final SourceReport report = (SourceReport) iterator.next();
             final ReportReader reportReader
                = ReportReaderFactory.createReader(report.getReportFormat());
             logger.fine("Processing report " + report.getReportFormat()
@@ -154,6 +156,26 @@ public final class ReportNormalizer
          catch (Exception e)
          {
             logger.log(Level.SEVERE, "Error while processing", e);
+            final Item item = new ObjectFactory().createItem();
+            item.setMessage("Error while Processing '" + report.getReportFormat()
+                    + "' '" + report.getFilename() + "' got Exception: '" + e + "'.");
+            item.setSeverity(Severity.ERROR);
+            item.setFindingType(SystemFindingType.SYS_PARSE_ERROR.getSymbol());
+            item.setOrigin(Origin.SYSTEM);
+            final ResourceInfo res 
+            	= ResourceInfo.register(report.getFilename().getName(), "", 
+            			report.getFilename().getAbsolutePath());
+            
+            if (items.containsKey(res)) 
+            {
+            	((List) items.get(res)).add(item);
+            }
+            else
+            {
+            	final List list = new ArrayList();
+            	list.add(item);
+            	items.put(res, list);
+            }
          }
       }
 

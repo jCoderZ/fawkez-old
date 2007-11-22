@@ -468,11 +468,15 @@ final class FindingsSummary
             while (j.hasNext())
             {
                final Item item = (Item) j.next();
-               out.write("<a href='");
-               out.write(occurrence.getHtmlLink());
-               out.write("#LINE");
-               out.write(Integer.toString(item.getLine()));
-               out.write("'>");
+               final String htmlLink = occurrence.getHtmlLink();
+               if (htmlLink != null)
+               {
+                   out.write("<a href='");
+                   out.write(occurrence.getHtmlLink());
+                   out.write("#LINE");
+                   out.write(Integer.toString(item.getLine()));
+                   out.write("'>");
+               }
                if (!isFindingsHaveSameMessage() && item.getMessage() != null)
                {
                   out.write(XmlUtil.escape(item.getMessage()));
@@ -484,7 +488,11 @@ final class FindingsSummary
                   out.write(":");
                   out.write(Integer.toString(item.getColumn()));
                }
-               out.write("]</a>");
+               out.write("]");
+               if (htmlLink != null)
+               {
+                   out.write("</a>");
+               }
                if (j.hasNext())
                {
                   out.write(", ");

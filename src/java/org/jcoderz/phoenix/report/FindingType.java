@@ -107,6 +107,7 @@ public class FindingType
          FindBugsFindingType.initialize();
          PmdFindingType.initialize();
          CpdFindingType.initialize();
+         SystemFindingType.initialize();
       }
 
    }

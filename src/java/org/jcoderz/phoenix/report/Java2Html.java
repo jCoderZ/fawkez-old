@@ -1384,6 +1384,8 @@ public final class Java2Html
                 bw.write("</td><td class='unassigned-data' width='100%'>");
                 bw.write(item.getMessage());
                 bw.write("</td></tr>");
+                
+                FindingsSummary.addFinding(item, mGlobalSummary);
              }
          }
         if (tableOpened)

@@ -243,11 +243,10 @@ public final class XmlUtil
    public static String formatXml (String org)
    {
       String result = org;
-      final StringBuffer sb = new StringBuffer(); 
-
-      boolean nestedTag = false;
       try
       {
+         final StringBuffer sb = new StringBuffer(); 
+         boolean nestedTag = false;
          final String in = org.trim();
          if (in.charAt(0) == '<') // && sb.charAt(1) == '?')
          {

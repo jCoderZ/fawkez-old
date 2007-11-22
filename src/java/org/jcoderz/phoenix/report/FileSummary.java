@@ -154,14 +154,14 @@ public final class FileSummary
     }
 
     /**
-     * Calculates the unweighted quality points scored for the code.
+     * Calculates the unweighed quality points scored for the code.
      * Maximum returned is <code>loc</code> the minimum is <code>0</code>.
      * @param loc total number of lines of code. This is also the maximum 
      *         that might be returned by this method.
      * @param violations the array holding the violations of the severity
      *      related to the position in the array. The elements of the 
      *      array are NOT modified.
-     * @return the unweighted quality score.
+     * @return the unweighed quality score.
      */
     private static int calcUnweightedQuality (int loc, int[] violations)
     {
@@ -195,7 +195,11 @@ public final class FileSummary
      * @param warning number of warning level findings.
      * @param error number of error level findings.
      * @param coverage number of coverage level findings.
-     * @return the unweighted quality score.
+     * @param filtered number of filtered level findings.
+     * @param codestyle number of codestyle level findings.
+     * @param design number of design level findings.
+     * @param cpd number of cpd level findings.
+     * @return the unweighed quality score.
      */
     public static float calculateQuality (int loc, int info, int warning, 
         int error, int coverage, int filtered, int codestyle, int design,
@@ -578,13 +582,14 @@ public final class FileSummary
     private int calcPercentCoverage ()
     {
         final int coverageViolationPercentage;
-        final int notCoveredLines = mViolations[Severity.COVERAGE.toInt()];
         if (!mCoverageData)
         {  
             coverageViolationPercentage = 0;
         }
         else 
         {
+            final int notCoveredLines 
+            	= mViolations[Severity.COVERAGE.toInt()];
             coverageViolationPercentage = calcPercentage(
                 notCoveredLines * Severity.COVERAGE.getPenalty(),
                 Severity.PENALTY_SCALE 

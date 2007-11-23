@@ -292,7 +292,7 @@ public final class CheckstyleFindingType
       new CheckstyleFindingType("CS_MAX_LEN_METHOD",
          "Method length exceeds the maximum allowed length.",
          "A Method should have a moderate length...",
-         "Method length is [\\.,0-9]+ lines \\(max allowed is [0-9]+\\)\\.",
+         "Method length is [\\.,0-9]+ lines \\(max allowed is [\\.,0-9]+\\)\\.",
          Severity.DESIGN);
 
    /** 

@@ -19,6 +19,7 @@
      <req:name>Consumer</req:name>
      <req:alternative_name>
         <req:name lang="de">Untergebener</req:name>
+        <req:name lang="old">Hiwi</req:name>
      </req:alternative_name>
      <req:superior><req:ref id="RP-90000"/></req:superior>
   </req:role>

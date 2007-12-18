@@ -21,6 +21,33 @@
         <req:name>MyId</req:name>
         <req:pattern>NAME_[1-9]1-16</req:pattern>
      </req:attribute>
+     <req:attribute>
+        <req:name>Pointer1</req:name>
+        <req:pattern></req:pattern>
+        <req:objectreference>
+           <req:linkstart>1</req:linkstart>
+           <req:linkend>0..*</req:linkend>
+           <req:ref id="D-90007"/>        
+        </req:objectreference>
+     </req:attribute>
+     <req:attribute>
+        <req:name>Pointer2</req:name>
+        <req:pattern></req:pattern>
+        <req:objectreference>
+           <req:linkstart>1</req:linkstart>
+           <req:linkend>0..*</req:linkend>
+           <req:ref id="D-90007"/>        
+        </req:objectreference>
+     </req:attribute>
+     <req:attribute>
+        <req:name>Pointer3</req:name>
+        <req:pattern></req:pattern>
+        <req:objectreference>
+           <req:linkstart>1</req:linkstart>
+           <req:linkend>0..*</req:linkend>
+           <req:ref id="D-90007"/>        
+        </req:objectreference>
+     </req:attribute>
   </req:entity>
   <req:version>Revision: $</req:version>
 </req:requirement>

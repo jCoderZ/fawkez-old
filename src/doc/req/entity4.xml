@@ -5,6 +5,11 @@
                  xsi:schemaLocation="req
                                      http://www.jcoderz.org/xsd/xdoc/requirements-SNAPSHOT.xsd">
   <req:title>Vehicle</req:title>
+  <req:alternative_name>
+     <req:name lang="de">Fahrzeug</req:name>
+     <req:name lang="alias">Auto</req:name>
+     <req:name lang="alias">Automobil</req:name>
+  </req:alternative_name>
   <req:category>
      <req:primary>Domain Model</req:primary>
      <req:secondary>Vehiclelel Structure</req:secondary>
@@ -19,7 +24,20 @@
      <req:name>Vehicle</req:name>
      <req:attribute>
         <req:name>MyId</req:name>
+        <req:alternative_name>
+           <req:name lang="de">Meine ID</req:name>
+           <req:name lang="alias">Formerly Known as Symbol.</req:name>
+        </req:alternative_name>
         <req:pattern>NAME_[1-9]1-16</req:pattern>
+     </req:attribute>
+     <req:attribute>
+        <req:name>Pointer1</req:name>
+        <req:pattern></req:pattern>
+        <req:objectreference>
+           <req:linkstart>1</req:linkstart>
+           <req:linkend>0..*</req:linkend>
+           <req:ref id="D-90006"/>        
+        </req:objectreference>
      </req:attribute>
   </req:entity>
   <req:version>$Revision: 1.5 $</req:version>

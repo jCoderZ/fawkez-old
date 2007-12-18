@@ -26,9 +26,14 @@
   </req:description>
   <req:entity>
      <req:name>Axle</req:name>
+     <req:alternative_name>
+        <req:name lang="de">Achse</req:name>
+        <req:name lang="alias">Axis</req:name>
+     </req:alternative_name>
      <req:attribute>
         <req:name>MyId</req:name>
         <req:pattern>xsd regex: NAME_[1-9]1-16</req:pattern>
+        <req:description>Attribute description is here.</req:description>
      </req:attribute>
      <req:attribute>
         <req:name>Pointer1</req:name>

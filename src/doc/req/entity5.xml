@@ -7,6 +7,8 @@
   <req:title>Blub</req:title>
   <req:category>
      <req:primary>Domain Model</req:primary>
+     <req:secondary>Vehiclelel Structure</req:secondary>
+     <req:tertiary>Grumpf</req:tertiary>
   </req:category>
   <req:key>D-90021</req:key>
   <req:summary>Blub</req:summary>
@@ -35,7 +37,7 @@
         <req:objectreference>
            <req:linkstart>1</req:linkstart>
            <req:linkend>0..3</req:linkend>
-           <req:ref id="D-90006"/>        
+           <req:ref id="D-90012"/>        
         </req:objectreference>
      </req:attribute>
   </req:entity>

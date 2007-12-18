@@ -26,11 +26,13 @@
    <xsl:key name="primary-actor-group" match="uc:primary" use="uc:name"/>
    <xsl:key name="secondary-actor-group" match="uc:secondary" use="uc:name"/>
    <xsl:key name="issue-group" match="uc:usecase" use="@id"/>
+   
+   <xsl:key name="entity-group" match="req:entity" use="req:name"/>
 
     <xsl:template match="uc:usecases">
        <xsl:variable name="book_state">
           <xsl:choose>
-             <xsl:when test="info/@state"><xsl:value-of select="info/@state"/></xsl:when>
+             <xsl:when test="uc:info/@state"><xsl:value-of select="uc:info/@state"/></xsl:when>
              <xsl:otherwise>draft</xsl:otherwise>
           </xsl:choose>
        </xsl:variable>
@@ -166,12 +168,47 @@
            </appendix>
         </xsl:if>
 
-        <xsl:if test="//indexterm">
-           <index></index>
-        </xsl:if>
+        <glossary>
+           <glossdiv>
+              <title>Entities</title>
+              <xsl:apply-templates select="//req:entity" mode="glossary">
+                 <xsl:sort data-type="text" select="req:name" order="ascending" />
+              </xsl:apply-templates>
+           </glossdiv>
+           <glossdiv>
+              <title>Roles</title>
+              <xsl:apply-templates select="//req:role" mode="glossary">
+                 <xsl:sort data-type="text" select="req:name" order="ascending" />
+              </xsl:apply-templates> 
+           </glossdiv>
+        </glossary>
+        <index></index>
 
        </book>
     </xsl:template>
+    
+    <xsl:template match="req:entity" mode="glossary">
+       <glossentry id="glossary_{../req:key}">
+          <glossterm><xsl:value-of select="req:name"/></glossterm>
+          <acronym><xsl:value-of select="req:name"/></acronym>
+          <glossdef>
+             <para><xsl:value-of select="../req:description"/></para> 
+             <glossseealso otherterm="{../req:key}"><xsl:value-of select="../req:key"/></glossseealso>
+          </glossdef>
+       </glossentry>
+    </xsl:template>
+    
+    <xsl:template match="req:role" mode="glossary">
+       <glossentry id="glossary_{../req:key}">
+          <glossterm><xsl:value-of select="req:name"/></glossterm>
+          <acronym><xsl:value-of select="req:name"/></acronym>
+          <glossdef>
+             <para><xsl:value-of select="../req:description"/></para> 
+             <glossseealso otherterm="{../req:key}"><xsl:value-of select="../req:key"/></glossseealso>
+          </glossdef>
+       </glossentry>
+    </xsl:template>
+   
 
    <xsl:template match="uc:usecase" mode="revision_list">
       <row>
@@ -522,6 +559,21 @@
             </xsl:for-each>
          </itemizedlist>
       </xsl:if>
+   </xsl:template>
+   
+   <xsl:template match="releasenotes">
+      <releaseinfo>
+         <xsl:choose>
+            <xsl:when test="string-length($cclabel) &gt; 0 and not(starts-with($cclabel, '${label}'))">
+               <xsl:value-of select="$cclabel"/><xsl:text> at </xsl:text><xsl:call-template name="datetime"/>
+            </xsl:when>
+            <xsl:otherwise>
+               <xsl:call-template name="datetime"/>
+               <xsl:text> by </xsl:text>
+               <xsl:value-of select="$user"/>
+            </xsl:otherwise>
+         </xsl:choose>
+      </releaseinfo>
    </xsl:template>
 
       <!-- BEGIN: generic copy -->

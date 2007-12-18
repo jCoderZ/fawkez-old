@@ -189,6 +189,7 @@
          <xsd:attribute name="version"     type="xsd:string"  use="required"/>
          <xsd:attribute name="useTemplate" type="xsd:boolean" default="false"/>
          <xsd:attribute name="issue"       type="xsd:string"/>
+         <xsd:attribute name="state"       type="xsd:string"/>
       </xsd:complexType>
    </xsd:element>
 

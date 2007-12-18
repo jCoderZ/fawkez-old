@@ -240,9 +240,16 @@
             <tbody>
                <row>
                   <entry spanname="hspan2">
-                     <emphasis role="bold"><xsl:value-of select="req:name"/></emphasis>
+                     <emphasis role="bold"><glossterm><xsl:value-of select="req:name"/></glossterm></emphasis>
                   </entry>
                </row>
+               <xsl:if test="req:alternative_name">
+                  <row>
+                     <entry spanname="hspan2">
+                        <xsl:apply-templates select="req:alternative_name"/>
+                     </entry>
+                  </row>
+               </xsl:if>
                <row>
                   <entry>
                      <emphasis role="bold">Constraints</emphasis>
@@ -271,14 +278,19 @@
                <xsl:for-each select="req:attribute">
                   <row id="{concat(concat(../../req:key,'-'),req:name)}" title="{req:name}">
                      <xsl:choose>
-                        <xsl:when test="req:description">
+                        <xsl:when test="req:description and req:alternative_name">
+                           <entry morerows='2' valign='middle'>
+                              <glossterm><xsl:value-of select="req:name"/></glossterm>
+                           </entry>
+                        </xsl:when>
+                        <xsl:when test="req:description or req:alternative_name">
                            <entry morerows='1' valign='middle'>
-                              <xsl:value-of select="req:name"/>
+                              <glossterm><xsl:value-of select="req:name"/></glossterm>
                            </entry>
                         </xsl:when>
                         <xsl:otherwise>
                            <entry>
-                              <xsl:value-of select="req:name"/>
+                              <glossterm><xsl:value-of select="req:name"/></glossterm>
                            </entry>
                         </xsl:otherwise>
                      </xsl:choose>
@@ -297,6 +309,11 @@
                         <xsl:value-of select="req:pattern"/>
                      </entry>
                   </row>
+                  <xsl:if test="req:alternative_name">
+                     <row>
+                        <entry spanname="hspan"><xsl:value-of select="req:alternative_name"/></entry>
+                     </row>
+                  </xsl:if>
                   <xsl:if test="req:description">
                      <row>
                         <entry spanname="hspan"><xsl:value-of select="req:description"/></entry>
@@ -343,7 +360,11 @@
    
    <xsl:template match="req:name" mode="alternate">
       <listitem>
-         <para>(<xsl:value-of select="@lang"/>)<xsl:text> </xsl:text><xsl:value-of select="."/></para>
+         <para>(<xsl:value-of select="@lang"/>)<xsl:text> </xsl:text><xsl:value-of select="."/><indexterm>
+            <primary><xsl:value-of select="../../../req:title"/></primary>
+            <secondary><xsl:value-of select="@lang"/></secondary>
+            <tertiary><xsl:value-of select="."/></tertiary>
+         </indexterm></para>
       </listitem>
    </xsl:template>
    

@@ -20,7 +20,9 @@
    <xsl:output method="xml" encoding="UTF-8" indent="yes"/>
    
    <xsl:template match="uc:usecases">
+      <!-- 
       <xsl:apply-templates select="req:requirement[req:category/req:primary = 'Domain Model']" mode="xmi"/>
+       -->
    </xsl:template>
    
    <xsl:key name="unique-category-primary-key" match="req:requirement/req:category/req:primary" use="."/>
@@ -59,12 +61,13 @@
               
               <xsl:for-each select="//req:requirement/req:category/req:secondary[generate-id() = generate-id(key('unique-category-secondary-key', .))]">    
                  <xsl:variable name="sec_cat" select="."/>
+                 <xsl:variable name="sec_cat_clean" select="translate(.,'&amp;','+')"/>
                    <xsl:if test="//req:entity[../req:category/req:secondary = $sec_cat and starts-with(../req:category/req:primary, 'Domain Model')]">
                    
 
                                 
-                    <UML:Package xmi.id = 'Second Category {$sec_cat}'
-                                 name = '{$sec_cat}'
+                    <UML:Package xmi.id = 'Second Category {$sec_cat_clean}'
+                                 name = '{$sec_cat_clean}'
                                  isSpecification = 'false' 
                                  isRoot = 'false' 
                                  isLeaf = 'false' 
@@ -77,10 +80,11 @@
                        
                          <xsl:for-each select="//req:requirement/req:category/req:tertiary[generate-id() = generate-id(key('unique-category-tertiary-key', .))]">    
                             <xsl:variable name="ter_cat" select="."/>
+                            <xsl:variable name="ter_cat_clean" select="translate(.,'&amp;','+')"/>
                             <xsl:if test="//req:entity[../req:category/req:tertiary = $ter_cat and ../req:category/req:secondary = $sec_cat and starts-with(../req:category/req:primary, 'Domain Model')]">
                                          
-                             <UML:Package xmi.id = 'Second Category {$sec_cat}/Tertiary Category {$ter_cat}'
-                                          name = '{$sec_cat}/{$ter_cat}'
+                             <UML:Package xmi.id = 'Second Category {$sec_cat_clean}/Tertiary Category {$ter_cat_clean}'
+                                          name = '{$sec_cat_clean}/{$ter_cat_clean}'
                                           isSpecification = 'false' 
                                           isRoot = 'false' 
                                           isLeaf = 'false' 
@@ -102,6 +106,9 @@
                    </xsl:if>
                    
                 </xsl:for-each>
+                
+                <xsl:call-template name="collaboration"/>
+                <xsl:call-template name="collaboration_dep"/>
 
                  <xsl:for-each select="//req:pattern[generate-id() = generate-id(key('unique-pattern-key', .))]">
                     <UML:DataType xmi.id = '{.}'
@@ -120,6 +127,182 @@
        </XMI>
     
        </redirect:write>
+   </xsl:template>
+   
+   <xsl:template name="collaboration">
+      <UML:Collaboration xmi.id = 'Collaboration Diagram'
+                         name = 'Collaboration Diagram'
+                         isSpecification = 'false'
+                         isRoot = 'false'
+                         isLeaf = 'false'
+                         isAbstract = 'false'>
+         <UML:Namespace.ownedElement>
+         
+            <xsl:for-each select="//req:requirement/req:category/req:secondary[generate-id() = generate-id(key('unique-category-secondary-key', .))]">    
+              <xsl:variable name="sec_cat" select="."/>
+              <xsl:variable name="sec_cat_clean" select="translate(.,'&amp;','+')"/>
+              
+              <xsl:if test="//req:entity[../req:category/req:secondary = $sec_cat and starts-with(../req:category/req:primary, 'Domain Model')]">  
+                 <xsl:if test="../req:tertiary = '' or not(../req:tertiary)">
+                    <UML:ClassifierRole xmi.id = 'Collab sec {$sec_cat_clean}'
+                                        name = '{$sec_cat}'
+                                        isSpecification = 'false'
+                                        isRoot = 'false'
+                                        isLeaf = 'false'
+                                        isAbstract = 'false'>
+                       <UML:ClassifierRole.multiplicity>
+                         <UML:Multiplicity xmi.id = 'Collab sec {$sec_cat_clean} multi'>
+                           <UML:Multiplicity.range>
+                             <UML:MultiplicityRange xmi.id = 'Collab sec {$sec_cat_clean} range'
+                               lower = '1' upper = '1'/>
+                           </UML:Multiplicity.range>
+                         </UML:Multiplicity>
+                       </UML:ClassifierRole.multiplicity>
+                       
+                       <!-- 
+                       <xsl:call-template name="check_dependencies">
+                          <xsl:with-param name="sec_cat" select="$sec_cat"/>
+                       </xsl:call-template>
+                        -->
+                       
+                     </UML:ClassifierRole>
+                  </xsl:if>
+                  
+                   <xsl:for-each select="//req:requirement/req:category/req:tertiary[generate-id() = generate-id(key('unique-category-tertiary-key', .))]">    
+                      <xsl:variable name="ter_cat" select="."/>
+                      <xsl:variable name="ter_cat_clean" select="translate(.,'&amp;','+')"/>
+                      <xsl:if test="//req:entity[../req:category/req:tertiary = $ter_cat and ../req:category/req:secondary = $sec_cat and starts-with(../req:category/req:primary, 'Domain Model')]">
+                         <UML:ClassifierRole xmi.id = 'Collab sec {$sec_cat_clean} / ter {$ter_cat_clean}'
+                                        name = '{$ter_cat}'
+                                        isSpecification = 'false'
+                                        isRoot = 'false'
+                                        isLeaf = 'false'
+                                        isAbstract = 'false'>
+                             <UML:ClassifierRole.multiplicity>
+                               <UML:Multiplicity xmi.id = 'Collab sec {$sec_cat_clean} / ter {$ter_cat_clean} multi'>
+                                 <UML:Multiplicity.range>
+                                   <UML:MultiplicityRange xmi.id = 'Collab sec {$sec_cat_clean} / ter {$ter_cat_clean} range'
+                                     lower = '1' upper = '1'/>
+                                 </UML:Multiplicity.range>
+                               </UML:Multiplicity>
+                             </UML:ClassifierRole.multiplicity>
+                          </UML:ClassifierRole>          
+                      </xsl:if>
+                   </xsl:for-each>              
+                </xsl:if>
+             </xsl:for-each>       
+          </UML:Namespace.ownedElement>
+       </UML:Collaboration>
+   </xsl:template>
+   
+   <xsl:template name="collaboration_dep">
+      <xsl:for-each select="//req:requirement/req:category/req:secondary[generate-id() = generate-id(key('unique-category-secondary-key', .))]">    
+         <xsl:variable name="sec_cat" select="."/>
+         <xsl:variable name="sec_cat_clean" select="translate(.,'&amp;','+')"/>
+        
+         <xsl:if test="//req:entity[../req:category/req:secondary = $sec_cat and starts-with(../req:category/req:primary, 'Domain Model')]">  
+            <xsl:if test="../req:tertiary = '' or not(../req:tertiary)">
+                 
+               <xsl:call-template name="check_dependencies_s">
+                  <xsl:with-param name="sec_cat" select="$sec_cat"/>
+               </xsl:call-template>
+            </xsl:if>
+            
+            <xsl:for-each select="//req:requirement/req:category/req:tertiary[generate-id() = generate-id(key('unique-category-tertiary-key', .))]">    
+               <xsl:variable name="ter_cat" select="."/>
+               <xsl:variable name="ter_cat_clean" select="translate(.,'&amp;','+')"/>
+               <xsl:if test="//req:entity[../req:category/req:tertiary = $ter_cat and ../req:category/req:secondary = $sec_cat and starts-with(../req:category/req:primary, 'Domain Model')]">
+                  <xsl:call-template name="check_dependencies_t">
+                     <xsl:with-param name="sec_cat" select="$sec_cat"/>
+                     <xsl:with-param name="ter_cat" select="$ter_cat"/>
+                  </xsl:call-template>
+               </xsl:if>
+            </xsl:for-each>              
+         </xsl:if>
+      </xsl:for-each>       
+   </xsl:template>
+   
+   <xsl:template name="check_dependencies_s">
+      <xsl:param name="sec_cat"/>
+      
+      <xsl:for-each select="//req:requirement/req:category/req:secondary[generate-id() = generate-id(key('unique-category-secondary-key', .))]">
+         <xsl:variable name="s_cat" select="."/>
+         <xsl:if test="//req:entity[../req:category/req:secondary = $s_cat and (not(../req:category/req:tertiary) or ../req:category/req:tertiary = '') and starts-with(../req:category/req:primary, 'Domain Model')]">             
+            <xsl:if test="//req:entity[../req:category/req:secondary = $s_cat and (not(../req:category/req:tertiary) or ../req:category/req:tertiary = '')]/../req:key = //req:attribute[../../req:category/req:secondary = $sec_cat]/req:objectreference/req:ref/@id">
+
+                <UML:Dependency xmi.id = 'Collab sec {$s_cat} to Collab sec {$sec_cat}'
+                                isSpecification = 'false'>
+                   <UML:Dependency.client>
+                     <UML:ClassifierRole xmi.idref = 'Collab sec {$s_cat}'/>
+                   </UML:Dependency.client>
+                   <UML:Dependency.supplier>
+                     <UML:ClassifierRole xmi.idref = 'Collab sec {$sec_cat}'/>
+                   </UML:Dependency.supplier>
+                </UML:Dependency>                 
+            </xsl:if>
+         </xsl:if>
+         
+         <xsl:for-each select="//req:requirement/req:category/req:tertiary[generate-id() = generate-id(key('unique-category-tertiary-key', .))]">    
+            <xsl:variable name="t_cat" select="."/>
+            <xsl:if test="//req:entity[../req:category/req:secondary = $s_cat and ../req:category/req:tertiary = $t_cat and starts-with(../req:category/req:primary, 'Domain Model')]">             
+               <xsl:if test="//req:entity[../req:category/req:secondary = $s_cat and ../req:category/req:tertiary = $t_cat]/../req:key = //req:attribute[../../req:category/req:secondary = $sec_cat]/req:objectreference/req:ref/@id">
+   
+                   <UML:Dependency xmi.id = 'Collab sec {$s_cat} / {$t_cat} to Collab sec {$sec_cat}'
+                                   isSpecification = 'false'>
+                      <UML:Dependency.client>
+                        <UML:ClassifierRole xmi.idref = 'Collab sec {$s_cat} / ter {$t_cat}'/>
+                      </UML:Dependency.client>
+                      <UML:Dependency.supplier>
+                        <UML:ClassifierRole xmi.idref = 'Collab sec {$sec_cat}'/>
+                      </UML:Dependency.supplier>
+                   </UML:Dependency>                 
+               </xsl:if>
+            </xsl:if>
+         </xsl:for-each>             
+         
+      </xsl:for-each>
+   </xsl:template>
+   
+   <xsl:template name="check_dependencies_t">
+      <xsl:param name="sec_cat"/>
+      <xsl:param name="ter_cat"/>
+      
+      <xsl:for-each select="//req:requirement/req:category/req:secondary[generate-id() = generate-id(key('unique-category-secondary-key', .))]">
+         <xsl:variable name="s_cat" select="."/>
+         <xsl:if test="//req:entity[../req:category/req:secondary = $s_cat and (not(../req:category/req:tertiary) or ../req:category/req:tertiary = '') and starts-with(../req:category/req:primary, 'Domain Model')]">             
+            <xsl:if test="//req:entity[../req:category/req:secondary = $s_cat and (not(../req:category/req:tertiary) or ../req:category/req:tertiary = '')]/../req:key = //req:attribute[../../req:category/req:secondary = $sec_cat and ../../req:category/req:tertiary = $ter_cat]/req:objectreference/req:ref/@id">
+
+                <UML:Dependency xmi.id = 'Collab sec {$s_cat} to Collab sec {$sec_cat} / {$ter_cat}'
+                                isSpecification = 'false'>
+                   <UML:Dependency.client>
+                     <UML:ClassifierRole xmi.idref = 'Collab sec {$s_cat}'/>
+                   </UML:Dependency.client>
+                   <UML:Dependency.supplier>
+                     <UML:ClassifierRole xmi.idref = 'Collab sec {$sec_cat} / ter {$ter_cat}'/>
+                   </UML:Dependency.supplier>
+                </UML:Dependency>                 
+            </xsl:if>
+         </xsl:if>
+         
+         <xsl:for-each select="//req:requirement/req:category/req:tertiary[generate-id() = generate-id(key('unique-category-tertiary-key', .))]">    
+            <xsl:variable name="t_cat" select="."/>
+            <xsl:if test="//req:entity[../req:category/req:secondary = $s_cat and ../req:category/req:tertiary = $t_cat and starts-with(../req:category/req:primary, 'Domain Model')]">             
+               <xsl:if test="//req:entity[../req:category/req:secondary = $s_cat and ../req:category/req:tertiary = $t_cat]/../req:key = //req:attribute[../../req:category/req:secondary = $sec_cat and ../../req:category/req:tertiary = $ter_cat]/req:objectreference/req:ref/@id">
+   
+                   <UML:Dependency xmi.id = 'Collab sec {$s_cat} / {$t_cat} to Collab sec {$sec_cat}'
+                                   isSpecification = 'false'>
+                      <UML:Dependency.client>
+                        <UML:ClassifierRole xmi.idref = 'Collab sec {$s_cat} / ter {$t_cat}'/>
+                      </UML:Dependency.client>
+                      <UML:Dependency.supplier>
+                        <UML:ClassifierRole xmi.idref = 'Collab sec {$sec_cat} / ter {$ter_cat}'/>
+                      </UML:Dependency.supplier>
+                   </UML:Dependency>                 
+               </xsl:if>
+            </xsl:if>
+         </xsl:for-each>             
+         
+      </xsl:for-each>
    </xsl:template>
    
    <xsl:template match="req:entity" mode="xmi">
@@ -226,50 +409,6 @@
               </UML:AssociationEnd.participant>
             </UML:AssociationEnd>
             
-            <!-- 
-            <UML:Association isAbstract="false" isLeaf="false" isRoot="false"
-               isSpecification="false" name="nonsens"
-               xmi.id="D-90005 Pointer1 reference to D-90006">
-               <UML:Association.connection>
-                  <UML:AssociationEnd changeability="changeable"
-                     targetScope="instance" aggregation="none"
-                     ordering="unordered" isNavigable="true"
-                     isSpecification="false" visibility="public" name="*"
-                     xmi.id="D-90005 Pointer1 reference to D-90006 end">
-                     <UML:AssociationEnd.multiplicity>
-                        <UML:Multiplicity>
-                           <UML:Multiplicity.range>
-                              <UML:MultiplicityRange upper="1" lower="1"
-                                 xmi.id="D-90005 Pointer1 reference to D-90006 end multi" />
-                           </UML:Multiplicity.range>
-                        </UML:Multiplicity>
-                     </UML:AssociationEnd.multiplicity>
-                     <UML:AssociationEnd.participant>
-                        <UML:Class xmi.idref="Entity D-90021" />
-                     </UML:AssociationEnd.participant>
-                  </UML:AssociationEnd>
-                  
-               </UML:Association.connection>
-            </UML:Association>
-             -->
-            
-            <!-- 
-            <UML:AssociationEnd xmi.id = '{../../../req:key}'
-              name = 'hallo' visibility = 'public' isSpecification = 'false' isNavigable = 'true'
-              ordering = 'unordered' aggregation = 'none' targetScope = 'instance' changeability = 'changeable'>
-              <UML:AssociationEnd.multiplicity>
-                <UML:Multiplicity xmi.id = '{../../../req:key}'
-                  <UML:Multiplicity.range>
-                    <UML:MultiplicityRange xmi.id = '{../../../req:key}'
-                      lower = '1' upper = '1'/>
-                  </UML:Multiplicity.range>
-                </UML:Multiplicity>
-              </UML:AssociationEnd.multiplicity>
-              <UML:AssociationEnd.participant>
-                <UML:Class xmi.idref = '{../../../req:key}'
-              </UML:AssociationEnd.participant>
-            </UML:AssociationEnd>
-            -->
           </UML:Association.connection>
       </UML:Association>
    </xsl:template>

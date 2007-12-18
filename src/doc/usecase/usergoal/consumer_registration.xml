@@ -39,7 +39,7 @@
 		</uc:step>
 		<uc:step id="6" desc="Verify MSISDN">System verifies the MSISDN. <uc:ref id="UC-10-E1"/>
 		</uc:step>
-		<uc:step id="7" desc="Check Duplicate Accounts">System checks for an account already existing. <uc:ref id="UC-10-E2"/>
+		<uc:step id="7" desc="Check Duplicate Accounts">System checks for an account <uc:ref id="D-90021-Axle"/> already existing. <uc:ref id="UC-10-E2"/>
 		</uc:step>
 		<uc:step id="8" desc="Generate Reg. Code">System generates registration code. Dummy reference to other use case step <uc:ref id="UC-25-4"/></uc:step>
 		<uc:step id="9" desc="Send Reg Code SMS">System sends SMS containing registration code to MSISDN. <uc:ref id="UC-10-E4"/>

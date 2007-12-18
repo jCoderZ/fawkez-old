@@ -8,9 +8,20 @@
                                 http://www.jcoderz.org/xsd/xdoc/requirements-SNAPSHOT.xsd
                                 uc
                                 http://www.jcoderz.org/xsd/xdoc/usecase-SNAPSHOT.xsd">
-   <uc:info project="Sample" version="0.1" template="true" issue="issue1243"/>
+   <uc:info project="Sample" version="0.1" issue="issue1243"/>
    <bookinfo>
       <!-- injected into the docbook bookinfo element -->
+      <mediaobject>
+         <imageobject role="fo">
+           <imagedata format="SVG" fileref="images/company.svg" />
+         </imageobject>
+         <imageobject role="html">
+           <imagedata format="SVG" fileref="images/company.png" />
+         </imageobject>
+      </mediaobject>
+      
+      <releasenotes></releasenotes>
+      
       <authorgroup>
          <author><firstname>Dino</firstname><surname>Coppola</surname></author>
       </authorgroup>
@@ -19,6 +30,22 @@
       <title>Introduction</title>
       <para>
          The purpose of this document is to test xdoc
+         <glosslist>
+            <glossentry><glossterm>C</glossterm>
+            <glossdef>
+            <para>
+            A procedural programming language invented by K&amp;R.
+            </para>
+            </glossdef>
+            </glossentry>
+            <glossentry><glossterm>Pascal</glossterm>
+            <glossdef>
+            <para>
+            A procedural programming language invented by Niklaus Wirth.
+            </para>
+            </glossdef>
+            </glossentry>
+         </glosslist>
       </para>
    </chapter>
 

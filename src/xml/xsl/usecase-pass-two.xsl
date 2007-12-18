@@ -561,7 +561,7 @@
       </xsl:if>
    </xsl:template>
    
-   <xsl:template match="releasenotes">
+   <xsl:template match="releasenotes|releaseinfo">
       <releaseinfo>
          <xsl:choose>
             <xsl:when test="string-length($cclabel) &gt; 0 and not(starts-with($cclabel, '${label}'))">

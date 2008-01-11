@@ -753,7 +753,7 @@
         </jar>
         <jar jarfile="${build.dir}/fawkez-all.jar">
             <fileset dir="${build.dir}/classes"/>
-        </jar>    	
+        </jar>
         <append-version jarfile="${build.dir}/fawkez.jar"/>
         <append-version jarfile="${build.dir}/fawkez-tools.jar"/>
         <append-version jarfile="${build.dir}/fawkez-server.jar"/>
@@ -774,7 +774,7 @@
    <!-- =================================================================== -->
    <target name="build"
            depends="prepare, fawkez-jar"
-           description="Build everthing (developer mode).">
+           description="Build everything (developer mode).">
    </target>
 
    <!-- =================================================================== -->
@@ -898,8 +898,8 @@
 	   <copy file="${build.dir}/fawkez-${DSTAMP}${TSTAMP}.tar.gz"
 	        todir="${build.dir}/doc"/>
    </target>
-   
-   <target name="tarball-with-libs" 
+
+   <target name="tarball-with-libs"
       depends="dist, doc, tarball-with-libs-nodeps"/>
    <target name="tarball-with-libs-nodeps" depends="prepare">
       <!-- grrrh, no update mode available for the tar task -->
@@ -916,7 +916,7 @@
             <exclude name="*.sh"/>
             <exclude name="bin/*.sh" />
          </tarfileset>
-         <tarfileset dir="${base.dir}/lib/default" 
+         <tarfileset dir="${base.dir}/lib/default"
                prefix="fawkez-${version}/lib/ext">
             <include name="**"/>
          </tarfileset>
@@ -926,17 +926,17 @@
 	        todir="${build.dir}/doc"/>
    </target>
 
-	<target name="doc" depends="javadoc, guideline-java, sad, usecase" 
+	<target name="doc" depends="javadoc, guideline-java, sad, usecase"
 		description="Build Docomentation"/>
-	
+
    <!-- =================================================================== -->
    <!-- Create JavaDoc                                                      -->
    <!-- =================================================================== -->
    <target name="javadoc" depends="prepare"
            description="Internal JavaDoc FawkeZ.">
-	  
+
 	   <!-- These values should be set by jMade -->
-	   <property name="java.javadoc" 
+	   <property name="java.javadoc"
 		   value="http://java.sun.com/j2se/1.5.0/docs/api"/>
 	   <property name="j2ee.javadoc"
 		   value="http://java.sun.com/j2ee/1.4/docs/api"/>
@@ -989,7 +989,7 @@
 		  <tag name="weblogic.resource-description"/>
 		  <tag name="fdims.admintool.example"/>
 
-         <!-- taglet name="org.jcoderz.phoenix.javadoc.JcoderzTaglet" 
+         <!-- taglet name="org.jcoderz.phoenix.javadoc.JcoderzTaglet"
 			 path="${build.dir}/classes"/ -->
          <sourcepath>
             <pathelement path="${base.dir}/src/java"/>

@@ -35,7 +35,7 @@
         </dependency>
         <dependency org="unknown" name="chart2d" rev="1.9.6k" />
         <dependency org="todo" name="umlgraph" rev="2.10" />
-        <!--  JDK 1.5 only 
+        <!--  JDK 1.5 only
         <dependency org="gr.spinellis" name="UmlGraph" rev="4.4" />
         -->
         <dependency org="xjavadoc" name="xjavadoc" rev="1.1"/>
@@ -48,7 +48,7 @@
             <artifact name="smack" type="jar"/>
             <artifact name="smackx" type="jar"/>
         </dependency>
-        <dependency org="docbook" name="docbook-xsl" rev="1.69.1">
+        <dependency org="docbook" name="docbook-xsl" rev="1.73.2">
             <artifact name="docbook-xsl" type="zip"/>
         </dependency>
 

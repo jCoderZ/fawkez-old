@@ -5,7 +5,7 @@
     <path id="xdoc.classpath">
        <pathelement path="${build.dir}/classes"/>
        <pathelement path="${build.dir}/docbook/"/> <!-- CatalogManager -->
-       <pathelement path="${build.dir}/docbook/docbook-xsl-1.69.1/extensions/saxon653.jar"/>
+       <pathelement path="${build.dir}/docbook/docbook-xsl-1.73.2/extensions/saxon65.jar"/>
        <fileset dir="${base.dir}/lib">
           <include name="default/saxon/*.jar"/>
           <include name="default/fop/*.jar"/>
@@ -36,16 +36,16 @@
              tofile="${build.dir}/docbook/jcoderz-html-style.xsl" />
        <replace file="${build.dir}/docbook/jcoderz-html-style.xsl">
           <replacefilter token="@DOCBOOK_XSL_HOME@"
-                         value="./docbook-xsl-1.69.1" />
+                         value="./docbook-xsl-1.73.2" />
        </replace>
        <copy file="${base.dir}/src/xml/xsl/jcoderz-fo-style.xsl.in"
              tofile="${build.dir}/docbook/jcoderz-fo-style.xsl" />
        <replace file="${build.dir}/docbook/jcoderz-fo-style.xsl">
           <replacefilter token="@DOCBOOK_XSL_HOME@"
-                         value="./docbook-xsl-1.69.1" />
+                         value="./docbook-xsl-1.73.2" />
        </replace>
-        <property name="catalog" 
-            location="${build.dir}/docbook/docbook-xsl-1.69.1/catalog.xml"/>
+        <property name="catalog"
+            location="${build.dir}/docbook/docbook-xsl-1.73.2/catalog.xml"/>
        <echo file="${build.dir}/docbook/CatalogManager.properties"
              append="false">#
 # File generated at ${build.time} on ${env.HOSTNAME}
@@ -66,7 +66,7 @@ static-catalog=yes
 # end-of-file
        </echo>
 		<!-- Make it work in a windows environment -->
-        <replace file="${build.dir}/docbook/CatalogManager.properties" 
+        <replace file="${build.dir}/docbook/CatalogManager.properties"
             token="\" value="\\"/>
     </target>
 
@@ -272,7 +272,7 @@ static-catalog=yes
    <!-- Generate Java Code Snippets                                         -->
    <!-- =================================================================== -->
    <target name="java-codesnippets"
-           depends="prepare, compile-all, 
+           depends="prepare, compile-all,
 			   java-codesnippets_uptodatecheck, java-codesnippets-nodeps">
    </target>
    <target name="java-codesnippets_uptodatecheck">

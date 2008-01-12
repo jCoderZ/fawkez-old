@@ -13,15 +13,15 @@
       <!-- injected into the docbook bookinfo element -->
       <mediaobject>
          <imageobject role="fo">
-           <imagedata format="SVG" fileref="images/company.svg" />
+           <imagedata format="SVG" fileref="images/jcoderz-org.svg" />
          </imageobject>
          <imageobject role="html">
-           <imagedata format="SVG" fileref="images/company.png" />
+           <imagedata format="SVG" fileref="images/jcoderz-org.png" />
          </imageobject>
       </mediaobject>
-      
+
       <releaseinfo></releaseinfo>
-      
+
       <authorgroup>
          <author><firstname>Dino</firstname><surname>Coppola</surname></author>
       </authorgroup>
@@ -72,17 +72,17 @@
    <!-- requirements -->
    <xi:include href="../req/DUM-1.xml" parse="xml"/>
    <xi:include href="../req/product.xml" parse="xml"/>
-   
+
    <!-- entities -->
    <xi:include href="../req/entity1.xml" parse="xml"/>
    <xi:include href="../req/entity2.xml" parse="xml"/>
    <xi:include href="../req/entity3.xml" parse="xml"/>
    <xi:include href="../req/entity4.xml" parse="xml"/>
    <xi:include href="../req/entity5.xml" parse="xml"/>
-   
+
    <xi:include href="../req/project.xml" parse="xml"/>
    <xi:include href="../req/model.xml" parse="xml"/>
-   
+
    <!-- roles -->
    <xi:include href="../req/role1.xml" parse="xml"/>
    <xi:include href="../req/role2.xml" parse="xml"/>

@@ -41,12 +41,12 @@ import org.jcoderz.phoenix.report.jaxb.File;
 import org.jcoderz.phoenix.report.jaxb.Item;
 
 /**
- * This class encapsulates all finding information collected 
+ * This class encapsulates all finding information collected
  * for a file or a group of files.
  *
- * <p>This class also allows to perform the magic quality 
+ * <p>This class also allows to perform the magic quality
  * calculation for the data collected in the summary.</p>
- * 
+ *
  * @author Andreas Mandel
  */
 public final class FileSummary
@@ -64,22 +64,22 @@ public final class FileSummary
     /** Lines of code in the file. */
     private int mLinesOfCode;
 
-    /** 
-     * Lines of code in the file that contain coverage information 
+    /**
+     * Lines of code in the file that contain coverage information
      * that is not 0.
-     */ 
+     */
     private int mCoveredLinesOfCode;
 
     /**
-     * Holds the number of violations for each severity level. 
+     * Holds the number of violations for each severity level.
      */
     private int[] mViolations = new int[Severity.VALUES.size()];
 
-    /** 
+    /**
      * Percentage values for the violations.
-     * Data stored in here is only valid if <code>mPercentUpToDate</code> 
+     * Data stored in here is only valid if <code>mPercentUpToDate</code>
      * is true.
-     */   
+     */
     private int[] mPercent = new int[Severity.VALUES.size()];
     private boolean mPercentUpToDate = false;
 
@@ -100,9 +100,9 @@ public final class FileSummary
     /**
      * Creates a new empty file summary object used to summarize
      * findings for classes in in the given package.
-     * 
+     *
      * @param packagename name of the package where this summary
-     *      is used for. 
+     *      is used for.
      */
     public FileSummary (String packagename)
     {
@@ -113,14 +113,14 @@ public final class FileSummary
      * Creates a new empty file summary object used to summarize
      * findings for the given class in the given package with
      * link to the file and code information.
-     * @param className the name of the class (without package 
+     * @param className the name of the class (without package
      *      information).
-     * @param packagename the name of the package where the class 
+     * @param packagename the name of the package where the class
      *      resides in.
      * @param reportfile the name of the file where the html report
-     *      stored.  
+     *      stored.
      * @param linesOfCode the number of lines in the file.
-     * @param withCoverage true if coverage information is 
+     * @param withCoverage true if coverage information is
      *      available.
      */
     public FileSummary (String className, String packagename,
@@ -135,10 +135,10 @@ public final class FileSummary
 
     /**
      * Calculates the quality as percentage represented as float.
-     * @param loc total number of lines of code. This is also the maximum 
+     * @param loc total number of lines of code. This is also the maximum
      *         that might be returned by this method.
      * @param violations the array holding the violations of the severity
-     *      related to the position in the array. The elements of the 
+     *      related to the position in the array. The elements of the
      *      array are NOT modified.
      * @return the quality as percentage represented as float.
      */
@@ -156,17 +156,17 @@ public final class FileSummary
     /**
      * Calculates the unweighed quality points scored for the code.
      * Maximum returned is <code>loc</code> the minimum is <code>0</code>.
-     * @param loc total number of lines of code. This is also the maximum 
+     * @param loc total number of lines of code. This is also the maximum
      *         that might be returned by this method.
      * @param violations the array holding the violations of the severity
-     *      related to the position in the array. The elements of the 
+     *      related to the position in the array. The elements of the
      *      array are NOT modified.
      * @return the unweighed quality score.
      */
     private static int calcUnweightedQuality (int loc, int[] violations)
     {
         Assert.assertEquals(
-            "Violations array length must match number of severities.", 
+            "Violations array length must match number of severities.",
             Severity.VALUES.size(), violations.length);
         int quality = loc * Severity.PENALTY_SCALE; // lines of code
         for (int i = 0; i < Severity.VALUES.size() && quality > 0; i++)
@@ -189,7 +189,7 @@ public final class FileSummary
     /**
      * Calculates the quality percentage scored for the code.
      * Maximum returned is <code>100</code> the minimum is <code>0</code>.
-     * @param loc total number of lines of code. This is also the maximum 
+     * @param loc total number of lines of code. This is also the maximum
      *         that might be returned by this method.
      * @param info number of info level findings.
      * @param warning number of warning level findings.
@@ -201,7 +201,7 @@ public final class FileSummary
      * @param cpd number of cpd level findings.
      * @return the unweighed quality score.
      */
-    public static float calculateQuality (int loc, int info, int warning, 
+    public static float calculateQuality (int loc, int info, int warning,
         int error, int coverage, int filtered, int codestyle, int design,
         int cpd)
     {
@@ -217,7 +217,7 @@ public final class FileSummary
         return FileSummary.calculateQuality(loc, violations);
     }
 
-    
+
     /** @return the name of the class (without package information). */
     public String getClassName ()
     {
@@ -281,15 +281,15 @@ public final class FileSummary
         mCoveredLinesOfCode += other.mCoveredLinesOfCode;
         mPercentUpToDate = false;
         mFiles++;
-        if (mCoverageData || other.isWithCoverage() 
-            || mCoveredLinesOfCode > 0 
+        if (mCoverageData || other.isWithCoverage()
+            || mCoveredLinesOfCode > 0
             || mViolations[Severity.COVERAGE.toInt()] > 0)
         {
             mCoverageData = true;
         }
     }
 
-    /** 
+    /**
      * Adds the counters from the given file to this summary.
      * @param file the data to be added.
      */
@@ -297,7 +297,7 @@ public final class FileSummary
     {
         final Iterator i = file.getItem().iterator();
         mFiles++;
-        mLinesOfCode += file.getLoc(); 
+        mLinesOfCode += file.getLoc();
         while (i.hasNext())
         {
             final Item item = (Item) i.next();
@@ -323,7 +323,7 @@ public final class FileSummary
     }
 
     /**
-     * Increments the counter for the given severity in this summary.  
+     * Increments the counter for the given severity in this summary.
      * @param severity the severity of the counter to be incremented.
      */
     public void addViolation (Severity severity)
@@ -363,7 +363,7 @@ public final class FileSummary
     }
 
     /**
-     * Returns the magic quality as percentage int. 
+     * Returns the magic quality as percentage int.
      * The maximum quality code gets a score of 100. The lowest score
      * possible is 0.
      * @return the magic quality as percentage int (0-100).
@@ -380,7 +380,7 @@ public final class FileSummary
     }
 
     /**
-     * Returns the magic quality as percentage float. 
+     * Returns the magic quality as percentage float.
      * The maximum quality code gets a score of 100. The lowest score
      * possible is 0.
      * @return the magic quality as percentage float (0.0-100.0).
@@ -390,17 +390,17 @@ public final class FileSummary
         // might be we should cache the result?
         return FileSummary.calculateQuality (mLinesOfCode, mViolations);
     }
-    
+
     /**
-     * Generates a string containing xhtml code that renders to a 
-     * percentage bar that can be used as component of a web page. 
+     * Generates a string containing xhtml code that renders to a
+     * percentage bar that can be used as component of a web page.
      * @return a string containing xhtml.
      */
     public String getPercentBar ()
     {
         calcPercent();
         final StringBuffer sb = new StringBuffer(STRING_BUFFER_SIZE);
-        sb.append("<table width='100%' cellspacing='0' cellpadding='0' " 
+        sb.append("<table width='100%' cellspacing='0' cellpadding='0' "
             + "summary='quality-bar'><tr valign='middle'>");
         for (int i = Severity.OK.toInt(); i < Severity.MAX_SEVERITY_INT; i++)
         {
@@ -418,9 +418,9 @@ public final class FileSummary
     }
 
     /**
-     * Generates a string containing xhtml code that renders to a 
-     * bar that can be used as component of a web page to represent 
-     * the amount of covered code. 
+     * Generates a string containing xhtml code that renders to a
+     * bar that can be used as component of a web page to represent
+     * the amount of covered code.
      * @return a string containing xhtml.
      */
     public String getCoverageBar ()
@@ -460,7 +460,7 @@ public final class FileSummary
     /** @return the coverage percentage as int. */
     public int getCoverage ()
     {
-        final int notCoveredLinesOfCode 
+        final int notCoveredLinesOfCode
                 = mViolations[Severity.COVERAGE.toInt()];
 
         int notCovered;
@@ -484,12 +484,12 @@ public final class FileSummary
         return MAX_PERCENTAGE - notCovered;
     }
 
-    /** 
-     * All findings that are between {@link Severity#INFO} and 
+    /**
+     * All findings that are between {@link Severity#INFO} and
      * {@link Severity#ERROR} but not {@link Severity#COVERAGE}
-     * are counted. 
-     * @return the number of violations summed up in this summary. 
-     */ 
+     * are counted.
+     * @return the number of violations summed up in this summary.
+     */
     public int getNumberOfFindings ()
     {
         int sum = 0;
@@ -537,7 +537,7 @@ public final class FileSummary
         // errors
         if (mLinesOfCode != 0)
         {
-            for (int i = Severity.ERROR.toInt(); i > Severity.INFO.toInt(); 
+            for (int i = Severity.ERROR.toInt(); i > Severity.INFO.toInt();
                     i--)
             {
                 int percent;
@@ -583,17 +583,17 @@ public final class FileSummary
     {
         final int coverageViolationPercentage;
         if (!mCoverageData)
-        {  
+        {
             coverageViolationPercentage = 0;
         }
-        else 
+        else
         {
-            final int notCoveredLines 
-            	= mViolations[Severity.COVERAGE.toInt()];
+            final int notCoveredLines
+                = mViolations[Severity.COVERAGE.toInt()];
             coverageViolationPercentage = calcPercentage(
                 notCoveredLines * Severity.COVERAGE.getPenalty(),
-                Severity.PENALTY_SCALE 
-                * (mCoveredLinesOfCode + notCoveredLines)); 
+                Severity.PENALTY_SCALE
+                * (mCoveredLinesOfCode + notCoveredLines));
         }
         return coverageViolationPercentage;
     }

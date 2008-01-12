@@ -98,7 +98,8 @@ public class XtremeDocs
 
    void setXdocTransformerParams (Transformer transformer)
    {
-      // TODO: Implement this in the corresponding first pass style sheets or remove this!
+      // TODO: Implement this in the corresponding first pass style sheets
+      // or remove this!
       transformer.setParameter(
             "basedir", getProject().getBaseDir().toString());
       transformer.setParameter("cclabel", mCcLabel);
@@ -159,7 +160,7 @@ public class XtremeDocs
     * Set the name of the company or organisation.
     * @param companyName The mCompanyName to set.
     */
-   public void setCompanyName(String companyName)
+   public void setCompanyName (String companyName)
    {
       mCompanyName = companyName;
    }
@@ -168,7 +169,7 @@ public class XtremeDocs
     * Set the flag, wether only validation should be executed or not.
     * @param validationOnly The mValidationOnly to set.
     */
-   public void setValidationOnly(boolean validationOnly)
+   public void setValidationOnly (boolean validationOnly)
    {
       mValidationOnly = validationOnly;
    }
@@ -177,7 +178,7 @@ public class XtremeDocs
     * Set the name of the company logo without suffix.
     * @param companyLogo The mCompanyLogo to set.
     */
-   public void setCompanyLogo(String companyLogo)
+   public void setCompanyLogo (String companyLogo)
    {
       mCompanyLogo = companyLogo;
    }
@@ -584,12 +585,12 @@ public class XtremeDocs
 
    private static final class Rasterizer
    {
-      private Rasterizer()
+      private Rasterizer ()
       {
          // utility class -- provides only static methods
       }
 
-      public static void rasterize(File in, File out)
+      public static void rasterize (File in, File out)
             throws TranscoderException, IOException
       {
          final OutputStream ostream = new FileOutputStream(out);
@@ -611,7 +612,7 @@ public class XtremeDocs
             // Create the transcoder output
             final TranscoderOutput output = new TranscoderOutput(ostream);
 
-            // Transform the svg document into a PNG image
+            // Transform the SVG document into a PNG image
             transcoder.transcode(input, output);
 
             ostream.flush();
@@ -624,42 +625,80 @@ public class XtremeDocs
    }
 
 
+   /**
+    * The Class FormatterInfoData.
+    */
    public static class FormatterInfoData
    {
       private File mStyleSheet;
       private File mCascadingStyleSheet;
       private String mType;
 
+      /**
+       * Gets the cascading style sheet.
+       *
+       * @return the cascading style sheet
+       */
       public File getCascadingStyleSheet ()
       {
          return mCascadingStyleSheet;
       }
 
+      /**
+       * Sets the cascading style sheet.
+       *
+       * @param cascadingStyleSheet the new cascading style sheet
+       */
       public void setCss (File cascadingStyleSheet)
       {
          mCascadingStyleSheet = cascadingStyleSheet;
       }
 
+      /**
+       * Gets the style sheet.
+       *
+       * @return the style sheet
+       */
       public File getStyleSheet ()
       {
          return mStyleSheet;
       }
 
+      /**
+       * Sets the style.
+       *
+       * @param styleSheet the new style
+       */
       public void setStyle (File styleSheet)
       {
          mStyleSheet = styleSheet;
       }
 
+      /**
+       * Gets the type.
+       *
+       * @return the type
+       */
       public String getType ()
       {
          return mType;
       }
 
+      /**
+       * Sets the type.
+       *
+       * @param type the new type
+       */
       public void setType (String type)
       {
          mType = type;
       }
 
+      /**
+       * Create the formatter info data.
+       *
+       * @return the formatter info data
+       */
       public static FormatterInfoData create ()
       {
          return new FormatterInfoData();

@@ -49,9 +49,9 @@
 	<classpathentry kind="lib" path="lib/default/xjavadoc/xjavadoc.jar"/>
 	<classpathentry kind="lib" path="lib/default/xmlunit/xmlunit.jar"/>
 	<classpathentry kind="lib" path="lib/default/findbugs/findbugs.jar"/>
-	<classpathentry kind="lib" path="lib/default/batik-1.5-fop/batik-1.5-fop.jar"/>
 	<classpathentry kind="lib" path="lib/luntbuild/hessian-3.0.8.jar"/>
 	<classpathentry kind="lib" path="lib/luntbuild/luntbuild-api.jar"/>
+	<classpathentry kind="lib" path="lib/default/batik-transcoder/batik-transcoder.jar"/>
 	<classpathentry kind="var" path="JAVA_HOME/lib/tools.jar"/>
 	<classpathentry kind="output" path="eclipse/bin"/>
 </classpath>

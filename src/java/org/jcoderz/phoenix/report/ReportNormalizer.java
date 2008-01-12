@@ -141,7 +141,7 @@ public final class ReportNormalizer
                = ReportReaderFactory.createReader(report.getReportFormat());
             logger.fine("Processing report " + report.getReportFormat()
                   + " '" + report.getFilename() + "'");
-            if (report.getFilename().length() != 0 
+            if (report.getFilename().length() != 0
                     || report.getFilename().isDirectory())
             {
                reportReader.parse(report.getFilename());
@@ -157,24 +157,24 @@ public final class ReportNormalizer
          {
             logger.log(Level.SEVERE, "Error while processing", e);
             final Item item = new ObjectFactory().createItem();
-            item.setMessage("Error while Processing '" + report.getReportFormat()
-                    + "' '" + report.getFilename() + "' got Exception: '" + e + "'.");
+            item.setMessage("Error while Processing '"
+                    + report.getReportFormat() + "' '"
+                    + report.getFilename() + "' got Exception: '" + e + "'.");
             item.setSeverity(Severity.ERROR);
             item.setFindingType(SystemFindingType.SYS_PARSE_ERROR.getSymbol());
             item.setOrigin(Origin.SYSTEM);
-            final ResourceInfo res 
-            	= ResourceInfo.register(report.getFilename().getName(), "", 
-            			report.getFilename().getAbsolutePath());
-            
-            if (items.containsKey(res)) 
-            {
-            	((List) items.get(res)).add(item);
-            }
-            else
-            {
-            	final List list = new ArrayList();
-            	list.add(item);
-            	items.put(res, list);
+            final ResourceInfo res = ResourceInfo.register(report
+                    .getFilename().getName(), "", report.getFilename()
+                    .getAbsolutePath());
+                if (items.containsKey(res))
+                {
+                    ((List) items.get(res)).add(item);
+                }
+                else
+                {
+                    final List list = new ArrayList();
+                    list.add(item);
+                    items.put(res, list);
             }
          }
       }
@@ -225,8 +225,8 @@ public final class ReportNormalizer
       transformer.transform(new StreamSource(mOutFile),
            new StreamResult(out));
       IoUtil.close(out);
-      FileUtils.copyFile(tempOutputFile, mOutFile); 
-      FileUtils.delete(tempOutputFile); 
+      FileUtils.copyFile(tempOutputFile, mOutFile);
+      FileUtils.delete(tempOutputFile);
    }
 
    /**
@@ -236,9 +236,9 @@ public final class ReportNormalizer
     * <ul>
     *   <li><code>-jcoverage jvoveragereport.xml</code> (http://???)</li>
     *   <li><code>-cobertura coberturareport.xml</code> (http://???)</li>
-    *   <li><code>-checkstyle checkstylereport.xml</code> 
+    *   <li><code>-checkstyle checkstylereport.xml</code>
     *       (http://checkstyle.sf.net)</li>
-    *   <li><code>-findbugs findbugsreport.xml</code> 
+    *   <li><code>-findbugs findbugsreport.xml</code>
     *       (http://findbugs.sf.net)</li>
     *   <li><code>-pmd pmdreport.xml</code> (http://pmd.sf.net)</li>
     *   <li><code>-cpd cpdreport.xml</code> (http://))))</li>

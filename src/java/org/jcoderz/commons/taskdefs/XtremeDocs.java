@@ -69,7 +69,7 @@ public class XtremeDocs
    private static final String DEFAULT_COMPANY_NAME = "jCoderZ.org";
    private static final String DEFAULT_COMPANY_LOGO = "jcoderz-org";
    private static final boolean DEFAULT_VALIDATION_ONLY_FLAG = false;
-   
+
    /** The output directory. */
    private File mOutDir;
    /** XEP home directory. */
@@ -98,6 +98,7 @@ public class XtremeDocs
 
    void setXdocTransformerParams (Transformer transformer)
    {
+      // TODO: Implement this in the corresponding first pass style sheets or remove this!
       transformer.setParameter(
             "basedir", getProject().getBaseDir().toString());
       transformer.setParameter("cclabel", mCcLabel);
@@ -162,7 +163,7 @@ public class XtremeDocs
    {
       mCompanyName = companyName;
    }
-   
+
    /**
     * Set the flag, wether only validation should be executed or not.
     * @param validationOnly The mValidationOnly to set.
@@ -285,7 +286,7 @@ public class XtremeDocs
          {
             throw new RuntimeException("Unsupported type " + mType);
          }
-         
+
          if (!mValidationOnly)
          {
             rasterizeSvgFiles(imageDir); // 4 HTML
@@ -409,7 +410,7 @@ public class XtremeDocs
       // .dot files -> .svg files
       AntTaskUtil.renderDotFiles(this, imageDir, mFailOnError);
    }
-   
+
    private void exportToXmi (File filePassOne, final File imageDir)
    {
       final XsltBasedTask task = new XsltBasedTask()

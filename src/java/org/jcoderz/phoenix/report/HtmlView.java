@@ -61,11 +61,12 @@ import org.jcoderz.commons.util.IoUtil;
  *
  * TODO: Support for annotations & type variables.
  * TODO: Document original source of this code
- * 
+ *
  * @author Andreas Mandel
  */
 public class HtmlView
 {
+   private static final int DEFAULT_TAB_INDENT = 4;
    private static final String COMMENT_MAGIC = "&COMMENT_";
    private static final String STRING_MAGIC = "&STRING_";
    private static final String END_MAGIC = ";";
@@ -113,7 +114,7 @@ public class HtmlView
    private int mNumberOfLines = -1;
    private String mClassname;
    private String mPackage;
-   private int mTabIndent = 4;
+   private int mTabIndent = DEFAULT_TAB_INDENT;
 
    /**
     * Creates a new HtmlView object.
@@ -254,8 +255,8 @@ public class HtmlView
     * @param file the file to look at,
     * @throws IOException if file io fails.
     */
-   private void privateReset (File file) 
-           throws IOException 
+   private void privateReset (File file)
+           throws IOException
    {
        mSourceFile = file;
        mCommentList.clear();
@@ -309,10 +310,10 @@ public class HtmlView
                case '>':  mFileData.append("&gt;");   linePos++; break;
                case '<':  mFileData.append("&lt;");   linePos++; break;
                case ' ':  mFileData.append("&#160;"); linePos++; break;
-               case '\t': 
+               case '\t':
                    while (++linePos % mTabIndent != 0)
                    {
-                       mFileData.append("&#160;"); 
+                       mFileData.append("&#160;");
                    }
                    break;
                case '\r': break;
@@ -501,7 +502,7 @@ public class HtmlView
    private void parseClassNameAndPackage ()
    {
       // find class name:
-      final StringTokenizer st 
+      final StringTokenizer st
             = new StringTokenizer(mFileData.toString(), " \n\r;\t&");
       mClassname = null;
       mPackage = "NoPackage";
@@ -535,7 +536,7 @@ public class HtmlView
    private String readNextNonNbspToken (final StringTokenizer st)
    {
        String result = st.nextToken();
-       while (st.hasMoreTokens() 
+       while (st.hasMoreTokens()
                && ("#160".equals(result) || "nbsp".equals(result)))
        {
            // new string to release rest of memory used for the file
@@ -748,7 +749,7 @@ public class HtmlView
     * @param in the string buffer to read from
     * @param offset the start offset
     * @param length the number of chars to copie
-    * @return a new string containing a copy of the stringbuffers content. 
+    * @return a new string containing a copy of the stringbuffers content.
     */
    public static String substring (StringBuffer in, int offset, int length)
    {

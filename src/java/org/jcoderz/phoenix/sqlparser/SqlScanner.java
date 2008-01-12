@@ -226,7 +226,7 @@ public final class SqlScanner
                }
             }
             // operator '- ', '-(' or '-function'
-            else if (d == '(' || Character.isLetter((char) d) 
+            else if (d == '(' || Character.isLetter((char) d)
                   || Character.isWhitespace((char) d))
             {
                reset();
@@ -261,7 +261,7 @@ public final class SqlScanner
                // not a known keyword
             }
 
-            // numberic literal?
+            // numeric literal?
             try
             {
                new BigDecimal(word); // well-formed?
@@ -272,7 +272,7 @@ public final class SqlScanner
                // not a numeric
             }
 
-            // otherwise it must be a indentifier (hopefully)
+            // otherwise it must be a identifier (hopefully)
             return new Token(TokenType.IDENTIFIER, word);
          }
       }
@@ -370,8 +370,8 @@ public final class SqlScanner
             reset();
          }
          ++mLine; mColumn = 0;
-         t = new Token(TokenType.NEWLINE, 
-                 asString(Constants.CARRIAGE_RETURN_CHAR) 
+         t = new Token(TokenType.NEWLINE,
+                 asString(Constants.CARRIAGE_RETURN_CHAR)
                  + asString(Constants.LINE_FEED_CHAR));
       }
       else
@@ -452,13 +452,16 @@ public final class SqlScanner
 
    private static boolean isNewlineChar (char c)
    {
-      return (c == Constants.LINE_FEED_CHAR 
+      return (c == Constants.LINE_FEED_CHAR
               || c == Constants.CARRIAGE_RETURN_CHAR);
    }
 
    /**
     * Simple SQL Scanner that reads the file given at argument 1 and dumps
     * the tokens to <code>stderr</code> and the content on <code>stdout</code>.
+    *
+    * @param args command line arguments
+    * @throws Exception An error occurred
     */
    public static void main (String[] args)
          throws Exception

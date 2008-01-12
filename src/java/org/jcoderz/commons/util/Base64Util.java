@@ -47,7 +47,7 @@ import org.jcoderz.commons.ArgumentMalformedException;
  *
  * This implementation does not encode/decode streaming
  * data. You need the data that you will encode/decode
- * already on a byte arrray.
+ * already on a byte array.
  *
  * @author Michael Griffel
  *

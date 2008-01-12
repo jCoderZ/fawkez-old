@@ -12,6 +12,7 @@
 <xsl:include href="libxdoc.xsl"/>
 <xsl:include href="html2docbook.xsl"/>
 
+<!-- FIXME: The Transformation parameters set in XtremeDocs.java are ignored here!   -->
 <xsl:param name="basedir" select="'.'"/>
 
 <!-- BEGIN: generic copy -->

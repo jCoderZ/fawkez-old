@@ -12,13 +12,14 @@
                        uc
                        http://www.jcoderz.org/xsd/xdoc/usecase-SNAPSHOT.xsd"
    version="1.0">
-   
+
 <xsl:output method="xml" indent="yes" encoding="UTF-8"/>
 
 <xsl:include href="libcommon.xsl"/>
 <xsl:include href="libxdoc.xsl"/>
 <xsl:include href="html2docbook.xsl"/>
 
+<!-- FIXME: The Transformation parameters set in XtremeDocs.java are ignored here!   -->
 <xsl:param name="basedir" select="'.'"/>
 
 <!-- BEGIN: generic copy -->

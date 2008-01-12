@@ -15,14 +15,15 @@
 
    <xsl:namespace-alias stylesheet-prefix="db" result-prefix=""/>
 
+   <xsl:param name="basedir" select="'.'"/>
+   <!--  Our default language is english. -->
+   <xsl:param name="lang" select="/uc:usecases/uc:info/@lang"/>
+
    <xsl:include href="libcommon.xsl"/>
    <xsl:include href="libxdoc.xsl"/>
    <xsl:include href="html2docbook.xsl"/>
    <xsl:include href="usecase_i18n.xsl"/>
    <xsl:include href="usecase-requirements.xsl"/>
-
-   <xsl:param name="lang" select="default"/>
-   <xsl:param name="basedir" select="'.'"/>
 
    <xsl:key name="primary-actor-group" match="uc:primary" use="uc:name"/>
    <xsl:key name="secondary-actor-group" match="uc:secondary" use="uc:name"/>
@@ -37,7 +38,7 @@
              <xsl:otherwise>draft</xsl:otherwise>
           </xsl:choose>
        </xsl:variable>
-       <book lang="{info/@lang}" status="{$book_state}">
+       <book lang="{uc:info/@lang}" status="{$book_state}">
           <xsl:apply-templates select="uc:info"/>
 
           <xsl:if test="//uc:usecase">

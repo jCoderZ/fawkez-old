@@ -11,9 +11,6 @@
    xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
    exclude-result-prefixes="xsl">
 
-   <!--  Our default language is english. -->
-   <xsl:param name="lang" select="'en'"/>
-
    <xsl:variable name="strRole">
      <xsl:choose>
        <xsl:when test="$lang='de'">

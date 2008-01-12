@@ -77,20 +77,6 @@ import java.util.List;
 public final class TokenType
         implements Serializable
 {
-    private static final long serialVersionUID = 1L;
-
-    /** The name of the token type */
-    private final transient String mName;
-
-    /** Ordinal of next token type to be created */
-    private static int sNextOrdinal = 0;
-
-    /** Assign a ordinal to this token type */
-    private final int mOrdinal = sNextOrdinal++;
-
-    /** Maps a string representation to an enumerated value */
-    private static final Map FROM_STRING = new HashMap();
-
     /** The token type create. */
     public static final TokenType CREATE = new TokenType("create");
 
@@ -210,32 +196,46 @@ public final class TokenType
     /** The token type increment. */
     public static final TokenType INCREMENT = new TokenType("increment");
 
+    /** The token type by. */
     public static final TokenType BY = new TokenType("by");
 
+    /** The token type start. */
     public static final TokenType START = new TokenType("start");
 
+    /** The token type with. */
     public static final TokenType WITH = new TokenType("with");
 
+    /** The token type maxvalue. */
     public static final TokenType MAXVALUE = new TokenType("maxvalue");
 
+    /** The token type nomaxvalue. */
     public static final TokenType NOMAXVALUE = new TokenType("nomaxvalue");
 
+    /** The token type minvalue. */
     public static final TokenType MINVALUE = new TokenType("minvalue");
 
+    /** The token type nominvalue. */
     public static final TokenType NOMINVALUE = new TokenType("nominvalue");
 
+    /** The token type cycle. */
     public static final TokenType CYCLE = new TokenType("cycle");
 
+    /** The token type nocycle. */
     public static final TokenType NOCYCLE = new TokenType("nocycle");
 
+    /** The token type cache. */
     public static final TokenType CACHE = new TokenType("cache");
 
+    /** The token type nocache. */
     public static final TokenType NOCACHE = new TokenType("nocache");
 
+    /** The token type order. */
     public static final TokenType ORDER = new TokenType("order");
 
+    /** The token type noorder. */
     public static final TokenType NOORDER = new TokenType("noorder");
 
+    /** The token type operator. */
     public static final TokenType OPERATOR = new TokenType("operator");
 
     /** Internal list of all available token types */
@@ -262,6 +262,20 @@ public final class TokenType
     public static final List VALUES = Collections.unmodifiableList(Arrays
             .asList(PRIVATE_VALUES));
 
+    /** Maps a string representation to an enumerated value */
+    private static final Map FROM_STRING = new HashMap();
+
+    private static final long serialVersionUID = 1L;
+
+    /** Ordinal of next token type to be created */
+    private static int sNextOrdinal = 0;
+
+    /** The name of the token type */
+    private final transient String mName;
+
+    /** Assign a ordinal to this token type */
+    private final int mOrdinal = sNextOrdinal++;
+
     /** Private Constructor */
     private TokenType (String name)
     {
@@ -274,7 +288,7 @@ public final class TokenType
      *
      * @param i the int representation of the token type to be returned.
      * @return the TokenType object represented by this int.
-     * @throws IllegalArgumentException If the assigned int value isn't 
+     * @throws IllegalArgumentException If the assigned int value isn't
      *      listed in the internal token type table
      */
     public static TokenType fromInt (int i)
@@ -298,7 +312,7 @@ public final class TokenType
      *
      * @param str the str representation of the token type to be returned.
      * @return the TokenType object represented by this str.
-     * @throws IllegalArgumentException If the given str value isn't listed 
+     * @throws IllegalArgumentException If the given str value isn't listed
      *          in the internal token type table.
      */
     public static TokenType fromString (String str)

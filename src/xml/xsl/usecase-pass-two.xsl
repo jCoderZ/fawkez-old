@@ -18,6 +18,7 @@
    <xsl:include href="libcommon.xsl"/>
    <xsl:include href="libxdoc.xsl"/>
    <xsl:include href="html2docbook.xsl"/>
+   <xsl:include href="usecase_i18n.xsl"/>
    <xsl:include href="usecase-requirements.xsl"/>
 
    <xsl:param name="lang" select="default"/>
@@ -94,23 +95,23 @@
 
           <xsl:if test="//uc:actors">
              <appendix id="Actors">
-             <title>All Actors</title>
+             <title><xsl:value-of select="$strAllActors"/></title>
              <section id="all_primary_actors">
-               <title>Primary Actors</title>
+               <title><xsl:value-of select="$strPrimaryActors"/></title>
                <informaltable>
                   <tgroup cols="2">
                     <tbody>
-                        <xsl:call-template name="uc:list_primary_actors"/>
+                       <xsl:call-template name="uc:list_primary_actors"/>
                     </tbody>
                   </tgroup>
                </informaltable>
              </section>
              <section id="all_secondary_actors">
-               <title>Secondary Actors</title>
+               <title><xsl:value-of select="$strSecondaryActors"/></title>
                <informaltable>
                   <tgroup cols="2">
                     <tbody>
-                            <xsl:call-template name="uc:list_secondary_actors"/>
+                       <xsl:call-template name="uc:list_secondary_actors"/>
                     </tbody>
                   </tgroup>
                </informaltable>
@@ -120,14 +121,14 @@
 
         <xsl:if test="//req:role">
            <appendix id="Roles UC List">
-             <title>Mapping Use Cases to Roles</title>
+             <title><xsl:value-of select="$strMappingUseCasesToRoles"/></title>
              <xsl:call-template name="uc:list_roles_usecases"/>
            </appendix>
         </xsl:if>
 
         <xsl:if test="//uc:usecase">
            <appendix id="Use Case Revisions">
-             <title>Use Case Revision</title>
+             <title><xsl:value-of select="$strUseCaseRevision"/></title>
              <informaltable>
                   <tgroup cols="3">
                     <colspec colwidth="2.5cm"/>
@@ -142,13 +143,13 @@
 
         <xsl:if test="//uc:open_issue or //req:open_issue">
            <appendix id="Open Issues">
-             <title>Open Issues</title>
+             <title><xsl:value-of select="$strOpenIssues"/></title>
              <section>
                 <title>Issues for Use Cases</title>
                 <xsl:apply-templates select="//uc:usecases" mode="issue_list"/>
              </section>
              <section>
-                <title>Issues for Requirements</title>
+                <title><xsl:value-of select="$strIssuesForRequirements"/></title>
                 <xsl:apply-templates select="//req:requirement" mode="issue_list"/>
              </section>
            </appendix>
@@ -156,7 +157,7 @@
 
         <xsl:if test="//uc:usecase">
            <appendix id="Priorities">
-             <title>Priorities</title>
+             <title><xsl:value-of select="$strPriorities"/></title>
              <informaltable>
                 <tgroup cols="2">
                    <colspec colwidth="2.5cm"/>
@@ -170,7 +171,7 @@
 
         <glossary>
            <glossdiv>
-              <title>Entities</title>
+              <title><xsl:value-of select="$strEntities"/></title>
               <xsl:apply-templates select="//req:entity" mode="glossary">
                  <xsl:sort data-type="text" select="req:name" order="ascending" />
               </xsl:apply-templates>
@@ -347,9 +348,7 @@
          <xsl:apply-templates select="uc:scope"/>
 
          <section id="{uc:name}_overview">
-          <title>
-            Overview
-          </title>
+          <title><xsl:value-of select="$strOverview"/></title>
           <para><xsl:value-of select="uc:goal"/></para>
           <para>
 
@@ -371,12 +370,12 @@
          </para>
 
          <section id="{uc:name}_actors">
-            <title>Actors</title>
+            <title><xsl:value-of select="$strActors"/></title>
             <xsl:call-template name="uc:actors" />
          </section>
 
          <section>
-            <title>Preconditions</title>
+            <title><xsl:value-of select="$strPreconditions"/></title>
             <itemizedlist>
               <xsl:apply-templates select="uc:precondition"/>
             </itemizedlist>
@@ -386,20 +385,20 @@
          </section>
 
          <section>
-            <title>Stakeholder</title>
+            <title><xsl:value-of select="$strStakeholder"/></title>
             <itemizedlist>
               <xsl:apply-templates select="uc:stakeholder"/>
             </itemizedlist>
          </section>
 
          <section id="{@id}" xreflabel="{@id} {uc:name}">
-            <title>Success</title>
+            <title><xsl:value-of select="$strSuccess"/></title>
             <xsl:apply-templates select="uc:success" />
          </section>
 
          <xsl:if test="count(uc:extension) > 0">
             <section>
-               <title>Extensions</title>
+               <title><xsl:value-of select="$strExtensions"/></title>
                <xsl:for-each select="uc:extension">
                   <section id="{../@id}-{@id}" xreflabel="{../@id}-{@id} {@name}">
                      <title><xsl:value-of select="@id"/>: <xsl:value-of select="@name"/></title>
@@ -410,13 +409,13 @@
          </xsl:if>
 
          <section id="{uc:name}_guarantees">
-            <title>Guarantees</title>
+            <title><xsl:value-of select="$strGuarantees"/></title>
             <xsl:call-template name="uc:guarantees" />
          </section>
 
          <xsl:if test="count(uc:open_issue) > 0">
             <section>
-               <title>Open Issues</title>
+               <title><xsl:value-of select="$strOpenIssues"/></title>
                <itemizedlist numeration="arabic">
                <xsl:apply-templates select="uc:open_issue"/>
                </itemizedlist>
@@ -432,14 +431,14 @@
 
    <xsl:template match="uc:scope">
      <section>
-         <title>Scope</title>
+         <title><xsl:value-of select="$strScope"/></title>
          <xsl:value-of select="."/>
       </section>
    </xsl:template>
 
    <xsl:template match="uc:trigger">
       <section>
-          <title>Trigger</title>
+          <title><xsl:value-of select="$strTrigger"/></title>
           <xsl:value-of select="."/>
        </section>
    </xsl:template>

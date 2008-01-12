@@ -18,7 +18,7 @@
   <xsl:param name ="double.sided">0</xsl:param>
   <xsl:param name ="draft.mode">no</xsl:param>
   <xsl:param name ="draft.watermark.image"></xsl:param>
-  <xsl:param name ="fop.extensions">1</xsl:param>
+  <xsl:param name ="fop1.extensions">1</xsl:param>
   <xsl:param name ="generate.index">1</xsl:param>
   <xsl:param name ="generate.toc">book toc,title,figure</xsl:param>
   <xsl:param name ="insert.xref.page.number">0</xsl:param>

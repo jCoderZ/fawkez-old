@@ -26,7 +26,7 @@
    <xsl:key name="primary-actor-group" match="uc:primary" use="uc:name"/>
    <xsl:key name="secondary-actor-group" match="uc:secondary" use="uc:name"/>
    <xsl:key name="issue-group" match="uc:usecase" use="@id"/>
-   
+
    <xsl:key name="entity-group" match="req:entity" use="req:name"/>
 
     <xsl:template match="uc:usecases">
@@ -88,7 +88,7 @@
                 </xsl:if>
              </chapter>
           </xsl:if>
-          
+
           <!-- Requirements -->
           <xsl:call-template name="req:requirements"/>
 
@@ -179,36 +179,36 @@
               <title>Roles</title>
               <xsl:apply-templates select="//req:role" mode="glossary">
                  <xsl:sort data-type="text" select="req:name" order="ascending" />
-              </xsl:apply-templates> 
+              </xsl:apply-templates>
            </glossdiv>
         </glossary>
         <index></index>
 
        </book>
     </xsl:template>
-    
+
     <xsl:template match="req:entity" mode="glossary">
        <glossentry id="glossary_{../req:key}">
           <glossterm><xsl:value-of select="req:name"/></glossterm>
           <acronym><xsl:value-of select="req:name"/></acronym>
           <glossdef>
-             <para><xsl:value-of select="../req:description"/></para> 
+             <para><xsl:value-of select="../req:description"/></para>
              <glossseealso otherterm="{../req:key}"><xsl:value-of select="../req:key"/></glossseealso>
           </glossdef>
        </glossentry>
     </xsl:template>
-    
+
     <xsl:template match="req:role" mode="glossary">
        <glossentry id="glossary_{../req:key}">
           <glossterm><xsl:value-of select="req:name"/></glossterm>
           <acronym><xsl:value-of select="req:name"/></acronym>
           <glossdef>
-             <para><xsl:value-of select="../req:description"/></para> 
+             <para><xsl:value-of select="../req:description"/></para>
              <glossseealso otherterm="{../req:key}"><xsl:value-of select="../req:key"/></glossseealso>
           </glossdef>
        </glossentry>
     </xsl:template>
-   
+
 
    <xsl:template match="uc:usecase" mode="revision_list">
       <row>
@@ -276,23 +276,25 @@
 
 
     <xsl:template match="uc:usecases" mode="issue_list">
-      <itemizedlist>
-         <xsl:for-each select="//uc:usecase[generate-id() = generate-id(key('issue-group', @id)[1])]">
-            <xsl:if test="uc:open_issue">
-               <listitem>
-                  <para><xsl:text>[</xsl:text><xref linkend="{@id}"/><xsl:text>] : </xsl:text>
-                     <itemizedlist>
-                        <xsl:for-each select="key('issue-group', @id)">
-                           <xsl:for-each select="uc:open_issue">
-                              <listitem><para><xsl:value-of select="."/></para></listitem>
-                           </xsl:for-each>
-                        </xsl:for-each>
-                     </itemizedlist>
-                  </para>
-               </listitem>
-            </xsl:if>
-         </xsl:for-each>
-      </itemizedlist>
+      <xsl:if test="count(//uc:usecase[generate-id() = generate-id(key('issue-group', @id)[1])]) > 0">
+        <itemizedlist>
+           <xsl:for-each select="//uc:usecase[generate-id() = generate-id(key('issue-group', @id)[1])]">
+              <xsl:if test="uc:open_issue">
+                 <listitem>
+                    <para><xsl:text>[</xsl:text><xref linkend="{@id}"/><xsl:text>] : </xsl:text>
+                       <itemizedlist>
+                          <xsl:for-each select="key('issue-group', @id)">
+                             <xsl:for-each select="uc:open_issue">
+                                <listitem><para><xsl:value-of select="."/></para></listitem>
+                             </xsl:for-each>
+                          </xsl:for-each>
+                       </itemizedlist>
+                    </para>
+                 </listitem>
+              </xsl:if>
+           </xsl:for-each>
+        </itemizedlist>
+      </xsl:if>
    </xsl:template>
 
    <xsl:template name="uc:list_primary_actors">
@@ -395,27 +397,32 @@
             <xsl:apply-templates select="uc:success" />
          </section>
 
-         <section>
-            <title>Extensions</title>
-            <xsl:for-each select="uc:extension">
-               <section id="{../@id}-{@id}" xreflabel="{../@id}-{@id} {@name}">
-                  <title><xsl:value-of select="@id"/>: <xsl:value-of select="@name"/></title>
-                  <xsl:apply-templates select="." />
-               </section>
-            </xsl:for-each>
-         </section>
+         <xsl:if test="count(uc:extension) > 0">
+            <section>
+               <title>Extensions</title>
+               <xsl:for-each select="uc:extension">
+                  <section id="{../@id}-{@id}" xreflabel="{../@id}-{@id} {@name}">
+                     <title><xsl:value-of select="@id"/>: <xsl:value-of select="@name"/></title>
+                     <xsl:apply-templates select="." />
+                  </section>
+               </xsl:for-each>
+            </section>
+         </xsl:if>
 
          <section id="{uc:name}_guarantees">
             <title>Guarantees</title>
             <xsl:call-template name="uc:guarantees" />
          </section>
 
-         <section>
-            <title>Open Issues</title>
-            <itemizedlist numeration="arabic">
-            <xsl:apply-templates select="uc:open_issue"/>
-            </itemizedlist>
-         </section>
+         <xsl:if test="count(uc:open_issue) > 0">
+            <section>
+               <title>Open Issues</title>
+               <itemizedlist numeration="arabic">
+               <xsl:apply-templates select="uc:open_issue"/>
+               </itemizedlist>
+            </section>
+         </xsl:if>
+
       </section>
    </xsl:template>
 
@@ -524,11 +531,11 @@
                <xsl:call-template name="title-page">
                   <xsl:with-param name="release" select="@version"/>
                </xsl:call-template>
-      
+
                <title><xsl:value-of select="@project"/></title>
-      
+
                <subtitle>Specification Document</subtitle>
-      
+
                <!--xsl:apply-templates select="/uc:usecases/bookinfo/*"/-->
                <!-- TODO: revision history from cvs log src/doc/sad/sad.xml -->
             </bookinfo>
@@ -539,7 +546,7 @@
       </xsl:choose>
       <xsl:apply-templates select="/uc:usecases/chapter"/>
    </xsl:template>
-   
+
    <xsl:template name="list_referents">
       <xsl:param name="usecase_id"/>
       <xsl:if test="//uc:usecase//uc:ref[(@id = $usecase_id or contains(@id,concat($usecase_id, '-'))) and not(ancestor-or-self::uc:usecase/@id = $usecase_id)]">
@@ -555,12 +562,12 @@
                      </xsl:variable>
                      <xsl:text> [</xsl:text><xref linkend="{$source}"/><xsl:text>] </xsl:text>
                   </para>
-               </listitem>               
+               </listitem>
             </xsl:for-each>
          </itemizedlist>
       </xsl:if>
    </xsl:template>
-   
+
    <xsl:template match="releasenotes|releaseinfo">
       <releaseinfo>
          <xsl:choose>

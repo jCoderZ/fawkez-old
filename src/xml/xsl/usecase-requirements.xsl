@@ -23,7 +23,7 @@
    <xsl:key name="unique-category-primary-key" match="req:requirement/req:category/req:primary" use="."/>
    <xsl:key name="unique-category-secondary-key" match="req:requirement/req:category/req:secondary" use="."/>
    <xsl:key name="unique-category-tertiary-key" match="req:requirement/req:category/req:tertiary" use="."/>
-   
+
    <xsl:key name="scope-group" match="uc:usecase" use="uc:scope"/>
 
    <!-- main -->
@@ -35,9 +35,9 @@
            <chapter>
               <title><xsl:value-of select="."/></title>
               <xsl:variable name="category" select="."/>
-              
+
               <xsl:if test="$category = 'Domain Model'">
-                 <!-- 
+                 <!--
                  <section>
                     <title>Complete Domain Model - Overview</title>
                     <para>
@@ -68,7 +68,7 @@
                      </para>
                   </section>
               </xsl:if>
-              
+
               <xsl:if test="starts-with($category, 'Role')">
                  <section>
                     <title>Complete Role Dependencies</title>
@@ -85,17 +85,17 @@
                      </para>
                   </section>
               </xsl:if>
-              
+
               <xsl:apply-templates select="//req:requirement[req:category/req:primary = $category and not(req:category/req:secondary) and not(req:category/req:tertiary)]">
                  <xsl:sort select="text()"/>
               </xsl:apply-templates>
-                            
+
               <xsl:for-each select="//req:requirement/req:category/req:secondary[generate-id() = generate-id(key('unique-category-secondary-key', .))]">
                  <xsl:variable name="sec_category" select="."/>
                  <xsl:if test="//req:requirement[req:category/req:primary = $category and req:category/req:secondary = $sec_category]">
                     <section>
                        <title><xsl:value-of select="."/></title>
-                       
+
                        <xsl:if test="$category = 'Domain Model'">
                           <xsl:variable name="f" select="concat('images/', $sec_category, '_domain_model')"/>
                           <mediaobject  id="{concat('diagram-', $sec_category, '_domain_model')}">
@@ -108,7 +108,7 @@
                               </imageobject>
                            </mediaobject>
                         </xsl:if>
-                        
+
                         <xsl:if test="starts-with($category, 'Role')">
                           <xsl:variable name="f" select="concat('images/', $sec_category, '_roles_model')"/>
                           <mediaobject  id="{concat('diagram-', $sec_category, '_roles_model')}">
@@ -121,17 +121,17 @@
                               </imageobject>
                            </mediaobject>
                         </xsl:if>
-                       
+
                        <xsl:apply-templates select="//req:requirement[req:category/req:primary = $category and req:category/req:secondary = $sec_category and not(req:category/req:tertiary)]">
                           <xsl:sort select="text()"/>
                        </xsl:apply-templates>
-                       
+
                        <xsl:for-each select="//req:requirement/req:category/req:tertiary[generate-id() = generate-id(key('unique-category-tertiary-key', .))]">
                           <xsl:variable name="thi_category" select="."/>
                           <xsl:if test="//req:requirement[req:category/req:primary = $category and req:category/req:secondary = $sec_category and req:category/req:tertiary = $thi_category]">
                              <section>
                                 <title><xsl:value-of select="."/></title>
-                                
+
                                 <xsl:if test="$category = 'Domain Model'">
                                    <xsl:variable name="f" select="concat('images/', $sec_category, '_', $thi_category, '_domain_model')"/>
                                    <title>Domain model for category <xsl:value-of select="."/></title>
@@ -145,7 +145,7 @@
                                        </imageobject>
                                     </mediaobject>
                                  </xsl:if>
-                                 
+
                                  <xsl:if test="starts-with($category, 'Role')">
                                    <xsl:variable name="f" select="concat('images/', $sec_category, '_', $thi_category, '_roles_model')"/>
                                    <title>Domain model for category <xsl:value-of select="."/></title>
@@ -159,7 +159,7 @@
                                        </imageobject>
                                     </mediaobject>
                                  </xsl:if>
-                                
+
                                 <xsl:apply-templates select="//req:requirement[req:category/req:primary = $category and req:category/req:secondary = $sec_category and req:category/req:tertiary = $thi_category]">
                                    <xsl:sort select="text()"/>
                                 </xsl:apply-templates>
@@ -169,7 +169,7 @@
                     </section>
                  </xsl:if>
               </xsl:for-each>
-              
+
            </chapter>
         </xsl:for-each>
       <!--/chapter-->
@@ -226,7 +226,7 @@
    <listitem><xref linkend="{@id}"/></listitem>
 </xsl:template>
 
-   <xsl:template match="req:entity">      
+   <xsl:template match="req:entity">
       <table frame="all">
          <title>entity summary</title>
          <tgroup cols='5' align='left' colsep='1' rowsep='1'>
@@ -323,7 +323,7 @@
            </tbody>
          </tgroup>
       </table>
-      
+
       <xsl:variable name="f" select="concat('images/', ../req:key)"/>
       <mediaobject  id="{concat('diagram-', ../req:key)}">
          <imageobject  role="fo">
@@ -339,7 +339,7 @@
           </caption>
        </mediaobject>
    </xsl:template>
-   
+
    <xsl:template match="req:attribute">
      <listitem>
         <para>
@@ -347,17 +347,17 @@
         </para>
      </listitem>
    </xsl:template>
-   
+
    <xsl:template match="req:objectreference">
         [<xsl:value-of select="req:linkstart"/>/<xsl:value-of select="req:linkend"/><xsl:text>] </xsl:text> <xref linkend="{req:ref/@id}"/>
    </xsl:template>
-   
+
    <xsl:template match="req:alternative_name">
       <itemizedlist>
          <xsl:apply-templates select="req:name" mode="alternate"/>
       </itemizedlist>
    </xsl:template>
-   
+
    <xsl:template match="req:name" mode="alternate">
       <listitem>
          <para>(<xsl:value-of select="@lang"/>)<xsl:text> </xsl:text><xsl:value-of select="."/><indexterm>
@@ -367,16 +367,16 @@
          </indexterm></para>
       </listitem>
    </xsl:template>
-   
+
    <xsl:template match="req:superior">
       <xsl:apply-templates/>
    </xsl:template>
-   
+
    <xsl:template match="req:superior" mode="subordinate">
       <xsl:text> [</xsl:text><xref linkend="{../../req:key}"/><xsl:text>]
       </xsl:text>
    </xsl:template>
-   
+
    <xsl:template name="uc:list_acting_use_cases_indirect">
       <xsl:param name="role_name"/>
       <xsl:for-each select="//req:role/req:superior/req:ref[@id = //req:role[req:name = $role_name]/../req:key]">
@@ -389,7 +389,7 @@
          </xsl:call-template>
       </xsl:for-each>
    </xsl:template>
-   
+
    <xsl:template name="uc:list_acting_use_cases">
       <xsl:param name="role_name"/>
       <xsl:for-each select="//uc:usecase/uc:actors/uc:primary[uc:name = $role_name]">
@@ -397,8 +397,8 @@
          </xsl:text>
       </xsl:for-each>
    </xsl:template>
-   
-   <xsl:template match="req:role">      
+
+   <xsl:template match="req:role">
       <table frame="all">
          <title>role summary</title>
          <tgroup cols='5' align='left' colsep='1' rowsep='1'>
@@ -472,7 +472,7 @@
            </tbody>
          </tgroup>
       </table>
-      
+
       <xsl:variable name="f" select="concat('images/', ../req:key)"/>
       <mediaobject  id="{concat('diagram-', ../req:key)}">
          <imageobject  role="fo">
@@ -492,7 +492,7 @@
    <xsl:template match="req:description">
       <xsl:value-of select="req:description"/><xsl:apply-templates/>
    </xsl:template>
-   
+
    <xsl:template match="req:open_issue">
       <listitem>
          <para>
@@ -500,8 +500,8 @@
          </para>
       </listitem>
    </xsl:template>
-   
-      
+
+
    <xsl:template name="uc:list_acting_use_cases_indirect_upwards">
       <xsl:param name="role_name"/>
       <xsl:for-each select="//req:role[../req:key = //req:role[normalize-space(req:name) = $role_name]/req:superior/req:ref/@id]">
@@ -512,7 +512,7 @@
          </xsl:call-template>
       </xsl:for-each>
    </xsl:template>
-   
+
    <xsl:template name="uc:list_roles_usecases">
       <xsl:for-each select="//uc:usecase[generate-id() = generate-id(key('scope-group', uc:scope))]">
          <xsl:variable name="scope_name" select="uc:scope"/>
@@ -545,10 +545,10 @@
    <xsl:template match="req:ref">
      <xsl:text> [</xsl:text><xref linkend="{@id}"/><xsl:text>] </xsl:text>
    </xsl:template>
-   
+
    <xsl:template match="req:requirement" mode="issue_list">
-      <itemizedlist>
-         <xsl:if test="req:open_issue">
+      <xsl:if test="req:open_issue">
+         <itemizedlist>
             <listitem>
                <para><xsl:text>[</xsl:text><xref linkend="{req:key}"/><xsl:text>] : </xsl:text>
                   <itemizedlist>
@@ -556,8 +556,8 @@
                   </itemizedlist>
                </para>
             </listitem>
-         </xsl:if>
-      </itemizedlist>
+         </itemizedlist>
+      </xsl:if>
    </xsl:template>
 
 </xsl:stylesheet>

@@ -7,13 +7,18 @@
        <pathelement path="${build.dir}/docbook/"/> <!-- CatalogManager -->
        <pathelement path="${build.dir}/docbook/docbook-xsl-1.73.2/extensions/saxon65.jar"/>
        <fileset dir="${base.dir}/lib">
+          <include name="default/commons-io/*.jar"/>
+          <include name="default/commons-logging/*.jar"/>
           <include name="default/saxon/*.jar"/>
           <include name="default/fop/*.jar"/>
-          <include name="default/batik-1.5-fop/*.jar"/>
+          <include name="default/batik*/*.jar"/>
           <include name="default/xml-resolver/*.jar"/>
+          <include name="default/xmlgraphics-commons/*.jar"/>
           <include name="default/avalon-framework/*.jar"/>
           <include name="default/xerces/*.jar"/>
           <include name="default/xalan/*.jar"/>
+         <include name="offo/fop-hyph.jar"/>
+         <include name="jimi/jimi.jar"/>
        </fileset>
     </path>
 
@@ -180,7 +185,7 @@ static-catalog=yes
          <arg value="${stylesheet}"/>
          <arg value="html.stylesheet=default.css"/>
          <arg value="use.extensions=1"/>
-         <arg value="fop.extensions=1"/>
+         <arg value="fop1.extensions=1"/>
          <arg value="xep.extensions=1"/>
          <classpath refid="xdoc.classpath"/>
       </java>

@@ -166,7 +166,7 @@ public class XtremeDocs
    }
 
    /**
-    * Set the flag, wether only validation should be executed or not.
+    * Set the flag, whether only validation should be executed or not.
     * @param validationOnly The mValidationOnly to set.
     */
    public void setValidationOnly (boolean validationOnly)

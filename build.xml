@@ -215,8 +215,9 @@
                retrieve-3rd-party-libs.uptodatecheck,
                retrieve-3rd-party-libs-nodeps"/>
     <target name="retrieve-3rd-party-libs.uptodatecheck">
+      <mkdir dir="${base.dir}/lib/default"/>
       <uptodate property="retrieve-3rd-party-libs.uptodate"
-          targetfile="${build.dir}/retrieve-3rd-party-libs.done">
+          targetfile="${base.dir}/lib/default/retrieve-3rd-party-libs.done">
           <srcfiles dir= "${base.dir}">
               <include name="config/ivy.xml"/>
               <include name="config/ivyconf.xml"/>
@@ -242,7 +243,7 @@
         <resolve file="${base.dir}/config/ivy.xml" conf="default"/>
         <retrieve pattern="${base.dir}/lib/[conf]/[module]/[artifact].[ext]"
             conf="default"/>
-        <touch file="${build.dir}/retrieve-3rd-party-libs.done"/>
+        <touch file="${base.dir}/lib/default/retrieve-3rd-party-libs.done"/>
     </target>
     <target name="report-dependency" depends="retrieve-3rd-party-libs">
         <mkdir dir="${build.dir}/ivy"/>
@@ -461,8 +462,8 @@
    <target name="jaxb-stubs"
            depends="jaxb-stubs-uptodate-check, jaxb-stubs-nodeps"/>
    <target name="jaxb-stubs-uptodate-check" >
-	<!-- Disabled: Each jaxb task has it's own dependency ckeck
-		<uptodate property="jaxb-stubs.uptodate"
+   <!-- Disabled: Each jaxb task has it's own dependency ckeck
+       <uptodate property="jaxb-stubs.uptodate"
                 targetfile="${build.dir}/gen-java/org/jcoderz/phoenix/checkstyle/jaxb/jaxb.properties" >
          <srcfiles dir= "${base.dir}/src/xml/schema" includes="**/*.xsd"/>
      </uptodate> -->
@@ -509,7 +510,7 @@
             produces="${build.dir}/gen-java/org/jcoderz/phoenix/findbugs/jaxb"/>
         <xjc target="${build.dir}/gen-java"
              extension="true"
-			 binding="${base.dir}/src/xml/findbugs/messagecollection.xjb"
+             binding="${base.dir}/src/xml/findbugs/messagecollection.xjb"
              schema="${base.dir}/src/xml/findbugs/messagecollection.xsd">
 <!--            <arg value="-use-runtime"/>
             <arg value="org.jcoderz.phoenix.report.jaxb.impl.runtime"/> -->
@@ -711,7 +712,7 @@
                 <include name="messages.xml"/>
             </patternset>
         </unjar>
-	     <move file="${build.dir}/classes/org/jcoderz/phoenix/findbugs/messages.xml"
+        <move file="${build.dir}/classes/org/jcoderz/phoenix/findbugs/messages.xml"
               tofile="${build.dir}/classes/org/jcoderz/phoenix/findbugs/fb-contrib-messages.xml"/>
         <!-- extract findbugs messages.xml -->
         <unjar dest="${build.dir}/classes/org/jcoderz/phoenix/findbugs"
@@ -731,9 +732,9 @@
         <jar jarfile="${build.dir}/fawkez.jar">
             <fileset dir="${build.dir}/classes">
                 <include name="org/jcoderz/commons/*"/>
-            	<include name="org/jcoderz/commons/statistics/**"/>
+                <include name="org/jcoderz/commons/statistics/**"/>
                 <include name="org/jcoderz/commons/types/**"/>
-            	<include name="org/jcoderz/commons/util/**"/>
+                <include name="org/jcoderz/commons/util/**"/>
             </fileset>
         </jar>
         <jar jarfile="${build.dir}/fawkez-tools.jar">
@@ -741,15 +742,15 @@
                 <include name="org/jcoderz/commons/doclet/**"/>
                 <include name="org/jcoderz/commons/taskdefs/*"/>
                 <include name="org/jcoderz/commons/types/**"/>
-            	<include name="org/jcoderz/commons/phoenix/**"/>
+                <include name="org/jcoderz/commons/phoenix/**"/>
             </fileset>
         </jar>
         <jar jarfile="${build.dir}/fawkez-server.jar">
             <fileset dir="${build.dir}/classes">
-            	<include name="org/jcoderz/commons/config/**"/>
-            	<include name="org/jcoderz/commons/connector/**"/>
-            	<include name="org/jcoderz/commons/logging/**"/>
-            	<!-- TODO: DDs-->
+              <include name="org/jcoderz/commons/config/**"/>
+              <include name="org/jcoderz/commons/connector/**"/>
+              <include name="org/jcoderz/commons/logging/**"/>
+              <!-- TODO: DDs-->
             </fileset>
         </jar>
         <jar jarfile="${build.dir}/fawkez-all.jar">
@@ -895,9 +896,9 @@
             <exclude name="bin/*.sh" />
          </tarfileset>
       </tar>
-   	<mkdir dir="${build.dir}/doc"/>
-	   <copy file="${build.dir}/fawkez-${DSTAMP}${TSTAMP}.tar.gz"
-	        todir="${build.dir}/doc"/>
+     <mkdir dir="${build.dir}/doc"/>
+     <copy file="${build.dir}/fawkez-${DSTAMP}${TSTAMP}.tar.gz"
+          todir="${build.dir}/doc"/>
    </target>
 
    <target name="tarball-with-libs"
@@ -922,13 +923,13 @@
             <include name="**"/>
          </tarfileset>
       </tar>
-   	<mkdir dir="${build.dir}/doc"/>
-	   <copy file="${build.dir}/fawkez-${DSTAMP}${TSTAMP}.tar.gz"
-	        todir="${build.dir}/doc"/>
+     <mkdir dir="${build.dir}/doc"/>
+     <copy file="${build.dir}/fawkez-${DSTAMP}${TSTAMP}.tar.gz"
+          todir="${build.dir}/doc"/>
    </target>
 
-	<target name="doc" depends="javadoc, guideline-java, sad, usecase"
-		description="Build Docomentation"/>
+  <target name="doc" depends="javadoc, guideline-java, sad, usecase"
+    description="Build Docomentation"/>
 
    <!-- =================================================================== -->
    <!-- Create JavaDoc                                                      -->
@@ -936,21 +937,21 @@
    <target name="javadoc" depends="prepare"
            description="Internal JavaDoc FawkeZ.">
 
-	   <!-- These values should be set by jMade -->
-	   <property name="java.javadoc"
-		   value="http://java.sun.com/j2se/1.5.0/docs/api"/>
-	   <property name="j2ee.javadoc"
-		   value="http://java.sun.com/j2ee/1.4/docs/api"/>
-	   <property name="jaxb.javadoc"
-		   value="http://java.sun.com/webservices/docs/1.4/api"/>
-	   <property name="xmlunit.javadoc"
-		   value="http://xmlunit.sourceforge.net/doc"/>
-	   <property name="junit.javadoc"
-		   value="http://www.junit.org/junit/javadoc/3.8.1"/>
-	   <property name="smack.javadoc"
-		   value="http://www.jivesoftware.org/builds/smack/docs/latest/javadoc"/>
-	   <property name="xerces.javadoc"
-		   value="http://xerces.apache.org/xerces-j/apiDocs"/>
+     <!-- These values should be set by jMade -->
+     <property name="java.javadoc"
+       value="http://java.sun.com/j2se/1.5.0/docs/api"/>
+     <property name="j2ee.javadoc"
+       value="http://java.sun.com/j2ee/1.4/docs/api"/>
+     <property name="jaxb.javadoc"
+       value="http://java.sun.com/webservices/docs/1.4/api"/>
+     <property name="xmlunit.javadoc"
+       value="http://xmlunit.sourceforge.net/doc"/>
+     <property name="junit.javadoc"
+       value="http://www.junit.org/junit/javadoc/3.8.1"/>
+     <property name="smack.javadoc"
+       value="http://www.jivesoftware.org/builds/smack/docs/latest/javadoc"/>
+     <property name="xerces.javadoc"
+       value="http://xerces.apache.org/xerces-j/apiDocs"/>
 
       <mkdir dir="${build.dir}/doc/api"/>
       <javadoc
@@ -965,33 +966,33 @@
          additionalparam="-quiet -J-Xmx256m"
          breakiterator="true"
          source="1.4">
-		  <tag name="ejb.create-method"/>
-		  <tag name="ejb.bean"/>
-		  <tag name="ejb.interface"/>
-		  <tag name="ejb.interface-method"/>
-		  <tag name="ejb.ejb-external-ref"/>
-		  <tag name="ejb.ejb-ref"/>
-		  <tag name="ejb.finder"/>
-		  <tag name="ejb.permission"/>
-		  <tag name="ejb.persistence"/>
-		  <tag name="ejb.persistent-field"/>
-		  <tag name="ejb.pk-field"/>
-		  <tag name="ejb.resource-ref"/>
-		  <tag name="ejb.security-roles"/>
-		  <tag name="ejb.transaction"/>
-		  <tag name="fdims.admintool.sampleOutput"/>
-		  <tag name="web.servlet"/>
-		  <tag name="web.servlet-mapping"/>
-		  <tag name="weblogic.cache"/>
-		  <tag name="weblogic.data-source-name"/>
-		  <tag name="weblogic.delay-database-insert-until"/>
-		  <tag name="weblogic.enable-call-by-reference"/>
-		  <tag name="weblogic.persistence"/>
-		  <tag name="weblogic.resource-description"/>
-		  <tag name="fdims.admintool.example"/>
+          <tag name="ejb.create-method"/>
+          <tag name="ejb.bean"/>
+          <tag name="ejb.interface"/>
+          <tag name="ejb.interface-method"/>
+          <tag name="ejb.ejb-external-ref"/>
+          <tag name="ejb.ejb-ref"/>
+          <tag name="ejb.finder"/>
+          <tag name="ejb.permission"/>
+          <tag name="ejb.persistence"/>
+          <tag name="ejb.persistent-field"/>
+          <tag name="ejb.pk-field"/>
+          <tag name="ejb.resource-ref"/>
+          <tag name="ejb.security-roles"/>
+          <tag name="ejb.transaction"/>
+          <tag name="fdims.admintool.sampleOutput"/>
+          <tag name="web.servlet"/>
+          <tag name="web.servlet-mapping"/>
+          <tag name="weblogic.cache"/>
+          <tag name="weblogic.data-source-name"/>
+          <tag name="weblogic.delay-database-insert-until"/>
+          <tag name="weblogic.enable-call-by-reference"/>
+          <tag name="weblogic.persistence"/>
+          <tag name="weblogic.resource-description"/>
+          <tag name="fdims.admintool.example"/>
 
          <!-- taglet name="org.jcoderz.phoenix.javadoc.JcoderzTaglet"
-			 path="${build.dir}/classes"/ -->
+             path="${build.dir}/classes"/ -->
          <sourcepath>
             <pathelement path="${base.dir}/src/java"/>
             <pathelement path="${base.dir}/test/java"/>
@@ -1009,7 +1010,7 @@
          <link href="${jaxb.javadoc}"/>
          <link href="${junit.javadoc}"/>
          <link href="${xmlunit.javadoc}"/>
-		 <link href="http://java.sun.com/j2se/1.5.0/docs/guide/javadoc/doclet/spec"/>
+         <link href="http://java.sun.com/j2se/1.5.0/docs/guide/javadoc/doclet/spec"/>
          <link href="${smack.javadoc}"/>
          <link href="${xerces.javadoc}"/>
       </javadoc>

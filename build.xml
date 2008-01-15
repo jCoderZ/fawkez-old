@@ -121,6 +121,7 @@
 | CLASSPATH=${java.class.path}
 | BOOTCLASSPATH=${sun.boot.class.path}
 | CWD=${user.dir}
+| PATH=${env.PATH}
 +-----------------------------------------------------------------+
 </echo>
         <property name="dump-info-done" value="true"/>

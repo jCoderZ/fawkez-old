@@ -252,5 +252,27 @@
        </xsl:otherwise>
      </xsl:choose>
    </xsl:variable>
+   
+   <xsl:variable name="strResponseTimes">
+     <xsl:choose>
+       <xsl:when test="$lang='de'">
+          <xsl:text>Antwortzeiten</xsl:text>
+       </xsl:when>
+       <xsl:otherwise>
+          <xsl:text>Response Times</xsl:text>
+       </xsl:otherwise>
+     </xsl:choose>
+   </xsl:variable>
+   
+   <xsl:variable name="strFrequencyOfUse">
+     <xsl:choose>
+       <xsl:when test="$lang='de'">
+          <xsl:text>Häufigkeit</xsl:text>
+       </xsl:when>
+       <xsl:otherwise>
+          <xsl:text>Frequency Of Use</xsl:text>
+       </xsl:otherwise>
+     </xsl:choose>
+   </xsl:variable>
 
 </xsl:stylesheet>

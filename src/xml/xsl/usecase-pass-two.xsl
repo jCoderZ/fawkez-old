@@ -365,7 +365,9 @@
              </para>
       </section>
 
-      <xsl:apply-templates select="uc:trigger"/>
+      <xsl:apply-templates select="uc:trigger[not(normalize-space(.) = '')]"/>
+      <xsl:apply-templates select="uc:response_times[not(normalize-space(.) = '')]"/>
+      <xsl:apply-templates select="uc:frequency_of_use[not(normalize-space(.) = '')]"/>
 
          <para role="Body">
          </para>
@@ -440,6 +442,20 @@
    <xsl:template match="uc:trigger">
       <section>
           <title><xsl:value-of select="$strTrigger"/></title>
+          <xsl:value-of select="."/>
+       </section>
+   </xsl:template>
+   
+   <xsl:template match="uc:response_time">
+      <section>
+          <title><xsl:value-of select="$strResponseTimes"/></title>
+          <xsl:value-of select="."/>
+       </section>
+   </xsl:template>
+   
+   <xsl:template match="uc:frequency_of_use">
+      <section>
+          <title><xsl:value-of select="$strFrequencyOfUse"/></title>
           <xsl:value-of select="."/>
        </section>
    </xsl:template>

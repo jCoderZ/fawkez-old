@@ -145,14 +145,18 @@
         <xsl:if test="//uc:open_issue or //req:open_issue">
            <appendix id="Open Issues">
              <title><xsl:value-of select="$strOpenIssues"/></title>
-             <section>
-                <title>Issues for Use Cases</title>
-                <xsl:apply-templates select="//uc:usecases" mode="issue_list"/>
-             </section>
-             <section>
-                <title><xsl:value-of select="$strIssuesForRequirements"/></title>
-                <xsl:apply-templates select="//req:requirement" mode="issue_list"/>
-             </section>
+             <xsl:if test="//uc:open_issue">
+                <section>
+                   <title>Issues for Use Cases</title>
+                   <xsl:apply-templates select="//uc:usecases" mode="issue_list"/>
+                </section>
+             </xsl:if>
+             <xsl:if test="//req:open_issue">
+                <section>
+                   <title><xsl:value-of select="$strIssuesForRequirements"/></title>
+                   <xsl:apply-templates select="//req:requirement" mode="issue_list"/>
+                </section>
+             </xsl:if>
            </appendix>
         </xsl:if>
 
@@ -170,20 +174,29 @@
            </appendix>
         </xsl:if>
 
-        <glossary>
-           <glossdiv>
-              <title><xsl:value-of select="$strEntities"/></title>
-              <xsl:apply-templates select="//req:entity" mode="glossary">
-                 <xsl:sort data-type="text" select="req:name" order="ascending" />
-              </xsl:apply-templates>
-           </glossdiv>
-           <glossdiv>
-              <title>Roles</title>
-              <xsl:apply-templates select="//req:role" mode="glossary">
-                 <xsl:sort data-type="text" select="req:name" order="ascending" />
-              </xsl:apply-templates>
-           </glossdiv>
-        </glossary>
+        <!-- if no element is available for the glossary, don't show glossary at all -->
+        <xsl:if test="//req:entity or //req:role">
+           <glossary>
+              <!-- if no entity is available for the glossary -->
+              <xsl:if test="//req:entity">
+                 <glossdiv>
+                    <title><xsl:value-of select="$strEntities"/></title>
+                    <xsl:apply-templates select="//req:entity" mode="glossary">
+                       <xsl:sort data-type="text" select="req:name" order="ascending" />
+                    </xsl:apply-templates>
+                 </glossdiv>
+              </xsl:if>
+              <!-- if no role is available for the glossary -->
+              <xsl:if test="//req:role">
+                 <glossdiv>
+                    <title>Roles</title>
+                    <xsl:apply-templates select="//req:role" mode="glossary">
+                       <xsl:sort data-type="text" select="req:name" order="ascending" />
+                    </xsl:apply-templates>
+                 </glossdiv>
+              </xsl:if>
+           </glossary>
+        </xsl:if>
         <index></index>
 
        </book>

@@ -366,7 +366,7 @@
       </section>
 
       <xsl:apply-templates select="uc:trigger[not(normalize-space(.) = '')]"/>
-      <xsl:apply-templates select="uc:response_times[not(normalize-space(.) = '')]"/>
+      <xsl:apply-templates select="uc:response_time[not(normalize-space(.) = '')]"/>
       <xsl:apply-templates select="uc:frequency_of_use[not(normalize-space(.) = '')]"/>
 
          <para role="Body">

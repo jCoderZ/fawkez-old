@@ -107,16 +107,18 @@
                   </tgroup>
                </informaltable>
              </section>
-             <section id="all_secondary_actors">
-               <title><xsl:value-of select="$strSecondaryActors"/></title>
-               <informaltable>
-                  <tgroup cols="2">
-                    <tbody>
-                       <xsl:call-template name="uc:list_secondary_actors"/>
-                    </tbody>
-                  </tgroup>
-               </informaltable>
-             </section>
+             <xsl:if test="//uc:secondary">
+                <section id="all_secondary_actors">
+                  <title><xsl:value-of select="$strSecondaryActors"/></title>
+                  <informaltable>
+                     <tgroup cols="2">
+                       <tbody>
+                          <xsl:call-template name="uc:list_secondary_actors"/>
+                       </tbody>
+                     </tgroup>
+                  </informaltable>
+                </section>
+             </xsl:if>
            </appendix>
         </xsl:if>
 

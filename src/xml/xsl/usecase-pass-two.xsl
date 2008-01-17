@@ -5,7 +5,7 @@
                 xmlns:req="req"
                 xmlns:xi="http://www.w3.org/2003/XInclude"
                 xmlns:db="http://docbook.org/ns/docbook"
-                exclude-result-prefixes="xsl xi db"
+                exclude-result-prefixes="xsl xi db uc req xsi"
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                 xsi:schemaLocation="req
                                 http://www.jcoderz.org/xsd/xdoc/requirements-SNAPSHOT.xsd
@@ -460,14 +460,14 @@
           <xsl:value-of select="."/>
        </section>
    </xsl:template>
-   
+
    <xsl:template match="uc:response_time">
       <section>
           <title><xsl:value-of select="$strResponseTimes"/></title>
           <xsl:value-of select="."/>
        </section>
    </xsl:template>
-   
+
    <xsl:template match="uc:frequency_of_use">
       <section>
           <title><xsl:value-of select="$strFrequencyOfUse"/></title>

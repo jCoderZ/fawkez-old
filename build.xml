@@ -114,6 +114,7 @@
 | - Version ${version} -
 |                                                                 |
 | JAVA_HOME=${env.JAVA_HOME}
+| ANT_HOME=${env.ANT_HOME}
 | ${java.vm.vendor}/${java.vm.version}
 | ${ant.version}
 | ${os.name}/${os.arch}/${os.version}

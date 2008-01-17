@@ -109,6 +109,10 @@
                   <tgroup cols="2">
                     <tbody>
                        <xsl:call-template name="uc:list_primary_actors"/>
+                       <row>
+                          <entry></entry>
+                          <entry></entry>
+                       </row>
                     </tbody>
                   </tgroup>
                </informaltable>
@@ -120,6 +124,11 @@
                      <tgroup cols="2">
                        <tbody>
                           <xsl:call-template name="uc:list_secondary_actors"/>
+                         <row>
+                             <entry></entry>
+                             <entry></entry>
+                             <entry></entry>
+                         </row>
                        </tbody>
                      </tgroup>
                   </informaltable>
@@ -139,14 +148,19 @@
            <appendix id="Use Case Revisions">
              <title><xsl:value-of select="$strUseCaseRevision"/></title>
              <informaltable>
-                  <tgroup cols="3">
-                    <colspec colwidth="2.5cm"/>
-                         <colspec colwidth="3cm"/>
-                    <tbody>
-                            <xsl:apply-templates select="//uc:usecase" mode="revision_list"/>
-                    </tbody>
-                  </tgroup>
-               </informaltable>
+                <tgroup cols="3">
+                   <colspec colwidth="2.5cm"/>
+                   <colspec colwidth="3cm"/>
+                   <tbody>
+                      <xsl:apply-templates select="//uc:usecase" mode="revision_list"/>
+                      <row>
+                          <entry></entry>
+                          <entry></entry>
+                          <entry></entry>
+                      </row>
+                   </tbody>
+                 </tgroup>
+              </informaltable>
            </appendix>
         </xsl:if>
 
@@ -176,6 +190,10 @@
                    <colspec colwidth="2.5cm"/>
                    <tbody>
                       <xsl:apply-templates select="//uc:usecase" mode="priority_list"/>
+                      <row>
+                          <entry></entry>
+                          <entry></entry>
+                      </row>
                     </tbody>
                 </tgroup>
              </informaltable>
@@ -456,28 +474,36 @@
    <xsl:template match="uc:scope">
      <section>
          <title><xsl:value-of select="$strScope"/></title>
-         <xsl:value-of select="."/>
+         <para>
+           <xsl:value-of select="."/>
+         </para>
       </section>
    </xsl:template>
 
    <xsl:template match="uc:trigger">
       <section>
-          <title><xsl:value-of select="$strTrigger"/></title>
-          <xsl:value-of select="."/>
+         <title><xsl:value-of select="$strTrigger"/></title>
+         <para>
+           <xsl:value-of select="."/>
+         </para>
        </section>
    </xsl:template>
 
    <xsl:template match="uc:response_time">
       <section>
-          <title><xsl:value-of select="$strResponseTimes"/></title>
-          <xsl:value-of select="."/>
+         <title><xsl:value-of select="$strResponseTimes"/></title>
+         <para>
+           <xsl:value-of select="."/>
+         </para>
        </section>
    </xsl:template>
 
    <xsl:template match="uc:frequency_of_use">
       <section>
-          <title><xsl:value-of select="$strFrequencyOfUse"/></title>
-          <xsl:value-of select="."/>
+         <title><xsl:value-of select="$strFrequencyOfUse"/></title>
+         <para>
+           <xsl:value-of select="."/>
+         </para>
        </section>
    </xsl:template>
 

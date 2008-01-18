@@ -117,6 +117,7 @@
 | ANT_HOME=${env.ANT_HOME}
 | ${java.vm.vendor}/${java.vm.version}
 | ${ant.version}
+| ${xerces.version}
 | ${os.name}/${os.arch}/${os.version}
 | file.encoding=${file.encoding}  language=${user.language}  build.debug=${build.debug}
 | CLASSPATH=${java.class.path}
@@ -139,6 +140,8 @@
                 <pathelement path="system.classpath"/>
             </classpath>
         </available>
+        <java classname="org.apache.xerces.impl.Version"
+          outputproperty="xerces.version"/>
         <property name="check_for_optional_packages-done" value="true"/>
     </target>
 

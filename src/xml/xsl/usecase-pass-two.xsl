@@ -521,27 +521,35 @@
 
    <xsl:template name="uc:actor_list">
      <xsl:param name="actor_type" select="'Primary'"/>
-         <xsl:variable name="actor_name" select="uc:name"/>
-         <itemizedlist>
-         <indexterm>
-            <primary>Actor</primary>
-            <secondary><xsl:value-of select="$actor_type"/></secondary>
-            <tertiary><xsl:value-of select="uc:name"/></tertiary>
-          </indexterm>
-            <listitem><para><xsl:choose>
+     <xsl:variable name="actor_name" select="uc:name"/>
+     <itemizedlist>
+        <indexterm>
+           <primary>Actor</primary>
+           <secondary><xsl:value-of select="$actor_type"/></secondary>
+           <tertiary><xsl:value-of select="uc:name"/></tertiary>
+        </indexterm>
+        <listitem>
+           <para>
+              <xsl:choose>
                   <xsl:when test="//req:role[req:name = $actor_name]"><xsl:value-of select="$actor_type"/>: <xsl:text> [</xsl:text><xref linkend="{//req:role[req:name = $actor_name]/../req:key}"/><xsl:text>]</xsl:text></xsl:when>
                   <xsl:otherwise><xsl:value-of select="$actor_type"/>: no role for actor <xsl:value-of select="$actor_name"/></xsl:otherwise>
-                  </xsl:choose>
-                <itemizedlist>
-                   <xsl:for-each select="uc:channel">
-                 <indexterm>
-                      <primary>Channel</primary>
-                      <secondary><xsl:value-of select="."/></secondary>
-                    </indexterm>
-                      <listitem><para>Channel: <xsl:value-of select="."/></para></listitem>
-                   </xsl:for-each>
-               </itemizedlist></para></listitem>
-         </itemizedlist>
+              </xsl:choose>
+              <xsl:if test="uc:channel">
+                 <itemizedlist>
+                    <xsl:for-each select="uc:channel">
+                       <indexterm>
+                          <primary>Channel</primary>
+                          <secondary><xsl:value-of select="."/></secondary>
+                       </indexterm>
+                       <listitem>
+                          <para>Channel: <xsl:value-of select="."/></para>
+                       </listitem>
+                    </xsl:for-each>
+                 </itemizedlist>
+              </xsl:if>
+            </para>
+         </listitem>
+      </itemizedlist>
    </xsl:template>
 
    <xsl:template name="uc:guarantees">
@@ -559,9 +567,14 @@
    </xsl:template>
 
    <xsl:template match="uc:success|uc:extension">
-         <itemizedlist numeration="arabic">
-         <xsl:apply-templates select="uc:step"/>
-         </itemizedlist>
+      <xsl:choose>
+         <xsl:when test="uc:step">
+            <itemizedlist numeration="arabic">
+            <xsl:apply-templates select="uc:step"/>
+            </itemizedlist>
+         </xsl:when>
+         <xsl:otherwise><para></para></xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
 
    <xsl:template match="uc:step">

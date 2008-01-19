@@ -110,8 +110,8 @@
         <dependency org="apache" name="oro" rev="2.0.8"/>
         <dependency org="apache" name="velocity" rev="1.4" />
         <dependency org="org.apache.xmlgraphics" name="fop" rev="0.94" />
-        <dependency org="org.apache.apache" name="xalan" rev="2.7.0" />
-        <dependency org="org.apache.apache" name="xerces" rev="2.9.1" >
+        <dependency org="org.apache" name="xalan" rev="2.7.0" />
+        <dependency org="apache" name="xerces" rev="2.9.1" >
             <!-- artifact name="xercesImpl" type="jar"/-->
         </dependency>
         <dependency org="apache" name="avalon-framework" rev="4.1.5">

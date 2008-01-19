@@ -44,11 +44,13 @@
     <!-- =================================================================== -->
     <path id="default.classpath">
       <path location="${base.dir}/lib/eclipse/tools.jar"/>
+      <!-- This is 2.9.0 -->
+      <path location="${base.dir}/lib/default/xerces/xercesImpl.jar"/>
       <fileset dir="${base.dir}/lib">
         <include name="default/**/*.jar"/>
         <!-- causing conflicts w/ the xerces jar from Ant
              using the junitreport task -->
-        <exclude name="default/**/xercesImpl*.jar"/>
+        <!-- exclude name="default/**/xercesImpl*.jar"/-->
         <!-- special BCEL version -->
         <exclude name="default/findbugs/bcel*.jar"/>
       </fileset>
@@ -117,7 +119,7 @@
 | ANT_HOME=${env.ANT_HOME}
 | ${java.vm.vendor}/${java.vm.version}
 | ${ant.version}
-| ${xerces.version}
+| CP: ${xerces.version}  ANT: ${xerces.version.ant}
 | ${os.name}/${os.arch}/${os.version}
 | file.encoding=${file.encoding}  language=${user.language}  build.debug=${build.debug}
 | CLASSPATH=${java.class.path}
@@ -141,6 +143,9 @@
             </classpath>
         </available>
         <java classname="org.apache.xerces.impl.Version"
+          outputproperty="xerces.version.ant"/>
+        <java classname="org.apache.xerces.impl.Version"
+          classpathref="default.classpath"
           outputproperty="xerces.version"/>
         <property name="check_for_optional_packages-done" value="true"/>
     </target>

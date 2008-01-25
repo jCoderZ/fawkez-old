@@ -14,11 +14,7 @@
       <filesystem name="libraries-revision">
         <artifact pattern="${base.dir}/lib/[module]/[artifact]-[revision].[ext]" />
       </filesystem>
-      <ibiblio name="ibiblio-maven2"
-                m2compatible="true"/>
-      <ibiblio name="ibiblio-org"/>
-      <ibiblio name="ibiblio-special"
-                  pattern="[module]/[type]s/[artifact].[ext]"/>
+      <ibiblio name="ibiblio-maven2" m2compatible="true"/>
     </chain>
   </resolvers>
 </ivyconf>

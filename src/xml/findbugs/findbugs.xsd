@@ -136,6 +136,7 @@
    <xsd:attribute name='abbrev' use='required' type='xsd:string'/>
    <!-- TODO: category might be an enum type: CORRECTNESS, PERFORMANCE, I18N, MT_CORRECTNESS, MALICIOUS_CODE, STYLE -->
    <xsd:attribute name='category' use='required' type='xsd:string'/>
+   <xsd:attribute name="cweid" type="xsd:positiveInteger" use="optional"/>
   </xsd:complexType>
  </xsd:element>
 
@@ -148,6 +149,7 @@
    </xsd:sequence>   
    <!-- TODO: abbrev might be an enum type: FS, ... -->
    <xsd:attribute name='abbrev' use='required' type='xsd:string'/>
+   <xsd:attribute name='cweid' use='optional' type='xsd:positiveInteger'/>
   </xsd:complexType>
  </xsd:element>
 
@@ -271,6 +273,7 @@
     <xsd:element name='SrcDir' type='xsd:string' maxOccurs='unbounded'/>
    </xsd:sequence>
    <xsd:attribute name='filename' type='xsd:string' use='optional'/>
+   <xsd:attribute name="projectName" type="xsd:string" use="optional" />
   </xsd:complexType>
  </xsd:element>
 
@@ -320,6 +323,7 @@
    <xsd:attribute name="cpu_seconds" type="xsd:float" use="optional" />
    <xsd:attribute name="clock_seconds" type="xsd:float" use="optional" />
    <xsd:attribute name="peak_mbytes" type="xsd:float" use="optional" />
+   <xsd:attribute name="alloc_mbytes" type="xsd:float" use="optional" />
    <xsd:attribute name="gc_seconds" type="xsd:float" use="optional" />
    <xsd:attribute name='priority_1' use='optional' type='xsd:int'/>
    <xsd:attribute name='priority_2' use='optional' type='xsd:int'/>

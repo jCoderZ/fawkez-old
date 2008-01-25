@@ -98,7 +98,7 @@
                 projectbase="${base.dir}"
                 tempfolder="${base.dir}/build/jcreport"
                 maxheap="128"
-                debug="true">
+                debug="false">
          <classpath refid="jcreport.classpath"/>
          <reports>   
             <report name="fawkez-test"

@@ -1055,7 +1055,7 @@ public class JcReportAntTask
       public NestedFindbugsElement (JcReportAntTask task)
       {
          mTask = task;
-         mCommandline.setClassname("edu.umd.cs.findbugs.FindBugs");
+         mCommandline.setClassname("edu.umd.cs.findbugs.FindBugs2");
       }
 
 
@@ -1114,8 +1114,7 @@ public class JcReportAntTask
        */
       public Path createPluginlist ()
       {
-         mPluginList 
-             = mCommandline.createClasspath(mTask.getProject()).createPath();
+         mPluginList = new Path(mTask.getProject());
          return mPluginList;
       }
 
@@ -1127,8 +1126,7 @@ public class JcReportAntTask
        */
       public Path createAuxclasspath ()
       {
-         mAuxPath = mCommandline.createClasspath(
-                 mTask.getProject()).createPath();
+         mAuxPath = new Path(mTask.getProject());
          return mAuxPath;
       }
 

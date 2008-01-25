@@ -239,10 +239,7 @@
         <!-- xmlns:ivy="antlib:fr.jayasoft.ivy.ant" -->
         <typedef resource="fr/jayasoft/ivy/ant/antlib.xml">
             <classpath>
-                <pathelement location="${base.dir}/lib/ivy/ivy-1.4.1.jar"/>
-                <pathelement location="${base.dir}/lib/ivy/commons-httpclient-3.0.1.jar"/>
-                <pathelement location="${base.dir}/lib/ivy/commons-logging.jar"/>
-                <pathelement location="${base.dir}/lib/ivy/commons-codec-1.3.jar"/>
+                <pathelement location="${base.dir}/lib/ivy/ivy-2.0.0-beta1.jar"/>
             </classpath>
         </typedef>
         <configure file="${base.dir}/config/ivyconf.xml" />

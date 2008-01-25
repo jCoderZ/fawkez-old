@@ -48,7 +48,7 @@
         <dependency org="xerces" name="xercesImpl" rev="2.8.1" />
         <dependency org="org.apache.ant" name="ant" rev="1.7.0" />
         <dependency org="log4j" name="log4j" rev="1.2.14" />
-        <dependency org="org.apache.velocity" name="velocity" rev="1.5" />
+        <dependency org="velocity" name="velocity" rev="1.4" />
         <dependency org="commons-logging" name="commons-logging" rev="1.1.1" />
         <dependency org="commons-collections" name="commons-collections" rev="2.1.1" />
         <dependency org="commons-pool" name="commons-pool" rev="1.4" />
@@ -59,9 +59,22 @@
         <dependency org="oro" name="oro" rev="2.0.8"/>
         <dependency org="junit" name="junit" rev="3.8.2"/>
         <dependency org="xmlunit" name="xmlunit" rev="1.1"/>
-        <dependency org="xdoclet" name="xdoclet" rev="1.2.3"/>
-        <dependency org="xjavadoc" name="xjavadoc" rev="1.1"/>
 
+
+        <dependency org="XDoclet Team" name="xdoclet" rev="1.2.2">
+            <artifact name="xdoclet" type="jar"/>
+            <artifact name="xdoclet-web-module" type="jar"/>
+            <artifact name="xdoclet-ejb-module" type="jar"/>
+            <artifact name="xdoclet-bea-module" type="jar"/>
+        </dependency>
+<!-- 
+        <dependency org="xdoclet" name="xdoclet" rev="1.2.3"/>
+        <dependency org="xdoclet" name="xdoclet-ejb-module" rev="1.2.3"/>
+        <dependency org="xdoclet" name="xdoclet-bea-module" rev="1.2.3"/>
+        <dependency org="xdoclet" name="xdoclet-web-module" rev="1.2.3"/>
+ -->
+
+        <dependency org="xjavadoc" name="xjavadoc" rev="1.1"/>
         <dependency org="geronimo-spec" name="geronimo-spec-j2ee" rev="1.4-rc4"/>
         <dependency org="geronimo-spec" name="geronimo-spec-j2ee-connector" rev="1.5-rc4"/>
         <dependency org="geronimo-spec" name="geronimo-spec-jms" rev="1.1-rc4"/>

@@ -50,6 +50,7 @@
             <include name="default/antlr/*.jar"/>
             <include name="default/checkstyle/*.jar"/>
             <include name="default/commons-beanutils/*.jar"/>
+            <include name="default/commons-beanutils-core/*.jar"/>
             <include name="default/commons-cli/*.jar"/>
             <include name="default/commons-logging/*.jar"/>
          </fileset>
@@ -58,7 +59,7 @@
       <path id="pmd.classpath">
          <fileset dir="${base.dir}/lib">
             <include name="default/pmd/*.jar"/>
-            <include name="default/asm/*.jar"/>
+            <include name="default/asm*/*.jar"/>
             <include name="default/backport-util-concurrent/*.jar"/>
             <include name="default/jaxen/*.jar"/>
             <include name="default/oro/*.jar"/>
@@ -68,8 +69,7 @@
       <path id="findbugs.classpath">
          <fileset dir="${base.dir}/lib">
             <include name="default/findbugs/*.jar"/>
-            <include name="default/asm/*.jar"/>
-            <include name="default/dom4j/*.jar"/>
+            <include name="default/asm*/*.jar"/>
             <include name="default/jaxen/*.jar"/>
             <exclude name="**/coreplugin.jar"/>
             <exclude name="**/fb-contrib.jar"/>
@@ -84,26 +84,7 @@
          <path location="${base.dir}/build/classes"/>
          <path location="${env.JAVA_HOME}/lib/tools.jar"/>
          <fileset dir="${base.dir}/lib">
-            <include name="default/chart2d/*.jar"/>
-            <include name="default/jaxb/*.jar"/>
-            <include name="default/log4j/*.jar"/>
-            <include name="default/commons-beanutils/*.jar"/>
-            <include name="default/commons-httpclient/*.jar"/>
-            <include name="default/commons-cli/*.jar"/>
-            <include name="default/commons-pool/*.jar"/>
-            <include name="default/checkstyle/*.jar"/>
-            <include name="default/fop/*.jar"/>
-            <include name="default/jtidy/*.jar"/>
-            <include name="default/batik-1.5-fop/*.jar"/>
-            <include name="default/velocity/*.jar"/>
-            <include name="default/jivesoftware/*.jar"/>
-            <include name="default/geronimo-spec/*.jar"/>
-            <include name="default/cobertura/*.jar"/>
-            <include name="default/ant/*.jar"/>
-            <include name="default/antlr/*.jar"/>
-            <include name="default/xercesImpl/*.jar"/>
-            <include name="default/xalan/*.jar"/>
-            <include name="default/luntbuild/*.jar"/>
+            <include name="default/**/*.jar"/>
          </fileset>
       </path>
 
@@ -117,7 +98,7 @@
                 projectbase="${base.dir}"
                 tempfolder="${base.dir}/build/jcreport"
                 maxheap="128"
-                debug="false">
+                debug="true">
          <classpath refid="jcreport.classpath"/>
          <reports>   
             <report name="fawkez-test"

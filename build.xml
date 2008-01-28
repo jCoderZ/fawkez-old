@@ -135,7 +135,8 @@
         <available property="junit.present"
                    classname="junit.framework.TestCase">
             <classpath>
-                <pathelement path="system.classpath"/>
+                <pathelement path="${java.class.path}"/>
+                <path refid="default.classpath"/>
             </classpath>
         </available>
         <java classname="org.apache.xerces.impl.Version"

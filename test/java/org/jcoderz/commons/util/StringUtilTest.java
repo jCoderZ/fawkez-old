@@ -233,4 +233,16 @@ public class StringUtilTest
       assertTrue("Modified string should contain only zeros, but was "
             + paddedString, paddedString.matches("[0]{" + MAX_LENGTH + "}"));
    }
+
+   /**
+    * Tests the method {@link StringUtil#contains(String, String)}.
+    */
+   public void testContains ()
+   {
+      assertTrue("'aaa' is contained in 'bbbaaaa'.",
+              StringUtil.contains("aaa", "bbbbaaaa"));
+      assertFalse("'ccc' is not contained in 'bbbaaaa'.",
+          StringUtil.contains("ccc", "bbbbaaaa"));
+   }
+
 }

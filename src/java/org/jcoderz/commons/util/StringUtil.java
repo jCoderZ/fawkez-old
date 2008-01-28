@@ -341,4 +341,22 @@ public final class StringUtil
       }
       return result;
    }
+
+   /**
+    * Returns true if the first argument string
+    * contains the second argument string, and otherwise returns false.
+    * This is no regular expression matching!
+    *
+    * @param str the string to test.
+    * @param subString the substring to look for in <code>str</code>.
+    *
+    * @return true if the first argument string
+    *   contains the second argument string, and otherwise returns false.
+    */
+   public static boolean contains (String str, String subString)
+   {
+       Assert.notNull(str, "str");
+       Assert.notNull(subString, "subString");
+       return str.indexOf(subString) >= 0;
+   }
 }

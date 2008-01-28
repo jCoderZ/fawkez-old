@@ -51,7 +51,6 @@ import javax.xml.transform.stream.StreamSource;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Task;
-import org.apache.tools.ant.types.LogLevel;
 import org.jcoderz.commons.util.StringUtil;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -72,7 +71,7 @@ public abstract class XsltBasedTask
    private static final String XML_PARSER_CONFIG_WITH_XINCLUDE
          = "org.apache.xerces.parsers.XIncludeParserConfiguration";
 
-   /** The fawkeZ VERSION file */
+   /** The fawkeZ VERSION file. */
    private static final String FAWKEZ_VERSION_FILE
          = "/org/jcoderz/commons/VERSION";
 
@@ -283,12 +282,13 @@ public abstract class XsltBasedTask
        {
 
            log("Found " + xercesVersion + " on classpath.",
-               LogLevel.WARN.getLevel());
-           log("This Version only supports the outdated 2003 namespace for XInclude ",
-               LogLevel.WARN.getLevel());
+               Project.MSG_WARN);
+           log("This Version only supports the outdated 2003 "
+               + "namespace for XInclude ",
+               Project.MSG_WARN);
            log("please put a newer version of xerxes on your classapth or use",
-               LogLevel.WARN.getLevel());
-           log("at least ANT 1.7.0.", LogLevel.WARN.getLevel());
+               Project.MSG_WARN);
+           log("at least ANT 1.7.0.", Project.MSG_WARN);
            // TODO: Add hint how to do this + throw exception?
        }
    }
@@ -405,7 +405,8 @@ void checkAttributeXslFile ()
             }
             catch (FileNotFoundException e)
             {
-                throw new BuildException("Cannot locate stylesheet " + mXslFile);
+                throw new BuildException("Cannot locate stylesheet "
+                    + mXslFile);
             }
         }
         else

@@ -88,7 +88,7 @@ public class ApiDocTask
 
     /**
      * Sets the XML input file that contains the document.
-     * 
+     *
      * @param f the XML input file (log message info).
      */
     public void setIn (File f)
@@ -99,7 +99,7 @@ public class ApiDocTask
     /**
      * Set the destination directory into which the result files should
      * be copied to. This parameter is required.
-     * 
+     *
      * @param dir the name of the destination directory.
      */
     public void setOut (File dir)
@@ -109,7 +109,7 @@ public class ApiDocTask
 
     /**
      * Set whether we should fail on an error.
-     * 
+     *
      * @param b Whether we should fail on an error.
      */
     public void setFailonerror (boolean b)
@@ -119,7 +119,7 @@ public class ApiDocTask
 
     /**
      * Set the source path to be used for this task run.
-     * 
+     *
      * @param src an Ant FileSet object containing the compilation
      *        source path.
      */
@@ -130,7 +130,7 @@ public class ApiDocTask
 
     /**
      * Set the doclet path to be used for this task run.
-     * 
+     *
      * @param path an Ant Path object containing the compilation source
      *        path.
      */
@@ -148,7 +148,7 @@ public class ApiDocTask
 
     /**
      * Execute this task.
-     * 
+     *
      * @throws BuildException An building exception occurred.
      */
     public void execute ()
@@ -208,11 +208,11 @@ public class ApiDocTask
                 if (!tmpFile.delete())
                 {
                     throw new BuildException("Cannot delete file " + tmpFile);
-                }                
+                }
             }
             catch (IOException e)
             {
-                throw new BuildException("Cannot move file " + tmpFile 
+                throw new BuildException("Cannot move file " + tmpFile
                         + " to " + outFile);
             }
         }
@@ -278,7 +278,7 @@ public class ApiDocTask
 
     /**
      * Checks the attributes provided by this class.
-     * 
+     *
      * @throws BuildException
      */
     private void checkAttributes ()
@@ -364,7 +364,7 @@ public class ApiDocTask
         /**
          * Returns the captured characters and <b>clears</b> the
          * internal buffer.
-         * 
+         *
          * @return the captured characters.
          */
         String characters ()
@@ -377,7 +377,7 @@ public class ApiDocTask
 
         /**
          * Returns a list of {@link ApiDocType}.
-         * 
+         *
          * @return a list of {@link ApiDocType}.
          */
         public List apiDocs ()

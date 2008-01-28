@@ -240,9 +240,9 @@ public class StringUtilTest
    public void testContains ()
    {
       assertTrue("'aaa' is contained in 'bbbaaaa'.",
-              StringUtil.contains("aaa", "bbbbaaaa"));
+              StringUtil.contains("bbbbaaaa", "aaa"));
       assertFalse("'ccc' is not contained in 'bbbaaaa'.",
-          StringUtil.contains("ccc", "bbbbaaaa"));
+          StringUtil.contains("bbbbaaaa", "ccc"));
    }
 
 }

@@ -51,6 +51,8 @@ import javax.xml.transform.stream.StreamSource;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Task;
+import org.apache.tools.ant.types.LogLevel;
+import org.jcoderz.commons.util.StringUtil;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
@@ -270,9 +272,28 @@ public abstract class XsltBasedTask
       checkAttributeOutFile();
       checkAttributeDestDir();
       checkAttributeXslFile();
+      checkXercesVersion();
    }
 
-   void checkAttributeXslFile ()
+   void checkXercesVersion ()
+   {
+       final String xercesVersion =
+           org.apache.xerces.impl.Version.getVersion();
+       if (StringUtil.contains(xercesVersion, ("2.6.2")))
+       {
+
+           log("Found " + xercesVersion + " on classpath.",
+               LogLevel.WARN.getLevel());
+           log("This Version only supports the outdated 2003 namespace for XInclude ",
+               LogLevel.WARN.getLevel());
+           log("please put a newer version of xerxes on your classapth or use",
+               LogLevel.WARN.getLevel());
+           log("at least ANT 1.7.0.", LogLevel.WARN.getLevel());
+           // TODO: Add hint how to do this + throw exception?
+       }
+   }
+
+void checkAttributeXslFile ()
    {
       if (mXslFile == null || !new File(mXslFile).exists())
       {
@@ -373,7 +394,7 @@ public abstract class XsltBasedTask
    private InputStream getXslFileAsStream ()
    {
       final InputStream result;
-      final InputStream xslStream 
+      final InputStream xslStream
           = XsltBasedTask.class.getResourceAsStream(mXslFile);
         if (xslStream == null)
         {
@@ -466,6 +487,6 @@ public abstract class XsltBasedTask
             throws TransformerException
     {
         throw arg0;
-    }    
+    }
    }
 }

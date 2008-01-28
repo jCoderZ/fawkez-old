@@ -22,10 +22,10 @@
 	<classpathentry kind="lib" path="lib/default/commons-pool/commons-pool.jar"/>
 	<classpathentry kind="lib" path="lib/default/dom4j/dom4j.jar"/>
 	<classpathentry kind="lib" path="lib/default/fop/fop.jar"/>
-	<classpathentry kind="lib" path="lib/default/geronimo-spec/geronimo-spec-j2ee-1.4.jar"/>
-	<classpathentry kind="lib" path="lib/default/geronimo-spec/geronimo-spec-j2ee-connector-1.5.jar"/>
-	<classpathentry kind="lib" path="lib/default/geronimo-spec/geronimo-spec-jms-1.1.jar"/>
-	<classpathentry kind="lib" path="lib/default/javancss/ccl.jar"/>
+	<classpathentry kind="lib" path="lib/default/geronimo-spec-j2ee/geronimo-spec-j2ee.jar"/>
+	<classpathentry kind="lib" path="lib/default/geronimo-spec-j2ee-connector/geronimo-spec-j2ee-connector.jar"/>
+	<classpathentry kind="lib" path="lib/default/geronimo-spec-jms/geronimo-spec-jms.jar"/>
+	<classpathentry kind="lib" path="lib/default/ccl/ccl.jar"/>
 	<classpathentry kind="lib" path="lib/default/javancss/javancss.jar"/>
 	<classpathentry kind="lib" path="lib/default/jaxb/jaxb-api.jar"/>
 	<classpathentry kind="lib" path="lib/default/jaxb/jaxb-impl.jar"/>
@@ -35,8 +35,8 @@
 	<classpathentry kind="lib" path="lib/default/jaxb/relaxngDatatype.jar"/>
 	<classpathentry kind="lib" path="lib/default/jaxb/xsdlib.jar"/>
 	<classpathentry kind="lib" path="lib/default/jaxen/jaxen.jar"/>
-	<classpathentry kind="lib" path="lib/default/jivesoftware/smack.jar"/>
-	<classpathentry kind="lib" path="lib/default/jivesoftware/smackx.jar"/>
+	<classpathentry kind="lib" path="lib/default/smack/smack.jar"/>
+	<classpathentry kind="lib" path="lib/default/smackx/smackx.jar"/>
 	<classpathentry kind="lib" path="lib/default/jtidy/jtidy.jar"/>
 	<classpathentry kind="lib" path="lib/default/junit/junit.jar"/>
 	<classpathentry kind="lib" path="lib/default/log4j/log4j.jar"/>
@@ -45,7 +45,7 @@
 	<classpathentry kind="lib" path="lib/default/saxpath/saxpath.jar"/>
 	<classpathentry kind="lib" path="lib/default/velocity/velocity.jar"/>
 	<classpathentry kind="lib" path="lib/default/xalan/xalan.jar"/>
-	<classpathentry kind="lib" path="lib/default/xerces/xercesImpl.jar"/>
+	<classpathentry kind="lib" path="lib/default/xercesImpl/xercesImpl.jar"/>
 	<classpathentry kind="lib" path="lib/default/xjavadoc/xjavadoc.jar"/>
 	<classpathentry kind="lib" path="lib/default/xmlunit/xmlunit.jar"/>
 	<classpathentry kind="lib" path="lib/default/findbugs/findbugs.jar"/>

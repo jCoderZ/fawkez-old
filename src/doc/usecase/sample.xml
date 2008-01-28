@@ -2,7 +2,7 @@
 
 <uc:usecases xmlns:uc="uc"
              xmlns:req="req"
-             xmlns:xi="http://www.w3.org/2003/XInclude"
+             xmlns:xi="http://www.w3.org/2001/XInclude"
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
              xsi:schemaLocation="req
                                 http://www.jcoderz.org/xsd/xdoc/requirements-SNAPSHOT.xsd

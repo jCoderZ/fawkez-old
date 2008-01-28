@@ -3,7 +3,7 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
                 xmlns:uc="uc"
                 xmlns:req="req"
-                xmlns:xi="http://www.w3.org/2003/XInclude"
+                xmlns:xi="http://www.w3.org/2001/XInclude"
                 xmlns:db="http://docbook.org/ns/docbook"
                 exclude-result-prefixes="xsl xi db uc req xsi"
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"

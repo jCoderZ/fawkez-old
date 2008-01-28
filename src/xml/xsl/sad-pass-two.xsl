@@ -1,6 +1,6 @@
 <xsl:stylesheet
    xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-   xmlns:xi="http://www.w3.org/2003/XInclude"
+   xmlns:xi="http://www.w3.org/2001/XInclude"
    xmlns:app="http://www.jcoderz.org/app-info-v1.0"
    xmlns:db="urn:docbook"
    exclude-result-prefixes="xsl xi app db"
@@ -41,7 +41,7 @@
 <xsl:template match="diagram">
    <xsl:variable name="f" select="concat('images/', @name)"/>
    <figure>
-      <title><xsl:value-of select="description"/></title>     
+      <title><xsl:value-of select="description"/></title>
       <mediaobject  id="{concat('diagram-', @name)}">
          <imageobject  role="fo">
             <imagedata  format="SVG"  fileref="{concat($f, '.svg')}"/>

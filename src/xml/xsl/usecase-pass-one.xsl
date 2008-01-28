@@ -1,6 +1,6 @@
 <xsl:stylesheet
    xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-   xmlns:xi="http://www.w3.org/2003/XInclude"
+   xmlns:xi="http://www.w3.org/2001/XInclude"
    xmlns:app="http://www.jcoderz.org/app-info-v1.0"
    xmlns:db="urn:docbook"
    xmlns:uc="uc"

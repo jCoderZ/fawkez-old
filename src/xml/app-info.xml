@@ -14,7 +14,7 @@
    <application
       id="1"
       name="FawkeZ"
-      short-name="FWK" 
+      short-name="FWK"
       package="org.jcoderz.commons">
 
       <xi:include href="fwk-rte-info.xml"/>
@@ -34,7 +34,7 @@
          <message
             id="65536"
             name="TEST_MESSAGE"
-            level="INFO">
+            level="java.util.logging.Level.INFO">
             <text>
                This is a test message and should not be used in a
                production environment. The parameter foo is set to

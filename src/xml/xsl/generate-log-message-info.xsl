@@ -819,9 +819,14 @@ public abstract class <xsl:value-of select="$classname"/>
    </xsl:variable>
    <xsl:variable name="token" select="substring-after($type-token, ':')"/>
    <xsl:if test="normalize-space($token)">
+     <xsl:variable name="constant_token">
+        <xsl:call-template name="asJavaConstantName">
+           <xsl:with-param name="value" select="normalize-space($token)"/>
+        </xsl:call-template>
+     </xsl:variable>
       /** The parameter &lt;code&gt;<xsl:value-of select="$token"/>&lt;/code&gt; for the log message text. */
-      public static final String PARAM_<xsl:value-of select="$token"/>
-            = "<xsl:value-of select="$token"/>";
+      public static final String PARAM_<xsl:value-of select="$constant_token"/>
+            = "<xsl:value-of select="$constant_token"/>";
       <xsl:call-template name="inner-clazz-declare-parameters">
          <xsl:with-param name="tokens"
             select="substring-after($tokens, $DEFAULT_STRING_SEPARATOR)"/>
@@ -838,10 +843,15 @@ public abstract class <xsl:value-of select="$classname"/>
    </xsl:variable>
    <xsl:variable name="token" select="substring-after($type-token, ':')"/>
    <xsl:if test="normalize-space($token)">
-                     "<xsl:value-of select="$token"/>" <xsl:if
+     <xsl:variable name="constant_token">
+        <xsl:call-template name="asJavaConstantName">
+           <xsl:with-param name="value" select="normalize-space($token)"/>
+        </xsl:call-template>
+     </xsl:variable>
+                     "<xsl:value-of select="$constant_token"/>" <xsl:if
                test="contains($tokens, $DEFAULT_STRING_SEPARATOR)">
          <xsl:text>,</xsl:text>
-      </xsl:if>  // PARAM_<xsl:value-of select="$token"/>
+      </xsl:if>  // PARAM_<xsl:value-of select="$constant_token"/>
       <xsl:call-template name="inner-clazz-construct-parameter-array">
          <xsl:with-param name="tokens"
             select="substring-after($tokens, $DEFAULT_STRING_SEPARATOR)"/>
@@ -1046,14 +1056,19 @@ public abstract class <xsl:value-of select="$classname"/>
       </xsl:call-template>
    </xsl:variable>
    <xsl:variable name="token" select="substring-after($type-token, ':')"/>
-   <xsl:variable name="display_token">
-      <xsl:call-template name="asJavaParameter">
-         <xsl:with-param name="name" select="$token"/>
-      </xsl:call-template>
-   </xsl:variable>
    <xsl:if test="normalize-space($token)">
+     <xsl:variable name="display_token">
+        <xsl:call-template name="asJavaParameter">
+           <xsl:with-param name="name" select="$token"/>
+        </xsl:call-template>
+     </xsl:variable>
+     <xsl:variable name="constant_token">
+        <xsl:call-template name="asJavaConstantName">
+           <xsl:with-param name="value" select="normalize-space($token)"/>
+        </xsl:call-template>
+     </xsl:variable>
          loggable.addParameter(PARAM_<xsl:value-of
-            select="$token"/>, <xsl:value-of
+            select="$constant_token"/>, <xsl:value-of
             select="$display_token"/>);<xsl:call-template
             name="inner-clazz-construct-parameter-setter">
          <xsl:with-param name="tokens"

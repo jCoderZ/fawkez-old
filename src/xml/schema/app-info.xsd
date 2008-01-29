@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- $Id: log-message-info.xsd,v 1.1 2005/04/01 08:50:12 mgriffel Exp $ -->
+<!-- $Id$ -->
 
 <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
           xmlns="http://www.jcoderz.org/app-info-v1.0"
@@ -26,8 +26,9 @@
 
    <xsd:simpleType name="shortNameType">
       <xsd:restriction base="xsd:string">
-         <xsd:maxLength value="3"/>
-         <xsd:minLength value="3"/>
+         <!--  More relaxd to fullfill customer requirement but prefer 3 -->
+         <xsd:minLength value="1"/>
+         <xsd:maxLength value="16"/>
       </xsd:restriction>
    </xsd:simpleType>
 
@@ -76,9 +77,11 @@
    <xsd:complexType name="messageType">
       <xsd:sequence>
        <xsd:element name="text" type="xsd:string"/>
+       <xsd:element name='description' type="xsd:string" minOccurs="0"/>
        <xsd:element name="solution" type="xsd:string" minOccurs="0"/>
-       <xsd:element name='event' type="eventType"
-            minOccurs="0" maxOccurs='1'/>
+       <xsd:element name='procedure' type="xsd:string" minOccurs="0"/>
+       <xsd:element name='verification' type="xsd:string" minOccurs="0"/>
+       <xsd:element name='event' type="eventType" minOccurs="0"/>
       </xsd:sequence>
       <xsd:attribute name='id' type='xsd:string' use='required'/>
       <xsd:attribute name='name' type='xsd:string' use='required'/>
@@ -87,6 +90,7 @@
       <xsd:attribute name='level' use='required'>
        <xsd:simpleType>
         <xsd:restriction base='xsd:string'>
+        <!--
          <xsd:enumeration value='OFF'/>
          <xsd:enumeration value='SEVERE'/>
          <xsd:enumeration value='WARNING'/>
@@ -95,7 +99,9 @@
          <xsd:enumeration value='FINE'/>
          <xsd:enumeration value='FINER'/>
          <xsd:enumeration value='FINEST'/>
-         <xsd:enumeration value='ALL'/>
+         <xsd:enumeration value='ALL'/>  -->
+         <!--  Need full qualified class for custom level -->
+         <xsd:pattern value='(.*\..*|OFF|SEVERE|WARNING|INFO|CONFIG|FINE|FINER|FINEST|ALL)'/>
         </xsd:restriction>
        </xsd:simpleType>
       </xsd:attribute>

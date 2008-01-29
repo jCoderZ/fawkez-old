@@ -30,7 +30,7 @@
 		<uc:minimal>Merchant is notified, why he cannot enter the self administration.</uc:minimal>
 	</uc:guarantees>
    <uc:success>
-      <uc:step id="1" desc="">System prompts for user and password.</uc:step>
+      <uc:step id="1" desc="Umlaute testen!: äöüßÄÖÜ">System prompts for user and password.</uc:step>
 		<uc:step id="2" desc="">Merchant enters username and password and submits.</uc:step>
       <uc:step id="3" desc="">System checks username. <uc:ref id="UC-14-E2"/></uc:step>
       <uc:step id="4" desc="Description of the step">System checks password. <uc:ref id="UC-14-E3"/></uc:step>
@@ -58,9 +58,9 @@
       $Log: login.xml,v $
       Revision 1.1  2005/09/05 14:02:14  mgriffel
       xdoc: first use case document
-      
+
       Revision 1.1  2005/09/01 13:17:33  dcoppola
       added initial version of additional use cases
-      
+
    </uc:commitlog>
 </uc:usecase>

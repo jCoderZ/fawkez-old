@@ -18,7 +18,7 @@
    <!--  Our default language is english. -->
    <xsl:param name="lang" select="'en'"/>
 
-   <xsl:output method="text" encoding="ISO-8859-1"/>
+   <xsl:output method="text" encoding="UTF-8"/>
 
    <xsl:include href="usecase_i18n.xsl"/>
 

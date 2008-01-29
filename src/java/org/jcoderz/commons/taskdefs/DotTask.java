@@ -121,6 +121,7 @@ public class DotTask
          checkAttributes();
 
          mCommand.setExecutable("dot");
+         mCommand.createArgument().setValue("-Gcharset=UTF-8");
          mCommand.createArgument().setValue("-T" + mFormat);
          mCommand.createArgument().setValue("-o" + mOutFile);
          mCommand.createArgument().setValue(mInFile.getAbsolutePath());

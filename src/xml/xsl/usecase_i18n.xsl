@@ -263,6 +263,17 @@
        </xsl:otherwise>
      </xsl:choose>
    </xsl:variable>
+   
+   <xsl:variable name="strTestAnnotations">
+     <xsl:choose>
+       <xsl:when test="$lang='de'">
+          <xsl:text>Testhinweise / -beispiele</xsl:text>
+       </xsl:when>
+       <xsl:otherwise>
+          <xsl:text>Testing Annotations / Examples</xsl:text>
+       </xsl:otherwise>
+     </xsl:choose>
+   </xsl:variable>
 
    <xsl:variable name="strGuarantees">
      <xsl:choose>

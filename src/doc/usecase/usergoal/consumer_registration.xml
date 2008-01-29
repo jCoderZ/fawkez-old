@@ -115,6 +115,26 @@
 		<uc:step id="3" desc="">Back to registration formular.<uc:ref id="UC-10-12"/>
 		</uc:step>
 	</uc:extension>
+   <uc:test-annotations>This is an example for testing</uc:test-annotations>
+   <uc:test-annotations>
+      <para>
+        Some testing blablub
+      </para>
+   </uc:test-annotations>
+   <uc:test-annotations>
+      <itemizedlist>
+        <listitem>
+           <para>
+           Some testing blablub
+           </para>
+        </listitem>
+        <listitem>
+           <para>
+           Another testing blablub
+           </para>
+        </listitem>
+      </itemizedlist>
+   </uc:test-annotations>
 	<uc:open_issue>After entering a wrong registration code, is it okay to start from entering the MSISDN on or should there be a retry mechanism starting from UC-10-8 or UC-10-10 directly?</uc:open_issue>
 	<uc:open_issue>Should the consumer personal data formular be extracted into another use case?</uc:open_issue>
 	<uc:open_issue>What are the exact checks in <uc:ref id="UC-10-14"/>? Should they be detailed here.</uc:open_issue>

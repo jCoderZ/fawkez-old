@@ -463,6 +463,15 @@
             <title><xsl:value-of select="$strGuarantees"/></title>
             <xsl:call-template name="uc:guarantees" />
          </section>
+         
+         <xsl:if test="uc:test-annotations">
+            <section>
+               <title><xsl:value-of select="$strTestAnnotations"/></title>
+               <itemizedlist numeration="arabic">
+                  <xsl:apply-templates select="uc:test-annotations"/>
+               </itemizedlist>
+            </section>
+         </xsl:if>
 
          <xsl:if test="count(uc:open_issue) > 0">
             <section>
@@ -497,6 +506,14 @@
            </xsl:choose>
          </para>
       </section>
+   </xsl:template>
+   
+   <xsl:template match="uc:test-annotations">
+      <listitem>
+         <para>
+            <xsl:apply-templates/>
+         </para>
+      </listitem>
    </xsl:template>
 
    <xsl:template match="uc:scope">

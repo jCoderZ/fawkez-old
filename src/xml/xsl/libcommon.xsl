@@ -216,11 +216,12 @@
       E-LBX-EXPIRED to e lbx expired
       EL CORTE INGLES to el corte ingles
       Visa Electron to visa electron
+      Visa_Electron to visa electron
   -->
 <xsl:template name="asDisplayName">
    <xsl:param name="name"/>
    <xsl:param name="pos">1</xsl:param>
-   <xsl:variable name="s" select="translate($name, '- ', '  ')"/>
+   <xsl:variable name="s" select="translate($name, '_- ', '   ')"/>
    <xsl:if test="$pos &lt;= string-length($s)">
          <!-- Contains upper case character at position $pos? -->
          <xsl:if test="contains(translate(substring($s, $pos, 1),

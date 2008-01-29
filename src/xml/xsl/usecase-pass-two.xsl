@@ -385,7 +385,12 @@
          <title>
             [<xsl:value-of select="@id"/>] <xsl:value-of select="uc:name"/> <xsl:text> </xsl:text><xsl:value-of select="@change_request"/>
          </title>
-         <xsl:apply-templates select="uc:scope"/>
+         <xsl:if test="uc:priority">
+            <xsl:apply-templates select="uc:priority"/>
+         </xsl:if>
+         <xsl:if test="uc:scope">
+            <xsl:apply-templates select="uc:scope"/>
+         </xsl:if>
 
          <section id="{uc:name}_overview">
           <title><xsl:value-of select="$strOverview"/></title>
@@ -473,6 +478,25 @@
 
    <xsl:template match="uc:stakeholder|uc:precondition|uc:open_issue">
       <listitem><para><xsl:value-of select="."/></para></listitem>
+   </xsl:template>
+   
+   <xsl:template match="uc:priority">
+     <section>
+         <title><xsl:value-of select="$strPriority"/></title>
+         <para>
+           <xsl:choose>
+              <xsl:when test=". = 'High'">
+                 <xsl:value-of select="$strPriorityHigh"/>
+              </xsl:when>
+              <xsl:when test=". = 'Medium'">
+                 <xsl:value-of select="$strPriorityMedium"/>
+              </xsl:when>
+              <xsl:when test=". = 'Low'">
+                 <xsl:value-of select="$strPriorityLow"/>
+              </xsl:when>
+           </xsl:choose>
+         </para>
+      </section>
    </xsl:template>
 
    <xsl:template match="uc:scope">

@@ -142,6 +142,50 @@
        </xsl:otherwise>
      </xsl:choose>
    </xsl:variable>
+   
+   <xsl:variable name="strPriority">
+     <xsl:choose>
+       <xsl:when test="$lang='de'">
+          <xsl:text>Priorität</xsl:text>
+       </xsl:when>
+       <xsl:otherwise>
+          <xsl:text>Priority</xsl:text>
+       </xsl:otherwise>
+     </xsl:choose>
+   </xsl:variable>
+   
+   <xsl:variable name="strPriorityHigh">
+     <xsl:choose>
+       <xsl:when test="$lang='de'">
+          <xsl:text>Hoch</xsl:text>
+       </xsl:when>
+       <xsl:otherwise>
+          <xsl:text>High</xsl:text>
+       </xsl:otherwise>
+     </xsl:choose>
+   </xsl:variable>
+   
+   <xsl:variable name="strPriorityMedium">
+     <xsl:choose>
+       <xsl:when test="$lang='de'">
+          <xsl:text>Mittel</xsl:text>
+       </xsl:when>
+       <xsl:otherwise>
+          <xsl:text>Medium</xsl:text>
+       </xsl:otherwise>
+     </xsl:choose>
+   </xsl:variable>
+   
+   <xsl:variable name="strPriorityLow">
+     <xsl:choose>
+       <xsl:when test="$lang='de'">
+          <xsl:text>Niedrig</xsl:text>
+       </xsl:when>
+       <xsl:otherwise>
+          <xsl:text>Low</xsl:text>
+       </xsl:otherwise>
+     </xsl:choose>
+   </xsl:variable>
 
    <xsl:variable name="strPriorities">
      <xsl:choose>

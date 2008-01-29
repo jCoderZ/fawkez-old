@@ -14,8 +14,7 @@
          <xsd:appinfo>
             <jxb:javaType name="org.jcoderz.phoenix.report.Severity"
                           parseMethod="org.jcoderz.phoenix.report.Severity.fromString"
-                          printMethod="toString">
-            </jxb:javaType>
+                          printMethod="toString"/>
          </xsd:appinfo>
       </xsd:annotation>
       <xsd:restriction base='xsd:string'>
@@ -36,8 +35,7 @@
           <xsd:appinfo>
              <jxb:javaType name="org.jcoderz.phoenix.report.Origin"
               parseMethod="fromString"
-              printMethod="toString">
-             </jxb:javaType>
+              printMethod="toString"/>
           </xsd:appinfo>
        </xsd:annotation>
         <xsd:restriction base='xsd:string'>
@@ -56,8 +54,7 @@
           <xsd:appinfo>
              <jxb:javaType name="org.jcoderz.phoenix.report.ReportLevel"
                            parseMethod="fromString"
-                           printMethod="toString">
-             </jxb:javaType>
+                           printMethod="toString"/>
           </xsd:appinfo>
        </xsd:annotation>
        <xsd:restriction base='xsd:string'>

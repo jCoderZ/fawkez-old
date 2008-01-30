@@ -46,7 +46,7 @@
                 <title>Use Cases</title>
                 <xsl:if test="uc:usecase[@level='Summary' and not(@change_request)]">
                    <section>
-                      <title>Summary Level</title>
+                      <title><xsl:value-of select="$strSummaryLevel"/></title>
                       <xsl:for-each select="//uc:usecase[@level='Summary' and not(@change_request) and generate-id() = generate-id(key('scope-group', uc:scope))]">
                          <xsl:variable name="scope_id" select="uc:scope"/>
                          <section>
@@ -60,7 +60,7 @@
                 </xsl:if>
                 <xsl:if test="uc:usecase[@level='UserGoal' and not(@change_request)]">
                 <section>
-                  <title>User Goal Level</title>
+                  <title><xsl:value-of select="$strUserGoalLevel"/></title>
                   <xsl:for-each select="//uc:usecase[@level='UserGoal' and not(@change_request) and generate-id() = generate-id(key('scope-group', uc:scope))]">
                      <xsl:variable name="scope_id" select="uc:scope"/>
                      <section>
@@ -74,7 +74,7 @@
                 </xsl:if>
                 <xsl:if test="uc:usecase[@level='Component' and not(@change_request)]">
                 <section>
-                  <title>Component Level</title>
+                  <title><xsl:value-of select="$strComponentLevel"/></title>
                   <xsl:for-each select="//uc:usecase[@level='Component' and not(@change_request) and generate-id() = generate-id(key('scope-group', uc:scope))]">
                      <xsl:variable name="scope_id" select="uc:scope"/>
                      <section>
@@ -88,7 +88,7 @@
                 </xsl:if>
                 <xsl:if test="uc:usecase[@change_request]">
                 <section>
-                  <title>Change Requests</title>
+                  <title><xsl:value-of select="$strChangeRequests"/></title>
                   <xsl:apply-templates select="uc:usecase[@change_request]" >
                      <xsl:sort select="@change_request"/>
                   </xsl:apply-templates>
@@ -201,7 +201,7 @@
         </xsl:if>
 
         <!-- if no element is available for the glossary, don't show glossary at all -->
-        <xsl:if test="//req:entity or //req:role">
+        <xsl:if test="//req:entity or //req:role or //req:term">
            <glossary>
               <!-- if no entity is available for the glossary -->
               <xsl:if test="//req:entity">
@@ -215,7 +215,7 @@
               <!-- if no role is available for the glossary -->
               <xsl:if test="//req:role">
                  <glossdiv>
-                    <title>Roles</title>
+                    <title><xsl:value-of select="$strRoles"/></title>
                     <xsl:apply-templates select="//req:role" mode="glossary">
                        <xsl:sort data-type="text" select="req:name" order="ascending" />
                     </xsl:apply-templates>
@@ -463,7 +463,7 @@
             <title><xsl:value-of select="$strGuarantees"/></title>
             <xsl:call-template name="uc:guarantees" />
          </section>
-         
+
          <xsl:if test="uc:test-annotations">
             <section>
                <title><xsl:value-of select="$strTestAnnotations"/></title>
@@ -488,7 +488,7 @@
    <xsl:template match="uc:stakeholder|uc:precondition|uc:open_issue">
       <listitem><para><xsl:value-of select="."/></para></listitem>
    </xsl:template>
-   
+
    <xsl:template match="uc:priority">
      <section>
          <title><xsl:value-of select="$strPriority"/></title>
@@ -507,7 +507,7 @@
          </para>
       </section>
    </xsl:template>
-   
+
    <xsl:template match="uc:test-annotations">
       <listitem>
          <para>
@@ -600,13 +600,13 @@
    <xsl:template name="uc:guarantees">
       <xsl:for-each select="uc:guarantees/uc:success">
          <itemizedlist>
-            <listitem><para>Success: <xsl:value-of select="."/></para></listitem>
+            <listitem><para><xsl:value-of select="$strSuccess"/>: <xsl:value-of select="."/></para></listitem>
          </itemizedlist>
       </xsl:for-each>
 
        <xsl:for-each select="uc:guarantees/uc:minimal">
          <itemizedlist>
-            <listitem><para>Minimal: <xsl:value-of select="."/></para></listitem>
+            <listitem><para><xsl:value-of select="$strMinimal"/>: <xsl:value-of select="."/></para></listitem>
          </itemizedlist>
       </xsl:for-each>
    </xsl:template>
@@ -655,7 +655,7 @@
 
                <title><xsl:value-of select="@project"/></title>
 
-               <subtitle>Specification Document</subtitle>
+               <subtitle><xsl:value-of select="$strSpecificationDocument"/></subtitle>
 
                <!--xsl:apply-templates select="/uc:usecases/bookinfo/*"/-->
                <!-- TODO: revision history from cvs log src/doc/sad/sad.xml -->
@@ -671,7 +671,7 @@
    <xsl:template name="list_referents">
       <xsl:param name="usecase_id"/>
       <xsl:if test="//uc:usecase//uc:ref[(@id = $usecase_id or contains(@id,concat($usecase_id, '-'))) and not(ancestor-or-self::uc:usecase/@id = $usecase_id)]">
-         <para><emphasis role="bold">referencing use cases</emphasis></para>
+         <para><emphasis role="bold"><xsl:value-of select="$strReferencingUseCases"/>:</emphasis></para>
          <xsl:if test="//uc:usecase//uc:ref[(@id = $usecase_id or contains(@id,concat($usecase_id, '-'))) and not(ancestor-or-self::uc:usecase/@id = $usecase_id)]">
             <itemizedlist>
                <xsl:for-each select="//uc:usecase//uc:ref[(@id = $usecase_id or contains(@id,concat($usecase_id, '-'))) and not(ancestor-or-self::uc:usecase/@id = $usecase_id)]">

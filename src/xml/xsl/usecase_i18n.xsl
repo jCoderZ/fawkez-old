@@ -22,6 +22,17 @@
      </xsl:choose>
    </xsl:variable>
 
+   <xsl:variable name="strRoles">
+     <xsl:choose>
+       <xsl:when test="$lang='de'">
+          <xsl:text>Rollen</xsl:text>
+       </xsl:when>
+       <xsl:otherwise>
+          <xsl:text>Roles</xsl:text>
+       </xsl:otherwise>
+     </xsl:choose>
+   </xsl:variable>
+
    <xsl:variable name="strDomainModel">
      <xsl:choose>
        <xsl:when test="$lang='de'">
@@ -142,7 +153,7 @@
        </xsl:otherwise>
      </xsl:choose>
    </xsl:variable>
-   
+
    <xsl:variable name="strPriority">
      <xsl:choose>
        <xsl:when test="$lang='de'">
@@ -153,7 +164,7 @@
        </xsl:otherwise>
      </xsl:choose>
    </xsl:variable>
-   
+
    <xsl:variable name="strPriorityHigh">
      <xsl:choose>
        <xsl:when test="$lang='de'">
@@ -164,7 +175,7 @@
        </xsl:otherwise>
      </xsl:choose>
    </xsl:variable>
-   
+
    <xsl:variable name="strPriorityMedium">
      <xsl:choose>
        <xsl:when test="$lang='de'">
@@ -175,7 +186,7 @@
        </xsl:otherwise>
      </xsl:choose>
    </xsl:variable>
-   
+
    <xsl:variable name="strPriorityLow">
      <xsl:choose>
        <xsl:when test="$lang='de'">
@@ -263,7 +274,7 @@
        </xsl:otherwise>
      </xsl:choose>
    </xsl:variable>
-   
+
    <xsl:variable name="strTestAnnotations">
      <xsl:choose>
        <xsl:when test="$lang='de'">
@@ -307,7 +318,7 @@
        </xsl:otherwise>
      </xsl:choose>
    </xsl:variable>
-   
+
    <xsl:variable name="strResponseTimes">
      <xsl:choose>
        <xsl:when test="$lang='de'">
@@ -318,7 +329,7 @@
        </xsl:otherwise>
      </xsl:choose>
    </xsl:variable>
-   
+
    <xsl:variable name="strFrequencyOfUse">
      <xsl:choose>
        <xsl:when test="$lang='de'">
@@ -326,6 +337,94 @@
        </xsl:when>
        <xsl:otherwise>
           <xsl:text>Frequency Of Use</xsl:text>
+       </xsl:otherwise>
+     </xsl:choose>
+   </xsl:variable>
+
+   <xsl:variable name="strSpecificationDocument">
+     <xsl:choose>
+       <xsl:when test="$lang='de'">
+          <xsl:text>Spezifikationsdokument</xsl:text>
+       </xsl:when>
+       <xsl:otherwise>
+          <xsl:text>Specification Document</xsl:text>
+       </xsl:otherwise>
+     </xsl:choose>
+   </xsl:variable>
+
+   <xsl:variable name="strReferencingUseCases">
+     <xsl:choose>
+       <xsl:when test="$lang='de'">
+          <xsl:text>Aufrufende Anwendungsfälle</xsl:text>
+       </xsl:when>
+       <xsl:otherwise>
+          <xsl:text>Referencing use cases</xsl:text>
+       </xsl:otherwise>
+     </xsl:choose>
+   </xsl:variable>
+
+   <xsl:variable name="strMinimal">
+     <xsl:choose>
+       <xsl:when test="$lang='de'">
+          <xsl:text>Minimal</xsl:text>
+       </xsl:when>
+       <xsl:otherwise>
+          <xsl:text>Minimal</xsl:text>
+       </xsl:otherwise>
+     </xsl:choose>
+   </xsl:variable>
+
+   <xsl:variable name="strUseCases">
+     <xsl:choose>
+       <xsl:when test="$lang='de'">
+          <xsl:text>Anwendungsfälle</xsl:text>
+       </xsl:when>
+       <xsl:otherwise>
+          <xsl:text>Use Cases</xsl:text>
+       </xsl:otherwise>
+     </xsl:choose>
+   </xsl:variable>
+
+   <xsl:variable name="strSummaryLevel">
+     <xsl:choose>
+       <xsl:when test="$lang='de'">
+          <xsl:text>Übersicht</xsl:text>
+       </xsl:when>
+       <xsl:otherwise>
+          <xsl:text>Summary Level</xsl:text>
+       </xsl:otherwise>
+     </xsl:choose>
+   </xsl:variable>
+
+   <xsl:variable name="strUserGoalLevel">
+     <xsl:choose>
+       <xsl:when test="$lang='de'">
+          <xsl:text>Anwendersicht</xsl:text>
+       </xsl:when>
+       <xsl:otherwise>
+          <xsl:text>User Goal Level</xsl:text>
+       </xsl:otherwise>
+     </xsl:choose>
+   </xsl:variable>
+
+   <xsl:variable name="strComponentLevel">
+     <xsl:choose>
+       <xsl:when test="$lang='de'">
+          <xsl:text>Komponenten</xsl:text>
+       </xsl:when>
+       <xsl:otherwise>
+          <xsl:text>Component Level</xsl:text>
+       </xsl:otherwise>
+     </xsl:choose>
+   </xsl:variable>
+
+   <xsl:variable name="strChangeRequests">
+     <xsl:choose>
+       <xsl:when test="$lang='de'">
+          <xsl:text>Change Requests</xsl:text>
+       </xsl:when>
+       <xsl:otherwise>
+          <xsl:text>Change Requests</xsl:text>
        </xsl:otherwise>
      </xsl:choose>
    </xsl:variable>

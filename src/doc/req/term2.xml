@@ -1,0 +1,20 @@
+<req:requirement xmlns:req="req"
+                 xmlns:db="http://docbook.org/ns/docbook"
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xsi:schemaLocation="req
+                                     http://www.jcoderz.org/xsd/xdoc/requirements-SNAPSHOT.xsd">
+  <req:title>Lampukistan</req:title>
+  <req:category>
+     <req:primary>Terms</req:primary>
+  </req:category>
+  <req:key>T-99001</req:key>
+  <req:summary>Lampukistan</req:summary>
+  <req:priority>High</req:priority>
+  <req:description>Lampukistan is a country famous for several uprisings in the Zepettel region.
+  It's major city is Porada Ninfu.
+  </req:description>
+  <req:term>
+     <req:name>Lampukistan</req:name>
+  </req:term>
+  <req:version>$Revision: 1.4 $</req:version>
+</req:requirement>

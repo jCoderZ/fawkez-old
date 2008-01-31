@@ -43,7 +43,7 @@
 
           <xsl:if test="//uc:usecase">
              <chapter id="usecases">
-                <title>Use Cases</title>
+                <title><xsl:value-of select="$strUseCases"/></title>
                 <xsl:if test="uc:usecase[@level='Summary' and not(@change_request)]">
                    <section>
                       <title><xsl:value-of select="$strSummaryLevel"/></title>
@@ -203,6 +203,15 @@
         <!-- if no element is available for the glossary, don't show glossary at all -->
         <xsl:if test="//req:entity or //req:role or //req:term">
            <glossary>
+              <!-- if no term is available for the glossary -->
+              <xsl:if test="//req:term">
+                 <glossdiv>
+                    <title><xsl:value-of select="$strTerms"/></title>
+                    <xsl:apply-templates select="//req:term" mode="glossary">
+                       <xsl:sort data-type="text" select="req:name" order="ascending" />
+                    </xsl:apply-templates>
+                 </glossdiv>
+              </xsl:if>
               <!-- if no entity is available for the glossary -->
               <xsl:if test="//req:entity">
                  <glossdiv>
@@ -226,6 +235,23 @@
         <index></index>
 
        </book>
+    </xsl:template>
+
+    <xsl:template match="req:term" mode="glossary">
+       <glossentry id="glossary_{../req:key}">
+          <glossterm><xsl:value-of select="req:name"/></glossterm>
+          <acronym><xsl:value-of select="req:acronym"/></acronym>
+          <glossdef>
+             <xsl:if test="req:acronym">
+               <para>
+                 <xsl:value-of select="$strAcronym"/><xsl:text>: </xsl:text>
+                 <acronym><emphasis role="bold"><xsl:value-of select="req:acronym"/></emphasis></acronym>
+               </para>
+             </xsl:if>
+             <para><xsl:value-of select="../req:description"/></para>
+             <glossseealso otherterm="{../req:key}"><xsl:value-of select="../req:key"/></glossseealso>
+          </glossdef>
+       </glossentry>
     </xsl:template>
 
     <xsl:template match="req:entity" mode="glossary">

@@ -245,7 +245,7 @@
    <xsl:variable name="strStakeholder">
      <xsl:choose>
        <xsl:when test="$lang='de'">
-          <xsl:text>Interessenvertreter</xsl:text>
+          <xsl:text>Beteiligte</xsl:text>
        </xsl:when>
        <xsl:otherwise>
           <xsl:text>Stakeholder</xsl:text>
@@ -385,6 +385,17 @@
      </xsl:choose>
    </xsl:variable>
 
+   <xsl:variable name="strIssuesForUseCases">
+     <xsl:choose>
+       <xsl:when test="$lang='de'">
+          <xsl:text>Offene Anwendungsfall-Probleme</xsl:text>
+       </xsl:when>
+       <xsl:otherwise>
+          <xsl:text>Issues for Use Cases</xsl:text>
+       </xsl:otherwise>
+     </xsl:choose>
+   </xsl:variable>
+
    <xsl:variable name="strSummaryLevel">
      <xsl:choose>
        <xsl:when test="$lang='de'">
@@ -425,6 +436,28 @@
        </xsl:when>
        <xsl:otherwise>
           <xsl:text>Change Requests</xsl:text>
+       </xsl:otherwise>
+     </xsl:choose>
+   </xsl:variable>
+
+   <xsl:variable name="strTerms">
+     <xsl:choose>
+       <xsl:when test="$lang='de'">
+          <xsl:text>Begriffe</xsl:text>
+       </xsl:when>
+       <xsl:otherwise>
+          <xsl:text>Terms</xsl:text>
+       </xsl:otherwise>
+     </xsl:choose>
+   </xsl:variable>
+
+   <xsl:variable name="strAcronym">
+     <xsl:choose>
+       <xsl:when test="$lang='de'">
+          <xsl:text>Akronym</xsl:text>
+       </xsl:when>
+       <xsl:otherwise>
+          <xsl:text>Acronym</xsl:text>
        </xsl:otherwise>
      </xsl:choose>
    </xsl:variable>

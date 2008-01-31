@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:docbook="http://docbook.org/ns/docbook" xmlns:req="req" targetNamespace="req">
-   <xsd:import schemaLocation="http://www.docbook.org/xsd/4.2/docbook.xsd"/>
+   <xsd:import schemaLocation="http://www.docbook.org/xsd/4.5/docbook.xsd"/>
 
    <xsd:simpleType name="requirementPriority">
       <xsd:restriction base="xsd:string">
          <xsd:pattern value="High|Medium|Low"/>
       </xsd:restriction>
    </xsd:simpleType>
-   
+
    <xsd:element name="ref">
       <xsd:complexType>
          <xsd:attribute name="id" type="xsd:string" use="required"/>
@@ -26,7 +26,8 @@
    <xsd:element name="primary" type="xsd:string"/>
    <xsd:element name="secondary" type="xsd:string"/>
    <xsd:element name="tertiary" type="xsd:string"/>
-   
+   <xsd:element name="acronym" type="xsd:string"/>
+
 
    <xsd:group name="content">
       <xsd:sequence>
@@ -41,7 +42,7 @@
            <xsd:any minOccurs="0" maxOccurs="unbounded"/>
       </xsd:sequence>
    </xsd:group>
-   
+
 
    <!-- entities and attributes for the data model -->
    <xsd:element name="name">
@@ -50,7 +51,7 @@
          <xsd:attribute name="issue" type="xsd:string"/>
       </xsd:complexType>
    </xsd:element>
-      
+
    <xsd:element name="alternative_name">
       <xsd:complexType>
          <xsd:sequence>
@@ -59,7 +60,7 @@
          <xsd:attribute name="issue" type="xsd:string"/>
       </xsd:complexType>
    </xsd:element>
-   
+
    <xsd:element name="objectreference">
       <xsd:complexType>
          <xsd:sequence>
@@ -70,7 +71,7 @@
          <xsd:attribute name="issue" type="xsd:string"/>
       </xsd:complexType>
    </xsd:element>
-   
+
    <xsd:element name="attribute">
       <xsd:complexType>
          <xsd:sequence>
@@ -80,6 +81,17 @@
             <xsd:element ref="req:objectreference" minOccurs="0" maxOccurs="1"/>
             <xsd:element ref="req:constraints" minOccurs="0" maxOccurs="1"/>
             <xsd:element ref="req:description" minOccurs="0" maxOccurs="1"/>
+         </xsd:sequence>
+         <xsd:attribute name="issue" type="xsd:string"/>
+      </xsd:complexType>
+   </xsd:element>
+
+   <xsd:element name="term">
+      <xsd:complexType>
+         <xsd:sequence>
+            <xsd:element ref="req:name" minOccurs="1" maxOccurs="1"/>
+            <xsd:element ref="req:alternative_name" minOccurs="0" maxOccurs="1"/>
+            <xsd:element ref="req:acronym" minOccurs="0" maxOccurs="1"/>
          </xsd:sequence>
          <xsd:attribute name="issue" type="xsd:string"/>
       </xsd:complexType>
@@ -96,7 +108,7 @@
          <xsd:attribute name="issue" type="xsd:string"/>
       </xsd:complexType>
    </xsd:element>
-   
+
    <xsd:element name="category">
       <xsd:complexType>
          <xsd:sequence>
@@ -117,7 +129,7 @@
          <xsd:attribute name="issue" type="xsd:string"/>
       </xsd:complexType>
    </xsd:element>
-      
+
    <xsd:element name="superior">
       <xsd:complexType>
          <xsd:sequence>
@@ -125,8 +137,8 @@
          </xsd:sequence>
          <xsd:attribute name="issue" type="xsd:string"/>
       </xsd:complexType>
-   </xsd:element>   
-      
+   </xsd:element>
+
    <xsd:element name="role">
       <xsd:complexType>
          <xsd:sequence>
@@ -149,6 +161,7 @@
             <xsd:element ref="req:summary" minOccurs="1" maxOccurs="1"/>
             <xsd:element ref="req:priority" minOccurs="1" maxOccurs="1"/>
             <xsd:element ref="req:description" minOccurs="1" maxOccurs="1"/>
+            <xsd:element ref="req:term" minOccurs="0" maxOccurs="1"/>
             <xsd:element ref="req:entity" minOccurs="0" maxOccurs="1"/>
             <xsd:element ref="req:role" minOccurs="0" maxOccurs="1"/>
             <xsd:element ref="req:version" minOccurs="1" maxOccurs="1"/>

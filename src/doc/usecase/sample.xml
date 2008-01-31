@@ -8,7 +8,7 @@
                                 http://www.jcoderz.org/xsd/xdoc/requirements-SNAPSHOT.xsd
                                 uc
                                 http://www.jcoderz.org/xsd/xdoc/usecase-SNAPSHOT.xsd">
-   <uc:info project="Sample" version="0.1" lang="en" issue="issue1243"/>
+   <uc:info project="Sample" version="0.1" lang="de" issue="issue1243"/>
    <bookinfo>
       <title>Sample Requirements Specification</title>
       <!-- injected into the docbook bookinfo element -->
@@ -73,6 +73,10 @@
    <!-- requirements -->
    <xi:include href="../req/DUM-1.xml" parse="xml"/>
    <xi:include href="../req/product.xml" parse="xml"/>
+
+   <!-- terms -->
+   <xi:include href="../req/term1.xml" parse="xml"/>
+   <xi:include href="../req/term2.xml" parse="xml"/>
 
    <!-- entities -->
    <xi:include href="../req/entity1.xml" parse="xml"/>

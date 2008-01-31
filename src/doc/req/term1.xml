@@ -1,0 +1,23 @@
+<req:requirement xmlns:req="req"
+                 xmlns:db="http://docbook.org/ns/docbook"
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xsi:schemaLocation="req
+                                     http://www.jcoderz.org/xsd/xdoc/requirements-SNAPSHOT.xsd">
+  <req:title>Porada Ninfu</req:title>
+  <req:category>
+     <req:primary>Terms</req:primary>
+  </req:category>
+  <req:key>T-99000</req:key>
+  <req:summary>Porada Ninfu</req:summary>
+  <req:priority>High</req:priority>
+  <req:description>Porada Ninfu is the major city of Lampukistan.
+  </req:description>
+  <req:term>
+     <req:name>Porada Ninfu</req:name>
+     <req:alternative_name>
+        <req:name lang="de">Porada Ninfu</req:name>
+     </req:alternative_name>
+     <req:acronym>PN</req:acronym>
+  </req:term>
+  <req:version>$Revision: 1.4 $</req:version>
+</req:requirement>

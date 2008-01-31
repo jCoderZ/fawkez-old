@@ -77,14 +77,14 @@ extends TestCase
         getCauseDetectionTestHelper(ServletException.class, "getRootCause");
         getCauseDetectionTestHelper(UnavailableException.class, "getRootCause");
         getCauseDetectionTestHelper(
-                javax.resource.spi.UnavailableException.class, 
+                javax.resource.spi.UnavailableException.class,
                 "getLinkedException");
-        getCauseDetectionTestHelper(JaxenException.class, "getCause");
+        getCauseDetectionTestHelper(JaxenException.class, "getRootCause");
     }
 
     private void getCauseDetectionTestHelper (Class ex, String methodName)
     {
-        final Method m 
+        final Method m
         = ThrowableUtil.findGetCauseMethod(ex.getMethods());
         assertNotNull("Could not get getCause method for " + ex.getName(), m);
         assertEquals("Differen method expected for getCause in " + ex.getName(),

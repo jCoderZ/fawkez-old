@@ -34,7 +34,6 @@
    <xsd:element name="channel" type="xsd:string"/>
    <xsd:element name="version" type="xsd:string"/>
    <xsd:element name="name" type="xsd:string"/>
-   <xsd:element name="goal" type="xsd:string"/>
    <xsd:element name="scope" type="xsd:string"/>
    <xsd:element name="trigger" type="xsd:string"/>
    <xsd:element name="priority" type="uc:useCasePriority"/>
@@ -131,6 +130,24 @@
         <xsd:attribute name="issue" type="xsd:string"/>
       </xsd:complexType>
    </xsd:element>
+   
+   <xsd:element name="goal">
+      <xsd:complexType mixed="true">
+         <xsd:sequence> 
+            <xsd:group ref="uc:content"/>
+          </xsd:sequence>
+          <xsd:attribute name="issue" type="xsd:string"/>
+       </xsd:complexType>
+   </xsd:element>
+   
+   <xsd:element name="description">
+      <xsd:complexType mixed="true">
+         <xsd:sequence> 
+            <xsd:group ref="uc:content"/>
+          </xsd:sequence>
+          <xsd:attribute name="issue" type="xsd:string"/>
+       </xsd:complexType>
+   </xsd:element>
 
    <xsd:element name="extension">   
       <xsd:complexType>
@@ -172,6 +189,7 @@
             <xsd:element ref="uc:version" minOccurs="1" maxOccurs="1"/>
             <xsd:element ref="uc:name" minOccurs="1" maxOccurs="1"/>
             <xsd:element ref="uc:goal" minOccurs="1" maxOccurs="1"/>
+            <xsd:element ref="uc:description" minOccurs="0" maxOccurs="1"/>
             <xsd:element ref="uc:scope" minOccurs="1" maxOccurs="1"/>
             <xsd:element ref="uc:trigger" minOccurs="1" maxOccurs="1"/>
             <xsd:element ref="uc:priority" minOccurs="1" maxOccurs="1"/>

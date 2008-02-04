@@ -420,19 +420,28 @@
 
          <section id="{uc:name}_overview">
           <title><xsl:value-of select="$strOverview"/></title>
-          <para><xsl:value-of select="uc:goal"/></para>
+          <para>
+             <xsl:apply-templates select="uc:goal"/>
+          </para>
+          <xsl:if test="uc:description">
+             <para>
+                <xsl:apply-templates select="uc:description"/>
+             </para>
+          </xsl:if>
           <para>
 
              <xsl:variable name="f" select="concat('images/', @id)"/>
-             <mediaobject  id="{concat('diagram-', uc:name)}">
-                <imageobject  role="fo">
-                   <imagedata  format="SVG"  fileref="{concat($f, '.svg')}"/>
-                </imageobject>
-                <imageobject  role="html">
-                   <imagedata  format="PNG"  fileref="{concat($f, '.png')}"/>
-                </imageobject>
-             </mediaobject>
-             </para>
+             <figure pgwide="1">
+                <mediaobject  id="{concat('diagram-', uc:name)}">
+                   <imageobject  role="fo">
+                      <imagedata  format="SVG"  fileref="{concat($f, '.svg')}"/>
+                   </imageobject>
+                   <imageobject  role="html">
+                      <imagedata  format="PNG"  fileref="{concat($f, '.png')}"/>
+                   </imageobject>
+                </mediaobject>
+             </figure>
+          </para>
       </section>
 
       <xsl:apply-templates select="uc:trigger[not(normalize-space(.) = '')]"/>
@@ -540,6 +549,14 @@
             <xsl:apply-templates/>
          </para>
       </listitem>
+   </xsl:template>
+   
+   <xsl:template match="uc:goal">
+      <xsl:apply-templates/>
+   </xsl:template>
+   
+   <xsl:template match="uc:description">
+      <xsl:apply-templates/>
    </xsl:template>
 
    <xsl:template match="uc:scope">

@@ -6,7 +6,18 @@
             id="UC-10" level="UserGoal">
 	<uc:version>$Revision: 1.5 $</uc:version>
 	<uc:name>Consumer Registration</uc:name>
-	<uc:goal>Consumer has been registered to the m-Wallet.</uc:goal>
+	<uc:goal>Consumer has been registered to the <emphasis role="bold">m-Wallet</emphasis>.</uc:goal>
+   <uc:description>
+      Consumer has been registered to the m-Wallet.
+      <itemizedlist>
+         <listitem>
+            <para>foo</para>
+         </listitem>
+         <listitem>
+            <para>bar</para>
+         </listitem>
+      </itemizedlist>
+   </uc:description>
 	<uc:scope>m-Wallet</uc:scope>
 	<uc:trigger/>
 	<uc:priority>High</uc:priority>

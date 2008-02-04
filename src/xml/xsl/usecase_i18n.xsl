@@ -230,6 +230,17 @@
        </xsl:otherwise>
      </xsl:choose>
    </xsl:variable>
+   
+   <xsl:variable name="strDescription">
+     <xsl:choose>
+       <xsl:when test="$lang='de'">
+          <xsl:text>Beschreibung</xsl:text>
+       </xsl:when>
+       <xsl:otherwise>
+          <xsl:text>Description</xsl:text>
+       </xsl:otherwise>
+     </xsl:choose>
+   </xsl:variable>
 
    <xsl:variable name="strPreconditions">
      <xsl:choose>

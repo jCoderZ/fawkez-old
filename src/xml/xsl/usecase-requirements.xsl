@@ -189,12 +189,12 @@
       <colspec colwidth='4in'/>
       <tbody>
         <xsl:if test="req:priority">
-           <row><entry><emphasis role="bold">Priority:</emphasis></entry><entry><xsl:value-of select="req:priority"/></entry></row>
+           <row><entry><emphasis role="bold"><xsl:value-of select="$strPriority"/>:</emphasis></entry><entry><xsl:value-of select="req:priority"/></entry></row>
         </xsl:if>
         <xsl:if test="req:status">
-           <row><entry><emphasis role="bold">Status:</emphasis></entry><entry><xsl:value-of select="req:status"/></entry></row>
+           <row><entry><emphasis role="bold"><xsl:value-of select="$strStatus"/>:</emphasis></entry><entry><xsl:value-of select="req:status"/></entry></row>
         </xsl:if>
-        <row><entry><emphasis role="bold">Release Version:</emphasis></entry><entry><xsl:value-of select="req:version"/></entry></row>
+        <row><entry><emphasis role="bold"><xsl:value-of select="$strReleaseVersion"/>:</emphasis></entry><entry><xsl:value-of select="req:version"/></entry></row>
       </tbody>
       </tgroup>
       </informaltable>
@@ -202,7 +202,7 @@
     <xsl:variable name="r" select="req:key"/>
     <xsl:if test="//uc:usecase//uc:ref[@id = $r]">
        <para>
-          This requirement is referenced by following use cases:
+          <xsl:value-of select="$strThisRequirementIsReferencedByTheFollowingUseCases"/>:
           <itemizedlist>
              <xsl:apply-templates select="//uc:usecase[descendant-or-self::uc:ref[@id = $r]]" mode="ref_to_req"/>
           </itemizedlist>
@@ -214,7 +214,7 @@
     <xsl:if test="req:open_issue">
        <para>
           <itemizedlist>
-             <title>Open Issues</title>
+             <title><xsl:value-of select="$strOpenIssues"/></title>
              <xsl:apply-templates select="req:open_issue"/>
           </itemizedlist>
        </para>
@@ -228,7 +228,7 @@
 
    <xsl:template match="req:entity">
       <table frame="all">
-         <title>entity summary</title>
+         <title><xsl:value-of select="$strEntitySummary"/></title>
          <tgroup cols='5' align='left' colsep='1' rowsep='1'>
             <colspec colname="c1"/>
             <colspec colname="c2"/>
@@ -260,19 +260,19 @@
                </row>
                <row>
                   <entry>
-                     <emphasis role="bold">Attribute</emphasis>
+                     <emphasis role="bold"><xsl:value-of select="$strAttribute"/></emphasis>
                   </entry>
                   <entry>
-                     <emphasis role="bold">Reference To</emphasis>
+                     <emphasis role="bold"><xsl:value-of select="$strReferenceTo"/></emphasis>
                   </entry>
                   <entry>
-                     <emphasis role="bold">Relation</emphasis>
+                     <emphasis role="bold"><xsl:value-of select="$strRelation"/></emphasis>
                   </entry>
                   <entry>
-                     <emphasis role="bold">Constraints</emphasis>
+                     <emphasis role="bold"><xsl:value-of select="$strConstraints"/></emphasis>
                   </entry>
                   <entry>
-                     <emphasis role="bold">Pattern</emphasis>
+                     <emphasis role="bold"><xsl:value-of select="$strPattern"/></emphasis>
                   </entry>
                </row>
                <xsl:for-each select="req:attribute">
@@ -334,7 +334,7 @@
           </imageobject>
           <caption>
              <para>
-                Domain Model diagram for entity <xsl:value-of select="../req:key"/><xsl:text> </xsl:text><xsl:value-of select="req:name"/>.
+                <xsl:value-of select="$strDomainModelDiagramForEntity"/><xsl:value-of select="../req:key"/><xsl:text> </xsl:text><xsl:value-of select="req:name"/>.
              </para>
           </caption>
        </mediaobject>
@@ -400,7 +400,7 @@
 
    <xsl:template match="req:role">
       <table frame="all">
-         <title>role summary</title>
+         <title><xsl:value-of select="$strRoleSummary"/></title>
          <tgroup cols='5' align='left' colsep='1' rowsep='1'>
             <colspec colname="c1"/>
             <colspec colname="c2"/>
@@ -418,7 +418,7 @@
                <xsl:if test="req:alternative_name/req:name">
                   <row>
                      <entry>
-                        <emphasis role="bold">Alias</emphasis>
+                        <emphasis role="bold"><xsl:value-of select="$strAlias"/></emphasis>
                      </entry>
                      <entry spanname="hspan">
                         <xsl:apply-templates select="req:alternative_name"/>
@@ -428,7 +428,7 @@
                <xsl:if test="req:superior">
                   <row>
                      <entry>
-                        <emphasis role="bold">Superior</emphasis>
+                        <emphasis role="bold"><xsl:value-of select="$strSuperior"/></emphasis>
                      </entry>
                      <entry spanname="hspan">
                         <xsl:apply-templates select="req:superior"/>
@@ -439,7 +439,7 @@
                   <xsl:variable name="sup_key" select="../req:key"/>
                   <row>
                      <entry>
-                        <emphasis role="bold">Subordinates</emphasis>
+                        <emphasis role="bold"><xsl:value-of select="$strSubordinates"/></emphasis>
                      </entry>
                      <entry spanname="hspan">
                         <xsl:apply-templates select="//req:superior[req:ref/@id = $sup_key]"
@@ -449,7 +449,7 @@
                </xsl:if>
                <row>
                   <entry>
-                     <emphasis role="bold">Acting use cases (directly)</emphasis>
+                     <emphasis role="bold"><xsl:value-of select="$strActingUseCasesDirectly"/></emphasis>
                   </entry>
                   <entry spanname="hspan">
                      <xsl:variable name="role_name" select="req:name"/>
@@ -460,7 +460,7 @@
                </row>
                <row>
                   <entry>
-                     <emphasis role="bold">Acting use cases (indirectly)</emphasis>
+                     <emphasis role="bold"><xsl:value-of select="$strActingUseCasesIndirectly"/></emphasis>
                   </entry>
                   <entry spanname="hspan">
                      <xsl:variable name="role_name" select="req:name"/>
@@ -483,7 +483,7 @@
           </imageobject>
           <caption>
              <para>
-                Role diagram for role <xsl:value-of select="../req:key"/><xsl:text> </xsl:text><xsl:value-of select="req:name"/>.
+                <xsl:value-of select="$strRoleDiagramForRole"/><xsl:value-of select="../req:key"/><xsl:text> </xsl:text><xsl:value-of select="req:name"/>.
              </para>
           </caption>
        </mediaobject>

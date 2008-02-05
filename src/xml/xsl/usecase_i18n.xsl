@@ -230,7 +230,7 @@
        </xsl:otherwise>
      </xsl:choose>
    </xsl:variable>
-   
+
    <xsl:variable name="strDescription">
      <xsl:choose>
        <xsl:when test="$lang='de'">
@@ -472,5 +472,193 @@
        </xsl:otherwise>
      </xsl:choose>
    </xsl:variable>
+
+   <xsl:variable name="strRoleSummary">
+     <xsl:choose>
+       <xsl:when test="$lang='de'">
+          <xsl:text>Rollenübersicht</xsl:text>
+       </xsl:when>
+       <xsl:otherwise>
+          <xsl:text>Role Summary</xsl:text>
+       </xsl:otherwise>
+     </xsl:choose>
+   </xsl:variable>
+
+   <xsl:variable name="strAlias">
+     <xsl:choose>
+       <xsl:when test="$lang='de'">
+          <xsl:text>Alias</xsl:text>
+       </xsl:when>
+       <xsl:otherwise>
+          <xsl:text>Alias</xsl:text>
+       </xsl:otherwise>
+     </xsl:choose>
+   </xsl:variable>
+
+   <xsl:variable name="strSuperior">
+     <xsl:choose>
+       <xsl:when test="$lang='de'">
+          <xsl:text>Vorgesetzter</xsl:text>
+       </xsl:when>
+       <xsl:otherwise>
+          <xsl:text>Superior</xsl:text>
+       </xsl:otherwise>
+     </xsl:choose>
+   </xsl:variable>
+
+   <xsl:variable name="strSubordinates">
+     <xsl:choose>
+       <xsl:when test="$lang='de'">
+          <xsl:text>Untergebene</xsl:text>
+       </xsl:when>
+       <xsl:otherwise>
+          <xsl:text>Subordinates</xsl:text>
+       </xsl:otherwise>
+     </xsl:choose>
+   </xsl:variable>
+
+   <xsl:variable name="strActingUseCasesDirectly">
+     <xsl:choose>
+       <xsl:when test="$lang='de'">
+          <xsl:text>Anwendungsfälle mit direkter Beteiligung</xsl:text>
+       </xsl:when>
+       <xsl:otherwise>
+          <xsl:text>Acting use cases (directly)</xsl:text>
+       </xsl:otherwise>
+     </xsl:choose>
+   </xsl:variable>
+
+   <xsl:variable name="strActingUseCasesIndirectly">
+     <xsl:choose>
+       <xsl:when test="$lang='de'">
+          <xsl:text>Akronym</xsl:text>
+       </xsl:when>
+       <xsl:otherwise>
+          <xsl:text>Anwendungsfälle mit indirekter Beteiligung</xsl:text>
+       </xsl:otherwise>
+     </xsl:choose>
+   </xsl:variable>
+
+   <xsl:variable name="strStatus">
+     <xsl:choose>
+       <xsl:when test="$lang='de'">
+          <xsl:text>Status</xsl:text>
+       </xsl:when>
+       <xsl:otherwise>
+          <xsl:text>Status</xsl:text>
+       </xsl:otherwise>
+     </xsl:choose>
+   </xsl:variable>
+
+   <xsl:variable name="strReleaseVersion">
+     <xsl:choose>
+       <xsl:when test="$lang='de'">
+          <xsl:text>Freigabeversion</xsl:text>
+       </xsl:when>
+       <xsl:otherwise>
+          <xsl:text>Release Version</xsl:text>
+       </xsl:otherwise>
+     </xsl:choose>
+   </xsl:variable>
+
+   <xsl:variable name="strThisRequirementIsReferencedByTheFollowingUseCases">
+     <xsl:choose>
+       <xsl:when test="$lang='de'">
+          <xsl:text>Diese Anforderung wird in folgenden Anwendungsfällen referenziert</xsl:text>
+       </xsl:when>
+       <xsl:otherwise>
+          <xsl:text>This requirement is referenced by the following use cases</xsl:text>
+       </xsl:otherwise>
+     </xsl:choose>
+   </xsl:variable>
+
+   <xsl:variable name="strEntitySummary">
+     <xsl:choose>
+       <xsl:when test="$lang='de'">
+          <xsl:text>Entitäten-Übersicht</xsl:text>
+       </xsl:when>
+       <xsl:otherwise>
+          <xsl:text>Entity Summary</xsl:text>
+       </xsl:otherwise>
+     </xsl:choose>
+   </xsl:variable>
+
+   <xsl:variable name="strAttribute">
+     <xsl:choose>
+       <xsl:when test="$lang='de'">
+          <xsl:text>Attribut</xsl:text>
+       </xsl:when>
+       <xsl:otherwise>
+          <xsl:text>Attribute</xsl:text>
+       </xsl:otherwise>
+     </xsl:choose>
+   </xsl:variable>
+
+   <xsl:variable name="strReferenceTo">
+     <xsl:choose>
+       <xsl:when test="$lang='de'">
+          <xsl:text>Referenz auf</xsl:text>
+       </xsl:when>
+       <xsl:otherwise>
+          <xsl:text>Reference To</xsl:text>
+       </xsl:otherwise>
+     </xsl:choose>
+   </xsl:variable>
+
+   <xsl:variable name="strRelation">
+     <xsl:choose>
+       <xsl:when test="$lang='de'">
+          <xsl:text>Bezug</xsl:text>
+       </xsl:when>
+       <xsl:otherwise>
+          <xsl:text>Relation</xsl:text>
+       </xsl:otherwise>
+     </xsl:choose>
+   </xsl:variable>
+
+   <xsl:variable name="strConstraints">
+     <xsl:choose>
+       <xsl:when test="$lang='de'">
+          <xsl:text>Einschränkungen</xsl:text>
+       </xsl:when>
+       <xsl:otherwise>
+          <xsl:text>Constraints</xsl:text>
+       </xsl:otherwise>
+     </xsl:choose>
+   </xsl:variable>
+
+   <xsl:variable name="strPattern">
+     <xsl:choose>
+       <xsl:when test="$lang='de'">
+          <xsl:text>Kardinalität</xsl:text>
+       </xsl:when>
+       <xsl:otherwise>
+          <xsl:text>Pattern</xsl:text>
+       </xsl:otherwise>
+     </xsl:choose>
+   </xsl:variable>
+
+   <xsl:variable name="strDomainModelDiagramForEntity">
+     <xsl:choose>
+       <xsl:when test="$lang='de'">
+          <xsl:text>Domänenmodel-Diagramm für Entität </xsl:text>
+       </xsl:when>
+       <xsl:otherwise>
+          <xsl:text>Domain model diagram for entity </xsl:text>
+       </xsl:otherwise>
+     </xsl:choose>
+   </xsl:variable>
+
+   <xsl:variable name="strRoleDiagramForRole">
+     <xsl:choose>
+       <xsl:when test="$lang='de'">
+          <xsl:text>Rollen-Diagramm für Rolle </xsl:text>
+       </xsl:when>
+       <xsl:otherwise>
+          <xsl:text>Role diagram for role </xsl:text>
+       </xsl:otherwise>
+     </xsl:choose>
+   </xsl:variable>
+
 
 </xsl:stylesheet>

@@ -531,10 +531,10 @@
    <xsl:variable name="strActingUseCasesIndirectly">
      <xsl:choose>
        <xsl:when test="$lang='de'">
-          <xsl:text>Akronym</xsl:text>
+          <xsl:text>Anwendungsfälle mit indirekter Beteiligung</xsl:text>
        </xsl:when>
        <xsl:otherwise>
-          <xsl:text>Anwendungsfälle mit indirekter Beteiligung</xsl:text>
+          <xsl:text>Acting use cases (indirectly)</xsl:text>
        </xsl:otherwise>
      </xsl:choose>
    </xsl:variable>

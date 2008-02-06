@@ -550,11 +550,11 @@
          </para>
       </listitem>
    </xsl:template>
-   
+
    <xsl:template match="uc:goal">
       <xsl:apply-templates/>
    </xsl:template>
-   
+
    <xsl:template match="uc:description">
       <xsl:apply-templates/>
    </xsl:template>
@@ -612,7 +612,7 @@
      <xsl:variable name="actor_name" select="uc:name"/>
      <itemizedlist>
         <indexterm>
-           <primary>Actor</primary>
+           <primary><xsl:value-of select="$strActor"/></primary>
            <secondary><xsl:value-of select="$actor_type"/></secondary>
            <tertiary><xsl:value-of select="uc:name"/></tertiary>
         </indexterm>
@@ -626,11 +626,11 @@
                  <itemizedlist>
                     <xsl:for-each select="uc:channel">
                        <indexterm>
-                          <primary>Channel</primary>
+                          <primary><xsl:value-of select="$strChannel"/></primary>
                           <secondary><xsl:value-of select="."/></secondary>
                        </indexterm>
                        <listitem>
-                          <para>Channel: <xsl:value-of select="."/></para>
+                          <para><xsl:value-of select="$strChannel"/>: <xsl:value-of select="."/></para>
                        </listitem>
                     </xsl:for-each>
                  </itemizedlist>

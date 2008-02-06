@@ -36,10 +36,32 @@
    <xsl:variable name="strDomainModel">
      <xsl:choose>
        <xsl:when test="$lang='de'">
-          <xsl:text>Domänen Model</xsl:text>
+          <xsl:text>Domänen-Model</xsl:text>
        </xsl:when>
        <xsl:otherwise>
           <xsl:text>Domain Model</xsl:text>
+       </xsl:otherwise>
+     </xsl:choose>
+   </xsl:variable>
+
+   <xsl:variable name="strActor">
+     <xsl:choose>
+       <xsl:when test="$lang='de'">
+          <xsl:text>Aktor</xsl:text>
+       </xsl:when>
+       <xsl:otherwise>
+          <xsl:text>Actor</xsl:text>
+       </xsl:otherwise>
+     </xsl:choose>
+   </xsl:variable>
+
+   <xsl:variable name="strChannel">
+     <xsl:choose>
+       <xsl:when test="$lang='de'">
+          <xsl:text>Kanal</xsl:text>
+       </xsl:when>
+       <xsl:otherwise>
+          <xsl:text>Channel</xsl:text>
        </xsl:otherwise>
      </xsl:choose>
    </xsl:variable>

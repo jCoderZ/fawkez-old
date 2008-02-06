@@ -219,6 +219,7 @@
     <para><xsl:apply-templates select="req:description"/></para>
     <para><xsl:apply-templates select="req:entity"/></para>
     <para><xsl:apply-templates select="req:role"/></para>
+    <para><xsl:apply-templates select="req:term"/></para>
     <xsl:if test="req:open_issue">
        <para>
           <itemizedlist>
@@ -495,6 +496,40 @@
              </para>
           </caption>
        </mediaobject>
+   </xsl:template>
+
+   <xsl:template match="req:term">
+      <indexterm>
+        <primary><xsl:value-of select="req:name"/></primary>
+      </indexterm>
+      <xsl:if test="req:alternative_name/req:name">
+         <table frame="all">
+            <title><xsl:value-of select="$strTermSummary"/></title>
+            <tgroup cols='2' align='left' colsep='1' rowsep='1'>
+               <colspec colname="c1"/>
+               <colspec colname="c2"/>
+               <spanspec spanname="hspan" namest="c2" nameend="c2" align="left"/>
+               <spanspec spanname="hspan2" namest="c1" nameend="c1" align="center"/>
+               <tbody>
+                  <row>
+                     <entry spanname="hspan2">
+                        <emphasis role="bold"><xsl:value-of select="req:name"/></emphasis>
+                     </entry>
+                  </row>
+                  <xsl:if test="req:alternative_name/req:name">
+                     <row>
+                        <entry>
+                           <emphasis role="bold"><xsl:value-of select="$strAlias"/></emphasis>
+                        </entry>
+                        <entry spanname="hspan">
+                           <xsl:apply-templates select="req:alternative_name"/>
+                        </entry>
+                     </row>
+                  </xsl:if>
+              </tbody>
+            </tgroup>
+         </table>
+      </xsl:if>
    </xsl:template>
 
    <xsl:template match="req:description">

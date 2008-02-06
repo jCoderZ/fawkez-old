@@ -506,6 +506,17 @@
      </xsl:choose>
    </xsl:variable>
 
+   <xsl:variable name="strTermSummary">
+     <xsl:choose>
+       <xsl:when test="$lang='de'">
+          <xsl:text>Begriffsübersicht</xsl:text>
+       </xsl:when>
+       <xsl:otherwise>
+          <xsl:text>Term Summary</xsl:text>
+       </xsl:otherwise>
+     </xsl:choose>
+   </xsl:variable>
+
    <xsl:variable name="strAlias">
      <xsl:choose>
        <xsl:when test="$lang='de'">

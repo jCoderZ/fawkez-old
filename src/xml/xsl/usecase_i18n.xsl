@@ -660,5 +660,49 @@
      </xsl:choose>
    </xsl:variable>
 
+   <xsl:variable name="strCompleteRoleDependencies">
+     <xsl:choose>
+       <xsl:when test="$lang='de'">
+          <xsl:text>Übersicht aller Rollenbeziehungen</xsl:text>
+       </xsl:when>
+       <xsl:otherwise>
+          <xsl:text>Complete Role Dependencies</xsl:text>
+       </xsl:otherwise>
+     </xsl:choose>
+   </xsl:variable>
+
+   <xsl:variable name="strCompleteDomainModelDetailed">
+     <xsl:choose>
+       <xsl:when test="$lang='de'">
+          <xsl:text>Detaillierte Übersicht des Domänenmodells</xsl:text>
+       </xsl:when>
+       <xsl:otherwise>
+          <xsl:text>Complete Domain Model - Detailed</xsl:text>
+       </xsl:otherwise>
+     </xsl:choose>
+   </xsl:variable>
+
+   <xsl:variable name="strDomainModelForCategory">
+     <xsl:choose>
+       <xsl:when test="$lang='de'">
+          <xsl:text>Domänenmodell für Kategorie </xsl:text>
+       </xsl:when>
+       <xsl:otherwise>
+          <xsl:text>Domain model for category </xsl:text>
+       </xsl:otherwise>
+     </xsl:choose>
+   </xsl:variable>
+
+   <xsl:variable name="strRoleModelForCategory">
+     <xsl:choose>
+       <xsl:when test="$lang='de'">
+          <xsl:text>Rollenmodell für Kategorie </xsl:text>
+       </xsl:when>
+       <xsl:otherwise>
+          <xsl:text>Role model for category </xsl:text>
+       </xsl:otherwise>
+     </xsl:choose>
+   </xsl:variable>
+
 
 </xsl:stylesheet>

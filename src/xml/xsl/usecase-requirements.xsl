@@ -32,9 +32,17 @@
          <title>Requirements</title-->
 
          <xsl:for-each select="//req:requirement/req:category/req:primary[generate-id() = generate-id(key('unique-category-primary-key', .))]">
+
+           <xsl:variable name="category" select="."/>
+
            <chapter>
-              <title><xsl:value-of select="."/></title>
-              <xsl:variable name="category" select="."/>
+              <title>
+                 <xsl:choose>
+                   <xsl:when test="$category = 'Domain Model'"><xsl:value-of select="$strDomainModel"/></xsl:when>
+                   <xsl:when test="starts-with($category, 'Role')"><xsl:value-of select="$strRoles"/></xsl:when>
+                   <xsl:otherwise><xsl:value-of select="."/></xsl:otherwise>
+                 </xsl:choose>
+              </title>
 
               <xsl:if test="$category = 'Domain Model'">
                  <!--
@@ -54,7 +62,7 @@
                   </section>
                    -->
                   <section>
-                    <title>Complete Domain Model - Detailed</title>
+                    <title><xsl:value-of select="strCompleteDomainModelDetailed"/></title>
                     <para>
                        <xsl:variable name="f" select="concat('images/', 'domain_model')"/>
                        <mediaobject  id="{concat('diagram-', 'domain_model')}">
@@ -71,7 +79,7 @@
 
               <xsl:if test="starts-with($category, 'Role')">
                  <section>
-                    <title>Complete Role Dependencies</title>
+                    <title><xsl:value-of select="$strCompleteRoleDependencies"/></title>
                     <para>
                        <xsl:variable name="f" select="concat('images/', 'roles_model')"/>
                        <mediaobject  id="{concat('diagram-', 'role_model')}">
@@ -99,7 +107,7 @@
                        <xsl:if test="$category = 'Domain Model'">
                           <xsl:variable name="f" select="concat('images/', $sec_category, '_domain_model')"/>
                           <mediaobject  id="{concat('diagram-', $sec_category, '_domain_model')}">
-                             <title>Domain model for category <xsl:value-of select="."/>.</title>
+                             <title><xsl:value-of select="$strDomainModelForCategory"/><xsl:value-of select="."/>.</title>
                              <imageobject  role="fo">
                                  <imagedata  format="SVG"  fileref="{concat($f, '.svg')}"/>
                               </imageobject>
@@ -112,7 +120,7 @@
                         <xsl:if test="starts-with($category, 'Role')">
                           <xsl:variable name="f" select="concat('images/', $sec_category, '_roles_model')"/>
                           <mediaobject  id="{concat('diagram-', $sec_category, '_roles_model')}">
-                             <title>Role model for category <xsl:value-of select="."/>.</title>
+                             <title><xsl:value-of select="strRoleModelForCategory"/><xsl:value-of select="."/>.</title>
                              <imageobject  role="fo">
                                  <imagedata  format="SVG"  fileref="{concat($f, '.svg')}"/>
                               </imageobject>
@@ -134,9 +142,9 @@
 
                                 <xsl:if test="$category = 'Domain Model'">
                                    <xsl:variable name="f" select="concat('images/', $sec_category, '_', $thi_category, '_domain_model')"/>
-                                   <title>Domain model for category <xsl:value-of select="."/></title>
+                                   <title><xsl:value-of select="$strDomainModelForCategory"/><xsl:value-of select="."/></title>
                                    <mediaobject  id="{concat('diagram-', $sec_category, '_', $thi_category, '_domain_model')}">
-                                      <caption>Domain model for category <xsl:value-of select="."/>.</caption>
+                                      <caption><xsl:value-of select="$strDomainModelForCategory"/><xsl:value-of select="."/>.</caption>
                                       <imageobject  role="fo">
                                           <imagedata  format="SVG"  fileref="{concat($f, '.svg')}"/>
                                        </imageobject>
@@ -148,9 +156,9 @@
 
                                  <xsl:if test="starts-with($category, 'Role')">
                                    <xsl:variable name="f" select="concat('images/', $sec_category, '_', $thi_category, '_roles_model')"/>
-                                   <title>Domain model for category <xsl:value-of select="."/></title>
+                                   <title><xsl:value-of select="$strRoleModelForCategory"/><xsl:value-of select="."/></title>
                                    <mediaobject  id="{concat('diagram-', $sec_category, '_', $thi_category, '_roles_model')}">
-                                      <caption>Domain model for category <xsl:value-of select="."/>.</caption>
+                                      <caption><xsl:value-of select="$strRoleModelForCategory"/><xsl:value-of select="."/>.</caption>
                                       <imageobject  role="fo">
                                           <imagedata  format="SVG"  fileref="{concat($f, '.svg')}"/>
                                        </imageobject>
@@ -252,7 +260,7 @@
                </xsl:if>
                <row>
                   <entry>
-                     <emphasis role="bold">Constraints</emphasis>
+                     <emphasis role="bold"><xsl:value-of select="$strConstraints"/></emphasis>
                   </entry>
                   <entry spanname="hspan">
                      <xsl:value-of select="req:constraints"/>

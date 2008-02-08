@@ -739,10 +739,8 @@ digraph G {
    "<xsl:value-of select="normalize-space(uc:actors/uc:primary/uc:name)"/>" -> "<xsl:value-of select="@id"/>" [color = "white"];
 
    <xsl:apply-templates select="uc:success"/>
-     label = "<xsl:value-of select="$strSuccessPaths"/>";
 
    <xsl:apply-templates select="uc:extension"/>
-     label = "<xsl:value-of select="$strExtensionPaths"/>";
 
    <xsl:call-template name="display_referents">
       <xsl:with-param name="usecase_id" select="@id"/>

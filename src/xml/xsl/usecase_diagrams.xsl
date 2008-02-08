@@ -789,6 +789,7 @@ digraph G {
 
    <xsl:template match="uc:step" mode="success_sequence">
      <xsl:variable name="prev" select="position() - 1"/>
+     <xsl:variable name="this_uc_id" select="../../@id"/>
      <xsl:choose>
         <xsl:when test="$prev != 0">
            "<xsl:value-of select="../../@id"/>-<xsl:value-of
@@ -796,7 +797,7 @@ digraph G {
                  select="../uc:step[position() = $prev]/@desc"/>" -> "<xsl:value-of
                  select="../../@id"/>-<xsl:value-of select="@id"/>: <xsl:value-of
                  select="@desc"/>"<xsl:if
-                    test="../uc:step[position() = $prev]/uc:ref[starts-with(@id, 'UC-')]"> [color = "white"]</xsl:if>;
+                    test="../uc:step[position() = $prev]/uc:ref[starts-with(@id, 'UC-') and (starts-with(@id, $this_uc_id))]"> [color = "white"]</xsl:if>;
          </xsl:when>
          <xsl:otherwise>
             "<xsl:value-of select="../../@id"/>" -> "<xsl:value-of select="../../@id"/>-1: <xsl:value-of select="@desc"/>";

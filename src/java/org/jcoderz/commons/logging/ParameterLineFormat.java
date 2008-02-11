@@ -42,6 +42,7 @@ import java.util.List;
 import java.util.logging.LogRecord;
 
 import org.jcoderz.commons.Loggable;
+import org.jcoderz.commons.util.StringUtil;
 
 /**
  * This class is used for formatting the parameters of a Loggable and parsing
@@ -157,15 +158,23 @@ public class ParameterLineFormat
             new String[]{loggable.getLogMessageInfo().getSymbol()}));
       basicFormat(sb, record, loggable, trackingIdSequence);
 
-      setParameterName(SOLUTION_TAG);
-      setParameterValues(Arrays.asList(
-            new String[]{loggable.getLogMessageInfo().getSolution()}));
-      basicFormat(sb, record, loggable, trackingIdSequence);
+      final String solution = loggable.getLogMessageInfo().getSolution();
+      if (!StringUtil.isEmptyOrNull(solution))
+      {
+          setParameterName(SOLUTION_TAG);
+          setParameterValues(Arrays.asList(
+                new String[]{solution}));
+          basicFormat(sb, record, loggable, trackingIdSequence);
+      }
 
       // log location
-      setParameterName(SOURCE_TAG);
-      setParameterValues(Arrays.asList(new String[]{getLogLocation(record)}));
-      basicFormat(sb, record, loggable, trackingIdSequence);
+      final String location = getLogLocation(record);
+      if (!".".equals(location))
+      {
+          setParameterName(SOURCE_TAG);
+          setParameterValues(Arrays.asList(new String[]{location}));
+          basicFormat(sb, record, loggable, trackingIdSequence);
+      }
 
       appendParameters(sb, record, loggable, trackingIdSequence);
    }

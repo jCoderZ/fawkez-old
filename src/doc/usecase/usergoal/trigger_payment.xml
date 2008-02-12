@@ -1,15 +1,15 @@
-<uc:usecase xmlns:uc="http://www.jcoderz.org/xsd/xdoc/usecase-SNAPSHOT.xsd"
-                    xmlns:db="http://docbook.org/ns/docbook"
-                   id="UC-19" level="UserGoal">
+<uc:usecase xmlns:uc="uc"
+            xmlns:db="http://docbook.org/ns/docbook"
+            id="UC-19" level="UserGoal">
 	<uc:version>$Revision: 1.1 $</uc:version>
 	<uc:commitlog>
 		$Log: trigger_payment.xml,v $
 		Revision 1.1  2005/09/05 14:02:14  mgriffel
 		xdoc: first use case document
-		
+
 		Revision 1.2  2005/09/01 13:23:50  dcoppola
 		Due to we are only supporting one currency per merchant, the check of that currency will be done against the merchant currency.
-		
+
 		Revision 1.1  2005/08/31 15:30:30  dcoppola
 		initial draft of maggie use cases
 
@@ -18,7 +18,7 @@
 	<uc:goal>A payment will be triggered, which has to be aggregated to the consumer/merchant account.</uc:goal>
 	<uc:scope>Micro Aggregation</uc:scope>
 	<uc:trigger></uc:trigger>
-	<uc:priority>high - prototype</uc:priority>
+	<uc:priority>High</uc:priority>
 	<uc:response_time>immediately</uc:response_time>
 	<uc:frequency_of_use>ad-hoc</uc:frequency_of_use>
 	<uc:actors>

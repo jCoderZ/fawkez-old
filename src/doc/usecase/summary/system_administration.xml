@@ -1,4 +1,5 @@
-<uc:usecase xmlns:uc="http://www.jcoderz.org/xsd/xdoc/usecase-SNAPSHOT.xsd" xmlns="http://docbook.org/ns/docbook" id="UC-2" level="Summary">
+<uc:usecase xmlns:uc="uc"
+            xmlns="http://docbook.org/ns/docbook" id="UC-2" level="Summary">
    <uc:version>$Revision: 1.2 $</uc:version>
    <uc:commitlog>
       $Log:$

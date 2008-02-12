@@ -7,6 +7,11 @@
 	<uc:version>$Revision: 1.5 $</uc:version>
 	<uc:name>Consumer Registration</uc:name>
 	<uc:goal>Consumer has been registered to the <emphasis role="bold">m-Wallet</emphasis>.</uc:goal>
+	<uc:scope>m-Wallet</uc:scope>
+	<uc:trigger/>
+	<uc:priority>High</uc:priority>
+   <uc:response_time>immediately</uc:response_time>
+   <uc:frequency_of_use>ad-hoc</uc:frequency_of_use>
    <uc:description>
       Consumer has been registered to the m-Wallet.
       <itemizedlist>
@@ -18,11 +23,6 @@
          </listitem>
       </itemizedlist>
    </uc:description>
-	<uc:scope>m-Wallet</uc:scope>
-	<uc:trigger/>
-	<uc:priority>High</uc:priority>
-	<uc:response_time>immediately</uc:response_time>
-	<uc:frequency_of_use>ad-hoc</uc:frequency_of_use>
 	<uc:actors>
 		<uc:primary>
 			<uc:name>Consumer</uc:name>
@@ -41,7 +41,7 @@
 		<uc:success>Consumer is registered to the system. All relevant consumer data are stored.</uc:success>
 		<uc:minimal>Consumer gets knowledge about the failure of the registration and the reason about it.</uc:minimal>
 	</uc:guarantees>
-	<uc:success>
+	<uc:success desc="standard path">
 		<uc:step id="1" desc="Display form">System sends initial formular asking for the MSISDN of the Consumer.</uc:step>
 		<uc:step id="2" desc="Enter MSISDN">Consumer enters his MSISDN.</uc:step>
 		<uc:step id="3" desc="Enter H.I.P. Code">Consumer enters "human-only-readable" letters from a picture (e.g. Human Interactive Proof-Technologie).</uc:step>
@@ -77,16 +77,16 @@
 			</itemizedlist>
 		</uc:step>
 		<uc:step id="13" desc="Submit Data">After filling out the form the consumer submits.</uc:step>
-		<uc:step id="14" desc="Verfiy Data">System verifies given master data.<uc:ref id="UC-10-E6"/>
+		<uc:step id="14" desc="Verify Data">System verifies given master data.<uc:ref id="UC-10-E6"/>
 		</uc:step>
 		<uc:step id="15" desc="Create Account">System creates account with all the data given. <uc:ref id="UC-10-E7"/>
 		</uc:step>
 		<uc:step id="16" desc="Ask For PI">Consumer will be asked about to configure a payment instrument. <uc:ref id="UC-11"/>
 		</uc:step>
 	</uc:success>
-	<uc:extension id="E1" name="MSISDN_MALFORMED">
-		<uc:step id="1" desc="">System logs a warning.</uc:step>
-		<uc:step id="2" desc="">System replies an error to the Consumer, that the MSISDN was malformed.</uc:step>
+	<uc:extension id="E1" name="MSISDN_MALFORMED" desc="malformed input">
+		<uc:step id="1" desc="aha">System logs a warning.</uc:step>
+		<uc:step id="2" desc="oho">System replies an error to the Consumer, that the MSISDN was malformed.</uc:step>
 		<uc:step id="3" desc="">back to registration formular. <uc:ref id="UC-10-1"/>
 		</uc:step>
 	</uc:extension>

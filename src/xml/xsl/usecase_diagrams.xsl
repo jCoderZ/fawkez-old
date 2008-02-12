@@ -50,19 +50,19 @@
        <redirect:write file="{$file}">
 
 digraph G {
-    fontname = "Bitstream Vera Sans"
+    fontname = "Times-Roman"
     fontsize = 8
     rankdir = "LR"
 
     node [
-            fontname = "Bitstream Vera Sans"
+            fontname = "Times-Roman"
             fontsize = 8
             shape = "record"
             fillcolor = "yellow"
     ]
 
     edge [
-            fontname = "Bitstream Vera Sans"
+            fontname = "Times-Roman"
             fontsize = 8
             weight = 10
     ]
@@ -175,18 +175,18 @@ digraph G {
        <redirect:write file="{$file}">
 
 digraph G {
-    fontname = "Bitstream Vera Sans"
+    fontname = "Times-Roman"
     fontsize = 8
 
     node [
-            fontname = "Bitstream Vera Sans"
+            fontname = "Times-Roman"
             fontsize = 8
             shape = "record"
             fillcolor = "yellow"
     ]
 
     edge [
-            fontname = "Bitstream Vera Sans"
+            fontname = "Times-Roman"
             fontsize = 8
     ]
 
@@ -230,17 +230,17 @@ digraph G {
        <redirect:write file="{$file}">
 
 digraph G {
-    fontname = "Bitstream Vera Sans"
+    fontname = "Times-Roman"
     fontsize = 8
 
     node [
-            fontname = "Bitstream Vera Sans"
+            fontname = "Times-Roman"
             fontsize = 8
             shape = "record"
     ]
 
     edge [
-            fontname = "Bitstream Vera Sans"
+            fontname = "Times-Roman"
             fontsize = 8
     ]
 
@@ -281,18 +281,18 @@ digraph G {
        <redirect:write file="{$file}">
 
 digraph G {
-    fontname = "Bitstream Vera Sans"
+    fontname = "Times-Roman"
     fontsize = 8
 
     node [
-            fontname = "Bitstream Vera Sans"
+            fontname = "Times-Roman"
             fontsize = 8
             shape = "record"
             fillcolor = "yellow"
     ]
 
     edge [
-            fontname = "Bitstream Vera Sans"
+            fontname = "Times-Roman"
             fontsize = 8
             weight = 10
     ]
@@ -361,18 +361,18 @@ digraph G {
        <redirect:write file="{$file}">
 
 digraph G {
-    fontname = "Bitstream Vera Sans"
+    fontname = "Times-Roman"
     fontsize = 8
 
     node [
-            fontname = "Bitstream Vera Sans"
+            fontname = "Times-Roman"
             fontsize = 8
             shape = "record"
             fillcolor = "yellow"
     ]
 
     edge [
-            fontname = "Bitstream Vera Sans"
+            fontname = "Times-Roman"
             fontsize = 8
             weight = 10
     ]
@@ -550,18 +550,18 @@ digraph G {
        <redirect:write file="{$file}">
 
 digraph G {
-    fontname = "Bitstream Vera Sans"
+    fontname = "Times-Roman"
     fontsize = 8
 
     node [
-            fontname = "Bitstream Vera Sans"
+            fontname = "Times-Roman"
             fontsize = 8
             shape = "record"
             fillcolor = "yellow"
     ]
 
     edge [
-            fontname = "Bitstream Vera Sans"
+            fontname = "Times-Roman"
             fontsize = 8
     ]
 
@@ -585,17 +585,17 @@ digraph G {
        <redirect:write file="{$file}">
 
 digraph G {
-    fontname = "Bitstream Vera Sans"
+    fontname = "Times-Roman"
     fontsize = 8
 
     node [
-            fontname = "Bitstream Vera Sans"
+            fontname = "Times-Roman"
             fontsize = 8
             shape = "record"
     ]
 
     edge [
-            fontname = "Bitstream Vera Sans"
+            fontname = "Times-Roman"
             fontsize = 8
     ]
 
@@ -725,8 +725,8 @@ digraph G {
 
 digraph G {
     graph [rankdir = TB, center = true, fontsize=12];
-    edge [fontname="verdana",fontsize=12,labelfontname="verdana",labelfontsize=12];
-    node [fontname="verdana",fontsize=12];
+    edge [fontname="Times-Roman",fontsize=12,labelfontname="Times-Roman",labelfontsize=12];
+    node [fontname="Times-Roman",fontsize=12];
 
     subgraph cluster0 {
        node [style=filled];
@@ -777,12 +777,12 @@ digraph G {
    <xsl:template match="uc:extension">
      "<xsl:value-of select="@id"/>" [shape = "diamond", fontcolor = "white" ];
      "<xsl:value-of select="../@id"/>-<xsl:value-of select="@id"/>: <xsl:value-of select="@name"/>" [shape = "box", style = "rounded"];
-     "<xsl:value-of select="@id"/>" -&gt; "<xsl:value-of select="../@id"/>-<xsl:value-of select="@id"/>: <xsl:value-of select="@name"/>";
+     "<xsl:value-of select="@id"/>" -&gt; "<xsl:value-of select="../@id"/>-<xsl:value-of select="@id"/>: <xsl:value-of select="@name"/>" [ label = "<xsl:value-of select="@desc"/>" ];
      <xsl:apply-templates select="uc:step"/>
    </xsl:template>
 
    <xsl:template match="uc:step" mode="list">
-     "<xsl:value-of select="../../@id"/>-<xsl:value-of select="@id"/>: <xsl:value-of select="@desc"/>" [shape = "box", style=rounded ];
+     "<xsl:value-of select="../../@id"/>-<xsl:value-of select="@id"/>: <xsl:value-of select="@desc"/>" [shape = "box", style=rounded];
    </xsl:template>
 
    <xsl:template match="uc:step" mode="success_sequence">

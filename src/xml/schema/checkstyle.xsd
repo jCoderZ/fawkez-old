@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- $Id: checkstyle.xsd,v 1.4 2004/04/19 09:53:49 amandel Exp $ -->
+<!-- $Id$ -->
 
 <!-- XML schema for checkstyle 3.1 XMLLogger output -->
 <xsd:schema

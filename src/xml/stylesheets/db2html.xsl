@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-   $Id: db2html.xsl,v 1.1 2004/07/13 09:19:11 mgriffel Exp $
+   $Id$
   -->
 <xsl:stylesheet
    version="1.0"

@@ -34,12 +34,17 @@ package org.jcoderz.commons.logging;
 
 
 import java.text.Format;
+import java.text.MessageFormat;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.LogRecord;
 
 import org.jcoderz.commons.Loggable;
+import org.jcoderz.commons.util.ArraysUtil;
 
 /**
  * This formats a standard LogRecord and parses a log line with a formatted
@@ -112,8 +117,8 @@ public class TraceLineFormat
       }
       else
       {
-         setMessageText(Arrays.asList(record.getParameters()).toString()
-               + " " + record.getMessage());
+        setMessageText(
+          formatMessage(record.getMessage(), record.getParameters()));
       }
       setLogSource(record.getSourceClassName(), record.getSourceMethodName());
       basicFormat(sb, record, loggable, trackingIdSequence);
@@ -233,4 +238,30 @@ public class TraceLineFormat
    {
       return getLogSource((String) getParameter(LOGSOURCE_INDEX));
    }
+
+   private static final String formatMessage (String pattern, Object[] params)
+   {
+      String result;
+      if (params != null && params.length != 0)
+      {
+          try
+          {
+              final MessageFormat formatter = new MessageFormat(pattern);
+              result
+                  = formatter.format(
+                      params, new StringBuffer(), null).toString();
+          }
+          catch (IllegalArgumentException ex)
+          {
+              result
+                  = ArraysUtil.toString(params) + " " + pattern;
+          }
+      }
+      else
+      {
+          result = pattern;
+      }
+      return result;
+   }
+
 }

@@ -424,20 +424,18 @@
                 <xsl:apply-templates select="uc:description"/>
              </para>
           </xsl:if>
-          <para>
-
-             <xsl:variable name="f" select="concat('images/', @id)"/>
-             <figure pgwide="1">
-                <mediaobject  id="{concat('diagram-', uc:name)}">
-                   <imageobject  role="fo">
-                      <imagedata  format="SVG"  fileref="{concat($f, '.svg')}"/>
-                   </imageobject>
-                   <imageobject  role="html">
-                      <imagedata  format="PNG"  fileref="{concat($f, '.png')}"/>
-                   </imageobject>
-                </mediaobject>
-             </figure>
-          </para>
+          <xsl:variable name="f" select="concat('images/', @id)"/>
+          <figure pgwide="1">
+             <title><xsl:value-of select="$strUseCaseDiagramForUseCase"/><xsl:value-of select="@id"/></title>
+             <mediaobject  id="{concat('diagram-', uc:name)}">
+                <imageobject  role="fo">
+                   <imagedata  format="SVG"  fileref="{concat($f, '.svg')}"/>
+                </imageobject>
+                <imageobject  role="html">
+                   <imagedata  format="PNG"  fileref="{concat($f, '.png')}"/>
+                </imageobject>
+             </mediaobject>
+          </figure>
       </section>
 
       <xsl:apply-templates select="uc:trigger[not(normalize-space(.) = '')]"/>
@@ -498,18 +496,18 @@
          <xsl:if test="uc:test-annotations">
             <section>
                <title><xsl:value-of select="$strTestAnnotations"/></title>
-               <itemizedlist numeration="arabic">
+               <orderedlist numeration="arabic">
                   <xsl:apply-templates select="uc:test-annotations"/>
-               </itemizedlist>
+               </orderedlist>
             </section>
          </xsl:if>
 
          <xsl:if test="count(uc:open_issue) > 0">
             <section>
                <title><xsl:value-of select="$strOpenIssues"/></title>
-               <itemizedlist numeration="arabic">
+               <orderedlist numeration="arabic">
                <xsl:apply-templates select="uc:open_issue"/>
-               </itemizedlist>
+               </orderedlist>
             </section>
          </xsl:if>
 
@@ -653,9 +651,9 @@
    <xsl:template match="uc:success|uc:extension">
       <xsl:choose>
          <xsl:when test="uc:step">
-            <itemizedlist numeration="arabic">
+            <orderedlist numeration="arabic">
             <xsl:apply-templates select="uc:step"/>
-            </itemizedlist>
+            </orderedlist>
          </xsl:when>
          <xsl:otherwise><para></para></xsl:otherwise>
       </xsl:choose>

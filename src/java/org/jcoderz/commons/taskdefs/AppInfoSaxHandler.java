@@ -48,6 +48,8 @@ class AppInfoSaxHandler
 {
    /** Application Identifier of fawkeZ. */
    public static final int APPLICATION_ID_FWK = 1;
+   /** Application Identifier of asfw. */
+   public static final int APPLICATION_ID_ASFW = 100;
 
    private static final Pattern REGEX_SINGLE_QUOTES
          = Pattern.compile(".*[^']'[^'].*",
@@ -83,6 +85,7 @@ class AppInfoSaxHandler
    public AppInfoSaxHandler ()
    {
       mMap.registerApplication(APPLICATION_ID_FWK, "FWK");
+      mMap.registerApplication(APPLICATION_ID_ASFW, "ASFW");
    }
 
    /** {@inheritDoc} */
@@ -163,6 +166,21 @@ class AppInfoSaxHandler
       {
          final String cdata = characters().trim();
          validateSolution(cdata);
+      }
+      else if ("description".equals(localName))
+      {
+         final String cdata = characters().trim();
+         validateDescription(cdata);
+      }
+      else if ("procedure".equals(localName))
+      {
+         final String cdata = characters().trim();
+         validateProcedure(cdata);
+      }
+      else if ("validation".equals(localName))
+      {
+         final String cdata = characters().trim();
+         validateValidation(cdata);
       }
       else if ("application".equals(localName))
       {
@@ -250,6 +268,39 @@ class AppInfoSaxHandler
    }
 
    private void validateSolution (String cdata)
+   {
+      if (cdata != null)
+      {
+         if (REGEX_VARIABLES.matcher(cdata).matches())
+         {
+            warn("The solution element MUST NOT use variables: " + cdata);
+         }
+      }
+   }
+
+   private void validateDescription (String cdata)
+   {
+      if (cdata != null)
+      {
+         if (REGEX_VARIABLES.matcher(cdata).matches())
+         {
+            warn("The solution element MUST NOT use variables: " + cdata);
+         }
+      }
+   }
+
+   private void validateProcedure (String cdata)
+   {
+      if (cdata != null)
+      {
+         if (REGEX_VARIABLES.matcher(cdata).matches())
+         {
+            warn("The solution element MUST NOT use variables: " + cdata);
+         }
+      }
+   }
+
+   private void validateValidation (String cdata)
    {
       if (cdata != null)
       {

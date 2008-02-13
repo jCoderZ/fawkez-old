@@ -11,32 +11,29 @@
          <xs:element name="InstanceId" type="xs:string"/>
          <xs:element name="SymbolId" type="xs:string"/>
          <xs:element name="Symbol" type="xs:string"/>
-         <xs:element name="Level" type="LevelEnumType"/>
+         <xs:element name="Level" type="xs:string"/>
          <xs:element name="Thread" type="xs:long"/>
          <xs:element name="TrackingNumber" type="xs:string"/>
          <xs:element name="BusinessImpact" type="BusinessImpactEnumType"/>
          <xs:element name="Category" type="CategoryEnumType"/>
          <xs:element name="Source" type="FrameType"/>
          <xs:element name="Message" type="xs:string"/>
+         <xs:element name="Description" type="xs:string" minOccurs="0"/>
          <xs:element name="Solution" type="xs:string" minOccurs="0"/>
+         <xs:element name="Procedure" type="xs:string" minOccurs="0"/>
+         <xs:element name="Verification" type="xs:string" minOccurs="0"/>
          <xs:element name="Parameter" type="ParameterType" minOccurs="0" maxOccurs="unbounded"/>
          <xs:element name="Stacktrace" type="StacktraceType" minOccurs="0"/>
          <xs:element name="Cause" type="CauseType" minOccurs="0"/>
       </xs:sequence>
    </xs:complexType>
-   <xs:simpleType name="LevelEnumType">
+<!-- <xs:simpleType name="LevelEnumType">
       <xs:restriction base="xs:token">
-         <xs:enumeration value="OFF"/>
-         <xs:enumeration value="SEVERE"/>
-         <xs:enumeration value="WARNING"/>
-         <xs:enumeration value="INFO"/>
-         <xs:enumeration value="CONFIG"/>
-         <xs:enumeration value="FINE"/>
-         <xs:enumeration value="FINER"/>
-         <xs:enumeration value="FINEST"/>
-         <xs:enumeration value="ALL"/>
+         <!- -  Need full qualified class for custom level - ->
+         <xs:pattern value='(.*\..*|OFF|SEVERE|WARNING|INFO|CONFIG|FINE|FINER|FINEST|ALL)'/>
+
       </xs:restriction>
-   </xs:simpleType>
+   </xs:simpleType> -->
    <xs:simpleType name="BusinessImpactEnumType">
       <xs:restriction base="xs:token">
          <xs:enumeration value="Critical"/>

@@ -35,6 +35,7 @@ package org.jcoderz.commons;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Level;
 
 /**
  * Interface for all loggable objects.
@@ -173,4 +174,20 @@ public interface Loggable
     * sink.
     */
    void log ();
+
+   /**
+    * Tries to find the source method where this log event was fired.
+    * @return the name of the method including the line number if available
+    * @see StackTraceElement#getMethodName()
+    * @see StackTraceElement#getLineNumber()
+    */
+   String getSourceMethod ();
+
+   /**
+    * Tries to find the source class name where this log event was fired.
+    * @return the name of the class
+    * @see StackTraceElement#getClassName()
+    */
+   String getSourceClass ();
+
 }

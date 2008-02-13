@@ -10,6 +10,12 @@ Fawkez 1.2 'Charlie X'
   * Update to PMD 4.1
   * Update to fb-contrib 3.4.2
   * Fixed bugs: #43 #50
+  * The log messages can now use a custom logger to log to and
+    does not need to use the logger assigned to the LoggableImpl.
+    Therefore the LogMessageGenerator ant task has 2 more
+    parameters: allowUseOfBaseLogger and customLoggerClass
+  * The LogFormater now also respects java text formating in
+    trace messages (was broken).
 
 Fawkez 1.1 'The Man Trap' (March 31, 2007)
 https://www.jcoderz.org/fawkez/browser/tags/FAWKEZ_1_1_0

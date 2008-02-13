@@ -163,6 +163,18 @@ public class LogEvent
       return mLoggable.getTrackingNumber();
    }
 
+   /** {@inheritDoc} */
+   public String getSourceClass ()
+   {
+      return mLoggable.getSourceClass();
+   }
+
+   /** {@inheritDoc} */
+   public String getSourceMethod ()
+   {
+      return mLoggable.getSourceMethod();
+   }
+
    LoggableImpl getExceptionImpl ()
    {
       return mLoggable;

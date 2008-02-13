@@ -349,6 +349,20 @@ public class LoggableImpl
    }
 
    /** {@inheritDoc} */
+   public String getSourceClass ()
+   {
+       getSource();
+       return mClassName;
+   }
+
+   /** {@inheritDoc} */
+   public String getSourceMethod ()
+   {
+       getSource();
+       return mMethodName;
+   }
+
+   /** {@inheritDoc} */
    public String toString ()
    {
       final StringBuffer sb = new StringBuffer();
@@ -372,49 +386,53 @@ public class LoggableImpl
       addParameter(GROUP_NAME_PARAMETER_NAME, mLogMessageInfo.getGroupName());
    }
 
-   private void getSource ()
+   private final void getSource ()
    {
-      final StackTraceElement[] stack = (new Throwable()).getStackTrace();
-      // First, search back to a method in the Logger class.
-      int ix = 0;
-      boolean found = false;
-      while (ix < stack.length)
+      // not analyzed yet.
+      if (mMethodName == null || mClassName == null)
       {
-         final StackTraceElement frame = stack[ix];
-         final String cname = frame.getClassName();
-         if (cname.equals(CLASSNAME))
-         {
-            found = true;
-         }
-         else if (found)
-         {
-            break;
-         }
-         ix++;
-      }
-      // Now search for the first frame before the "LoggableImpl" class or
-      // LogMessageInfo class.
-      while (ix < stack.length)
-      {
-         final StackTraceElement frame = stack[ix];
-         final String cname = frame.getClassName();
-         try
-         {
-            final Class clazz = Class.forName(cname);
-            if (! (Loggable.class.isAssignableFrom(clazz)
-                  || LogMessageInfo.class.isAssignableFrom(clazz)))
-            {
-               // We've found the relevant frame.
-               setMethodAndClass(frame);
-               break;
-            }
-         }
-         catch (ClassNotFoundException e)
-         {
-            setMethodAndClass(frame);
-            break;
-         }
-         ix++;
+          final StackTraceElement[] stack = (new Throwable()).getStackTrace();
+          // First, search back to a method in the Logger class.
+          int ix = 0;
+          boolean found = false;
+          while (ix < stack.length)
+          {
+             final StackTraceElement frame = stack[ix];
+             final String cname = frame.getClassName();
+             if (cname.equals(CLASSNAME))
+             {
+                found = true;
+             }
+             else if (found)
+             {
+                break;
+             }
+             ix++;
+          }
+          // Now search for the first frame before the "LoggableImpl" class or
+          // LogMessageInfo class.
+          while (ix < stack.length)
+          {
+             final StackTraceElement frame = stack[ix];
+             final String cname = frame.getClassName();
+             try
+             {
+                final Class clazz = Class.forName(cname);
+                if (! (Loggable.class.isAssignableFrom(clazz)
+                      || LogMessageInfo.class.isAssignableFrom(clazz)))
+                {
+                   // We've found the relevant frame.
+                   setMethodAndClass(frame);
+                   break;
+                }
+             }
+             catch (ClassNotFoundException e)
+             {
+                setMethodAndClass(frame);
+                break;
+             }
+             ix++;
+          }
       }
    }
 

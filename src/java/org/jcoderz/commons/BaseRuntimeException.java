@@ -40,20 +40,20 @@ import java.util.Set;
 
 /**
  * This is the Base class for all runtime exceptions.
- * 
- * <p>In the {@link org.jcoderz.commons package overview} you can find a 
+ *
+ * <p>In the {@link org.jcoderz.commons package overview} you can find a
  * general statement when to use runtime exceptions.</p>
- * 
- * <p>This class can never be directly used. Services must implement a 
- * general service specific Exception from which they can derive more 
- * concrete service specific exceptions. There are some common used 
- * exceptions available as direct subclasses of this class. If 
- * appropriate this classes must be used prior generating own 
+ *
+ * <p>This class can never be directly used. Services must implement a
+ * general service specific Exception from which they can derive more
+ * concrete service specific exceptions. There are some common used
+ * exceptions available as direct subclasses of this class. If
+ * appropriate this classes must be used prior generating own
  * classes.</p>
- * 
- * <p>Most functionality is implemented and documented by the 
+ *
+ * <p>Most functionality is implemented and documented by the
  * {@link org.jcoderz.commons.LoggableImpl} which is used a member of
- * objects of this class. Other stuff is handled by the base class 
+ * objects of this class. Other stuff is handled by the base class
  * {@link java.lang.Exception}.</p>
  *
  *
@@ -65,13 +65,13 @@ public class BaseRuntimeException
       implements Loggable
 {
    static final long serialVersionUID = 2L;
-   
+
    /** The loggable implementation. */
    private final LoggableImpl mLoggable;
-   
+
    /**
     * Constructor getting an log message info.
-    * 
+    *
     * @param messageInfo the log message info for this exception
     */
    protected BaseRuntimeException (LogMessageInfo messageInfo)
@@ -82,7 +82,7 @@ public class BaseRuntimeException
 
    /**
     * Constructor getting an log message info and a root exception.
-    * 
+    *
     * @param messageInfo the log message info for this exception
     * @param cause the problem that caused this exception to be thrown
     */
@@ -99,7 +99,7 @@ public class BaseRuntimeException
       mLoggable.initCause(cause);
       return this;
    }
-   
+
    /** {@inheritDoc} */
    public final void addParameter (String name, Serializable value)
    {
@@ -113,11 +113,11 @@ public class BaseRuntimeException
    }
 
    /** {@inheritDoc} */
-   public final String getMessage () 
+   public final String getMessage ()
    {
       return mLoggable.getMessage();
    }
-   
+
    /** {@inheritDoc} */
    public final void log ()
    {
@@ -129,31 +129,31 @@ public class BaseRuntimeException
    {
       return mLoggable.getCause();
    }
-   
+
    /** {@inheritDoc} */
    public long getEventTime ()
    {
       return mLoggable.getEventTime();
    }
-   
+
    /** {@inheritDoc} */
    public LogMessageInfo getLogMessageInfo ()
    {
       return mLoggable.getLogMessageInfo();
    }
-   
+
    /** {@inheritDoc} */
    public String getNodeId ()
    {
       return mLoggable.getNodeId();
    }
-   
+
    /** {@inheritDoc} */
    public List getParameter (String name)
    {
       return mLoggable.getParameter(name);
    }
-   
+
    /** {@inheritDoc} */
    public Set getParameterNames ()
    {
@@ -165,11 +165,23 @@ public class BaseRuntimeException
    {
       return mLoggable.getThreadId();
    }
-   
+
    /** {@inheritDoc} */
    public String getTrackingNumber ()
    {
       return mLoggable.getTrackingNumber();
+   }
+
+   /** {@inheritDoc} */
+   public String getSourceClass ()
+   {
+      return mLoggable.getSourceClass();
+   }
+
+   /** {@inheritDoc} */
+   public String getSourceMethod ()
+   {
+      return mLoggable.getSourceMethod();
    }
 
    LoggableImpl getExceptionImpl ()

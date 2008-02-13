@@ -56,6 +56,38 @@ public final class LogMessageGenerator
    private String mApplication = null;
 
    /**
+    * The custom logger class to generate log messages for.
+    * A possible valid value is 'java.util.logging.Logger'.
+    */
+   private String mCustomLoggerClass = null;
+
+   /**
+    * Shall the log messages get a .log() method that uses the
+    * logger of the LoggableImpl to log the messages to?
+    */
+   private Boolean mAllowUseOfBaseLogger = null;
+
+   /**
+    * Sets the custom logger class to generate log messages for.
+    * A possible valid value is 'java.util.logging.Logger'.
+    * @param className the name of the custom logger
+    */
+   public void setCustomLoggerClass (String className)
+   {
+       mCustomLoggerClass = className;
+   }
+
+   /**
+    * Sets whether the log messages get a .log() method that uses the
+    * logger of the LoggableImpl to log the messages to?
+    * @param the flag value to be set.
+    */
+   public void setAllowUseOfBaseLogger (boolean allow)
+   {
+       mAllowUseOfBaseLogger = Boolean.valueOf(allow);
+   }
+
+   /**
     * Sets the application (short) name. This parameter is required.
     * @param s The application (short) name.
     */
@@ -75,6 +107,16 @@ public final class LogMessageGenerator
    {
       transformer.setParameter("application-short-name", mApplication);
       transformer.setParameter("application-name", mApplication);
+      if (mAllowUseOfBaseLogger != null)
+      {
+          transformer.setParameter("allow-use-of-base-logger",
+              mAllowUseOfBaseLogger);
+      }
+      if (mCustomLoggerClass != null)
+      {
+          transformer.setParameter("custom-logger-class",
+              mCustomLoggerClass);
+      }
    }
 
    /** {@inheritDoc} */

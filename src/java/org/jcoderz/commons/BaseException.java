@@ -36,6 +36,7 @@ package org.jcoderz.commons;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Level;
 
 
 /**
@@ -170,6 +171,24 @@ public class BaseException
    public String getTrackingNumber ()
    {
       return mLoggable.getTrackingNumber();
+   }
+
+   /** {@inheritDoc} */
+   public Level getLogLevel ()
+   {
+      return mLoggable.getLogMessageInfo().getLogLevel();
+   }
+
+   /** {@inheritDoc} */
+   public String getSourceClass ()
+   {
+      return mLoggable.getSourceClass();
+   }
+
+   /** {@inheritDoc} */
+   public String getSourceMethod ()
+   {
+      return mLoggable.getSourceMethod();
    }
 
    LoggableImpl getExceptionImpl ()

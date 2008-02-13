@@ -18,11 +18,21 @@
 <xsl:include href="libcommon.xsl"/>
 
 <xsl:output method="text"
-            encoding="ISO-8859-1"/>
+            encoding="UTF-8"/>
 
 <xsl:param name="application-short-name" select="."/>
 <xsl:param name="application-name" select="."/>
 <xsl:param name="outdir" select="'.'"/>
+<!--
+   If set log messages are generated that allow the usage of a custom logger
+   the custom logger class must support a logp(Level level, String id,
+   String sourceClass, String sourceMethod, String msg, Object param) method.
+   If the custom logger class is 'java.util.logging.Logger' the logp of this
+   logger is used.  -->
+<xsl:param name="custom-logger-class" select="''"/>
+<!-- Usefull to disallow logging using the logger of the loggable impl
+  class (could be used if custom-logger-class is set) -->
+<xsl:param name="allow-use-of-base-logger" select="'true'"/>
 
 <xsl:variable name="DEFAULT_STRING_SEPARATOR" select="'|'"/>
 
@@ -298,6 +308,26 @@ public class <xsl:value-of select="$classname"/>
             <xsl:with-param name="with" select="'null'"/>
          </xsl:call-template></xsl:if>
    }
+
+      <xsl:if test="$custom-logger-class">
+      /**
+       * Logs the exception
+       * <tt>"<xsl:value-of select="normalize-space($message/text)"/>"</tt>
+       * to the custom logger.
+       * @param logger the custom logger to log to.
+       */
+      public void log (<xsl:value-of select="$custom-logger-class"/> logger)
+      {
+        logger.logp(getLogLevel(),
+          <xsl:if test="$custom-logger-class != 'java.util.logging.Logger'">
+            getLogMessageInfo().getSymbol(),</xsl:if>
+            getSourceClass(),
+            getSourceMethod(), <xsl:if test="$custom-logger-class = 'java.util.logging.Logger'">
+            getLogMessageInfo().getSymbol() + "|" + </xsl:if>
+            getTrackingNumber() + "|" + getMessage(),
+            (Object) this);
+      }
+      </xsl:if>
 
    <xsl:if test="normalize-space($tokens)">
       <xsl:call-template
@@ -614,7 +644,7 @@ public abstract class <xsl:value-of select="$classname"/>
        * @procedure <xsl:value-of select="normalize-space($message/procedure)"/>
     </xsl:if>
     <xsl:if test="$message/verification">
-       * @solution <xsl:value-of select="normalize-space($message/verification)"/>
+       * @verification <xsl:value-of select="normalize-space($message/verification)"/>
     </xsl:if>
        */
       public static final String SYMBOL
@@ -656,12 +686,13 @@ public abstract class <xsl:value-of select="$classname"/>
                "<xsl:value-of select="$groupName"/>",
                "<xsl:value-of select="$groupNameAbbr"/>");
       }
-      <xsl:if test="not($message/@base-exception)">
+      <xsl:variable name="isAudit" select="boolean($message/@category = 'AUDIT')"/>
       <xsl:variable name="log-event-class"><xsl:choose>
             <xsl:when test="$message/@category = 'AUDIT'">AuditLogEvent</xsl:when>
             <xsl:otherwise>LogEvent</xsl:otherwise></xsl:choose>
       </xsl:variable>
-      <xsl:variable name="isAudit" select="boolean($message/@category = 'AUDIT')"/>
+      <xsl:if test="not($message/@base-exception)">
+        <xsl:if test="$allow-use-of-base-logger">
       /**
        * Logs the message
        * <tt>"<xsl:value-of select="normalize-space($message/text)"/>"</tt>
@@ -720,6 +751,93 @@ public abstract class <xsl:value-of select="$classname"/>
          new <xsl:value-of select="$log-event-class"/>(<xsl:value-of
             select="$constant"/><xsl:if test="$isAudit">, auditPrincipal</xsl:if>, cause).log();</xsl:otherwise></xsl:choose>
       }
+        </xsl:if> <!-- <xsl:if test="$allow-use-of-base-logger"> -->
+
+        <xsl:if test="$custom-logger-class">
+      /**
+       * Logs the message
+       * <tt>"<xsl:value-of select="normalize-space($message/text)"/>"</tt>
+       * with the given parameters to the custom logger.
+       * @param logger the custom logger to log to.<xsl:call-template
+                  name="inner-clazz-log-parameter-javadoc">
+                  <xsl:with-param name="tokens" select="$tokens"/>
+                  <xsl:with-param name="isAudit" select="$isAudit"/>
+               </xsl:call-template>
+       */
+      public static void log (<xsl:value-of select="$custom-logger-class"/> logger,
+          <xsl:call-template
+                  name="inner-clazz-log-parameter-list">
+                  <xsl:with-param name="tokens" select="$tokens"/>
+                  <xsl:with-param name="isAudit" select="$isAudit"/>
+          </xsl:call-template>
+            )
+      {
+        final <xsl:value-of select="$log-event-class"/> logEvent
+          = new <xsl:value-of select="$log-event-class"/>(<xsl:value-of
+              select="$constant"/><xsl:if test="$isAudit">, auditPrincipal</xsl:if>);
+           <xsl:if test="normalize-space($tokens)">
+        addParameters(logEvent,
+               <xsl:call-template
+                  name="inner-clazz-log-parameter-call">
+                  <xsl:with-param name="tokens" select="$tokens"/>
+                  <xsl:with-param name="isAudit" select="$isAudit"/>
+               </xsl:call-template>);
+           </xsl:if>
+
+         logger.logp(<xsl:value-of select="$constant"/>.getLogLevel(),
+          <xsl:if test="$custom-logger-class != 'java.util.logging.Logger'">
+           <xsl:value-of select="$constant"/>.getSymbol(),</xsl:if>
+           logEvent.getSourceClass(),
+           logEvent.getSourceMethod(), <xsl:if test="$custom-logger-class = 'java.util.logging.Logger'">
+           <xsl:value-of select="$constant"/>.getSymbol() + "|" + </xsl:if>
+           logEvent.getTrackingNumber() + "|" + logEvent.getMessage(),
+           (Object) logEvent);
+      }
+
+      /**
+       * Logs the message
+       * <tt>"<xsl:value-of select="normalize-space($message/text)"/>"</tt>
+       * with the given parameters to the custom logger.
+       * @param logger the custom logger to log to.<xsl:call-template
+                  name="inner-clazz-log-parameter-javadoc">
+                  <xsl:with-param name="tokens" select="$tokens"/>
+                  <xsl:with-param name="isAudit" select="$isAudit"/>
+               </xsl:call-template>
+       * @param cause the Throwable that causes this message to be logged.
+       */
+      public static void log (<xsl:value-of select="$custom-logger-class"/> logger,
+          <xsl:call-template
+                  name="inner-clazz-log-parameter-list">
+                  <xsl:with-param name="tokens" select="$tokens"/>
+                  <xsl:with-param name="isAudit" select="$isAudit"/>
+          </xsl:call-template><xsl:if test="$isAudit or normalize-space($tokens)">,</xsl:if>
+               Throwable cause
+            )
+      {
+        final <xsl:value-of select="$log-event-class"/> logEvent
+          = new <xsl:value-of select="$log-event-class"/>(<xsl:value-of
+              select="$constant"/><xsl:if test="$isAudit">, auditPrincipal</xsl:if>,
+              cause);
+           <xsl:if test="normalize-space($tokens)">
+        addParameters(logEvent,
+               <xsl:call-template
+                  name="inner-clazz-log-parameter-call">
+                  <xsl:with-param name="tokens" select="$tokens"/>
+                  <xsl:with-param name="isAudit" select="$isAudit"/>
+               </xsl:call-template>);
+           </xsl:if>
+
+         logger.logp(<xsl:value-of select="$constant"/>.getLogLevel(),
+          <xsl:if test="$custom-logger-class != 'java.util.logging.Logger'">
+           <xsl:value-of select="$constant"/>.getSymbol(),</xsl:if>
+           logEvent.getSourceClass(),
+           logEvent.getSourceMethod(), <xsl:if test="$custom-logger-class = 'java.util.logging.Logger'">
+           <xsl:value-of select="$constant"/>.getSymbol() + "|" + </xsl:if>
+           logEvent.getTrackingNumber() + "|" + logEvent.getMessage(),
+           (Object) logEvent);
+      }
+
+        </xsl:if>
 
       <!-- special factory methods for audit log events -->
       <xsl:if test="$isAudit">
@@ -784,6 +902,7 @@ public abstract class <xsl:value-of select="$classname"/>
       </xsl:if>
 
       </xsl:if>
+
       /**
        * Adds the given message parameters to the <tt>loggable</tt>.
        * @param loggable the loggable to initialize. <xsl:call-template

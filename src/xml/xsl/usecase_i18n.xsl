@@ -671,6 +671,17 @@
      </xsl:choose>
    </xsl:variable>
 
+   <xsl:variable name="strUseCaseDiagramForUseCase">
+     <xsl:choose>
+       <xsl:when test="$lang='de'">
+          <xsl:text>Anwendungsfall-Diagramm für Anwendungsfall </xsl:text>
+       </xsl:when>
+       <xsl:otherwise>
+          <xsl:text>Use case diagram for use case </xsl:text>
+       </xsl:otherwise>
+     </xsl:choose>
+   </xsl:variable>
+
    <xsl:variable name="strDomainModelDiagramForEntity">
      <xsl:choose>
        <xsl:when test="$lang='de'">

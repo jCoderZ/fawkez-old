@@ -5,8 +5,8 @@
                 xmlns:req="req"
                 xmlns:xi="http://www.w3.org/2001/XInclude"
                 xmlns:db="http://docbook.org/ns/docbook"
-                exclude-result-prefixes="xsl xi db uc req xsi"
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                exclude-result-prefixes="xsl xi db uc req xsi"
                 xsi:schemaLocation="req
                                 http://www.jcoderz.org/xsd/xdoc/requirements-SNAPSHOT.xsd
                                 uc
@@ -65,9 +65,7 @@
                      <xsl:variable name="scope_id" select="uc:scope"/>
                      <section>
                         <title><xsl:value-of select="uc:scope"/></title>
-                        <para>
-                          <xsl:apply-templates select="//uc:usecase[@level='UserGoal' and not(@change_request) and uc:scope=$scope_id]"/>
-                        </para>
+                        <xsl:apply-templates select="//uc:usecase[@level='UserGoal' and not(@change_request) and uc:scope=$scope_id]"/>
                      </section>
                   </xsl:for-each>
                 </section>
@@ -79,9 +77,7 @@
                      <xsl:variable name="scope_id" select="uc:scope"/>
                      <section>
                         <title><xsl:value-of select="uc:scope"/></title>
-                        <para>
-                          <xsl:apply-templates select="//uc:usecase[@level='Component' and not(@change_request) and uc:scope=$scope_id]"/>
-                        </para>
+                        <xsl:apply-templates select="//uc:usecase[@level='Component' and not(@change_request) and uc:scope=$scope_id]"/>
                      </section>
                   </xsl:for-each>
                 </section>

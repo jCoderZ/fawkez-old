@@ -153,10 +153,13 @@ public class ParameterLineFormat
          throw new IllegalArgumentException(
                "Parameter must be null or a Throwable, but is: " + parameter);
       }
-      setParameterName(SYMBOL_TAG);
-      setParameterValues(Arrays.asList(
-            new String[]{loggable.getLogMessageInfo().getSymbol()}));
-      basicFormat(sb, record, loggable, trackingIdSequence);
+      if (!StringUtil.isEmptyOrNull(loggable.getLogMessageInfo().getSymbol()))
+      {
+          setParameterName(SYMBOL_TAG);
+          setParameterValues(Arrays.asList(
+                new String[]{loggable.getLogMessageInfo().getSymbol()}));
+          basicFormat(sb, record, loggable, trackingIdSequence);
+      }
 
       final String solution = loggable.getLogMessageInfo().getSolution();
       if (!StringUtil.isEmptyOrNull(solution))

@@ -776,13 +776,21 @@ digraph G {
 
    <xsl:template match="uc:extension">
      "<xsl:value-of select="@id"/>" [shape = "diamond", fontcolor = "white" ];
-     "<xsl:value-of select="../@id"/>-<xsl:value-of select="@id"/>: <xsl:value-of select="@name"/>" [shape = "box", style = "rounded"];
+     "<xsl:value-of select="../@id"/>-<xsl:value-of select="@id"/>: <xsl:value-of select="@name"/>" [
+         shape = "record", 
+         style = "rounded",
+         label = "{<xsl:value-of select="../@id"/>-<xsl:value-of select="@id"/>|<xsl:value-of select="@name"/>}"
+         ];
      "<xsl:value-of select="@id"/>" -&gt; "<xsl:value-of select="../@id"/>-<xsl:value-of select="@id"/>: <xsl:value-of select="@name"/>" [ label = "<xsl:value-of select="@desc"/>" ];
      <xsl:apply-templates select="uc:step"/>
    </xsl:template>
 
    <xsl:template match="uc:step" mode="list">
-     "<xsl:value-of select="../../@id"/>-<xsl:value-of select="@id"/>: <xsl:value-of select="@desc"/>" [shape = "box", style=rounded];
+     "<xsl:value-of select="../../@id"/>-<xsl:value-of select="@id"/>: <xsl:value-of select="@desc"/>" [
+         shape = "record",
+         style = "rounded", 
+         label = "{<xsl:value-of select="../../@id"/>-<xsl:value-of select="@id"/>|<xsl:value-of select="@desc"/>}"
+      ];
    </xsl:template>
 
    <xsl:template match="uc:step" mode="success_sequence">

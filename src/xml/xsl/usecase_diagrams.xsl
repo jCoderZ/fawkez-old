@@ -936,8 +936,8 @@ digraph G {
            <xsl:variable name="ext" select="concat('E', substring-after($key, '-E'))"/>
            <xsl:choose>
               <xsl:when test="contains($ext,'-')">
-                 <xsl:variable name="ext_id" select="substring-before($ext, '-'))"/>
-                 <xsl:variable name="ext_step" select="substring-after($ext, '-'))"/>
+                 <xsl:variable name="ext_id" select="substring-before($ext, '-')"/>
+                 <xsl:variable name="ext_step" select="substring-after($ext, '-')"/>
                  <xsl:value-of select="//uc:usecase[@id = $from_uc]/uc:extension[@id = $ext_id]/@name"/>
               </xsl:when>
               <xsl:otherwise>

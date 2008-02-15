@@ -934,7 +934,16 @@ digraph G {
         </xsl:when>
         <xsl:when test="contains($key,'-E')">
            <xsl:variable name="ext" select="concat('E', substring-after($key, '-E'))"/>
-           <xsl:value-of select="$key"/><xsl:text>: </xsl:text><xsl:value-of select="//uc:usecase[@id = $from_uc]/uc:extension[@id = $ext]/@name"/>
+           <xsl:choose>
+              <xsl:when test="contains($ext,'-')">
+                 <xsl:variable name="ext_id" select="substring-before($ext, '-'))"/>
+                 <xsl:variable name="ext_step" select="substring-after($ext, '-'))"/>
+                 <xsl:value-of select="//uc:usecase[@id = $from_uc]/uc:extension[@id = $ext_id]/@name"/>
+              </xsl:when>
+              <xsl:otherwise>
+                 <xsl:value-of select="//uc:usecase[@id = $from_uc]/uc:extension[@id = $ext]/@name"/>   
+              </xsl:otherwise>
+           </xsl:choose>
         </xsl:when>
         <xsl:when test="not(contains(substring-after($key,'UC-'),'-'))">
            <xsl:value-of select="//uc:usecase[@id = $from_uc]/uc:name"/>

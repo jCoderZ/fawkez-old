@@ -30,7 +30,7 @@
 		<uc:minimal>none yet</uc:minimal>
 	</uc:guarantees>
 	<uc:success>
-      <uc:step id="1" desc="">Merchant performs login.<uc:ref id="UC-25"/></uc:step>
+      <uc:step id="1" desc="Merchant Login">Merchant performs login.<uc:ref id="UC-25"/></uc:step>
       <uc:step id="2" desc="">Merchant is able to manage his master data via self adminstration. <uc:ref id="UC-14"/></uc:step>
       <uc:step id="3" desc="">Merchant can handle disputes related to him. <uc:ref id="UC-15"/></uc:step>
       <uc:step id="4" desc="">Merchant can view and administer it's transactions. <uc:ref id="UC-16"/></uc:step>

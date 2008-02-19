@@ -424,18 +424,24 @@
                 <xsl:apply-templates select="uc:description"/>
              </para>
           </xsl:if>
-          <xsl:variable name="f" select="concat('images/', @id)"/>
-          <figure pgwide="1">
-             <title><xsl:value-of select="$strUseCaseDiagramForUseCase"/><xsl:value-of select="@id"/></title>
-             <mediaobject  id="{concat('diagram-', uc:name)}">
-                <imageobject  role="fo">
-                   <imagedata  format="SVG"  fileref="{concat($f, '.svg')}"/>
-                </imageobject>
-                <imageobject  role="html">
-                   <imagedata  format="PNG"  fileref="{concat($f, '.png')}"/>
-                </imageobject>
-             </mediaobject>
-          </figure>
+          <xsl:choose>
+            <xsl:when test="boolean(@suppress_diagram) != 'true'"/>
+            <xsl:when test="boolean(../@suppress_diagrams != 'true')"/>
+            <xsl:otherwise>
+              <xsl:variable name="f" select="concat('images/', @id)"/>
+		          <figure pgwide="1">
+		             <title><xsl:value-of select="$strUseCaseDiagramForUseCase"/><xsl:value-of select="@id"/></title>
+		             <mediaobject  id="{concat('diagram-', uc:name)}">
+		                <imageobject  role="fo">
+		                   <imagedata  format="SVG"  fileref="{concat($f, '.svg')}"/>
+		                </imageobject>
+		                <imageobject  role="html">
+		                   <imagedata  format="PNG"  fileref="{concat($f, '.png')}"/>
+		                </imageobject>
+		             </mediaobject>
+		          </figure>
+	          </xsl:otherwise>
+          </xsl:choose>
       </section>
 
       <xsl:apply-templates select="uc:trigger[not(normalize-space(.) = '')]"/>

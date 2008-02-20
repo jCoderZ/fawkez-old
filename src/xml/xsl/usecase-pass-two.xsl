@@ -468,7 +468,7 @@
             </xsl:call-template>
          </section>
 
-         <xsl:if test="uc:stakeholder">
+         <xsl:if test="boolean(uc:stakeholder) and string-length(uc:stakeholder) > 0">
             <section>
                <title><xsl:value-of select="$strStakeholder"/></title>
                   <itemizedlist>

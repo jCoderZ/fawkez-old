@@ -300,7 +300,7 @@
    <xsl:variable name="strSuccess">
      <xsl:choose>
        <xsl:when test="$lang='de'">
-          <xsl:text>Erfolgsfall</xsl:text>
+          <xsl:text>Regelpfad</xsl:text>
        </xsl:when>
        <xsl:otherwise>
           <xsl:text>Success</xsl:text>
@@ -311,7 +311,7 @@
    <xsl:variable name="strExtensions">
      <xsl:choose>
        <xsl:when test="$lang='de'">
-          <xsl:text>Erweiterungen</xsl:text>
+          <xsl:text>Alternativpfade</xsl:text>
        </xsl:when>
        <xsl:otherwise>
           <xsl:text>Extensions</xsl:text>

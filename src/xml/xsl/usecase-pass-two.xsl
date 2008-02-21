@@ -425,8 +425,8 @@
              </para>
           </xsl:if>
           <xsl:choose>
-            <xsl:when test="boolean(@suppress_diagram) != 'true'"/>
-            <xsl:when test="boolean(../@suppress_diagrams != 'true')"/>
+            <xsl:when test="boolean(@suppress_diagram)"/>
+            <xsl:when test="boolean(../uc:info/@suppress_diagrams)"/>
             <xsl:otherwise>
               <xsl:variable name="f" select="concat('images/', @id)"/>
 		          <figure pgwide="1">
@@ -461,7 +461,7 @@
 	         <xsl:when test="boolean(uc:precondition)">
 		         <section>
 		            <title><xsl:value-of select="$strPreconditions"/></title>
-		            <xsl:if test="boolean(uc:precondition) and string-length(uc:precondition) > 0">
+		            <xsl:if test="boolean(uc:precondition) and string-length(uc:precondition) &gt; 0">
 		               <itemizedlist>
 		                 <xsl:apply-templates select="uc:precondition"/>
 		               </itemizedlist>
@@ -481,7 +481,7 @@
 	         </xsl:when>
          </xsl:choose>
 
-         <xsl:if test="boolean(uc:stakeholder) and string-length(uc:stakeholder) > 0">
+         <xsl:if test="boolean(uc:stakeholder) and string-length(uc:stakeholder) &gt; 0">
             <section>
                <title><xsl:value-of select="$strStakeholder"/></title>
                   <itemizedlist>
@@ -507,10 +507,15 @@
             </section>
          </xsl:if>
 
-         <section id="{uc:name}_guarantees">
-            <title><xsl:value-of select="$strGuarantees"/></title>
-            <xsl:call-template name="uc:guarantees" />
-         </section>
+
+         <xsl:if test="boolean(uc:guarantees)">
+           <xsl:if test="(boolean(uc:guarantees/uc:success) and string-length(uc:guarantees/uc:success) &gt; 0) or (boolean(uc:guarantees/uc:minimal) and string-length(uc:guarantees/uc:minimal) &gt; 0)">
+		         <section id="{uc:name}_guarantees">
+		            <title><xsl:value-of select="$strGuarantees"/></title>
+		            <xsl:call-template name="uc:guarantees" />
+		         </section>
+	         </xsl:if>
+         </xsl:if>
 
          <xsl:if test="uc:test-annotations">
             <section>
@@ -551,6 +556,9 @@
               <xsl:when test=". = 'Low'">
                  <xsl:value-of select="$strPriorityLow"/>
               </xsl:when>
+              <xsl:otherwise>
+                 <xsl:value-of select="$strUnknownPriority"/><xsl:text>: </xsl:text><xsl:value-of select="."/>
+              </xsl:otherwise>
            </xsl:choose>
          </para>
       </section>
@@ -655,15 +663,19 @@
 
    <xsl:template name="uc:guarantees">
       <xsl:for-each select="uc:guarantees/uc:success">
-         <itemizedlist>
+        <xsl:if test="string-length(.) > 0">
+          <itemizedlist>
             <listitem><para><xsl:value-of select="$strSuccess"/>: <xsl:value-of select="."/></para></listitem>
-         </itemizedlist>
+          </itemizedlist>
+        </xsl:if>
       </xsl:for-each>
 
-       <xsl:for-each select="uc:guarantees/uc:minimal">
-         <itemizedlist>
+      <xsl:for-each select="uc:guarantees/uc:minimal">
+        <xsl:if test="string-length(.) > 0">
+          <itemizedlist>
             <listitem><para><xsl:value-of select="$strMinimal"/>: <xsl:value-of select="."/></para></listitem>
-         </itemizedlist>
+          </itemizedlist>
+        </xsl:if>
       </xsl:for-each>
    </xsl:template>
 

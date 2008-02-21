@@ -220,6 +220,17 @@
      </xsl:choose>
    </xsl:variable>
 
+   <xsl:variable name="strUnknownPriority">
+     <xsl:choose>
+       <xsl:when test="$lang='de'">
+          <xsl:text>Unbekannte Priorität</xsl:text>
+       </xsl:when>
+       <xsl:otherwise>
+          <xsl:text>Unknown Priority</xsl:text>
+       </xsl:otherwise>
+     </xsl:choose>
+   </xsl:variable>
+
    <xsl:variable name="strPriorities">
      <xsl:choose>
        <xsl:when test="$lang='de'">

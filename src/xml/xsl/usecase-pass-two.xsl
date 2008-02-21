@@ -457,21 +457,25 @@
          </section>
 
 		     <xsl:variable name="usecase_id" select="@id"/>
+         <xsl:variable name="hasContent" select="string-length(uc:precondition) &gt; 0"/>
+         <xsl:variable name="hasReferringUseCases" select="//uc:usecase//uc:ref[(@id = $usecase_id or contains(@id,concat($usecase_id, '-'))) and not(ancestor-or-self::uc:usecase/@id = $usecase_id)]"/>
          <xsl:choose>
 	         <xsl:when test="boolean(uc:precondition)">
-		         <section>
-		            <title><xsl:value-of select="$strPreconditions"/></title>
-		            <xsl:if test="boolean(uc:precondition) and string-length(uc:precondition) &gt; 0">
-		               <itemizedlist>
-		                 <xsl:apply-templates select="uc:precondition"/>
-		               </itemizedlist>
-		            </xsl:if>
-		            <xsl:call-template name="list_referents">
-		               <xsl:with-param name="usecase_id" select="@id"/>
-		            </xsl:call-template>
-		         </section>
+             <xsl:if test="$hasContent or $hasReferringUseCases">
+			         <section>
+			            <title><xsl:value-of select="$strPreconditions"/></title>
+			            <xsl:if test="$hasContent">
+			               <itemizedlist>
+			                 <xsl:apply-templates select="uc:precondition"/>
+			               </itemizedlist>
+			            </xsl:if>
+			            <xsl:call-template name="list_referents">
+			               <xsl:with-param name="usecase_id" select="@id"/>
+			            </xsl:call-template>
+			         </section>
+             </xsl:if>
 	         </xsl:when>
-		       <xsl:when test="//uc:usecase//uc:ref[(@id = $usecase_id or contains(@id,concat($usecase_id, '-'))) and not(ancestor-or-self::uc:usecase/@id = $usecase_id)]">
+		       <xsl:when test="$hasReferringUseCases">
 		         <section>
 		            <title><xsl:value-of select="$strPreconditions"/></title>
 		            <xsl:call-template name="list_referents">

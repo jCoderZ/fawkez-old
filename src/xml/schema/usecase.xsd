@@ -40,7 +40,6 @@
    <xsd:element name="response_time" type="xsd:string"/>
    <xsd:element name="frequency_of_use" type="xsd:string"/>
    <xsd:element name="stakeholder" type="xsd:string"/>
-   <xsd:element name="open_issue" type="xsd:string"/>
    <xsd:element name="commitlog" type="xsd:string"/>
 
    <xsd:element name="ref">
@@ -143,6 +142,15 @@
             <xsd:group ref="uc:content"/>
          </xsd:sequence>
          <xsd:attribute name="issue" type="xsd:string"/>
+       </xsd:complexType>
+   </xsd:element>
+
+   <xsd:element name="open_issue">
+      <xsd:complexType mixed="true">
+         <xsd:sequence>
+            <xsd:group ref="uc:content"/>
+          </xsd:sequence>
+          <xsd:attribute name="issue" type="xsd:string"/>
        </xsd:complexType>
    </xsd:element>
 

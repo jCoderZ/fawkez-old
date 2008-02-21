@@ -165,7 +165,7 @@
              <title><xsl:value-of select="$strOpenIssues"/></title>
              <xsl:if test="//uc:open_issue">
                 <section>
-                   <title>Issues for Use Cases</title>
+                   <title><xsl:value-of select="strIssuesForUseCases"/></title>
                    <xsl:apply-templates select="//uc:usecases" mode="issue_list"/>
                 </section>
              </xsl:if>
@@ -348,7 +348,9 @@
                        <itemizedlist>
                           <xsl:for-each select="key('issue-group', @id)">
                              <xsl:for-each select="uc:open_issue">
-                                <listitem><para><xsl:value-of select="."/></para></listitem>
+                                <listitem><para>
+                                  <xsl:apply-templates />
+                                </para></listitem>
                              </xsl:for-each>
                           </xsl:for-each>
                        </itemizedlist>
@@ -534,7 +536,7 @@
             <section>
                <title><xsl:value-of select="$strOpenIssues"/></title>
                <orderedlist numeration="arabic">
-               <xsl:apply-templates select="uc:open_issue"/>
+                 <xsl:apply-templates select="uc:open_issue"/>
                </orderedlist>
             </section>
          </xsl:if>
@@ -543,7 +545,7 @@
    </xsl:template>
 
    <xsl:template match="uc:stakeholder|uc:precondition|uc:open_issue">
-      <listitem><para><xsl:value-of select="."/></para></listitem>
+      <listitem><para><xsl:apply-templates /></para></listitem>
    </xsl:template>
 
    <xsl:template match="uc:priority">

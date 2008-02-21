@@ -197,7 +197,9 @@
       <colspec colwidth='4in'/>
       <tbody>
         <xsl:if test="req:priority">
+          <xsl:if test="not(req:term)">
            <row><entry><emphasis role="bold"><xsl:value-of select="$strPriority"/>:</emphasis></entry><entry><xsl:value-of select="req:priority"/></entry></row>
+          </xsl:if>
         </xsl:if>
         <xsl:if test="req:status">
            <row><entry><emphasis role="bold"><xsl:value-of select="$strStatus"/>:</emphasis></entry><entry><xsl:value-of select="req:status"/></entry></row>
@@ -512,9 +514,14 @@
                <spanspec spanname="hspan2" namest="c1" nameend="c1" align="center"/>
                <tbody>
                   <row>
-                     <entry spanname="hspan2">
+                     <entry>
                         <emphasis role="bold"><xsl:value-of select="req:name"/></emphasis>
                      </entry>
+                     <xsl:if test="req:acronym">
+	                     <entry spanname="hspan">
+	                       <xsl:value-of select="$strAcronym"/>: <emphasis role="bold"><xsl:value-of select="req:acronym"/></emphasis>
+	                     </entry>
+                     </xsl:if>
                   </row>
                   <xsl:if test="req:alternative_name/req:name">
                      <row>

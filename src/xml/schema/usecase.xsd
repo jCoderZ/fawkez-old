@@ -122,12 +122,17 @@
     </xsd:element>
 
    <xsd:element name="success">
-      <xsd:complexType mixed="true">
-   	 <xsd:sequence>
-   	    <xsd:element ref="uc:step" minOccurs="0" maxOccurs="100"/>
-        <xsd:group ref="uc:content"/>
-   	  </xsd:sequence>
-        <xsd:attribute name="desc" type="xsd:string" use="optional"/>
+     <xsd:complexType mixed="true">
+	   	 <xsd:sequence>
+	   	    <xsd:element ref="uc:step" minOccurs="0" maxOccurs="100"/>
+	        <xsd:group ref="uc:content"/>
+	   	  </xsd:sequence>
+        <xsd:attribute name="desc" type="xsd:string" use="optional">
+          <xsd:annotation>
+            <xsd:documentation xml:lang="en">This optional text will occur on the
+              edge leading to this node in the generated diagram.</xsd:documentation>
+          </xsd:annotation>
+        </xsd:attribute>
         <xsd:attribute name="issue" type="xsd:string"/>
       </xsd:complexType>
    </xsd:element>
@@ -210,7 +215,12 @@
          <xsd:attribute name="id" type="uc:useCaseId" use="required"/>
          <xsd:attribute name="level" type="uc:useCaseLevel" use="required"/>
          <xsd:attribute name="issue" type="xsd:string"/>
-         <xsd:attribute name="suppress_diagram" type="xsd:boolean" use="optional"/>
+         <xsd:attribute name="suppress_diagram" type="xsd:boolean" use="optional">
+           <xsd:annotation>
+             <xsd:documentation xml:lang="en">When set to true the generated
+               diagram will be suppressed.</xsd:documentation>
+           </xsd:annotation>
+         </xsd:attribute>
       </xsd:complexType>
    </xsd:element>
 
@@ -221,6 +231,12 @@
          <xsd:attribute name="useTemplate" type="xsd:boolean" default="false"/>
          <xsd:attribute name="issue"       type="xsd:string"/>
          <xsd:attribute name="state"       type="xsd:string"/>
+         <xsd:attribute name="suppress_diagrams" type="xsd:boolean" use="optional">
+           <xsd:annotation>
+             <xsd:documentation xml:lang="en">When set to true all generated
+               diagrams will be suppressed.</xsd:documentation>
+           </xsd:annotation>
+         </xsd:attribute>
       </xsd:complexType>
    </xsd:element>
 
@@ -233,7 +249,6 @@
             <xsd:element ref="chapter" />
             <xsd:any minOccurs="0" maxOccurs="100"/>
          </xsd:sequence>
-        <xsd:attribute name="suppress_diagrams" type="xsd:boolean" use="optional"/>
       </xsd:complexType>
    </xsd:element>
 </xsd:schema>

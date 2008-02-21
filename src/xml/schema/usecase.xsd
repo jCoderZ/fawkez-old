@@ -210,6 +210,7 @@
          <xsd:attribute name="id" type="uc:useCaseId" use="required"/>
          <xsd:attribute name="level" type="uc:useCaseLevel" use="required"/>
          <xsd:attribute name="issue" type="xsd:string"/>
+         <xsd:attribute name="suppress_diagram" type="xsd:boolean" use="optional"/>
       </xsd:complexType>
    </xsd:element>
 
@@ -232,6 +233,7 @@
             <xsd:element ref="chapter" />
             <xsd:any minOccurs="0" maxOccurs="100"/>
          </xsd:sequence>
+        <xsd:attribute name="suppress_diagrams" type="xsd:boolean" use="optional"/>
       </xsd:complexType>
    </xsd:element>
 </xsd:schema>

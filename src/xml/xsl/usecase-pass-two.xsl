@@ -165,7 +165,7 @@
              <title><xsl:value-of select="$strOpenIssues"/></title>
              <xsl:if test="//uc:open_issue">
                 <section>
-                   <title><xsl:value-of select="strIssuesForUseCases"/></title>
+                   <title><xsl:value-of select="$strIssuesForUseCases"/></title>
                    <xsl:apply-templates select="//uc:usecases" mode="issue_list"/>
                 </section>
              </xsl:if>

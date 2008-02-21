@@ -717,11 +717,16 @@ digraph G {
    <!-- Use Case flow diagram -->
 
    <xsl:template match="uc:usecase">
-      <xsl:variable name="file"><xsl:value-of
-         select="$imagedir"/>/<xsl:value-of
-         select="@id"/>.dot</xsl:variable>
 
-       <redirect:write file="{$file}">
+     <xsl:choose>
+       <xsl:when test="boolean(@suppress_diagram)"/>
+       <xsl:when test="boolean(../uc:info/@suppress_diagrams)"/>
+       <xsl:otherwise>
+	      <xsl:variable name="file"><xsl:value-of
+	         select="$imagedir"/>/<xsl:value-of
+	         select="@id"/>.dot</xsl:variable>
+
+	      <redirect:write file="{$file}">
 
 digraph G {
     graph [rankdir = TB, center = true, fontsize=12];
@@ -747,7 +752,9 @@ digraph G {
    </xsl:call-template>
 }
 
-     </redirect:write>
+       </redirect:write>
+      </xsl:otherwise>
+     </xsl:choose>
    </xsl:template>
 
    <xsl:template match="uc:actors">
@@ -777,7 +784,7 @@ digraph G {
    <xsl:template match="uc:extension">
      "<xsl:value-of select="@id"/>" [shape = "diamond", fontcolor = "white" ];
      "<xsl:value-of select="../@id"/>-<xsl:value-of select="@id"/>: <xsl:value-of select="@name"/>" [
-         shape = "record", 
+         shape = "record",
          style = "rounded",
          label = "{<xsl:value-of select="../@id"/>-<xsl:value-of select="@id"/>|<xsl:value-of select="@name"/>}"
          ];
@@ -788,7 +795,7 @@ digraph G {
    <xsl:template match="uc:step" mode="list">
      "<xsl:value-of select="../../@id"/>-<xsl:value-of select="@id"/>: <xsl:value-of select="@desc"/>" [
          shape = "record",
-         style = "rounded", 
+         style = "rounded",
          label = "{<xsl:value-of select="../../@id"/>-<xsl:value-of select="@id"/>|<xsl:value-of select="@desc"/>}"
       ];
    </xsl:template>
@@ -835,7 +842,7 @@ digraph G {
         <xsl:otherwise>
            "<xsl:value-of select="ancestor-or-self::uc:usecase/@id"/>-<xsl:value-of select="ancestor-or-self::uc:step/@id"/>: <xsl:value-of select="ancestor-or-self::uc:step/@desc"/>" [
                 shape = "record",
-                style = "rounded", 
+                style = "rounded",
                 label = "{<xsl:value-of select="ancestor-or-self::uc:usecase/@id"/>-<xsl:value-of select="ancestor-or-self::uc:step/@id"/>|<xsl:value-of select="ancestor-or-self::uc:step/@desc"/>}"
                ];
            "<xsl:value-of select="ancestor-or-self::uc:usecase/@id"/>-<xsl:value-of select="ancestor-or-self::uc:step/@id"/>: <xsl:value-of select="ancestor-or-self::uc:step/@desc"/>" -&gt; "<xsl:call-template name="lookup_name"><xsl:with-param name="key" select="@id"/></xsl:call-template>"
@@ -857,7 +864,7 @@ digraph G {
         <xsl:otherwise>
           "<xsl:value-of select="ancestor-or-self::uc:usecase/@id"/>-<xsl:value-of select="ancestor-or-self::uc:extension/@id"/>: <xsl:value-of select="ancestor-or-self::uc:extension/@name"/>" [
                 shape = "record",
-                style = "rounded", 
+                style = "rounded",
                 label = "{<xsl:value-of select="ancestor-or-self::uc:usecase/@id"/>-<xsl:value-of select="ancestor-or-self::uc:extension/@id"/>|<xsl:value-of select="ancestor-or-self::uc:extension/@name"/>}"
                ];
           "<xsl:value-of select="ancestor-or-self::uc:usecase/@id"/>-<xsl:value-of select="ancestor-or-self::uc:extension/@id"/>: <xsl:value-of select="ancestor-or-self::uc:extension/@name"/>" -&gt; "<xsl:call-template name="lookup_name"><xsl:with-param name="key" select="@id"/></xsl:call-template>"
@@ -892,7 +899,7 @@ digraph G {
             </xsl:variable>
             "<xsl:value-of select="$source"/>" [
                 shape = "record",
-                style = "rounded", 
+                style = "rounded",
                 label = "{<xsl:value-of select="$source_id"/>|<xsl:value-of select="$source_name"/>}"
                ];
             "<xsl:value-of select="$source"/>" -> "<xsl:value-of select="$destination"/>";
@@ -922,7 +929,7 @@ digraph G {
         </xsl:otherwise>
      </xsl:choose>
    </xsl:template>
-   
+
    <xsl:template name="lookup_name_only">
      <xsl:param name="key"/>
      <xsl:variable name="from_uc">
@@ -941,7 +948,7 @@ digraph G {
                  <xsl:value-of select="//uc:usecase[@id = $from_uc]/uc:extension[@id = $ext_id]/@name"/>
               </xsl:when>
               <xsl:otherwise>
-                 <xsl:value-of select="//uc:usecase[@id = $from_uc]/uc:extension[@id = $ext]/@name"/>   
+                 <xsl:value-of select="//uc:usecase[@id = $from_uc]/uc:extension[@id = $ext]/@name"/>
               </xsl:otherwise>
            </xsl:choose>
         </xsl:when>
@@ -954,5 +961,5 @@ digraph G {
         </xsl:otherwise>
      </xsl:choose>
    </xsl:template>
-   
+
 </xsl:stylesheet>

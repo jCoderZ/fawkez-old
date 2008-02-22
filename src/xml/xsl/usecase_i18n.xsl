@@ -110,6 +110,28 @@
      </xsl:choose>
    </xsl:variable>
 
+   <xsl:variable name="strPrimary">
+     <xsl:choose>
+       <xsl:when test="$lang='de'">
+          <xsl:text>Primär</xsl:text>
+       </xsl:when>
+       <xsl:otherwise>
+          <xsl:text>Primary</xsl:text>
+       </xsl:otherwise>
+     </xsl:choose>
+   </xsl:variable>
+
+   <xsl:variable name="strNoRoleForActor">
+     <xsl:choose>
+       <xsl:when test="$lang='de'">
+          <xsl:text>Keine Rollendefinition vorhanden </xsl:text>
+       </xsl:when>
+       <xsl:otherwise>
+          <xsl:text>No role for actor </xsl:text>
+       </xsl:otherwise>
+     </xsl:choose>
+   </xsl:variable>
+
    <xsl:variable name="strPrimaryActors">
      <xsl:choose>
        <xsl:when test="$lang='de'">

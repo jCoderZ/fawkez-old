@@ -157,7 +157,7 @@
    <xsl:variable name="strOpenIssues">
      <xsl:choose>
        <xsl:when test="$lang='de'">
-          <xsl:text>Offene Probleme</xsl:text>
+          <xsl:text>Offene Punkte</xsl:text>
        </xsl:when>
        <xsl:otherwise>
           <xsl:text>Open Issues</xsl:text>
@@ -168,7 +168,7 @@
    <xsl:variable name="strIssuesForRequirements">
      <xsl:choose>
        <xsl:when test="$lang='de'">
-          <xsl:text>Offene Anforderungs-Probleme</xsl:text>
+          <xsl:text>Offene Punkte - Anforderungen</xsl:text>
        </xsl:when>
        <xsl:otherwise>
           <xsl:text>Issues for Requirements</xsl:text>
@@ -718,7 +718,7 @@
    <xsl:variable name="strCompleteRoleDependencies">
      <xsl:choose>
        <xsl:when test="$lang='de'">
-          <xsl:text>Übersicht aller Rollenbeziehungen</xsl:text>
+          <xsl:text>Übersicht der Rollenbeziehungen</xsl:text>
        </xsl:when>
        <xsl:otherwise>
           <xsl:text>Complete Role Dependencies</xsl:text>
@@ -758,6 +758,5 @@
        </xsl:otherwise>
      </xsl:choose>
    </xsl:variable>
-
 
 </xsl:stylesheet>

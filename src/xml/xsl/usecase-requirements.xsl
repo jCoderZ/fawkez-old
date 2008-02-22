@@ -506,7 +506,7 @@
       </indexterm>
       <xsl:if test="req:alternative_name/req:name">
          <table frame="all">
-            <title><xsl:value-of select="$strTermSummary"/></title>
+            <title><xsl:value-of select="$strTermSummary"/><xsl:value-of select="req:name"/></title>
             <tgroup cols='2' align='left' colsep='1' rowsep='1'>
                <colspec colname="c1"/>
                <colspec colname="c2"/>

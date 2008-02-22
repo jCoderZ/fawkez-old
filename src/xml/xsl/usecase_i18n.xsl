@@ -542,10 +542,10 @@
    <xsl:variable name="strTermSummary">
      <xsl:choose>
        <xsl:when test="$lang='de'">
-          <xsl:text>Begriffsübersicht</xsl:text>
+          <xsl:text>Begriffsübersicht: </xsl:text>
        </xsl:when>
        <xsl:otherwise>
-          <xsl:text>Term Summary</xsl:text>
+          <xsl:text>Term summary: </xsl:text>
        </xsl:otherwise>
      </xsl:choose>
    </xsl:variable>

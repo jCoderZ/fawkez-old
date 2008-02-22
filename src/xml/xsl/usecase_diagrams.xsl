@@ -177,6 +177,7 @@ digraph G {
 digraph G {
     fontname = "Times-Roman"
     fontsize = 8
+    rankdir = "LR"
 
     node [
             fontname = "Times-Roman"
@@ -232,6 +233,7 @@ digraph G {
 digraph G {
     fontname = "Times-Roman"
     fontsize = 8
+    rankdir = "LR"
 
     node [
             fontname = "Times-Roman"

@@ -691,6 +691,7 @@
             <orderedlist numeration="arabic">
             <xsl:apply-templates select="uc:step"/>
             </orderedlist>
+            <para/>
          </xsl:when>
          <xsl:otherwise><para></para></xsl:otherwise>
       </xsl:choose>

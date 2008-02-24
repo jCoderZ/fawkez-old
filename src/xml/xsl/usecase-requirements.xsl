@@ -95,7 +95,7 @@
               </xsl:if>
 
               <xsl:apply-templates select="//req:requirement[req:category/req:primary = $category and not(req:category/req:secondary) and not(req:category/req:tertiary)]">
-                 <xsl:sort select="text()"/>
+                <xsl:sort select="req:summary"/>
               </xsl:apply-templates>
 
               <xsl:for-each select="//req:requirement/req:category/req:secondary[generate-id() = generate-id(key('unique-category-secondary-key', .))]">
@@ -131,7 +131,7 @@
                         </xsl:if>
 
                        <xsl:apply-templates select="//req:requirement[req:category/req:primary = $category and req:category/req:secondary = $sec_category and not(req:category/req:tertiary)]">
-                          <xsl:sort select="text()"/>
+                         <xsl:sort select="req:summary"/>
                        </xsl:apply-templates>
 
                        <xsl:for-each select="//req:requirement/req:category/req:tertiary[generate-id() = generate-id(key('unique-category-tertiary-key', .))]">
@@ -169,7 +169,7 @@
                                  </xsl:if>
 
                                 <xsl:apply-templates select="//req:requirement[req:category/req:primary = $category and req:category/req:secondary = $sec_category and req:category/req:tertiary = $thi_category]">
-                                   <xsl:sort select="text()"/>
+                                   <xsl:sort select="req:summary"/>
                                 </xsl:apply-templates>
                              </section>
                           </xsl:if>
@@ -186,9 +186,9 @@
 <xsl:template match="req:requirement">
   <section id="{req:key}">
     <title>
-      <xsl:text>[</xsl:text><xsl:value-of select="req:key"/><xsl:text>]</xsl:text>
-      <xsl:text> </xsl:text>
       <xsl:value-of select="req:summary"/>
+      <xsl:text> </xsl:text>
+      <xsl:text>[</xsl:text><xsl:value-of select="req:key"/><xsl:text>]</xsl:text>
     </title>
     <para>
       <informaltable frame='none'>

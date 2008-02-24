@@ -140,7 +140,7 @@
            </appendix>
         </xsl:if>
 
-        <xsl:if test="//uc:usecase">
+        <xsl:if test="//uc:usecase and not(/uc:usecases/uc:info/@suppress_revision_list)">
            <appendix id="Use Case Revisions">
              <title><xsl:value-of select="$strUseCaseRevision"/></title>
              <informaltable>
@@ -340,25 +340,22 @@
 
     <xsl:template match="uc:usecases" mode="issue_list">
       <xsl:if test="count(//uc:usecase[generate-id() = generate-id(key('issue-group', @id)[1])]) > 0">
-        <itemizedlist>
-           <xsl:for-each select="//uc:usecase[generate-id() = generate-id(key('issue-group', @id)[1])]">
-              <xsl:if test="uc:open_issue">
-                 <listitem>
-                    <para><xsl:text>[</xsl:text><xref linkend="{@id}"/><xsl:text>] : </xsl:text>
-                       <itemizedlist>
-                          <xsl:for-each select="key('issue-group', @id)">
-                             <xsl:for-each select="uc:open_issue">
-                                <listitem><para>
-                                  <xsl:apply-templates />
-                                </para></listitem>
-                             </xsl:for-each>
-                          </xsl:for-each>
-                       </itemizedlist>
-                    </para>
-                 </listitem>
-              </xsl:if>
-           </xsl:for-each>
-        </itemizedlist>
+        <xsl:for-each select="//uc:usecase[generate-id() = generate-id(key('issue-group', @id)[1])]">
+          <xsl:if test="uc:open_issue">
+		        <section id="{@id}_issue_list">
+               <title><xsl:text>[</xsl:text><xref linkend="{@id}"/><xsl:text>] : </xsl:text></title>
+               <orderedlist>
+                  <xsl:for-each select="key('issue-group', @id)">
+                     <xsl:for-each select="uc:open_issue">
+                        <listitem><para>
+                          <xsl:apply-templates />
+                        </para></listitem>
+                     </xsl:for-each>
+                  </xsl:for-each>
+               </orderedlist>
+		         </section>
+           </xsl:if>
+        </xsl:for-each>
       </xsl:if>
    </xsl:template>
 

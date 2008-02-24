@@ -405,7 +405,7 @@
    </xsl:template>
 
    <xsl:template match="uc:usecase">
-      <section id="{uc:name}">
+      <section id="{@id}" xreflabel="{@id} {uc:name}">
          <title>
             [<xsl:value-of select="@id"/>] <xsl:value-of select="uc:name"/> <xsl:text> </xsl:text><xsl:value-of select="@change_request"/>
          </title>
@@ -416,13 +416,13 @@
             <xsl:apply-templates select="uc:scope"/>
          </xsl:if>
 
-         <section id="{uc:name}_overview">
+         <section id="{@id}_overview">
           <title><xsl:value-of select="$strOverview"/></title>
-          <para>
+          <para id="{@id}_goal">
              <xsl:apply-templates select="uc:goal"/>
           </para>
           <xsl:if test="uc:description">
-             <para>
+             <para id="{@id}_description">
                 <xsl:apply-templates select="uc:description"/>
              </para>
           </xsl:if>
@@ -431,7 +431,7 @@
             <xsl:when test="boolean(../uc:info/@suppress_diagrams)"/>
             <xsl:otherwise>
               <xsl:variable name="f" select="concat('images/', @id)"/>
-		          <figure pgwide="1">
+		          <figure pgwide="1" id="{@id}_diagram">
 		             <title><xsl:value-of select="$strUseCaseDiagramForUseCase"/><xsl:value-of select="@id"/></title>
 		             <mediaobject  id="{concat('diagram-', uc:name)}">
 		                <imageobject  role="fo">
@@ -453,7 +453,7 @@
          <para role="Body">
          </para>
 
-         <section id="{uc:name}_actors">
+         <section id="{@id}_actors">
             <title><xsl:value-of select="$strActors"/></title>
             <xsl:call-template name="uc:actors" />
          </section>
@@ -464,7 +464,7 @@
          <xsl:choose>
 	         <xsl:when test="boolean(uc:precondition)">
              <xsl:if test="$hasContent or $hasReferringUseCases">
-			         <section>
+			         <section id="{@id}_preconditions">
 			            <title><xsl:value-of select="$strPreconditions"/></title>
 			            <xsl:if test="$hasContent">
 			               <itemizedlist>
@@ -478,7 +478,7 @@
              </xsl:if>
 	         </xsl:when>
 		       <xsl:when test="$hasReferringUseCases">
-		         <section>
+		         <section id="{@id}_referring_use_cases">
 		            <title><xsl:value-of select="$strPreconditions"/></title>
 		            <xsl:call-template name="list_referents">
 		               <xsl:with-param name="usecase_id" select="@id"/>
@@ -488,7 +488,7 @@
          </xsl:choose>
 
          <xsl:if test="boolean(uc:stakeholder) and string-length(uc:stakeholder) &gt; 0">
-            <section>
+            <section id="{@id}_stakeholder">
                <title><xsl:value-of select="$strStakeholder"/></title>
                   <itemizedlist>
                     <xsl:apply-templates select="uc:stakeholder"/>
@@ -496,13 +496,13 @@
             </section>
          </xsl:if>
 
-         <section id="{@id}" xreflabel="{@id} {uc:name}">
+         <section id="{@id}_success">
             <title><xsl:value-of select="$strSuccess"/></title>
             <xsl:apply-templates select="uc:success" />
          </section>
 
          <xsl:if test="count(uc:extension) > 0">
-            <section>
+            <section id="{@id}_extensions">
                <title><xsl:value-of select="$strExtensions"/></title>
                <xsl:for-each select="uc:extension">
                   <section id="{../@id}-{@id}" xreflabel="{../@id}-{@id} {@name}">
@@ -516,7 +516,7 @@
 
          <xsl:if test="boolean(uc:guarantees)">
            <xsl:if test="(boolean(uc:guarantees/uc:success) and string-length(uc:guarantees/uc:success) &gt; 0) or (boolean(uc:guarantees/uc:minimal) and string-length(uc:guarantees/uc:minimal) &gt; 0)">
-		         <section id="{uc:name}_guarantees">
+		         <section id="{@id}_guarantees">
 		            <title><xsl:value-of select="$strGuarantees"/></title>
 		            <xsl:call-template name="uc:guarantees" />
 		         </section>
@@ -524,7 +524,7 @@
          </xsl:if>
 
          <xsl:if test="uc:test-annotations">
-            <section>
+            <section id="{@id}_test_annotations">
                <title><xsl:value-of select="$strTestAnnotations"/></title>
                <orderedlist numeration="arabic">
                   <xsl:apply-templates select="uc:test-annotations"/>
@@ -533,7 +533,7 @@
          </xsl:if>
 
          <xsl:if test="count(uc:open_issue) > 0">
-            <section>
+            <section id="{@id}_open_issues">
                <title><xsl:value-of select="$strOpenIssues"/></title>
                <orderedlist numeration="arabic">
                  <xsl:apply-templates select="uc:open_issue"/>
@@ -549,7 +549,7 @@
    </xsl:template>
 
    <xsl:template match="uc:priority">
-     <section>
+     <section id="{../@id}_priority">
          <title><xsl:value-of select="$strPriority"/></title>
          <para>
            <xsl:choose>
@@ -587,7 +587,7 @@
    </xsl:template>
 
    <xsl:template match="uc:scope">
-     <section>
+     <section id="{../@id}_scope">
          <title><xsl:value-of select="$strScope"/></title>
          <para>
            <xsl:value-of select="."/>
@@ -596,7 +596,7 @@
    </xsl:template>
 
    <xsl:template match="uc:trigger">
-      <section>
+      <section id="{../@id}_trigger">
          <title><xsl:value-of select="$strTrigger"/></title>
          <para>
            <xsl:value-of select="."/>
@@ -605,7 +605,7 @@
    </xsl:template>
 
    <xsl:template match="uc:response_time">
-      <section>
+      <section id="{../@id}_response_time">
          <title><xsl:value-of select="$strResponseTimes"/></title>
          <para>
            <xsl:value-of select="."/>
@@ -614,7 +614,7 @@
    </xsl:template>
 
    <xsl:template match="uc:frequency_of_use">
-      <section>
+      <section id="{../@id}_frequency_of_use">
          <title><xsl:value-of select="$strFrequencyOfUse"/></title>
          <para>
            <xsl:value-of select="."/>

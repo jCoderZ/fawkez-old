@@ -454,7 +454,7 @@
    <xsl:variable name="strIssuesForUseCases">
      <xsl:choose>
        <xsl:when test="$lang='de'">
-          <xsl:text>Offene Anwendungsfall-Probleme</xsl:text>
+          <xsl:text>Offene Punkte - Anwendungsfälle</xsl:text>
        </xsl:when>
        <xsl:otherwise>
           <xsl:text>Issues for Use Cases</xsl:text>

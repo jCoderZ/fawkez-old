@@ -50,19 +50,19 @@
        <redirect:write file="{$file}">
 
 digraph G {
-    fontname = "Times-Roman"
+    fontname = "Sans"
     fontsize = 8
     rankdir = "LR"
 
     node [
-            fontname = "Times-Roman"
+            fontname = "Sans"
             fontsize = 8
             shape = "record"
             fillcolor = "yellow"
     ]
 
     edge [
-            fontname = "Times-Roman"
+            fontname = "Sans"
             fontsize = 8
             weight = 10
     ]
@@ -175,19 +175,19 @@ digraph G {
        <redirect:write file="{$file}">
 
 digraph G {
-    fontname = "Times-Roman"
+    fontname = "Sans"
     fontsize = 8
     rankdir = "LR"
 
     node [
-            fontname = "Times-Roman"
+            fontname = "Sans"
             fontsize = 8
             shape = "record"
             fillcolor = "yellow"
     ]
 
     edge [
-            fontname = "Times-Roman"
+            fontname = "Sans"
             fontsize = 8
     ]
 
@@ -231,18 +231,18 @@ digraph G {
        <redirect:write file="{$file}">
 
 digraph G {
-    fontname = "Times-Roman"
+    fontname = "Sans"
     fontsize = 8
     rankdir = "LR"
 
     node [
-            fontname = "Times-Roman"
+            fontname = "Sans"
             fontsize = 8
             shape = "record"
     ]
 
     edge [
-            fontname = "Times-Roman"
+            fontname = "Sans"
             fontsize = 8
     ]
 
@@ -283,18 +283,18 @@ digraph G {
        <redirect:write file="{$file}">
 
 digraph G {
-    fontname = "Times-Roman"
+    fontname = "Sans"
     fontsize = 8
 
     node [
-            fontname = "Times-Roman"
+            fontname = "Sans"
             fontsize = 8
             shape = "record"
             fillcolor = "yellow"
     ]
 
     edge [
-            fontname = "Times-Roman"
+            fontname = "Sans"
             fontsize = 8
             weight = 10
     ]
@@ -363,18 +363,18 @@ digraph G {
        <redirect:write file="{$file}">
 
 digraph G {
-    fontname = "Times-Roman"
+    fontname = "Sans"
     fontsize = 8
 
     node [
-            fontname = "Times-Roman"
+            fontname = "Sans"
             fontsize = 8
             shape = "record"
             fillcolor = "yellow"
     ]
 
     edge [
-            fontname = "Times-Roman"
+            fontname = "Sans"
             fontsize = 8
             weight = 10
     ]
@@ -552,18 +552,18 @@ digraph G {
        <redirect:write file="{$file}">
 
 digraph G {
-    fontname = "Times-Roman"
+    fontname = "Sans"
     fontsize = 8
 
     node [
-            fontname = "Times-Roman"
+            fontname = "Sans"
             fontsize = 8
             shape = "record"
             fillcolor = "yellow"
     ]
 
     edge [
-            fontname = "Times-Roman"
+            fontname = "Sans"
             fontsize = 8
     ]
 
@@ -587,17 +587,17 @@ digraph G {
        <redirect:write file="{$file}">
 
 digraph G {
-    fontname = "Times-Roman"
+    fontname = "Sans"
     fontsize = 8
 
     node [
-            fontname = "Times-Roman"
+            fontname = "Sans"
             fontsize = 8
             shape = "record"
     ]
 
     edge [
-            fontname = "Times-Roman"
+            fontname = "Sans"
             fontsize = 8
     ]
 
@@ -732,8 +732,8 @@ digraph G {
 
 digraph G {
     graph [rankdir = TB, center = true, fontsize=12];
-    edge [fontname="Times-Roman",fontsize=12,labelfontname="Times-Roman",labelfontsize=12];
-    node [fontname="Times-Roman",fontsize=12];
+    edge [fontname="Sans",fontsize=12,labelfontname="Sans",labelfontsize=12];
+    node [fontname="Sans",fontsize=12];
 
     subgraph cluster0 {
        node [style=filled];

@@ -674,7 +674,7 @@
    <xsl:variable name="strRelation">
      <xsl:choose>
        <xsl:when test="$lang='de'">
-          <xsl:text>Bezug</xsl:text>
+          <xsl:text>Relation</xsl:text>
        </xsl:when>
        <xsl:otherwise>
           <xsl:text>Relation</xsl:text>
@@ -696,7 +696,7 @@
    <xsl:variable name="strPattern">
      <xsl:choose>
        <xsl:when test="$lang='de'">
-          <xsl:text>Kardinalität</xsl:text>
+          <xsl:text>Typ</xsl:text>
        </xsl:when>
        <xsl:otherwise>
           <xsl:text>Pattern</xsl:text>

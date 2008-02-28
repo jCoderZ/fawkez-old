@@ -62,7 +62,7 @@
                   </section>
                    -->
                   <section>
-                    <title><xsl:value-of select="strCompleteDomainModelDetailed"/></title>
+                    <title><xsl:value-of select="$strCompleteDomainModelDetailed"/></title>
                     <para>
                        <xsl:variable name="f" select="concat('images/', 'domain_model')"/>
                        <mediaobject  id="{concat('diagram-', 'domain_model')}">
@@ -102,8 +102,6 @@
                  <xsl:variable name="sec_category" select="."/>
                  <xsl:if test="//req:requirement[req:category/req:primary = $category and req:category/req:secondary = $sec_category]">
                     <section>
-                       <title><xsl:value-of select="."/></title>
-
                        <xsl:if test="$category = 'Domain Model'">
                           <xsl:variable name="f" select="concat('images/', $sec_category, '_domain_model')"/>
                           <mediaobject  id="{concat('diagram-', $sec_category, '_domain_model')}">
@@ -138,12 +136,10 @@
                           <xsl:variable name="thi_category" select="."/>
                           <xsl:if test="//req:requirement[req:category/req:primary = $category and req:category/req:secondary = $sec_category and req:category/req:tertiary = $thi_category]">
                              <section>
-                                <title><xsl:value-of select="."/></title>
-
                                 <xsl:if test="$category = 'Domain Model'">
                                    <xsl:variable name="f" select="concat('images/', $sec_category, '_', $thi_category, '_domain_model')"/>
                                    <title><xsl:value-of select="$strDomainModelForCategory"/><xsl:value-of select="."/></title>
-                                   <mediaobject  id="{concat('diagram-', $sec_category, '_', $thi_category, '_domain_model')}">
+                                   <mediaobject id="{concat('diagram-', $sec_category, '_', $thi_category, '_domain_model')}">
                                       <caption><xsl:value-of select="$strDomainModelForCategory"/><xsl:value-of select="."/>.</caption>
                                       <imageobject  role="fo">
                                           <imagedata  format="SVG"  fileref="{concat($f, '.svg')}"/>

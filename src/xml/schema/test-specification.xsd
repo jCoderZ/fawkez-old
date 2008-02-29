@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <xsd:simpleType name="AreaTopicType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="Functional" />
+			<xsd:enumeration value="Non-Functional" />
+		</xsd:restriction>
+	</xsd:simpleType>
+   <xsd:simpleType name='useCaseStepId'>
+      <xsd:restriction base='xsd:string'>
+         <xsd:pattern value='UC-[0-9]+-[0-9]+|UC-[0-9]+-E[0-9]+-[0-9]+'/>
+      </xsd:restriction>
+   </xsd:simpleType>
+   <xsd:simpleType name='scrnoType'>
+      <xsd:restriction base='xsd:string'>
+         <xsd:pattern value='[tT][aA][cC][iI]-[0-9]+|[eE][xX][tT][0-9]+'/>
+      </xsd:restriction>
+   </xsd:simpleType>
+	<xsd:simpleType name="AutomizationType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="Automatic" />
+			<xsd:enumeration value="Manual" />
+		</xsd:restriction>
+	</xsd:simpleType>
+   <xsd:simpleType name='testCaseId'>
+      <xsd:restriction base='xsd:string'>
+         <xsd:pattern value='[A-Z]{3,4}_[1-9]{1}[0-9]{0,1}[0-9]{4}'/>
+      </xsd:restriction>
+   </xsd:simpleType>
+   <xsd:simpleType name='issueId'>
+      <xsd:restriction base='xsd:string'>
+         <xsd:pattern value='[A-Z]+[\-]+[1-9]+'/>
+      </xsd:restriction>
+   </xsd:simpleType>
+   <xsd:simpleType name='stepId'>
+      <xsd:restriction base='xsd:string'>
+         <xsd:pattern value='[0-9]{1,2}'/>
+      </xsd:restriction>
+   </xsd:simpleType>
+	<xsd:simpleType name="LevelType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="System" />
+			<xsd:enumeration value="Integration" />
+			<xsd:enumeration value="Performance" />
+			<xsd:enumeration value="Load/Stress" />
+			<xsd:enumeration value="Scalability" />
+			<xsd:enumeration value="High Availability" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="PriorityType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="Low" />
+			<xsd:enumeration value="Medium" />
+			<xsd:enumeration value="High" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="VarietyType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="Positiv" />
+			<xsd:enumeration value="Negativ" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="TestType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="Black Box" />
+			<xsd:enumeration value="White Box" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:element name="action" type="xsd:string" />
+	<xsd:element name="areatopic" type="AreaTopicType">
+		
+	</xsd:element>
+	<xsd:element name="cut" type="xsd:string" />
+	<xsd:element name="depends" type="xsd:string"/>
+	<xsd:element name="description" type="xsd:string" />
+	<xsd:element name="docbase" type="xsd:string" />
+	<xsd:element name="equiclass">
+		<xsd:complexType />
+	</xsd:element>
+	<xsd:element name="evaluation" type="AutomizationType" />
+	<xsd:element name="execution" type="AutomizationType" />
+	<xsd:element name="expected" type="xsd:string" />
+	<xsd:element name="id" type="xsd:string" />
+	<xsd:element name="input" type="xsd:string" />
+	<xsd:element name="inputvalues">
+		<xsd:complexType />
+	</xsd:element>
+	<xsd:element name="level" type="LevelType" />
+	<xsd:element name="message" type="xsd:string">
+		</xsd:element>
+	<xsd:element name="method" type="xsd:string">
+		</xsd:element>
+	<xsd:element name="note" type="xsd:string"/>
+	<xsd:element name="postcondition" type="xsd:string" />
+	<xsd:element name="precondition" type="xsd:string" />
+	<xsd:element name="priority" type="PriorityType" />
+	<xsd:element name="revision" type="xsd:string" />
+	<xsd:element name="scrno" type="scrnoType" />
+	<xsd:element name="shortname" type="xsd:string" />
+	<xsd:element name="step">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="id" type="stepId"/>
+				<xsd:element ref="action" />
+				<xsd:element ref="input" />
+				<xsd:element ref="expected" />
+            <xsd:element name="traceability" type="useCaseStepId" maxOccurs="unbounded" minOccurs="0"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="steps">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element maxOccurs="unbounded" minOccurs="1" ref="step" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="team" type="xsd:string" />
+	<xsd:element name="test">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="id" type="testCaseId" />
+				<xsd:element ref="shortname" />
+				<xsd:element ref="team" />
+				<xsd:element ref="type" />
+				<xsd:element ref="areatopic" />
+				<xsd:element ref="level" />
+				<xsd:element ref="variety" />
+				<xsd:element ref="scrno" minOccurs="0" maxOccurs="unbounded"/>
+				<xsd:element ref="docbase" />
+				<xsd:element ref="priority" />
+				<xsd:element ref="depends" />
+				<xsd:element ref="equiclass" />
+				<xsd:element ref="note" />
+				<xsd:element ref="method" />
+				<xsd:element ref="message" />
+				<xsd:element ref="execution" />
+				<xsd:element ref="evaluation" />
+				<xsd:element ref="cut" />
+				<xsd:element ref="description" />
+				<xsd:element ref="precondition" />
+				<xsd:element ref="inputvalues" />
+				<xsd:element ref="steps" />
+				<xsd:element ref="postcondition" />
+				<xsd:element ref="revision" />
+				<xsd:element ref="traceability" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="traceability" type="xsd:string" />
+	<xsd:element name="type" type="TestType" />
+	<xsd:element name="variety" type="VarietyType" />
+</xsd:schema>

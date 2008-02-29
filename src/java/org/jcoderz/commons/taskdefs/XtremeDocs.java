@@ -283,6 +283,10 @@ public class XtremeDocs
                exportToXmi(filePassOne, imageDir);
             }
          }
+         else if ("TestSpec".equals(mType))
+         {
+
+         }
          else
          {
             throw new RuntimeException("Unsupported type " + mType);

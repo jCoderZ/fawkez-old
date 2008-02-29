@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<test xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="http://www.jcoderz.org/xsd/xdoc/test-specification.xsd">
+  <id>T1004</id>
+  <shortname>Module3PositiveTest-001</shortname>
+  <team>test-de:dcoppola</team>
+  <type>Black Box</type>
+  <areatopic>Functional</areatopic>
+  <level>System</level>
+  <variety>Positiv</variety>
+  <scrno></scrno>
+  <docbase>No Docbase provided</docbase>
+  <priority>Low</priority>
+  <equiclass></equiclass>
+  <note></note>
+  <method></method>
+  <message></message>
+  <execution>Manual</execution>
+  <evaluation>Manual</evaluation>
+  <cut>Wallet</cut>
+  <description>
+    
+  </description>
+  <precondition>
+    
+  </precondition>
+  <inputvalues>None</inputvalues>
+  <steps>
+    <step>
+      <id>1</id>
+      <action>
+        On the drop-down box in the navigation frame select this and that.
+      </action>
+      <input>none</input>
+      <expected>
+        After selecting Foo in the drop down box. Content Frame will be
+        reloaded with the start page of the Wallet.
+      </expected>
+    </step>
+    <step>
+      <id>2</id>
+      <action>
+        Select "Data" in the tree view on the navigation frame.
+      </action>
+      <input>none</input>
+      <expected>
+        Content will be reloaded displaying the Data start
+        page.
+      </expected>
+    </step>
+    <step>
+      <id>3</id>
+      <action>
+        Select "First Foo" on the tree.
+      </action>
+      <input>none</input>
+      <expected>
+        Content frame will be reloaded with overview of top units.
+      </expected>
+    </step>
+    <step>
+      <id>4</id>
+      <action>Fill the edit mask of the content frame with input data</action>
+      <input>
+        <table>
+          <tr>
+            <th>Field name</th>
+            <th>Input value</th>
+          </tr>
+          <tr>
+            <td>department (id: TODO)</td>
+            <td>Test_9451</td>
+          </tr>
+        </table>
+      </input>
+      <expected></expected>
+    </step>
+  </steps>
+  <postcondition>
+    No Exception or Failure message will be triggered.
+  </postcondition>
+  <revision>$Revision: 1.3 $</revision>
+  <traceability>UC-27</traceability>
+</test>

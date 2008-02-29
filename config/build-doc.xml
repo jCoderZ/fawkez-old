@@ -162,6 +162,49 @@ static-catalog=yes
           </docletPath>
       </xdoc>
    </target>
+  
+   <target name="testspec" depends="compile-all, xsl-stylesheets, testspec-nodeps"/>
+   <target name="testspec-nodeps">
+      <taskdef name="xdoc"
+               classname="org.jcoderz.commons.taskdefs.XtremeDocs">
+         <classpath>
+            <pathelement location="${build.dir}/classes"/>
+            <path refid="xdoc.classpath"/>
+         </classpath>
+      </taskdef>
+
+      <mkdir dir="${build.dir}/doc/testspec"/>
+      <mkdir dir="${build.dir}/doc/testspec/images"/>
+      <copy todir="${build.dir}/doc/testspec/images"
+           overwrite="true">
+        <fileset dir="${base.dir}/src/doc/usecase/images">
+           <include name="*.svg"/>
+           <include name="*.png"/>
+        </fileset>
+        <fileset dir="${base.dir}/src/doc/images">
+           <include name="*.svg"/>
+           <include name="*.png"/>
+        </fileset>
+      </copy>
+      <xdoc type="TestSpec" in="${base.dir}/src/doc/testspec/test_specification.xml"
+            out="${build.dir}/doc/testspec" failonerror="true"
+            xephome="${xep.home}" cclabel="${label}" companyname="JCoderZ.org"
+            companylogo="jcoderz-org">
+         <src dir="${base.dir}/src/java"/>
+         <src dir="${build.dir}/gen-java"/>
+         <classpath>
+               <path refid="xdoc.classpath"/>
+         </classpath>
+         <formatter type="HTML"
+            style="${build.dir}/docbook/jcoderz-html-style.xsl"
+            css="${base.dir}/src/css/default.css"/>
+         <formatter type="PDF"
+            style="${build.dir}/docbook/jcoderz-fo-style.xsl"/>
+         <docletPath>
+            <path refid="xdoc.classpath"/>
+         </docletPath>
+     </xdoc>
+   </target>
 
 
    <!-- =================================================================== -->

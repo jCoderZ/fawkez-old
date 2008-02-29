@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+
+<testspecs xmlns:xi="http://www.w3.org/2001/XInclude"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:noNamespaceSchemaLocation="http://www.jcoderz.org/xsd/xdoc/test-specification.xsd">
+
+   <info project="TACO All" version="$Name:  $"/>
+   <bookinfo>
+      <authorgroup>
+         <author><firstname>Dino</firstname><surname>Coppola</surname></author>
+      </authorgroup>
+   </bookinfo>
+     
+   <xi:include href="../testspec/T1001-Module1PositiveTest-001.xml" parse="xml"/>
+   <xi:include href="../testspec/T1002-Module1PositiveTest-002.xml" parse="xml"/>
+   <xi:include href="../testspec/T1003-Module2PositiveTest-001.xml" parse="xml"/>
+   <xi:include href="../testspec/T1004-Module3PositiveTest-001.xml" parse="xml"/>
+</testspecs>
+             
+             
+   
+

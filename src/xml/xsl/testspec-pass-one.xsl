@@ -5,12 +5,15 @@
    xmlns:db="urn:docbook"
    xmlns:uc="uc"
    xmlns:req="req"
+   xmlns:tc="http://jcoderz.org/test-specifications"
    exclude-result-prefixes="xsl xi app db"
    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
    xsi:schemaLocation="req
                        http://www.jcoderz.org/xsd/xdoc/requirements-SNAPSHOT.xsd
                        uc
-                       http://www.jcoderz.org/xsd/xdoc/usecase-SNAPSHOT.xsd"
+                       http://www.jcoderz.org/xsd/xdoc/usecase-SNAPSHOT.xsd
+                       http://jcoderz.org/test-specifications
+                       http://www.jcoderz.org/xsd/xdoc/test-specifications-SNAPSHOT.xsd"
    version="1.0">
 
 <xsl:output method="xml" indent="yes" encoding="UTF-8"/>

@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns:docbook="http://docbook.org/ns/docbook"
+            xmlns:tc="http://jcoderz.org/test-specifications"
+            targetNamespace="http://jcoderz.org/test-specifications">
+    <xsd:import schemaLocation="http://www.docbook.org/xsd/4.2/docbook.xsd"/>
+   
     <xsd:simpleType name="AreaTopicType">
 		<xsd:restriction base="xsd:string">
 			<xsd:enumeration value="Functional" />
@@ -67,7 +72,7 @@
 		</xsd:restriction>
 	</xsd:simpleType>
 	<xsd:element name="action" type="xsd:string" />
-	<xsd:element name="areatopic" type="AreaTopicType">
+	<xsd:element name="areatopic" type="tc:AreaTopicType">
 		
 	</xsd:element>
 	<xsd:element name="cut" type="xsd:string" />
@@ -77,15 +82,15 @@
 	<xsd:element name="equiclass">
 		<xsd:complexType />
 	</xsd:element>
-	<xsd:element name="evaluation" type="AutomizationType" />
-	<xsd:element name="execution" type="AutomizationType" />
+	<xsd:element name="evaluation" type="tc:AutomizationType" />
+	<xsd:element name="execution" type="tc:AutomizationType" />
 	<xsd:element name="expected" type="xsd:string" />
 	<xsd:element name="id" type="xsd:string" />
 	<xsd:element name="input" type="xsd:string" />
 	<xsd:element name="inputvalues">
 		<xsd:complexType />
 	</xsd:element>
-	<xsd:element name="level" type="LevelType" />
+	<xsd:element name="level" type="tc:LevelType" />
 	<xsd:element name="message" type="xsd:string">
 		</xsd:element>
 	<xsd:element name="method" type="xsd:string">
@@ -93,25 +98,25 @@
 	<xsd:element name="note" type="xsd:string"/>
 	<xsd:element name="postcondition" type="xsd:string" />
 	<xsd:element name="precondition" type="xsd:string" />
-	<xsd:element name="priority" type="PriorityType" />
+	<xsd:element name="priority" type="tc:PriorityType" />
 	<xsd:element name="revision" type="xsd:string" />
-	<xsd:element name="scrno" type="scrnoType" />
+	<xsd:element name="scrno" type="tc:scrnoType" />
 	<xsd:element name="shortname" type="xsd:string" />
 	<xsd:element name="step">
 		<xsd:complexType>
 			<xsd:sequence>
-				<xsd:element name="id" type="stepId"/>
-				<xsd:element ref="action" />
-				<xsd:element ref="input" />
-				<xsd:element ref="expected" />
-            <xsd:element name="traceability" type="useCaseStepId" maxOccurs="unbounded" minOccurs="0"/>
+				<xsd:element name="id" type="tc:stepId"/>
+				<xsd:element ref="tc:action" />
+				<xsd:element ref="tc:input" />
+				<xsd:element ref="tc:expected" />
+            <xsd:element name="traceability" type="tc:useCaseStepId" maxOccurs="unbounded" minOccurs="0"/>
 			</xsd:sequence>
 		</xsd:complexType>
 	</xsd:element>
 	<xsd:element name="steps">
 		<xsd:complexType>
 			<xsd:sequence>
-				<xsd:element maxOccurs="unbounded" minOccurs="1" ref="step" />
+				<xsd:element maxOccurs="unbounded" minOccurs="1" ref="tc:step" />
 			</xsd:sequence>
 		</xsd:complexType>
 	</xsd:element>
@@ -119,35 +124,35 @@
 	<xsd:element name="test">
 		<xsd:complexType>
 			<xsd:sequence>
-				<xsd:element name="id" type="testCaseId" />
-				<xsd:element ref="shortname" />
-				<xsd:element ref="team" />
-				<xsd:element ref="type" />
-				<xsd:element ref="areatopic" />
-				<xsd:element ref="level" />
-				<xsd:element ref="variety" />
-				<xsd:element ref="scrno" minOccurs="0" maxOccurs="unbounded"/>
-				<xsd:element ref="docbase" />
-				<xsd:element ref="priority" />
-				<xsd:element ref="depends" />
-				<xsd:element ref="equiclass" />
-				<xsd:element ref="note" />
-				<xsd:element ref="method" />
-				<xsd:element ref="message" />
-				<xsd:element ref="execution" />
-				<xsd:element ref="evaluation" />
-				<xsd:element ref="cut" />
-				<xsd:element ref="description" />
-				<xsd:element ref="precondition" />
-				<xsd:element ref="inputvalues" />
-				<xsd:element ref="steps" />
-				<xsd:element ref="postcondition" />
-				<xsd:element ref="revision" />
-				<xsd:element ref="traceability" />
+				<xsd:element name="id" type="tc:testCaseId" />
+				<xsd:element ref="tc:shortname" />
+				<xsd:element ref="tc:team" />
+				<xsd:element ref="tc:type" />
+				<xsd:element ref="tc:areatopic" />
+				<xsd:element ref="tc:level" />
+				<xsd:element ref="tc:variety" />
+				<xsd:element ref="tc:scrno" minOccurs="0" maxOccurs="unbounded"/>
+				<xsd:element ref="tc:docbase" />
+				<xsd:element ref="tc:priority" />
+				<xsd:element ref="tc:depends" />
+				<xsd:element ref="tc:equiclass" />
+				<xsd:element ref="tc:note" />
+				<xsd:element ref="tc:method" />
+				<xsd:element ref="tc:message" />
+				<xsd:element ref="tc:execution" />
+				<xsd:element ref="tc:evaluation" />
+				<xsd:element ref="tc:cut" />
+				<xsd:element ref="tc:description" />
+				<xsd:element ref="tc:precondition" />
+				<xsd:element ref="tc:inputvalues" />
+				<xsd:element ref="tc:steps" />
+				<xsd:element ref="tc:postcondition" />
+				<xsd:element ref="tc:revision" />
+				<xsd:element ref="tc:traceability" />
 			</xsd:sequence>
 		</xsd:complexType>
 	</xsd:element>
 	<xsd:element name="traceability" type="xsd:string" />
-	<xsd:element name="type" type="TestType" />
-	<xsd:element name="variety" type="VarietyType" />
+	<xsd:element name="type" type="tc:TestType" />
+	<xsd:element name="variety" type="tc:VarietyType" />
 </xsd:schema>

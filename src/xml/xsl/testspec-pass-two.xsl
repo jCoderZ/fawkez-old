@@ -1,7 +1,19 @@
 <?xml version="1.0"?>
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
-                xmlns:xi="http://www.w3.org/2003/XInclude"  
+                xmlns:uc="uc"
+                xmlns:req="req"
+                xmlns:tc="http://jcoderz.org/test-specifications"
+                xmlns:xi="http://www.w3.org/2001/XInclude"
+                xmlns:db="http://docbook.org/ns/docbook"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                exclude-result-prefixes="xsl xi db uc req xsi"
+                xsi:schemaLocation="req
+                                http://www.jcoderz.org/xsd/xdoc/requirements-SNAPSHOT.xsd
+                                uc
+                                http://www.jcoderz.org/xsd/xdoc/usecase-SNAPSHOT.xsd
+                                http://jcoderz.org/test-specifications
+                                http://www.jcoderz.org/xsd/xdoc/test-specifications-SNAPSHOT.xsd"  
                 version="1.0">
    <xsl:output encoding="UTF-8"/>
 

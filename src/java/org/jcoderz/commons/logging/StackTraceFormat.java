@@ -41,6 +41,7 @@ import java.util.List;
 import java.util.logging.LogRecord;
 
 import org.jcoderz.commons.Loggable;
+import org.jcoderz.commons.util.StringUtil;
 
 /**
  * This class is used for formatting the stack trace of a Throwable or for
@@ -191,7 +192,15 @@ public final class StackTraceFormat
       if (thrown instanceof Loggable)
       {
          final Loggable nested = (Loggable) thrown;
-         text.append(nested.getLogMessageInfo().getSymbol());
+         final String message = nested.getLogMessageInfo().getSymbol();
+         if (!StringUtil.isEmptyOrNull(message))
+         {
+             text.append(message);
+         }
+         else
+         {
+             text.append(thrown.toString());
+         }
       }
       else
       {

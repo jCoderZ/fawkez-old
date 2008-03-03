@@ -111,4 +111,68 @@
          to the error condition.
       </solution>
    </message>
+   <message
+      id="8"
+      name="ARGUMENT_MAX_LENGTH_VIOLATION"
+      level="WARNING"
+      base-exception="org.jcoderz.commons.ArgumentMalformedException">
+      <text>
+         The given argument is at least partly malformed.
+         Argument ''{ARGUMENT_NAME}'' cannot be set to
+         value ''{Serializable:ARGUMENT_VALUE}''. The length of the Value
+         ({Integer:ARGUMENT_LENGTH}) exceeds the allowed maximum length
+         ({Integer:MAX_LENGTH}) for {Class:ARGUMENT_CLASS}.
+      </text>
+      <solution>
+         Supply a correct value for the argument.
+      </solution>
+   </message>
+   <message
+      id="9"
+      name="ARGUMENT_MIN_LENGTH_VIOLATION"
+      level="WARNING"
+      base-exception="org.jcoderz.commons.ArgumentMalformedException">
+      <text>
+         The given argument is at least partly malformed.
+         Argument ''{ARGUMENT_NAME}'' cannot be set to
+         value ''{Serializable:ARGUMENT_VALUE}''. The length of the Value
+         ({Integer:ARGUMENT_LENGTH}) is below the allowed minimum length
+         ({Integer:MIN_LENGTH}) for {Class:ARGUMENT_CLASS}.
+      </text>
+      <solution>
+         Supply a correct value for the argument.
+      </solution>
+   </message>
+   <message
+      id="10"
+      name="ARGUMENT_MAX_VALUE_VIOLATION"
+      level="WARNING"
+      base-exception="org.jcoderz.commons.ArgumentMalformedException">
+      <text>
+         The given argument is at least partly malformed.
+         Argument ''{ARGUMENT_NAME}'' cannot be set to
+         value ''{Serializable:ARGUMENT_VALUE}''. The value
+         exceeds the allowed maximum ({Long:MAX_VALUE})
+         for {Class:ARGUMENT_CLASS}.
+      </text>
+      <solution>
+         Supply a correct value for the argument.
+      </solution>
+   </message>
+   <message
+      id="11"
+      name="ARGUMENT_MIN_VALUE_VIOLATION"
+      level="WARNING"
+      base-exception="org.jcoderz.commons.ArgumentMalformedException">
+      <text>
+         The given argument is at least partly malformed.
+         Argument ''{ARGUMENT_NAME}'' cannot be set to
+         value ''{Serializable:ARGUMENT_VALUE}''. The value
+         is below the allowed minimum
+         ({Long:MIN_VALUE}) for {Class:ARGUMENT_CLASS}.
+      </text>
+      <solution>
+         Supply a correct value for the argument.
+      </solution>
+   </message>
 </group>

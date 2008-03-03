@@ -634,7 +634,7 @@ import java.util.List;
  * @author generated
  */
 public final class <xsl:value-of select="$classname"/>
-      implements Serializable
+      implements Serializable, org.jcoderz.commons.StrongType
 {
    /**
     * The name of this type.
@@ -801,7 +801,7 @@ import java.io.Serializable;
  * @author generated via stylesheet
  */
 public final class <xsl:value-of select="$classname"/>
-      implements Serializable
+      implements Serializable, org.jcoderz.commons.StrongType
 {
    /**
     * The name of this type.
@@ -841,15 +841,17 @@ public final class <xsl:value-of select="$classname"/>
       Assert.notNull(str, TYPE_NAME);<xsl:if test="$min-length != 0">
       if (str.length() &lt; MIN_LENGTH)
       {
-         throw new ArgumentMalformedException(
+         throw new ArgumentMinLengthViolationException(
             <xsl:value-of select="$classname-constant"/>,
-            str, "Minimum length for value is " + MIN_LENGTH + ".");
+            str, new Integer(str.length()), new Integer(MIN_LENGTH),
+            <xsl:value-of select="$classname"/>.class);
       }</xsl:if>
       if (str.length() &gt; MAX_LENGTH)
       {
-         throw new ArgumentMalformedException(
+         throw new ArgumentMaxLengthViolationException(
             <xsl:value-of select="$classname-constant"/>,
-            str, "Maximum length for value is " + MAX_LENGTH + ".");
+            str, new Integer(str.length()), new Integer(MAX_LENGTH),
+            <xsl:value-of select="$classname"/>.class);
       }<xsl:if test="$token-type">
       if (!XsdUtil.isValidToken(str))
       {
@@ -913,6 +915,8 @@ public final class <xsl:value-of select="$classname"/>
 
 <xsl:template name="restricted-string-import-hook" priority="-1">
 <xsl:param name="token-type" select="''"/>
+import org.jcoderz.commons.ArgumentMinLengthViolationException;
+import org.jcoderz.commons.ArgumentMaxLengthViolationException;
 import org.jcoderz.commons.ArgumentMalformedException;<xsl:if test="$token-type">
 import org.jcoderz.commons.util.XsdUtil;</xsl:if>
 import org.jcoderz.commons.util.Assert;
@@ -946,7 +950,7 @@ import org.jcoderz.commons.util.HashCodeUtil;
  * @author generated via stylesheet
  */
 public final class <xsl:value-of select="$classname"/>
-      implements Serializable
+      implements Serializable, org.jcoderz.commons.StrongType
 {
    /**
     * The name of this type.
@@ -989,22 +993,24 @@ public final class <xsl:value-of select="$classname"/>
     * @throws ArgumentMalformedException If the given long <code>id</code>
     *         violates the restriction of the type
     *         <xsl:value-of select="$classname"/>.
+    * @throws ArgumentMinValueViolationException If the value of the given
+    *         long <code>id</code> is below <code>MIN_VALUE</code>.
+    * @throws ArgumentMaxValueViolationException If the value of the given
+    *         long <code>id</code> is above <code>MAX_VALUE</code>.
     */
    private <xsl:value-of select="$classname"/> (long id)
    {
       if (id &lt; MIN_VALUE)
       {
-         throw new ArgumentMalformedException(
-               TYPE_NAME,
-               String.valueOf(id),
-               "Minimum value for <xsl:value-of select="$classname"/> is " + MIN_VALUE);
+         throw new ArgumentMinValueViolationException(
+               TYPE_NAME, new Long(id), new Long(MIN_VALUE),
+               <xsl:value-of select="$classname"/>.class);
       }
       if (id &gt; MAX_VALUE)
       {
-         throw new ArgumentMalformedException(
-               TYPE_NAME,
-               String.valueOf(id),
-               "Maximum value for <xsl:value-of select="$classname"/> is " + MAX_VALUE);
+         throw new ArgumentMaxValueViolationException(
+               TYPE_NAME, new Long(id), new Long(MAX_VALUE),
+               <xsl:value-of select="$classname"/>.class);
       }
       m<xsl:value-of select="$classname"/> = id;
    }
@@ -1016,6 +1022,10 @@ public final class <xsl:value-of select="$classname"/>
     * @throws ArgumentMalformedException If the given long <code>id</code>
     *         violates the restriction of the type
     *         <xsl:value-of select="$classname"/>.
+    * @throws ArgumentMinValueViolationException If the value of the given
+    *         long <code>id</code> is below <code>MIN_VALUE</code>.
+    * @throws ArgumentMaxValueViolationException If the value of the given
+    *         long <code>id</code> is above <code>MAX_VALUE</code>.
     */
    public static <xsl:value-of select="$classname"/> fromLong (long id)
          throws ArgumentMalformedException
@@ -1030,6 +1040,10 @@ public final class <xsl:value-of select="$classname"/>
     * @throws ArgumentMalformedException If the given string <code>s</code>
     *         violates the restriction of the type
     *         <xsl:value-of select="$classname"/>.
+    * @throws ArgumentMinValueViolationException If the long value of the given
+    *         string <code>s</code> is below <code>MIN_VALUE</code>.
+    * @throws ArgumentMaxValueViolationException If the long value of the given
+    *         string <code>s</code> is above <code>MAX_VALUE</code>.
     */
    public static <xsl:value-of select="$classname"/> fromString (String s)
          throws ArgumentMalformedException
@@ -1054,6 +1068,10 @@ public final class <xsl:value-of select="$classname"/>
     * @throws ArgumentMalformedException If the given Long <code>id</code>
     *         is null or violates the restriction of the type
     *         <xsl:value-of select="$classname"/>.
+    * @throws ArgumentMinValueViolationException If the value of the given
+    *         long <code>id</code> is below <code>MIN_VALUE</code>.
+    * @throws ArgumentMaxValueViolationException If the value of the given
+    *         long <code>id</code> is above <code>MAX_VALUE</code>.
     */
    public static <xsl:value-of select="$classname"/> fromLong (Long id)
          throws ArgumentMalformedException
@@ -1121,6 +1139,8 @@ public final class <xsl:value-of select="$classname"/>
 
 <xsl:template name="restricted-long-import-hook" priority="-1">
 import org.jcoderz.commons.ArgumentMalformedException;
+import org.jcoderz.commons.ArgumentMinValueViolationException;
+import org.jcoderz.commons.ArgumentMaxValueViolationException;
 import org.jcoderz.commons.util.RandomUtil;
 import org.jcoderz.commons.util.Assert;
 </xsl:template>
@@ -1154,7 +1174,7 @@ import java.util.regex.Pattern;
  * @author generated
  */
 public final class <xsl:value-of select="$classname"/>
-      implements Serializable
+      implements Serializable, org.jcoderz.commons.StrongType
 {
    /**
     * The name of this type.

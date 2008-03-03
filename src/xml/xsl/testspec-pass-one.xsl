@@ -13,7 +13,7 @@
                        uc
                        http://www.jcoderz.org/xsd/xdoc/usecase-SNAPSHOT.xsd
                        http://jcoderz.org/test-specifications
-                       http://www.jcoderz.org/xsd/xdoc/test-specifications-SNAPSHOT.xsd"
+                       http://www.jcoderz.org/xsd/xdoc/test-specification-SNAPSHOT.xsd"
    version="1.0">
 
 <xsl:output method="xml" indent="yes" encoding="UTF-8"/>

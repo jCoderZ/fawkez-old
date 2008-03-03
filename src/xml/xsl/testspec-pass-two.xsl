@@ -13,7 +13,7 @@
                                 uc
                                 http://www.jcoderz.org/xsd/xdoc/usecase-SNAPSHOT.xsd
                                 http://jcoderz.org/test-specifications
-                                http://www.jcoderz.org/xsd/xdoc/test-specifications-SNAPSHOT.xsd"  
+                                http://www.jcoderz.org/xsd/xdoc/test-specification-SNAPSHOT.xsd"  
                 version="1.0">
    <xsl:output encoding="UTF-8"/>
 
@@ -210,7 +210,7 @@
 
     <xsl:template name="statistics">
       <para>
-         <table frame="all">
+         <table frame="all" tabstyle="striped">
            <title>Global Statistics</title>
            <tgroup cols="2" align="left" colsep="1" rowsep="1">
               <colspec colnum="1" colname="c1"/>
@@ -262,7 +262,7 @@
       </para>
 
       <para>
-        <table frame="all">
+        <table frame="all" tabstyle="striped">
            <title>Test Cases for Components Under Test</title>
            <tgroup cols="2" align="left" colsep="1" rowsep="1">
               <colspec colnum="1" colname="c1"/>
@@ -297,7 +297,7 @@
        <para>
          <xsl:choose>
            <xsl:when test="//scrno[generate-id() = generate-id(key('test-issue-group', .))]">
-            <table frame="all"><title>Elements</title>
+            <table frame="all" tabstyle="striped"><title>Elements</title>
                <tgroup cols="2" align="left" colsep="1" rowsep="1">
                   <colspec colwidth="75" colnum="1" colname="c1"/>
                   <thead>
@@ -361,7 +361,7 @@
             [<xsl:value-of select="id"/>] <xsl:value-of select="shortname"/>
          </title>
 
-         <table frame="all"><title>Elements</title>
+         <table frame="all" tabstyle="striped"><title>Elements</title>
             <tgroup cols="4" align="left" colsep="1" rowsep="1">
                <colspec colname="c1"/>
                <colspec colname="c2"/>
@@ -463,7 +463,7 @@
             [<xsl:value-of select="id"/>] <xsl:value-of select="shortname"/>
          </title>
 
-         <table frame="all"><title>Elements</title>
+         <table frame="all" tabstyle="striped"><title>Elements</title>
             <tgroup cols="4" align="left" colsep="1" rowsep="1">
                <colspec colname="c1"/>
                <colspec colname="c2"/>
@@ -569,7 +569,7 @@
    </xsl:template>
 
    <xsl:template match="steps">
-     <table frame="all"><title>Test Steps</title>
+     <table frame="all" tabstyle="striped"><title>Test Steps</title>
         <tgroup cols="4" align="left" colsep="1" rowsep="1">
            <colspec colname="c1"/>
            <colspec colname="c2"/>
@@ -601,7 +601,7 @@
    </xsl:template>
    
    <xsl:template match="steps" mode="nf-tests">
-     <table frame="all"><title>Test Groups</title>
+     <table frame="all" tabstyle="striped"><title>Test Groups</title>
         <tgroup cols="4" align="left" colsep="1" rowsep="1">
            <colspec colname="c1"/>
            <colspec colname="c2"/>

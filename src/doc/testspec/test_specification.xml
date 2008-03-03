@@ -2,7 +2,7 @@
 
 <testspecs xmlns:xi="http://www.w3.org/2001/XInclude"
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-           xsi:noNamespaceSchemaLocation="http://www.jcoderz.org/xsd/xdoc/test-specification.xsd">
+           xsi:noNamespaceSchemaLocation="http://www.jcoderz.org/xsd/xdoc/test-specification-SNAPSHOT.xsd">
 
    <info project="TACO All" version="$Name:  $"/>
    <bookinfo>

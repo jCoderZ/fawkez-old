@@ -696,19 +696,26 @@
 
    <xsl:template match="uc:step">
            <xsl:variable name="uc_id">
-            <xsl:choose>
-               <xsl:when test="name(..) = 'uc:success'">
-                   <xsl:value-of select="../../@id"/>-<xsl:value-of select="@id"/>
-               </xsl:when>
-               <xsl:otherwise>
-                 <xsl:value-of select="../../@id"/>-<xsl:value-of
-                  select="../@id"/>-<xsl:value-of select="@id"/>
-               </xsl:otherwise>
-            </xsl:choose>
+              <xsl:choose>
+                 <xsl:when test="name(..) = 'uc:success'">
+                     <xsl:value-of select="../../@id"/>-<xsl:value-of select="@id"/>
+                 </xsl:when>
+                 <xsl:otherwise>
+                   <xsl:value-of select="../../@id"/>-<xsl:value-of
+                      select="../@id"/>-<xsl:value-of select="@id"/>
+                 </xsl:otherwise>
+              </xsl:choose>
            </xsl:variable>
             <listitem id="{$uc_id}" xreflabel="{$uc_id} {../@name} {../../uc:name}">
                <para>
-                  <xsl:value-of select="$uc_id"/>: <xsl:apply-templates/>
+                  <xsl:value-of select="$uc_id"/>
+                  <xsl:if test="@desc and not(@desc = '')">
+                     <xsl:text> [</xsl:text>
+                     <xsl:value-of select="@desc"/>
+                     <xsl:text>]</xsl:text>
+                  </xsl:if>
+                  <xsl:text>: </xsl:text>
+                  <xsl:apply-templates/>
                </para>
             </listitem>
    </xsl:template>

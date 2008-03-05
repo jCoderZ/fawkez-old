@@ -28,7 +28,9 @@
            <req:name lang="de">Meine ID</req:name>
            <req:name lang="alias">Formerly Known as Symbol.</req:name>
         </req:alternative_name>
-        <req:pattern>NAME_[1-9]1-16</req:pattern>
+        <req:pattern>
+           NAME_[1-9]1-16
+        </req:pattern>
      </req:attribute>
      <req:attribute>
         <req:name>Pointer1</req:name>

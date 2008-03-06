@@ -45,35 +45,23 @@
               </title>
 
               <xsl:if test="$category = 'Domain Model'">
-                 <!--
-                 <section>
-                    <title>Complete Domain Model - Overview</title>
-                    <para>
-                       <xsl:variable name="f" select="concat('images/', 'domain_model_global_cat')"/>
-                       <mediaobject  id="{concat('diagram-', 'domain_model_global_cat')}">
-                          <imageobject  role="fo">
-                              <imagedata  format="SVG"  fileref="{concat($f, '.svg')}"/>
-                           </imageobject>
-                           <imageobject  role="html">
-                              <imagedata  format="PNG"  fileref="{concat($f, '.png')}"/>
-                           </imageobject>
-                        </mediaobject>
-                     </para>
-                  </section>
-                   -->
                   <section>
                     <title><xsl:value-of select="$strCompleteDomainModelDetailed"/></title>
-                    <para>
-                       <xsl:variable name="f" select="concat('images/', 'domain_model')"/>
-                       <mediaobject  id="{concat('diagram-', 'domain_model')}">
-                          <imageobject  role="fo">
-                              <imagedata  format="SVG"  fileref="{concat($f, '.svg')}"/>
-                           </imageobject>
-                           <imageobject  role="html">
-                              <imagedata  format="PNG"  fileref="{concat($f, '.png')}"/>
-                           </imageobject>
-                        </mediaobject>
-                     </para>
+                    <xsl:variable name="f" select="concat('images/', 'domain_model')"/>
+                    <figure>
+                      <xsl:attribute name="id">
+                        <xsl:text>figure.domain_model_complete</xsl:text>
+                      </xsl:attribute>
+                      <title><xsl:value-of select="$strCompleteDomainModelDetailed"/></title>
+                      <mediaobject id="{concat('diagram-', 'domain_model')}">
+                        <imageobject role="fo">
+                          <imagedata format="SVG" fileref="{concat($f, '.svg')}"/>
+                        </imageobject>
+                        <imageobject role="html">
+                          <imagedata format="PNG" fileref="{concat($f, '.png')}"/>
+                        </imageobject>
+                      </mediaobject>
+                    </figure>
                   </section>
               </xsl:if>
 
@@ -82,14 +70,20 @@
                     <title><xsl:value-of select="$strCompleteRoleDependencies"/></title>
                     <para>
                        <xsl:variable name="f" select="concat('images/', 'roles_model')"/>
-                       <mediaobject  id="{concat('diagram-', 'role_model')}">
-                          <imageobject  role="fo">
-                              <imagedata  format="SVG"  fileref="{concat($f, '.svg')}"/>
+                       <figure>
+                         <xsl:attribute name="id">
+                           <xsl:text>figure.role_model_complete</xsl:text>
+                         </xsl:attribute>
+                         <title><xsl:value-of select="$strCompleteRoleDependencies"/></title>
+                         <mediaobject id="{concat('diagram-', 'role_model')}">
+                           <imageobject role="fo">
+                             <imagedata format="SVG" fileref="{concat($f, '.svg')}"/>
                            </imageobject>
-                           <imageobject  role="html">
-                              <imagedata  format="PNG"  fileref="{concat($f, '.png')}"/>
+                           <imageobject role="html">
+                             <imagedata format="PNG" fileref="{concat($f, '.png')}"/>
                            </imageobject>
-                        </mediaobject>
+                         </mediaobject>
+                       </figure>
                      </para>
                   </section>
               </xsl:if>
@@ -106,28 +100,38 @@
                       <xsl:choose>
                         <xsl:when test="$category = 'Domain Model'">
                           <xsl:variable name="f" select="concat('images/', $sec_category, '_domain_model')"/>
-                          <mediaobject  id="{concat('diagram-', $sec_category, '_domain_model')}">
-                             <title><xsl:value-of select="$strDomainModelForCategory"/><xsl:value-of select="."/>.</title>
-                             <imageobject  role="fo">
-                                 <imagedata  format="SVG"  fileref="{concat($f, '.svg')}"/>
+                          <figure>
+                            <xsl:attribute name="id">
+                              <xsl:value-of select="concat('figure.', $sec_category, '_domain_model')" />
+                            </xsl:attribute>
+                            <title><xsl:value-of select="$strDomainModelForCategory"/><xsl:value-of select="."/>.</title>
+                            <mediaobject id="{concat('diagram-', $sec_category, '_domain_model')}">
+                              <imageobject  role="fo">
+                                <imagedata format="SVG" fileref="{concat($f, '.svg')}"/>
                               </imageobject>
-                              <imageobject  role="html">
-                                 <imagedata  format="PNG"  fileref="{concat($f, '.png')}"/>
+                              <imageobject role="html">
+                                <imagedata format="PNG" fileref="{concat($f, '.png')}"/>
                               </imageobject>
-                           </mediaobject>
-                         </xsl:when>
+                            </mediaobject>
+                          </figure>
+                        </xsl:when>
 
                         <xsl:when test="starts-with($category, 'Role')">
                           <xsl:variable name="f" select="concat('images/', $sec_category, '_roles_model')"/>
-                          <mediaobject  id="{concat('diagram-', $sec_category, '_roles_model')}">
-                             <title><xsl:value-of select="strRoleModelForCategory"/><xsl:value-of select="."/>.</title>
-                             <imageobject  role="fo">
-                                 <imagedata  format="SVG"  fileref="{concat($f, '.svg')}"/>
-                              </imageobject>
-                              <imageobject  role="html">
-                                 <imagedata  format="PNG"  fileref="{concat($f, '.png')}"/>
-                              </imageobject>
-                           </mediaobject>
+                            <figure>
+                              <xsl:attribute name="id">
+                                <xsl:value-of select="concat('figure.', $sec_category, '_roles_model')" />
+                              </xsl:attribute>
+                              <title><xsl:value-of select="$strRoleModelForCategory"/><xsl:value-of select="."/>.</title>
+                              <mediaobject id="{concat('diagram-', $sec_category, '_roles_model')}">
+                                <imageobject role="fo">
+                                  <imagedata format="SVG" fileref="{concat($f, '.svg')}"/>
+                                </imageobject>
+                                <imageobject role="html">
+                                  <imagedata format="PNG" fileref="{concat($f, '.png')}"/>
+                                </imageobject>
+                              </mediaobject>
+                            </figure>
                          </xsl:when>
                        </xsl:choose>
 
@@ -143,36 +147,44 @@
                                <xsl:choose>
                                  <xsl:when test="$category = 'Domain Model'">
                                    <xsl:variable name="f" select="concat('images/', $sec_category, '_', $thi_category, '_domain_model')"/>
-                                   <title><xsl:value-of select="$strDomainModelForCategory"/><xsl:value-of select="."/></title>
-                                   <mediaobject id="{concat('diagram-', $sec_category, '_', $thi_category, '_domain_model')}">
-                                      <caption><xsl:value-of select="$strDomainModelForCategory"/><xsl:value-of select="."/>.</caption>
-                                      <imageobject  role="fo">
-                                          <imagedata  format="SVG"  fileref="{concat($f, '.svg')}"/>
-                                       </imageobject>
-                                       <imageobject  role="html">
-                                          <imagedata  format="PNG"  fileref="{concat($f, '.png')}"/>
-                                       </imageobject>
-                                    </mediaobject>
+                                   <figure>
+                                     <xsl:attribute name="id">
+                                       <xsl:value-of select="concat('figure.', $sec_category, '_', $thi_category, '_domain_model')" />
+                                     </xsl:attribute>
+                                     <title><xsl:value-of select="$strDomainModelForCategory"/><xsl:value-of select="."/></title>
+                                     <mediaobject id="{concat('diagram-', $sec_category, '_', $thi_category, '_domain_model')}">
+                                        <imageobject role="fo">
+                                            <imagedata format="SVG" fileref="{concat($f, '.svg')}"/>
+                                         </imageobject>
+                                         <imageobject role="html">
+                                            <imagedata format="PNG" fileref="{concat($f, '.png')}"/>
+                                         </imageobject>
+                                      </mediaobject>
+                                    </figure>
                                   </xsl:when>
 
                                   <xsl:when test="starts-with($category, 'Role')">
                                    <xsl:variable name="f" select="concat('images/', $sec_category, '_', $thi_category, '_roles_model')"/>
-                                   <title><xsl:value-of select="$strRoleModelForCategory"/><xsl:value-of select="."/></title>
-                                   <mediaobject  id="{concat('diagram-', $sec_category, '_', $thi_category, '_roles_model')}">
-                                      <caption><xsl:value-of select="$strRoleModelForCategory"/><xsl:value-of select="."/>.</caption>
-                                      <imageobject  role="fo">
-                                          <imagedata  format="SVG"  fileref="{concat($f, '.svg')}"/>
+                                   <figure>
+                                     <xsl:attribute name="id">
+                                       <xsl:value-of select="concat('figure.', $sec_category, '_', $thi_category, '_roles_model')" />
+                                     </xsl:attribute>
+                                     <title><xsl:value-of select="$strRoleModelForCategory"/><xsl:value-of select="."/></title>
+                                     <mediaobject id="{concat('diagram-', $sec_category, '_', $thi_category, '_roles_model')}">
+                                       <imageobject role="fo">
+                                         <imagedata format="SVG" fileref="{concat($f, '.svg')}"/>
                                        </imageobject>
-                                       <imageobject  role="html">
-                                          <imagedata  format="PNG"  fileref="{concat($f, '.png')}"/>
+                                       <imageobject role="html">
+                                         <imagedata format="PNG" fileref="{concat($f, '.png')}"/>
                                        </imageobject>
-                                    </mediaobject>
-                                  </xsl:when>
-                                </xsl:choose>
+                                     </mediaobject>
+                                   </figure>
+                                 </xsl:when>
+                               </xsl:choose>
 
-                                <xsl:apply-templates select="//req:requirement[req:category/req:primary = $category and req:category/req:secondary = $sec_category and req:category/req:tertiary = $thi_category]">
-                                   <xsl:sort select="req:summary"/>
-                                </xsl:apply-templates>
+                               <xsl:apply-templates select="//req:requirement[req:category/req:primary = $category and req:category/req:secondary = $sec_category and req:category/req:tertiary = $thi_category]">
+                                 <xsl:sort select="req:summary"/>
+                               </xsl:apply-templates>
                              </section>
                           </xsl:if>
                        </xsl:for-each>

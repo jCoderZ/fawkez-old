@@ -102,7 +102,9 @@
                  <xsl:variable name="sec_category" select="."/>
                  <xsl:if test="//req:requirement[req:category/req:primary = $category and req:category/req:secondary = $sec_category]">
                     <section>
-                       <xsl:if test="$category = 'Domain Model'">
+                      <title><xsl:value-of select="."/></title>
+                      <xsl:choose>
+                        <xsl:when test="$category = 'Domain Model'">
                           <xsl:variable name="f" select="concat('images/', $sec_category, '_domain_model')"/>
                           <mediaobject  id="{concat('diagram-', $sec_category, '_domain_model')}">
                              <title><xsl:value-of select="$strDomainModelForCategory"/><xsl:value-of select="."/>.</title>
@@ -113,9 +115,9 @@
                                  <imagedata  format="PNG"  fileref="{concat($f, '.png')}"/>
                               </imageobject>
                            </mediaobject>
-                        </xsl:if>
+                         </xsl:when>
 
-                        <xsl:if test="starts-with($category, 'Role')">
+                        <xsl:when test="starts-with($category, 'Role')">
                           <xsl:variable name="f" select="concat('images/', $sec_category, '_roles_model')"/>
                           <mediaobject  id="{concat('diagram-', $sec_category, '_roles_model')}">
                              <title><xsl:value-of select="strRoleModelForCategory"/><xsl:value-of select="."/>.</title>
@@ -126,7 +128,8 @@
                                  <imagedata  format="PNG"  fileref="{concat($f, '.png')}"/>
                               </imageobject>
                            </mediaobject>
-                        </xsl:if>
+                         </xsl:when>
+                       </xsl:choose>
 
                        <xsl:apply-templates select="//req:requirement[req:category/req:primary = $category and req:category/req:secondary = $sec_category and not(req:category/req:tertiary)]">
                          <xsl:sort select="req:summary"/>
@@ -136,7 +139,9 @@
                           <xsl:variable name="thi_category" select="."/>
                           <xsl:if test="//req:requirement[req:category/req:primary = $category and req:category/req:secondary = $sec_category and req:category/req:tertiary = $thi_category]">
                              <section>
-                                <xsl:if test="$category = 'Domain Model'">
+                               <title><xsl:value-of select="."/></title>
+                               <xsl:choose>
+                                 <xsl:when test="$category = 'Domain Model'">
                                    <xsl:variable name="f" select="concat('images/', $sec_category, '_', $thi_category, '_domain_model')"/>
                                    <title><xsl:value-of select="$strDomainModelForCategory"/><xsl:value-of select="."/></title>
                                    <mediaobject id="{concat('diagram-', $sec_category, '_', $thi_category, '_domain_model')}">
@@ -148,9 +153,9 @@
                                           <imagedata  format="PNG"  fileref="{concat($f, '.png')}"/>
                                        </imageobject>
                                     </mediaobject>
-                                 </xsl:if>
+                                  </xsl:when>
 
-                                 <xsl:if test="starts-with($category, 'Role')">
+                                  <xsl:when test="starts-with($category, 'Role')">
                                    <xsl:variable name="f" select="concat('images/', $sec_category, '_', $thi_category, '_roles_model')"/>
                                    <title><xsl:value-of select="$strRoleModelForCategory"/><xsl:value-of select="."/></title>
                                    <mediaobject  id="{concat('diagram-', $sec_category, '_', $thi_category, '_roles_model')}">
@@ -162,7 +167,8 @@
                                           <imagedata  format="PNG"  fileref="{concat($f, '.png')}"/>
                                        </imageobject>
                                     </mediaobject>
-                                 </xsl:if>
+                                  </xsl:when>
+                                </xsl:choose>
 
                                 <xsl:apply-templates select="//req:requirement[req:category/req:primary = $category and req:category/req:secondary = $sec_category and req:category/req:tertiary = $thi_category]">
                                    <xsl:sort select="req:summary"/>

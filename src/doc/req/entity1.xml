@@ -8,7 +8,7 @@
      <req:primary>Domain Model</req:primary>
   </req:category>
   <req:key>D-90005</req:key>
-  <req:summary>Axle</req:summary>  
+  <req:summary>Axle</req:summary>
   <req:priority>High</req:priority>
   <req:description>
       The term ‘axle’ is new. Currently there exists no auxiliary term ‘axle vehicle’.
@@ -21,7 +21,7 @@
            </para>
         </listitem>
      </itemizedlist>
-
+      See also: <req:ref id="D-90006-MyId"/>.
      <emphasis role="bold">list of referenced data models:</emphasis>
   </req:description>
   <req:entity>
@@ -41,7 +41,7 @@
         <req:objectreference>
            <req:linkstart>1</req:linkstart>
            <req:linkend>0..*</req:linkend>
-           <req:ref id="D-90006"/>        
+           <req:ref id="D-90006"/>
         </req:objectreference>
      </req:attribute>
      <req:attribute>
@@ -50,7 +50,7 @@
         <req:objectreference>
            <req:linkstart>1</req:linkstart>
            <req:linkend>1</req:linkend>
-           <req:ref id="D-90007"/>        
+           <req:ref id="D-90007"/>
         </req:objectreference>
      </req:attribute>
   </req:entity>

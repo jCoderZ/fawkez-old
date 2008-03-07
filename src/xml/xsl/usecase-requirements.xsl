@@ -301,20 +301,20 @@
                   </entry>
                </row>
                <xsl:for-each select="req:attribute">
-                  <row id="{concat(concat(../../req:key,'-'),req:name)}" title="{req:name}">
+                  <row title="{req:name}">
                      <xsl:choose>
                         <xsl:when test="req:description and req:alternative_name">
-                           <entry morerows='2' valign='middle'>
+                           <entry morerows='2' valign='middle' id="{concat(concat(../../req:key,'-'),req:name)}" xreflabel="{concat(concat(../../req:key,'-'),req:name)}">
                               <glossterm><xsl:value-of select="req:name"/></glossterm>
                            </entry>
                         </xsl:when>
                         <xsl:when test="req:description or req:alternative_name">
-                           <entry morerows='1' valign='middle'>
+                           <entry morerows='1' valign='middle' id="{concat(concat(../../req:key,'-'),req:name)}" xreflabel="{concat(concat(../../req:key,'-'),req:name)}">
                               <glossterm><xsl:value-of select="req:name"/></glossterm>
                            </entry>
                         </xsl:when>
                         <xsl:otherwise>
-                           <entry>
+                           <entry id="{concat(concat(../../req:key,'-'),req:name)}" xreflabel="{concat(concat(../../req:key,'-'),req:name)}">
                               <glossterm><xsl:value-of select="req:name"/></glossterm>
                            </entry>
                         </xsl:otherwise>

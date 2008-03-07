@@ -55,10 +55,9 @@ digraph G {
     rankdir = "LR"
 
     node [
-            fontname = "Sans"
-            fontsize = 8
+            fontname = "Sans",
+            fontsize = 8,
             shape = "record"
-            fillcolor = "yellow"
     ]
 
     edge [
@@ -287,10 +286,11 @@ digraph G {
     fontsize = 8
 
     node [
-            fontname = "Sans"
-            fontsize = 8
-            shape = "record"
-            fillcolor = "yellow"
+            fontname = "Sans",
+            fontsize = 8,
+            shape = "record",
+            fillcolor = "#EEEEEE",
+            style = "filled"
     ]
 
     edge [
@@ -367,10 +367,11 @@ digraph G {
     fontsize = 8
 
     node [
-            fontname = "Sans"
-            fontsize = 8
-            shape = "record"
-            fillcolor = "yellow"
+            fontname = "Sans",
+            fontsize = 8,
+            shape = "record",
+            fillcolor = "#EEEEEE",
+            style = "filled"
     ]
 
     edge [
@@ -556,10 +557,11 @@ digraph G {
     fontsize = 8
 
     node [
-            fontname = "Sans"
-            fontsize = 8
-            shape = "record"
-            fillcolor = "yellow"
+            fontname = "Sans",
+            fontsize = 8,
+            shape = "record",
+            fillcolor = "#EEEEEE",
+            style = "filled"
     ]
 
     edge [
@@ -591,9 +593,11 @@ digraph G {
     fontsize = 8
 
     node [
-            fontname = "Sans"
-            fontsize = 8
-            shape = "record"
+            fontname = "Sans",
+            fontsize = 8,
+            shape = "record",
+            fillcolor = "#EEEEEE",
+            style = "filled"
     ]
 
     edge [
@@ -767,13 +771,11 @@ digraph G {
    <xsl:template match="uc:primary">
      "<xsl:value-of select="uc:name"/>" [shape=box]; /* actor */
      "<xsl:value-of select="uc:name"/>" -&gt; "<xsl:value-of select="../../@id"/>"
-     <xsl:for-each select="../uc:secondary">
-        "<xsl:value-of select="../uc:primary/uc:name"/>" -&gt; "<xsl:value-of select="uc:name"/>" [style=bold]
-     </xsl:for-each>
    </xsl:template>
 
    <xsl:template match="uc:secondary">
      "<xsl:value-of select="uc:name"/>" [shape=box]; /* actor */
+     "<xsl:value-of select="uc:name"/>" -&gt; "<xsl:value-of select="../../@id"/>"
    </xsl:template>
 
 
@@ -784,20 +786,22 @@ digraph G {
    </xsl:template>
 
    <xsl:template match="uc:extension">
-     "<xsl:value-of select="@id"/>" [shape = "diamond", fontcolor = "white" ];
-     "<xsl:value-of select="../@id"/>-<xsl:value-of select="@id"/>: <xsl:value-of select="@name"/>" [
+     "<xsl:value-of select="../@id"/>-<xsl:value-of select="@id"/>" [
          shape = "record",
          style = "rounded",
+         fillcolor = "#EEEEEE",
+         style = "filled",
          label = "{<xsl:value-of select="../@id"/>-<xsl:value-of select="@id"/>|<xsl:value-of select="@name"/>}"
          ];
-     "<xsl:value-of select="@id"/>" -&gt; "<xsl:value-of select="../@id"/>-<xsl:value-of select="@id"/>: <xsl:value-of select="@name"/>" [ label = "<xsl:value-of select="@desc"/>" ];
      <xsl:apply-templates select="uc:step"/>
    </xsl:template>
 
    <xsl:template match="uc:step" mode="list">
-     "<xsl:value-of select="../../@id"/>-<xsl:value-of select="@id"/>: <xsl:value-of select="@desc"/>" [
+     "<xsl:value-of select="../../@id"/>-<xsl:value-of select="@id"/>" [
          shape = "record",
          style = "rounded",
+         fillcolor = "#EEEEEE",
+         style = "filled",
          label = "{<xsl:value-of select="../../@id"/>-<xsl:value-of select="@id"/>|<xsl:value-of select="@desc"/>}"
       ];
    </xsl:template>
@@ -808,14 +812,11 @@ digraph G {
      <xsl:choose>
         <xsl:when test="$prev != 0">
            "<xsl:value-of select="../../@id"/>-<xsl:value-of
-                 select="../uc:step[position() = $prev]/@id"/>: <xsl:value-of
-                 select="../uc:step[position() = $prev]/@desc"/>" -> "<xsl:value-of
-                 select="../../@id"/>-<xsl:value-of select="@id"/>: <xsl:value-of
-                 select="@desc"/>"<xsl:if
-                    test="../uc:step[position() = $prev]/uc:ref[starts-with(@id, 'UC-') and (starts-with(@id, $this_uc_id))]"> [color = "white"]</xsl:if>;
+                 select="../uc:step[position() = $prev]/@id"/>" -> "<xsl:value-of
+                 select="../../@id"/>-<xsl:value-of select="@id"/>";
          </xsl:when>
          <xsl:otherwise>
-            "<xsl:value-of select="../../@id"/>" -> "<xsl:value-of select="../../@id"/>-1: <xsl:value-of select="@desc"/>";
+            "<xsl:value-of select="../../@id"/>" -> "<xsl:value-of select="../../@id"/>-1";
          </xsl:otherwise>
      </xsl:choose>
    </xsl:template>
@@ -833,21 +834,26 @@ digraph G {
       <xsl:choose>
          <xsl:when test="contains(@id, '-E')">
            <!-- extension relation from extension to use case -->
-           "<xsl:value-of select="ancestor-or-self::uc:usecase/@id"/>-<xsl:value-of select="ancestor-or-self::uc:step/@id"/>: <xsl:value-of select="ancestor-or-self::uc:step/@desc"/>" -&gt; "<xsl:value-of select="substring-after(substring-after(@id,'-'),'-')"/>"
+           "<xsl:value-of select="ancestor-or-self::uc:usecase/@id"/>-<xsl:value-of select="ancestor-or-self::uc:step/@id"/>" -&gt; "<xsl:value-of select="@id"/>"
 
-           "<xsl:value-of select="substring-after(substring-after(@id,'-'),'-')"/>" -&gt; "<xsl:value-of select="ancestor-or-self::uc:usecase/@id"/>-<xsl:value-of select="ancestor-or-self::uc:usecase/uc:success/uc:step[position() = $next]/@id"/>: <xsl:value-of select="ancestor-or-self::uc:usecase/uc:success/uc:step[position()=$next]/@desc"/>"
-          <!-- relation from 'secondary actor' to extension path -->
           <xsl:if test="@actor">
              "<xsl:value-of select="@actor"/>" -&gt; "<xsl:value-of select="@id"/>"
           </xsl:if>
         </xsl:when>
         <xsl:otherwise>
-           "<xsl:value-of select="ancestor-or-self::uc:usecase/@id"/>-<xsl:value-of select="ancestor-or-self::uc:step/@id"/>: <xsl:value-of select="ancestor-or-self::uc:step/@desc"/>" [
+           <xsl:variable name="source_name">
+               <xsl:call-template name="lookup_name_only">
+                  <xsl:with-param name="key" select="@id"/>
+               </xsl:call-template>
+            </xsl:variable>
+           "<xsl:value-of select="@id"/>" [
                 shape = "record",
                 style = "rounded",
-                label = "{<xsl:value-of select="ancestor-or-self::uc:usecase/@id"/>-<xsl:value-of select="ancestor-or-self::uc:step/@id"/>|<xsl:value-of select="ancestor-or-self::uc:step/@desc"/>}"
+                fillcolor = "#EEEEEE",
+                style = "filled",
+                label = "{<xsl:value-of select="@id"/>|<xsl:value-of select="$source_name"/>}"
                ];
-           "<xsl:value-of select="ancestor-or-self::uc:usecase/@id"/>-<xsl:value-of select="ancestor-or-self::uc:step/@id"/>: <xsl:value-of select="ancestor-or-self::uc:step/@desc"/>" -&gt; "<xsl:call-template name="lookup_name"><xsl:with-param name="key" select="@id"/></xsl:call-template>"
+           "<xsl:value-of select="ancestor-or-self::uc:usecase/@id"/>-<xsl:value-of select="ancestor-or-self::uc:step/@id"/>" -&gt; "<xsl:value-of select="@id"/>"
         </xsl:otherwise>
       </xsl:choose>
       <xsl:text>;</xsl:text>
@@ -857,19 +863,26 @@ digraph G {
      <!-- if you are coming from the basic path, the actor is in the relationship, otherwise the underlying extension path -->
       <xsl:choose>
         <xsl:when test="contains(@id, '-E')">
-            "<xsl:value-of select="ancestor-or-self::uc:usecase/@id"/>-<xsl:value-of select="ancestor-or-self::uc:extension/@id"/>: <xsl:value-of select="ancestor-or-self::uc:extension/@name"/>" -&gt; "<xsl:value-of select="substring-after(substring-after(@id,'-'),'-')"/>"
-         <!-- relation from 'secondary actor' to extension path -->
-         <xsl:if test="@actor">
-            "<xsl:value-of select="@actor"/>" -&gt; "<xsl:value-of select="@id"/>"
-         </xsl:if>
+           "<xsl:value-of select="ancestor-or-self::uc:usecase/@id"/>-<xsl:value-of select="ancestor-or-self::uc:extension/@id"/>" -&gt; "<xsl:value-of select="@id"/>"
+           <!-- relation from 'secondary actor' to extension path -->
+           <xsl:if test="@actor">
+              "<xsl:value-of select="@actor"/>" -&gt; "<xsl:value-of select="@id"/>";
+           </xsl:if>
         </xsl:when>
         <xsl:otherwise>
-          "<xsl:value-of select="ancestor-or-self::uc:usecase/@id"/>-<xsl:value-of select="ancestor-or-self::uc:extension/@id"/>: <xsl:value-of select="ancestor-or-self::uc:extension/@name"/>" [
+           <xsl:variable name="source_name">
+               <xsl:call-template name="lookup_name_only">
+                  <xsl:with-param name="key" select="@id"/>
+               </xsl:call-template>
+            </xsl:variable>
+          "<xsl:value-of select="@id"/>" [
                 shape = "record",
                 style = "rounded",
-                label = "{<xsl:value-of select="ancestor-or-self::uc:usecase/@id"/>-<xsl:value-of select="ancestor-or-self::uc:extension/@id"/>|<xsl:value-of select="ancestor-or-self::uc:extension/@name"/>}"
+                fillcolor = "#EEEEEE",
+                style = "filled",
+                label = "{<xsl:value-of select="@id"/>|<xsl:value-of select="$source_name"/>}"
                ];
-          "<xsl:value-of select="ancestor-or-self::uc:usecase/@id"/>-<xsl:value-of select="ancestor-or-self::uc:extension/@id"/>: <xsl:value-of select="ancestor-or-self::uc:extension/@name"/>" -&gt; "<xsl:call-template name="lookup_name"><xsl:with-param name="key" select="@id"/></xsl:call-template>"
+          "<xsl:value-of select="ancestor-or-self::uc:usecase/@id"/>-<xsl:value-of select="ancestor-or-self::uc:extension/@id"/>" -&gt; "<xsl:value-of select="@id"/>"
         </xsl:otherwise>
      </xsl:choose>
       <xsl:text>;</xsl:text>
@@ -902,6 +915,8 @@ digraph G {
             "<xsl:value-of select="$source"/>" [
                 shape = "record",
                 style = "rounded",
+                fillcolor = "#EEEEEE",
+                style = "filled",
                 label = "{<xsl:value-of select="$source_id"/>|<xsl:value-of select="$source_name"/>}"
                ];
             "<xsl:value-of select="$source"/>" -> "<xsl:value-of select="$destination"/>";
@@ -920,14 +935,14 @@ digraph G {
         </xsl:when>
         <xsl:when test="contains($key,'-E')">
            <xsl:variable name="ext" select="concat('E', substring-after($key, '-E'))"/>
-           <xsl:value-of select="$key"/><xsl:text>: </xsl:text><xsl:value-of select="//uc:usecase[@id = $from_uc]/uc:extension[@id = $ext]/@name"/>
+           <xsl:value-of select="$key"/>
         </xsl:when>
         <xsl:when test="not(contains(substring-after($key,'UC-'),'-'))">
            <xsl:value-of select="$key"/>
         </xsl:when>
         <xsl:otherwise>
            <xsl:variable name="ext" select="substring-after(substring-after($key, '-'), '-')"/>
-           <xsl:value-of select="$key"/><xsl:text>: </xsl:text><xsl:value-of select="//uc:usecase[@id = $from_uc]/uc:success/uc:step[@id = $ext]/@desc"/>
+           <xsl:value-of select="$key"/>
         </xsl:otherwise>
      </xsl:choose>
    </xsl:template>

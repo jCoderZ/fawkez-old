@@ -28,10 +28,22 @@
 			<uc:name>Consumer</uc:name>
 			<uc:channel>Web</uc:channel>
 		</uc:primary>
+      <uc:primary>
+         <uc:name>Consumer 2</uc:name>
+         <uc:channel>Web</uc:channel>
+      </uc:primary>
+      <uc:primary>
+         <uc:name>Consumer 3</uc:name>
+         <uc:channel>Web</uc:channel>
+      </uc:primary>
 		<uc:secondary>
 			<uc:name>m-Wallet</uc:name>
 			<uc:channel>Web</uc:channel>
 		</uc:secondary>
+      <uc:secondary>
+         <uc:name>m-Wallet 2</uc:name>
+         <uc:channel>Web</uc:channel>
+      </uc:secondary>
 	</uc:actors>
 	<uc:stakeholder>Service Provider wants to get all relevant data of the consumer.</uc:stakeholder>
 	<uc:stakeholder>Consumer wants to be able to top-up his registered account and to use his account to purchase things.</uc:stakeholder>

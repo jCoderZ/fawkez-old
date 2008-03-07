@@ -725,7 +725,7 @@ digraph G {
    <xsl:template match="uc:usecase">
 
      <xsl:choose>
-       <xsl:when test="(../uc:info/@suppress_diagrams = 'true' and (not(@suppress_diagrams) and not(@suppress_diagrams = 'true'))) or @suppress_diagrams = 'true'"/>
+       <xsl:when test="@suppress_diagrams = 'true'"/>
        <xsl:otherwise>
 	      <xsl:variable name="file"><xsl:value-of
 	         select="$imagedir"/>/<xsl:value-of

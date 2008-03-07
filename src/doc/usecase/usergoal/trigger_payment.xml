@@ -1,6 +1,7 @@
 <uc:usecase xmlns:uc="uc"
             xmlns:db="http://docbook.org/ns/docbook"
-            id="UC-19" level="UserGoal">
+            id="UC-19" level="UserGoal"
+            suppress_diagrams="false">
 	<uc:version>$Revision: 1.1 $</uc:version>
 	<uc:commitlog>
 		$Log: trigger_payment.xml,v $

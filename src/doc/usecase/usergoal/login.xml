@@ -3,7 +3,8 @@
             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
             xsi:schemaLocation="uc
                                 http://www.jcoderz.org/xsd/xdoc/usecase-SNAPSHOT.xsd"
-            id="UC-25" level="UserGoal">
+            id="UC-25" level="UserGoal"
+            suppress_diagrams="false">
 	<uc:version>$Revision: 1.1 $</uc:version>
 	<uc:name>Merchant Self Administration Login</uc:name>
 	<uc:goal>To enter the merchant self administration, you have to be authorized.</uc:goal>

@@ -1,5 +1,6 @@
 <uc:usecase xmlns:uc="uc"
-            xmlns="http://docbook.org/ns/docbook" id="UC-14" level="UserGoal">
+            xmlns="http://docbook.org/ns/docbook" id="UC-14" level="UserGoal"
+            suppress_diagrams="false">
 	<uc:version>$Revision: 1.1 $</uc:version>
 	<uc:commitlog>
 		$Log: modify_master_data.xml,v $

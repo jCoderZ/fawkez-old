@@ -9,7 +9,7 @@
 
 <xsl:param name="basedir" select="'.'"/>
 
-<xsl:variable name="MAX_WIDTH">300</xsl:variable>
+<xsl:variable name="MAX_WIDTH">380</xsl:variable>
 <xsl:variable name="MAX_HEIGHT">600</xsl:variable>
 <xsl:variable name="PT2PX_FACTOR">1.25</xsl:variable>
 

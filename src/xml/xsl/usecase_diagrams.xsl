@@ -738,6 +738,7 @@ digraph G {
     graph [rankdir = TB, center = true, fontsize=12];
     edge [fontname="Sans",fontsize=12,labelfontname="Sans",labelfontsize=12];
     node [fontname="Sans",fontsize=12];
+    bgcolor = "#dfdfff";
 
     subgraph cluster0 {
        node [style=filled];
@@ -789,7 +790,7 @@ digraph G {
      "<xsl:value-of select="../@id"/>-<xsl:value-of select="@id"/>" [
          shape = "record",
          style = "rounded",
-         fillcolor = "#EEEEEE",
+         fillcolor = "#c0c0c0",
          style = "filled",
          label = "{<xsl:value-of select="../@id"/>-<xsl:value-of select="@id"/>|<xsl:value-of select="@name"/>}"
          ];
@@ -833,12 +834,17 @@ digraph G {
      <!-- if you are coming from the basic path, the actor is in the relationship, otherwise the underlying extension path -->
       <xsl:choose>
          <xsl:when test="contains(@id, '-E')">
-           <!-- extension relation from extension to use case -->
-           "<xsl:value-of select="ancestor-or-self::uc:usecase/@id"/>-<xsl:value-of select="ancestor-or-self::uc:step/@id"/>" -&gt; "<xsl:value-of select="@id"/>"
+            <!-- extension relation from extension to use case -->
+            <xsl:variable name="description">
+               <xsl:call-template name="lookup_desc_of_extension">
+                  <xsl:with-param name="destination" select="@id"/>
+               </xsl:call-template>
+            </xsl:variable>
+            "<xsl:value-of select="ancestor-or-self::uc:usecase/@id"/>-<xsl:value-of select="ancestor-or-self::uc:step/@id"/>" -&gt; "<xsl:value-of select="@id"/>" [headlabel = "<xsl:value-of select="$description"/>"]
 
-          <xsl:if test="@actor">
-             "<xsl:value-of select="@actor"/>" -&gt; "<xsl:value-of select="@id"/>"
-          </xsl:if>
+            <xsl:if test="@actor">
+               "<xsl:value-of select="@actor"/>" -&gt; "<xsl:value-of select="@id"/>"
+            </xsl:if>
         </xsl:when>
         <xsl:otherwise>
            <xsl:variable name="source_name">
@@ -863,7 +869,12 @@ digraph G {
      <!-- if you are coming from the basic path, the actor is in the relationship, otherwise the underlying extension path -->
       <xsl:choose>
         <xsl:when test="contains(@id, '-E')">
-           "<xsl:value-of select="ancestor-or-self::uc:usecase/@id"/>-<xsl:value-of select="ancestor-or-self::uc:extension/@id"/>" -&gt; "<xsl:value-of select="@id"/>"
+           <xsl:variable name="description">
+               <xsl:call-template name="lookup_desc_of_extension">
+                  <xsl:with-param name="destination" select="@id"/>
+               </xsl:call-template>
+            </xsl:variable>
+           "<xsl:value-of select="ancestor-or-self::uc:usecase/@id"/>-<xsl:value-of select="ancestor-or-self::uc:extension/@id"/>" -&gt; "<xsl:value-of select="@id"/>" [headlabel = "<xsl:value-of select="$description"/>"]
            <!-- relation from 'secondary actor' to extension path -->
            <xsl:if test="@actor">
               "<xsl:value-of select="@actor"/>" -&gt; "<xsl:value-of select="@id"/>";
@@ -977,6 +988,27 @@ digraph G {
            <xsl:value-of select="//uc:usecase[@id = $from_uc]/uc:success/uc:step[@id = $ext]/@desc"/>
         </xsl:otherwise>
      </xsl:choose>
+   </xsl:template>
+   
+   <xsl:template name="lookup_desc_of_extension">
+      <xsl:param name="destination"/>
+      <xsl:variable name="uc_id">
+         <xsl:value-of select="substring-before(substring-after($destination, 'UC-'), '-')"/>    
+      </xsl:variable>
+      <xsl:variable name="ext_id_bulk">
+         <xsl:value-of select="substring-after(substring-after($destination, concat('UC-', $uc_id)), '-')"/>    
+      </xsl:variable>
+      <xsl:variable name="ext_id">
+         <xsl:choose>
+           <xsl:when test="contains($ext_id_bulk, '-')">
+              <xsl:value-of select="substring-before($ext_id_bulk, '-')"/>    
+           </xsl:when>
+           <xsl:otherwise>
+              <xsl:value-of select="$ext_id_bulk"/>
+           </xsl:otherwise>
+         </xsl:choose>
+      </xsl:variable>
+      <xsl:value-of select="//uc:usecase[@id = concat('UC-', $uc_id)]/uc:extension[$ext_id = @id]/@desc"/>
    </xsl:template>
 
 </xsl:stylesheet>

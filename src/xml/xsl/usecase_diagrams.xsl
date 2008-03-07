@@ -926,7 +926,7 @@ digraph G {
             "<xsl:value-of select="$source"/>" [
                 shape = "record",
                 style = "rounded",
-                fillcolor = "#EEEEEE",
+                <xsl:choose><xsl:when test="contains($source_id,'-E')">fillcolor = "#c0c0c0"</xsl:when><xsl:otherwise>fillcolor = "#EEEEEE"</xsl:otherwise></xsl:choose>,
                 style = "filled",
                 label = "{<xsl:value-of select="$source_id"/>|<xsl:value-of select="$source_name"/>}"
                ];

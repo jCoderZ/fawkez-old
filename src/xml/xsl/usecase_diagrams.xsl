@@ -747,7 +747,6 @@ digraph G {
         label = "<xsl:value-of select="$strActors"/>";
     }
    label = "<xsl:value-of select="@id"/><xsl:text> </xsl:text><xsl:value-of select="uc:name"/>";
-   "<xsl:value-of select="normalize-space(uc:actors/uc:primary/uc:name)"/>" -> "<xsl:value-of select="@id"/>" [color = "white"];
 
    <xsl:apply-templates select="uc:success"/>
 

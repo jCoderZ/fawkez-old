@@ -424,8 +424,7 @@
              </para>
           </xsl:if>
           <xsl:choose>
-            <xsl:when test="boolean(@suppress_diagram)"/>
-            <xsl:when test="boolean(../uc:info/@suppress_diagrams)"/>
+            <xsl:when test="boolean(../uc:info/@suppress_diagrams) and (not(@suppress_diagrams) and not(boolean(@suppress_diagrams)))"/>
             <xsl:otherwise>
               <xsl:variable name="f" select="concat('images/', @id)"/>
 		          <figure pgwide="1" id="{@id}_diagram">

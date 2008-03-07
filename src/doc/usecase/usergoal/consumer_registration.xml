@@ -3,7 +3,8 @@
             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
             xsi:schemaLocation="uc
                                 http://www.jcoderz.org/xsd/xdoc/usecase-SNAPSHOT.xsd"
-            id="UC-10" level="UserGoal">
+            id="UC-10" level="UserGoal"
+            suppress_diagrams="false">
 	<uc:version>$Revision: 1.5 $</uc:version>
 	<uc:name>Consumer Registration</uc:name>
 	<uc:goal>Consumer has been registered to the <emphasis role="bold">m-Wallet</emphasis>.</uc:goal>

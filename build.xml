@@ -947,7 +947,8 @@ xerces in current vm: ${xerces.version.ant}
           todir="${build.dir}/doc"/>
    </target>
 
-  <target name="doc" depends="javadoc, guideline-java, sad, usecase, testspec"
+  <target name="doc" depends="javadoc, guideline-java, sad, usecase, testspec,
+                              quality-report"
     description="Build Docomentation"/>
 
    <!-- =================================================================== -->

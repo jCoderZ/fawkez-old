@@ -287,6 +287,10 @@ public class XtremeDocs
          {
 
          }
+         else if ("Quality-Report".equals(mType))
+         {
+
+         }
          else
          {
             throw new RuntimeException("Unsupported type " + mType);

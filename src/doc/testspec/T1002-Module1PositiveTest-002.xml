@@ -3,6 +3,7 @@
       xsi:noNamespaceSchemaLocation="http://www.jcoderz.org/xsd/xdoc/test-specification-SNAPSHOT.xsd">
   <id>T1002</id>
   <shortname>Module1PositiveTest-002</shortname>
+  <state>final</state>
   <team>test-de:dcoppola</team>
   <type>Black Box</type>
   <areatopic>Functional</areatopic>

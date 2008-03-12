@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<uc:usecases xmlns:xi="http://www.w3.org/2001/XInclude"
+<root xmlns:xi="http://www.w3.org/2001/XInclude"
              version="1.0"
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
              xmlns:db="urn:docbook"
@@ -21,10 +21,9 @@
                                  http://jcoderz.org/generic-cms
                                  http://www.jcoderz.org/xsd/xdoc/generic-cms-SNAPSHOT.xsd">
 
-   <root>
       <xi:include href="../usecase/sample.xml" parse="xml"/>
       <xi:include href="../testspec/test_specification.xml" parse="xml"/>
-   </root>
+      <xi:include href="testresults/test-results.xml" parse="xml"/>
 
-</uc:usecases>
+</root>
 

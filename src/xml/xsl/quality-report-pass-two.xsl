@@ -44,14 +44,14 @@
    
    <xsl:key name="usecases-group"   match="uc:usecases" use="."/>
    
-   <xsl:key name="test-group"                         match="//test" use="traceability"/>
-   <xsl:key name="test-shortname-group"               match="//test" use="shortname"/>
+   <xsl:key name="test-group"                         match="//tc:test" use="tc:traceability"/>
+   <xsl:key name="test-shortname-group"               match="//tc:test" use="tc:shortname"/>
    <xsl:key name="usecase-group"                      match="//uc:usecase" use="@id"/>
-   <xsl:key name="testresult-group"                   match="//testresult[starts-with(version,$version)]" use="."/>
-   <xsl:key name="testresult-testcase-group"          match="//testresult[starts-with(version,$version)]" use="testcase"/>
-   <xsl:key name="testresult-shortname-group"         match="//testresult[starts-with(version,$version)]" use="shortname"/>
-   <xsl:key name="testresult-passed-testcase-group"   match="//testresult[starts-with(version,$version) and result = 'passed']" use="testcase"/>
-   <xsl:key name="testresult-passed-shortname-group"  match="//testresult[starts-with(version,$version) and result = 'passed']" use="shortname"/>
+   <xsl:key name="testresult-group"                   match="//tr:testresult[starts-with(tr:version,$version)]" use="."/>
+   <xsl:key name="testresult-testcase-group"          match="//tr:testresult[starts-with(tr:version,$version)]" use="tr:testcase"/>
+   <xsl:key name="testresult-shortname-group"         match="//tr:testresult[starts-with(tr:version,$version)]" use="tr:shortname"/>
+   <xsl:key name="testresult-passed-testcase-group"   match="//tr:testresult[starts-with(tr:version,$version) and tr:result = 'passed']" use="tr:testcase"/>
+   <xsl:key name="testresult-passed-shortname-group"  match="//tr:testresult[starts-with(tr:version,$version) and tr:result = 'passed']" use="tr:shortname"/>
    
    <xsl:key name="issue-group"                        match="//issue[starts-with(../version,$version)]" use="."/>
    <xsl:key name="scarab-id"                          match="//scarab//issue"
@@ -371,7 +371,7 @@
                         </row>
                      </thead>
                      <tbody>
-                        <xsl:apply-templates select="//test[not(key('usecase-group',traceability))]"/>
+                        <xsl:apply-templates select="//tc:test[not(key('usecase-group',tc:traceability))]"/>
                         <row>
                            <entry></entry>
                            <entry></entry>
@@ -415,21 +415,21 @@
                      </row>
                   </thead>
                   <tbody>
-                     <xsl:variable name="number_specified_tests" select="count(//test)"/>
+                     <xsl:variable name="number_specified_tests" select="count(//tc:test)"/>
                      <xsl:variable name="number_executed_tests" select="count(key('testresult-group',.))"/>
-                     <xsl:variable name="number_executed_testspecs" select="count(//test[key('testresult-testcase-group',id)/testcase = id])"/>
-                     <xsl:variable name="number_executed_testspecs_passed" select="count(//test[key('testresult-testcase-group',id)[result = 'passed']/testcase = id])"/>
+                     <xsl:variable name="number_executed_testspecs" select="count(//tc:test[key('testresult-testcase-group',tc:id)/tc:testcase = tc:id])"/>
+                     <xsl:variable name="number_executed_testspecs_passed" select="count(//tc:test[key('testresult-testcase-group',tc:id)[result = 'passed']/tc:testcase = tc:id])"/>
                      <xsl:variable name="number_issues" select="count(//item[(type = $jira.bug.type or type = $jira.cr.type or type = $jira.internal.type) and contains(fixVersion,$version)])"/>
                      <xsl:variable name="number_accepted_issues" select="count(//item[(type = $jira.bug.type or type = $jira.cr.type or type = $jira.internal.type) and (status = 'Accepted' or status = 'Closed') and contains(fixVersion,$version)])"/>
-                     <xsl:variable name="number_tests" select="count(//testresult[starts-with(version,$version)])"/>
-                     <xsl:variable name="number_tests_passed" select="count(//testresult[result = 'passed' and starts-with(version,$version)])"/>
-                     <xsl:variable name="number_tests_failed" select="count(//testresult[result = 'failed' and starts-with(version,$version)])"/>
-                     <xsl:variable name="number_automated_jmeter_tests" select="count(//testresult[string-length(shortname) &gt; 0 and executor = 'JMeter'])"/>
-                     <xsl:variable name="number_automated_jmeter_tests_passed" select="count(//testresult[result = 'passed' and string-length(shortname) &gt; 0 and executor = 'JMeter'])"/>
-                     <xsl:variable name="number_automated_jmeter_tests_failed" select="count(//testresult[result = 'failed' and string-length(shortname) &gt; 0 and executor = 'JMeter'])"/>
-                     <xsl:variable name="number_automated_selenium_tests" select="count(//testresult[string-length(shortname) &gt; 0 and executor = 'Selenium'])"/>
-                     <xsl:variable name="number_automated_selenium_tests_passed" select="count(//testresult[result = 'passed' and string-length(shortname) &gt; 0 and executor = 'Selenium'])"/>
-                     <xsl:variable name="number_automated_selenium_tests_failed" select="count(//testresult[result = 'failed' and string-length(shortname) &gt; 0 and executor = 'Selenium'])"/>
+                     <xsl:variable name="number_tests" select="count(//tr:testresult[starts-with(version,$version)])"/>
+                     <xsl:variable name="number_tests_passed" select="count(//tr:testresult[tr:result = 'passed' and starts-with(version,$version)])"/>
+                     <xsl:variable name="number_tests_failed" select="count(//tr:testresult[tr:result = 'failed' and starts-with(version,$version)])"/>
+                     <xsl:variable name="number_automated_jmeter_tests" select="count(//tr:testresult[string-length(tr:shortname) &gt; 0 and tr:executor = 'JMeter'])"/>
+                     <xsl:variable name="number_automated_jmeter_tests_passed" select="count(//tr:testresult[tr:result = 'passed' and string-length(tr:shortname) &gt; 0 and tr:executor = 'JMeter'])"/>
+                     <xsl:variable name="number_automated_jmeter_tests_failed" select="count(//tr:testresult[tr:result = 'failed' and string-length(tr:shortname) &gt; 0 and tr:executor = 'JMeter'])"/>
+                     <xsl:variable name="number_automated_selenium_tests" select="count(//tr:testresult[string-length(tr:shortname) &gt; 0 and tr:executor = 'Selenium'])"/>
+                     <xsl:variable name="number_automated_selenium_tests_passed" select="count(//tr:testresult[tr:result = 'passed' and string-length(tr:shortname) &gt; 0 and tr:executor = 'Selenium'])"/>
+                     <xsl:variable name="number_automated_selenium_tests_failed" select="count(//tr:testresult[tr:result = 'failed' and string-length(tr:shortname) &gt; 0 and tr:executor = 'Selenium'])"/>
                      <row>
                         <entry><emphasis role="bold">Test Specifications</emphasis></entry>
                         <entry><xsl:value-of select="$number_specified_tests"/></entry>
@@ -664,12 +664,12 @@
    </xsl:template>
    
    <xsl:template match="root" mode="test_efficiency">
-      <xsl:variable name="tr_at_all"           select="count(//testresult[number(time) = number(time)])"/>
-      <xsl:variable name="tr_issue_at_all"     select="count(//testresult[issue and not(issue = '') and number(time) = number(time)])"/>
-      <xsl:variable name="tr_test_at_all"      select="count(//testresult[testcase and not(testcase = '') and number(time) = number(time)])"/>
-      <xsl:variable name="tr_time_spent"       select="sum(//testresult/time[number(.)=number(.)])"/>
-      <xsl:variable name="tr_issue_time_spent" select="sum(//testresult[issue and not(issue = '')]/time[number(.) = number(.)])"/>
-      <xsl:variable name="tr_test_time_spent"  select="sum(//testresult[testcase and not(testcase = '')]/time[number(.) = number(.)])"/>
+      <xsl:variable name="tr_at_all"           select="count(//tr:testresult[number(tr:time) = number(tr:time)])"/>
+      <xsl:variable name="tr_issue_at_all"     select="count(//tr:testresult[tr:issue and not(tr:issue = '') and number(tr:time) = number(tr:time)])"/>
+      <xsl:variable name="tr_test_at_all"      select="count(//tr:testresult[tr:testcase and not(tr:testcase = '') and number(tr:time) = number(tr:time)])"/>
+      <xsl:variable name="tr_time_spent"       select="sum(//tr:testresult/tr:time[number(.)=number(.)])"/>
+      <xsl:variable name="tr_issue_time_spent" select="sum(//tr:testresult[tr:issue and not(tr:issue = '')]/tr:time[number(.) = number(.)])"/>
+      <xsl:variable name="tr_test_time_spent"  select="sum(//tr:testresult[tr:testcase and not(tr:testcase = '')]/tr:time[number(.) = number(.)])"/>
       <xsl:variable name="tr_avg_time"         select="$tr_time_spent div $tr_at_all"/>
       <xsl:variable name="tr_issue_avg_time"   select="$tr_issue_time_spent div $tr_issue_at_all"/>
       <xsl:variable name="tr_test_avg_time"    select="$tr_issue_time_spent div $tr_test_at_all"/>
@@ -771,8 +771,8 @@
                   </row>
                </thead>
                <tbody>
-                  <xsl:apply-templates select="//testresult[starts-with(version,$version)]" mode="specified">
-                     <xsl:sort select="testcase" order="ascending" data-type="text"/>
+                  <xsl:apply-templates select="//tr:testresult[starts-with(version,$version)]" mode="specified">
+                     <xsl:sort select="tr:testcase" order="ascending" data-type="text"/>
                      <xsl:with-param name="testcase_filter" select="$testcase_filter"/>
                   </xsl:apply-templates>
                   <row>
@@ -816,8 +816,8 @@
                   </row>
                </thead>
                <tbody>
-                  <xsl:apply-templates select="//test[contains(id, $testcase_filter)]" mode="untested">
-                     <xsl:sort select="id" order="ascending" data-type="text"/>
+                  <xsl:apply-templates select="//tc:test[contains(tc:id, $testcase_filter)]" mode="untested">
+                     <xsl:sort select="tc:id" order="ascending" data-type="text"/>
                   </xsl:apply-templates>
                   <row>
                      <entry></entry>
@@ -831,12 +831,12 @@
       </section>
    </xsl:template> 
    
-   <xsl:template match="testresult" mode="specified">
-      <xsl:param name="this_shortname" select="shortname"/>
+   <xsl:template match="tr:testresult" mode="specified">
+      <xsl:param name="this_shortname" select="tr:shortname"/>
       <xsl:param name="testcase_filter" select="'NO FILTER SET'"/>
       <xsl:variable name="testcase_id">
          <xsl:choose>
-            <xsl:when test="string-length(testcase) &gt; 0"><xsl:value-of select="testcase"/></xsl:when>
+            <xsl:when test="string-length(tr:testcase) &gt; 0"><xsl:value-of select="tr:testcase"/></xsl:when>
             <xsl:when test="key('test-shortname-group',$this_shortname)"><xsl:call-template name="lookup_testcase_id"><xsl:with-param name="shortname" select="$this_shortname"/></xsl:call-template></xsl:when>
             <xsl:otherwise>STEPS</xsl:otherwise>
          </xsl:choose>
@@ -852,31 +852,31 @@
                <xsl:value-of select="$this_shortname"/>            
             </entry>
             <entry>
-               <xsl:value-of select="comment"/>            
+               <xsl:value-of select="tr:comment"/>            
             </entry>
             <entry>
                <xsl:choose>
-                  <xsl:when test="version = $version.releasecandidate">
+                  <xsl:when test="tr:version = $version.releasecandidate">
 <xsl:text disable-output-escaping="yes">&lt;?dbhtml bgcolor="Lime" ?&gt;&lt;?dbfo bgcolor="Lime" ?&gt;</xsl:text>
-                     <xsl:value-of select="version"/>
+                     <xsl:value-of select="tr:version"/>
                   </xsl:when>
                   <xsl:otherwise>
 <xsl:text disable-output-escaping="yes">&lt;?dbhtml bgcolor="yellow" ?&gt;&lt;?dbfo bgcolor="yellow" ?&gt;</xsl:text>
-                     <xsl:value-of select="version"/>
+                     <xsl:value-of select="tr:version"/>
                   </xsl:otherwise>            
                </xsl:choose>
             </entry>
             <xsl:if test="$type = 'internal'">
                <entry>
-                  <xsl:value-of select="executor"/>            
+                  <xsl:value-of select="tr:executor"/>            
                </entry>
             </xsl:if>
             <entry>
-               <xsl:apply-templates select="result"/>
+               <xsl:apply-templates select="tr:result"/>
             </entry>
             <xsl:if test="$type = 'internal'">
                <entry>
-                  <xsl:variable name="shortname_temp" select="//test[id = $testcase_id]/shortname"/>
+                  <xsl:variable name="shortname_temp" select="//tc:test[tc:id = $testcase_id]/tc:shortname"/>
                   <xsl:choose>
                      <xsl:when test="key('mappings-group', $shortname_temp)/session_id">
                         <xsl:for-each select="key('mappings-group', $shortname_temp)/session_id">
@@ -893,12 +893,12 @@
       </xsl:if>
    </xsl:template>
    
-   <xsl:template match="testresult" mode="unspecified">
-      <xsl:param name="this_shortname" select="shortname"/>
+   <xsl:template match="tr:testresult" mode="unspecified">
+      <xsl:param name="this_shortname" select="tr:shortname"/>
       <xsl:variable name="testcase_id">
          <xsl:choose>
-            <xsl:when test="string-length(testcase) &gt; 0"><xsl:value-of select="testcase"/></xsl:when>
-            <xsl:when test="key('test-shortname-group',$this_shortname)"><xsl:call-template name="lookup_testcase_id"><xsl:with-param name="shortname" select="shortname"/></xsl:call-template></xsl:when>
+            <xsl:when test="string-length(testcase) &gt; 0"><xsl:value-of select="tr:testcase"/></xsl:when>
+            <xsl:when test="key('test-shortname-group',$this_shortname)"><xsl:call-template name="lookup_testcase_id"><xsl:with-param name="shortname" select="tr:shortname"/></xsl:call-template></xsl:when>
             <xsl:otherwise>STEPS</xsl:otherwise>
          </xsl:choose>
       </xsl:variable>
@@ -908,40 +908,40 @@
                <xsl:value-of select="$this_shortname"/>
             </entry>
             <entry>
-               <xsl:for-each select="issue"><ulink url="https://www-bb.achievo.de/jira/browse/{.}">
+               <xsl:for-each select="tr:issue"><ulink url="/jira/browse/{.}">
                      <citetitle><xsl:value-of select="."/></citetitle>
                   </ulink><xsl:if test="not(position() = last())">, </xsl:if></xsl:for-each>
             </entry>
             <entry>
-               <xsl:value-of select="comment"/>
+               <xsl:value-of select="tr:comment"/>
             </entry>
             <entry>
                <xsl:choose>
-                  <xsl:when test="version = $version.releasecandidate">
+                  <xsl:when test="tr:version = $version.releasecandidate">
 <xsl:text disable-output-escaping="yes">&lt;?dbhtml bgcolor="Lime" ?&gt;&lt;?dbfo bgcolor="Lime" ?&gt;</xsl:text>
-                     <xsl:value-of select="version"/>
+                     <xsl:value-of select="tr:version"/>
                   </xsl:when>
                   <xsl:otherwise>
 <xsl:text disable-output-escaping="yes">&lt;?dbhtml bgcolor="yellow" ?&gt;&lt;?dbfo bgcolor="yellow" ?&gt;</xsl:text>
-                     <xsl:value-of select="version"/>
+                     <xsl:value-of select="tr:version"/>
                   </xsl:otherwise>            
                </xsl:choose>           
             </entry>
             <xsl:if test="$type = 'internal'">
                <entry>
-                  <xsl:value-of select="executor"/>
+                  <xsl:value-of select="tr:executor"/>
                </entry>
             </xsl:if>
             <entry>
-               <xsl:apply-templates select="result"/>
+               <xsl:apply-templates select="tr:result"/>
             </entry>
          </row>
       </xsl:if>
    </xsl:template>
    
-   <xsl:template match="test" mode="untested">
-      <xsl:param name="this_shortname" select="shortname"/>
-      <xsl:param name="this_id" select="id"/>
+   <xsl:template match="tc:test" mode="untested">
+      <xsl:param name="this_shortname" select="tc:shortname"/>
+      <xsl:param name="this_id" select="tc:id"/>
       <xsl:if test="not(key('testresult-testcase-group',$this_id) or key('testresult-shortname-group',$this_shortname))">
          <row>
 <xsl:text disable-output-escaping="yes">&lt;?dbhtml bgcolor="yellow" ?&gt;&lt;?dbfo bgcolor="yellow" ?&gt;</xsl:text>
@@ -954,15 +954,10 @@
                <xsl:value-of select="$this_shortname"/>
             </entry>
             <entry>
-               <xsl:for-each select="scrno"><xsl:choose>
-                  <xsl:when test="contains(.,'TACI')"><ulink url="https://www-bb.achievo.de/jira/browse/{.}">
+               <xsl:for-each select="tc:scrno">
+                   <ulink url="/jira/browse/{.}">
                      <citetitle><xsl:value-of select="."/></citetitle>
-                  </ulink></xsl:when>
-                  <xsl:when test="contains(.,'EXT')"><ulink url="http://www.ics-software.de/scarab/issues/id/{.}">
-                     <citetitle><xsl:value-of select="."/></citetitle>
-                  </ulink></xsl:when>
-                  <xsl:otherwise><xsl:value-of select="."/></xsl:otherwise>
-                  </xsl:choose><xsl:if test="not(position() = last())">, </xsl:if>
+                  </ulink><xsl:if test="not(position() = last())">, </xsl:if>
                </xsl:for-each>
             </entry>
             <entry>
@@ -1224,8 +1219,8 @@
       <xsl:param name="tc_failed" select="count(uc:usecase[@id = //test/traceability[//testresult[starts-with(version,$version) and (result = 'failed' or result = 'blocked')]/testcase = ../id]])"/>
       <xsl:param name="tc_untested" select="count(uc:usecase[@id = //test/traceability[not(key('testresult-testcase-group',../id))]])"/-->
       <xsl:variable name="root_file_name" select="uc:info/@project"/>
-      <xsl:variable name="tc_passed" select="count(//testresult[starts-with(version,$version) and result = 'passed' and (testcase = //test[traceability = //uc:usecase[../uc:info/@project = $root_file_name]]/id)])"/>
-      <xsl:variable name="tc_failed" select="count(//testresult[starts-with(version,$version) and (result = 'failed' or result = 'blocked') and (testcase = //test[traceability = //uc:usecase[../uc:info/@project = $root_file_name]]/id)])"/>
+      <xsl:variable name="tc_passed" select="count(//tr:testresult[starts-with(tr:version,$version) and tr:result = 'passed' and (tr:testcase = //tc:test[tc:traceability = //uc:usecase[../uc:info/@project = $root_file_name]]/tc:id)])"/>
+      <xsl:variable name="tc_failed" select="count(//tr:testresult[starts-with(tr:version,$version) and (tr:result = 'failed' or tr: result = 'blocked') and (tr:testcase = //tc:test[tc:traceability = //uc:usecase[../uc:info/@project = $root_file_name]]/tc:id)])"/>
       <xsl:variable name="tc_untested" select="20"/>
       <para>
          <itemizedlist>
@@ -1314,13 +1309,13 @@
        Test Coverage
        *************
     -->
-   <xsl:template match="test">
+   <xsl:template match="tc:test">
       <row>
          <entry><ulink url="all_testspec.html#{id}">
                   <citetitle><xsl:value-of select="id"/></citetitle>
          </ulink></entry>
-         <entry><xsl:value-of select="shortname"/></entry>
-         <entry><xsl:value-of select="traceability"/></entry>
+         <entry><xsl:value-of select="tc:shortname"/></entry>
+         <entry><xsl:value-of select="tc:traceability"/></entry>
       </row>
    </xsl:template>
     
@@ -1374,8 +1369,8 @@
       <xsl:param name="uc_id" select="@id"/>
       <row>
          <xsl:variable name="cover_num" select="count(key('test-group',$uc_id))"/>
-         <xsl:variable name="tc_executed" select="count(key('test-group',$uc_id)[key('testresult-testcase-group',id) or key('testresult-shortname-group',shortname)])"/>
-         <xsl:variable name="tc_passed"   select="count(key('test-group',$uc_id)[key('testresult-passed-testcase-group',id) or key('testresult-passed-shortname-group',shortname)])"/>
+         <xsl:variable name="tc_executed" select="count(key('test-group',$uc_id)[key('testresult-testcase-group',id) or key('testresult-shortname-group',tr:shortname)])"/>
+         <xsl:variable name="tc_passed"   select="count(key('test-group',$uc_id)[key('testresult-passed-testcase-group',id) or key('testresult-passed-shortname-group',tr:shortname)])"/>
          <xsl:choose>
             <xsl:when test="$cover_num = 0">
                <xsl:text disable-output-escaping="yes">
@@ -1394,8 +1389,8 @@
          </entry>
          <entry>
             <xsl:for-each select="key('test-group',$uc_id)">
-               <ulink url="all_testspec.html#{id}">
-                  <citetitle><xsl:value-of select="id"/></citetitle>
+               <ulink url="all_testspec.html#{tc:id}">
+                  <citetitle><xsl:value-of select="tc:id"/></citetitle>
                </ulink><xsl:if test="not(position() = last())"><xsl:text>, 
                </xsl:text></xsl:if>
             </xsl:for-each>
@@ -1432,7 +1427,7 @@
    <xsl:template name="lookup_testcase_id">
       <xsl:param name="shortname"/>
       <xsl:choose>
-          <xsl:when test="key('test-shortname-group',$shortname)"><xsl:for-each select="key('test-shortname-group',$shortname)"><xsl:value-of select="id"/></xsl:for-each></xsl:when>
+          <xsl:when test="key('test-shortname-group',$shortname)"><xsl:for-each select="key('test-shortname-group',$shortname)"><xsl:value-of select="tc:id"/></xsl:for-each></xsl:when>
           <xsl:otherwise>STEPS</xsl:otherwise>
       </xsl:choose>
    </xsl:template>

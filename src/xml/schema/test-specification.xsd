@@ -109,14 +109,15 @@
 	<xsd:element name="revision" type="xsd:string" />
 	<xsd:element name="scrno" type="tc:scrnoType" />
 	<xsd:element name="shortname" type="xsd:string" />
+   <xsd:element name="traceability" type="tc:useCaseStepId" />
 	<xsd:element name="step">
 		<xsd:complexType>
 			<xsd:sequence>
-				<xsd:element name="id" type="tc:stepId"/>
+				<xsd:element ref="tc:id"/>
 				<xsd:element ref="tc:action" />
 				<xsd:element ref="tc:input" />
 				<xsd:element ref="tc:expected" />
-            <xsd:element name="traceability" type="tc:useCaseStepId" maxOccurs="unbounded" minOccurs="0"/>
+            <xsd:element ref="tc:traceability" maxOccurs="unbounded" minOccurs="0"/>
 			</xsd:sequence>
 		</xsd:complexType>
 	</xsd:element>
@@ -131,7 +132,7 @@
 	<xsd:element name="test">
 		<xsd:complexType>
 			<xsd:sequence>
-				<xsd:element name="id" type="tc:testCaseId" />
+				<xsd:element ref="tc:id"/>
 				<xsd:element ref="tc:shortname" />
             <xsd:element ref="tc:state" />
 				<xsd:element ref="tc:team" />
@@ -160,7 +161,6 @@
 			</xsd:sequence>
 		</xsd:complexType>
 	</xsd:element>
-	<xsd:element name="traceability" type="xsd:string" />
 	<xsd:element name="type" type="tc:TestType" />
 	<xsd:element name="variety" type="tc:VarietyType" />
 </xsd:schema>

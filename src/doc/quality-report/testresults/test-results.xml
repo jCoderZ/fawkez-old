@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<tr:testresults xmlns:xi="http://www.w3.org/2001/XInclude"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns:db="urn:docbook"
+             xmlns:uc="uc"
+             xmlns:req="req"
+             xmlns:tc="http://jcoderz.org/test-specifications"
+             xmlns:tr="http://jcoderz.org/test-results"
+             xmlns:cms="http://jcoderz.org/generic-cms"
+             xsi:schemaLocation="req
+                                 http://www.jcoderz.org/xsd/xdoc/requirements-SNAPSHOT.xsd
+                                 uc
+                                 http://www.jcoderz.org/xsd/xdoc/usecase-SNAPSHOT.xsd
+                                 http://jcoderz.org/test-specifications
+                                 http://www.jcoderz.org/xsd/xdoc/test-specification-SNAPSHOT.xsd
+                                 http://jcoderz.org/test-results
+                                 http://www.jcoderz.org/xsd/xdoc/test-results-SNAPSHOT.xsd
+                                 http://jcoderz.org/generic-cms
+                                 http://www.jcoderz.org/xsd/xdoc/generic-cms-SNAPSHOT.xsd"> 
+   <tr:testresult>
+      <tr:version>1.0.0.0.1</tr:version>
+      <tr:testcase>T0001</tr:testcase>
+      <tr:issue>TRAC-123</tr:issue>
+      <tr:result>passed</tr:result>
+      <tr:executer>Selenium</tr:executer>
+      <tr:time>5.3</tr:time>
+      <tr:comment></tr:comment>
+      <tr:timestamp>2008-03-04 08:55:36</tr:timestamp>
+      <tr:environment>jcoderz build environment</tr:environment>
+   </tr:testresult>
+   <tr:testresult>
+      <tr:version>1.0.0.0.1</tr:version>
+      <tr:testcase>T0002</tr:testcase>
+      <tr:issue>TRAC-345</tr:issue>
+      <tr:result>passed</tr:result>
+      <tr:executer>Selenium</tr:executer>
+      <tr:time>2.56</tr:time>
+      <tr:comment></tr:comment>
+      <tr:timestamp>2008-03-04 09:25:38</tr:timestamp>
+      <tr:environment>jcoderz build environment</tr:environment>
+   </tr:testresult>
+   <tr:testresult>
+      <tr:version>1.0.0.0.1</tr:version>
+      <tr:testcase>T0003</tr:testcase>
+      <tr:shortname>Module2PositiveTest-001</tr:shortname>
+      <tr:issue></tr:issue>
+      <tr:result>failed</tr:result>
+      <tr:executer>Selenium</tr:executer>
+      <tr:time>2.33</tr:time>
+      <tr:comment></tr:comment>
+      <tr:timestamp>2008-03-04 09:25:38</tr:timestamp>
+      <tr:environment>jcoderz build environment</tr:environment>
+   </tr:testresult>
+</tr:testresults>

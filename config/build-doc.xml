@@ -215,7 +215,11 @@ static-catalog=yes
            <path refid="xdoc.classpath"/>
         </classpath>
      </taskdef>
-
+     
+     <!-- hardcoded test properties to create sample documents -->
+     <property name="version" value="1.0.0.0"/>
+     <property name="version.releasecandidate" value="1.0.0.0.1"/>
+     
      <mkdir dir="${build.dir}/doc/quality-report"/>
      <mkdir dir="${build.dir}/doc/quality-report/images"/>
      <copy todir="${build.dir}/doc/quality-report/images"

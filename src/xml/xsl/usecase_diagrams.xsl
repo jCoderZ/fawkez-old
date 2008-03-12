@@ -25,6 +25,10 @@
    <xsl:key name="unique-category-primary-key" match="req:requirement/req:category/req:primary" use="."/>
    <xsl:key name="unique-category-secondary-key" match="req:requirement/req:category/req:secondary" use="."/>
    <xsl:key name="unique-category-tertiary-key" match="req:requirement/req:category/req:tertiary" use="."/>
+   <xsl:key name="usecase-references-out" 
+            match="//uc:ref[starts-with(@id, 'UC-')]" use="ancestor-or-self::uc:usecase/@id"/>
+   <xsl:key name="usecase-references-precondition" 
+            match="//uc:ref[starts-with(@id, 'UC-') and ancestor-or-self::uc:precondition]" use="ancestor-or-self::uc:usecase/@id"/>
 
    <xsl:variable name="dummy" select="sdfdsfdsfsdfsdfsdfsdf"/>
 
@@ -37,6 +41,8 @@
       <xsl:apply-templates select="//uc:usecases" mode="dm_global_cat"/>
       <xsl:apply-templates select="//uc:usecases" mode="roles"/>
       <xsl:apply-templates select="//uc:usecases" mode="roles_category"/>
+      <xsl:apply-templates select="//uc:usecases" mode="uc_dep"/>
+      <xsl:apply-templates select="//uc:usecase" mode="uc_dep_single"/>
       <xsl:apply-templates select="req:requirement[starts-with(req:category/req:primary, 'Role')]"
                            mode="role"/>
    </xsl:template>
@@ -1042,6 +1048,203 @@ digraph G {
          </xsl:choose>
       </xsl:variable>
       <xsl:value-of select="//uc:usecase[@id = concat('UC-', $uc_id)]/uc:extension[$ext_id = @id]/@desc"/>
+   </xsl:template>
+   
+   
+   <!-- Usecase dependy diagram -->
+   
+   <xsl:template match="uc:usecases" mode="uc_dep">
+
+      <xsl:variable name="file"><xsl:value-of
+         select="$imagedir"/>/usecase_dependencies.dot</xsl:variable>
+
+      <redirect:write file="{$file}">
+
+digraph G {
+    edge [fontname="Sans",fontsize=12,labelfontname="Sans",labelfontsize=12];
+    node [fontname="Sans",fontsize=12];
+    bgcolor = "#dfdfff";
+
+    label = "<xsl:value-of select="'Use Case Dependencies'"/>";
+
+    
+      <xsl:apply-templates select="//uc:usecase" mode="uc_dep_list_uc"/>
+      
+      <xsl:apply-templates select="//uc:usecase" mode="uc_dep_ref_out"/>
+      <xsl:apply-templates select="//uc:usecase" mode="uc_dep_ref_precondition"/>
+}
+
+      </redirect:write>
+   </xsl:template>
+   
+   <xsl:template match="uc:usecase" mode="uc_dep_list_uc">
+      <xsl:variable name="uc_id" select="@id"/>
+      
+      <!-- find out whether this usecase is referred by another UC or referring to another one. -->
+      <xsl:variable name="referred">
+         <xsl:for-each select="key('usecase-references-out', $uc_id)">
+            <xsl:variable name="from_uc">
+               <xsl:call-template name="get_uc_name">
+                  <xsl:with-param name="key" select="@id"/>
+               </xsl:call-template>
+            </xsl:variable>
+            <xsl:if test="not($from_uc = $uc_id)">
+               true
+            </xsl:if>
+         </xsl:for-each>
+         <xsl:for-each select="//uc:ref[not(ancestor-or-self::uc:usecase/@id = substring-after($uc_id, 'UC-'))]">
+            <xsl:if test="ancestor-or-self::uc:usecase/@id = substring-after($uc_id, 'UC-')">
+               true
+            </xsl:if>
+         </xsl:for-each>
+      </xsl:variable>
+      
+      <!-- only create a node, if usecase has a reference to another usecase -->
+      <xsl:if test="not(normalize-space($referred) = '')">
+         "<xsl:value-of select="@id"/>" [
+            shape = "record",
+            style = "rounded",
+            fillcolor = "#EEEEEE",
+            style = "filled",
+            label = "{<xsl:value-of select="@id"/>|<xsl:value-of select="uc:name"/>}"
+         ];
+      </xsl:if>
+   </xsl:template>
+   
+   <xsl:template match="uc:usecase" mode="uc_dep_ref_out">
+      <xsl:variable name="uc_id" select="@id"/>
+      <xsl:for-each select="key('usecase-references-out', $uc_id)">
+         <xsl:variable name="from_uc">
+           <xsl:choose>
+              <xsl:when test="contains(substring-after(substring-after(@id, '-'), '-'), '-')">
+                 <xsl:value-of select="concat('UC-', substring-before(substring-after(substring-after(@id, '-'), '-'), '-'))"/>
+              </xsl:when>
+              <xsl:when test="contains(substring-after(@id, '-'), '-')">
+                 <xsl:value-of select="concat('UC-', substring-before(substring-after(@id, '-'), '-'))"/>
+              </xsl:when>
+              <xsl:otherwise>
+                 <xsl:value-of select="concat('UC-', substring-after(@id, '-'))"/>
+              </xsl:otherwise>
+           </xsl:choose>
+        </xsl:variable>
+        <xsl:if test="not($uc_id = $from_uc)">
+           "<xsl:value-of select="$uc_id"/>" -&gt; "<xsl:value-of select="$from_uc"/>";
+        </xsl:if>
+      </xsl:for-each> 
+   </xsl:template>
+   
+   <xsl:template match="uc:usecase" mode="uc_dep_ref_precondition">
+      <xsl:variable name="uc_id" select="@id"/>
+      <xsl:for-each select="key('usecase-references-precondition', $uc_id)">
+        <xsl:variable name="from_uc">
+           <xsl:call-template name="get_uc_name">
+              <xsl:with-param name="key" select="@id"/>
+           </xsl:call-template>
+        </xsl:variable>
+        <xsl:if test="not($uc_id = $from_uc)">
+           "<xsl:value-of select="$uc_id"/>" -&gt; "<xsl:value-of select="$from_uc"/>" [label = "precondition",style=dotted];
+        </xsl:if>
+      </xsl:for-each>
+   </xsl:template>
+   
+   <xsl:template name="get_uc_name">
+     <xsl:param name="key"/>
+     <xsl:choose>
+        <xsl:when test="contains(substring-after(substring-after(@id, '-'), '-'), '-')">
+           <xsl:value-of select="concat('UC-', substring-before(substring-after(substring-after(@id, '-'), '-'), '-'))"/>
+        </xsl:when>
+        <xsl:when test="contains(substring-after(@id, '-'), '-')">
+           <xsl:value-of select="concat('UC-', substring-before(substring-after(@id, '-'), '-'))"/>
+        </xsl:when>
+        <xsl:otherwise>
+           <xsl:value-of select="concat('UC-', substring-after(@id, '-'))"/>
+        </xsl:otherwise>
+     </xsl:choose>
+   </xsl:template>
+   
+   <!-- Usecase dependency diagram for single usecase -->
+   <xsl:template match="uc:usecase" mode="uc_dep_single">
+
+      <xsl:variable name="file"><xsl:value-of
+         select="$imagedir"/>/<xsl:value-of
+         select="concat(@id, '-dependencies')"/>.dot</xsl:variable>
+
+      <redirect:write file="{$file}">
+
+digraph G {
+    edge [fontname="Sans",fontsize=12,labelfontname="Sans",labelfontsize=12];
+    node [fontname="Sans",fontsize=12];
+    bgcolor = "#dfdfff";
+
+    label = "<xsl:value-of select="concat(@id, ' - Use Case Dependencies')"/>";
+    
+    "<xsl:value-of select="@id"/>" [
+            shape = "record",
+            style = "rounded",
+            fillcolor = "#EEEEEE",
+            style = "filled",
+            label = "{<xsl:value-of select="@id"/>|<xsl:value-of select="uc:name"/>}"
+     ];
+     
+      <xsl:variable name="uc_id" select="@id"/>
+      <xsl:for-each select="//uc:usecase[not(@id = $uc_id)]">
+         <xsl:call-template name="uc_dep_single_list_uc">
+            <xsl:with-param name="uc_id" select="$uc_id"/>
+         </xsl:call-template>
+      </xsl:for-each>
+      
+     
+      <!-- 
+         <xsl:apply-templates select="//uc:usecase" mode="uc_dep_ref_precondition"/>
+       -->
+}
+
+      </redirect:write>
+   </xsl:template>
+   
+   <xsl:template name="uc_dep_single_list_uc">
+      <xsl:param name="uc_id"/>
+      <xsl:variable name="this_uc_id" select="@id"/>
+      
+      <!-- find out whether this usecase is referred by another UC or referring to another one. -->
+      <xsl:variable name="referred_out">
+         <xsl:for-each select="key('usecase-references-out', $this_uc_id)">
+            <xsl:variable name="from_uc">
+               <xsl:call-template name="get_uc_name">
+                  <xsl:with-param name="key" select="@id"/>
+               </xsl:call-template>
+            </xsl:variable>
+            <xsl:if test="$from_uc = $uc_id">
+               true
+            </xsl:if>
+         </xsl:for-each>
+      </xsl:variable>
+      <xsl:variable name="referred_in">
+         <xsl:for-each select="//uc:ref[not(ancestor-or-self::uc:usecase/@id = $uc_id)]">
+            <xsl:if test="ancestor-or-self::uc:usecase/@id = $uc_id">
+               true
+            </xsl:if>
+         </xsl:for-each>
+      </xsl:variable>
+      
+      <!-- only create a node, if usecase has a reference to another usecase -->
+      <xsl:if test="not(normalize-space($referred_in) = '') or not(normalize-space($referred_out) = '')">
+         "<xsl:value-of select="@id"/>" [
+            shape = "record",
+            style = "rounded",
+            fillcolor = "#EEEEEE",
+            style = "filled",
+            label = "{<xsl:value-of select="@id"/>|<xsl:value-of select="uc:name"/>}"
+         ];
+      </xsl:if>
+      
+      <xsl:if test="not(normalize-space($referred_in) = '')">
+         "<xsl:value-of select="$uc_id"/>" -&gt; "<xsl:value-of select="$this_uc_id"/>"
+      </xsl:if>
+      <xsl:if test="not(normalize-space($referred_out) = '')">
+         "<xsl:value-of select="$this_uc_id"/>" -&gt; "<xsl:value-of select="$uc_id"/>"
+      </xsl:if>
+      
    </xsl:template>
 
 </xsl:stylesheet>

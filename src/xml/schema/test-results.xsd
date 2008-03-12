@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns:tr="http://jcoderz.org/test-results"
+            targetNamespace="http://jcoderz.org/test-results">
+   <xsd:simpleType name='testCaseIdType'>
+      <xsd:restriction base='xsd:string'>
+         <xsd:pattern value='[A-Z]{3,4}_[1-9]{1}[0-9]{0,1}[0-9]{4}|STEPS|'/>
+      </xsd:restriction>
+   </xsd:simpleType>
+   <xsd:simpleType name='versionIdType'>
+      <xsd:restriction base='xsd:string'>
+         <xsd:pattern value='[0-9]{1,2}.[0-9]{1,2}.[0-9]{1,2}.[0-9]{1,2}.[0-9]{1,2}'/>
+      </xsd:restriction>
+   </xsd:simpleType>
+   <xsd:simpleType name='resultType'>
+      <xsd:restriction base='xsd:string'>
+         <xsd:pattern value='passed|failed|unknown'/>
+      </xsd:restriction>
+   </xsd:simpleType>
+   <xsd:simpleType name='issueNumberType'>
+      <xsd:restriction base='xsd:string'>
+         <xsd:pattern value='EXT[0-9]{1,5}|INT[0-9]{1,5}|[A-Z][A-Z][A-Z][IE][0-9]{1,6}|'/>
+      </xsd:restriction>
+   </xsd:simpleType>
+   <xsd:simpleType name='timeStampType'>
+      <xsd:restriction base='xsd:string'>
+         <xsd:pattern value='[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}'/>
+      </xsd:restriction>
+   </xsd:simpleType>
+   <xsd:simpleType name='timeType'>
+      <xsd:restriction base='xsd:string'>
+         <xsd:pattern value='[0-9]{1,15}.[0-9]{1,15}|[0-9]{1,15}'/>
+      </xsd:restriction>
+   </xsd:simpleType>
+   
+
+   <xsd:element name="version"     type="tr:versionIdType" />
+   <xsd:element name="testcase"    type="tr:testCaseIdType" />
+   <xsd:element name="issue"       type="tr:issueNumberType" />
+   <xsd:element name="result"      type="tr:resultType" />
+   <xsd:element name="executer"    type="xsd:string" />
+   <xsd:element name="comment"     type="xsd:string" />
+   <xsd:element name="shortname"   type="xsd:string" />
+   <xsd:element name="environment" type="xsd:string" />
+   <xsd:element name="time"        type="tr:timeType" />
+   <xsd:element name="timestamp"   type="tr:timeStampType" />
+   
+   <xsd:element name="testresult">
+      <xsd:complexType>
+         <xsd:sequence>
+            <xsd:element ref="tr:version" minOccurs="1" maxOccurs="1"/>
+            <xsd:element ref="tr:testcase" minOccurs="1" maxOccurs="1"/>
+            <xsd:element ref="tr:shortname" minOccurs="0" maxOccurs="1"/>
+            <xsd:element ref="tr:issue" minOccurs="0" maxOccurs="100"/>
+            <xsd:element ref="tr:result" minOccurs="1" maxOccurs="1"/>
+            <xsd:element ref="tr:executer" minOccurs="1" maxOccurs="1"/>
+            <xsd:element ref="tr:time" minOccurs="1" maxOccurs="1"/>
+            <xsd:element ref="tr:comment" minOccurs="1" maxOccurs="1"/>
+            <xsd:element ref="tr:timestamp" minOccurs="1" maxOccurs="1"/>
+            <xsd:element ref="tr:environment" minOccurs="0" maxOccurs="1"/>
+         </xsd:sequence>
+      </xsd:complexType>
+   </xsd:element>
+   
+	<xsd:element name="testresults">
+		<xsd:complexType>
+			<xsd:choice>
+				<xsd:element ref="tr:testresult" minOccurs="0" maxOccurs="unbounded"/>
+            <xsd:element ref="tr:testresults" minOccurs="0" maxOccurs="unbounded"/>
+			</xsd:choice>
+		</xsd:complexType>
+	</xsd:element>
+</xsd:schema>

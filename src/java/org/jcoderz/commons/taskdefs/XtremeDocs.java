@@ -41,7 +41,9 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
 import javax.xml.transform.Transformer;
+
 import org.apache.batik.transcoder.TranscoderException;
 import org.apache.batik.transcoder.TranscoderInput;
 import org.apache.batik.transcoder.TranscoderOutput;
@@ -95,6 +97,17 @@ public class XtremeDocs
    private String mCompanyLogo = DEFAULT_COMPANY_LOGO;
    /** flag for execution of validation tasks only */
    private boolean mValidationOnly = DEFAULT_VALIDATION_ONLY_FLAG;
+   private final List mTransformerProperties = new ArrayList();
+
+   /**
+    * Add the given property to be sent to the transformer.
+    * @param the property to be sent to the transformer.
+    **/
+   public void addParam(org.apache.tools.ant.types.Environment.Variable var)
+   {
+       mTransformerProperties.add(var);
+   }
+
 
    void setXdocTransformerParams (Transformer transformer)
    {
@@ -107,6 +120,14 @@ public class XtremeDocs
             System.getProperty("user.name"));
       transformer.setParameter("companyname", mCompanyName);
       transformer.setParameter("companylogo", mCompanyLogo);
+
+      final Iterator i = mTransformerProperties.iterator();
+      while (i.hasNext())
+      {
+          org.apache.tools.ant.types.Environment.Variable
+              var = (org.apache.tools.ant.types.Environment.Variable) i.next();
+          transformer.setParameter(var.getKey(), var.getValue());
+      }
    }
 
    /**
@@ -711,6 +732,28 @@ public class XtremeDocs
       {
          return new FormatterInfoData();
       }
+
+   }
+   private class Property
+   {
+       String mKey;
+       String mValue;
+       public String getKey ()
+       {
+           return mKey;
+       }
+       public void setKey (String key)
+       {
+           mKey = key;
+       }
+       public String getValue ()
+       {
+           return mValue;
+       }
+       public void setValue (String value)
+       {
+           mValue = value;
+       }
 
    }
 

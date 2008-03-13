@@ -36,13 +36,25 @@
    <!-- wether it is an "internal" or "external" report. -->
    <xsl:param name="type" select="'internal'"/>
    
+   <!-- constants -->
+   <xsl:variable name="cms.bug.type"       select="'Bug'"/>
+   <xsl:variable name="cms.cr.type"        select="'Change Request'"/>
+   <xsl:variable name="cms.task.type"      select="'Task'"/>
+   
+   <xsl:variable name="cms.state.draft"    select="'Draft'"/>
+   <xsl:variable name="cms.state.open"     select="'Open'"/>
+   <xsl:variable name="cms.state.accepted" select="'Accepted'"/>
+   <xsl:variable name="cms.state.resolved" select="'Resolved'"/>
+   <xsl:variable name="cms.state.closed"   select="'Closed'"/>
+   
+   <!-- old -->
    <xsl:variable name="jira.bug.type"      select="'Bug Fix'"/>
    <xsl:variable name="jira.cr.type"       select="'Change Request'"/>
    <xsl:variable name="jira.internal.type" select="'Internal Issue'"/>
    <xsl:variable name="jira.testing.type"  select="'Testing Sub-Task'"/>
    <xsl:variable name="jira.impl.type"     select="'Implementation Sub-Task'"/> 
    
-   <xsl:key name="usecases-group"   match="uc:usecases" use="."/>
+   <xsl:key name="usecases-group"          match="uc:usecases" use="."/>
    
    <xsl:key name="test-group"                         match="//tc:test" use="tc:traceability"/>
    <xsl:key name="test-shortname-group"               match="//tc:test" use="tc:shortname"/>
@@ -53,8 +65,8 @@
    <xsl:key name="testresult-passed-testcase-group"   match="//tr:testresult[starts-with(tr:version,$version) and tr:result = 'passed']" use="tr:testcase"/>
    <xsl:key name="testresult-passed-shortname-group"  match="//tr:testresult[starts-with(tr:version,$version) and tr:result = 'passed']" use="tr:shortname"/>
    
-   <xsl:key name="issue-group"                        match="//issue[starts-with(../version,$version)]" use="."/>
-   <xsl:key name="scarab-id"                          match="//scarab//issue"
+   <xsl:key name="issue-group"                        match="//cms:issue[starts-with(../cms:version,$version)]" use="."/>
+   <xsl:key name="scarab-id"                          match="//cms:issues//cms:issue"
                                                       use="ext"/>
 
    <xsl:key name="mappings-group"                     match="//mappings/mapping" use="shortname"/>
@@ -212,7 +224,7 @@
                         </row>
                      </thead>
                      <tbody>
-                        <xsl:apply-templates select="//item[contains(fixVersion,$version) and (type = 'Change Request' or type = 'Bug Fix' or type = 'Internal Issue') and starts-with(summary,'EXT')]" mode="tested">
+                        <xsl:apply-templates select="//cms:issue[contains(cms:version,$version) and (cms:type = $cms.cr.type or cms:type = $cms.bug.type or cms:type = $cms.task.type) and starts-with(cms:summary,'EXT')]" mode="tested">
                            <xsl:sort select="key" order="ascending" data-type="text"/>
                         </xsl:apply-templates>
                         <row>
@@ -253,7 +265,7 @@
                         </row>
                      </thead>
                      <tbody>
-                        <xsl:apply-templates select="//item[contains(fixVersion,$version) and (type = 'Change Request' or type = 'Bug Fix' or type = 'Internal Issue') and not(starts-with(summary,'EXT'))]" mode="tested">
+                        <xsl:apply-templates select="//cms:issue[contains(cms:version,$version) and (cms:type = $cms.cr.type or cms:type = $cms.bug.type or cms:type = $cms.task.type) and not(starts-with(cms:summary,'EXT'))]" mode="tested">
                            <xsl:sort select="key" order="ascending" data-type="text"/>
                         </xsl:apply-templates>
                         <row>
@@ -418,12 +430,12 @@
                      <xsl:variable name="number_specified_tests" select="count(//tc:test)"/>
                      <xsl:variable name="number_executed_tests" select="count(key('testresult-group',.))"/>
                      <xsl:variable name="number_executed_testspecs" select="count(//tc:test[key('testresult-testcase-group',tc:id)/tc:testcase = tc:id])"/>
-                     <xsl:variable name="number_executed_testspecs_passed" select="count(//tc:test[key('testresult-testcase-group',tc:id)[result = 'passed']/tc:testcase = tc:id])"/>
-                     <xsl:variable name="number_issues" select="count(//item[(type = $jira.bug.type or type = $jira.cr.type or type = $jira.internal.type) and contains(fixVersion,$version)])"/>
-                     <xsl:variable name="number_accepted_issues" select="count(//item[(type = $jira.bug.type or type = $jira.cr.type or type = $jira.internal.type) and (status = 'Accepted' or status = 'Closed') and contains(fixVersion,$version)])"/>
+                     <xsl:variable name="number_executed_testspecs_passed" select="count(//tc:test[key('testresult-testcase-group',tc:id)[tr:result = 'passed']/tc:testcase = tc:id])"/>
+                     <xsl:variable name="number_issues" select="count(//cms:issue[(cms:type = $cms.bug.type or cms:type = $cms.cr.type or cms:type = $cms.task.type) and contains(cms:version,$version)])"/>
+                     <xsl:variable name="number_accepted_issues" select="count(//cms:issue[(cms:type = $cms.bug.type or cms:type = $cms.cr.type or cms:type = $cms.task.type) and (cms:state = $cms.state.accepted or cms:state = $cms.state.closed) and contains(cms:version,$version)])"/>
                      <xsl:variable name="number_tests" select="count(//tr:testresult[starts-with(version,$version)])"/>
-                     <xsl:variable name="number_tests_passed" select="count(//tr:testresult[tr:result = 'passed' and starts-with(version,$version)])"/>
-                     <xsl:variable name="number_tests_failed" select="count(//tr:testresult[tr:result = 'failed' and starts-with(version,$version)])"/>
+                     <xsl:variable name="number_tests_passed" select="count(//tr:testresult[tr:result = 'passed' and starts-with(tr:version,$version)])"/>
+                     <xsl:variable name="number_tests_failed" select="count(//tr:testresult[tr:result = 'failed' and starts-with(tr:version,$version)])"/>
                      <xsl:variable name="number_automated_jmeter_tests" select="count(//tr:testresult[string-length(tr:shortname) &gt; 0 and tr:executor = 'JMeter'])"/>
                      <xsl:variable name="number_automated_jmeter_tests_passed" select="count(//tr:testresult[tr:result = 'passed' and string-length(tr:shortname) &gt; 0 and tr:executor = 'JMeter'])"/>
                      <xsl:variable name="number_automated_jmeter_tests_failed" select="count(//tr:testresult[tr:result = 'failed' and string-length(tr:shortname) &gt; 0 and tr:executor = 'JMeter'])"/>
@@ -968,26 +980,27 @@
       </xsl:if> 
    </xsl:template>   
    
-   <xsl:template match="item" mode="tested">
-      <xsl:param name="key_local" select="translate(key,'-','')"/>
-      <xsl:param name="key_local_unmodified" select="key"/>
-      <xsl:param name="summary_local" select="summary"/>
-      <xsl:param name="status_local" select="status"/>
+   <xsl:template match="cms:issue" mode="tested">
+      <xsl:param name="key_local" select="translate(cms:id,'-','')"/>
+      <xsl:param name="key_local_unmodified" select="cms:id"/>
+      <xsl:param name="summary_local" select="cms:summary"/>
+      <xsl:param name="status_local" select="cms:state"/>
       
       <!-- if there is a test result for this Jira issue without any existing testspec for this Jira issue-->
-      <xsl:if test="key('issue-group',$key_local)[(not(../testcase) or ../testcase = '' or not(testcase = //scrno[contains(. , $key_local) or contains(. , $key_local_unmodified)]/../id))] and not(//scrno[contains(. , $key_local) or contains(. , $key_local_unmodified)])">
+      <xsl:if test="key('issue-group',$key_local)[(not(../tr:testcase) or ../tr:testcase = '' or not(tr:testcase = //tc:scrno[contains(. , $key_local) or contains(. , $key_local_unmodified)]/../tc:id))] and not(//tc:scrno[contains(. , $key_local) or contains(. , $key_local_unmodified)])">
          <!-- for each test result for test result for this Jira issue without any existing testspec for this Jira issue-->
-         <xsl:for-each select="key('issue-group',$key_local)[(not(../testcase) or ../testcase = '' or not(testcase = //scrno[contains(. , $key_local) or contains(. , $key_local_unmodified)]/../id)) and not(//scrno[contains(. , $key_local) or contains(. , $key_local_unmodified)])]">
+         <xsl:for-each select="key('issue-group',$key_local)[(not(../tr:testcase) or ../tr:testcase = '' or not(tr:testcase = //tc:scrno[contains(. , $key_local) or contains(. , $key_local_unmodified)]/../tc:id)) and not(//tc:scrno[contains(. , $key_local) or contains(. , $key_local_unmodified)])]">
             <row>
                <entry>
-                  <ulink url="https://www-bb.achievo.de/jira/browse/{$key_local_unmodified}">
+                  <ulink url="/jira/browse/{$key_local_unmodified}">
                      <citetitle><xsl:value-of select="$key_local_unmodified"/></citetitle>
                   </ulink><xsl:if test="$type = 'internal'">(<xsl:value-of select="$status_local"/>)</xsl:if>           
                </entry>
                <entry>
                   <xsl:choose>
+                     <!-- replace with external ID, when existing?!? -->
                      <xsl:when test="starts-with(substring-before($summary_local,' '),'EXT')">
-                        <ulink url="http://www.ics-software.de/scarab/issues/id/{substring-before($summary_local,' ')}">
+                        <ulink url="/scarab/issues/id/{substring-before($summary_local,' ')}">
                            <citetitle><xsl:value-of select="substring-before($summary_local,' ')"/></citetitle>
                         </ulink>        
                      </xsl:when>
@@ -996,8 +1009,8 @@
                </entry>
                <entry>
                   <xsl:choose>
-                     <xsl:when test="//scrno[contains(. , $key_local) or contains(. , $key_local_unmodified)]">
-                        <xsl:for-each select="//scrno[contains(. , $key_local) or contains(. , $key_local_unmodified)]">
+                     <xsl:when test="//tc:scrno[contains(. , $key_local) or contains(. , $key_local_unmodified)]">
+                        <xsl:for-each select="//tc:scrno[contains(. , $key_local) or contains(. , $key_local_unmodified)]">
                            <xsl:variable name="t_id" select="../id"/>
                            <ulink url="all_testspec.html#{$t_id}">
                               <citetitle><xsl:value-of select="$t_id"/></citetitle>

@@ -24,6 +24,7 @@
       <xi:include href="../usecase/sample.xml" parse="xml"/>
       <xi:include href="../testspec/test_specification.xml" parse="xml"/>
       <xi:include href="testresults/test-results.xml" parse="xml"/>
+      <xi:include href="cms/change-management.xml" parse="xml"/>
 
 </root>
 

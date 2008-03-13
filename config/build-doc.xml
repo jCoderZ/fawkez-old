@@ -216,10 +216,6 @@ static-catalog=yes
         </classpath>
      </taskdef>
      
-     <!-- hardcoded test properties to create sample documents -->
-     <property name="version" value="1.0.0.0"/>
-     <property name="version.releasecandidate" value="1.0.0.0.1"/>
-     
      <mkdir dir="${build.dir}/doc/quality-report"/>
      <mkdir dir="${build.dir}/doc/quality-report/images"/>
      <copy todir="${build.dir}/doc/quality-report/images"
@@ -237,6 +233,9 @@ static-catalog=yes
            out="${build.dir}/doc/quality-report" failonerror="true"
            xephome="${xep.home}" cclabel="${label}" companyname="JCoderZ.org"
            companylogo="jcoderz-org">
+        <!-- hardcoded test parameters to create sample documents -->
+        <param key="version" value="1.0.0.0"/>
+        <param key="version.releasecandidate" value="1.0.0.0.1"/>
         <src dir="${base.dir}/src/java"/>
         <src dir="${build.dir}/gen-java"/>
         <classpath>

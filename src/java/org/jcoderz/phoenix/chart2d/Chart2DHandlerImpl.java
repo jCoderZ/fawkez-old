@@ -87,6 +87,7 @@ import org.jcoderz.commons.types.Date;
 import org.jcoderz.commons.util.Constants;
 import org.jcoderz.commons.util.IoUtil;
 import org.jcoderz.commons.util.LoggingProxy;
+import org.jcoderz.commons.util.LoggingUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.traversal.NodeIterator;
@@ -267,11 +268,7 @@ public class Chart2DHandlerImpl implements Chart2DHandler
       
       if (sDebug)
       {
-          final Handler[] handlers = Logger.getLogger("").getHandlers();
-          for (int index = 0; index < handlers.length; index++)
-          {
-             handlers[index].setLevel(Level.ALL);
-          }
+          LoggingUtils.setGlobalHandlerLogLevel(Level.ALL);
           Logger.getLogger("org.jcoderz.phoenix.chart2d").setLevel(Level.ALL);
           Logger.getLogger("").setLevel(Level.ALL);
       }

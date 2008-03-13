@@ -97,13 +97,14 @@ public class XtremeDocs
    private String mCompanyLogo = DEFAULT_COMPANY_LOGO;
    /** flag for execution of validation tasks only */
    private boolean mValidationOnly = DEFAULT_VALIDATION_ONLY_FLAG;
+   /** List of Variables set as Properties in the Transformer context. */
    private final List mTransformerProperties = new ArrayList();
 
    /**
     * Add the given property to be sent to the transformer.
-    * @param the property to be sent to the transformer.
+    * @param var the property to be sent to the transformer.
     **/
-   public void addParam(org.apache.tools.ant.types.Environment.Variable var)
+   public void addParam (org.apache.tools.ant.types.Environment.Variable var)
    {
        mTransformerProperties.add(var);
    }
@@ -124,8 +125,8 @@ public class XtremeDocs
       final Iterator i = mTransformerProperties.iterator();
       while (i.hasNext())
       {
-          org.apache.tools.ant.types.Environment.Variable
-              var = (org.apache.tools.ant.types.Environment.Variable) i.next();
+          final org.apache.tools.ant.types.Environment.Variable var 
+              = (org.apache.tools.ant.types.Environment.Variable) i.next();
           transformer.setParameter(var.getKey(), var.getValue());
       }
    }
@@ -306,11 +307,11 @@ public class XtremeDocs
          }
          else if ("TestSpec".equals(mType))
          {
-
+        	 // Nothing to do
          }
          else if ("Quality-Report".equals(mType))
          {
-
+        	 // Nothing to do
          }
          else
          {
@@ -734,27 +735,4 @@ public class XtremeDocs
       }
 
    }
-   private class Property
-   {
-       String mKey;
-       String mValue;
-       public String getKey ()
-       {
-           return mKey;
-       }
-       public void setKey (String key)
-       {
-           mKey = key;
-       }
-       public String getValue ()
-       {
-           return mValue;
-       }
-       public void setValue (String value)
-       {
-           mValue = value;
-       }
-
-   }
-
 }

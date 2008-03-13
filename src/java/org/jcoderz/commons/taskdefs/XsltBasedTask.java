@@ -191,7 +191,7 @@ public abstract class XsltBasedTask
     */
    public String getFawkezVersionAsString ()
    {
-      final StringBuffer version = new StringBuffer("");
+      final StringBuffer version = new StringBuffer();
       try
       {
          final Properties fawkezProps

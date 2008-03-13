@@ -37,43 +37,43 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Helper class around JDK logging. 
+ * Helper class around JDK logging.
  * @author Andreas Mandel
  */
-public class LoggingUtils 
+public final class LoggingUtils
 {
-	private final static String CLASSNAME = LoggingUtils.class.getName();
-	private final static Logger logger = Logger.getLogger(CLASSNAME);
-	
-	
-	private LoggingUtils ()
-	{
-		// NO INSTANCE
-	}
-	
-	
-	/**
-	 * Set all log levels of all active handlers to the given 
-	 * level. Not for app server usage but helpful for small 
-	 * local utilities. 
-	 * @param level The level to be set in all registered Handlers.
-	 */
-	public static void setGlobalHandlerLogLevel (Level level)
-	{
-		Assert.notNull(level, "level");
+    private static final String CLASSNAME = LoggingUtils.class.getName();
+    private static final Logger logger = Logger.getLogger(CLASSNAME);
+
+
+    private LoggingUtils ()
+    {
+        // NO INSTANCE
+    }
+
+
+    /**
+     * Set all log levels of all active handlers to the given
+     * level. Not for app server usage but helpful for small
+     * local utilities.
+     * @param level The level to be set in all registered Handlers.
+     */
+    public static void setGlobalHandlerLogLevel (Level level)
+    {
+        Assert.notNull(level, "level");
         final Handler[] handlers = Logger.getLogger("").getHandlers();
         for (int index = 0; index < handlers.length; index++)
         {
-        	try
-        	{
-        	    handlers[index].setLevel(level);
-        	}
-        	catch (Exception e) // Might be a security exception...
-        	{
-        		logger.log(Level.FINE, 
-        		    "Failed to change loglevel for Handler '"
-        			    + handlers[index] + "'.", e);
-        	}
+            try
+            {
+                handlers[index].setLevel(level);
+            }
+            catch (Exception e) // Might be a security exception...
+            {
+                logger.log(Level.FINE,
+                    "Failed to change loglevel for Handler '"
+                        + handlers[index] + "'.", e);
+            }
         }
-	}
+    }
 }

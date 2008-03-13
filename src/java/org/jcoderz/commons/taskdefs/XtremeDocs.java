@@ -125,7 +125,7 @@ public class XtremeDocs
       final Iterator i = mTransformerProperties.iterator();
       while (i.hasNext())
       {
-          final org.apache.tools.ant.types.Environment.Variable var 
+          final org.apache.tools.ant.types.Environment.Variable var
               = (org.apache.tools.ant.types.Environment.Variable) i.next();
           transformer.setParameter(var.getKey(), var.getValue());
       }
@@ -307,11 +307,11 @@ public class XtremeDocs
          }
          else if ("TestSpec".equals(mType))
          {
-        	 // Nothing to do
+             // Nothing to do
          }
          else if ("Quality-Report".equals(mType))
          {
-        	 // Nothing to do
+             // Nothing to do
          }
          else
          {

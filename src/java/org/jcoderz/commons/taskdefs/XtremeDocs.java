@@ -546,6 +546,7 @@ public class XtremeDocs
          throws BuildException
    {
       checkAttributeInFile();
+      XsltBasedTask.checkXercesVersion(this);
    }
 
    private void checkAttributeInFile ()

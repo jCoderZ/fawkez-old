@@ -131,25 +131,20 @@
     <!-- Check to see what optional dependencies are available               -->
     <!-- =================================================================== -->
     <target name="check_for_optional_packages"
-            unless="check_for_optional_packages-done">
-        <available property="junit.present"
-                   classname="junit.framework.TestCase">
-            <classpath>
-                <pathelement path="${java.class.path}"/>
+            unless="check_for_optional_packages-done"
+            depends="check-xerces-ant, check-xerces-classpath">
+          <available property="junit.present"
+                     classname="junit.framework.TestCase">
+              <classpath>
                 <path refid="default.classpath"/>
-            </classpath>
-        </available>
-        <java classname="org.apache.xerces.impl.Version"
-          outputproperty="xerces.version.ant"/>
-        <java classname="org.apache.xerces.impl.Version"
-          classpathref="default.classpath"
-          outputproperty="xerces.version"/>
-      <condition property="outdated-xerces">
-        <or>
-          <contains string="${xerces.version}" substring="2.6.2"/>
-          <contains string="${xerces.version.ant}" substring="2.6.2"/>
-        </or>
-      </condition>
+              </classpath>
+          </available>
+          <condition property="outdated-xerces">
+            <or>
+              <contains string="${xerces.version}" substring="2.6.2"/>
+              <contains string="${xerces.version.ant}" substring="2.6.2"/>
+            </or>
+          </condition>
       <property name="check_for_optional_packages-done" value="true"/>
     </target>
 
@@ -162,6 +157,33 @@ xerces in current vm: ${xerces.version.ant}
       <fail message="Outdated version of xerces found on classpath!"/>
     </target>
 
+    <target name="check-xerces-ant"
+       depends="check-xerces-ant-available, check-xerces-ant-version">
+    </target>
+    <target name="check-xerces-ant-available">
+      <available property="xerces.ant.present"
+                 classname="org.apache.xerces.impl.Version">
+      </available>
+    </target>
+    <target name="check-xerces-ant-version"
+      if="xerces.ant.present">
+      <java classname="org.apache.xerces.impl.Version"
+        outputproperty="xerces.version.ant"/>
+    </target>
+    <target name="check-xerces-classpath"
+       depends="check-xerces-classpath-available, check-xerces-classpath-version">
+    </target>
+    <target name="check-xerces-classpath-available">
+      <available property="xerces.classpath.present"
+                 classname="org.apache.xerces.impl.Version">
+      </available>
+    </target>
+    <target name="check-xerces-classpath-version"
+      if="xerces.classpath.present">
+      <java classname="org.apache.xerces.impl.Version"
+        classpathref="default.classpath"
+        outputproperty="xerces.version"/>
+    </target>
 
     <!-- =================================================================== -->
     <!-- Generates a Version class w/ information about this build           -->

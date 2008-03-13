@@ -219,6 +219,25 @@ public abstract class XsltBasedTask
       mResolveExternalEntities = b;
    }
 
+   static void checkXercesVersion (Task task)
+   {
+       final String xercesVersion =
+           org.apache.xerces.impl.Version.getVersion();
+       if (StringUtil.contains(xercesVersion, ("2.6.2")))
+       {
+
+           task.log("Found " + xercesVersion + " on classpath.",
+               Project.MSG_WARN);
+           task.log("This Version only supports the outdated 2003 "
+               + "namespace for XInclude ",
+               Project.MSG_WARN);
+           task.log("please put a newer version of xerxes on your classapth or use",
+               Project.MSG_WARN);
+           task.log("at least ANT 1.7.0.", Project.MSG_WARN);
+           // TODO: Add hint how to do this + throw exception?
+       }
+   }
+
    /**
     * Returns the build-in default stylesheet file name that
     * should be used by XSL transformer.
@@ -271,29 +290,10 @@ public abstract class XsltBasedTask
       checkAttributeOutFile();
       checkAttributeDestDir();
       checkAttributeXslFile();
-      checkXercesVersion();
+      checkXercesVersion(this);
    }
 
-   void checkXercesVersion ()
-   {
-       final String xercesVersion =
-           org.apache.xerces.impl.Version.getVersion();
-       if (StringUtil.contains(xercesVersion, ("2.6.2")))
-       {
-
-           log("Found " + xercesVersion + " on classpath.",
-               Project.MSG_WARN);
-           log("This Version only supports the outdated 2003 "
-               + "namespace for XInclude ",
-               Project.MSG_WARN);
-           log("please put a newer version of xerxes on your classapth or use",
-               Project.MSG_WARN);
-           log("at least ANT 1.7.0.", Project.MSG_WARN);
-           // TODO: Add hint how to do this + throw exception?
-       }
-   }
-
-void checkAttributeXslFile ()
+   void checkAttributeXslFile ()
    {
       if (mXslFile == null || !new File(mXslFile).exists())
       {

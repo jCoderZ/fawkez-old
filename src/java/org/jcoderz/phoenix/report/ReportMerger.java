@@ -52,6 +52,7 @@ import javax.xml.transform.stream.StreamSource;
 
 import org.jcoderz.commons.util.FileUtils;
 import org.jcoderz.commons.util.IoUtil;
+import org.jcoderz.commons.util.LoggingUtils;
 import org.jcoderz.phoenix.report.jaxb.ObjectFactory;
 import org.jcoderz.phoenix.report.jaxb.Report;
 
@@ -176,11 +177,7 @@ public class ReportMerger
             else if (args[i].equals("-loglevel"))
             {
                mLogLevel = Level.parse(args[i + 1]);
-               final Handler[] handlers = Logger.getLogger("").getHandlers();
-               for (int index = 0; index < handlers.length; index++)
-               {
-                  handlers[index].setLevel(mLogLevel);
-               }
+               LoggingUtils.setGlobalHandlerLogLevel(mLogLevel);
                logger.fine("Setting log level: " + mLogLevel);
                logger.setLevel(mLogLevel);
             }

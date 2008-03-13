@@ -88,6 +88,7 @@ import org.jcoderz.commons.util.Constants;
 import org.jcoderz.commons.util.EmptyIterator;
 import org.jcoderz.commons.util.FileUtils;
 import org.jcoderz.commons.util.IoUtil;
+import org.jcoderz.commons.util.LoggingUtils;
 import org.jcoderz.commons.util.XmlUtil;
 import org.jcoderz.phoenix.report.jaxb.Item;
 import org.jcoderz.phoenix.report.jaxb.Report;
@@ -613,11 +614,7 @@ public final class Java2Html
    private void setLoglevel (String loglevel)
    {
        mLogLevel = Level.parse(loglevel);
-       final Handler[] handlers = Logger.getLogger("").getHandlers();
-       for (int index = 0; index < handlers.length; index++)
-       {
-          handlers[index].setLevel(mLogLevel);
-       }
+       LoggingUtils.setGlobalHandlerLogLevel(Level.ALL);
        logger.fine("Setting log level: " + mLogLevel);
        logger.setLevel(mLogLevel);
    }

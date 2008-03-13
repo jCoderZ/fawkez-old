@@ -43,6 +43,9 @@ import java.util.StringTokenizer;
 import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import org.jcoderz.commons.util.LoggingUtils;
+
 import junit.framework.TestSuite;
 
 /**
@@ -71,19 +74,7 @@ public abstract class TestCase
    // sets all loggers to Level.ALL
    static
    {
-      final Handler[] handlers = Logger.getLogger("").getHandlers();
-      final int amountOfHandlers = handlers.length;
-      for (int i = 0; i < amountOfHandlers; i++)
-      {
-         try
-         {
-            handlers[i].setLevel(Level.ALL);
-         }
-         catch (Exception ex)
-         {
-            //ignore
-         }
-      }
+      LoggingUtils.setGlobalHandlerLogLevel(Level.ALL);
    }
 
    /**

@@ -73,20 +73,10 @@ public class WhitespaceFormatTest
    {
       final String t1 = "This is a string.";
       final String t2 = "\tThis is\t\ta\tstring \twith\t\t  tabs.";
-      final String r1 = WhitespaceFormat.format(t1);
-      final String r2 = WhitespaceFormat.format(t2);
-      final CharBuffer tb1 = CharBuffer.wrap(t1);
-      final CharBuffer tb2 = CharBuffer.wrap(t2);
-      final CharBuffer rb1 = WhitespaceFormat.format(tb1);
-      final CharBuffer rb2 = WhitespaceFormat.format(tb2);
-      compare(t1, r1);
-      parseAndCompare(t1, r1);
-      compare(t2, r2);
-      parseAndCompare(t2, r2);
-      compare(tb1, rb1);
-      compare(tb2, rb2);
+      reformatAndCheck(t1, t2);
       parseAndCompare(String.valueOf(PRESERVED_CHAR), PRESERVED_CHAR + t2);
    }
+
 
    /**
     * Tests formatting of strings, with line feeds as white space.
@@ -95,18 +85,7 @@ public class WhitespaceFormatTest
    {
       final String t1 = "This is a string.";
       final String t2 = "\n\nThis is\na string with\n  line feeds.";
-      final String r1 = WhitespaceFormat.format(t1);
-      final String r2 = WhitespaceFormat.format(t2);
-      final CharBuffer tb1 = CharBuffer.wrap(t1);
-      final CharBuffer tb2 = CharBuffer.wrap(t2);
-      final CharBuffer rb1 = WhitespaceFormat.format(tb1);
-      final CharBuffer rb2 = WhitespaceFormat.format(tb2);
-      compare(t1, r1);
-      parseAndCompare(t1, r1);
-      compare(t2, r2);
-      parseAndCompare(t2, r2);
-      compare(tb1, rb1);
-      compare(tb2, rb2);
+      reformatAndCheck(t1, t2);
       parseAndCompare(
             String.valueOf(PRESERVED_CHAR) + String.valueOf(PRESERVED_CHAR),
             String.valueOf(PRESERVED_CHAR) + String.valueOf(PRESERVED_CHAR) + t2
@@ -122,18 +101,24 @@ public class WhitespaceFormatTest
       final String t2
             = "This is\na\tstring\t \twith\n  mixed\n\n \twhite\nspace.";
 
-      final String r1 = WhitespaceFormat.format(t1);
-      final String r2 = WhitespaceFormat.format(t2);
-      final CharBuffer tb1 = CharBuffer.wrap(t1);
-      final CharBuffer tb2 = CharBuffer.wrap(t2);
-      final CharBuffer rb1 = WhitespaceFormat.format(tb1);
-      final CharBuffer rb2 = WhitespaceFormat.format(tb2);
-      compare(t1, r1);
-      parseAndCompare(t1, r1);
-      compare(t2, r2);
-      parseAndCompare(t2, r2);
-      compare(tb1, rb1);
-      compare(tb2, rb2);
+      reformatAndCheck(t1, t2);
+   }
+
+
+   private void reformatAndCheck (final String t1, final String t2)
+   {
+       final String r1 = WhitespaceFormat.format(t1);
+         final String r2 = WhitespaceFormat.format(t2);
+         final CharBuffer tb1 = CharBuffer.wrap(t1);
+         final CharBuffer tb2 = CharBuffer.wrap(t2);
+         final CharBuffer rb1 = WhitespaceFormat.format(tb1);
+         final CharBuffer rb2 = WhitespaceFormat.format(tb2);
+         compare(t1, r1);
+         parseAndCompare(t1, r1);
+         compare(t2, r2);
+         parseAndCompare(t2, r2);
+         compare(tb1, rb1);
+         compare(tb2, rb2);
    }
 
    private void compare (final String source, final String formatted)

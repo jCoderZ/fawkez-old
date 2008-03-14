@@ -1032,7 +1032,7 @@ xerces in current vm: ${xerces.version.ant}
           <tag name="weblogic.persistence"/>
           <tag name="weblogic.resource-description"/>
           <tag name="fdims.admintool.example"/>
-          <tag name="description "/>
+          <tag name="description"/>
           <tag name="solution"/>
           <tag name="procedure"/>
           <tag name="verification"/>

@@ -92,6 +92,10 @@ public class JcoderzTaglet
        "weblogic.resource-description",
        "weblogic.transaction-descriptor",
        "weblogic.dbms-column-type",
+       "description",
+       "solution",
+       "procedure",
+       "verification",
        "@annotation"};
 
    /**

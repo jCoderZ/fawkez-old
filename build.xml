@@ -1032,6 +1032,10 @@ xerces in current vm: ${xerces.version.ant}
           <tag name="weblogic.persistence"/>
           <tag name="weblogic.resource-description"/>
           <tag name="fdims.admintool.example"/>
+          <tag name="description "/>
+          <tag name="solution"/>
+          <tag name="procedure"/>
+          <tag name="verification"/>
 
          <!-- taglet name="org.jcoderz.phoenix.javadoc.JcoderzTaglet"
              path="${build.dir}/classes"/ -->
@@ -1053,6 +1057,7 @@ xerces in current vm: ${xerces.version.ant}
          <link href="${junit.javadoc}"/>
          <link href="${xmlunit.javadoc}"/>
          <link href="http://java.sun.com/j2se/1.5.0/docs/guide/javadoc/doclet/spec"/>
+         <link href="http://checkstyle.sourceforge.net/api/"/>
          <link href="${smack.javadoc}"/>
          <link href="${xerces.javadoc}"/>
       </javadoc>

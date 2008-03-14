@@ -30,7 +30,7 @@
 	</uc:actors>
 	<uc:stakeholder>Merchant wants to have the aggregation of the micro payment amounts to be settled due to certain conditions.</uc:stakeholder>
    <uc:stakeholder>Service Provider wants to transfer the responsibility to define the aggregation parameters to the merchant.</uc:stakeholder>
-	<uc:precondition>none</uc:precondition>
+	<uc:precondition>The usecase <uc:ref id="UC-25"/> has to be executed before.</uc:precondition>
 	<uc:guarantees>
 		<uc:success>Merchant could set the parmeters for the aggregation rules successfully.</uc:success>
 		<minimal>Merchant is notified about the failure of the modification or what went wrong.</minimal>

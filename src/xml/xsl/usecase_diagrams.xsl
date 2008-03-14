@@ -933,8 +933,8 @@ digraph G {
 
    <xsl:template name="display_referents">
       <xsl:param name="usecase_id"/>
-      <xsl:if test="//uc:usecase//uc:ref[(@id = $usecase_id or contains(@id,concat($usecase_id, '-'))) and not(ancestor-or-self::uc:usecase/@id = $usecase_id)]">
-         <xsl:for-each select="//uc:usecase//uc:ref[(@id = $usecase_id or contains(@id,concat($usecase_id, '-'))) and not(ancestor-or-self::uc:usecase/@id = $usecase_id)]">
+      <xsl:if test="//uc:usecase//uc:step//uc:ref[(@id = $usecase_id or contains(@id,concat($usecase_id, '-'))) and not(ancestor-or-self::uc:usecase/@id = $usecase_id)]">
+         <xsl:for-each select="//uc:usecase//uc:step//uc:ref[(@id = $usecase_id or contains(@id,concat($usecase_id, '-'))) and not(ancestor-or-self::uc:usecase/@id = $usecase_id)]">
             <xsl:variable name="destination">
                <xsl:call-template name="lookup_name">
                   <xsl:with-param name="key" select="@id"/>

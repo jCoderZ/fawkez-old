@@ -86,7 +86,7 @@ public class Base64DecoderServlet
             + "' rows='5' cols='100' wrap='soft'>");
       if (encodedData != null && data == null)
       {
-         out.println(encodedData);
+         out.println(XmlUtil.escape(encodedData));
       }
       out.println("</textarea>");
       out.println("<input tabindex='2' type='submit' value='Decode' "
@@ -115,7 +115,7 @@ public class Base64DecoderServlet
          throws IOException
    {
       out.println("<hr />");
-      final String xml 
+      final String xml
           = XmlUtil.formatXml(new String(data, Constants.ENCODING_UTF8));
       if (xml != null)
       {

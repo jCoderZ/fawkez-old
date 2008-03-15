@@ -1056,11 +1056,34 @@ xerces in current vm: ${xerces.version.ant}
          <link href="${jaxb.javadoc}"/>
          <link href="${junit.javadoc}"/>
          <link href="${xmlunit.javadoc}"/>
-         <link href="http://java.sun.com/j2se/1.5.0/docs/guide/javadoc/doclet/spec"/>
-         <link href="http://checkstyle.sourceforge.net/api/"/>
          <link href="${smack.javadoc}"/>
          <link href="${xerces.javadoc}"/>
-      </javadoc>
+           <link href="http://asm.objectweb.org/current/doc/javadoc/user/"/>
+           <link href="http://jakarta.apache.org/bcel/apidocs/"/>
+           <link href="http://chart2d.sourceforge.net/Chart2D_1.9.6/javadocs/"/>
+           <link href="http://checkstyle.sourceforge.net/api/"/>
+           <link href="http://commons.apache.org/beanutils/commons-beanutils-1.7.0/docs/api/"/>
+           <link href="http://commons.apache.org/cli/apidocs/"/>
+           <link href="http://commons.apache.org/codec/apidocs/"/>
+           <link href="http://commons.apache.org/collections/apidocs/"/>
+           <link href="http://hc.apache.org/httpclient-3.x/apidocs/"/>
+           <link href="http://commons.apache.org/logging/apidocs/"/>
+           <link href="http://commons.apache.org/pool/apidocs/"/>
+           <link href="http://www.dom4j.org/apidocs/"/>
+           <link href="http://java.sun.com/j2se/1.5.0/docs/guide/javadoc/doclet/spec"/>
+           <link href="http://java.sun.com/j2ee/1.4/docs/api/"/>
+           <link href="http://jaxen.codehaus.org/apidocs/"/>
+           <link href="http://www.jivesoftware.org/builds/smack/docs/latest/javadoc/"/>
+           <link href="http://jtidy.sourceforge.net/apidocs/"/>
+           <link href="http://www.junit.org/junit/javadoc/3.8.1/"/>
+           <link href="http://logging.apache.org/log4j/1.2/apidocs/"/>
+           <link href="http://jakarta.apache.org/oro/api/"/>
+           <link href="http://jaxen.codehaus.org/apidocs/"/>
+           <link href="http://xml.apache.org/xalan-j/apidocs/"/>
+           <link href="http://xerces.apache.org/xerces2-j/javadocs/api/"/>
+           <link href="http://xmlunit.sourceforge.net/doc/"/>
+           <link href="http://findbugs.sourceforge.net/api/"/>
+           <link href="http://xmlgraphics.apache.org/batik/javadoc/"/>      </javadoc>
       <!--
       <copy todir="${build.dir}/doc/api">
          <fileset dir="${base.dir}/src/docs" includes="**/doc-files/*"/>

@@ -5,24 +5,76 @@
 	<classpathentry kind="src" path="src/java"/>
 	<classpathentry kind="src" path="test/java"/>
 	<classpathentry kind="src" path="tools/java"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JDK1.5.0"/>
 	<classpathentry kind="lib" path="lib/default/ant/ant.jar"/>
 	<classpathentry kind="lib" path="lib/default/antlr/antlr.jar"/>
-	<classpathentry kind="lib" path="lib/default/asm/asm.jar"/>
-	<classpathentry kind="lib" path="lib/default/bcel/bcel.jar"/>
-	<classpathentry kind="lib" path="lib/default/chart2d/chart2d.jar"/>
-	<classpathentry kind="lib" path="lib/default/checkstyle/checkstyle.jar"/>
+	<classpathentry kind="lib" path="lib/default/asm/asm.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="http://asm.objectweb.org/current/doc/javadoc/user/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/default/bcel/bcel.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="http://jakarta.apache.org/bcel/apidocs/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/default/chart2d/chart2d.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="http://chart2d.sourceforge.net/Chart2D_1.9.6/javadocs/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/default/checkstyle/checkstyle.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="http://checkstyle.sourceforge.net/api/"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="lib" path="lib/default/cobertura/cobertura.jar"/>
-	<classpathentry kind="lib" path="lib/default/commons-beanutils/commons-beanutils.jar"/>
-	<classpathentry kind="lib" path="lib/default/commons-cli/commons-cli.jar"/>
-	<classpathentry kind="lib" path="lib/default/commons-codec/commons-codec.jar"/>
-	<classpathentry kind="lib" path="lib/default/commons-collections/commons-collections.jar"/>
-	<classpathentry kind="lib" path="lib/default/commons-httpclient/commons-httpclient.jar"/>
-	<classpathentry kind="lib" path="lib/default/commons-logging/commons-logging.jar"/>
-	<classpathentry kind="lib" path="lib/default/commons-pool/commons-pool.jar"/>
-	<classpathentry kind="lib" path="lib/default/dom4j/dom4j.jar"/>
+	<classpathentry kind="lib" path="lib/default/commons-beanutils/commons-beanutils.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="http://commons.apache.org/beanutils/commons-beanutils-1.7.0/docs/api/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/default/commons-cli/commons-cli.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="http://commons.apache.org/cli/apidocs/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/default/commons-codec/commons-codec.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="http://commons.apache.org/codec/apidocs/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/default/commons-collections/commons-collections.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="http://commons.apache.org/collections/apidocs/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/default/commons-httpclient/commons-httpclient.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="http://hc.apache.org/httpclient-3.x/apidocs/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/default/commons-logging/commons-logging.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="http://commons.apache.org/logging/apidocs/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/default/commons-pool/commons-pool.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="http://commons.apache.org/pool/apidocs/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/default/dom4j/dom4j.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="http://www.dom4j.org/apidocs/"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="lib" path="lib/default/fop/fop.jar"/>
-	<classpathentry kind="lib" path="lib/default/geronimo-spec-j2ee/geronimo-spec-j2ee.jar"/>
+	<classpathentry kind="lib" path="lib/default/geronimo-spec-j2ee/geronimo-spec-j2ee.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="http://java.sun.com/j2ee/1.4/docs/api"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="lib" path="lib/default/geronimo-spec-j2ee-connector/geronimo-spec-j2ee-connector.jar"/>
 	<classpathentry kind="lib" path="lib/default/geronimo-spec-jms/geronimo-spec-jms.jar"/>
 	<classpathentry kind="lib" path="lib/default/ccl/ccl.jar"/>
@@ -34,24 +86,71 @@
 	<classpathentry kind="lib" path="lib/default/jaxb/namespace.jar"/>
 	<classpathentry kind="lib" path="lib/default/jaxb/relaxngDatatype.jar"/>
 	<classpathentry kind="lib" path="lib/default/jaxb/xsdlib.jar"/>
-	<classpathentry kind="lib" path="lib/default/jaxen/jaxen.jar"/>
-	<classpathentry kind="lib" path="lib/default/smack/smack.jar"/>
+	<classpathentry kind="lib" path="lib/default/jaxen/jaxen.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="http://jaxen.codehaus.org/apidocs/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/default/smack/smack.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="http://www.jivesoftware.org/builds/smack/docs/latest/javadoc"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="lib" path="lib/default/smackx/smackx.jar"/>
-	<classpathentry kind="lib" path="lib/default/jtidy/jtidy.jar"/>
-	<classpathentry kind="lib" path="lib/default/junit/junit.jar"/>
-	<classpathentry kind="lib" path="lib/default/log4j/log4j.jar"/>
-	<classpathentry kind="lib" path="lib/default/oro/oro.jar"/>
+	<classpathentry kind="lib" path="lib/default/jtidy/jtidy.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="http://jtidy.sourceforge.net/apidocs/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/default/junit/junit.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="http://www.junit.org/junit/javadoc/3.8.1"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/default/log4j/log4j.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="http://logging.apache.org/log4j/1.2/apidocs/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/default/oro/oro.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="http://jakarta.apache.org/oro/api/"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="lib" path="lib/default/pmd/pmd.jar"/>
-	<classpathentry kind="lib" path="lib/default/saxpath/saxpath.jar"/>
+	<classpathentry kind="lib" path="lib/default/saxpath/saxpath.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="http://jaxen.codehaus.org/apidocs/"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="lib" path="lib/default/velocity/velocity.jar"/>
-	<classpathentry kind="lib" path="lib/default/xalan/xalan.jar"/>
-	<classpathentry kind="lib" path="lib/default/xercesImpl/xercesImpl.jar"/>
+	<classpathentry kind="lib" path="lib/default/xalan/xalan.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="http://xml.apache.org/xalan-j/apidocs/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/default/xercesImpl/xercesImpl.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="http://xerces.apache.org/xerces2-j/javadocs/api/"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="lib" path="lib/default/xjavadoc/xjavadoc.jar"/>
-	<classpathentry kind="lib" path="lib/default/xmlunit/xmlunit.jar"/>
-	<classpathentry kind="lib" path="lib/default/findbugs/findbugs.jar"/>
+	<classpathentry kind="lib" path="lib/default/xmlunit/xmlunit.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="http://xmlunit.sourceforge.net/doc"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/default/findbugs/findbugs.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="http://findbugs.sourceforge.net/api/"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="lib" path="lib/luntbuild/hessian-3.0.8.jar"/>
 	<classpathentry kind="lib" path="lib/luntbuild/luntbuild-api.jar"/>
-	<classpathentry kind="lib" path="lib/default/batik-transcoder/batik-transcoder.jar"/>
-	<classpathentry kind="var" path="JAVA_HOME/lib/tools.jar"/>
+	<classpathentry kind="lib" path="lib/default/batik-transcoder/batik-transcoder.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="http://xmlgraphics.apache.org/batik/javadoc/"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="eclipse/bin"/>
 </classpath>

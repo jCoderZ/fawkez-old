@@ -37,6 +37,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.rmi.UnexpectedException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
@@ -56,7 +57,8 @@ import org.jcoderz.commons.util.StringUtil;
 public final class ResourceInfo
 {
    /** holds a map from resource name to ResourceInfo */
-    private static final Map RESOURCES = new HashMap();
+    private static final Map<String, ResourceInfo> RESOURCES
+        = new HashMap<String, ResourceInfo>();
 
     private static final String CLASSNAME = ResourceInfo.class.getName();
     private static final Logger logger = Logger.getLogger(CLASSNAME);
@@ -73,10 +75,14 @@ public final class ResourceInfo
 
     private ResourceInfo (String name, String pkg, String sourceDir)
     {
+        if (logger.isLoggable(Level.FINER))
+        {
+            logger.entering(CLASSNAME, "<init>",
+                new Object[]{name, pkg, sourceDir});
+        }
         Assert.notNull(name, "name");
         Assert.notNull(sourceDir, "sourceDir");
-
-        mResourceName = name;
+        mResourceName = checkName(name);
         if (pkg != null)
         {
             mPackage = pkg;
@@ -85,8 +91,12 @@ public final class ResourceInfo
         {
             mPackage = StringUtil.EMPTY_STRING;
         }
-        mSourcDir = sourceDir;
+        mSourcDir = checkName(sourceDir);
         mClassname = determineClassName(name);
+        if (logger.isLoggable(Level.FINER))
+        {
+            logger.exiting(CLASSNAME, "<init>", this);
+        }
     }
 
     /**
@@ -99,21 +109,23 @@ public final class ResourceInfo
     public static ResourceInfo register (String name, String pkg,
             String sourceDir)
     {
+        final String resourceName = checkName(name);
         final ResourceInfo result;
-        if (RESOURCES.get(name) == null)
+        if (RESOURCES.containsKey(resourceName))
         {
-            result = new ResourceInfo(name, pkg, sourceDir);
-            add(name, result);
+            result = new ResourceInfo(resourceName, pkg, sourceDir);
+            add(resourceName, result);
         }
         else
         {
-            result = (ResourceInfo) RESOURCES.get(name);
-            final ResourceInfo newInfo = new ResourceInfo(name, pkg, sourceDir);
+            result = RESOURCES.get(resourceName);
+            final ResourceInfo newInfo
+                = new ResourceInfo(resourceName, pkg, sourceDir);
             // sanity check
             if (!newInfo.equals(result))
             {
                 throw new RuntimeException("Ups, the ResourceInfo w/ the name "
-                        + name
+                        + resourceName
                         + " is already registered with different parameters: "
                         + result);
             }
@@ -129,11 +141,13 @@ public final class ResourceInfo
      */
     public static ResourceInfo lookup (String name)
     {
-        if (!RESOURCES.containsKey(name))
+        final String lookupName = checkName(name);
+        if (!RESOURCES.containsKey(lookupName))
         {
-            logger.finer("### ResourceInfo not found for '" + name + "'");
+            logger.finer("### ResourceInfo not found for '"
+                + lookupName + "'");
         }
-        return (ResourceInfo) RESOURCES.get(name);
+        return RESOURCES.get(lookupName);
     }
 
     /**
@@ -291,6 +305,25 @@ public final class ResourceInfo
     private static void add (String name, ResourceInfo info)
     {
         RESOURCES.put(name, info);
+    }
+
+    private static String checkName (String lookupName)
+    {
+        String name = lookupName;
+        if (!RESOURCES.containsKey(lookupName))
+        {
+            try
+            {
+                name = new File(lookupName).getCanonicalPath();
+            }
+            catch (IOException ex)
+            {
+                throw new RuntimeException(
+                    "Uuppss, this was not expected in 'getCanonicalPath'.",
+                    ex);
+            }
+        }
+        return name;
     }
 
 }

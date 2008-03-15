@@ -37,7 +37,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.rmi.UnexpectedException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
@@ -58,7 +58,7 @@ public final class ResourceInfo
 {
    /** holds a map from resource name to ResourceInfo */
     private static final Map<String, ResourceInfo> RESOURCES
-        = new HashMap<String, ResourceInfo>();
+        = Collections.synchronizedMap(new HashMap<String, ResourceInfo>());
 
     private static final String CLASSNAME = ResourceInfo.class.getName();
     private static final Logger logger = Logger.getLogger(CLASSNAME);
@@ -111,7 +111,7 @@ public final class ResourceInfo
     {
         final String resourceName = checkName(name);
         final ResourceInfo result;
-        if (RESOURCES.containsKey(resourceName))
+        if (!RESOURCES.containsKey(resourceName))
         {
             result = new ResourceInfo(resourceName, pkg, sourceDir);
             add(resourceName, result);

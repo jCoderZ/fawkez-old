@@ -60,29 +60,29 @@ import org.apache.tools.ant.types.Path;
 public final class JcoderzReportAntTask
       extends MatchingTask
 {
-   /** the current working directory when forking JVM */
+   /** the current working directory when forking JVM. */
    private File mWorkingDir = null;
 
-   /** Output directory for XML/HTML report */
+   /** Output directory for XML/HTML report. */
    private File mOut = new File(".");
-   /** The Filter Filename */
+   /** The Filter Filename. */
    private File mFilter = null;
-   /** The project's name */
+   /** The project's name. */
    private String mName = "Not defined";
-   /** The output format */
+   /** The output format. */
    private OutputFormat mOutputFormat = OutputFormat.XML;
-   /** Flag: exit build process if an error occurred */
+   /** Flag: exit build process if an error occurred. */
    private boolean mFailOnError = false;
-   /** List of input report of type JcoderzReportAntTask.Report */
+   /** List of input report of type JcoderzReportAntTask.Report. */
    private final List mReportFiles = new ArrayList();
-   /** The Java Commandline */
+   /** The Java Commandline. */
    private final CommandlineJava mCommandline = new CommandlineJava();
-   /** 
-    * List of source directories of type JcoderzReportAntTask.SourceDirectory. 
+   /**
+    * List of source directories of type JcoderzReportAntTask.SourceDirectory.
     */
    private final List mSourceDirectories = new ArrayList();
 
-   /** Debug output flag */
+   /** Debug output flag. */
    private boolean mDebug = false;
 
 

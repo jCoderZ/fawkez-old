@@ -102,7 +102,7 @@
                 projectbase="${base.dir}"
                 tempfolder="${base.dir}/build/jcreport"
                 debug="false"
-                maxheap="256" 
+                maxheap="384" 
                 cpus="1"> <!-- Increase to speed up -->
          <classpath refid="jcreport.classpath"/>
          <reports>   

@@ -63,7 +63,6 @@ public final class PmdReportReader
             = "org.jcoderz.phoenix.pmd.jaxb";
 
     private static final String CLASSNAME = PmdReportReader.class.getName();
-
     private static final Logger logger = Logger.getLogger(CLASSNAME);
 
     private static final int PRIORITY_HIGH = 1;
@@ -89,24 +88,27 @@ public final class PmdReportReader
     public void parse (File f)
             throws JAXBException, FileNotFoundException
     {
+        logger.entering(CLASSNAME, "parse", f);
         mReportDocument = (Pmd) getUnmarshaller().unmarshal(
                 new FileInputStream(f));
+        logger.exiting(CLASSNAME, "parse");
     }
 
     /** {@inheritDoc} */
-    protected Map getItems ()
+    protected Map<ResourceInfo, List<Item>> getItems ()
             throws JAXBException
     {
-        final Map result = new HashMap();
+        logger.entering(CLASSNAME, "getItems()");
+        final Map<ResourceInfo, List<Item>> result
+            = new HashMap<ResourceInfo, List<Item>>();
 
-        for (final Iterator iterator = mReportDocument.getFile().iterator();
+        for (final Iterator<FileType> iterator = mReportDocument.getFile().iterator();
                 iterator.hasNext();)
         {
-            final FileType file
-                    = (org.jcoderz.phoenix.pmd.jaxb.FileType) iterator.next();
+            final FileType file = iterator.next();
 
             final String key = normalizeFileName(file.getName());
-            final List items = createItemMap(file);
+            final List<Item> items = createItemMap(file);
             final ResourceInfo info = ResourceInfo.lookup(key);
             if (info != null)
             {
@@ -117,17 +119,18 @@ public final class PmdReportReader
                 logger.finer("Ingoring findings for resource " + key);
             }
         }
+        logger.exiting(CLASSNAME, "getItems()", result);
         return result;
     }
 
-    private List createItemMap (org.jcoderz.phoenix.pmd.jaxb.FileType file)
+    private List<Item> createItemMap (org.jcoderz.phoenix.pmd.jaxb.FileType file)
             throws JAXBException
     {
-        final List items = new ArrayList();
-        for (final Iterator iterator = file.getViolation().iterator(); iterator
+        final List<Item> items = new ArrayList<Item>();
+        for (final Iterator<Violation> iterator = file.getViolation().iterator(); iterator
                 .hasNext();)
         {
-            final Violation violation = (Violation) iterator.next();
+            final Violation violation = iterator.next();
 
             final Item item = new ObjectFactory().createItem();
             item.setMessage(violation.getValue().trim());
@@ -138,7 +141,6 @@ public final class PmdReportReader
             item.setEndLine(violation.getEndline());
             item.setColumn(violation.getBegincolumn());
             item.setEndColumn(violation.getEndcolumn());
-
             items.add(item);
         }
         return items;
@@ -147,7 +149,7 @@ public final class PmdReportReader
     private Severity mapPriority (Violation violation)
     {
         final Severity ret;
-        
+
         switch (violation.getPriority())
         {
             case PRIORITY_HIGH:

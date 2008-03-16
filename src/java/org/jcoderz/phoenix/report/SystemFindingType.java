@@ -35,7 +35,7 @@ package org.jcoderz.phoenix.report;
 
 /**
  * Enumeration type for system internal findings.
- * 
+ *
  * @author Andreas Mandel
  */
 public final class SystemFindingType
@@ -45,13 +45,20 @@ public final class SystemFindingType
 
    /** Problem in merge. */
    public static final SystemFindingType SYS_PARSE_ERROR =
-      new SystemFindingType("SYS_PARSE_ERROR", 
-         "Failed to parse input file .",
-         "Mergin the reports into one result failed. No input from the " 
+      new SystemFindingType("SYS_PARSE_ERROR",
+         "Failed to parse input file.",
+         "Mergin the reports into one result failed. No input from the "
          + "affected sourcew will be available.",
          Severity.ERROR);
 
-  
+   /** Problem in merge. */
+   public static final SystemFindingType SYS_ERROR =
+      new SystemFindingType("SYS_ERROR",
+         "Error during processing.",
+         "Please check details.",
+         Severity.ERROR);
+
+
    private SystemFindingType (String symbol, String shortText,
          String description, Severity severity)
    {
@@ -64,7 +71,7 @@ public final class SystemFindingType
    {
        return mSeverity;
    }
-   
+
    /**
     * Init of the system finding type.
     */

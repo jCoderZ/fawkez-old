@@ -87,7 +87,7 @@ final class FindingsSummary
     }
 
     /**
-     * Generates a key unique for kind of the given finding type and 
+     * Generates a key unique for kind of the given finding type and
      *          severity.
      * @param findingType the type to generate the key for.
      * @param severity the severity to generate the key for.
@@ -99,7 +99,7 @@ final class FindingsSummary
      {
          return findingType.getSymbol() + "_" + severity.toString();
      }
-    
+
    /**
     * Adds the finding to the findings data structure.
     * All references and counters are updated.
@@ -128,12 +128,12 @@ final class FindingsSummary
    }
 
    /**
-    * Returns the FindingSummary appropriate to hold findings of the 
+    * Returns the FindingSummary appropriate to hold findings of the
     * type of the given Item.
-    * If no such summary capsule exists yet, a new one is generated and 
+    * If no such summary capsule exists yet, a new one is generated and
     * returned.
     * @param item the item where to return a summary for.
-    * @return the FindingSummary appropriate to hold findings of the 
+    * @return the FindingSummary appropriate to hold findings of the
     *     type of the given Item.
     */
    public FindingSummary getFindingSummary (Item item)
@@ -153,8 +153,8 @@ final class FindingsSummary
    /**
     * Returns the map mapping from the type/severity string to stored
     * FindingSummary objects.
-    * The returned map is immutable. Stored objects MUST not be 
-    * modified. 
+    * The returned map is immutable. Stored objects MUST not be
+    * modified.
     * @return the map mapping from the type/severity string to stored
     * FindingSummary objects.
     */
@@ -170,7 +170,7 @@ final class FindingsSummary
    }
 
     /**
-     * Generates a page that lists all findings, that links to the 
+     * Generates a page that lists all findings, that links to the
      * detailed finding pages. The content is ordered by severity and
      * number of occurrences.
      * @param out the writer where to write the html data to.
@@ -178,9 +178,9 @@ final class FindingsSummary
      */
     static void createOverallContent (Writer out) throws IOException
     {
-        final Collection colAllFindings 
-                = getFindingsSummary().getFindings().values(); 
-        final FindingSummary[] allFindings 
+        final Collection colAllFindings
+                = getFindingsSummary().getFindings().values();
+        final FindingSummary[] allFindings
                 = (FindingSummary[]) colAllFindings.toArray(
                         new FindingSummary[colAllFindings.size()]);
 
@@ -258,8 +258,8 @@ final class FindingsSummary
       /**
        * Creates a new FindingSummary to collect findings similiar
        * to the given finding.
-       * @param finding the reference Item for the types of findings 
-       *     collected in this summary. 
+       * @param finding the reference Item for the types of findings
+       *     collected in this summary.
        */
       public FindingSummary (Item finding)
       {
@@ -403,7 +403,7 @@ final class FindingsSummary
       public void createFindingTypeContent (Writer out)
          throws IOException
       {
-         final FindingOccurrence[] allFindings 
+         final FindingOccurrence[] allFindings
                  = (FindingOccurrence[]) mOccurrences.values().toArray(
                      new FindingOccurrence[0]);
 
@@ -445,7 +445,7 @@ final class FindingsSummary
 
          final Iterator i = Arrays.asList(allFindings).iterator();
 
-         out.write("<table border='0' cellpadding='0' cellspacing='0' " 
+         out.write("<table border='0' cellpadding='0' cellspacing='0' "
                  + "width='95%' summary='Places of this finding.'>");
 
          while (i.hasNext())
@@ -588,7 +588,7 @@ final class FindingsSummary
 
          public String findingsToString ()
          {
-            final StringBuffer sb = new StringBuffer();
+            final StringBuilder sb = new StringBuilder();
             sb.append('{');
             final Iterator i = mFindingsInFile.iterator();
             while (i.hasNext())
@@ -607,7 +607,7 @@ final class FindingsSummary
             return sb.toString();
          }
 
-         /** 
+         /**
           * {@inheritDoc}
           * Be aware that the order (result of {@link #compareTo} can change
           * if new findings are added.

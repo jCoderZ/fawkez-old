@@ -44,31 +44,31 @@ import javax.xml.bind.JAXBException;
 /**
  * @author Michael Griffel
  */
-public final class SourceDirectoryReader 
+public final class SourceDirectoryReader
       extends AbstractReportReader
 {
-   private static final String CLASSNAME 
+   private static final String CLASSNAME
            = SourceDirectoryReader.class.getName();
 
    private static final Logger logger = Logger.getLogger(CLASSNAME);
-   
+
    private final Map mSources = new HashMap();
-   
-   SourceDirectoryReader () 
+
+   SourceDirectoryReader ()
          throws JAXBException
    {
       super(JcoderzReport.JCODERZ_JAXB_CONTEXT_PATH);
    }
 
    /** {@inheritDoc} */
-   protected Map getItems () 
+   protected Map getItems ()
          throws JAXBException
    {
       return Collections.unmodifiableMap(mSources);
    }
 
    /** {@inheritDoc} */
-   public void parse (File f) 
+   public void parse (File f)
          throws JAXBException, FileNotFoundException
    {
       if (! f.isDirectory())
@@ -87,18 +87,25 @@ public final class SourceDirectoryReader
          final String resourceName = files[i].getAbsolutePath();
          if (files[i].isDirectory())
          {
-            final String subpkg;
-            if (pkg == null)
+            if (".svn".equals(files[i].getName()))
             {
-               subpkg = files[i].getName();
+                logger.finer("Ignoring source dir: '" + files[i] + "'");
             }
             else
-            {   
-               subpkg = pkg + "." + files[i].getName();
+            {
+                final String subpkg;
+                if (pkg == null)
+                {
+                   subpkg = files[i].getName();
+                }
+                else
+                {
+                   subpkg = pkg + "." + files[i].getName();
+                }
+                addSourceFiles(files[i], subpkg, sourceDir);
             }
-            addSourceFiles(files[i], subpkg, sourceDir);
          }
-         else if (resourceName.endsWith(".java") 
+         else if (resourceName.endsWith(".java")
                || resourceName.endsWith("package.html"))
          {
             addResource(pkg, sourceDir, resourceName);
@@ -109,12 +116,12 @@ public final class SourceDirectoryReader
          }
       }
       // register package.html if not already registered (only in **/src/java**)
-      final String packageHtml = directory.getAbsolutePath() + File.separator 
+      final String packageHtml = directory.getAbsolutePath() + File.separator
             + "package.html";
-      if (ResourceInfo.lookup(packageHtml) == null 
+      if (ResourceInfo.lookup(packageHtml) == null
             && packageHtml.matches(
                   ".*/src/java.*"))
-      {   
+      {
          ResourceInfo.register(packageHtml, pkg, sourceDir);
       }
    }
@@ -122,8 +129,8 @@ public final class SourceDirectoryReader
    private void addResource (
             String pkg, String sourceDir, final String resourceName)
    {
-      final ResourceInfo info 
+      final ResourceInfo info
             = ResourceInfo.register(resourceName, pkg, sourceDir);
       mSources.put(info, Collections.EMPTY_LIST);
-   }   
+   }
 }

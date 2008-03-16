@@ -50,7 +50,7 @@ import org.jcoderz.phoenix.report.jaxb.Item;
  * @author Andreas Mandel
  */
 public final class FileSummary
-        implements Comparable
+        implements Comparable<FileSummary>
 {
     /** Constant used for initial string buffer size. */
     private static final int STRING_BUFFER_SIZE = 256;
@@ -239,7 +239,7 @@ public final class FileSummary
     /** {@inheritDoc} */
     public String toString ()
     {
-        final StringBuffer result = new StringBuffer();
+        final StringBuilder result = new StringBuilder();
         calcPercent();
 
         result.append(getFullClassName());
@@ -248,10 +248,10 @@ public final class FileSummary
         result.append('(');
         result.append(mViolations[Severity.OK.toInt()]);
         result.append("%)");
-        final Iterator i = Severity.VALUES.iterator();
+        final Iterator<Severity> i = Severity.VALUES.iterator();
         while (i.hasNext())
         {
-            final Severity s = (Severity) i.next();
+            final Severity s = i.next();
             if (mViolations[s.toInt()] != 0)
             {
                 result.append(", ");
@@ -295,12 +295,12 @@ public final class FileSummary
      */
     public void add (File file)
     {
-        final Iterator i = file.getItem().iterator();
         mFiles++;
         mLinesOfCode += file.getLoc();
+        final Iterator<Item> i = file.getItem().iterator();
         while (i.hasNext())
         {
-            final Item item = (Item) i.next();
+            final Item item = i.next();
             final Severity severity = item.getSeverity();
             addViolation(severity);
         }
@@ -399,7 +399,7 @@ public final class FileSummary
     public String getPercentBar ()
     {
         calcPercent();
-        final StringBuffer sb = new StringBuffer(STRING_BUFFER_SIZE);
+        final StringBuilder sb = new StringBuilder(STRING_BUFFER_SIZE);
         sb.append("<table width='100%' cellspacing='0' cellpadding='0' "
             + "summary='quality-bar'><tr valign='middle'>");
         for (int i = Severity.OK.toInt(); i < Severity.MAX_SEVERITY_INT; i++)
@@ -427,7 +427,7 @@ public final class FileSummary
     {
         final int notCovered = MAX_PERCENTAGE - getCoverage();
 
-        final StringBuffer sb = new StringBuffer(STRING_BUFFER_SIZE);
+        final StringBuilder sb = new StringBuilder(STRING_BUFFER_SIZE);
         sb.append("<table width='100%' cellspacing='0' cellpadding='0' "
             + "summary='coverage-bar'><tr valign='middle'>");
         if (notCovered < MAX_PERCENTAGE)
@@ -504,19 +504,18 @@ public final class FileSummary
     }
 
     /** {@inheritDoc} */
-    public int compareTo (Object o)
+    public int compareTo (FileSummary o)
     {
         int result = 0;
         if (mPackage != null)
         {
-            result = mPackage.compareTo(((FileSummary) o).mPackage);
+            result = mPackage.compareTo((o).mPackage);
         }
         if (result == 0)
         {
             if (getClassName() != null)
             {
-                result = getClassName().compareTo(
-                    ((FileSummary) o).getClassName());
+                result = getClassName().compareTo(o.getClassName());
             }
         }
         return result;
@@ -617,13 +616,14 @@ public final class FileSummary
      * Comparator that allows to sort the FileSummary by name of the package.
      * @author Andreas Mandel
      */
-    static final class SortByPackage implements Comparator, Serializable
+    static final class SortByPackage
+        implements Comparator<FileSummary>, Serializable
     {
         private static final long serialVersionUID = 2244367340241672131L;
 
-        public int compare (Object o1, Object o2)
+        public int compare (FileSummary o1, FileSummary o2)
         {
-            return ((FileSummary) o1).compareTo(o2);
+            return o1.compareTo(o2);
         }
     }
 
@@ -631,15 +631,16 @@ public final class FileSummary
      * Comparator that allows to sort the FileSummary by quality.
      * @author Andreas Mandel
      */
-    static final class SortByQuality implements Comparator, Serializable
+    static final class SortByQuality
+        implements Comparator<FileSummary>, Serializable
     {
         private static final long serialVersionUID = 1718175789352629538L;
 
-        public int compare (Object o1, Object o2)
+        public int compare (FileSummary o1, FileSummary o2)
         {
             int result;
-            final float qualityA = ((FileSummary) o1).getQualityAsFloat();
-            final float qualityB = ((FileSummary) o2).getQualityAsFloat();
+            final float qualityA = o1.getQualityAsFloat();
+            final float qualityB = o2.getQualityAsFloat();
             if (qualityA < qualityB)
             {
                 result = -1;
@@ -650,7 +651,7 @@ public final class FileSummary
             }
             else
             {
-                result = ((FileSummary) o1).compareTo(o2);
+                result = o1.compareTo(o2);
             }
             return result;
         }
@@ -660,15 +661,13 @@ public final class FileSummary
      * Comparator that allows to sort the FileSummary by coverage.
      * @author Andreas Mandel
      */
-    static final class SortByCoverage implements Comparator, Serializable
+    static final class SortByCoverage
+        implements Comparator<FileSummary>, Serializable
     {
         private static final long serialVersionUID = -4275903074787742250L;
 
-        public int compare (Object o1, Object o2)
+        public int compare (FileSummary a, FileSummary b)
         {
-            final FileSummary a = (FileSummary) o1;
-            final FileSummary b = (FileSummary) o2;
-
             final long coverA = a.getCoverage();
             final long coverB = b.getCoverage();
 
@@ -683,7 +682,7 @@ public final class FileSummary
             }
             else
             {
-                result = ((FileSummary) o1).compareTo(o2);
+                result = a.compareTo(b);
             }
             return result;
         }

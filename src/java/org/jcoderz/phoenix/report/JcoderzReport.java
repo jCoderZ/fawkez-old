@@ -34,11 +34,15 @@ package org.jcoderz.phoenix.report;
 
 import java.io.File;
 import java.io.OutputStream;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
+
 import javax.xml.bind.JAXBException;
+
+import org.jcoderz.phoenix.report.jaxb.Item;
 import org.jcoderz.phoenix.report.jaxb.ObjectFactory;
 import org.jcoderz.phoenix.report.jaxb.Report;
 
@@ -54,7 +58,7 @@ public final class JcoderzReport
     public static final String JCODERZ_JAXB_CONTEXT_PATH
        = "org.jcoderz.phoenix.report.jaxb";
 
-    
+
     private static final String CLASSNAME = JcoderzReport.class.getName();
 
     private static final Logger logger = Logger.getLogger(CLASSNAME);
@@ -130,7 +134,7 @@ public final class JcoderzReport
    {
       final Map files = items;
 
-      for (final Iterator iterator = files.keySet().iterator(); 
+      for (final Iterator iterator = files.keySet().iterator();
           iterator.hasNext(); )
       {
          final ResourceInfo info = (ResourceInfo) iterator.next();
@@ -205,4 +209,25 @@ public final class JcoderzReport
    {
       return mReport.getName();
    }
+
+   public void addSystemLevelIssue (String message, Throwable e,
+       ResourceInfo res)
+   {
+       try
+       {
+           final Item item = new ObjectFactory().createItem();
+           item.setMessage(message);
+           item.setSeverity(Severity.ERROR);
+           item.setFindingType(SystemFindingType.SYS_ERROR.getSymbol());
+           item.setOrigin(Origin.SYSTEM);
+           addItems(ReportLevel.PROD, Collections.singletonMap(res, item));
+       }
+       catch (JAXBException ex)
+       {
+           // give up.. it is about time
+           throw new RuntimeException(
+               "Failed to add detail for " + e, ex);
+       }
+   }
+
 }

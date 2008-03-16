@@ -2,6 +2,10 @@
 
 <project name="report">
 
+   <!-- Redefine to make included build file self contained and
+      make eclipse happy. -->
+   <property name="base.dir" value="../"/>
+  
    <!-- The ruleset files -->
    <property name="pmd.rules" value="${base.dir}/config/jcoderz-pmd.xml"/>
    <property name="checkstyle.rules" value="${base.dir}/config/jcoderz-checkstyle.xml" />
@@ -20,7 +24,7 @@
       </path>
       <taskdef name="jcsummaryreport"
                classname="org.jcoderz.phoenix.report.JcSummaryReportAntTask">
-         <classpath refid="jcreport.classpath" />
+         <classpath refid="jcreport.classpath"/>
       </taskdef>
       <!-- TODO: Find a good place for the fawkez build!
            The folder should be the CC artefacts folder -->
@@ -97,15 +101,16 @@
                 packagebase="org.jcoderz"
                 projectbase="${base.dir}"
                 tempfolder="${base.dir}/build/jcreport"
-                maxheap="128"
-                debug="false">
+                debug="false"
+                maxheap="256" 
+                cpus="1"> <!-- Increase to speed up -->
          <classpath refid="jcreport.classpath"/>
          <reports>   
             <report name="fawkez-test"
                     level="test"
                     sourcepath="${base.dir}/test/java"
                     classpath="${build.dir}/classes">
-            </report>   
+            </report>    
             <report name="fawkez-prod"
                     level="prod"
                     sourcepath="${base.dir}/src/java"
@@ -118,23 +123,23 @@
          <tools>
             <pmd config="${pmd.rules}"
                  targetjdk="1.4"
-                 encoding="Cp1252">
+                 encoding="ASCII">
                <classpath refid="pmd.classpath"/>
             </pmd>
-            <cpd minimumtokens="100">
+            <cpd minimumtokens="100"
+              encoding="ASCII">
                <classpath refid="pmd.classpath"/>
-            </cpd> <!-- Could not disable UnreadFields cause further dependencies -->
-            <findbugs maxheap="256"
-                      effort="max"
-                      debug="false"
-               		 omitVisitors="RuntimeExceptionCapture,FindUncalledPrivateMethods,CustomBuiltXML,DeclaredRuntimeException,PossiblyRedundantMethodCalls"
-                      warninglevel="low">
+            </cpd>
+           <!-- Could not disable UnreadFields cause further dependencies -->
+           <findbugs effort="max"
+              debug="false"
+              omitVisitors="RuntimeExceptionCapture,FindUncalledPrivateMethods,CustomBuiltXML,DeclaredRuntimeException,PossiblyRedundantMethodCalls"
+              warninglevel="low">
                <classpath refid="findbugs.classpath"/>
                <auxclasspath refid="findbugs.aux.classpath"/>
                <pluginlist refid="findbugs.plugins"/>
             </findbugs>
-            <checkstyle config="${checkstyle.rules}"
-                        maxheap="512"> 
+            <checkstyle config="${checkstyle.rules}"> 
                <classpath refid="checkstyle.classpath" />
             </checkstyle>
             <!-- cobertura datafile="x.ser">

@@ -1,5 +1,5 @@
 /*
- * $Id: ReportNormalizer.java 413 2006-10-07 19:22:43Z mrumpf $
+ * $Id$
  *
  * Copyright 2006, The jCoderZ.org Project. All rights reserved.
  *
@@ -33,12 +33,11 @@
 package org.jcoderz.phoenix.report;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -46,10 +45,12 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
+import org.jcoderz.commons.ArgumentMalformedException;
 import org.jcoderz.commons.util.FileUtils;
 import org.jcoderz.commons.util.IoUtil;
 import org.jcoderz.commons.util.LoggingUtils;
@@ -64,99 +65,99 @@ import org.jcoderz.phoenix.report.jaxb.Report;
  */
 public class ReportMerger
 {
+
+   /** The Constant CLASSNAME. */
    private static final String CLASSNAME = ReportNormalizer.class.getName();
+
+   /** The Constant logger. */
    private static final Logger logger = Logger.getLogger(CLASSNAME);
-   
+
+   /** The log level. */
    private Level mLogLevel;
+
+   /** The out file. */
    private File mOutFile;
-   private final List mReports = new ArrayList();
-   private final List mFilters = new ArrayList();
 
-   
+   /** The reports. */
+   private final List<File> mReports = new ArrayList<File>();
+
+   /** The filters. */
+   private final List<File> mFilters = new ArrayList<File>();
+
+
+   /**
+    * Merge input reports.
+    * @throws JAXBException if a xml handling error occurs.
+    * @throws FileNotFoundException in case of an IO issue.
+    */
    public void merge ()
+       throws JAXBException, FileNotFoundException
    {
-      // create the final report
-      try
-      {
-         logger.log(Level.FINE, "Merging jcoderz-report.xml files...");
-         // prepare JAXB
-         final JAXBContext mJaxbContext = JAXBContext.newInstance(
-               "org.jcoderz.phoenix.report.jaxb",
-               this.getClass().getClassLoader());
-         final Marshaller mMarshaller = mJaxbContext.createMarshaller();
-         mMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT,
-                 Boolean.TRUE);
+     logger.log(Level.FINE, "Merging jcoderz-report.xml files...");
+     // prepare JAXB
+     final JAXBContext mJaxbContext
+         = JAXBContext.newInstance("org.jcoderz.phoenix.report.jaxb",
+           this.getClass().getClassLoader());
+     final Marshaller mMarshaller = mJaxbContext.createMarshaller();
+     mMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT,
+             Boolean.TRUE);
 
-         // merge the reports
-         final Report mergedReport = new ObjectFactory().createReport();
-         final Iterator iter = mReports.iterator();
-         while (iter.hasNext())
-         {
-            final File reportFile = (File) iter.next();
-            logger.log(Level.FINE, "Report: " + reportFile);
-            try
-            {
-               final Report report = (Report) new ObjectFactory()
-                     .createUnmarshaller().unmarshal(reportFile);
-               mergedReport.getFile().addAll(report.getFile());
-            }
-            catch (JAXBException ex)
-            {
-               // TODO
-               ex.printStackTrace();
-            }
-         }
-
-         // create the file
-         mMarshaller.marshal(mergedReport, new FileOutputStream(mOutFile));
-      }
-      catch (Exception ex)
-      {
-         // TODO
-         ex.printStackTrace();
-      }
+     // merge the reports
+     final Report mergedReport = new ObjectFactory().createReport();
+     for (final File reportFile : mReports)
+     {
+        logger.log(Level.FINE, "Report: " + reportFile);
+        try
+        {
+           final Report report = (Report) new ObjectFactory()
+                 .createUnmarshaller().unmarshal(reportFile);
+           mergedReport.getFile().addAll(report.getFile());
+        }
+        catch (JAXBException ex)
+        {
+           // TODO: ADD ISSUE AS system ITEM TO THE REPORT
+           ex.printStackTrace();
+        }
+     }
+     // create the file
+     mMarshaller.marshal(mergedReport, new FileOutputStream(mOutFile));
    }
 
 
    /**
     * Filters the report XML file using the JDK XSL processor.
     */
-   private void filter ()
+   public void filter () throws TransformerException, IOException
    {
-      try
-      {
-         logger.log(Level.FINE, "Filtering jcoderz-report.xml files...");
-         final Iterator iter = mFilters.iterator();
-         while (iter.hasNext())
-         {
-            final File filterFile = (File) iter.next();
-            logger.log(Level.FINE, "Filter: " + filterFile);
-            final TransformerFactory tFactory 
-                = TransformerFactory.newInstance();
-      
-            final Transformer transformer = tFactory.newTransformer(
-                  new StreamSource(filterFile));
-      
-            final File tempOutputFile = new File(
-                  mOutFile.getCanonicalPath() + ".tmp");
-            tempOutputFile.createNewFile();
-      
-            final FileOutputStream out = new FileOutputStream(tempOutputFile);
-            transformer.transform(new StreamSource(mOutFile),
-                 new StreamResult(out));
-            IoUtil.close(out);
-            FileUtils.copyFile(tempOutputFile, mOutFile); 
-            FileUtils.delete(tempOutputFile);
-         }
-      }
-      catch (Exception ex)
-      {
-         // TODO
-         ex.printStackTrace();
-      }
+       logger.log(Level.FINE, "Filtering jcoderz-report.xml files...");
+       for (final File filterFile : mFilters)
+       {
+           logger.log(Level.FINE, "Filter: " + filterFile);
+           final TransformerFactory tFactory
+           = TransformerFactory.newInstance();
+
+           final Transformer transformer = tFactory.newTransformer(
+               new StreamSource(filterFile));
+
+           final File tempOutputFile = new File(
+               mOutFile.getCanonicalPath() + ".tmp");
+           tempOutputFile.createNewFile();
+
+           final FileOutputStream out = new FileOutputStream(tempOutputFile);
+           transformer.transform(new StreamSource(mOutFile),
+               new StreamResult(out));
+           IoUtil.close(out);
+           FileUtils.copyFile(tempOutputFile, mOutFile);
+           FileUtils.delete(tempOutputFile);
+       }
    }
 
 
+   /**
+    * Parses the arguments.
+    *
+    * @param args the args
+    */
    private void parseArguments (String[] args)
    {
       try
@@ -165,42 +166,29 @@ public class ReportMerger
          {
             logger.fine("Parsing argument '" + args[i] + "' = '"
                   + args[i + 1] + "'");
-      
-            if (args[i].equals("-jcreport"))
+
+            if ("-jcreport".equals(args[i]))
             {
-               mReports.add(new File(args[i + 1]));
+               addReport(new File(args[i + 1]));
             }
-            else if (args[i].equals("-filter"))
+            else if ("-filter".equals(args[i]))
             {
-               mFilters.add(new File(args[i + 1]));
+               addFilter(new File(args[i + 1]));
             }
-            else if (args[i].equals("-loglevel"))
+            else if ("-loglevel".equals(args[i]))
             {
-               mLogLevel = Level.parse(args[i + 1]);
-               LoggingUtils.setGlobalHandlerLogLevel(mLogLevel);
-               logger.fine("Setting log level: " + mLogLevel);
-               logger.setLevel(mLogLevel);
+                setLogLevel(Level.parse(args[i + 1]));
             }
-            else if (args[i].equals("-out"))
+            else if ("-out".equals(args[i]))
             {
-               final File out = new File(args[i + 1]);
-               if (out.isDirectory())
-               {
-                  out.mkdirs();
-                  mOutFile = new File(out,
-                     ReportNormalizer.JCODERZ_REPORT_XML).getCanonicalFile();
-               }
-               else
-               {
-                  mOutFile = out.getCanonicalFile();
-               }
+                setOutFile(new File(args[i + 1]));
             }
             else
             {
                throw new IllegalArgumentException(
                        "Invalid argument '" + args[i]  + "'");
             }
-      
+
             ++i;
             ++i;
          }
@@ -221,12 +209,101 @@ public class ReportMerger
       }
    }
 
-   
+
+   /**
+    * The main method.
+    *
+    * @param args the arguments
+    */
    public static void main (String[] args)
-   { 
+       throws Exception
+   {
       final ReportMerger rm = new ReportMerger();
       rm.parseArguments(args);
       rm.merge();
       rm.filter();
    }
+
+    /**
+     * Adds the report.
+     * @param report the report
+     */
+    public void addReport (File report)
+    {
+        mReports.add(report);
+    }
+
+    /**
+     * Adds the filter.
+     * @param filter the filter
+     */
+    public void addFilter (File filter)
+    {
+        mFilters.add(filter);
+    }
+
+    /**
+     * Gets the log level.
+     *
+     * @return the log level
+     */
+    public Level getLogLevel ()
+    {
+        return mLogLevel;
+    }
+
+
+    /**
+     * Sets the log level.
+     *
+     * @param logLevel the new log level
+     */
+    public void setLogLevel (Level logLevel)
+    {
+        mLogLevel = logLevel;
+        LoggingUtils.setGlobalHandlerLogLevel(mLogLevel);
+        logger.fine("Setting log level: " + mLogLevel);
+        logger.setLevel(mLogLevel);
+    }
+
+
+    /**
+     * Gets the out file.
+     *
+     * @return the out file
+     */
+    public File getOutFile ()
+    {
+        return mOutFile;
+    }
+
+
+    /**
+     * Sets the out file.
+     *
+     * @param outFile the new out file
+     *
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
+    public void setOutFile (File outFile)
+        throws IOException
+    {
+        if (mOutFile != null)
+        {
+            throw new ArgumentMalformedException("outFile", outFile,
+                "Out File already set to '" + mOutFile + "'.");
+        }
+        mOutFile = outFile;
+        if (mOutFile.isDirectory())
+        {
+            mOutFile.mkdirs();
+            mOutFile = new File(mOutFile,
+                ReportNormalizer.JCODERZ_REPORT_XML).getCanonicalFile();
+        }
+        else
+        {
+           mOutFile = mOutFile.getCanonicalFile();
+        }
+
+    }
 }

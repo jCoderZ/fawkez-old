@@ -84,7 +84,7 @@ public final class CpdReportReader
    {
       final Map result = new HashMap();
 
-      for (final Iterator iterator 
+      for (final Iterator iterator
               = mReportDocument.getDuplication().iterator();
            iterator.hasNext();)
       {
@@ -136,7 +136,7 @@ public final class CpdReportReader
    private String constructMessage (int currentIndex, List filez,
          Duplication duplication)
    {
-      final StringBuffer sb = new StringBuffer();
+      final StringBuilder sb = new StringBuilder();
       sb.append("Copied and pasted code. ");
       sb.append(duplication.getTokens());
       sb.append(" equal tokens (");

@@ -36,7 +36,6 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -52,6 +51,7 @@ import javax.xml.bind.ValidationEventLocator;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParserFactory;
 
+import org.jcoderz.phoenix.report.jaxb.Item;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -67,7 +67,8 @@ import org.xml.sax.XMLReader;
 public abstract class AbstractReportReader
         implements ReportReader, ValidationEventHandler
 {
-    private static final String CLASSNAME = AbstractReportReader.class.getName();
+    private static final String CLASSNAME
+        = AbstractReportReader.class.getName();
     private static final Logger logger = Logger.getLogger(CLASSNAME);
 
     private final JAXBContext mJaxbContext;
@@ -149,7 +150,7 @@ public abstract class AbstractReportReader
             {
                 throw new RuntimeException(e);
             }
-            final UnmarshallerHandler un 
+            final UnmarshallerHandler un
                 = getUnmarshaller().getUnmarshallerHandler();
             reader.setEntityResolver(new DummyEntityResolver());
             reader.setContentHandler(un);
@@ -164,22 +165,20 @@ public abstract class AbstractReportReader
     }
 
     /** {@inheritDoc} */
-    public final void merge (Map toItems)
+    public final void merge (Map<ResourceInfo, List<Item>> toItems)
             throws JAXBException
     {
-        final Map myResourceList = getItems();
+        final Map<ResourceInfo, List<Item>> myResourceList = getItems();
 
-        for (final Iterator iterator = myResourceList.keySet().iterator(); 
-                iterator.hasNext();)
+        for (ResourceInfo info : myResourceList.keySet())
         {
-            final ResourceInfo info = (ResourceInfo) iterator.next();
-            List items = (List) toItems.get(info);
+            List<Item> items = toItems.get(info);
             if (items == null)
             {
-                items = new ArrayList();
+                items = new ArrayList<Item>();
                 toItems.put(info, items);
             }
-            items.addAll((List) myResourceList.get(info));
+            items.addAll(myResourceList.get(info));
         }
     }
 
@@ -190,14 +189,14 @@ public abstract class AbstractReportReader
      * @return the items of the input report as a List of the type Item.
      * @throws JAXBException if an JAXB exception occures.
      */
-    protected abstract Map getItems ()
+    protected abstract Map<ResourceInfo, List<Item>> getItems ()
             throws JAXBException;
 
     /** {@inheritDoc} */
     public final boolean handleEvent (ValidationEvent e)
     {
         final ValidationEventLocator l = e.getLocator();
-        final StringBuffer sb = new StringBuffer();
+        final StringBuilder sb = new StringBuilder();
         sb.append("[ValidationEvent:");
         sb.append(", message=");
         sb.append(e.getMessage());

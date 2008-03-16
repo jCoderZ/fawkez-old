@@ -39,12 +39,12 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import javax.xml.bind.JAXBException;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
@@ -52,6 +52,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.TransformerFactoryConfigurationError;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
+
 import org.jcoderz.commons.util.FileUtils;
 import org.jcoderz.commons.util.IoUtil;
 import org.jcoderz.commons.util.LoggingUtils;
@@ -67,338 +68,553 @@ import org.jcoderz.phoenix.report.jaxb.ObjectFactory;
  */
 public final class ReportNormalizer
 {
-   public static final String JCODERZ_REPORT_XML
-      = "jcoderz-report.xml";
-   private static final transient String CLASSNAME
-      = ReportNormalizer.class.getName();
-   private static final transient Logger logger
-      = Logger.getLogger(CLASSNAME);
 
-   private File mProjectHome;
-   private String mProjectName = "Unknown Project";
-   private File mOutFile;
-   private Level mLogLevel = Level.INFO;
-   private ReportLevel mLevel = ReportLevel.PROD;
+    /** The Constant JCODERZ_REPORT_XML. */
+    public static final String JCODERZ_REPORT_XML
+        = "jcoderz-report.xml";
 
-   /**
-    * The XSL stylesheet that can be used to filter
-    * the jcoderz-report XML file.
-    */
-   private File mFilterFile = null;
+    /** The Constant CLASSNAME. */
+    private static final String CLASSNAME
+        = ReportNormalizer.class.getName();
 
-   /**
-    * Constructor.
-    * @throws IOException in case of any error.
-    */
-   public ReportNormalizer ()
-         throws IOException
-   {
-      mProjectHome = new File(".").getCanonicalFile();
-      mOutFile = new File(JCODERZ_REPORT_XML);
-   }
+    /** The Constant logger. */
+    private static final Logger logger
+        = Logger.getLogger(CLASSNAME);
 
-   /**
-    * Main method.
-    * @param args arguments.
-    */
-   public static void main (String[] args)
-   {
-      int rc = 0;
-      try
-      {
-         final ReportNormalizer rn = new ReportNormalizer();
-         rn.run(args);
-      }
-      catch (Throwable e)
-      {
-         if (logger.isLoggable(Level.FINE))
-         {
-            e.printStackTrace();
-         }
-         rc = -1;
-      }
-      System.exit(rc);
-   }
+    /** The project home. */
+    private File mProjectHome;
 
-   /**
-    * Run ReportNormalizer.
-    * @param args command line arguments.
-    * @throws Exception in case of any error.
-    */
-   public void run (String[] args)
-      throws Exception
-   {
-      final List reportList = parseArguments (args);
-      final Map items = new HashMap();
+    /** The project name. */
+    private String mProjectName = "Unknown Project";
 
-      logger.fine("Running report normalizer on #" + reportList.size()
+    /** The out file. */
+    private File mOutFile;
+
+    /** The log level. */
+    private Level mLogLevel = Level.INFO;
+
+    /** The report level. */
+    private ReportLevel mLevel = ReportLevel.PROD;
+
+    /** The report list. */
+    private List<SourceReport> mReportList
+        = new ArrayList<SourceReport>();
+
+    /** The src list. */
+    private List<SourceReport> mSrcList
+        = new ArrayList<SourceReport>();
+
+    /**
+     * The XSL stylesheet that can be used to filter the
+     * jcoderz-report XML file.
+     */
+    private File mFilterFile = null;
+
+    /**
+     * Constructor.
+     *
+     * @throws IOException in case of any error.
+     */
+    public ReportNormalizer ()
+        throws IOException
+    {
+        mProjectHome = new File(".").getCanonicalFile();
+        mOutFile = new File(JCODERZ_REPORT_XML);
+    }
+
+    /**
+     * Main method.
+     *
+     * @param args arguments.
+     *
+     * @throws Exception the exception
+     */
+    public static void main (String[] args)
+        throws Exception
+    {
+        try
+        {
+            final ReportNormalizer rn = new ReportNormalizer();
+            rn.parseArguments(args);
+            rn.run();
+        }
+        catch (Exception e)
+        {
+            logger.log(Level.WARNING, "Failed in Normalizer.", e);
+            throw e;
+        }
+    }
+
+    /**
+     * Run ReportNormalizer.
+     */
+    public void run () throws JAXBException, IOException, TransformerException
+    {
+        logger.fine("Running report normalizer on #" + mReportList.size()
             + " reports ...");
-      for (final Iterator iterator = reportList.iterator(); iterator.hasNext();)
-      {
-          final SourceReport report = (SourceReport) iterator.next();
-         try
-         {
-            final ReportReader reportReader
-               = ReportReaderFactory.createReader(report.getReportFormat());
+        final Map<ResourceInfo, List<Item>> items
+            = new HashMap<ResourceInfo, List<Item>>();
+        for (SourceReport report : mSrcList)
+        {
+            handleReport(report, items);
+        }
+        for (SourceReport report : mReportList)
+        {
+            handleReport(report, items);
+        }
+
+        final JcoderzReport myReport = new JcoderzReport();
+        myReport.setProjectHome(mProjectHome.getAbsolutePath());
+        myReport.setProjectName(mProjectName);
+        myReport.setLevel(mLevel);
+
+        // XML report
+        final OutputStream out = new FileOutputStream(mOutFile);
+        try
+        {
+            myReport.write(out, items);
+        }
+        finally
+        {
+            IoUtil.close(out);
+        }
+
+        // apply filters to the report
+        if (mFilterFile != null)
+        {
+            filter();
+        }
+    }
+
+    /**
+     * Handle report.
+     *
+     * @param report the report
+     * @param items the items
+     *
+     * @throws JAXBException the JAXB exception
+     */
+    private void handleReport (SourceReport report,
+        final Map<ResourceInfo, List<Item>> items)
+            throws JAXBException
+    {
+        try
+        {
             logger.fine("Processing report " + report.getReportFormat()
-                  + " '" + report.getFilename() + "'");
+                + " '" + report.getFilename() + "'");
             if (report.getFilename().length() != 0
-                    || report.getFilename().isDirectory())
+                || report.getFilename().isDirectory())
             {
-               reportReader.parse(report.getFilename());
-               reportReader.merge(items);
+                final ReportReader reportReader
+                = ReportReaderFactory.createReader(
+                    report.getReportFormat());
+                reportReader.parse(report.getFilename());
+                reportReader.merge(items);
             }
             else
             {
-               logger.fine("Good job, no findings reported by "
-                     + report.getReportFormat());
+                logger.fine("Good job, no findings reported by "
+                    + report.getReportFormat());
             }
-         }
-         catch (Exception e)
-         {
+        }
+        catch (Exception e)
+        {
             logger.log(Level.SEVERE, "Error while processing", e);
             final Item item = new ObjectFactory().createItem();
             item.setMessage("Error while Processing '"
-                    + report.getReportFormat() + "' '"
-                    + report.getFilename() + "' got Exception: '" + e + "'.");
+                + report.getReportFormat() + "' '"
+                + report.getFilename() + "' got Exception: '" + e + "'.");
             item.setSeverity(Severity.ERROR);
             item.setFindingType(SystemFindingType.SYS_PARSE_ERROR.getSymbol());
             item.setOrigin(Origin.SYSTEM);
-            final ResourceInfo res = ResourceInfo.register(report
-                    .getFilename().getName(), "", report.getFilename()
-                    .getAbsolutePath());
-                if (items.containsKey(res))
-                {
-                    ((List) items.get(res)).add(item);
-                }
-                else
-                {
-                    final List list = new ArrayList();
-                    list.add(item);
-                    items.put(res, list);
-            }
-         }
-      }
-
-      final JcoderzReport myReport = new JcoderzReport();
-
-      myReport.setProjectHome(mProjectHome.getAbsolutePath());
-      myReport.setProjectName(mProjectName);
-      myReport.setLevel(mLevel);
-
-      // XML report
-      final OutputStream out = new FileOutputStream(mOutFile);
-      myReport.write(out, items);
-      IoUtil.close(out);
-
-      // apply filters to the report
-      if (mFilterFile != null)
-      {
-         filter();
-      }
-   }
-
-   /**
-    * Filters the report XML file using the JDK XSL processor.
-    *
-    * @throws TransformerFactoryConfigurationError
-    * @throws TransformerConfigurationException
-    * @throws IOException
-    * @throws TransformerException
-    * @throws FileNotFoundException
-    */
-   private void filter ()
-         throws TransformerFactoryConfigurationError,
-         TransformerConfigurationException, IOException,
-         TransformerException, FileNotFoundException
-   {
-      logger.log(Level.FINE, "Filter: " + mFilterFile);
-      final TransformerFactory tFactory = TransformerFactory.newInstance();
-
-      final Transformer transformer = tFactory.newTransformer(
-            new StreamSource(mFilterFile));
-
-      final File tempOutputFile = new File(
-            mOutFile.getCanonicalPath() + ".tmp");
-      tempOutputFile.createNewFile();
-
-      final FileOutputStream out = new FileOutputStream(tempOutputFile);
-      transformer.transform(new StreamSource(mOutFile),
-           new StreamResult(out));
-      IoUtil.close(out);
-      FileUtils.copyFile(tempOutputFile, mOutFile);
-      FileUtils.delete(tempOutputFile);
-   }
-
-   /**
-    * The following parameters select the different reports
-    * to combine into a single report.
-    *
-    * <ul>
-    *   <li><code>-jcoverage jvoveragereport.xml</code> (http://???)</li>
-    *   <li><code>-cobertura coberturareport.xml</code> (http://???)</li>
-    *   <li><code>-checkstyle checkstylereport.xml</code>
-    *       (http://checkstyle.sf.net)</li>
-    *   <li><code>-findbugs findbugsreport.xml</code>
-    *       (http://findbugs.sf.net)</li>
-    *   <li><code>-pmd pmdreport.xml</code> (http://pmd.sf.net)</li>
-    *   <li><code>-cpd cpdreport.xml</code> (http://))))</li>
-    * </ul>
-    *
-    * <ul>
-    *   <li><code>-projectHome</code></li>
-    *   <li><code>-filter filter.xsl</code></li>
-    *   <li><code>-srcDir</code></li>
-    *   <li><code>-projectName</code></li>
-    *   <li><code>-level PROD|TEST|MISC</code> The weight level</li>
-    *   <li><code>-loglevel</code></li>
-    *   <li><code>-out</code></li>
-    * </ul>
-    *
-    * @param args The command line arguments
-    * @return The list of reports to normalize
-    * @throws IOException When the filter file cannot be found
-    */
-   private List parseArguments (String[] args)
-         throws IOException
-   {
-      try
-      {
-         final List reportList = new ArrayList();
-
-         for (int i = 0; i < args.length; )
-         {
-            logger.fine("Parsing argument '" + args[i] + "' = '"
-                  + args[i + 1] + "'");
-
-            if (args[i].equals("-jcoverage"))
+            final ResourceInfo res
+                = ResourceInfo.register(report.getFilename().getAbsolutePath(),
+                    "", report.getFilename().getAbsolutePath());
+            if (items.containsKey(res))
             {
-               reportList.add(new SourceReport(
-                     ReportFormat.JCOVERAGE, args[i + 1]));
-            }
-            else if (args[i].equals("-cobertura"))
-            {
-               reportList.add(new SourceReport(
-                     ReportFormat.COBERTURA, args[i + 1]));
-            }
-            else if (args[i].equals("-checkstyle"))
-            {
-               reportList.add(new SourceReport(
-                     ReportFormat.CHECKSTYLE, args[i + 1]));
-            }
-            else if (args[i].equals("-findbugs"))
-            {
-               reportList.add(new SourceReport(
-                     ReportFormat.FINDBUGS, args[i + 1]));
-            }
-            else if (args[i].equals("-pmd"))
-            {
-               reportList.add(new SourceReport(
-                     ReportFormat.PMD, args[i + 1]));
-            }
-            else if (args[i].equals("-cpd"))
-            {
-               reportList.add(new SourceReport(
-                     ReportFormat.CPD, args[i + 1]));
-            }
-            else if (args[i].equals("-projectHome"))
-            {
-               mProjectHome = new File(args[i + 1]);
-            }
-            else if (args[i].equals("-filter"))
-            {
-               mFilterFile = new File(args[i + 1]);
-               if (!mFilterFile.exists())
-               {
-                  throw new IOException("Filter file '" + mFilterFile
-                        + "' does not exists.");
-               }
-            }
-            else if (args[i].equals("-srcDir"))
-            {
-               reportList.add(new SourceReport(
-                     ReportFormat.SOURCE_DIRECTORY, args[i + 1]));
-            }
-            else if (args[i].equals("-projectName"))
-            {
-               mProjectName = args[i + 1];
-            }
-            else if (args[i].equals("-level"))
-            {
-               mLevel = ReportLevel.fromString(args[i + 1]);
-            }
-            else if (args[i].equals("-loglevel"))
-            {
-               mLogLevel = Level.parse(args[i + 1]);
-               LoggingUtils.setGlobalHandlerLogLevel(mLogLevel);
-               logger.fine("Setting log level: " + mLogLevel);
-               logger.setLevel(mLogLevel);
-            }
-            else if (args[i].equals("-out"))
-            {
-               final File out = new File(args[i + 1]);
-               if (out.isDirectory())
-               {
-                  mOutFile
-                     = new File(out, JCODERZ_REPORT_XML).getCanonicalFile();
-               }
-               else
-               {
-                  mOutFile = out.getCanonicalFile();
-               }
+                items.get(res).add(item);
             }
             else
             {
-               throw new IllegalArgumentException(
-                       "Invalid argument '" + args[i]  + "'");
+                final List<Item> list = new ArrayList<Item>();
+                list.add(item);
+                items.put(res, list);
             }
+        }
+    }
 
-            ++i;
-            ++i;
-         }
-         return reportList;
-      }
-      catch (IndexOutOfBoundsException e)
-      {
-         final IllegalArgumentException ex = new IllegalArgumentException(
-            "Missing value for " + args[args.length - 1]);
-         ex.initCause(e);
-         throw ex;
-      }
-   }
+    /**
+     * Filters the report XML file using the JDK XSL processor.
+     *
+     * @throws TransformerFactoryConfigurationError
+     *      the transformer factory configuration error
+     * @throws TransformerConfigurationException
+     *      the transformer configuration exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws TransformerException the transformer exception
+     * @throws FileNotFoundException the file not found exception
+     */
+    private void filter ()
+        throws TransformerFactoryConfigurationError,
+            TransformerConfigurationException, IOException,
+            TransformerException, FileNotFoundException
+    {
+        logger.log(Level.FINE, "Filter: " + mFilterFile);
+        final TransformerFactory tFactory = TransformerFactory.newInstance();
 
-   private static final class SourceReport
-   {
-      private final ReportFormat mReportFormat;
-      private final File mFilename;
+        final Transformer transformer = tFactory.newTransformer(
+            new StreamSource(mFilterFile));
 
-      SourceReport (ReportFormat r, String f)
-      {
-         mReportFormat = r;
-         mFilename = new File(f);
-         if (! mFilename.exists())
-         {
-            throw new IllegalArgumentException(
-                  "Input file/directory '" + f + "' does not exists.");
-         }
-      }
+        final File tempOutputFile = new File(
+            mOutFile.getCanonicalPath() + ".tmp");
+        tempOutputFile.createNewFile();
 
-      /**
-       * Returns the filename.
-       * @return the filename.
-       */
-      File getFilename ()
-      {
-         return mFilename;
-      }
+        final FileOutputStream out = new FileOutputStream(tempOutputFile);
+        transformer.transform(new StreamSource(mOutFile),
+            new StreamResult(out));
+        IoUtil.close(out);
+        FileUtils.copyFile(tempOutputFile, mOutFile);
+        FileUtils.delete(tempOutputFile);
+    }
 
-      /**
-       * Returns the reportFormat.
-       * @return the reportFormat.
-       */
-      ReportFormat getReportFormat ()
-      {
-         return mReportFormat;
-      }
-   }
+    /**
+     * The following parameters select the different reports
+     * to combine into a single report.
+     *
+     * <ul>
+     * <li><code>-jcoverage jvoveragereport.xml</code> (http://???)</li>
+     * <li><code>-cobertura coberturareport.xml</code> (http://???)</li>
+     * <li><code>-checkstyle checkstylereport.xml</code>
+     * (http://checkstyle.sf.net)</li>
+     * <li><code>-findbugs findbugsreport.xml</code>
+     * (http://findbugs.sf.net)</li>
+     * <li><code>-pmd pmdreport.xml</code> (http://pmd.sf.net)</li>
+     * <li><code>-cpd cpdreport.xml</code> (http://))))</li>
+     * </ul>
+     *
+     * <ul>
+     * <li><code>-projectHome</code></li>
+     * <li><code>-filter filter.xsl</code></li>
+     * <li><code>-srcDir</code></li>
+     * <li><code>-projectName</code></li>
+     * <li><code>-level PROD|TEST|MISC</code> The weight level</li>
+     * <li><code>-loglevel</code></li>
+     * <li><code>-out</code></li>
+     * </ul>
+     *
+     * @param args The command line arguments
+     *
+     * @return The list of reports to normalize
+     *
+     * @throws IOException When the filter file cannot be found
+     */
+    private void parseArguments (String[] args)
+        throws IOException
+    {
+        try
+        {
+            for (int i = 0; i < args.length; )
+            {
+                logger.fine("Parsing argument '" + args[i] + "' = '"
+                    + args[i + 1] + "'");
+
+                if (args[i].equals("-jcoverage"))
+                {
+                    addReport(ReportFormat.JCOVERAGE, args[i + 1]);
+                }
+                else if (args[i].equals("-cobertura"))
+                {
+                    addReport(ReportFormat.COBERTURA, args[i + 1]);
+                }
+                else if (args[i].equals("-checkstyle"))
+                {
+                    addReport(ReportFormat.CHECKSTYLE, args[i + 1]);
+                }
+                else if (args[i].equals("-findbugs"))
+                {
+                    addReport(ReportFormat.FINDBUGS, args[i + 1]);
+                }
+                else if (args[i].equals("-pmd"))
+                {
+                    addReport(ReportFormat.PMD, args[i + 1]);
+                }
+                else if (args[i].equals("-cpd"))
+                {
+                    addReport(ReportFormat.CPD, args[i + 1]);
+                }
+                else if (args[i].equals("-projectHome"))
+                {
+                    setProjectHome(new File(args[i + 1]));
+                }
+                else if (args[i].equals("-filter"))
+                {
+                    setFilterFile(new File(args[i + 1]));
+                }
+                else if (args[i].equals("-srcDir"))
+                {
+                    addReport(ReportFormat.SOURCE_DIRECTORY, args[i + 1]);
+                }
+                else if (args[i].equals("-projectName"))
+                {
+                    setProjectName(args[i + 1]);
+                }
+                else if (args[i].equals("-level"))
+                {
+                    setLevel(ReportLevel.fromString(args[i + 1]));
+                }
+                else if (args[i].equals("-loglevel"))
+                {
+                    setLogLevel(Level.parse(args[i + 1]));
+                }
+                else if (args[i].equals("-out"))
+                {
+                    setOutFile(new File(args[i + 1]));
+                }
+                else
+                {
+                    throw new IllegalArgumentException(
+                        "Invalid argument '" + args[i]  + "'");
+                }
+
+                ++i;
+                ++i;
+            }
+        }
+        catch (IndexOutOfBoundsException e)
+        {
+            final IllegalArgumentException ex = new IllegalArgumentException(
+                "Missing value for " + args[args.length - 1]);
+            ex.initCause(e);
+            throw ex;
+        }
+    }
+
+    /**
+     * Adds the report.
+     *
+     * @param format the format
+     * @param file the file
+     */
+    public void addReport (ReportFormat format, String file)
+    {
+        addReport(format, new File(file));
+    }
+
+    /**
+     * Adds the report.
+     *
+     * @param format the format
+     * @param file the file
+     */
+    public void addReport (ReportFormat format, File file)
+    {
+        if (format == ReportFormat.SOURCE_DIRECTORY)
+        {
+            addSource(file);
+        }
+        else
+        {
+            mReportList.add(new SourceReport(format, file));
+        }
+    }
+
+
+    public void addSource (File srcDir)
+    {
+        mSrcList.add(new SourceReport(
+            ReportFormat.SOURCE_DIRECTORY, srcDir));
+    }
+
+    /**
+     * Gets the project home.
+     *
+     * @return the project home
+     */
+    public File getProjectHome ()
+    {
+        return mProjectHome;
+    }
+
+    /**
+     * Sets the project home.
+     *
+     * @param projectHome the new project home
+     */
+    public void setProjectHome (File projectHome)
+    {
+        mProjectHome = projectHome;
+    }
+
+    /**
+     * Gets the project name.
+     *
+     * @return the project name
+     */
+    public String getProjectName ()
+    {
+        return mProjectName;
+    }
+
+    /**
+     * Sets the project name.
+     *
+     * @param projectName the new project name
+     */
+    public void setProjectName (String projectName)
+    {
+        mProjectName = projectName;
+    }
+
+    /**
+     * Gets the out file.
+     *
+     * @return the out file
+     */
+    public File getOutFile ()
+    {
+        return mOutFile;
+    }
+
+    /**
+     * Sets the out file.
+     *
+     * @param outFile the new out file
+     *
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
+    public void setOutFile (File outFile) throws IOException
+    {
+        if (outFile.isDirectory())
+        {
+            mOutFile
+            = new File(outFile, JCODERZ_REPORT_XML).getCanonicalFile();
+        }
+        else
+        {
+            mOutFile = outFile.getCanonicalFile();
+        }
+    }
+
+    /**
+     * Gets the log level.
+     *
+     * @return the log level
+     */
+    public Level getLogLevel ()
+    {
+        return mLogLevel;
+    }
+
+    /**
+     * Sets the log level.
+     *
+     * @param logLevel the new log level
+     */
+    public void setLogLevel (Level logLevel)
+    {
+        mLogLevel = logLevel;
+        LoggingUtils.setGlobalHandlerLogLevel(mLogLevel);
+        logger.config("Setting log level: " + mLogLevel);
+        Logger.getLogger("org.jcoderz.phoenix.report")
+            .setLevel(mLogLevel);
+    }
+
+    /**
+     * Gets the level.
+     *
+     * @return the level
+     */
+    public ReportLevel getLevel ()
+    {
+        return mLevel;
+    }
+
+    /**
+     * Sets the level.
+     *
+     * @param level the new level
+     */
+    public void setLevel (ReportLevel level)
+    {
+        mLevel = level;
+    }
+
+    /**
+     * Gets the filter file.
+     *
+     * @return the filter file
+     */
+    public File getFilterFile ()
+    {
+        return mFilterFile;
+    }
+
+    /**
+     * Sets the filter file.
+     *
+     * @param filterFile the new filter file
+     *
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
+    public void setFilterFile (File filterFile)
+        throws IOException
+    {
+        mFilterFile = filterFile;
+        if (!mFilterFile.exists())
+        {
+            throw new IOException("Filter file '" + mFilterFile
+                + "' does not exists.");
+        }
+
+    }
+
+    /**
+     * The Class SourceReport.
+     */
+    private static final class SourceReport
+    {
+
+        /** The report format. */
+        private final ReportFormat mReportFormat;
+
+        /** The filename. */
+        private final File mFilename;
+
+        /**
+         * Instantiates a new source report.
+         *
+         * @param r the ReportFormat
+         * @param f the File
+         */
+        SourceReport (ReportFormat r, File f)
+        {
+            mReportFormat = r;
+            mFilename = f;
+            if (! mFilename.exists())
+            {
+                throw new IllegalArgumentException(
+                    "Input file/directory '" + f + "' does not exists.");
+            }
+        }
+
+        /**
+         * Returns the filename.
+         *
+         * @return the filename.
+         */
+        File getFilename ()
+        {
+            return mFilename;
+        }
+
+        /**
+         * Returns the reportFormat.
+         *
+         * @return the reportFormat.
+         */
+        ReportFormat getReportFormat ()
+        {
+            return mReportFormat;
+        }
+    }
 }

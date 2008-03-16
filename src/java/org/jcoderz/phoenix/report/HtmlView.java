@@ -94,20 +94,20 @@ public class HtmlView
    static
    {
       KEYWORD_REPLACEMENT = new String[KEYWORDS.length];
-      final StringBuffer stringBuffer = new StringBuffer();
+      final StringBuilder sb = new StringBuilder();
       for (int i = 0; i < KEYWORDS.length; i++)
       {
-         stringBuffer.setLength(0);
-         stringBuffer.append("<span class='keyword'>");
-         stringBuffer.append(KEYWORDS[i]);
-         stringBuffer.append("</span>");
-         KEYWORD_REPLACEMENT[i] = stringBuffer.toString();
+         sb.setLength(0);
+         sb.append("<span class='keyword'>");
+         sb.append(KEYWORDS[i]);
+         sb.append("</span>");
+         KEYWORD_REPLACEMENT[i] = sb.toString();
       }
    }
 
-   private final List mCommentList = new ArrayList();
-   private final List mStringList = new ArrayList();
-   private final List mLines = new ArrayList();
+   private final List<String> mCommentList = new ArrayList<String>();
+   private final List<String> mStringList = new ArrayList<String>();
+   private final List<String> mLines = new ArrayList<String>();
    private final StringBuffer mFileData = new StringBuffer();
    private final StringBuffer mStringBuffer = new StringBuffer();
    private File mSourceFile;
@@ -148,7 +148,7 @@ public class HtmlView
 
    /**
     * Sets the tab indent to be used when reading source files.
-    * @param int tabIndent the tab width to be used when reading source files.
+    * @param tabIndent the tab width to be used when reading source files.
     */
    public void setTabIndent (int tabIndent)
    {
@@ -165,7 +165,7 @@ public class HtmlView
     */
    public String getLine (int lineNumber)
    {
-      return (String) mLines.get(lineNumber - 1);
+      return mLines.get(lineNumber - 1);
    }
 
    /**
@@ -240,7 +240,7 @@ public class HtmlView
 
          if (charPos != -1)
          {
-            final StringBuffer lineBuffer = new StringBuffer(line);
+            final StringBuilder lineBuffer = new StringBuilder(line);
 
             lineBuffer.insert(charPos, htmlCode);
             mLines.set(lineNumber - 1, lineBuffer.toString());
@@ -317,7 +317,7 @@ public class HtmlView
                    }
                    break;
                case '\r': break;
-               case '\n': linePos=0; linesCount++;
+               case '\n': linePos = 0; linesCount++;
                default:   linePos++; mFileData.append((char) i);
             }
          }
@@ -355,7 +355,7 @@ public class HtmlView
       final StringBuffer stringBuffer = mStringBuffer;
       for (int i = 0; i < mStringList.size(); i++)
       {
-         final String comment = (String) mStringList.get(i);
+         final String comment = mStringList.get(i);
          final String key = STRING_MAGIC + (i + 1) + END_MAGIC;
 
          stringBuffer.setLength(0);
@@ -376,7 +376,7 @@ public class HtmlView
       final StringBuffer commentBuffer = mStringBuffer;
       for (int i = 0; i < mCommentList.size(); i++)
       {
-         final String comment = (String) mCommentList.get(i);
+         final String comment = mCommentList.get(i);
          final String key = COMMENT_MAGIC + (i + 1) + END_MAGIC;
 
          final String type;
@@ -420,10 +420,10 @@ public class HtmlView
     */
    private void handleJavaDocComments ()
    {
-      final StringBuffer commentBuffer = new StringBuffer();
+      final StringBuilder commentBuffer = new StringBuilder();
       for (int i = 0; i < mCommentList.size(); i++)
       {
-         final String comment = (String) mCommentList.get(i);
+         final String comment = mCommentList.get(i);
          if (comment.startsWith("/**"))
          {
             // javadoc comment...

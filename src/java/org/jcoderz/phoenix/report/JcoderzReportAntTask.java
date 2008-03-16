@@ -262,10 +262,7 @@ public final class JcoderzReportAntTask
          {
             throw e;
          }
-         else
-         {
-            log(e.getMessage(), Project.MSG_ERR);
-         }
+         log(e.getMessage(), e, Project.MSG_ERR);
       }
    }
 
@@ -449,13 +446,17 @@ public final class JcoderzReportAntTask
        */
       private boolean testIfCondition ()
       {
+         final boolean result;
          if ("".equals(mIfCondition))
          {
-             return true;
+             result = true;
          }
-
-         final String test = getProject().replaceProperties(mIfCondition);
-         return getProject().getProperty(test) != null;
+         else
+         {
+             final String test = getProject().replaceProperties(mIfCondition);
+             result = getProject().getProperty(test) != null;
+         }
+         return result;
       }
    }
 

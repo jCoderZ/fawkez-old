@@ -34,9 +34,12 @@ package org.jcoderz.phoenix.report;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.List;
 import java.util.Map;
 
 import javax.xml.bind.JAXBException;
+
+import org.jcoderz.phoenix.report.jaxb.Item;
 
 /**
  * Common Interface for all Report Readers.
@@ -64,6 +67,6 @@ public interface ReportReader
     *        input items.
     * @throws JAXBException if an JAXB exception occurs.
     */
-   void merge (Map items)
+   void merge (Map<ResourceInfo, List<Item>> items)
       throws JAXBException;
 }

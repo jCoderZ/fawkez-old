@@ -112,10 +112,10 @@ public final class Java2Html
 
    /** Pattern helper to generate css style names of the listings. */
    private static final String[] PATTERN = {"odd", "even"};
-   
+
    /** Size of the pattern. */
    private static final int PATTERN_SIZE = PATTERN.length;
-   
+
    /** Name of this class. */
    private static final String CLASSNAME = Java2Html.class.getName();
 
@@ -217,11 +217,11 @@ public final class Java2Html
       Logger.getLogger("org.jcoderz.phoenix.report").setLevel(Level.FINEST);
       engine.process();
    }
-   
+
    /**
-    * Returns the string "odd" or "even", depending on the number given. 
+    * Returns the string "odd" or "even", depending on the number given.
     * @param number the number to check if it'S odd or even.
-    * @return the string "odd" if the given number is odd, "even" 
+    * @return the string "odd" if the given number is odd, "even"
     *     otherwise.
     */
    public static String toOddEvenString (int number)
@@ -469,7 +469,7 @@ public final class Java2Html
               continue;
           }
           final String name = "icon_" + s.toString() + ".gif";
-          final InputStream in 
+          final InputStream in
                   = this.getClass().getResourceAsStream(name);
           if (in != null)
           {
@@ -736,7 +736,7 @@ public final class Java2Html
          {
             line = mHtmlView.getLine(currentLine);
             bw.write("<tr class='"
-               + errorLevel(currentLine) 
+               + errorLevel(currentLine)
                + Java2Html.toOddEvenString(currentLine) + "'>");
             bw.write("<td align='right' class='lineno");
             final boolean isLast = currentLine == lastLine;
@@ -764,7 +764,7 @@ public final class Java2Html
          bw.write("<table width='95%' cellpadding='0' cellspacing='0' "
                + "border='0'>\n");
          int rowCounter = 0;
-         
+
          final String relativeRoot = relativeRoot(mPackage, "");
 
          // findings with no line number or uncovered jet
@@ -875,14 +875,14 @@ public final class Java2Html
 
    /**
     * Generates a image related to the severity of the given Item.
-    * The image links back to the general finding page of the item. 
+    * The image links back to the general finding page of the item.
     * @param w the writer where to write the output to.
     * @param item the item to be documented.
     * @param root the relative path from the page generated to the root dir.
-    * @throws IOException if the datas could not be written to the given 
+    * @throws IOException if the datas could not be written to the given
     *     writer.
     */
-   private void appendSeverityImage (Writer w, Item item, String root) 
+   private void appendSeverityImage (Writer w, Item item, String root)
        throws IOException
    {
        w.write("<a href='");
@@ -1067,7 +1067,7 @@ public final class Java2Html
     */
    private String getIcons (int line)
    {
-      final StringBuffer icons = new StringBuffer();
+      final StringBuilder icons = new StringBuilder();
       mFindingsInCurrentLine.clear();
 
       // collect relevant findings
@@ -1236,9 +1236,9 @@ public final class Java2Html
       try
       {
           htmlHeader(bw, "Project Report " + mProjectName, "");
-    
+
           bw.write("<h1>Project Report " + mProjectName + "</h1>");
-    
+
           bw.write("<table border='0' cellpadding='2' cellspacing='0' "
                 + "width='95%'>");
           bw.write("<thead><tr><th>");
@@ -1286,13 +1286,13 @@ public final class Java2Html
           bw.write("<tr class='odd'><td class='classname" + LAST_MARKER + "'>");
           bw.write("Overall summary");
           bw.write("</td>");
-          hitsCell(bw, String.valueOf(mGlobalSummary.getNumberOfFindings()), 
+          hitsCell(bw, String.valueOf(mGlobalSummary.getNumberOfFindings()),
                   true);
           hitsCell(bw, String.valueOf(mGlobalSummary.getNumberOfFiles()), true);
           hitsCell(bw, String.valueOf(mGlobalSummary.getLinesOfCode()), true);
           if (mCoverageData)
           {
-             hitsCell(bw, String.valueOf(mGlobalSummary.getCoverage()) + "%", 
+             hitsCell(bw, String.valueOf(mGlobalSummary.getCoverage()) + "%",
                      true);
              bw.write("<td valign='middle' class='hits" + LAST_MARKER
                    + "' width='100'>");
@@ -1307,9 +1307,9 @@ public final class Java2Html
           bw.write(NEWLINE);
           bw.write("</tbody>");
           bw.write("</table>");
-    
+
           bw.write("<h1><a href='findings.html'>View by Finding</a></h1>");
-    
+
           bw.write("<h1>Packages</h1>");
           bw.write("<table border='0' cellpadding='2' cellspacing='0' "
                 + "width='95%'>");
@@ -1322,10 +1322,10 @@ public final class Java2Html
           bw.write("<th>%</th><th class='remainder'>Quality</th></tr></thead>");
           bw.write("<tbody>");
           bw.write(NEWLINE);
-    
+
           final Set packages = new TreeSet(order);
           packages.addAll(mPackageSummary.values());
-    
+
           final Iterator i = packages.iterator();
           int pos = 0;
           while (i.hasNext())
@@ -1336,13 +1336,13 @@ public final class Java2Html
              appendPackageLink(bw, pkg, filename, pos, isLast);
           }
           bw.write("</tbody></table>\n");
-    
+
           // findings with no line number...
           createUnassignedFindingsTable(bw);
-    
+
           bw.write("<h1>Java Files</h1>");
           createClassListTable(bw, mAllFiles, true, order);
-    
+
           bw.write("</body></html>");
       }
       finally
@@ -1359,7 +1359,7 @@ public final class Java2Html
         int row = 0;
         while (i.hasNext())
         {
-            final org.jcoderz.phoenix.report.jaxb.File file 
+            final org.jcoderz.phoenix.report.jaxb.File file
                 = (org.jcoderz.phoenix.report.jaxb.File) i.next();
             final Iterator j = file.getItem().iterator();
             while (j.hasNext())
@@ -1369,7 +1369,7 @@ public final class Java2Html
                 if (!tableOpened)
                 {
                     bw.write("<h1>Unassigned findings</h1>");
-                    bw.write("<table border='0' cellpadding='0' " 
+                    bw.write("<table border='0' cellpadding='0' "
                         + "cellspacing='0' width='95%'>");
                     tableOpened = true;
                 }
@@ -1381,7 +1381,7 @@ public final class Java2Html
                 bw.write("</td><td class='unassigned-data' width='100%'>");
                 bw.write(item.getMessage());
                 bw.write("</td></tr>");
-                
+
                 FindingsSummary.addFinding(item, mGlobalSummary);
              }
          }
@@ -1391,14 +1391,14 @@ public final class Java2Html
         }
     }
 
-    private void appendPackageLink (final BufferedWriter bw, 
-            final FileSummary pkg, final String filename, final int pos, 
+    private void appendPackageLink (final BufferedWriter bw,
+            final FileSummary pkg, final String filename, final int pos,
             final boolean isLast)
         throws IOException
     {
          final String name = pkg.getPackage();
          final String subdir = name.replaceAll("\\.", "/");
-         bw.write("<tr class='" + Java2Html.toOddEvenString(pos) 
+         bw.write("<tr class='" + Java2Html.toOddEvenString(pos)
                + "'><td class='classname");
          appendIf(bw, isLast, LAST_MARKER);
          bw.write("'><a href='" + subdir + "/" + filename + "'>");
@@ -1436,7 +1436,7 @@ public final class Java2Html
        bw.write("<?xml version='1.0' encoding='UTF-8'?>" + NEWLINE
          + "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" "
          + NEWLINE
-         + "\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">" 
+         + "\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">"
          + NEWLINE
          + "<html xmlns='http://www.w3.org/1999/xhtml' xml:lang='en'"
          + " lang='en'>" + NEWLINE
@@ -1456,7 +1456,7 @@ public final class Java2Html
 
    private static String relativeRoot (String currentPackage, String page)
    {
-      final StringBuffer rootDir = new StringBuffer();
+      final StringBuilder rootDir = new StringBuilder();
 
       if (currentPackage.length() != 0)
       {
@@ -1471,7 +1471,7 @@ public final class Java2Html
          }
       }
       rootDir.append(page);
-      
+
       return rootDir.toString().replaceAll("//", "/");
    }
 
@@ -1666,7 +1666,7 @@ public final class Java2Html
       }
    }
 
-    private void appendClassLink (BufferedWriter bw, final FileSummary file, 
+    private void appendClassLink (BufferedWriter bw, final FileSummary file,
             boolean fullPackageNames, int pos, final boolean isLast)
         throws IOException
     {
@@ -1762,14 +1762,14 @@ public final class Java2Html
          bw.write(str);
       }
    }
-   
-   private BufferedWriter openWriter (String filename) 
+
+   private BufferedWriter openWriter (String filename)
        throws IOException
    {
        return openWriter(mOutDir, filename);
    }
 
-   private BufferedWriter openWriter (File dir, String filename) 
+   private BufferedWriter openWriter (File dir, String filename)
        throws IOException
    {
        FileOutputStream fos = null;

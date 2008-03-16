@@ -223,7 +223,7 @@ public class JcSummaryReportAntTask
                   + mBaseDir + "' must exists and must be a folder!");
          }
 
-         
+
          // Stores a mapping between a timestamp and a Summary instance. This
          // reads all lines in the summary db file and checks for new folders
          final Map summaryMap = readSummaryDb(mSummaryDbFile, mBaseDir);
@@ -263,7 +263,7 @@ public class JcSummaryReportAntTask
          final PrintWriter pw = new PrintWriter(fos);
          pw.println("Timestamp;Error;Warning;Info;"
                + "Coverage;Loc;CodeLoc;Filtered;Codestyle;Design;Cpd;Quality");
-   
+
          // Sort the keySet before writing the CSV file
          final Set keySet = summaryMap.keySet();
          final List keyList = new ArrayList(keySet);
@@ -271,7 +271,7 @@ public class JcSummaryReportAntTask
          final Iterator iter = keyList.iterator();
          while (iter.hasNext())
          {
-            Long ts = (Long) iter.next();
+            final Long ts = (Long) iter.next();
             final Summary sum = (Summary) summaryMap.get(ts);
             pw.print(sum.getTimestamp() + ";");
             pw.print(sum.getError() + ";");
@@ -367,9 +367,11 @@ public class JcSummaryReportAntTask
             }
             catch (NumberFormatException ex)
             {
-               log("The folder '" + folders[i] + "' is not a timestamp folder!");
+               log("The folder '" + folders[i]
+                   + "' is not a timestamp folder!");
             }
-            final Summary sum = readSummaryXml(new File(folder, "summary.xml"), ts);
+            final Summary sum
+                = readSummaryXml(new File(folder, "summary.xml"), ts);
             files.put(new Long(sum.getTimestamp()), sum);
          }
          else
@@ -540,7 +542,8 @@ public class JcSummaryReportAntTask
     *
     * @throws IOException if the image can not be written.
     */
-   private void createQualityChart (Map ymd2SummaryMap, Map summaryMap, String title)
+   private void createQualityChart (Map ymd2SummaryMap, Map summaryMap,
+       String title)
          throws IOException
    {
       final Set labels = new TreeSet(summaryMap.keySet());
@@ -550,7 +553,7 @@ public class JcSummaryReportAntTask
       }
 
       final String[] legendLabels = {"Quality"};
-      
+
       // Configure dataset
       final Dataset dataset = new Dataset(legendLabels.length,
          summaryMap.size(), 1);
@@ -574,7 +577,8 @@ public class JcSummaryReportAntTask
             = createGraphChart2DProperties(labelsAxisLabels, title);
       final MultiColorsProperties multiColorsProps
             = createMultiColorsProperties(new Color[] {Color.GREEN});
-      createChart(title, legendLabels, dataset, graphChart2DProps, multiColorsProps);
+      createChart(title, legendLabels, dataset, graphChart2DProps,
+          multiColorsProps);
    }
 
 
@@ -584,7 +588,8 @@ public class JcSummaryReportAntTask
     *
     * @throws IOException if the image can not be written.
     */
-   private void createLocChart (Map ymd2SummaryMap, Map summaryMap, String title)
+   private void createLocChart (Map ymd2SummaryMap, Map summaryMap,
+       String title)
          throws IOException
    {
       final Set labels = new TreeSet(summaryMap.keySet());
@@ -594,7 +599,7 @@ public class JcSummaryReportAntTask
       }
 
       final String[] legendLabels = {"Loc"};
-      
+
       // Configure dataset
       final Dataset dataset = new Dataset(legendLabels.length,
          summaryMap.size(), 1);
@@ -617,8 +622,10 @@ public class JcSummaryReportAntTask
       final GraphChart2DProperties graphChart2DProps
             = createGraphChart2DProperties(labelsAxisLabels, title);
       final MultiColorsProperties multiColorsProps
-            = createMultiColorsProperties(new Color[] {new Color(115, 117, 255)});
-      createChart(title, legendLabels, dataset, graphChart2DProps, multiColorsProps);
+            = createMultiColorsProperties(
+                new Color[] {new Color(115, 117, 255)});
+      createChart(title, legendLabels, dataset, graphChart2DProps,
+          multiColorsProps);
    }
 
 
@@ -628,7 +635,8 @@ public class JcSummaryReportAntTask
     *
     * @throws IOException if the image can not be written.
     */
-   private void createFindingsChart (Map ymd2SummaryMap, Map summaryMap, String title)
+   private void createFindingsChart (Map ymd2SummaryMap, Map summaryMap,
+       String title)
          throws IOException
    {
      final Set labels = new TreeSet(summaryMap.keySet());
@@ -639,7 +647,7 @@ public class JcSummaryReportAntTask
 
      final String[] legendLabels = {"Error", "Warning", "Info", "Coverage",
          "Filtered", "Codestyle", "Design", "Cpd"};
-     
+
      // Configure dataset
      final Dataset dataset = new Dataset(legendLabels.length,
         summaryMap.size(), 1);
@@ -679,14 +687,14 @@ public class JcSummaryReportAntTask
               new Color(214, 211, 255),
               new Color(247, 247, 247)
               });
-     createChart(title, legendLabels, dataset, graphChart2DProps, 
+     createChart(title, legendLabels, dataset, graphChart2DProps,
              multiColorsProps);
    }
 
 
-   private void createChart (final String title, final String[] legendLabels, 
-           final Dataset dataset, 
-           final GraphChart2DProperties graphChart2DProps, 
+   private void createChart (final String title, final String[] legendLabels,
+           final Dataset dataset,
+           final GraphChart2DProperties graphChart2DProps,
            final MultiColorsProperties multiColorsProps) throws IOException
    {
       // Configure chart
@@ -724,7 +732,7 @@ public class JcSummaryReportAntTask
    private MultiColorsProperties createMultiColorsProperties (Color[] colors)
    {
       // Configure graph component colors
-      final MultiColorsProperties multiColorsProps 
+      final MultiColorsProperties multiColorsProps
           = new MultiColorsProperties();
       multiColorsProps.setColorsCustomize(true);
       multiColorsProps.setColorsCustom(colors);
@@ -740,7 +748,7 @@ public class JcSummaryReportAntTask
       return object2DProps;
    }
 
-   
+
    private GraphProperties createGraphProperties ()
    {
       // Configure graph properties
@@ -760,7 +768,7 @@ public class JcSummaryReportAntTask
       return chart2DProps;
    }
 
-   
+
    private LegendProperties createLegendProperties (String[] legendLabels)
    {
       // Configure legend properties
@@ -786,7 +794,7 @@ public class JcSummaryReportAntTask
       return graphChart2DProps;
    }
 
-   
+
    private void renderHtmlView (Map summaryDbMap, Map ts2BaseFolder)
    {
       try
@@ -799,7 +807,7 @@ public class JcSummaryReportAntTask
          pw.println("</title>");
          pw.println("<style type=\"text/css\">");
          pw.println("<!--");
-         
+
          pw.println("body { font-family: verdana, tahoma; }");
          pw.println("img { border:none; }");
          pw.println("a { text-decoration: none; }");
@@ -809,9 +817,11 @@ public class JcSummaryReportAntTask
          pw.println("table { border-collapse: collapse; "
               + "border: 1px solid black; text-align: right; }");
          pw.println("table td { padding: 5px; border-collapse: collapse; "
-              + "border: 1px solid black; font-size: small; vertical-align: top; }");
+              + "border: 1px solid black; font-size: small; vertical-align: "
+              + "top; }");
          pw.println("td.month { padding: 10px; border: 1px solid black; "
-              + "margin: 1em; background-color: #eeeeee; text-align: left; font-size: large; }");
+              + "margin: 1em; background-color: #eeeeee; text-align: left; "
+              + "font-size: large; }");
          pw.println("td.day_odd { background: #aaaaaa; }");
          pw.println("td.day_even { background: #cccccc; }");
          pw.println("td.quality_odd { background:#88b888; }");
@@ -854,7 +864,7 @@ public class JcSummaryReportAntTask
          pw.println("</tr>");
 
 
-         final Map yearMap = (Map) summaryDbMap;
+         final Map yearMap = summaryDbMap;
          final List sortedYearList = new ArrayList();
          sortedYearList.addAll(yearMap.keySet());
          Collections.sort(sortedYearList);
@@ -955,7 +965,7 @@ public class JcSummaryReportAntTask
 
    private String wrapTimestamp (Summary sum, String oddeven)
    {
-      final StringBuffer sb = new StringBuffer();
+      final StringBuilder sb = new StringBuilder();
       sb.append("<td class=\"day_");
       sb.append(oddeven);
       sb.append("\">");
@@ -978,9 +988,10 @@ public class JcSummaryReportAntTask
    }
 
 
-   private String wrapValue (Summary sum, int value, String severity, String oddeven)
+   private String wrapValue (Summary sum, int value, String severity,
+       String oddeven)
    {
-      final StringBuffer sb = new StringBuffer();
+      final StringBuilder sb = new StringBuilder();
       sb.append("<td class=\"");
       sb.append(severity);
       sb.append("_");
@@ -1006,7 +1017,7 @@ public class JcSummaryReportAntTask
 
    private String wrapValue (int value, String severity, String oddeven)
    {
-      final StringBuffer sb = new StringBuffer();
+      final StringBuilder sb = new StringBuilder();
       sb.append("<td class=\"");
       sb.append(severity);
       sb.append("_");
@@ -1020,7 +1031,7 @@ public class JcSummaryReportAntTask
 
    private String wrapValue (double value, String severity, String oddeven)
    {
-      final StringBuffer sb = new StringBuffer();
+      final StringBuilder sb = new StringBuilder();
       sb.append("<td class=\"");
       sb.append(severity);
       sb.append("_");
@@ -1097,7 +1108,7 @@ public class JcSummaryReportAntTask
 
       public Summary (long timestamp, int error, int warning, int info,
             int coverage, int loc, int codeloc, int filtered,
-            int codestyle, int design, int cpd, 
+            int codestyle, int design, int cpd,
             double quality, File summaryXml)
       {
          mFiltered = filtered;
@@ -1222,7 +1233,7 @@ public class JcSummaryReportAntTask
       }
    }
 
-   
+
    /**
     * Filter for folders that contain a 'summary.xml' file.
     *
@@ -1246,8 +1257,8 @@ public class JcSummaryReportAntTask
             final File summaryXml = new File(folder, "summary.xml");
             result = summaryXml.exists() && summaryXml.isFile();
          }
-         
+
          return result;
-      }   
+      }
    }
 }

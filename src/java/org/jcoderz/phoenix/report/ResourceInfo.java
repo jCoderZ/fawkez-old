@@ -82,7 +82,7 @@ public final class ResourceInfo
         }
         Assert.notNull(name, "name");
         Assert.notNull(sourceDir, "sourceDir");
-        mResourceName = checkName(name);
+        mResourceName = checkName(name).intern();
         if (pkg != null)
         {
             mPackage = pkg;
@@ -91,8 +91,8 @@ public final class ResourceInfo
         {
             mPackage = StringUtil.EMPTY_STRING;
         }
-        mSourcDir = checkName(sourceDir);
-        mClassname = determineClassName(name);
+        mSourcDir = checkName(sourceDir).intern();
+        mClassname = determineClassName(name).intern();
         if (logger.isLoggable(Level.FINER))
         {
             logger.exiting(CLASSNAME, "<init>", this);
@@ -122,13 +122,10 @@ public final class ResourceInfo
             final ResourceInfo newInfo
                 = new ResourceInfo(resourceName, pkg, sourceDir);
             // sanity check
-            if (!newInfo.equals(result))
-            {
-                throw new RuntimeException("Ups, the ResourceInfo w/ the name "
-                        + resourceName
-                        + " is already registered with different parameters: "
-                        + result);
-            }
+            Assert.assertEquals("Ups, the ResourceInfo w/ the name "
+                + resourceName
+                + " is already registered with different parameters!",
+                result, newInfo);
         }
         return result;
     }
@@ -287,7 +284,7 @@ public final class ResourceInfo
 
     private String determineClassName (String name)
     {
-        String result = null;
+        String result = "";
 
         final String magic = ".java";
         if (name.endsWith(magic))

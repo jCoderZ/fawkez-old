@@ -101,9 +101,9 @@
                 packagebase="org.jcoderz"
                 projectbase="${base.dir}"
                 tempfolder="${base.dir}/build/jcreport"
-                debug="false"
+                debug="true"
                 maxheap="384" 
-                cpus="1"> <!-- Increase to speed up -->
+                cpus="0"> <!-- Increase to speed up -->
          <classpath refid="jcreport.classpath"/>
          <reports>   
             <report name="fawkez-test"
@@ -139,7 +139,8 @@
                <auxclasspath refid="findbugs.aux.classpath"/>
                <pluginlist refid="findbugs.plugins"/>
             </findbugs>
-            <checkstyle config="${checkstyle.rules}"> 
+            <checkstyle config="${checkstyle.rules}"
+              maxHeap="512"> 
                <classpath refid="checkstyle.classpath" />
             </checkstyle>
             <!-- cobertura datafile="x.ser">

@@ -477,38 +477,66 @@ public class JcReportAntTask
             File findbugsXml, File pmdXml, File cpdXml, File coberturaXml)
        throws IOException, JAXBException, TransformerException
    {
-      log("Creating report normalizer...");
-      final ReportNormalizer normalizer = new ReportNormalizer();
-      normalizer.addSource(srcDir);
-      normalizer.setLevel(level);
+      // INLINE failed, got java.lang.OutOfMemoryError: PermGen space
+      log("Creating report normalizer command line...");
+      final CommandlineJava cmd = createCommandlineJava(mCommandline, mMaxHeap);
+
+      cmd.setClassname("org.jcoderz.phoenix.report.ReportNormalizer");
+
+      cmd.createArgument().setValue("-srcDir");
+      cmd.createArgument().setFile(srcDir);
+
+      cmd.createArgument().setValue("-level");
+      cmd.createArgument().setValue(level.toString());
+
       if (mDebug)
       {
-         normalizer.setLogLevel(Level.ALL);
+         cmd.createArgument().setValue("-loglevel");
+         cmd.createArgument().setValue("FINEST");
       }
-      normalizer.setProjectName(mName);
-      normalizer.setOutFile(reportDir);
+
+      cmd.createArgument().setValue("-projectName");
+      cmd.createArgument().setValue(mName);
+
+      cmd.createArgument().setValue("-out");
+      cmd.createArgument().setFile(reportDir);
+
       if (checkstyleXml != null)
       {
-          normalizer.addReport(ReportFormat.CHECKSTYLE, checkstyleXml);
+         cmd.createArgument().setValue("-checkstyle");
+         cmd.createArgument().setFile(checkstyleXml);
       }
+
       if (findbugsXml != null)
       {
-          normalizer.addReport(ReportFormat.FINDBUGS, findbugsXml);
+         cmd.createArgument().setValue("-findbugs");
+         cmd.createArgument().setFile(findbugsXml);
       }
+
       if (pmdXml != null)
       {
-          normalizer.addReport(ReportFormat.PMD, pmdXml);
+         cmd.createArgument().setValue("-pmd");
+         cmd.createArgument().setFile(pmdXml);
       }
+
       if (cpdXml != null)
       {
-          normalizer.addReport(ReportFormat.CPD, cpdXml);
+         cmd.createArgument().setValue("-cpd");
+         cmd.createArgument().setFile(cpdXml);
       }
+
       if (coberturaXml != null)
       {
-          normalizer.addReport(ReportFormat.COBERTURA, coberturaXml);
+         cmd.createArgument().setValue("-cobertura");
+         cmd.createArgument().setFile(coberturaXml);
       }
-      normalizer.run();
-      return normalizer.getOutFile();
+
+      forkToolProcess(this, cmd, new LogStreamHandler(this, Project.MSG_INFO,
+         Project.MSG_WARN));
+
+      final File outFile = new File(reportDir,
+         ReportNormalizer.JCODERZ_REPORT_XML);
+      return outFile;
    }
 
 

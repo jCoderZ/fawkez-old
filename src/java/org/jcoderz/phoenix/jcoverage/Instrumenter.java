@@ -76,23 +76,16 @@ public final class Instrumenter
     * @param args command line arguments.
     */
    public static void main (String[] args)
+      throws Exception
    {
-      try
-      {
-         final Main instrumenter = new Main(); 
-         instrumenter.main(args); 
+      Main.main(args); 
 
-         logger.info("Instrumentation of '" + args[0] + "' done.");
-      }
-      catch (Exception e)
-      {
-         e.printStackTrace();
-      }
+      logger.info("Instrumentation of '" + args[0] + "' done.");
    }
 
    private static void parseArguments (String[] args)
    {
-       final List arguments = new ArrayList();
+      // final List arguments = new ArrayList();
       try
       {
          for (int i = 0; i < args.length; )

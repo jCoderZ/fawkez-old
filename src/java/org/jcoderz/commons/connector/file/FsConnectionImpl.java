@@ -114,23 +114,29 @@ class FsConnectionImpl
       {
          tmp = props.getProperty(FsConnectionFactory.PROP_TEMP_DIR);
       }
-
       if (tmp == null)
       {
          tmp = System.getProperty("java.io.tmpdir");
       }
-
-      final String chunkSize = props.getProperty(
-         FsConnectionFactory.PROP_FILE_TRANSFER_CHUNK_SIZE,
-         String.valueOf(
-               FsConnectionFactory.FILE_TRANSFER_CHUNK_SIZE_DEF_VALUE));
-
       mTmpDir = new File(tmp);
-      mFileTransferChunkSize = Long.valueOf(chunkSize).longValue();
+
+      if (props != null)
+      {
+          mFileTransferChunkSize
+              = Long.getLong(FsConnectionFactory.PROP_FILE_TRANSFER_CHUNK_SIZE,
+                  FsConnectionFactory.FILE_TRANSFER_CHUNK_SIZE_DEF_VALUE)
+                  .longValue();
+      }
+      else
+      {
+          mFileTransferChunkSize
+              = FsConnectionFactory.FILE_TRANSFER_CHUNK_SIZE_DEF_VALUE;
+      }
+
       if (logger.isLoggable(Level.FINER))
       {
          logger.finer("Created FsConnection with attributes TempDir " + mTmpDir
-               + ", FileTransferChunkSize " + chunkSize);
+               + ", FileTransferChunkSize " + mFileTransferChunkSize);
       }
    }
 
@@ -306,7 +312,7 @@ class FsConnectionImpl
 
       logger.exiting(CLASSNAME, method);
    }
-   
+
    /** {@inheritDoc} */
    public String createTempFile ()
          throws ResourceException
@@ -421,7 +427,7 @@ class FsConnectionImpl
                logger.throwing(CLASSNAME, method, re);
                throw re;
             }
-            logger.finer("Created all necessary parant directories " 
+            logger.finer("Created all necessary parant directories "
                   + parent.toString());
          }
          catch (java.lang.SecurityException se)

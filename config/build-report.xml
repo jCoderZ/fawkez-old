@@ -101,8 +101,8 @@
                 packagebase="org.jcoderz"
                 projectbase="${base.dir}"
                 tempfolder="${base.dir}/build/jcreport"
-                debug="true"
-                maxheap="384" 
+                debug="false"
+                maxheap="128" 
                 cpus="0"> <!-- Increase to speed up -->
          <classpath refid="jcreport.classpath"/>
          <reports>   
@@ -131,7 +131,8 @@
                <classpath refid="pmd.classpath"/>
             </cpd>
            <!-- Could not disable UnreadFields cause further dependencies -->
-           <findbugs effort="max"
+           <findbugs maxheap="256" 
+              effort="max"
               debug="false"
               omitVisitors="RuntimeExceptionCapture,FindUncalledPrivateMethods,CustomBuiltXML,DeclaredRuntimeException,PossiblyRedundantMethodCalls"
               warninglevel="low">

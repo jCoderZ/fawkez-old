@@ -588,14 +588,16 @@
                      <xsl:for-each select="//uc:usecase[uc:scope = $scope_name]">
                        <row id="role_uc_list {uc:name}" label="{uc:name}">
                         <entry>
-                           <xsl:value-of select="uc:name"/><xsl:text> : </xsl:text>
+                           <xsl:text> [</xsl:text><xref linkend="{@id}"/><xsl:text>] : </xsl:text>
                         </entry>
                         <entry>
-                           <xsl:variable name="role_name" select="normalize-space(uc:actors/uc:primary/uc:name)"/>
-                           <xsl:text> [</xsl:text><xref linkend="{//req:requirement[normalize-space(req:role/req:name) = $role_name]/req:key}"/><xsl:text>] </xsl:text>
-                           <xsl:call-template name="uc:list_acting_use_cases_indirect_upwards">
-                              <xsl:with-param name="role_name" select="$role_name"/>
-                           </xsl:call-template>
+                           <xsl:for-each select="uc:actors/uc:primary">
+                              <xsl:variable name="role_name" select="normalize-space(uc:name)"/>
+                              <xsl:text> [</xsl:text><xref linkend="{//req:requirement[normalize-space(req:role/req:name) = $role_name]/req:key}"/><xsl:text>] </xsl:text>
+                              <xsl:call-template name="uc:list_acting_use_cases_indirect_upwards">
+                                 <xsl:with-param name="role_name" select="$role_name"/>
+                              </xsl:call-template>
+                           </xsl:for-each>
                         </entry>
                       </row>
                      </xsl:for-each>

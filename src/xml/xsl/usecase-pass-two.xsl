@@ -362,7 +362,8 @@
       <xsl:for-each select="//uc:primary[generate-id() = generate-id(key('primary-actor-group', uc:name)[1])]">
         <row id="primary_actor_list {uc:name}" label="{uc:name} as primary actor">
          <entry>
-            <xsl:value-of select="uc:name"/><xsl:text> : </xsl:text>
+            <xsl:variable name="role_name" select="normalize-space(uc:name)"/>
+            <xsl:text>[</xsl:text><xref linkend="{//req:requirement[normalize-space(req:role/req:name) = $role_name]/req:key}"/><xsl:text>]</xsl:text>
          </entry>
            <entrytbl cols="1">
             <tbody>
@@ -383,7 +384,8 @@
       <xsl:for-each select="//uc:secondary[generate-id() = generate-id(key('secondary-actor-group', uc:name)[1])]">
          <row id="secondary_actor_list {uc:name}" label="{uc:name} as secondary/supporting actor">
           <entry>
-            <xsl:value-of select="uc:name"/><xsl:text> : </xsl:text>
+            <xsl:variable name="role_name" select="normalize-space(uc:name)"/>
+            <xsl:text>[</xsl:text><xref linkend="{//req:requirement[normalize-space(req:role/req:name) = $role_name]/req:key}"/><xsl:text>]</xsl:text>
          </entry>
          <entrytbl cols="1">
             <tbody>
@@ -426,17 +428,29 @@
             <xsl:when test="@suppress_diagrams = 'true'"/>
             <xsl:otherwise>
               <xsl:variable name="f" select="concat('images/', @id)"/>
-		          <figure pgwide="1" id="{@id}_diagram">
-		             <title><xsl:value-of select="$strUseCaseDiagramForUseCase"/><xsl:value-of select="@id"/></title>
-		             <mediaobject  id="{concat('diagram-', uc:name)}">
+              <xsl:variable name="dependency-filename" select="concat($f, '-dependencies')"/>
+		          <figure pgwide="1" id="{@id}_dependency-diagram">
+		             <title><xsl:value-of select="$strUseCaseDependencyDiagramForUseCase"/><xsl:value-of select="@id"/></title>
+		             <mediaobject  id="{concat('dependency-diagram-', uc:name)}">
 		                <imageobject  role="fo">
-		                   <imagedata  format="SVG"  fileref="{concat($f, '.svg')}"/>
+		                   <imagedata  format="SVG"  fileref="{concat($dependency-filename, '.svg')}"/>
 		                </imageobject>
 		                <imageobject  role="html">
-		                   <imagedata  format="PNG"  fileref="{concat($f, '.png')}"/>
+		                   <imagedata  format="PNG"  fileref="{concat($dependency-filename, '.png')}"/>
 		                </imageobject>
 		             </mediaobject>
 		          </figure>
+                <figure pgwide="1" id="{@id}_diagram">
+                   <title><xsl:value-of select="$strUseCaseDiagramForUseCase"/><xsl:value-of select="@id"/></title>
+                   <mediaobject  id="{concat('diagram-', uc:name)}">
+                      <imageobject  role="fo">
+                         <imagedata  format="SVG"  fileref="{concat($f, '.svg')}"/>
+                      </imageobject>
+                      <imageobject  role="html">
+                         <imagedata  format="PNG"  fileref="{concat($f, '.png')}"/>
+                      </imageobject>
+                   </mediaobject>
+                </figure>
 	          </xsl:otherwise>
           </xsl:choose>
       </section>

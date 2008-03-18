@@ -704,6 +704,28 @@
      </xsl:choose>
    </xsl:variable>
 
+   <xsl:variable name="strUseCaseDependencies">
+     <xsl:choose>
+       <xsl:when test="$lang='de'">
+          <xsl:text>Anwendungsfall-Abhängigkeiten</xsl:text>
+       </xsl:when>
+       <xsl:otherwise>
+          <xsl:text>Use case dependencies</xsl:text>
+       </xsl:otherwise>
+     </xsl:choose>
+   </xsl:variable>
+
+   <xsl:variable name="strUseCaseDependencyDiagramForUseCase">
+     <xsl:choose>
+       <xsl:when test="$lang='de'">
+          <xsl:text>Abhängigkeits-Diagramm für Anwendungsfall </xsl:text>
+       </xsl:when>
+       <xsl:otherwise>
+          <xsl:text>Dependency diagram for use case </xsl:text>
+       </xsl:otherwise>
+     </xsl:choose>
+   </xsl:variable>
+
    <xsl:variable name="strUseCaseDiagramForUseCase">
      <xsl:choose>
        <xsl:when test="$lang='de'">

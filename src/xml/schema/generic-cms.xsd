@@ -134,7 +134,7 @@
       <xsd:complexType>
          <xsd:sequence>
             <xsd:element ref="cms:id"                minOccurs="1" maxOccurs="1"/>
-            <xsd:element ref="cms:external-id"       minOccurs="0" maxOccurs="1"/>
+            <xsd:element ref="cms:external-id"       minOccurs="0" maxOccurs="unbounded"/>
             <xsd:element ref="cms:type"              minOccurs="1" maxOccurs="1"/>
             <xsd:element ref="cms:version"           minOccurs="1" maxOccurs="1"/>
             <xsd:element ref="cms:affects-version"   minOccurs="1" maxOccurs="1"/>

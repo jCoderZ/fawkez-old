@@ -38,7 +38,7 @@
    <xsd:element name="testcase"    type="tr:testCaseIdType" />
    <xsd:element name="issue"       type="tr:issueNumberType" />
    <xsd:element name="result"      type="tr:resultType" />
-   <xsd:element name="executer"    type="xsd:string" />
+   <xsd:element name="executor"    type="xsd:string" />
    <xsd:element name="comment"     type="xsd:string" />
    <xsd:element name="shortname"   type="xsd:string" />
    <xsd:element name="environment" type="xsd:string" />
@@ -53,7 +53,7 @@
             <xsd:element ref="tr:shortname" minOccurs="0" maxOccurs="1"/>
             <xsd:element ref="tr:issue" minOccurs="0" maxOccurs="100"/>
             <xsd:element ref="tr:result" minOccurs="1" maxOccurs="1"/>
-            <xsd:element ref="tr:executer" minOccurs="1" maxOccurs="1"/>
+            <xsd:element ref="tr:executor" minOccurs="1" maxOccurs="1"/>
             <xsd:element ref="tr:time" minOccurs="1" maxOccurs="1"/>
             <xsd:element ref="tr:comment" minOccurs="1" maxOccurs="1"/>
             <xsd:element ref="tr:timestamp" minOccurs="1" maxOccurs="1"/>

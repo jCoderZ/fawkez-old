@@ -23,6 +23,10 @@
          <cms:text>TRAC</cms:text>
          <cms:url>http://www.jcoderz.org/trac/</cms:url>
       </cms:linkroot>
+      <cms:linkroot>
+         <cms:text>TREC</cms:text>
+         <cms:url>http://www.jcoderz.org/trec/</cms:url>
+      </cms:linkroot>
    </cms:meta>
    <cms:issues>
       <cms:issue>
@@ -48,6 +52,8 @@
       
       <cms:issue>
          <cms:id>TRAC-345</cms:id>
+         <cms:external-id>TREC-123</cms:external-id>
+         <cms:external-id>TREC-456</cms:external-id>
          <cms:type>Bug</cms:type>
          <cms:version>1.0.0.0</cms:version>
          <cms:affects-version>0.8.7.0</cms:affects-version>
@@ -61,6 +67,29 @@
             <cms:spent-effort>3.6</cms:spent-effort>
          </cms:effort>
          <cms:module>Administration</cms:module>
+         <cms:link>
+            <cms:id>TRAC-345</cms:id>
+            <cms:linktype>Dependency</cms:linktype>
+         </cms:link>
+      </cms:issue>
+      
+      <cms:issue>
+         <cms:id>TRAC-23</cms:id>
+         <cms:external-id>TREC-24</cms:external-id>
+         <cms:type>Bug</cms:type>
+         <cms:version>1.0.0.0</cms:version>
+         <cms:affects-version>0.8.7.0</cms:affects-version>
+         <cms:state>Accepted</cms:state>
+         <cms:summary>Hello You.</cms:summary>
+         <cms:assignee>John Doe</cms:assignee>
+         <cms:effort>
+            <cms:efforttype>Bug Fixing</cms:efforttype>
+            <cms:original-effort>3.4</cms:original-effort>
+            <cms:remaining-effort>0.0</cms:remaining-effort>
+            <cms:spent-effort>3.6</cms:spent-effort>
+         </cms:effort>
+         <cms:module>Administration</cms:module>
+         <cms:module>Core</cms:module>
          <cms:link>
             <cms:id>TRAC-345</cms:id>
             <cms:linktype>Dependency</cms:linktype>

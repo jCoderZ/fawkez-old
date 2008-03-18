@@ -67,7 +67,7 @@
    
    <xsl:key name="issue-group"                        match="//cms:issue[starts-with(../cms:version,$version)]" use="."/>
    <xsl:key name="scarab-id"                          match="//cms:issues//cms:issue"
-                                                      use="ext"/>
+                                                      use="cms:id"/>
 
    <xsl:key name="mappings-group"                     match="//mappings/mapping" use="shortname"/>
    
@@ -224,7 +224,7 @@
                         </row>
                      </thead>
                      <tbody>
-                        <xsl:apply-templates select="//cms:issue[contains(cms:version,$version) and (cms:type = $cms.cr.type or cms:type = $cms.bug.type or cms:type = $cms.task.type) and starts-with(cms:summary,'EXT')]" mode="tested">
+                        <xsl:apply-templates select="//cms:issue[contains(cms:version,$version) and (cms:type = $cms.cr.type or cms:type = $cms.bug.type or cms:type = $cms.task.type) and cms:external-id]" mode="tested">
                            <xsl:sort select="key" order="ascending" data-type="text"/>
                         </xsl:apply-templates>
                         <row>
@@ -265,7 +265,7 @@
                         </row>
                      </thead>
                      <tbody>
-                        <xsl:apply-templates select="//cms:issue[contains(cms:version,$version) and (cms:type = $cms.cr.type or cms:type = $cms.bug.type or cms:type = $cms.task.type) and not(starts-with(cms:summary,'EXT'))]" mode="tested">
+                        <xsl:apply-templates select="//cms:issue[contains(cms:version,$version) and (cms:type = $cms.cr.type or cms:type = $cms.bug.type or cms:type = $cms.task.type) and not(cms:external-id)]" mode="tested">
                            <xsl:sort select="key" order="ascending" data-type="text"/>
                         </xsl:apply-templates>
                         <row>
@@ -783,7 +783,7 @@
                   </row>
                </thead>
                <tbody>
-                  <xsl:apply-templates select="//tr:testresult[starts-with(version,$version)]" mode="specified">
+                  <xsl:apply-templates select="//tr:testresult[starts-with(tr:version,$version)]" mode="specified">
                      <xsl:sort select="tr:testcase" order="ascending" data-type="text"/>
                      <xsl:with-param name="testcase_filter" select="$testcase_filter"/>
                   </xsl:apply-templates>
@@ -909,7 +909,7 @@
       <xsl:param name="this_shortname" select="tr:shortname"/>
       <xsl:variable name="testcase_id">
          <xsl:choose>
-            <xsl:when test="string-length(testcase) &gt; 0"><xsl:value-of select="tr:testcase"/></xsl:when>
+            <xsl:when test="string-length(tr:testcase) &gt; 0"><xsl:value-of select="tr:testcase"/></xsl:when>
             <xsl:when test="key('test-shortname-group',$this_shortname)"><xsl:call-template name="lookup_testcase_id"><xsl:with-param name="shortname" select="tr:shortname"/></xsl:call-template></xsl:when>
             <xsl:otherwise>STEPS</xsl:otherwise>
          </xsl:choose>
@@ -920,9 +920,9 @@
                <xsl:value-of select="$this_shortname"/>
             </entry>
             <entry>
-               <xsl:for-each select="tr:issue"><ulink url="/jira/browse/{.}">
-                     <citetitle><xsl:value-of select="."/></citetitle>
-                  </ulink><xsl:if test="not(position() = last())">, </xsl:if></xsl:for-each>
+               <xsl:for-each select="tr:issue"><xsl:call-template name="link_to_cms">
+                  <xsl:with-param name="issue_id" select="."/>
+               </xsl:call-template><xsl:if test="not(position() = last())">, </xsl:if></xsl:for-each>
             </entry>
             <entry>
                <xsl:value-of select="tr:comment"/>
@@ -958,18 +958,17 @@
          <row>
 <xsl:text disable-output-escaping="yes">&lt;?dbhtml bgcolor="yellow" ?&gt;&lt;?dbfo bgcolor="yellow" ?&gt;</xsl:text>
             <entry>
-               <ulink url="all_testspec.html#{id}">
-                  <citetitle><xsl:value-of select="id"/></citetitle>
+               <ulink url="all_testspec.html#{tc:id}">
+                  <citetitle><xsl:value-of select="tc:id"/></citetitle>
                </ulink>   
             </entry>
             <entry>
                <xsl:value-of select="$this_shortname"/>
             </entry>
             <entry>
-               <xsl:for-each select="tc:scrno">
-                   <ulink url="/jira/browse/{.}">
-                     <citetitle><xsl:value-of select="."/></citetitle>
-                  </ulink><xsl:if test="not(position() = last())">, </xsl:if>
+               <xsl:for-each select="tc:scrno"><xsl:call-template name="link_to_cms">
+                  <xsl:with-param name="issue_id" select="."/>
+               </xsl:call-template><xsl:if test="not(position() = last())">, </xsl:if>
                </xsl:for-each>
             </entry>
             <entry>
@@ -981,7 +980,7 @@
    </xsl:template>   
    
    <xsl:template match="cms:issue" mode="tested">
-      <xsl:param name="key_local" select="translate(cms:id,'-','')"/>
+      <xsl:param name="key_local" select="cms:id"/>
       <xsl:param name="key_local_unmodified" select="cms:id"/>
       <xsl:param name="summary_local" select="cms:summary"/>
       <xsl:param name="status_local" select="cms:state"/>
@@ -992,17 +991,18 @@
          <xsl:for-each select="key('issue-group',$key_local)[(not(../tr:testcase) or ../tr:testcase = '' or not(tr:testcase = //tc:scrno[contains(. , $key_local) or contains(. , $key_local_unmodified)]/../tc:id)) and not(//tc:scrno[contains(. , $key_local) or contains(. , $key_local_unmodified)])]">
             <row>
                <entry>
-                  <ulink url="/jira/browse/{$key_local_unmodified}">
-                     <citetitle><xsl:value-of select="$key_local_unmodified"/></citetitle>
-                  </ulink><xsl:if test="$type = 'internal'">(<xsl:value-of select="$status_local"/>)</xsl:if>           
+                  <xsl:call-template name="link_to_cms">
+                      <xsl:with-param name="issue_id" select="$key_local_unmodified"/>
+                  </xsl:call-template><xsl:if test="$type = 'internal'">(<xsl:value-of select="$status_local"/>)</xsl:if>           
                </entry>
                <entry>
                   <xsl:choose>
-                     <!-- replace with external ID, when existing?!? -->
-                     <xsl:when test="starts-with(substring-before($summary_local,' '),'EXT')">
-                        <ulink url="/scarab/issues/id/{substring-before($summary_local,' ')}">
-                           <citetitle><xsl:value-of select="substring-before($summary_local,' ')"/></citetitle>
-                        </ulink>        
+                     <xsl:when test="cms:external-id">
+                        <xsl:for-each select="cms:external-id">
+                           <xsl:call-template name="link_to_cms">
+                               <xsl:with-param name="issue_id" select="."/>
+                           </xsl:call-template>
+                        </xsl:for-each>        
                      </xsl:when>
                      <xsl:otherwise>none</xsl:otherwise> 
                   </xsl:choose>   
@@ -1011,16 +1011,16 @@
                   <xsl:choose>
                      <xsl:when test="//tc:scrno[contains(. , $key_local) or contains(. , $key_local_unmodified)]">
                         <xsl:for-each select="//tc:scrno[contains(. , $key_local) or contains(. , $key_local_unmodified)]">
-                           <xsl:variable name="t_id" select="../id"/>
+                           <xsl:variable name="t_id" select="../tc:id"/>
                            <ulink url="all_testspec.html#{$t_id}">
                               <citetitle><xsl:value-of select="$t_id"/></citetitle>
                            </ulink>
                            <xsl:if test="not(position() = last()) "><xsl:text>,</xsl:text><sbr/></xsl:if>
                         </xsl:for-each>
                      </xsl:when>
-                     <xsl:when test="../testcase and not(../testcase = '')">
-                        <ulink url="all_testspec.html#{../testcase}">
-                           <citetitle><xsl:value-of select="../testcase"/></citetitle>
+                     <xsl:when test="../tr:testcase and not(../tr:testcase = '')">
+                        <ulink url="all_testspec.html#{../tr:testcase}">
+                           <citetitle><xsl:value-of select="../tr:testcase"/></citetitle>
                         </ulink>
                      </xsl:when>
                      <xsl:otherwise>
@@ -1029,25 +1029,25 @@
                   </xsl:choose>
                </entry>
                <entry>
-                  <xsl:value-of select="../comment"/>
+                  <xsl:value-of select="../tr:comment"/>
                </entry>
                <entry>
                   <xsl:choose>
-                     <xsl:when test="../version = $version.releasecandidate">
+                     <xsl:when test="../tr:version = $version.releasecandidate">
 <xsl:text disable-output-escaping="yes">
 &lt;?dbhtml bgcolor="Lime" ?&gt;&lt;?dbfo bgcolor="Lime" ?&gt;</xsl:text>
-                        <xsl:value-of select="../version"/>
+                        <xsl:value-of select="../tr:version"/>
                      </xsl:when>
                      <xsl:otherwise>
 <xsl:text disable-output-escaping="yes">
 &lt;?dbhtml bgcolor="yellow" ?&gt;&lt;?dbfo bgcolor="yellow" ?&gt;</xsl:text>
-                        <xsl:value-of select="../version"/>
+                        <xsl:value-of select="../tr:version"/>
                      </xsl:otherwise>            
                   </xsl:choose>
                </entry>
                <entry>
                   <xsl:choose>
-                     <xsl:when test="//scrno[contains(. , $key_local) or contains(. , $key_local_unmodified)]">
+                     <xsl:when test="//tc:scrno[contains(. , $key_local) or contains(. , $key_local_unmodified)]">
                         <!--
                         TODO: find a way to decide, when to paint entry green, red or yellow.
                         <xsl:choose>
@@ -1057,11 +1057,11 @@
                         -->
 <xsl:text disable-output-escaping="yes">
 &lt;?dbhtml bgcolor="white" ?&gt;&lt;?dbfo bgcolor="white" ?&gt;</xsl:text>
-                        <xsl:for-each select="//scrno[contains(. , $key_local) or contains(. , $key_local_unmodified)]">
-                           <xsl:variable name="t_id" select="../id"/>
+                        <xsl:for-each select="//tc:scrno[contains(. , $key_local) or contains(. , $key_local_unmodified)]">
+                           <xsl:variable name="t_id" select="../tc:id"/>
                            <xsl:choose>
-                              <xsl:when test="key('issue-group', $key_local)[../testcase = $t_id]">
-                                 <xsl:apply-templates select="key('issue-group', $key_local)[../testcase = $t_id]/../result"/>
+                              <xsl:when test="key('issue-group', $key_local)[../tr:testcase = $t_id]">
+                                 <xsl:apply-templates select="key('issue-group', $key_local)[../tr:testcase = $t_id]/../tr:result"/>
                               </xsl:when>
                               <xsl:otherwise>
                                   no test result
@@ -1071,7 +1071,7 @@
                         </xsl:for-each>
                      </xsl:when>
                      <xsl:otherwise>
-                        <xsl:apply-templates select="../result"/>
+                        <xsl:apply-templates select="../tr:result"/>
                      </xsl:otherwise>
                   </xsl:choose>   
                </entry>
@@ -1081,25 +1081,27 @@
       </xsl:if>
       
       <!-- if there is/are test specification(s) for this Jira issue -->
-      <xsl:if test="//scrno[contains(. , $key_local) or contains(. , $key_local_unmodified)]">
+      <xsl:if test="//tc:scrno[contains(. , $key_local) or contains(. , $key_local_unmodified)]">
          <!-- for each test specification for this Jira issue -->
-         <xsl:for-each select="//scrno[contains(. , $key_local) or contains(. , $key_local_unmodified)]">
-            <xsl:variable name="testcase_id" select="../id"/>
+         <xsl:for-each select="//tc:scrno[contains(. , $key_local) or contains(. , $key_local_unmodified)]">
+            <xsl:variable name="testcase_id" select="../tc:id"/>
             <xsl:choose>
                <xsl:when test="key('testresult-testcase-group',$testcase_id)">
                   <xsl:for-each select="key('testresult-testcase-group',$testcase_id)">
                      <row>
                         <entry>
-                           <ulink url="https://www-bb.achievo.de/jira/browse/{$key_local_unmodified}">
-                              <citetitle><xsl:value-of select="$key_local_unmodified"/></citetitle>
-                           </ulink><xsl:if test="$type = 'internal'">(<xsl:value-of select="$status_local"/>)</xsl:if>      
+                           <xsl:call-template name="link_to_cms">
+                               <xsl:with-param name="issue_id" select="$key_local_unmodified"/>
+                           </xsl:call-template><xsl:if test="$type = 'internal'">(<xsl:value-of select="$status_local"/>)</xsl:if>      
                         </entry>
                         <entry>
                            <xsl:choose>
-                              <xsl:when test="starts-with(substring-before($summary_local,' '),'EXT')">
-                                 <ulink url="http://www.ics-software.de/scarab/issues/id/{substring-before($summary_local,' ')}">
-                                    <citetitle><xsl:value-of select="substring-before($summary_local,' ')"/></citetitle>
-                                 </ulink>        
+                              <xsl:when test="cms:external-id">
+                                 <xsl:for-each select="cms:external-id">
+                                    <xsl:call-template name="link_to_cms">
+                                        <xsl:with-param name="issue_id" select="."/>
+                                    </xsl:call-template>
+                                 </xsl:for-each>        
                               </xsl:when>
                               <xsl:otherwise>none</xsl:otherwise> 
                            </xsl:choose>
@@ -1110,24 +1112,24 @@
                            </ulink>
                         </entry>
                         <entry>
-                           <xsl:value-of select="comment"/>
+                           <xsl:value-of select="tr:comment"/>
                         </entry>
                         <entry>
                            <xsl:choose>
-                              <xsl:when test="version = $version.releasecandidate">
+                              <xsl:when test="tr:version = $version.releasecandidate">
                                  <xsl:text disable-output-escaping="yes">
 &lt;?dbhtml bgcolor="Lime" ?&gt;&lt;?dbfo bgcolor="Lime" ?&gt;</xsl:text>
-                                 <xsl:value-of select="version"/>
+                                 <xsl:value-of select="tr:version"/>
                               </xsl:when>
                               <xsl:otherwise>
                                  <xsl:text disable-output-escaping="yes">
 &lt;?dbhtml bgcolor="yellow" ?&gt;&lt;?dbfo bgcolor="yellow" ?&gt;</xsl:text>
-                                 <xsl:value-of select="version"/>
+                                 <xsl:value-of select="tr:version"/>
                               </xsl:otherwise>            
                            </xsl:choose>
                         </entry>
                         <entry>
-                           <xsl:apply-templates select="result"/>
+                           <xsl:apply-templates select="tr:result"/>
                         </entry>
                      </row><xsl:text>
                      </xsl:text>
@@ -1138,9 +1140,9 @@
                      <xsl:text disable-output-escaping="yes">
 &lt;?dbhtml bgcolor="yellow" ?&gt;&lt;?dbfo bgcolor="yellow" ?&gt;</xsl:text>
                      <entry>
-                        <ulink url="https://www-bb.achievo.de/jira/browse/{$key_local_unmodified}">
-                           <citetitle><xsl:value-of select="$key_local_unmodified"/></citetitle>
-                        </ulink><xsl:if test="$type = 'internal'">(<xsl:value-of select="$status_local"/>)</xsl:if>
+                        <xsl:call-template name="link_to_cms">
+                            <xsl:with-param name="issue_id" select="$key_local_unmodified"/>
+                        </xsl:call-template><xsl:if test="$type = 'internal'">(<xsl:value-of select="$status_local"/>)</xsl:if>
                      </entry>
                      <entry>
                         <ulink url="all_testspec.html#{$testcase_id}">
@@ -1188,24 +1190,26 @@
             <xsl:text disable-output-escaping="yes">
 &lt;?dbhtml bgcolor="yellow" ?&gt;&lt;?dbfo bgcolor="yellow" ?&gt;</xsl:text>
             <entry>
-               <ulink url="https://www-bb.achievo.de/jira/browse/{$key_local_unmodified}">
-                  <citetitle><xsl:value-of select="$key_local_unmodified"/></citetitle>
-               </ulink><xsl:if test="$type = 'internal'">(<xsl:value-of select="$status_local"/>)</xsl:if>
+               <xsl:call-template name="link_to_cms">
+                   <xsl:with-param name="issue_id" select="$key_local_unmodified"/>
+               </xsl:call-template><xsl:if test="$type = 'internal'">(<xsl:value-of select="$status_local"/>)</xsl:if>
             </entry>
             <entry>
                <xsl:choose>
-                  <xsl:when test="starts-with(substring-before($summary_local,' '),'EXT')">
-                     <ulink url="http://www.ics-software.de/scarab/issues/id/{substring-before($summary_local,' ')}">
-                        <citetitle><xsl:value-of select="substring-before($summary_local,' ')"/></citetitle>
-                     </ulink>        
+                  <xsl:when test="cms:external-id">
+                     <xsl:for-each select="cms:external-id">
+                        <xsl:call-template name="link_to_cms">
+                            <xsl:with-param name="issue_id" select="."/>
+                        </xsl:call-template>
+                     </xsl:for-each>        
                   </xsl:when>
                   <xsl:otherwise>none</xsl:otherwise> 
                </xsl:choose>  
             </entry>
             <entry>
                <xsl:choose>
-                  <xsl:when test="//scrno[contains(. , $key_local) or contains(. , $key_local_unmodified)]">
-                     <xsl:variable name="t_id" select="//scrno[contains(. , $key_local) or contains(. , $key_local_unmodified)]/../id"/>
+                  <xsl:when test="//tc:scrno[contains(. , $key_local) or contains(. , $key_local_unmodified)]">
+                     <xsl:variable name="t_id" select="//tc:scrno[contains(. , $key_local) or contains(. , $key_local_unmodified)]/../id"/>
                      <ulink url="all_testspec.html#{$t_id}">
                         <citetitle><xsl:value-of select="$t_id"/></citetitle>
                      </ulink>
@@ -1324,8 +1328,8 @@
     -->
    <xsl:template match="tc:test">
       <row>
-         <entry><ulink url="all_testspec.html#{id}">
-                  <citetitle><xsl:value-of select="id"/></citetitle>
+         <entry><ulink url="all_testspec.html#{tc:id}">
+                  <citetitle><xsl:value-of select="tc:id"/></citetitle>
          </ulink></entry>
          <entry><xsl:value-of select="tc:shortname"/></entry>
          <entry><xsl:value-of select="tc:traceability"/></entry>
@@ -1443,5 +1447,22 @@
           <xsl:when test="key('test-shortname-group',$shortname)"><xsl:for-each select="key('test-shortname-group',$shortname)"><xsl:value-of select="tc:id"/></xsl:for-each></xsl:when>
           <xsl:otherwise>STEPS</xsl:otherwise>
       </xsl:choose>
+   </xsl:template>
+   
+   <xsl:template name="link_to_cms">
+      <xsl:param name="issue_id"/>
+      <xsl:variable name="dest_url"><xsl:call-template name="lookup_issue_url">
+          <xsl:with-param name="issue_id" select="$issue_id"/>
+      </xsl:call-template></xsl:variable>
+      <ulink url="{$dest_url}">
+         <citetitle><xsl:value-of select="$issue_id"/></citetitle>
+      </ulink>
+   </xsl:template>
+   
+   <xsl:template name="lookup_issue_url">
+      <xsl:param name="issue_id"/>
+      <xsl:for-each select="//cms:linkroot">
+          <xsl:if test="contains($issue_id, cms:text)"><xsl:value-of select="concat(cms:url, $issue_id)"/></xsl:if>
+      </xsl:for-each>
    </xsl:template>
 </xsl:stylesheet>

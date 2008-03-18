@@ -178,7 +178,7 @@
    <xsd:element name="actors">
      <xsd:complexType>
         <xsd:sequence>
-           <xsd:element ref="uc:primary" minOccurs="1" maxOccurs="1"/>
+           <xsd:element ref="uc:primary" minOccurs="1" maxOccurs="100"/>
            <xsd:element ref="uc:secondary" minOccurs="1" maxOccurs="100"/>
          </xsd:sequence>
          <xsd:attribute name="issue" type="xsd:string"/>
@@ -240,12 +240,12 @@
          <xsd:attribute name="issue"       type="xsd:string"/>
          <xsd:attribute name="state"       type="xsd:string"/>
          <xsd:attribute name="suppress_diagrams" type="xsd:boolean" use="optional">
-         <xsd:attribute name="suppress_revision_list" type="xsd:boolean" use="optional">
            <xsd:annotation>
              <xsd:documentation xml:lang="en">When set to true all generated
                diagrams will be suppressed.</xsd:documentation>
            </xsd:annotation>
          </xsd:attribute>
+         <xsd:attribute name="suppress_revision_list" type="xsd:boolean" use="optional">
       </xsd:complexType>
    </xsd:element>
 

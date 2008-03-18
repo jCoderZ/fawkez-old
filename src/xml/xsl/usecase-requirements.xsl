@@ -48,7 +48,7 @@
                   <section>
                     <title><xsl:value-of select="$strCompleteDomainModelDetailed"/></title>
                     <xsl:variable name="f" select="concat('images/', 'domain_model')"/>
-                    <figure>
+                    <figure pgwide="1">
                       <xsl:attribute name="id">
                         <xsl:text>figure.domain_model_complete</xsl:text>
                       </xsl:attribute>
@@ -70,7 +70,7 @@
                     <title><xsl:value-of select="$strCompleteRoleDependencies"/></title>
                     <para>
                        <xsl:variable name="f" select="concat('images/', 'roles_model')"/>
-                       <figure>
+                       <figure pgwide="1">
                          <xsl:attribute name="id">
                            <xsl:text>figure.role_model_complete</xsl:text>
                          </xsl:attribute>
@@ -100,7 +100,7 @@
                       <xsl:choose>
                         <xsl:when test="$category = 'Domain Model'">
                           <xsl:variable name="f" select="concat('images/', $sec_category, '_domain_model')"/>
-                          <figure>
+                          <figure pgwide="1">
                             <xsl:attribute name="id">
                               <xsl:value-of select="concat('figure.', $sec_category, '_domain_model')" />
                             </xsl:attribute>
@@ -118,7 +118,7 @@
 
                         <xsl:when test="starts-with($category, 'Role')">
                           <xsl:variable name="f" select="concat('images/', $sec_category, '_roles_model')"/>
-                            <figure>
+                            <figure pgwide="1">
                               <xsl:attribute name="id">
                                 <xsl:value-of select="concat('figure.', $sec_category, '_roles_model')" />
                               </xsl:attribute>

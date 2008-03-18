@@ -65,7 +65,7 @@
    <xsl:key name="testresult-passed-testcase-group"   match="//tr:testresult[starts-with(tr:version,$version) and tr:result = 'passed']" use="tr:testcase"/>
    <xsl:key name="testresult-passed-shortname-group"  match="//tr:testresult[starts-with(tr:version,$version) and tr:result = 'passed']" use="tr:shortname"/>
    
-   <xsl:key name="issue-group"                        match="//cms:issue[starts-with(../cms:version,$version)]" use="."/>
+   <xsl:key name="issue-group"                        match="//tr:issue[starts-with(../tr:version,$version)]" use="."/>
    <xsl:key name="scarab-id"                          match="//cms:issues//cms:issue"
                                                       use="cms:id"/>
 
@@ -225,7 +225,7 @@
                      </thead>
                      <tbody>
                         <xsl:apply-templates select="//cms:issue[contains(cms:version,$version) and (cms:type = $cms.cr.type or cms:type = $cms.bug.type or cms:type = $cms.task.type) and cms:external-id]" mode="tested">
-                           <xsl:sort select="key" order="ascending" data-type="text"/>
+                           <xsl:sort select="cms:id" order="ascending" data-type="text"/>
                         </xsl:apply-templates>
                         <row>
                            <entry></entry>
@@ -266,7 +266,7 @@
                      </thead>
                      <tbody>
                         <xsl:apply-templates select="//cms:issue[contains(cms:version,$version) and (cms:type = $cms.cr.type or cms:type = $cms.bug.type or cms:type = $cms.task.type) and not(cms:external-id)]" mode="tested">
-                           <xsl:sort select="key" order="ascending" data-type="text"/>
+                           <xsl:sort select="cms:id" order="ascending" data-type="text"/>
                         </xsl:apply-templates>
                         <row>
                            <entry></entry>

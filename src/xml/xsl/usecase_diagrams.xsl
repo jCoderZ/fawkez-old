@@ -64,7 +64,9 @@ digraph G {
     node [
             fontname = "Sans",
             fontsize = 8,
-            shape = "record"
+            shape = "record",
+            style=filled,
+            fillcolor="#EEEED1"
     ]
 
     edge [
@@ -186,10 +188,11 @@ digraph G {
     rankdir = "LR"
 
     node [
-            fontname = "Sans"
-            fontsize = 8
-            shape = "record"
-            fillcolor = "#ffcc33"
+            fontname = "Sans",
+            fontsize = 8,
+            shape = "record",
+            style=filled,
+            fillcolor="#EEEED1"
     ]
 
     edge [
@@ -296,7 +299,7 @@ digraph G {
             fontname = "Sans",
             fontsize = 8,
             shape = "record",
-            fillcolor = "#eaedf4",
+            fillcolor = "#ffffbb",
             style = "filled"
     ]
 
@@ -377,7 +380,7 @@ digraph G {
             fontname = "Sans",
             fontsize = 8,
             shape = "record",
-            fillcolor = "#eaedf4",
+            fillcolor = "#ffffbb",
             style = "filled"
     ]
 
@@ -567,7 +570,7 @@ digraph G {
             fontname = "Sans",
             fontsize = 8,
             shape = "record",
-            fillcolor = "#eaedf4",
+            fillcolor = "#ffffbb",
             style = "filled"
     ]
 
@@ -603,7 +606,7 @@ digraph G {
             fontname = "Sans",
             fontsize = 8,
             shape = "record",
-            fillcolor = "#eaedf4",
+            fillcolor = "#f0f0f0",
             style = "filled"
     ]
 
@@ -747,7 +750,7 @@ digraph G {
     bgcolor = "#cacfdb";
 
     subgraph cluster0 {
-       node [style=filled, fillcolor="#cacfdb"];
+       node [style=filled, fillcolor="#EEEED1"];
        color=black;
        bgcolor="#dee1e8";
        fillcolor="#dee1e8";
@@ -1280,7 +1283,7 @@ digraph G {
      <xsl:variable name="wrapped_name">
        <xsl:call-template name="word-wrap">
          <xsl:with-param name="tobewrapped" select="normalize-space($name)" />
-         <xsl:with-param name="size" select="24" />
+         <xsl:with-param name="size" select="0" />
          <xsl:with-param name="indent" select="'\l'"/>
        </xsl:call-template>
      </xsl:variable>
@@ -1291,7 +1294,7 @@ digraph G {
       <xsl:param name="tobewrapped" />
       <xsl:param name="size" select="0" />
       <xsl:param name="indent" />
-      <xsl:variable name="maxlength" select="28" />
+      <xsl:variable name="maxlength" select="30" />
 
       <xsl:choose>
          <xsl:when test="contains($tobewrapped,' ')">

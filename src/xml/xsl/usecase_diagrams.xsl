@@ -56,13 +56,13 @@
        <redirect:write file="{$file}">
 
 digraph G {
-    fontname = "Sans"
+    fontname = "Helvetica"
     fontsize = 8
     rankdir = "LR"
     pack = "true"
 
     node [
-            fontname = "Sans",
+            fontname = "Helvetica",
             fontsize = 8,
             shape = "record",
             style=filled,
@@ -70,7 +70,7 @@ digraph G {
     ]
 
     edge [
-            fontname = "Sans"
+            fontname = "Helvetica"
             fontsize = 8
             weight = 10
     ]
@@ -183,12 +183,12 @@ digraph G {
        <redirect:write file="{$file}">
 
 digraph G {
-    fontname = "Sans"
+    fontname = "Helvetica"
     fontsize = 8
     rankdir = "LR"
 
     node [
-            fontname = "Sans",
+            fontname = "Helvetica",
             fontsize = 8,
             shape = "record",
             style=filled,
@@ -196,7 +196,7 @@ digraph G {
     ]
 
     edge [
-            fontname = "Sans"
+            fontname = "Helvetica"
             fontsize = 8
     ]
 
@@ -240,18 +240,18 @@ digraph G {
        <redirect:write file="{$file}">
 
 digraph G {
-    fontname = "Sans"
+    fontname = "Helvetica"
     fontsize = 8
     rankdir = "LR"
 
     node [
-            fontname = "Sans"
+            fontname = "Helvetica"
             fontsize = 8
             shape = "record"
     ]
 
     edge [
-            fontname = "Sans"
+            fontname = "Helvetica"
             fontsize = 8
     ]
 
@@ -292,11 +292,11 @@ digraph G {
        <redirect:write file="{$file}">
 
 digraph G {
-    fontname = "Sans"
+    fontname = "Helvetica"
     fontsize = 8
 
     node [
-            fontname = "Sans",
+            fontname = "Helvetica",
             fontsize = 8,
             shape = "record",
             fillcolor = "#ffffbb",
@@ -304,7 +304,7 @@ digraph G {
     ]
 
     edge [
-            fontname = "Sans"
+            fontname = "Helvetica"
             fontsize = 8
             weight = 10
     ]
@@ -373,11 +373,11 @@ digraph G {
        <redirect:write file="{$file}">
 
 digraph G {
-    fontname = "Sans"
+    fontname = "Helvetica"
     fontsize = 8
 
     node [
-            fontname = "Sans",
+            fontname = "Helvetica",
             fontsize = 8,
             shape = "record",
             fillcolor = "#ffffbb",
@@ -385,7 +385,7 @@ digraph G {
     ]
 
     edge [
-            fontname = "Sans"
+            fontname = "Helvetica"
             fontsize = 8
             weight = 10
     ]
@@ -563,11 +563,11 @@ digraph G {
        <redirect:write file="{$file}">
 
 digraph G {
-    fontname = "Sans"
+    fontname = "Helvetica"
     fontsize = 8
 
     node [
-            fontname = "Sans",
+            fontname = "Helvetica",
             fontsize = 8,
             shape = "record",
             fillcolor = "#ffffbb",
@@ -575,7 +575,7 @@ digraph G {
     ]
 
     edge [
-            fontname = "Sans"
+            fontname = "Helvetica"
             fontsize = 8
     ]
 
@@ -599,11 +599,11 @@ digraph G {
        <redirect:write file="{$file}">
 
 digraph G {
-    fontname = "Sans"
+    fontname = "Helvetica"
     fontsize = 8
 
     node [
-            fontname = "Sans",
+            fontname = "Helvetica",
             fontsize = 8,
             shape = "record",
             fillcolor = "#f0f0f0",
@@ -611,7 +611,7 @@ digraph G {
     ]
 
     edge [
-            fontname = "Sans"
+            fontname = "Helvetica"
             fontsize = 8
     ]
 
@@ -744,12 +744,13 @@ digraph G {
 	      <redirect:write file="{$file}">
 
 digraph G {
-    graph [rankdir = TB, center = true];
-    edge [fontname="Sans",fontsize=12,labelfontname="Sans",labelfontsize=12];
-    node [fontname="Sans",fontsize=12];
+    graph [rankdir = TB, center = true ];
+    edge [fontname="Helvetica",fontsize=12,labelfontname="Helvetica",labelfontsize=12];
+    node [fontname="Helvetica",fontsize=12];
     bgcolor = "#cacfdb";
 
     subgraph cluster0 {
+       rankdir=LR;
        node [style=filled, fillcolor="#EEEED1"];
        color=black;
        bgcolor="#dee1e8";
@@ -759,7 +760,7 @@ digraph G {
    <xsl:apply-templates select="uc:actors"/>
         label = "<xsl:value-of select="$strActors"/>";
     }
-   label = "\l<xsl:value-of select="@id"/><xsl:text> </xsl:text><xsl:value-of select="uc:name"/>";
+   label = "\n<xsl:value-of select="@id"/><xsl:text> </xsl:text><xsl:value-of select="uc:name"/>";
 
    <xsl:apply-templates select="uc:success"/>
 
@@ -1077,11 +1078,11 @@ digraph G {
 digraph G {
     graph [rankdir = "LR"]
 
-    edge [fontname="Sans",fontsize=12,labelfontname="Sans",labelfontsize=12]
-    node [fontname="Sans",fontsize=12]
+    edge [fontname="Helvetica",fontsize=12,labelfontname="Helvetica",labelfontsize=12]
+    node [fontname="Helvetica",fontsize=12]
     bgcolor = "#dee1e8"
 
-    label = "\l<xsl:value-of select="$strUseCaseDependencies"/>";
+    label = "\n<xsl:value-of select="$strUseCaseDependencies"/>";
 
     <xsl:apply-templates select="//uc:usecase" mode="uc_dep_list_uc"/>
     <xsl:apply-templates select="//uc:usecase" mode="uc_dep_ref_out"/>
@@ -1199,11 +1200,11 @@ digraph G {
 
 digraph G {
     graph[rankdir = "LR"]
-    edge [fontname="Sans",fontsize=12,labelfontname="Sans",labelfontsize=12];
-    node [fontname="Sans",fontsize=12];
+    edge [fontname="Helvetica",fontsize=12,labelfontname="Helvetica",labelfontsize=12];
+    node [fontname="Helvetica",fontsize=12];
     bgcolor = "#dee1e8";
 
-    label = "\l<xsl:value-of select="concat(@id, concat(' - ', $strUseCaseDependencies))"/>";
+    label = "\n<xsl:value-of select="concat(@id, concat(' - ', $strUseCaseDependencies))"/>";
 
     "<xsl:value-of select="@id"/>" [
             shape = "record",
@@ -1284,10 +1285,10 @@ digraph G {
        <xsl:call-template name="word-wrap">
          <xsl:with-param name="tobewrapped" select="normalize-space($name)" />
          <xsl:with-param name="size" select="0" />
-         <xsl:with-param name="indent" select="'\l'"/>
+         <xsl:with-param name="indent" select="'\n'"/>
        </xsl:call-template>
      </xsl:variable>
-     <xsl:value-of select="substring-after($wrapped_name,'\l')"/>
+     <xsl:value-of select="substring-after($wrapped_name,'\n')"/>
    </xsl:template>
 
    <xsl:template name="word-wrap">
@@ -1348,7 +1349,9 @@ digraph G {
                         <xsl:value-of select="$indent" />
                      </xsl:when>
                      <xsl:otherwise>
-                        <xsl:text></xsl:text>
+                       <xsl:if test="$size > 0">
+                         <xsl:text> </xsl:text>
+                       </xsl:if>
                      </xsl:otherwise>
                   </xsl:choose>
                </xsl:otherwise>

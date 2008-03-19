@@ -16,7 +16,7 @@
    <xsl:param name="basedir" select="'.'"/>
    <xsl:param name="imagedir" select="'.'"/>
    <!--  Our default language is english. -->
-   <xsl:param name="lang" select="'en'"/>
+   <xsl:param name="lang" select="/uc:usecases/uc:info/@lang"/>
 
    <xsl:output method="text" encoding="UTF-8"/>
 
@@ -59,6 +59,7 @@ digraph G {
     fontname = "Sans"
     fontsize = 8
     rankdir = "LR"
+    pack = "true"
 
     node [
             fontname = "Sans",
@@ -188,7 +189,7 @@ digraph G {
             fontname = "Sans"
             fontsize = 8
             shape = "record"
-            fillcolor = "yellow"
+            fillcolor = "#ffcc33"
     ]
 
     edge [
@@ -295,7 +296,7 @@ digraph G {
             fontname = "Sans",
             fontsize = 8,
             shape = "record",
-            fillcolor = "#EEEEEE",
+            fillcolor = "#eaedf4",
             style = "filled"
     ]
 
@@ -376,7 +377,7 @@ digraph G {
             fontname = "Sans",
             fontsize = 8,
             shape = "record",
-            fillcolor = "#EEEEEE",
+            fillcolor = "#eaedf4",
             style = "filled"
     ]
 
@@ -566,7 +567,7 @@ digraph G {
             fontname = "Sans",
             fontsize = 8,
             shape = "record",
-            fillcolor = "#EEEEEE",
+            fillcolor = "#eaedf4",
             style = "filled"
     ]
 
@@ -602,7 +603,7 @@ digraph G {
             fontname = "Sans",
             fontsize = 8,
             shape = "record",
-            fillcolor = "#EEEEEE",
+            fillcolor = "#eaedf4",
             style = "filled"
     ]
 
@@ -740,19 +741,22 @@ digraph G {
 	      <redirect:write file="{$file}">
 
 digraph G {
-    graph [rankdir = TB, center = true, fontsize=12];
+    graph [rankdir = TB, center = true];
     edge [fontname="Sans",fontsize=12,labelfontname="Sans",labelfontsize=12];
     node [fontname="Sans",fontsize=12];
-    bgcolor = "#dfdfff";
+    bgcolor = "#cacfdb";
 
     subgraph cluster0 {
-       node [style=filled];
-       color=lightgrey;
+       node [style=filled, fillcolor="#cacfdb"];
+       color=black;
+       bgcolor="#dee1e8";
+       fillcolor="#dee1e8";
+       style = "filled";
 
    <xsl:apply-templates select="uc:actors"/>
         label = "<xsl:value-of select="$strActors"/>";
     }
-   label = "<xsl:value-of select="@id"/><xsl:text> </xsl:text><xsl:value-of select="uc:name"/>";
+   label = "\l<xsl:value-of select="@id"/><xsl:text> </xsl:text><xsl:value-of select="uc:name"/>";
 
    <xsl:apply-templates select="uc:success"/>
 
@@ -788,23 +792,33 @@ digraph G {
    </xsl:template>
 
    <xsl:template match="uc:extension">
+      <xsl:variable name="wrapped_name">
+       <xsl:call-template name="wrap-name">
+         <xsl:with-param name="name" select="@name" />
+       </xsl:call-template>
+      </xsl:variable>
      "<xsl:value-of select="../@id"/>-<xsl:value-of select="@id"/>" [
          shape = "record",
          style = "rounded",
          fillcolor = "#c0c0c0",
          style = "filled",
-         label = "{<xsl:value-of select="../@id"/>-<xsl:value-of select="@id"/>|<xsl:value-of select="@name"/>}"
+         label = "{<xsl:value-of select="../@id"/>-<xsl:value-of select="@id"/>|<xsl:value-of select="$wrapped_name"/>}"
          ];
      <xsl:apply-templates select="uc:step"/>
    </xsl:template>
 
    <xsl:template match="uc:step" mode="list">
+      <xsl:variable name="wrapped_desc">
+       <xsl:call-template name="wrap-name">
+         <xsl:with-param name="name" select="@desc" />
+       </xsl:call-template>
+      </xsl:variable>
      "<xsl:value-of select="../../@id"/>-<xsl:value-of select="@id"/>" [
          shape = "record",
          style = "rounded",
-         fillcolor = "#EEEEEE",
+         fillcolor = "#eaedf4",
          style = "filled",
-         label = "{<xsl:value-of select="../../@id"/>-<xsl:value-of select="@id"/>|<xsl:value-of select="@desc"/>}"
+         label = "{<xsl:value-of select="../../@id"/>-<xsl:value-of select="@id"/>|<xsl:value-of select="$wrapped_desc"/>}"
       ];
    </xsl:template>
 
@@ -871,7 +885,7 @@ digraph G {
            "<xsl:value-of select="@id"/>" [
                 shape = "record",
                 style = "rounded",
-                fillcolor = "#EEEEEE",
+                fillcolor = "#eaedf4",
                 style = "filled",
                 label = "{<xsl:value-of select="@id"/>|<xsl:value-of select="$source_name"/>}"
                ];
@@ -918,7 +932,7 @@ digraph G {
           "<xsl:value-of select="@id"/>" [
                 shape = "record",
                 style = "rounded",
-                fillcolor = "#EEEEEE",
+                fillcolor = "#eaedf4",
                 style = "filled",
                 label = "{<xsl:value-of select="@id"/>|<xsl:value-of select="$source_name"/>}"
                ];
@@ -955,7 +969,7 @@ digraph G {
             "<xsl:value-of select="$source"/>" [
                 shape = "record",
                 style = "rounded",
-                <xsl:choose><xsl:when test="contains($source_id,'-E')">fillcolor = "#c0c0c0"</xsl:when><xsl:otherwise>fillcolor = "#EEEEEE"</xsl:otherwise></xsl:choose>,
+                <xsl:choose><xsl:when test="contains($source_id,'-E')">fillcolor = "#c0c0c0"</xsl:when><xsl:otherwise>fillcolor = "#eaedf4"</xsl:otherwise></xsl:choose>,
                 style = "filled",
                 label = "{<xsl:value-of select="$source_id"/>|<xsl:value-of select="$source_name"/>}"
                ];
@@ -1058,19 +1072,17 @@ digraph G {
       <redirect:write file="{$file}">
 
 digraph G {
-    rankdir = "LR"
+    graph [rankdir = "LR"]
 
     edge [fontname="Sans",fontsize=12,labelfontname="Sans",labelfontsize=12]
     node [fontname="Sans",fontsize=12]
-    bgcolor = "#dfdfff"
+    bgcolor = "#dee1e8"
 
-    label = "<xsl:value-of select="$strUseCaseDependencies"/>";
+    label = "\l<xsl:value-of select="$strUseCaseDependencies"/>";
 
-
-      <xsl:apply-templates select="//uc:usecase" mode="uc_dep_list_uc"/>
-
-      <xsl:apply-templates select="//uc:usecase" mode="uc_dep_ref_out"/>
-      <xsl:apply-templates select="//uc:usecase" mode="uc_dep_ref_precondition"/>
+    <xsl:apply-templates select="//uc:usecase" mode="uc_dep_list_uc"/>
+    <xsl:apply-templates select="//uc:usecase" mode="uc_dep_ref_out"/>
+    <xsl:apply-templates select="//uc:usecase" mode="uc_dep_ref_precondition"/>
 }
 
       </redirect:write>
@@ -1098,14 +1110,20 @@ digraph G {
          </xsl:for-each>
       </xsl:variable>
 
+      <xsl:variable name="wrapped_name">
+       <xsl:call-template name="wrap-name">
+         <xsl:with-param name="name" select="uc:name" />
+       </xsl:call-template>
+      </xsl:variable>
+
       <!-- only create a node, if usecase has a reference to another usecase -->
       <xsl:if test="not(normalize-space($referred) = '')">
          "<xsl:value-of select="@id"/>" [
             shape = "record",
             style = "rounded",
-            fillcolor = "#EEEEEE",
+            fillcolor = "#eaedf4",
             style = "filled",
-            label = "{<xsl:value-of select="@id"/>|<xsl:value-of select="uc:name"/>}"
+            label = "{<xsl:value-of select="@id"/>|<xsl:value-of select="$wrapped_name"/>}"
          ];
       </xsl:if>
    </xsl:template>
@@ -1168,22 +1186,28 @@ digraph G {
          select="$imagedir"/>/<xsl:value-of
          select="concat(@id, '-dependencies')"/>.dot</xsl:variable>
 
+      <xsl:variable name="wrapped_name">
+       <xsl:call-template name="wrap-name">
+         <xsl:with-param name="name" select="uc:name" />
+       </xsl:call-template>
+      </xsl:variable>
+
       <redirect:write file="{$file}">
 
 digraph G {
+    graph[rankdir = "LR"]
     edge [fontname="Sans",fontsize=12,labelfontname="Sans",labelfontsize=12];
     node [fontname="Sans",fontsize=12];
-    bgcolor = "#dfdfff";
-    rankdir = "LR"
+    bgcolor = "#dee1e8";
 
-    label = "<xsl:value-of select="concat(@id, ' - Use Case Dependencies')"/>";
+    label = "\l<xsl:value-of select="concat(@id, concat(' - ', $strUseCaseDependencies))"/>";
 
     "<xsl:value-of select="@id"/>" [
             shape = "record",
             style = "rounded",
-            fillcolor = "#EEEEEE",
+            fillcolor = "#eaedf4",
             style = "filled",
-            label = "{<xsl:value-of select="@id"/>|<xsl:value-of select="uc:name"/>}"
+            label = "{<xsl:value-of select="@id"/>|<xsl:value-of select="$wrapped_name"/>}"
      ];
 
       <xsl:variable name="uc_id" select="@id"/>
@@ -1192,7 +1216,6 @@ digraph G {
             <xsl:with-param name="uc_id" select="$uc_id"/>
          </xsl:call-template>
       </xsl:for-each>
-
 
       <!--
          <xsl:apply-templates select="//uc:usecase" mode="uc_dep_ref_precondition"/>
@@ -1229,12 +1252,17 @@ digraph G {
 
       <!-- only create a node, if usecase has a reference to another usecase -->
       <xsl:if test="not(normalize-space($referred_in) = '') or not(normalize-space($referred_out) = '')">
+        <xsl:variable name="wrapped_name">
+          <xsl:call-template name="wrap-name">
+            <xsl:with-param name="name" select="uc:name" />
+          </xsl:call-template>
+        </xsl:variable>
          "<xsl:value-of select="@id"/>" [
             shape = "record",
             style = "rounded",
-            fillcolor = "#EEEEEE",
+            fillcolor = "#eaedf4",
             style = "filled",
-            label = "{<xsl:value-of select="@id"/>|<xsl:value-of select="uc:name"/>}"
+            label = "{<xsl:value-of select="@id"/>|<xsl:value-of select="$wrapped_name" />}"
          ];
       </xsl:if>
 
@@ -1245,6 +1273,86 @@ digraph G {
          "<xsl:value-of select="$this_uc_id"/>" -&gt; "<xsl:value-of select="$uc_id"/>"
       </xsl:if>
 
+   </xsl:template>
+
+   <xsl:template name="wrap-name">
+     <xsl:param name="name" />
+     <xsl:variable name="wrapped_name">
+       <xsl:call-template name="word-wrap">
+         <xsl:with-param name="tobewrapped" select="normalize-space($name)" />
+         <xsl:with-param name="size" select="24" />
+         <xsl:with-param name="indent" select="'\l'"/>
+       </xsl:call-template>
+     </xsl:variable>
+     <xsl:value-of select="substring-after($wrapped_name,'\l')"/>
+   </xsl:template>
+
+   <xsl:template name="word-wrap">
+      <xsl:param name="tobewrapped" />
+      <xsl:param name="size" select="0" />
+      <xsl:param name="indent" />
+      <xsl:variable name="maxlength" select="28" />
+
+      <xsl:choose>
+         <xsl:when test="contains($tobewrapped,' ')">
+            <xsl:variable name="word" select="substring-before($tobewrapped,' ')" />
+            <xsl:variable name="length" select="string-length($word)" />
+            <xsl:choose>
+               <xsl:when test="$size=0">
+                  <xsl:value-of select="$indent" />
+                  <xsl:value-of select="$word" />
+                  <xsl:call-template name="word-wrap">
+                     <xsl:with-param name="tobewrapped" select="substring-after($tobewrapped,' ')" />
+                     <xsl:with-param name="size" select="string-length(concat($indent,$word))" />
+                     <xsl:with-param name="indent" select="$indent" />
+                  </xsl:call-template>
+               </xsl:when>
+               <xsl:otherwise>
+                  <xsl:choose>
+                     <xsl:when test="($size + $length + 1) > $maxlength">
+                        <xsl:text></xsl:text>
+                        <xsl:value-of select="$indent" />
+                        <xsl:value-of select="$word" />
+                        <xsl:call-template name="word-wrap">
+                           <xsl:with-param name="tobewrapped"
+                              select="substring-after($tobewrapped,' ')" />
+                           <xsl:with-param name="size" select="string-length(concat($indent,$word))" />
+                           <xsl:with-param name="indent" select="$indent" />
+                        </xsl:call-template>
+                     </xsl:when>
+                     <xsl:otherwise>
+                        <xsl:value-of select="concat(' ',$word)" />
+                        <xsl:call-template name="word-wrap">
+                           <xsl:with-param name="tobewrapped"
+                              select="substring-after($tobewrapped,' ')" />
+                           <xsl:with-param name="size" select="$size + 1 + string-length($word)" />
+                           <xsl:with-param name="indent" select="$indent" />
+                        </xsl:call-template>
+                     </xsl:otherwise>
+                  </xsl:choose>
+               </xsl:otherwise>
+            </xsl:choose>
+         </xsl:when>
+         <xsl:otherwise>
+            <xsl:choose>
+               <xsl:when test="$size=0">
+                  <xsl:value-of select="$indent" />
+               </xsl:when>
+               <xsl:otherwise>
+                  <xsl:choose>
+                     <xsl:when test="$size + string-length($tobewrapped) > $maxlength">
+                        <xsl:text></xsl:text>
+                        <xsl:value-of select="$indent" />
+                     </xsl:when>
+                     <xsl:otherwise>
+                        <xsl:text></xsl:text>
+                     </xsl:otherwise>
+                  </xsl:choose>
+               </xsl:otherwise>
+            </xsl:choose>
+            <xsl:value-of select="$tobewrapped" />
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
 
 </xsl:stylesheet>

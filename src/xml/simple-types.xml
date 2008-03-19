@@ -169,23 +169,29 @@
          package="org.jcoderz.commons.test"
          min-value="15"
          max-value="255">
-         <constants name="SPECIAL" comment="Verry Stecial Value" value="15"/>
+         <constants name="SPECIAL" comment="Very Special Value" value="15"/>
       </restrictedLong>
    </restricted-longs>
 <!-- ===============================================================
      VALUE OBJECTS
      =============================================================== -->
    <valueObjects>
-   <!--
       <valueObject
          classname="FooValueObject"
          package="org.jcoderz.commons.foo.types"
          serializable="true"
          final="false" >
-         <description>The Foo is documented here.</description>
+         <description>The Foo is documented here!
+           <hibernate.class
+             table="Foo" dynamic-update="true"/>
+           <hibernate.cache usage="read-only"/>
+         </description>
          <member
             name="Id"
             type="long">unique identifier for Foo
+           <hibernate.id
+             generator-class="native"
+             unsaved-value="-1"/>
          </member>
          <member
             name="Creation Date"
@@ -198,7 +204,7 @@
             initial-value="new java.util.ArrayList()"
             final="true">List of all Merchants
          </member>
-      </valueObject>
+      </valueObject> <!--
       <valueObject
          classname="Settlement"
          package="org.jcoderz.commons.foo.types"
@@ -230,8 +236,7 @@
             type="org.jcoderz.commons.types.ParticipantId">
             payee of this settlement
          </member>
-      </valueObject>
--->
+      </valueObject> -->
    </valueObjects>
 
 </simpleTypes>

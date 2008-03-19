@@ -1060,9 +1060,9 @@ digraph G {
 digraph G {
     rankdir = "LR"
 
-    edge [fontname="Sans",fontsize=12,labelfontname="Sans",labelfontsize=12];
-    node [fontname="Sans",fontsize=12];
-    bgcolor = "#dfdfff";
+    edge [fontname="Sans",fontsize=12,labelfontname="Sans",labelfontsize=12]
+    node [fontname="Sans",fontsize=12]
+    bgcolor = "#dfdfff"
 
     label = "<xsl:value-of select="$strUseCaseDependencies"/>";
 
@@ -1174,6 +1174,7 @@ digraph G {
     edge [fontname="Sans",fontsize=12,labelfontname="Sans",labelfontsize=12];
     node [fontname="Sans",fontsize=12];
     bgcolor = "#dfdfff";
+    rankdir = "LR"
 
     label = "<xsl:value-of select="concat(@id, ' - Use Case Dependencies')"/>";
 

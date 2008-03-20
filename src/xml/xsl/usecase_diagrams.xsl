@@ -59,7 +59,7 @@ digraph G {
     fontname = "Helvetica"
     fontsize = 8
     rankdir = "LR"
-    pack = "true"
+    penwidth = "0.0001"
 
     node [
             fontname = "Helvetica",
@@ -186,6 +186,7 @@ digraph G {
     fontname = "Helvetica"
     fontsize = 8
     rankdir = "LR"
+    penwidth = "0.0001"
 
     node [
             fontname = "Helvetica",
@@ -243,11 +244,14 @@ digraph G {
     fontname = "Helvetica"
     fontsize = 8
     rankdir = "LR"
+    penwidth = "0.0001"
 
     node [
             fontname = "Helvetica"
             fontsize = 8
             shape = "record"
+            style="filled"
+            fillcolor="#EEEED1"
     ]
 
     edge [
@@ -294,6 +298,7 @@ digraph G {
 digraph G {
     fontname = "Helvetica"
     fontsize = 8
+    penwidth = "0.0001"
 
     node [
             fontname = "Helvetica",
@@ -375,6 +380,7 @@ digraph G {
 digraph G {
     fontname = "Helvetica"
     fontsize = 8
+    penwidth = "0.0001"
 
     node [
             fontname = "Helvetica",
@@ -565,6 +571,7 @@ digraph G {
 digraph G {
     fontname = "Helvetica"
     fontsize = 8
+    penwidth = "0.0001"
 
     node [
             fontname = "Helvetica",
@@ -601,12 +608,13 @@ digraph G {
 digraph G {
     fontname = "Helvetica"
     fontsize = 8
+    penwidth = "0.0001"
 
     node [
             fontname = "Helvetica",
             fontsize = 8,
             shape = "record",
-            fillcolor = "#f0f0f0",
+            fillcolor = "#ffffbb",
             style = "filled"
     ]
 
@@ -748,6 +756,7 @@ digraph G {
     edge [fontname="Helvetica",fontsize=12,labelfontname="Helvetica",labelfontsize=12];
     node [fontname="Helvetica",fontsize=12];
     bgcolor = "#cacfdb";
+    penwidth = "0.0001"
 
     subgraph cluster0 {
        rankdir=LR;
@@ -1076,11 +1085,12 @@ digraph G {
       <redirect:write file="{$file}">
 
 digraph G {
-    graph [rankdir = "LR"]
 
+    graph [rankdir = "LR"]
     edge [fontname="Helvetica",fontsize=12,labelfontname="Helvetica",labelfontsize=12]
-    node [fontname="Helvetica",fontsize=12]
+    node [fontname="Helvetica",fontsize=12, style="filled", fillcolor="#EEEED1"]
     bgcolor = "#dee1e8"
+    penwidth = "0.0001"
 
     label = "\n<xsl:value-of select="$strUseCaseDependencies"/>";
 
@@ -1201,8 +1211,9 @@ digraph G {
 digraph G {
     graph[rankdir = "LR"]
     edge [fontname="Helvetica",fontsize=12,labelfontname="Helvetica",labelfontsize=12];
-    node [fontname="Helvetica",fontsize=12];
+    node [fontname="Helvetica",fontsize=12, style="filled", fillcolor="#EEEED1"];
     bgcolor = "#dee1e8";
+    penwidth = "0.0001"
 
     label = "\n<xsl:value-of select="concat(@id, concat(' - ', $strUseCaseDependencies))"/>";
 

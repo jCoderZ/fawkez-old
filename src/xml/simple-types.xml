@@ -181,17 +181,21 @@
          package="org.jcoderz.commons.foo.types"
          serializable="true"
          final="false" >
-         <description>The Foo is documented here!
+         <description>The Foo is documented here!</description>
+         <xdoclet>
            <hibernate.class
-             table="Foo" dynamic-update="true"/>
+             table="FooTable" dynamic-update="true"/>
            <hibernate.cache usage="read-only"/>
-         </description>
+         </xdoclet>
          <member
             name="Id"
-            type="long">unique identifier for Foo
-           <hibernate.id
-             generator-class="native"
-             unsaved-value="-1"/>
+            type="long">
+           <decription>unique identifier for Foo</decription>
+           <xdoclet>
+             <hibernate.id
+               generator-class="native"
+               unsaved-value="-1"/>
+           </xdoclet>
          </member>
          <member
             name="Creation Date"

@@ -411,9 +411,12 @@ package <xsl:value-of select="$package"/>;
 import org.jcoderz.commons.util.HashCodeUtil;
 import org.jcoderz.commons.util.ObjectUtil;
 
-/** <xsl:call-template name="generate-javadoc">
-   <xsl:with-param name="doc-text" select="$object/description" />
-</xsl:call-template> * @author generated
+/**
+ * <xsl:value-of select="$object/description"/><xsl:call-template name="generate-xdoclet">
+   <xsl:with-param name="doc-text" select="$object/xdoclet" />
+   <xsl:with-param name="indent"><xsl:text> </xsl:text></xsl:with-param>
+</xsl:call-template>
+ * @author generated
  */
 public <xsl:if test="$object/@final = 'true'">final </xsl:if>class <xsl:value-of select="$classname"/><xsl:if test="$object/@serializable">
       implements java.io.Serializable</xsl:if>
@@ -507,9 +510,11 @@ public <xsl:if test="$object/@final = 'true'">final </xsl:if>class <xsl:value-of
    <xsl:variable name="doc"><xsl:value-of select="normalize-space(current())"/>
    </xsl:variable>
    /**
-    * Returns the <xsl:value-of select="$doc"/>. <xsl:call-template name="generate-xjavadoc">
-   <xsl:with-param name="doc-text" select="current()" />
-</xsl:call-template>    * @return the <xsl:value-of select="$doc"/>.
+    * Returns the <xsl:value-of select="$doc"/>. <xsl:call-template name="generate-xdoclet">
+   <xsl:with-param name="doc-text" select="current()/xdoclet" />
+   <xsl:with-param name="indent"><xsl:text>    </xsl:text></xsl:with-param>
+</xsl:call-template>
+    * @return the <xsl:value-of select="$doc"/>.
     */
    public <xsl:value-of select="./@type"/> get<xsl:value-of select="$identifier"/> ()
    {
@@ -1338,47 +1343,20 @@ import org.jcoderz.commons.util.Assert;
   ** Generate complex javadoc structure that might contain xdoclet tags
   ** as sublelements / attributes
   -->
-<xsl:template name="generate-javadoc">
+<xsl:template name="generate-xdoclet">
   <xsl:param name="doc-text"/>
-  <xsl:apply-templates select="$doc-text" mode="generate-javadoc-">
-    <xsl:with-param name="indent"><xsl:text> </xsl:text></xsl:with-param>
-  </xsl:apply-templates>
-</xsl:template>
-
-<xsl:template name="generate-xjavadoc">
-  <xsl:param name="doc-text"/>
-  <xsl:apply-templates select="$doc-text" mode="generate-xjavadoc-">
-    <xsl:with-param name="indent"><xsl:text>    </xsl:text></xsl:with-param>
-  </xsl:apply-templates>
-</xsl:template>
-
-<xsl:template match="*" mode="generate-xjavadoc-">
   <xsl:param name="indent"/>
-  <xsl:apply-templates mode="generate-javadoc-content"
-    select="*|comment()|processing-instruction()">
+  <xsl:apply-templates select="$doc-text" mode="generate-javadoc-">
     <xsl:with-param name="indent" select="$indent"/>
-  </xsl:apply-templates><xsl:text>
-</xsl:text><xsl:value-of select="$indent"/>*
+  </xsl:apply-templates>
 </xsl:template>
 
 <xsl:template match="*" mode="generate-javadoc-">
   <xsl:param name="indent"/>
-  <xsl:message><xsl:copy-of select="."></xsl:copy-of></xsl:message>
-  <xsl:apply-templates mode="generate-javadoc-content-text"
-    select="text()">
-    <xsl:with-param name="indent" select="$indent"/>
-  </xsl:apply-templates>
   <xsl:apply-templates mode="generate-javadoc-content"
     select="*|comment()|processing-instruction()">
       <xsl:with-param name="indent" select="$indent"/>
-  </xsl:apply-templates><xsl:text>
-</xsl:text><xsl:value-of select="$indent"/>*
-</xsl:template>
-
-<xsl:template match="text()" priority="5"  mode="generate-javadoc-content-text">
-  <xsl:param name="indent"/>
-<xsl:text>
-</xsl:text><xsl:value-of select="$indent"/>* <xsl:value-of select="normalize-space(.)"/>
+  </xsl:apply-templates>
 </xsl:template>
 
 <xsl:template match="node()" mode="generate-javadoc-content">

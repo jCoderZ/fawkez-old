@@ -140,10 +140,7 @@
               </classpath>
           </available>
           <condition property="outdated-xerces">
-            <or>
               <contains string="${xerces.version}" substring="2.6.2"/>
-              <contains string="${xerces.version.ant}" substring="2.6.2"/>
-            </or>
           </condition>
       <property name="check_for_optional_packages-done" value="true"/>
     </target>
@@ -175,6 +172,8 @@ xerces in current vm: ${xerces.version.ant}
     </target>
     <target name="check-xerces-classpath-available">
       <available property="xerces.classpath.present"
+                 classpathref="default.classpath"
+                 ignoresystemclasses="true"
                  classname="org.apache.xerces.impl.Version">
       </available>
     </target>

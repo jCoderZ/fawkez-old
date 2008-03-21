@@ -414,9 +414,9 @@ public class LoggableImpl
           while (ix < stack.length)
           {
              final StackTraceElement frame = stack[ix];
-             final String cname = frame.getClassName();
              try
              {
+                final String cname = frame.getClassName();
                 final Class clazz = Class.forName(cname);
                 if (! (Loggable.class.isAssignableFrom(clazz)
                       || LogMessageInfo.class.isAssignableFrom(clazz)))

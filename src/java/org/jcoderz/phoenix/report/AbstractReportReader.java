@@ -38,6 +38,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.logging.Logger;
 
 import javax.xml.bind.JAXBContext;
@@ -170,15 +171,16 @@ public abstract class AbstractReportReader
     {
         final Map<ResourceInfo, List<Item>> myResourceList = getItems();
 
-        for (ResourceInfo info : myResourceList.keySet())
+        for (Entry<ResourceInfo, List<Item>> entry : myResourceList.entrySet())
         {
+            final ResourceInfo info = entry.getKey();
             List<Item> items = toItems.get(info);
             if (items == null)
             {
                 items = new ArrayList<Item>();
                 toItems.put(info, items);
             }
-            items.addAll(myResourceList.get(info));
+            items.addAll(entry.getValue());
         }
     }
 

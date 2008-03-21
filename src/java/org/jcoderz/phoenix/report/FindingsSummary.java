@@ -58,7 +58,8 @@ final class FindingsSummary
    /** Singleton type findings collector. */
    private static FindingsSummary sFindingsSummary = new FindingsSummary();
 
-   private final Map mFindings = new HashMap();
+   private final Map<String, FindingSummary> mFindings
+       = new HashMap<String, FindingSummary>();
    private int mOverallCounter = 0;
 
    private FindingsSummary ()
@@ -123,14 +124,13 @@ final class FindingsSummary
    public FindingSummary getFindingSummary (FindingType findingType,
          Severity severity)
    {
-       return (FindingSummary) mFindings.get(
-               getKeyForFinding(findingType, severity));
+       return mFindings.get(getKeyForFinding(findingType, severity));
    }
 
    /**
     * Returns the FindingSummary appropriate to hold findings of the
     * type of the given Item.
-    * If no such summary capsule exists yet, a new one is generated and
+    * If no such summary exists yet, a new one is generated and
     * returned.
     * @param item the item where to return a summary for.
     * @return the FindingSummary appropriate to hold findings of the
@@ -141,8 +141,7 @@ final class FindingsSummary
       final String key = getKeyForFinding(item);
       // cast to make sure we get an exception once item.getFindingType
       // returns a real FindingType
-      FindingSummary result = (FindingSummary) mFindings.get(key);
-
+      FindingSummary result = mFindings.get(key);
       if (result == null)
       {
          result = new FindingSummary(item);
@@ -158,7 +157,7 @@ final class FindingsSummary
     * @return the map mapping from the type/severity string to stored
     * FindingSummary objects.
     */
-   Map getFindings ()
+   Map<String, FindingSummary> getFindings ()
    {
       return Collections.unmodifiableMap(mFindings);
    }
@@ -178,11 +177,11 @@ final class FindingsSummary
      */
     static void createOverallContent (Writer out) throws IOException
     {
-        final Collection colAllFindings
+        final Collection<FindingSummary> colAllFindings
                 = getFindingsSummary().getFindings().values();
         final FindingSummary[] allFindings
-                = (FindingSummary[]) colAllFindings.toArray(
-                        new FindingSummary[colAllFindings.size()]);
+                = colAllFindings.toArray(
+                    new FindingSummary[colAllFindings.size()]);
 
          out.write("<h1><a href='index.html'>View by Classes</a></h1>");
          out.write("<h1>Findings - Overview</h1>");
@@ -191,14 +190,11 @@ final class FindingsSummary
 
          Severity currentSeverity = null;
 
-         final Iterator i = Arrays.asList(allFindings).iterator();
          out.write("<table border='0' cellpadding='0' cellspacing='0' "
                  + "width='95%' summary='Summary of all findings.'>");
          int row = 0;
-         while (i.hasNext())
+         for (final FindingSummary summary : allFindings)
          {
-
-            final FindingSummary summary = (FindingSummary) i.next();
             if (summary.getSeverity() != currentSeverity)
             {
                out.write("<tr><td colspan='3' class='severityheader'>");
@@ -245,9 +241,10 @@ final class FindingsSummary
     * Holds all findings of a specific type.
     * @author Andreas Mandel
     */
-   final class FindingSummary implements Comparable
+   final class FindingSummary implements Comparable<FindingSummary>
    {
-      private final Map mOccurrences = new HashMap();
+      private final Map<String, FindingOccurrence> mOccurrences
+          = new HashMap<String, FindingOccurrence>();
       private final Severity mSeverity;
       private final Origin mOrigin;
       private int mCounter;
@@ -321,7 +318,7 @@ final class FindingsSummary
       /**
        * @return Returns the occurrences.
        */
-      public Map getOccurrences ()
+      public Map<String, FindingOccurrence> getOccurrences ()
       {
          return Collections.unmodifiableMap(mOccurrences);
       }
@@ -373,9 +370,8 @@ final class FindingsSummary
        * The order is from severe with most findings to info with
        * fewer findings.
        */
-      public int compareTo (Object o)
+      public int compareTo (FindingSummary other)
       {
-         final FindingSummary other = (FindingSummary) o;
          int result = -mSeverity.compareTo(other.mSeverity);
          if (result == 0)
          {
@@ -391,7 +387,7 @@ final class FindingsSummary
 
       private FindingOccurrence getOccurrence (String filename)
       {
-         return (FindingOccurrence) mOccurrences.get(filename);
+         return mOccurrences.get(filename);
       }
 
       public String createFindingDetailFilename ()
@@ -404,8 +400,7 @@ final class FindingsSummary
          throws IOException
       {
          final FindingOccurrence[] allFindings
-                 = (FindingOccurrence[]) mOccurrences.values().toArray(
-                     new FindingOccurrence[0]);
+                 = mOccurrences.values().toArray(new FindingOccurrence[0]);
 
          Arrays.sort(allFindings);
 
@@ -443,16 +438,13 @@ final class FindingsSummary
          out.write(getFindingType().getDescription());
          out.write("</blockquote>\n");
 
-         final Iterator i = Arrays.asList(allFindings).iterator();
 
          out.write("<table border='0' cellpadding='0' cellspacing='0' "
                  + "width='95%' summary='Places of this finding.'>");
 
-         while (i.hasNext())
+         for (final FindingSummary.FindingOccurrence
+             occurrence : allFindings)
          {
-            final FindingSummary.FindingOccurrence
-               occurrence = (FindingOccurrence) i.next();
-
             out.write("<tr><td class='findingtype-counter'>");
             out.write(Integer.toString(occurrence.getFindings().size()));
             out.write("</td><td class='findingtype-class' width='100%'>");
@@ -463,11 +455,11 @@ final class FindingsSummary
             out.write("</td></tr>");
 
             out.write("<tr><td class='findingtype-data' colspan='2'>");
-            final Iterator j = occurrence.getFindings().iterator();
 
-            while (j.hasNext())
+            final Iterator<Item> i = occurrence.getFindings().iterator();
+            while (i.hasNext())
             {
-               final Item item = (Item) j.next();
+               final Item item = i.next();
                final String htmlLink = occurrence.getHtmlLink();
                if (htmlLink != null)
                {
@@ -493,7 +485,7 @@ final class FindingsSummary
                {
                    out.write("</a>");
                }
-               if (j.hasNext())
+               if (i.hasNext())
                {
                   out.write(", ");
                }
@@ -525,10 +517,10 @@ final class FindingsSummary
        *
        * @author Andreas Mandel
        */
-      final class FindingOccurrence implements Comparable
+      final class FindingOccurrence implements Comparable<FindingOccurrence>
       {
          private final FileSummary mFileSummary;
-         private final List mFindingsInFile = new ArrayList();
+         private final List<Item> mFindingsInFile = new ArrayList<Item>();
 
          private FindingOccurrence (FileSummary summary)
          {
@@ -551,7 +543,7 @@ final class FindingsSummary
             mOverallCounter++;
          }
 
-         public List getFindings ()
+         public List<Item> getFindings ()
          {
             return Collections.unmodifiableList(mFindingsInFile);
          }
@@ -590,10 +582,10 @@ final class FindingsSummary
          {
             final StringBuilder sb = new StringBuilder();
             sb.append('{');
-            final Iterator i = mFindingsInFile.iterator();
+            final Iterator<Item> i = mFindingsInFile.iterator();
             while (i.hasNext())
             {
-               final Item finding = (Item) i.next();
+               final Item finding = i.next();
                sb.append('@');
                sb.append(finding.getLine());
                sb.append(':');
@@ -613,10 +605,9 @@ final class FindingsSummary
           * if new findings are added.
           * The order is from most findings to fewer findings.
           */
-         public int compareTo (Object o)
+         public int compareTo (FindingOccurrence o)
          {
-            return ((FindingOccurrence) o).mFindingsInFile.size()
-               - this.mFindingsInFile.size();
+            return o.mFindingsInFile.size() - this.mFindingsInFile.size();
          }
       }
    }

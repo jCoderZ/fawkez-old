@@ -38,6 +38,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.logging.Logger;
 
 import javax.xml.bind.JAXBException;
@@ -108,11 +109,11 @@ public final class JcoderzReport
     * Writes the report to the specified stream by using JAXB.
     *
     * @param out where to write the jCoderZ report to.
-    * @param items the file items. The items are a Map of filename string and of
-    *        the type jCoderZ Item (org.jcoderz.phoenix.report.jaxb.Item)
+    * @param items the file items. The items are a Map of ResourceInfo and
+    *    a List of the type jCoderZ Item (org.jcoderz.phoenix.report.jaxb.Item)
     * @throws JAXBException for JAXB errors
     */
-   public void write (OutputStream out, Map items)
+   public void write (OutputStream out, Map<ResourceInfo, List<Item>> items)
       throws JAXBException
    {
       addItems(mLevel, items);
@@ -129,16 +130,15 @@ public final class JcoderzReport
     * @throws JAXBException When the JAXB file representation can not
     *      be created.
     */
-   public void addItems (ReportLevel level, Map items)
+   public void addItems (ReportLevel level, Map<ResourceInfo, List<Item>> items)
       throws JAXBException
    {
-      final Map files = items;
+      final Map<ResourceInfo, List<Item>> files = items;
 
-      for (final Iterator iterator = files.keySet().iterator();
-          iterator.hasNext(); )
+      for (Entry<ResourceInfo, List<Item>> entry : files.entrySet())
       {
-         final ResourceInfo info = (ResourceInfo) iterator.next();
-         final List itemList = (List) files.get(info);
+         final ResourceInfo info = entry.getKey();
+         final List<Item> itemList = entry.getValue();
          final org.jcoderz.phoenix.report.jaxb.File f
             = new org.jcoderz.phoenix.report.jaxb.ObjectFactory().createFile();
          f.setName(info.getResourceName());
@@ -220,7 +220,8 @@ public final class JcoderzReport
            item.setSeverity(Severity.ERROR);
            item.setFindingType(SystemFindingType.SYS_ERROR.getSymbol());
            item.setOrigin(Origin.SYSTEM);
-           addItems(ReportLevel.PROD, Collections.singletonMap(res, item));
+           addItems(ReportLevel.PROD, Collections.singletonMap(res,
+               Collections.singletonList(item)));
        }
        catch (JAXBException ex)
        {

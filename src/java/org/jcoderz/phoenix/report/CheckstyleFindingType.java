@@ -33,7 +33,6 @@
 package org.jcoderz.phoenix.report;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.xml.bind.JAXBContext;
@@ -44,19 +43,19 @@ import org.jcoderz.phoenix.checkstyle.message.jaxb.FindingData;
 
 /**
  * Enumeration type for checkstyle findings.
- * It also holds a method to get the finding type from the message 
+ * It also holds a method to get the finding type from the message
  * received. This is needed due to the fact that there is no reliable
  * enumeration of checkstyle findings delivered with checkstyle.
  * <p>New patterns might be needed with each checkstyle update.</p>
  * <p>Once assigned the symbols should not be changed without a urgent
  * need. The symbols are used to generate wiki page link.</p>
- * 
+ *
  * @author Andreas Mandel
  */
 public final class CheckstyleFindingType
       extends FindingType
 {
-   private static final List CHECKSTYLE_FINDING_TYPES;
+   private static final List<CheckstyleFindingType> CHECKSTYLE_FINDING_TYPES;
 
    private static final String CHECKSTYLE_MESSAGE_JAXB_CONTEXT
       = "org.jcoderz.phoenix.checkstyle.message.jaxb";
@@ -69,10 +68,10 @@ public final class CheckstyleFindingType
 
    static
    {
-      CHECKSTYLE_FINDING_TYPES = new ArrayList();
+      CHECKSTYLE_FINDING_TYPES = new ArrayList<CheckstyleFindingType>();
    }
 
-   /** 
+   /**
     * Checkstyle finding type that relates to:
     * <i>Interfaces should describe a type and hence have methods</i>.
     */
@@ -82,7 +81,7 @@ public final class CheckstyleFindingType
          "interfaces should describe a type and hence have methods.",
          Severity.DESIGN);
 
-   /** 
+   /**
     * Checkstyle finding type that relates to:
     * <i>Line is longer than the allowed number of characters</i>.
     */
@@ -91,7 +90,7 @@ public final class CheckstyleFindingType
          "Line is longer than the allowed number of characters.",
          "Line is longer than [0-9]+ characters.");
 
-   /** 
+   /**
     * Checkstyle finding type that relates to:
     * <i>Line does not match expected header line</i>.
     */
@@ -101,7 +100,7 @@ public final class CheckstyleFindingType
          + "Please use the global header.",
          "Line does not match expected header line of .*\\.");
 
-   /** 
+   /**
     * Checkstyle finding type that relates to:
     * <i>Missing a Javadoc comment</i>.
     */
@@ -111,7 +110,7 @@ public final class CheckstyleFindingType
          "Missing a Javadoc comment.",
          "Missing a Javadoc comment\\.");
 
-   /** 
+   /**
     * Checkstyle finding type that relates to:
     * <i>Unused Javadoc tag</i>.
     */
@@ -121,7 +120,7 @@ public final class CheckstyleFindingType
          "Unused Javadoc tag.",
          "Unused .* tag for '.*'\\.");
 
-   /** 
+   /**
     * Checkstyle finding type that relates to:
     * <i>Expected an @return tag</i>.
     */
@@ -131,7 +130,7 @@ public final class CheckstyleFindingType
          "Expected an @return tag.",
          "Expected an @return tag.");
 
-   /** 
+   /**
     * Checkstyle finding type that relates to:
     * <i>Missing Javadoc tag</i>.
     */
@@ -141,7 +140,7 @@ public final class CheckstyleFindingType
          "Missing Javadoc tag.",
          "Expected .* tag for '.*'\\.");
 
-   /** 
+   /**
     * Checkstyle finding type that relates to:
     * <i>Unable to get class information for something</i>.
     */
@@ -151,7 +150,7 @@ public final class CheckstyleFindingType
          "Unable to get class information for something.",
          "Unable to get class information for .* tag '.*'\\.");
 
-   /** 
+   /**
     * Checkstyle finding type that relates to:
     * <i>Incomplete/Unclosed HTML tag</i>.
     */
@@ -161,7 +160,7 @@ public final class CheckstyleFindingType
          "Incomplete/Unclosed HTML tag.",
          "Incomplete HTML tag found: .*");
 
-   /** 
+   /**
     * Checkstyle finding type that relates to:
     * <i>Name does not match given pattern</i>.
     */
@@ -171,7 +170,7 @@ public final class CheckstyleFindingType
          "Name does not match given pattern.",
          "Name '.*' must match pattern '.*'\\.");
 
-   /** 
+   /**
     * Checkstyle finding type that relates to:
     * <i>After the method declaration there should be a ' '</i>.
     */
@@ -181,7 +180,7 @@ public final class CheckstyleFindingType
          "After the method declaration there should be a ' '.",
          "No whitespace \\( \\(\\) after method declaration\\.");
 
-   /** 
+   /**
     * Checkstyle finding type that relates to:
     * <i>Comment matches to-do format</i>.
     */
@@ -192,7 +191,7 @@ public final class CheckstyleFindingType
          "Comment matches to-do format '.*'\\.",
          Severity.INFO);
 
-   /** 
+   /**
     * Checkstyle finding type that relates to:
     * <i>Dont use magics in the code</i>.
     */
@@ -203,7 +202,7 @@ public final class CheckstyleFindingType
          + " Define appropriate constant instead.",
          "Dont use magic .* in the code\\.");
 
-   /** 
+   /**
     * Checkstyle finding type that relates to:
     * <i>Whitespace not allowed</i>.
     */
@@ -213,7 +212,7 @@ public final class CheckstyleFindingType
          "Whitespace not allowed.",
          "'.*' is followed by whitespace\\.");
 
-   /** 
+   /**
     * Checkstyle finding type that relates to:
     * <i>Whitespace expected</i>.
     */
@@ -223,7 +222,7 @@ public final class CheckstyleFindingType
          "Whitespace expected.",
          "'.*' is not followed by whitespace\\.");
 
-   /** 
+   /**
     * Checkstyle finding type that relates to:
     * <i>Whitespace not allowed</i>.
     */
@@ -233,7 +232,7 @@ public final class CheckstyleFindingType
          "Whitespace not allowed.",
          "'.*' is preceeded with whitespace\\.");
 
-   /** 
+   /**
     * Checkstyle finding type that relates to:
     * <i>Whitespace expected</i>.
     */
@@ -243,7 +242,7 @@ public final class CheckstyleFindingType
          "Whitespace expected.",
          "'.*' is not preceeded with whitespace\\.");
 
-   /** 
+   /**
     * Checkstyle finding type that relates to:
     * <i>A required javadoc tag is missing</i>.
     */
@@ -253,7 +252,7 @@ public final class CheckstyleFindingType
          "A required javadoc tag is missing.",
          "Type Javadoc comment is missing an .* tag\\.");
 
-   /** 
+   /**
     * Checkstyle finding type that relates to:
     * <i>A field is hidden</i>.
     */
@@ -263,7 +262,7 @@ public final class CheckstyleFindingType
          "A field is hidden.",
          "'.*' hides a field\\.", Severity.DESIGN);
 
-   /** 
+   /**
     * Checkstyle finding type that relates to:
     * <i>Line contains a tab character</i>.
     */
@@ -274,7 +273,7 @@ public final class CheckstyleFindingType
          + "indentation.",
          "Line contains a tab character\\.");
 
-   /** 
+   /**
     * Checkstyle finding type that relates to:
     * <i>File does not end with a newline</i>.
     */
@@ -284,7 +283,7 @@ public final class CheckstyleFindingType
          "File does not end with a newline.",
          "File does not end with a newline\\.");
 
-   /** 
+   /**
     * Checkstyle finding type that relates to:
     * <i>Method length exceeds the maximum allowed length</i>.
     */
@@ -295,7 +294,7 @@ public final class CheckstyleFindingType
          "Method length is [\\.,0-9]+ lines \\(max allowed is [\\.,0-9]+\\)\\.",
          Severity.DESIGN);
 
-   /** 
+   /**
     * Checkstyle finding type that relates to:
     * <i>Length of anonymous inner class exceeds the maximum allowed length</i>.
     */
@@ -307,7 +306,7 @@ public final class CheckstyleFindingType
          + "\\(max allowed is [0-9]+\\)\\.",
          Severity.DESIGN);
 
-   /** 
+   /**
     * Checkstyle finding type that relates to:
     * <i>Empty block detected</i>.
     */
@@ -318,7 +317,7 @@ public final class CheckstyleFindingType
          + "this block, describing why it is ok.",
          "Empty .* block\\.");
 
-   /** 
+   /**
     * Checkstyle finding type that relates to:
     * <i>Unused import</i>.
     */
@@ -328,7 +327,7 @@ public final class CheckstyleFindingType
          "Unused import.",
          "Unused import - .*\\.");
 
-   /** 
+   /**
     * Checkstyle finding type that relates to:
     * <i>Indentation violation</i>.
     */
@@ -338,7 +337,7 @@ public final class CheckstyleFindingType
          "Several keywords require a special indentation.",
          "Expected indentation for '.*' is '.*' but was at '.*'\\.");
 
-   /** 
+   /**
     * Checkstyle finding type that relates to:
     * <i>Deeply nested tries</i>.
     */
@@ -349,7 +348,7 @@ public final class CheckstyleFindingType
          "Nested try depth is [0-9]+ \\(max allowed is [0-9]+\\)\\.",
          Severity.DESIGN);
 
-   /** 
+   /**
     * Checkstyle finding type that relates to:
     * <i>Too many parameters</i>.
     */
@@ -359,8 +358,8 @@ public final class CheckstyleFindingType
          "Too many parameters.",
          "More than [0-9]+ parameters\\.",
          Severity.DESIGN);
-   
-   /** 
+
+   /**
     * Checkstyle finding type that relates to:
     * <i>Method unused</i>.
     */
@@ -370,7 +369,7 @@ public final class CheckstyleFindingType
          "Method is never used.",
          "Unused private method '.*'\\.");
 
-   /** 
+   /**
     * Checkstyle finding type that relates to:
     * <i>Local variable unused</i>.
     */
@@ -380,7 +379,7 @@ public final class CheckstyleFindingType
          "Local variable is never used.",
          "Unused local variable '.*'\\.");
 
-   /** 
+   /**
     * Checkstyle finding type that relates to:
     * <i>Indentation must be a multiple of 4</i>.
     */
@@ -390,7 +389,7 @@ public final class CheckstyleFindingType
          "Indentation must be a multiple of 4.",
          "Indentation must be a multiple of 4\\.");
 
-   /** 
+   /**
     * Checkstyle finding type that relates to:
     * <i>Field is never used</i>.
     */
@@ -400,7 +399,7 @@ public final class CheckstyleFindingType
          "Field is never used.",
          "Unused private field '.*'\\.");
 
-  /** 
+  /**
    * Checkstyle finding type that relates to:
    * <i>The equals operator should be on a new line</i>.
    */
@@ -410,7 +409,7 @@ public final class CheckstyleFindingType
          "The equals operator should be on a new line.",
          "The equals operator should be on a new line\\.");
 
-   /** 
+   /**
     * Checkstyle finding type that relates to:
     * <i>Line matches a illegal pattern</i>.
     */
@@ -420,7 +419,7 @@ public final class CheckstyleFindingType
          "Line matches a illegal pattern.",
          "Line matches the illegal pattern '.*'\\.");
 
-   /** 
+   /**
     * Checkstyle finding type that relates to:
     * <i>Long constants should use a uppercase L</i>.
     */
@@ -430,7 +429,7 @@ public final class CheckstyleFindingType
             + "a lot like 1. 123L vs. 123l.",
          "Should use uppercase 'L'\\.");
 
-   /** 
+   /**
     * Checkstyle finding type that relates to:
     * <i>Invalid log level for trace log</i>.
     */
@@ -442,7 +441,7 @@ public final class CheckstyleFindingType
          "Maximum allowed log level for trace log is '.*' but was '.*'\\.",
          Severity.DESIGN);
 
-   /** 
+   /**
     * Checkstyle finding type that relates to:
     * <i>The brace should not be on a new line</i>.
     */
@@ -452,7 +451,7 @@ public final class CheckstyleFindingType
           "The brace should not be on a new line.",
           "'[\\{\\}\\(\\)]' should be on the (previous|same) line\\.");
 
-   /** 
+   /**
     * Checkstyle finding type that relates to:
     * <i>Avoid inline conditionals</i>.
     */
@@ -462,7 +461,7 @@ public final class CheckstyleFindingType
           "Avoid inline conditionals.",
           "Avoid inline conditionals\\.");
 
-   /** 
+   /**
     * Checkstyle finding type that relates to:
     * <i>Avoid redundant code</i>.
     */
@@ -472,7 +471,7 @@ public final class CheckstyleFindingType
           "Avoid redundant code.",
           "Redundant '.*' modifier\\.");
 
-  /** 
+  /**
    * Checkstyle finding type that relates to:
    * <i>Javadoc Pattern</i>.
    */
@@ -482,18 +481,18 @@ public final class CheckstyleFindingType
          "The javadoc tag does not comply to the required pattern.",
          "Type Javadoc tag .* must match pattern '.*'\\.");
 
-  /** 
+  /**
    * Checkstyle finding type that relates to:
    * <i>Redundant throws with subclass.</i>.
    */
   public static final CheckstyleFindingType CS_REDUNDANT_THROWS_SUBCLASS =
       new CheckstyleFindingType("CS_REDUNDANT_THROWS_SUBCLASS",
          "Redundant throws declaration of a subclass.",
-         "The throws statement already contains the superclass and so" 
+         "The throws statement already contains the superclass and so"
          + "declaring a subclass is redundant.",
          "Redundant throws: '.*' is subclass of '.*'\\.");
 
-  /** 
+  /**
    * Checkstyle finding type that relates to:
    * <i>Redundant throws with unchecked exception.</i>.
    */
@@ -502,20 +501,21 @@ public final class CheckstyleFindingType
          "Throws declaration of a unchecked exception is not needed.",
          "Throws declaration of a unchecked exception is not needed.",
          "Redundant throws: '.*' is unchecked exception\\.");
-  
-  /** 
+
+  /**
    * Checkstyle finding type that relates to:
    * <i>Boolean expression complexity is ... (max allowed is ...).</i>.
    */
   public static final CheckstyleFindingType CS_BOOLEAN_EXPRESSION_COMPLEXITY =
       new CheckstyleFindingType("CS_BOOLEAN_EXPRESSION_COMPLEXITY",
           "Boolean expression is too complex.",
-          "Boolean expression is too complex. " 
-          + "Too many conditions leads to code that is difficult to read and hence debug and maintain.",
+          "Boolean expression is too complex. "
+          + "Too many conditions leads to code that is difficult to "
+          + "read and hence debug and maintain.",
           "Boolean expression complexity is .* \\(max allowed is .*\\)\\.");
-  
-  /** 
-   * A internal checkstyle exception was triggered we shoulds also 
+
+  /**
+   * A internal checkstyle exception was triggered we shoulds also
    * report this!
    */
   public static final CheckstyleFindingType CS_EXCEPTION =
@@ -525,7 +525,7 @@ public final class CheckstyleFindingType
          + "something strange here. One often problem is a reference to a "
          + "Unknown or not visible class in Javadoc.",
          "Got an exception - .*\\.");
-  
+
    private CheckstyleFindingType (String symbol, String shortText,
          String description, String messagePattern, Severity severity)
    {
@@ -534,20 +534,20 @@ public final class CheckstyleFindingType
       mSeverity = severity;
       CHECKSTYLE_FINDING_TYPES.add(this);
    }
-   
-    
+
+
 
     private CheckstyleFindingType (String symbol, String shortText,
         String description, String messagePattern)
     {
-        this(symbol, shortText, description, messagePattern, 
+        this(symbol, shortText, description, messagePattern,
             Severity.CODE_STYLE);
     }
-   
+
    /**
     * Reads the given message and tries to find a matching finding type.
     * @param message the message to read.
-    * @return the finding type matching to the message, or null if no such 
+    * @return the finding type matching to the message, or null if no such
     *   type was found.
     */
    public static FindingType detectFindingTypeForMessage (String message)
@@ -555,13 +555,12 @@ public final class CheckstyleFindingType
       new FindingType.LazyInit();
       FindingType result = null;
 
-      final Iterator i = CHECKSTYLE_FINDING_TYPES.iterator();
-      while (i.hasNext() && (result == null))
+      for (final CheckstyleFindingType type : CHECKSTYLE_FINDING_TYPES)
       {
-         final CheckstyleFindingType type = (CheckstyleFindingType) i.next();
          if (message.matches(type.getMessagePattern()))
          {
             result = type;
+            break;
          }
       }
       return result;
@@ -572,7 +571,7 @@ public final class CheckstyleFindingType
    {
        return mSeverity;
    }
-   
+
    /**
     * @return Returns the messagePattern.
     */
@@ -596,11 +595,9 @@ public final class CheckstyleFindingType
             = (CheckstyleMessages) unmarshaller.unmarshal(
                   CheckstyleFindingType.class.getClassLoader().
                       getResourceAsStream(CHECKSTYLE_MESSAGE_FILE));
-         for (final Iterator iterator 
-                     = messageCollection.getFindingType().iterator();
-              iterator.hasNext(); )
+         for (final FindingData e
+             : (List<FindingData>) messageCollection.getFindingType())
          {
-            final FindingData e = (FindingData) iterator.next();
             new CheckstyleFindingType(e.getSymbol(), e.getShortDescription(),
                   e.getDetailedDescription(), e.getMessagePattern());
 

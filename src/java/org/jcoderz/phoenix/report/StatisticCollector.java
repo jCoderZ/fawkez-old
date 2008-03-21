@@ -42,6 +42,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.Map.Entry;
 
 import net.sourceforge.chart2d.Chart2DProperties;
 import net.sourceforge.chart2d.Dataset;
@@ -58,7 +59,7 @@ import org.jcoderz.phoenix.report.jaxb.Report;
 
 /**
  * TODO: Extend this class to run historic tool on existing reports.
- * 
+ *
  * @author Andreas Mandel
  */
 public final class StatisticCollector
@@ -139,9 +140,12 @@ public final class StatisticCollector
       // y axis with number of lines
       // (2 lines 1 for production code one for test code)
 
-      final Map productionPackages = new HashMap();
-      final Map testPackages = new HashMap();
-      final Map allPackages = new HashMap();
+      final Map<String, FileSummary> productionPackages
+          = new HashMap<String, FileSummary>();
+      final Map<String, FileSummary> testPackages
+          = new HashMap<String, FileSummary>();
+      final Map<String, FileSummary> allPackages
+          = new HashMap<String, FileSummary>();
 
       summarize(productionPackages, testPackages, allPackages);
 
@@ -149,8 +153,8 @@ public final class StatisticCollector
 
       allPackages.clear();  // make GC happy
 
-      final Map production;
-      final Map test;
+      final Map<String, FileSummary> production;
+      final Map<String, FileSummary> test;
       final String level;
 
       if (productionPackages.size() > MAX_SERVICE_PACKAGES)
@@ -177,32 +181,29 @@ public final class StatisticCollector
     *       used.
     * @throws IOException if the XML file can not be written
     */
-   private void writeSummary (Map packages)
+   private void writeSummary (Map<String, FileSummary> packages)
          throws IOException
    {
       final StringBuffer sb = new StringBuffer();
 
 
       final FileSummary all = new FileSummary();
-      final Iterator i = packages.values().iterator();
+      final Iterator<FileSummary> i = packages.values().iterator();
 
       while (i.hasNext())
       {
-         all.add((FileSummary) i.next());
+         all.add(i.next());
       }
 
       sb.append("<findingsummary ");
       fillSummaryLine(sb, all);
       sb.append(">\n");
 
-
-      final Iterator j = packages.keySet().iterator();
-
       sb.append("   <packagelevelxml>\n");
-      while (j.hasNext())
+      for (Entry<String, FileSummary> entry : packages.entrySet())
       {
-         final String pkg = (String) j.next();
-         final FileSummary summary = (FileSummary) packages.get(pkg);
+         final String pkg = entry.getKey();
+         final FileSummary summary = entry.getValue();
          sb.append("      <package name='");
          sb.append(pkg);
          sb.append("' ");
@@ -212,15 +213,15 @@ public final class StatisticCollector
       sb.append("   </packagelevelxml>\n");
 
 
-      final Map serviceLevelMap = generateServiceLevelMap(packages);
+      final Map<String, FileSummary> serviceLevelMap
+          = generateServiceLevelMap(packages);
 
-      final Iterator l = serviceLevelMap.keySet().iterator();
 
       sb.append("   <servicelevelxml>\n");
-      while (l.hasNext())
+      for (Entry<String, FileSummary> service : serviceLevelMap.entrySet())
       {
-         final String pkg = (String) l.next();
-         final FileSummary summary = (FileSummary) serviceLevelMap.get(pkg);
+         final String pkg = service.getKey();
+         final FileSummary summary = service.getValue();
          sb.append("      <service name='");
          sb.append(pkg);
          sb.append("' ");
@@ -244,19 +245,19 @@ public final class StatisticCollector
       }
    }
 
-   private Map generateServiceLevelMap (Map packages)
+   private Map<String, FileSummary> generateServiceLevelMap (
+       Map<String, FileSummary> packages)
    {
-      final Map serviceLevelMap = new HashMap();
-      final Iterator k = packages.keySet().iterator();
+      final Map<String, FileSummary> serviceLevelMap
+          = new HashMap<String, FileSummary>();
 
-      while (k.hasNext())
+      for (Entry<String, FileSummary> packagz : packages.entrySet())
       {
-         final String pkg = (String) k.next();
-         final FileSummary summary = (FileSummary) packages.get(pkg);
+         final String pkg = packagz.getKey();
+         final FileSummary summary = packagz.getValue();
          final String service = getService(pkg);
 
-         FileSummary serviceSummary 
-             = (FileSummary) serviceLevelMap.get(service);
+         FileSummary serviceSummary = serviceLevelMap.get(service);
          if (serviceSummary == null)
          {
             serviceSummary = new FileSummary(service);
@@ -275,7 +276,7 @@ public final class StatisticCollector
       for (int i = 0; i < Severity.VALUES.size(); i++)
       {
           final Severity currentSeverity = Severity.fromInt(i);
-          sb.append(currentSeverity.toString());          
+          sb.append(currentSeverity.toString());
           sb.append("='");
           sb.append(summary.getViolations(currentSeverity));
           sb.append("' ");
@@ -283,7 +284,7 @@ public final class StatisticCollector
       sb.append(" loc='");
       sb.append(summary.getLinesOfCode());
       sb.append("' codeLoc='");
-      sb.append(summary.getCoverage() 
+      sb.append(summary.getCoverage()
           + summary.getViolations(Severity.COVERAGE));
       sb.append("' quality='");
       sb.append(summary.getQualityAsFloat());
@@ -318,14 +319,13 @@ public final class StatisticCollector
     * @param testPackages map to collect test code data.
     * @param all All packages.
     */
-   private void summarize (final Map productionPackages,
-         final Map testPackages, final Map all)
+   private void summarize (final Map<String, FileSummary> productionPackages,
+         final Map<String, FileSummary> testPackages,
+         final Map<String, FileSummary> all)
    {
-      final List allFiles = mReport.getFile();
-      final Iterator i = allFiles.iterator();
-      while (i.hasNext())
+      final List<File> allFiles = mReport.getFile();
+      for (final File currentFile : allFiles)
       {
-         final File currentFile = (File) i.next();
          // Level 3 is currently given to test classes, below 3 is production
          if (currentFile.getLevel().equals(ReportLevel.TEST))
          {
@@ -340,10 +340,11 @@ public final class StatisticCollector
       }
    }
 
-   private FileSummary addToMap (final Map map, final File file)
+   private FileSummary addToMap (final Map<String, FileSummary> map,
+       final File file)
    {
       final String pkg = file.getPackage();
-      FileSummary counter = (FileSummary) map.get(pkg);
+      FileSummary counter = map.get(pkg);
       if (counter == null)
       {
          counter = new FileSummary(pkg);
@@ -370,7 +371,8 @@ public final class StatisticCollector
     *
     * @throws IOException if the image can not be written.
     */
-   private void createLocChart (Map src, Map test, String level)
+   private void createLocChart (Map<String, FileSummary> src,
+       Map<String, FileSummary> test, String level)
          throws IOException
    {
      //<-- Begin Chart2D configuration -->
@@ -389,10 +391,10 @@ public final class StatisticCollector
      legendProps.setLegendLabelsTexts (legendLabels);
 
      //Configure graph chart properties
-     final GraphChart2DProperties graphChart2DProps 
+     final GraphChart2DProperties graphChart2DProps
              = new GraphChart2DProperties();
 
-     final Set labels = new TreeSet(src.keySet());
+     final Set<String> labels = new TreeSet<String>(src.keySet());
      labels.addAll(test.keySet());
 
      if (labels.size() == 0)
@@ -401,7 +403,7 @@ public final class StatisticCollector
      }
 
      final String [] labelsLongAxisLabels
-           = (String[]) labels.toArray(new String[]{});
+           = labels.toArray(new String[]{});
      final String [] labelsAxisLabels
            = cutPackages(labelsLongAxisLabels);
 
@@ -430,7 +432,7 @@ public final class StatisticCollector
      }
 
      //Configure graph component colors
-     final MultiColorsProperties multiColorsProps 
+     final MultiColorsProperties multiColorsProps
          = new MultiColorsProperties();
 
      //Configure chart
@@ -471,7 +473,7 @@ public final class StatisticCollector
     *
     * @throws IOException if the image can not be written.
     */
-   private void createQualityChart (Map src, String level)
+   private void createQualityChart (Map<String, FileSummary> src, String level)
          throws IOException
    {
      //<-- Begin Chart2D configuration -->
@@ -487,15 +489,15 @@ public final class StatisticCollector
      //Configure legend properties
      final LegendProperties legendProps = new LegendProperties();
      final String[] legendLabels = {
-         "Error", "C&P", "Warning", "Design", "Code Style", 
+         "Error", "C&P", "Warning", "Design", "Code Style",
          "Info", "Coverage"};
      legendProps.setLegendLabelsTexts (legendLabels);
 
      //Configure graph chart properties
-     final GraphChart2DProperties graphChart2DProps 
+     final GraphChart2DProperties graphChart2DProps
              = new GraphChart2DProperties();
 
-     final Set labels = new TreeSet(src.keySet());
+     final Set<String> labels = new TreeSet<String>(src.keySet());
 
      if (labels.size() == 0)
      {
@@ -503,9 +505,8 @@ public final class StatisticCollector
      }
 
      final String [] labelsLongAxisLabels
-           = (String[]) labels.toArray(new String[]{});
-     final String [] labelsAxisLabels
-           = cutPackages(labelsLongAxisLabels);
+           = labels.toArray(new String[labels.size()]);
+     final String [] labelsAxisLabels = cutPackages(labelsLongAxisLabels);
 
      graphChart2DProps.setLabelsAxisLabelsTexts(labelsAxisLabels);
      graphChart2DProps.setLabelsAxisTitleText(level + " Name");
@@ -527,24 +528,24 @@ public final class StatisticCollector
      // fill data....
      for (int j = 0; j < dataset.getNumCats(); ++j)
      {
-        final FileSummary sum = (FileSummary) src.get(labelsLongAxisLabels[j]);
+        final FileSummary sum = src.get(labelsLongAxisLabels[j]);
         if (sum != null && sum.getLinesOfCode() != 0)
         {
            final float loc = sum.getLinesOfCode();
-           final float codeLoc = sum.getCoverage() 
+           final float codeLoc = sum.getCoverage()
                + sum.getViolations(Severity.COVERAGE);
 
-           dataset.set(ROW_ERROR, j, 0, 
+           dataset.set(ROW_ERROR, j, 0,
                (PERCENT * sum.getViolations(Severity.ERROR)) / loc);
-           dataset.set(ROW_CPD, j, 0, 
+           dataset.set(ROW_CPD, j, 0,
                (PERCENT * sum.getViolations(Severity.CPD)) / loc);
-           dataset.set(ROW_WARNING, j, 0, 
+           dataset.set(ROW_WARNING, j, 0,
                (PERCENT * sum.getViolations(Severity.WARNING)) / loc);
-           dataset.set(ROW_DESIGN, j, 0, 
+           dataset.set(ROW_DESIGN, j, 0,
                (PERCENT * sum.getViolations(Severity.DESIGN)) / loc);
-           dataset.set(ROW_CODE_STYLE, j, 0, 
+           dataset.set(ROW_CODE_STYLE, j, 0,
                (PERCENT * sum.getViolations(Severity.CODE_STYLE)) / loc);
-           dataset.set(ROW_INFO, j, 0, 
+           dataset.set(ROW_INFO, j, 0,
                (PERCENT * sum.getViolations(Severity.INFO)) / loc);
 
            if (codeLoc != 0)
@@ -570,7 +571,7 @@ public final class StatisticCollector
      }
 
      //Configure graph component colors
-     final MultiColorsProperties multiColorsProps 
+     final MultiColorsProperties multiColorsProps
              = new MultiColorsProperties();
 
      multiColorsProps.setColorsCustomize(true);
@@ -620,9 +621,10 @@ public final class StatisticCollector
    /**
     * Gets the loc counter for a given package.
     */
-   private float getCounter (Map src, String string)
+   private float getCounter (Map<String, FileSummary> src,
+       String string)
    {
-      final FileSummary counter = (FileSummary) src.get(string);
+      final FileSummary counter = src.get(string);
       final int result;
 
       if (counter != null)

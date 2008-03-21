@@ -75,7 +75,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.logging.Handler;
+import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -132,8 +132,7 @@ public final class Java2Html
    /** Name of the index page with content sorted by coverage. */
    private static final String SORT_BY_COVERAGE_INDEX = "index_c.html";
 
-   /** There is no such thing before JDK1.5. */
-   private static final Integer INTEGER_ZERO = new Integer(0);
+   private static final Integer INTEGER_ZERO = Integer.valueOf(0);
 
    /** Marker for ccs stypes used as the last row in a table. */
    private static final String LAST_MARKER = "_last";
@@ -141,22 +140,29 @@ public final class Java2Html
    private static final String DEFAULT_STYLESHEET = "reportstyle.css";
 
    /** Collects a List of all <code>FileSummary</code>s of the report. */
-   private final List mAllFiles = new ArrayList();
+   private final List<FileSummary> mAllFiles
+       = new ArrayList<FileSummary>();
 
 
    /** Map of package name + FileSummary for this package. */
-   private final Map mPackageSummary = new HashMap();
-   private final Map mAllPackages = new HashMap();
+   private final Map<String, FileSummary> mPackageSummary
+       = new HashMap<String, FileSummary>();
+   private final Map<String, List<FileSummary>> mAllPackages
+       = new HashMap<String, List<FileSummary>>();
    /**
     * Collects findings in the current file.
     * Maps from the line number (Integer) to a List of Item objects.
     */
-   private final Map mFindingsInFile = new HashMap();
-   private final Map mFindingsInCurrentLine = new HashMap();
-   private final List mCurrentFindings = new ArrayList();
-   private final List mHandledFindings = new ArrayList();
+   private final Map<Integer, List<Item>> mFindingsInFile
+       = new HashMap<Integer, List<Item>>();
+   private final Map<Integer, String> mFindingsInCurrentLine
+       = new HashMap<Integer, String>();
+   private final List<Item> mCurrentFindings = new ArrayList<Item>();
+   private final List<Item> mHandledFindings
+       = new ArrayList<Item>();
    /** List of findings with no (available) file assignment */
-   private final List mGlobalFindings = new ArrayList();
+   private final List<org.jcoderz.phoenix.report.jaxb.File> mGlobalFindings
+       = new ArrayList<org.jcoderz.phoenix.report.jaxb.File>();
    /** file summary for all files */
    private FileSummary mGlobalSummary;
 
@@ -171,9 +177,11 @@ public final class Java2Html
    private String mClassname;
    private String mPackage;
    private String mPackageBase;
-   private final StringBuffer mStringBuffer = new StringBuffer();
+   private final StringBuilder mStringBuilder
+       = new StringBuilder();
    /** String buffer to be used by the getIcons method. */
-   private final StringBuffer mGetIconsStringBuffer = new StringBuffer();
+   private final StringBuilder mGetIconsStringBuffer
+       = new StringBuilder();
 
    private java.io.File mInputData;
    private java.io.File mOutDir;
@@ -186,7 +194,8 @@ public final class Java2Html
     * Holds a list of items that are currently active for the
     * current file and line.
     */
-   private final List mActiveItems = new LinkedList();
+   private final List<Item> mActiveItems
+       = new LinkedList<Item>();
 
    /**
     * Constructor.
@@ -395,13 +404,11 @@ public final class Java2Html
       final Report report = (Report) unmarshaller.unmarshal(mInputData);
       mGlobalSummary = new FileSummary();
 
-      final Iterator files = report.getFile().iterator();
+//      final Iterator files = report.getFile().iterator();
 
-      while (files.hasNext())
-      {  // TODO: Handle none java / source files
-         final org.jcoderz.phoenix.report.jaxb.File file
-               = (org.jcoderz.phoenix.report.jaxb.File) files.next();
-
+      for (final org.jcoderz.phoenix.report.jaxb.File file
+          : (List<org.jcoderz.phoenix.report.jaxb.File>) report.getFile())
+      {
          try
          {
             if (file.getName().endsWith(".java"))
@@ -424,10 +431,8 @@ public final class Java2Html
       }
 
       // create package summary
-      final Iterator packages = mAllPackages.values().iterator();
-      while (packages.hasNext())
+      for (final List<FileSummary> pkg : mAllPackages.values())
       {
-         final List pkg = (List) packages.next();
          createPackageSummary(pkg);
       }
       createFullSummary();
@@ -624,13 +629,9 @@ public final class Java2Html
     */
    private void createPerFindingSummary () throws IOException
    {
-      final Iterator i = FindingsSummary.getFindingsSummary().getFindings().
-         values().iterator();
-
-      while (i.hasNext())
+      for (final FindingsSummary.FindingSummary summary
+          : FindingsSummary.getFindingsSummary().getFindings().values())
       {
-         final FindingsSummary.FindingSummary summary
-              = (FindingsSummary.FindingSummary) i.next();
          final String filename = summary.createFindingDetailFilename();
          final BufferedWriter out = openWriter(filename);
          try
@@ -767,16 +768,12 @@ public final class Java2Html
 
          final String relativeRoot = relativeRoot(mPackage, "");
 
-         // findings with no line number or uncovered jet
-         final Iterator remainder = mFindingsInFile.values().iterator();
          int pos = mHandledFindings.size();
-         while (remainder.hasNext())
+         // findings with no line number or uncovered jet
+         for (final List<Item> lineFindings : mFindingsInFile.values())
          {
-            final List lineFindings = (List) remainder.next();
-            final Iterator items = lineFindings.iterator();
-            while (items.hasNext())
-            {
-               final Item item = (Item) items.next();
+             for (final Item item : lineFindings)
+             {
                if (!item.getOrigin().equals(Origin.COVERAGE))
                {
                   pos++;
@@ -806,13 +803,9 @@ public final class Java2Html
          }
 
          // Findings as marked in the code.
-         final Iterator findings = mHandledFindings.iterator();
          pos = 0;
-
-
-         while (findings.hasNext())
+         for (final Item item : mHandledFindings)
          {
-            final Item item = (Item) findings.next();
             pos++;
             rowCounter++;
 
@@ -851,11 +844,9 @@ public final class Java2Html
             bw.write("      </a>\n");
             bw.write("   </td>\n");
             bw.write("</tr>\n");
-
          }
 
          bw.write("</table>\n");
-
          bw.write("\n</body>\n</html>");
       }
       catch (FileNotFoundException fnfe)
@@ -912,10 +903,8 @@ public final class Java2Html
       // Create file summary info
       final FileSummary summary = new FileSummary(mClassname, mPackage,
             subdir + "/" + mClassname + ".html", linesCount, mCoverageData);
-      final Iterator items = mCurrentFindings.iterator();
-      while (items.hasNext())
+      for (final Item item : mCurrentFindings)
       {
-         final Item item = (Item) items.next();
          FindingsSummary.addFinding(item, summary);
          if (item.getOrigin().equals(Origin.COVERAGE))
          {
@@ -939,15 +928,13 @@ public final class Java2Html
    private void fillFindingsInFile (
          org.jcoderz.phoenix.report.jaxb.File data)
    {
-      final Iterator i = data.getItem().iterator();
-      while (i.hasNext())
+      for (final Item item : (List<Item>) data.getItem())
       {
-         final Item item = (Item) i.next();
-         final Integer lineNumber = new Integer(item.getLine());
-         List itemsInLine = (List) mFindingsInFile.get(lineNumber);
+         final int lineNumber = item.getLine();
+         List<Item> itemsInLine = mFindingsInFile.get(lineNumber);
          if (itemsInLine == null)
          {
-            itemsInLine = new ArrayList();
+            itemsInLine = new ArrayList<Item>();
             mFindingsInFile.put(lineNumber, itemsInLine);
          }
          itemsInLine.add(item);
@@ -987,11 +974,11 @@ public final class Java2Html
    {
       Severity severity = Severity.OK;
 
-      final Iterator active = mActiveItems.iterator();
+      final Iterator<Item> active = mActiveItems.iterator();
 
       while (active.hasNext())
       {
-         final Item item = (Item) active.next();
+         final Item item = active.next();
          if (item.getEndLine() < line)
          {
             active.remove();
@@ -1003,10 +990,10 @@ public final class Java2Html
       }
 
 
-      final Iterator items = findingsInLine(line);
+      final Iterator<Item> items = findingsInLine(line);
       while (items.hasNext())
       {
-         final Item item = (Item) items.next();
+         final Item item = items.next();
          if (item.getOrigin() == Origin.COVERAGE)
          {
             if (item.getCounter() == 0)
@@ -1026,11 +1013,10 @@ public final class Java2Html
       return severity;
    }
 
-   private Iterator findingsInLine (int line)
+   private Iterator<Item> findingsInLine (int line)
    {
-      final List findingsInLine
-            = (List) mFindingsInFile.get(new Integer(line));
-      final Iterator result;
+      final List<Item> findingsInLine = mFindingsInFile.get(line);
+      final Iterator<Item> result;
       if (findingsInLine == null)
       {
          result = EmptyIterator.EMPTY_ITERATOR;
@@ -1046,11 +1032,11 @@ public final class Java2Html
    {
       String hits = "&nbsp;";
 
-      final Iterator items = findingsInLine(line);
+      final Iterator<Item> items = findingsInLine(line);
 
       while (items.hasNext())
       {
-         final Item item = (Item) items.next();
+         final Item item = items.next();
          if (item.getOrigin() == Origin.COVERAGE)
          {
             hits = String.valueOf(item.getCounter());
@@ -1071,10 +1057,10 @@ public final class Java2Html
       mFindingsInCurrentLine.clear();
 
       // collect relevant findings
-      final Iterator items = findingsInLine(line);
+      final Iterator<Item> items = findingsInLine(line);
       while (items.hasNext())
       {
-         final Item item = (Item) items.next();
+         final Item item = items.next();
          if (item.getOrigin() == Origin.COVERAGE)
          {
             if (item.getCounter() == 0)
@@ -1105,8 +1091,8 @@ public final class Java2Html
             icons.append(mGetIconsStringBuffer);
             if (item.isSetColumn())
             {
-               final Integer pos = new Integer(item.getColumn());
-               final String last = (String) mFindingsInCurrentLine.get(pos);
+               final int pos = item.getColumn();
+               final String last = mFindingsInCurrentLine.get(pos);
                if (last != null)
                {
                   mGetIconsStringBuffer.insert(0, last);
@@ -1141,15 +1127,15 @@ public final class Java2Html
       }
       else if (in.charAt(0) == ' ')
       {
-         mStringBuffer.setLength(0);
+         mStringBuilder.setLength(0);
          int i;
 
          for (i = 0; i < in.length() && in.charAt(i) == ' ';  i++)
          {
-            mStringBuffer.append("&nbsp;");
+            mStringBuilder.append("&nbsp;");
          }
-         mStringBuffer.append(in.substring(i));
-         result = mStringBuffer.toString();
+         mStringBuilder.append(in.substring(i));
+         result = mStringBuilder.toString();
       }
       else
       {
@@ -1165,18 +1151,18 @@ public final class Java2Html
    {
       mAllFiles.add(summary);
 
-      List packageList = (List) mAllPackages.get(summary.getPackage());
+      List<FileSummary> packageList
+          = mAllPackages.get(summary.getPackage());
 
       if (packageList == null)
       {
-         packageList = new ArrayList();
+         packageList = new ArrayList<FileSummary>();
          mAllPackages.put(summary.getPackage(), packageList);
       }
       packageList.add(summary);
 
       FileSummary packageSummary
-         = (FileSummary) mPackageSummary.get(summary.getPackage());
-
+         = mPackageSummary.get(summary.getPackage());
       if (packageSummary == null)
       {
          packageSummary = new FileSummary(mPackage);
@@ -1186,7 +1172,7 @@ public final class Java2Html
       mGlobalSummary.add(summary);
    }
 
-   private void createPackageSummary (List pkg)
+   private void createPackageSummary (List<FileSummary> pkg)
          throws IOException
    {
       createPackageSummary(new FileSummary.SortByPackage(), pkg);
@@ -1194,11 +1180,12 @@ public final class Java2Html
       createPackageSummary(new FileSummary.SortByCoverage(), pkg);
    }
 
-   private void createPackageSummary (Comparator order, List pkg)
+   private void createPackageSummary (Comparator<FileSummary> order,
+       List<FileSummary> pkg)
       throws IOException
    {
       final String filename = fileNameForOrder(order);
-      final String packageName = ((FileSummary) pkg.get(0)).getPackage();
+      final String packageName = pkg.get(0).getPackage();
       final String subdir = packageName.replaceAll("\\.", "/");
       final java.io.File dir = new java.io.File(mOutDir, subdir);
       dir.mkdirs();
@@ -1228,7 +1215,7 @@ public final class Java2Html
       createFullSummary(new FileSummary.SortByCoverage());
    }
 
-   private void createFullSummary (Comparator order)
+   private void createFullSummary (Comparator<FileSummary> order)
          throws IOException
    {
       final String filename = fileNameForOrder(order);
@@ -1323,15 +1310,15 @@ public final class Java2Html
           bw.write("<tbody>");
           bw.write(NEWLINE);
 
-          final Set packages = new TreeSet(order);
+          final Set<FileSummary> packages = new TreeSet<FileSummary>(order);
           packages.addAll(mPackageSummary.values());
 
-          final Iterator i = packages.iterator();
           int pos = 0;
+          final Iterator<FileSummary> i = packages.iterator();
           while (i.hasNext())
           {
              pos++;
-             final FileSummary pkg = (FileSummary) i.next();
+             final FileSummary pkg = i.next();
              final boolean isLast = !i.hasNext();
              appendPackageLink(bw, pkg, filename, pos, isLast);
           }
@@ -1355,17 +1342,12 @@ public final class Java2Html
         throws IOException
     {
         boolean tableOpened = false;
-        final Iterator i = mGlobalFindings.iterator();
         int row = 0;
-        while (i.hasNext())
+        for (final org.jcoderz.phoenix.report.jaxb.File file : mGlobalFindings)
         {
-            final org.jcoderz.phoenix.report.jaxb.File file
-                = (org.jcoderz.phoenix.report.jaxb.File) i.next();
-            final Iterator j = file.getItem().iterator();
-            while (j.hasNext())
+            for (final Item item : (List<Item>) file.getItem())
              {
                 row++;
-                final Item item = (Item) j.next();
                 if (!tableOpened)
                 {
                     bw.write("<h1>Unassigned findings</h1>");
@@ -1526,7 +1508,7 @@ public final class Java2Html
       {
          return line;
       }
-      final StringBuffer result = mStringBuffer;
+      final StringBuilder result = mStringBuilder;
       result.setLength(0);
 
       int pos = 1;  // counting starts with 1
@@ -1554,8 +1536,7 @@ public final class Java2Html
             else
             {
                final String finding
-                     = (String) mFindingsInCurrentLine.remove(
-                         new Integer(pos));
+                     = mFindingsInCurrentLine.remove(pos);
                if (finding != null)
                {
                   result.append(finding);
@@ -1570,11 +1551,12 @@ public final class Java2Html
          }
       }
 
-      final Iterator i = mFindingsInCurrentLine.keySet().iterator();
+      final Iterator<Entry<Integer, String>> i
+          = mFindingsInCurrentLine.entrySet().iterator();
       while (i.hasNext())
       {
-         final Integer xx = (Integer) i.next();
-         final String finding = (String) mFindingsInCurrentLine.get(xx);
+         final Entry<Integer, String> entry = i.next();
+         final String finding = entry.getValue();
          i.remove();
          if (finding != null)
          {
@@ -1588,8 +1570,9 @@ public final class Java2Html
     * Creates a list of all classes as html table and appends it to the
     * given bw.
     */
-   private void createClassListTable (BufferedWriter bw, Collection files,
-      boolean fullPackageNames, Comparator order)
+   private void createClassListTable (BufferedWriter bw,
+       Collection<FileSummary> files, boolean fullPackageNames,
+       Comparator<FileSummary> order)
          throws IOException
    {
       // Do not create a table if no classes are here.
@@ -1597,7 +1580,7 @@ public final class Java2Html
       {
          final String filename = fileNameForOrder(order);
          final FileSummary[] summaries =
-            (FileSummary[]) files.toArray(new FileSummary[files.size()]);
+            files.toArray(new FileSummary[files.size()]);
 
          Arrays.sort(summaries, order);
 
@@ -1649,11 +1632,11 @@ public final class Java2Html
          bw.write(NEWLINE);
 
          int pos = 0;
-         final Iterator i = Arrays.asList(summaries).iterator();
+         final Iterator<FileSummary> i = Arrays.asList(summaries).iterator();
          while (i.hasNext())
          {
             pos++;
-            final FileSummary file = (FileSummary) i.next();
+            final FileSummary file = i.next();
             final boolean isLast = !i.hasNext();
             appendClassLink(bw, file, fullPackageNames, pos, isLast);
          }
@@ -1712,7 +1695,7 @@ public final class Java2Html
         bw.write(NEWLINE);
     }
 
-   private static String fileNameForOrder (Comparator order)
+   private static String fileNameForOrder (Comparator<FileSummary> order)
    {
       String filename;
       if (order instanceof FileSummary.SortByPackage)

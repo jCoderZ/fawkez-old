@@ -104,7 +104,7 @@
         <dependency org="jaxen" name="jaxen" rev="1.1-beta-8"/>
         <dependency org="saxpath" name="saxpath" rev="1.0-FCS"/>
         <dependency org="dom4j" name="dom4j" rev="1.6.1"/>
-        <dependency org="checkstyle" name="checkstyle" rev="4.1"/>
+        <dependency org="checkstyle" name="checkstyle" rev="4.4"/>
         <dependency org="urbanophile" name="java-getopt" rev="1.0.9"/>
         <dependency org="saxon" name="saxon" rev="6.5.3"/>
         <dependency org="xml-resolver" name="xml-resolver" rev="1.1"/>

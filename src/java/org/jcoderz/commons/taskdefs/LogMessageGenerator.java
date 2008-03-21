@@ -80,7 +80,7 @@ public final class LogMessageGenerator
    /**
     * Sets whether the log messages get a .log() method that uses the
     * logger of the LoggableImpl to log the messages to?
-    * @param the flag value to be set.
+    * @param allow the flag value to be set.
     */
    public void setAllowUseOfBaseLogger (boolean allow)
    {

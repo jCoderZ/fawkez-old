@@ -53,16 +53,16 @@
 
    <!-- *** General filters *** -->
 
-	<!-- Never filter samples... -->
+    <!-- Never filter samples... -->
    <xs:template
-	   match="/report/file[@package = 'org.jcoderz.phoenix.report.samples']/item"
-	   priority="2">
+       match="/report/file[@package = 'org.jcoderz.phoenix.report.samples']/item"
+       priority="2">
       <item>
          <xs:apply-templates select="@*"/>
          <xs:attribute name="message"><xs:value-of select="concat(@message, ' (sample)')"/></xs:attribute>
       </item>
    </xs:template>
-	
+
    <!-- Some tests are not relevant for testcases....  -->
    <xs:template
       match="/report/file[@level = 'test']/
@@ -145,6 +145,16 @@
          <xs:apply-templates select="@*"/>
          <xs:attribute name="severity">filtered</xs:attribute>
          <xs:attribute name="severity-reason">Delegation code can not be externalized further.</xs:attribute>
+      </item>
+   </xs:template>
+
+   <xs:template
+      match="/report/file[@package != 'org.jcoderz.phoenix.report']/
+                   item[@finding-type = 'LSYC_LOCAL_SYNCHRONIZED_COLLECTION']">
+      <item>
+         <xs:apply-templates select="@*"/>
+         <xs:attribute name="severity">filtered</xs:attribute>
+         <xs:attribute name="severity-reason">We are still on Java 1.4 here.</xs:attribute>
       </item>
    </xs:template>
 

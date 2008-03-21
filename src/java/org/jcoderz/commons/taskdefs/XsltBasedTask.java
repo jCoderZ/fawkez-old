@@ -81,7 +81,7 @@ public abstract class XsltBasedTask
    /** The XSL stylesheet file. */
    private String mXslFile = null;
 
-   /** The Input XML document (log message info fil) to be used. */
+   /** The Input XML document (log message info file) to be used. */
    private File mInFile = null;
 
    /** The Output file. */
@@ -124,7 +124,7 @@ public abstract class XsltBasedTask
    }
 
    /**
-    * Sets the ouput file.
+    * Sets the output file.
     * @param f The output file.
     */
    public void setOut (File f)
@@ -155,7 +155,7 @@ public abstract class XsltBasedTask
    /**
     * Execute this task.
     *
-    * @throws BuildException An building exception occured.
+    * @throws BuildException An building exception occurred.
     */
    public void execute ()
          throws BuildException
@@ -225,14 +225,13 @@ public abstract class XsltBasedTask
            org.apache.xerces.impl.Version.getVersion();
        if (StringUtil.contains(xercesVersion, ("2.6.2")))
        {
-
            task.log("Found " + xercesVersion + " on classpath.",
                Project.MSG_WARN);
            task.log("This Version only supports the outdated 2003 "
                + "namespace for XInclude ",
                Project.MSG_WARN);
-           task.log("please put a newer version of xerxes on your classapth or use",
-               Project.MSG_WARN);
+           task.log("please put a newer version of xerces on your classpath"
+               + "or use", Project.MSG_WARN);
            task.log("at least ANT 1.7.0.", Project.MSG_WARN);
            // TODO: Add hint how to do this + throw exception?
        }

@@ -49,7 +49,7 @@ public final class XmlUtil
 
     private static final int INDENT = 2;
     private static final String SPACES = "                           ";
-    
+
    /** No instances. */
    private XmlUtil ()
    {
@@ -135,12 +135,12 @@ public final class XmlUtil
          return null;
       }
    }
-   
+
    /**
     * Encode a string so that it can be safely used as attribute value in
     * XML output.
     * @param attribute the attribute value to be encoded.
-    * @return a string representing the attribute value that can be safely 
+    * @return a string representing the attribute value that can be safely
     *         used in XML output.
     */
    public static String attributeEscape (String attribute)
@@ -245,14 +245,14 @@ public final class XmlUtil
       String result = org;
       try
       {
-         final StringBuffer sb = new StringBuffer(); 
-         boolean nestedTag = false;
          final String in = org.trim();
          if (in.charAt(0) == '<') // && sb.charAt(1) == '?')
          {
-            int indent = 0;
-            for (int t = 0; t < in.length(); t++)
-            {
+             final StringBuffer sb = new StringBuffer();
+             boolean nestedTag = false;
+             int indent = 0;
+             for (int t = 0; t < in.length(); t++)
+             {
                char c = in.charAt(t);
 
                switch (c)
@@ -340,5 +340,5 @@ public final class XmlUtil
        }
    }
 
-   
+
 }

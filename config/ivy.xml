@@ -15,17 +15,13 @@
 
     <dependencies defaultconf="default" >
     <!--  Things below here come from the lib dir in svn. -->
-        <dependency org="SUN" name="jaxb" rev="1.0.3">
-            <artifact name="jaxb-api" type="jar"/>
-            <artifact name="jaxb-impl" type="jar"/>
-            <artifact name="jaxb-libs" type="jar"/>
-            <artifact name="relaxngDatatype" type="jar"/>
-            <artifact name="namespace" type="jar"/>
-            <artifact name="jax-qname" type="jar"/>
-            <artifact name="xsdlib" type="jar"/>
-            <artifact name="jaxb-xjc" type="jar"/>
-            <artifact name="xercesImpl" type="jar"/>
-            <artifact name="xalan" type="jar"/>
+        <dependency org="SUN" name="jaxb" rev="1.0.6">
+            <artifact name="jaxb-api"/>
+            <artifact name="jaxb-impl"/>
+            <artifact name="jaxb-libs"/>
+            <artifact name="jaxb-xjc"/>
+            <artifact name="xsdlib"/>
+            <artifact name="relaxngDatatype"/>
         </dependency>
         <dependency org="unknown" name="chart2d" rev="1.9.6k" />
         <dependency org="gr.spinellis" name="umlgraph" rev="2.10" />

@@ -82,8 +82,6 @@
 	<classpathentry kind="lib" path="lib/default/jaxb/jaxb-api.jar"/>
 	<classpathentry kind="lib" path="lib/default/jaxb/jaxb-impl.jar"/>
 	<classpathentry kind="lib" path="lib/default/jaxb/jaxb-libs.jar"/>
-	<classpathentry kind="lib" path="lib/default/jaxb/jax-qname.jar"/>
-	<classpathentry kind="lib" path="lib/default/jaxb/namespace.jar"/>
 	<classpathentry kind="lib" path="lib/default/jaxb/relaxngDatatype.jar"/>
 	<classpathentry kind="lib" path="lib/default/jaxb/xsdlib.jar"/>
 	<classpathentry kind="lib" path="lib/default/jaxen/jaxen.jar">

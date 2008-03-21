@@ -276,7 +276,7 @@ xerces in current vm: ${xerces.version.ant}
         <!-- xmlns:ivy="antlib:fr.jayasoft.ivy.ant" -->
         <typedef resource="fr/jayasoft/ivy/ant/antlib.xml">
             <classpath>
-                <pathelement location="${base.dir}/lib/ivy/ivy-2.0.0-beta1.jar"/>
+                <pathelement location="${base.dir}/lib/ivy/ivy-2.0.0-beta2.jar"/>
             </classpath>
         </typedef>
         <configure file="${base.dir}/config/ivyconf.xml" />

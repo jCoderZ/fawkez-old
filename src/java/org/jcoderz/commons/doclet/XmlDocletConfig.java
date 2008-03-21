@@ -81,7 +81,7 @@ public final class XmlDocletConfig
                      throws ArgumentMalformedException
                {
                   return cfg.parseOutputDirectory(args);
-               };
+               }
             };
       tempMap.put(outputDirectory.getOption(), outputDirectory);
       final XmlDocletOption link
@@ -91,7 +91,7 @@ public final class XmlDocletConfig
                      throws ArgumentMalformedException
                {
                   return cfg.parseLink(args);
-               };
+               }
             };
       tempMap.put(link.getOption(), link);
 

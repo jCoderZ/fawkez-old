@@ -218,7 +218,7 @@
         <xsl:if test="req:status">
            <row><entry><emphasis role="bold"><xsl:value-of select="$strStatus"/>:</emphasis></entry><entry><xsl:value-of select="req:status"/></entry></row>
         </xsl:if>
-        <row><entry><emphasis role="bold"><xsl:value-of select="$strReleaseVersion"/>:</emphasis></entry><entry><xsl:value-of select="normalize-space(translate(substring-after(req:version, '$Revision:'), '$', ' ')))"/></entry></row>
+        <row><entry><emphasis role="bold"><xsl:value-of select="$strReleaseVersion"/>:</emphasis></entry><entry><xsl:value-of select="normalize-space(translate(substring-after(req:version, '$Revision:'), '$', ' '))"/></entry></row>
       </tbody>
       </tgroup>
       </informaltable>

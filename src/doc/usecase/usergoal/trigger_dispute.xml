@@ -1,4 +1,8 @@
 <uc:usecase xmlns:uc="uc"
+            xmlns:db="http://docbook.org/ns/docbook"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="uc
+                                http://www.jcoderz.org/xsd/xdoc/usecase-SNAPSHOT.xsd"
             xmlns="http://docbook.org/ns/docbook" id="UC-23" level="UserGoal"
             suppress_diagrams="false">
 	<uc:version>$Revision: 1.1 $</uc:version>
@@ -13,7 +17,7 @@
 	</uc:commitlog>
 	<uc:name>Trigger Dispute</uc:name>
 	<uc:goal>Possibility to trigger a dispute related to a certain transaction.</uc:goal>
-	<uc:scope>Micro Aggregation</uc:scope>
+	<uc:scope>Micro Aggregation Merchant Self Administration</uc:scope>
 	<uc:trigger></uc:trigger>
 	<uc:priority>high - prototype</uc:priority>
 	<uc:response_time>immediately</uc:response_time>

@@ -1,5 +1,9 @@
 <uc:usecase xmlns:uc="uc"
-            xmlns="http://docbook.org/ns/docbook" id="UC-26" level="UserGoal"
+            xmlns:db="http://docbook.org/ns/docbook"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="uc
+                                http://www.jcoderz.org/xsd/xdoc/usecase-SNAPSHOT.xsd"
+            id="UC-26" level="UserGoal"
             suppress_diagrams="false">
 	<uc:version>$Revision: 1.1 $</uc:version>
 	<uc:commitlog>

@@ -1,4 +1,8 @@
 <uc:usecase xmlns:uc="uc"
+            xmlns:db="http://docbook.org/ns/docbook"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="uc
+                                http://www.jcoderz.org/xsd/xdoc/usecase-SNAPSHOT.xsd"
                id="UC-1" level="Summary">
 	<uc:version>$Revision: 1.1 $</uc:version>
 	<uc:commitlog>

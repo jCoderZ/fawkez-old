@@ -1,5 +1,8 @@
 <uc:usecase xmlns:uc="uc"
             xmlns:db="http://docbook.org/ns/docbook"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="uc
+                                http://www.jcoderz.org/xsd/xdoc/usecase-SNAPSHOT.xsd"
             id="UC-19" level="UserGoal"
             suppress_diagrams="false">
 	<uc:version>$Revision: 1.1 $</uc:version>
@@ -17,7 +20,7 @@
 	</uc:commitlog>
 	<uc:name>Trigger Payment</uc:name>
 	<uc:goal>A payment will be triggered, which has to be aggregated to the consumer/merchant account.</uc:goal>
-	<uc:scope>Micro Aggregation</uc:scope>
+	<uc:scope>Micro Aggregation Merchant Self Administration</uc:scope>
 	<uc:trigger></uc:trigger>
 	<uc:priority>High</uc:priority>
 	<uc:response_time>immediately</uc:response_time>
@@ -55,7 +58,7 @@
       <uc:step id="5">System checks if the amount does fit to system rules.<uc:ref id="UC-19-E6"/></uc:step>
       <uc:step id="6">System checks if account has been blocked.<uc:ref id="UC-19-E7"/></uc:step>
       <uc:step id="7">System aggregates amount to the account.<uc:ref id="UC-19-E8"/></uc:step>
-      <uc:step id="8">System notifies that the amount has been aggregated succesfully.</uc:step>
+      <uc:step id="8">System notifies that the amount has been aggregated successfully.</uc:step>
       <uc:step id="9">use case ends.</uc:step>
 	</uc:success>
    <uc:extension id="E1" name="MERCHANT UNKNOWN">

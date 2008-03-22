@@ -1,4 +1,8 @@
 <uc:usecase xmlns:uc="uc"
+            xmlns:db="http://docbook.org/ns/docbook"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="uc
+                                http://www.jcoderz.org/xsd/xdoc/usecase-SNAPSHOT.xsd"
             xmlns="http://docbook.org/ns/docbook" id="UC-27" level="UserGoal"
             suppress_diagrams="false">
 	<uc:version>$Revision: 1.1 $</uc:version>
@@ -30,15 +34,15 @@
 	</uc:actors>
 	<uc:stakeholder>Merchant wants to have the aggregation of the micro payment amounts to be settled due to certain conditions.</uc:stakeholder>
    <uc:stakeholder>Service Provider wants to transfer the responsibility to define the aggregation parameters to the merchant.</uc:stakeholder>
-	<uc:precondition>The usecase <uc:ref id="UC-25"/> has to be executed before.</uc:precondition>
+	<uc:precondition>The use case <uc:ref id="UC-25"/> has to be executed before.</uc:precondition>
 	<uc:guarantees>
-		<uc:success>Merchant could set the parmeters for the aggregation rules successfully.</uc:success>
+		<uc:success>Merchant could set the parameters for the aggregation rules successfully.</uc:success>
 		<minimal>Merchant is notified about the failure of the modification or what went wrong.</minimal>
 	</uc:guarantees>
 	<uc:success>
       <uc:step id="1">Merchant enters aggregation rules parameters configuration view.</uc:step>
       <uc:step id="2">System checks, if merchant is logged in. <uc:ref id="UC-25"/></uc:step>
-      <uc:step id="3">System displays the aggregation rules with their editeable parameters:
+      <uc:step id="3">System displays the aggregation rules with their editable parameters:
          <itemizedlist>
             <listitem>minimum amount limit</listitem>
             <listitem>maximum amount limit</listitem>

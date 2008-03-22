@@ -1,5 +1,9 @@
 <uc:usecase xmlns:uc="uc"
-            xmlns="http://docbook.org/ns/docbook" id="UC-22" level="UserGoal"
+            xmlns:db="http://docbook.org/ns/docbook"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="uc
+                                http://www.jcoderz.org/xsd/xdoc/usecase-SNAPSHOT.xsd"
+            id="UC-22" level="UserGoal"
             suppress_diagrams="false">
 	<uc:version>$Revision: 1.1 $</uc:version>
 	<uc:commitlog>
@@ -13,7 +17,7 @@
 	</uc:commitlog>
 	<uc:name>View Transaction History (Consumer)</uc:name>
 	<uc:goal>Possibility to view all the transactions related to an account.</uc:goal>
-	<uc:scope>Micro Aggregation</uc:scope>
+	<uc:scope>Micro Aggregation Merchant Self Administration</uc:scope>
 	<uc:trigger></uc:trigger>
 	<uc:priority>high - prototype</uc:priority>
 	<uc:response_time>immediately</uc:response_time>

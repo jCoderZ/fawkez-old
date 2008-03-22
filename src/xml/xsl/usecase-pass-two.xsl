@@ -13,7 +13,9 @@
                                 http://www.jcoderz.org/xsd/xdoc/usecase-SNAPSHOT.xsd">
    <xsl:output encoding="iso-8859-1" />
 
-   <xsl:namespace-alias stylesheet-prefix="db" result-prefix=""/>
+<!--
+    <xsl:namespace-alias stylesheet-prefix="db" result-prefix=""/>
+ -->
 
    <xsl:param name="basedir" select="'.'"/>
    <!--  Our default language is english. -->

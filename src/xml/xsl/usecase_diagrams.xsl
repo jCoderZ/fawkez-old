@@ -21,7 +21,7 @@
    <xsl:output method="text" encoding="UTF-8"/>
 
    <xsl:include href="usecase_i18n.xsl"/>
-   
+
    <xsl:key name="unique-usecase-scope-key" match="uc:usecase/uc:scope" use="."/>
 
    <xsl:key name="unique-category-primary-key" match="req:requirement/req:category/req:primary" use="."/>
@@ -755,6 +755,8 @@ digraph G {
 	      <redirect:write file="{$file}">
 
 digraph G {
+    fontname = "Helvetica"
+    fontsize = 14
     graph [rankdir = TB, center = true ];
     edge [fontname="Helvetica",fontsize=12,labelfontname="Helvetica",labelfontsize=12];
     node [fontname="Helvetica",fontsize=12];
@@ -1089,6 +1091,8 @@ digraph G {
 
 digraph G {
 
+    fontname = "Helvetica"
+    fontsize = 14
     graph [rankdir = "LR"]
     edge [fontname="Helvetica",fontsize=12,labelfontname="Helvetica",labelfontsize=12]
     node [fontname="Helvetica",fontsize=12, style="filled", fillcolor="#EEEED1"]
@@ -1107,15 +1111,15 @@ digraph G {
 
    <xsl:template match="uc:usecase" mode="uc_dep_list_uc">
       <xsl:variable name="uc_id" select="@id"/>
-      
+
       <xsl:variable name="wrapped_name">
        <xsl:call-template name="wrap-name">
          <xsl:with-param name="name" select="uc:name" />
        </xsl:call-template>
       </xsl:variable>
-      
+
       <xsl:choose>
-         <xsl:when test="//uc:ref[not(ancestor-or-self::uc:usecase/@id = $uc_id) and 
+         <xsl:when test="//uc:ref[not(ancestor-or-self::uc:usecase/@id = $uc_id) and
                        (@id = $uc_id or starts-with(@id, concat($uc_id, '-')))]">
             "<xsl:value-of select="@id"/>" [
                shape = "record",
@@ -1123,7 +1127,7 @@ digraph G {
                fillcolor = "#eaedf4",
                style = "filled",
                label = "{<xsl:value-of select="@id"/>|<xsl:value-of select="$wrapped_name"/>}"
-            ];   
+            ];
          </xsl:when>
          <xsl:when test=".//uc:ref[not(@id = $uc_id) and not(starts-with(@id, concat($uc_id, '-')))]">
             "<xsl:value-of select="@id"/>" [
@@ -1139,10 +1143,10 @@ digraph G {
 
    <xsl:template match="uc:usecase" mode="uc_dep_ref_out">
       <xsl:variable name="uc_id" select="@id"/>
-      
+
       <xsl:for-each select="//uc:usecase[not(@id = $uc_id)]">
          <xsl:variable name="target_uc_id" select="@id"/>
-         
+
          <xsl:if test="//uc:usecase[@id = $uc_id]//uc:ref
                            [@id = $target_uc_id or starts-with(@id, concat($target_uc_id, '-'))]">
             "<xsl:value-of select="$uc_id"/>" -&gt; "<xsl:value-of select="$target_uc_id"/>";
@@ -1152,17 +1156,17 @@ digraph G {
 
    <xsl:template match="uc:usecase" mode="uc_dep_ref_precondition">
       <xsl:variable name="uc_id" select="@id"/>
-      
+
       <xsl:for-each select="//uc:usecase[not(@id = $uc_id)]">
          <xsl:variable name="target_uc_id" select="@id"/>
-         
+
          <xsl:if test="//uc:usecase[@id = $uc_id]/uc:precondition//uc:ref
                            [@id = $target_uc_id or starts-with(@id, concat($target_uc_id, '-'))]">
                        "<xsl:value-of select="$uc_id"/>" -&gt; "<xsl:value-of select="$target_uc_id"/>" [label = "precondition",style=dotted];
          </xsl:if>
       </xsl:for-each>
    </xsl:template>
-   
+
    <!-- scope depending usecase dependency diagrams -->
    <xsl:template match="uc:usecases" mode="uc_scope_dep">
 
@@ -1170,10 +1174,12 @@ digraph G {
          <xsl:variable name="file"><xsl:value-of
             select="$imagedir"/>/usecase_<xsl:value-of
             select="."/>_dependencies.dot</xsl:variable>
-   
+
          <redirect:write file="{$file}">
 
 digraph G {
+    fontname = "Helvetica"
+    fontsize = 14
     graph [rankdir = "LR"]
     edge [fontname="Helvetica",fontsize=12,labelfontname="Helvetica",labelfontsize=12]
     node [fontname="Helvetica",fontsize=12, style="filled", fillcolor="#EEEED1"]
@@ -1183,22 +1189,22 @@ digraph G {
     label = "\n<xsl:value-of select="$strUseCaseDependencies"/> '<xsl:value-of select="."/>'";
 
             <xsl:variable name="uc_scope" select="."/>
-      
+
             <xsl:apply-templates select="//uc:usecase[uc:scope = $uc_scope]"
                                  mode="uc_dep_list_uc"/>
-      
-            <xsl:apply-templates select="//uc:usecase[uc:scope = $uc_scope]" 
+
+            <xsl:apply-templates select="//uc:usecase[uc:scope = $uc_scope]"
                                  mode="uc_dep_ref_out"/>
-            <xsl:apply-templates select="//uc:usecase[uc:scope = $uc_scope]" 
+            <xsl:apply-templates select="//uc:usecase[uc:scope = $uc_scope]"
                                  mode="uc_dep_ref_precondition"/>
 }
 
          </redirect:write>
       </xsl:for-each>
-   </xsl:template>   
-   
-   
-   <!-- helper methods -->   
+   </xsl:template>
+
+
+   <!-- helper methods -->
 
    <xsl:template name="get_uc_name">
      <xsl:param name="key"/>
@@ -1216,7 +1222,7 @@ digraph G {
    </xsl:template>
 
    <!-- Usecase dependency diagram for single usecase -->
-   
+
    <xsl:template match="uc:usecase" mode="uc_dep_single">
 
       <xsl:variable name="file"><xsl:value-of
@@ -1232,6 +1238,8 @@ digraph G {
       <redirect:write file="{$file}">
 
 digraph G {
+    fontname = "Helvetica"
+    fontsize = 14
     graph[rankdir = "LR"]
     edge [fontname="Helvetica",fontsize=12,labelfontname="Helvetica",labelfontsize=12];
     node [fontname="Helvetica",fontsize=12, style="filled", fillcolor="#EEEED1"];

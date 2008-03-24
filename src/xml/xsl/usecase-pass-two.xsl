@@ -435,7 +435,7 @@
 		             <title><xsl:value-of select="$strUseCaseDependencyDiagramForUseCase"/><xsl:value-of select="@id"/></title>
 		             <mediaobject id="{concat('dependency-diagram-', uc:name)}">
 		                <imageobject role="fo">
-		                   <imagedata format="SVG" fileref="{concat($dependency-filename, '.svg')}" align="center" valign="top" scalefit="0"/>
+		                   <imagedata format="SVG" fileref="{concat($dependency-filename, '.svg')}" align="center" valign="top" scalefit="1"/>
 		                </imageobject>
 		                <imageobject role="html">
 		                   <imagedata format="PNG" fileref="{concat($dependency-filename, '.png')}"/>
@@ -446,7 +446,7 @@
                    <title><xsl:value-of select="$strUseCaseDiagramForUseCase"/><xsl:value-of select="@id"/></title>
                    <mediaobject  id="{concat('diagram-', uc:name)}">
                       <imageobject  role="fo">
-                         <imagedata  format="SVG"  fileref="{concat($f, '.svg')}" align="center" valign="top" scalefit="0"/>
+                         <imagedata  format="SVG"  fileref="{concat($f, '.svg')}" align="center" valign="top" scalefit="1"/>
                       </imageobject>
                       <imageobject  role="html">
                          <imagedata  format="PNG"  fileref="{concat($f, '.png')}"/>

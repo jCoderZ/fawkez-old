@@ -582,7 +582,7 @@
                <tgroup cols="2">
                   <tbody>
                      <xsl:for-each select="//uc:usecase[uc:scope = $scope_name]">
-                       <row id="role_uc_list {uc:name}" label="{uc:name}">
+                       <row id="role_uc_list {uc:id}" label="{uc:name}">
                         <entry>
                            <xsl:text> [</xsl:text><xref linkend="{@id}"/><xsl:text>] : </xsl:text>
                         </entry>

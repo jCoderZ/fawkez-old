@@ -49,7 +49,7 @@
                 <xsl:if test="uc:usecase[@level='Summary' and not(@change_request)]">
                    <section>
                       <title><xsl:value-of select="$strSummaryLevel"/></title>
-                      <xsl:for-each select="//uc:usecase[@level='Summary' and not(@change_request) and generate-id() = generate-id(key('scope-group', uc:scope))]">
+                      <xsl:for-each select="//uc:usecase[@level='Summary' and not(@change_request) and generate-id() = generate-id(key('scope-group', concat(@level, '-', uc:scope)))]">
                          <xsl:variable name="scope_id" select="uc:scope"/>
                          <section>
                             <title><xsl:value-of select="uc:scope"/></title>
@@ -63,7 +63,7 @@
                 <xsl:if test="uc:usecase[@level='UserGoal' and not(@change_request)]">
                 <section>
                   <title><xsl:value-of select="$strUserGoalLevel"/></title>
-                  <xsl:for-each select="//uc:usecase[@level='UserGoal' and not(@change_request) and generate-id() = generate-id(key('scope-group', uc:scope))]">
+                  <xsl:for-each select="//uc:usecase[@level='UserGoal' and not(@change_request) and generate-id() = generate-id(key('scope-group', concat(@level, '-', uc:scope)))]">
                      <xsl:variable name="scope_id" select="uc:scope"/>
                      <section>
                         <title><xsl:value-of select="uc:scope"/></title>
@@ -75,7 +75,7 @@
                 <xsl:if test="uc:usecase[@level='Component' and not(@change_request)]">
                 <section>
                   <title><xsl:value-of select="$strComponentLevel"/></title>
-                  <xsl:for-each select="//uc:usecase[@level='Component' and not(@change_request) and generate-id() = generate-id(key('scope-group', uc:scope))]">
+                  <xsl:for-each select="//uc:usecase[@level='Component' and not(@change_request) and generate-id() = generate-id(key('scope-group', concat(@level, '-', uc:scope)))]">
                      <xsl:variable name="scope_id" select="uc:scope"/>
                      <section>
                         <title><xsl:value-of select="uc:scope"/></title>

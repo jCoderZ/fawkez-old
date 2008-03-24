@@ -24,7 +24,7 @@
    <xsl:key name="unique-category-secondary-key" match="req:requirement/req:category/req:secondary" use="."/>
    <xsl:key name="unique-category-tertiary-key" match="req:requirement/req:category/req:tertiary" use="."/>
 
-   <xsl:key name="scope-group" match="uc:usecase" use="uc:scope"/>
+   <xsl:key name="scope-group" match="uc:usecase" use="concat(@level, '-', uc:scope)"/>
 
    <!-- main -->
    <xsl:template name="req:requirements">
@@ -578,7 +578,7 @@
    </xsl:template>
 
    <xsl:template name="uc:list_roles_usecases">
-      <xsl:for-each select="//uc:usecase[generate-id() = generate-id(key('scope-group', uc:scope))]">
+      <xsl:for-each select="//uc:usecase[generate-id() = generate-id(key('scope-group', concat(@level, '-', uc:scope)))]">
          <xsl:variable name="scope_name" select="uc:scope"/>
          <section>
             <title><xsl:value-of select="uc:scope"/></title>

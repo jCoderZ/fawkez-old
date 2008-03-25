@@ -574,7 +574,7 @@
    </xsl:template>
 
    <xsl:template name="uc:list_roles_usecases">
-      <xsl:for-each select="//uc:usecase[generate-id() = generate-id(key('scope-group', concat(@level, '-', uc:scope)))]">
+      <xsl:for-each select="//uc:usecase[generate-id() = generate-id(key('scope-group', .))]">
          <xsl:variable name="scope_name" select="uc:scope"/>
          <section>
             <title><xsl:value-of select="uc:scope"/></title>
@@ -582,7 +582,7 @@
                <tgroup cols="2">
                   <tbody>
                      <xsl:for-each select="//uc:usecase[uc:scope = $scope_name]">
-                       <row id="role_uc_list {@level} {@id}" label="{uc:name}">
+                       <row id="role_uc_list_{@level}_{@id}" label="{uc:name}">
                         <entry>
                            <xsl:text> [</xsl:text><xref linkend="{@id}"/><xsl:text>] : </xsl:text>
                         </entry>

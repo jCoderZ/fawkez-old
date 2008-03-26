@@ -48,7 +48,7 @@
                   <section>
                     <title><xsl:value-of select="$strCompleteDomainModelDetailed"/></title>
                     <xsl:variable name="f" select="concat('images/', 'domain_model')"/>
-                    <figure pgwide="1">
+                    <figure pgwide="0" >
                       <xsl:attribute name="id">
                         <xsl:text>figure.domain_model_complete</xsl:text>
                       </xsl:attribute>
@@ -70,7 +70,7 @@
                     <title><xsl:value-of select="$strCompleteRoleDependencies"/></title>
                     <para>
                        <xsl:variable name="f" select="concat('images/', 'roles_model')"/>
-                       <figure pgwide="1">
+                       <figure pgwide="0" >
                          <xsl:attribute name="id">
                            <xsl:text>figure.role_model_complete</xsl:text>
                          </xsl:attribute>
@@ -100,7 +100,7 @@
                       <xsl:choose>
                         <xsl:when test="$category = 'Domain Model'">
                           <xsl:variable name="f" select="concat('images/', $sec_category, '_domain_model')"/>
-                          <figure pgwide="1">
+                          <figure pgwide="0" >
                             <xsl:attribute name="id">
                               <xsl:value-of select="concat('figure.', $sec_category, '_domain_model')" />
                             </xsl:attribute>
@@ -118,7 +118,7 @@
 
                         <xsl:when test="starts-with($category, 'Role')">
                           <xsl:variable name="f" select="concat('images/', $sec_category, '_roles_model')"/>
-                            <figure pgwide="1">
+                            <figure pgwide="0" >
                               <xsl:attribute name="id">
                                 <xsl:value-of select="concat('figure.', $sec_category, '_roles_model')" />
                               </xsl:attribute>
@@ -351,6 +351,9 @@
 
       <xsl:variable name="f" select="concat('images/', ../req:key)"/>
       <figure>
+       <xsl:attribute name="id">
+          <xsl:value-of select="concat('figure.', ../req:key, '_domain_model')" />
+       </xsl:attribute>
        <title><xsl:value-of select="$strDomainModelDiagramForEntity"/><xsl:value-of select="../req:key"/><xsl:text> </xsl:text><xsl:value-of select="req:name"/></title>
        <mediaobject id="{concat('diagram-', ../req:key)}">
          <imageobject role="fo">
@@ -498,6 +501,9 @@
 
       <xsl:variable name="f" select="concat('images/', ../req:key)"/>
       <figure>
+       <xsl:attribute name="id">
+          <xsl:value-of select="concat('figure.', ../req:key, '_role_model')" />
+       </xsl:attribute>
        <title><xsl:value-of select="$strRoleDiagramForRole"/><xsl:value-of select="../req:key"/><xsl:text> </xsl:text><xsl:value-of select="req:name"/></title>
        <mediaobject id="{concat('diagram-', ../req:key)}">
          <imageobject role="fo">

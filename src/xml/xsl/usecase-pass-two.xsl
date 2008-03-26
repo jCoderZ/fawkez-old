@@ -431,7 +431,7 @@
             <xsl:otherwise>
               <xsl:variable name="f" select="concat('images/', @id)"/>
               <xsl:variable name="dependency-filename" select="concat($f, '-dependencies')"/>
-		          <figure pgwide="1" id="{@id}_dependency-diagram">
+		          <figure pgwide="0" id="figure.{@id}_dependency-diagram">
 		             <title><xsl:value-of select="$strUseCaseDependencyDiagramForUseCase"/><xsl:value-of select="@id"/></title>
 		             <mediaobject id="{concat('dependency-diagram-', uc:name)}">
 		                <imageobject role="fo">
@@ -442,7 +442,7 @@
 		                </imageobject>
 		             </mediaobject>
 		          </figure>
-                <figure pgwide="1" id="{@id}_diagram">
+                <figure pgwide="0" id="figure.{@id}_diagram">
                    <title><xsl:value-of select="$strUseCaseDiagramForUseCase"/><xsl:value-of select="@id"/></title>
                    <mediaobject  id="{concat('diagram-', uc:name)}">
                       <imageobject  role="fo">

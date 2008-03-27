@@ -224,7 +224,7 @@
                         </row>
                      </thead>
                      <tbody>
-                        <xsl:apply-templates select="//cms:issue[contains(cms:version,$version) and (cms:type = $cms.cr.type or cms:type = $cms.bug.type or cms:type = $cms.task.type) and cms:external-id]" mode="tested">
+                        <xsl:apply-templates select="//cms:issue[contains(cms:version,$version) and (cms:type = $cms.cr.type or cms:type = $cms.bug.type) and cms:external-id]" mode="tested">
                            <xsl:sort select="cms:id" order="ascending" data-type="text"/>
                         </xsl:apply-templates>
                         <row>
@@ -265,7 +265,7 @@
                         </row>
                      </thead>
                      <tbody>
-                        <xsl:apply-templates select="//cms:issue[contains(cms:version,$version) and (cms:type = $cms.cr.type or cms:type = $cms.bug.type or cms:type = $cms.task.type) and not(cms:external-id)]" mode="tested">
+                        <xsl:apply-templates select="//cms:issue[contains(cms:version,$version) and (cms:type = $cms.cr.type or cms:type = $cms.bug.type) and not(cms:external-id)]" mode="tested">
                            <xsl:sort select="cms:id" order="ascending" data-type="text"/>
                         </xsl:apply-templates>
                         <row>
@@ -431,8 +431,8 @@
                      <xsl:variable name="number_executed_tests" select="count(key('testresult-group',.))"/>
                      <xsl:variable name="number_executed_testspecs" select="count(//tc:test[key('testresult-testcase-group',tc:id)/tc:testcase = tc:id])"/>
                      <xsl:variable name="number_executed_testspecs_passed" select="count(//tc:test[key('testresult-testcase-group',tc:id)[tr:result = 'passed']/tc:testcase = tc:id])"/>
-                     <xsl:variable name="number_issues" select="count(//cms:issue[(cms:type = $cms.bug.type or cms:type = $cms.cr.type or cms:type = $cms.task.type) and contains(cms:version,$version)])"/>
-                     <xsl:variable name="number_accepted_issues" select="count(//cms:issue[(cms:type = $cms.bug.type or cms:type = $cms.cr.type or cms:type = $cms.task.type) and (cms:state = $cms.state.accepted or cms:state = $cms.state.closed) and contains(cms:version,$version)])"/>
+                     <xsl:variable name="number_issues" select="count(//cms:issue[(cms:type = $cms.bug.type or cms:type = $cms.cr.type) and contains(cms:version,$version)])"/>
+                     <xsl:variable name="number_accepted_issues" select="count(//cms:issue[(cms:type = $cms.bug.type or cms:type = $cms.cr.type) and (cms:state = $cms.state.accepted or cms:state = $cms.state.closed) and contains(cms:version,$version)])"/>
                      <xsl:variable name="number_tests" select="count(//tr:testresult[starts-with(version,$version)])"/>
                      <xsl:variable name="number_tests_passed" select="count(//tr:testresult[tr:result = 'passed' and starts-with(tr:version,$version)])"/>
                      <xsl:variable name="number_tests_failed" select="count(//tr:testresult[tr:result = 'failed' and starts-with(tr:version,$version)])"/>

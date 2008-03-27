@@ -7,7 +7,7 @@
 	<uc:version>$Revision: 1.1 $</uc:version>
 	<uc:name>Merchant Self Administration</uc:name>
 	<uc:goal>Administration of the system.</uc:goal>
-	<uc:scope>Micro Aggregation Administration</uc:scope>
+	<uc:scope>Micro Aggregation Merchant Self Administration</uc:scope>
 	<uc:trigger></uc:trigger>
 	<uc:priority>High</uc:priority>
 	<uc:response_time></uc:response_time>

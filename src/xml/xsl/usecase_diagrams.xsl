@@ -760,7 +760,7 @@ digraph G {
     graph [rankdir = TB, center = true ];
     edge [fontname="Helvetica",fontsize=12,labelfontname="Helvetica",labelfontsize=12];
     node [fontname="Helvetica",fontsize=12];
-    bgcolor = "#cacfdb";
+    bgcolor = "#dee1e8";
     penwidth = "0.0001"
 
     subgraph cluster0 {
@@ -818,7 +818,7 @@ digraph G {
      "<xsl:value-of select="../@id"/>-<xsl:value-of select="@id"/>" [
          shape = "record",
          style = "rounded",
-         fillcolor = "#c0c0c0",
+         fillcolor = "#E2E0E0",
          style = "filled",
          label = "{<xsl:value-of select="../@id"/>-<xsl:value-of select="@id"/>|<xsl:value-of select="$wrapped_name"/>}"
          ];
@@ -882,7 +882,7 @@ digraph G {
                "<xsl:value-of select="@id"/>" [
                    shape = "record",
                    style = "rounded",
-                   fillcolor = "#c0c0c0",
+                   fillcolor = "#E2E0E0",
                    style = "filled",
                    label = "{<xsl:value-of select="@id"/>|<xsl:value-of select="$target_name"/>}"
                   ];
@@ -931,7 +931,7 @@ digraph G {
            "<xsl:value-of select="@id"/>" [
                 shape = "record",
                 style = "rounded",
-                fillcolor = "#c0c0c0",
+                fillcolor = "#E2E0E0",
                 style = "filled",
                 label = "{<xsl:value-of select="@id"/>|<xsl:value-of select="$target_name"/>}"
                ];
@@ -987,7 +987,7 @@ digraph G {
             "<xsl:value-of select="$source"/>" [
                 shape = "record",
                 style = "rounded",
-                <xsl:choose><xsl:when test="contains($source_id,'-E')">fillcolor = "#c0c0c0"</xsl:when><xsl:otherwise>fillcolor = "#eaedf4"</xsl:otherwise></xsl:choose>,
+                <xsl:choose><xsl:when test="contains($source_id,'-E')">fillcolor = "#E2E0E0"</xsl:when><xsl:otherwise>fillcolor = "#eaedf4"</xsl:otherwise></xsl:choose>,
                 style = "filled",
                 label = "{<xsl:value-of select="$source_id"/>|<xsl:value-of select="$source_name"/>}"
                ];

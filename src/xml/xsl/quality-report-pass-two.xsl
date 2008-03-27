@@ -59,6 +59,8 @@
    <xsl:key name="test-group"                         match="//tc:test" use="tc:traceability"/>
    <xsl:key name="test-shortname-group"               match="//tc:test" use="tc:shortname"/>
    <xsl:key name="usecase-group"                      match="//uc:usecase" use="@id"/>
+   <xsl:key name="usecase-scope-group"                match="//uc:usecase" use="uc:scope"/>
+   <xsl:key name="scope-group"                        match="//uc:scope" use="."/>
    <xsl:key name="testresult-group"                   match="//tr:testresult[starts-with(tr:version,$version)]" use="."/>
    <xsl:key name="testresult-testcase-group"          match="//tr:testresult[starts-with(tr:version,$version)]" use="tr:testcase"/>
    <xsl:key name="testresult-shortname-group"         match="//tr:testresult[starts-with(tr:version,$version)]" use="tr:shortname"/>
@@ -1339,46 +1341,49 @@
    <xsl:template match="uc:usecases" mode="simple_coverage">
       <section>
          <title><xsl:value-of select="uc:info/@project"/><xsl:text> </xsl:text>(<xsl:value-of select="uc:info/@version"/>)</title>
-         <section>
-            <title>Use Case Coverage</title>
-            <para>
-               Simple list of use cases with coverage of specified test cases.
-            </para>
-            <table frame="all">
-               <title>Use Cases (Simple Coverage)</title>
-               <tgroup cols="6" align="left" colsep="1" rowsep="1">
-                  <colspec colnum="1" colname="c1"/>
-                  <colspec colwidth="250pt" colnum="2" colname="c2"/>
-                  <colspec colnum="3" colname="c3"/>
-                  <colspec colwidth="30pt" colnum="4" colname="c4"/>
-                  <colspec colwidth="30pt" colnum="5" colname="c5"/>
-                  <colspec colwidth="30pt" colnum="6" colname="c6"/>
-                  <thead>
-                     <row>
-                        <entry>UC-ID</entry>
-                        <entry>Description</entry>
-                        <entry>Test Cases</entry>
-                        <entry>Count</entry>
-                        <entry>TC Executed</entry>
-                        <entry>TC Passed</entry>
-                     </row>
-                  </thead>
-                  <tbody>
-                     <xsl:apply-templates select="uc:usecase" mode="simple_coverage">
-                        <xsl:sort select="@id" order="ascending" data-type="text"/>
-                     </xsl:apply-templates>
-                     <row>
-                        <entry></entry>
-                        <entry></entry>
-                        <entry></entry>
-                        <entry></entry>
-                        <entry></entry>
-                        <entry></entry>
-                     </row>
-                  </tbody>
-               </tgroup>
-            </table>
-         </section>
+         <para>
+            Simple list of use cases with coverage of specified test cases.
+         </para>
+         <xsl:for-each select=".//uc:scope[generate-id() = generate-id(key('scope-group', .))]">
+            <xsl:variable name="this_scope" select="."/>
+            <xsl:choose>
+               <xsl:when test="key('usecase-scope-group', $this_scope)">
+                  <para>
+                     <table frame="all">
+                        <title>Use Cases - Simple Coverage (<xsl:value-of select="$this_scope"/>)</title>
+                        <tgroup cols="6" align="left" colsep="1" rowsep="1">
+                           <colspec colnum="1" colname="c1"/>
+                           <colspec colwidth="250pt" colnum="2" colname="c2"/>
+                           <colspec colnum="3" colname="c3"/>
+                           <colspec colwidth="30pt" colnum="4" colname="c4"/>
+                           <colspec colwidth="30pt" colnum="5" colname="c5"/>
+                           <colspec colwidth="30pt" colnum="6" colname="c6"/>
+                           <thead>
+                              <row>
+                                 <entry>UC-ID</entry>
+                                 <entry>Description</entry>
+                                 <entry>Test Cases</entry>
+                                 <entry>Count</entry>
+                                 <entry>TC Executed</entry>
+                                 <entry>TC Passed</entry>
+                              </row>
+                           </thead>
+                           <tbody>
+                              <xsl:apply-templates select="key('usecase-scope-group', $this_scope)" mode="simple_coverage">
+                                 <xsl:sort select="@id" order="ascending" data-type="text"/>
+                              </xsl:apply-templates>
+                           </tbody>
+                        </tgroup>
+                     </table>
+                  </para>
+               </xsl:when>
+               <xsl:otherwise>
+                  <para>
+                     No use cases found.
+                  </para>
+               </xsl:otherwise>
+            </xsl:choose>
+         </xsl:for-each>
       </section>
    </xsl:template>
    

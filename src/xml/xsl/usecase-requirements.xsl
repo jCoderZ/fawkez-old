@@ -572,7 +572,7 @@
       <xsl:param name="role_name"/>
       <xsl:for-each select="//req:role[../req:key = //req:role[normalize-space(req:name) = $role_name]/req:superior/req:ref/@id]">
          <xsl:text> [</xsl:text><xref linkend="{../req:key}"/><xsl:text>] </xsl:text>
-         <!-- deep recusrive list of use cases -->
+         <!-- deep recursive list of use cases -->
          <xsl:call-template name="uc:list_acting_use_cases_indirect_upwards">
             <xsl:with-param name="role_name" select="req:key"/>
          </xsl:call-template>
@@ -580,7 +580,7 @@
    </xsl:template>
 
    <xsl:template name="uc:list_roles_usecases">
-      <xsl:for-each select="//uc:usecase[generate-id() = generate-id(key('scope-group', .))]">
+      <xsl:for-each select="//uc:usecase[generate-id() = generate-id(key('scope-group', concat(@level, '-', uc:scope)))]">
          <xsl:variable name="scope_name" select="uc:scope"/>
          <section>
             <title><xsl:value-of select="uc:scope"/></title>

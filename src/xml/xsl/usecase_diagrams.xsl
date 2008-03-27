@@ -1338,7 +1338,7 @@ digraph G {
       <xsl:param name="tobewrapped" />
       <xsl:param name="size" select="0" />
       <xsl:param name="indent" />
-      <xsl:variable name="maxlength" select="30" />
+      <xsl:variable name="maxlength" select="26" />
 
       <xsl:choose>
          <xsl:when test="contains($tobewrapped,' ')">

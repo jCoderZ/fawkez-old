@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<req:requirement xmlns:req="req"
+                 xmlns:db="http://docbook.org/ns/docbook"
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xsi:schemaLocation="req
+                                     http://www.jcoderz.org/xsd/xdoc/requirements-SNAPSHOT.xsd">
+  <req:title>feature presentation</req:title>
+  <req:category>
+    <req:primary>Domain Model</req:primary>
+    <req:secondary>Disassembly</req:secondary>
+  </req:category>
+  <req:key>D-10034</req:key>
+  <req:summary>Feature presentation</req:summary>
+  <req:priority>High</req:priority>
+  <req:description>
+
+  </req:description>
+  <req:entity>
+    <req:name>Feature presentation</req:name>
+    <req:attribute>
+       <req:name>feature</req:name>
+       <req:pattern></req:pattern>
+       <req:objectreference>
+          <req:linkstart>0..*</req:linkstart>
+          <req:linkend></req:linkend>
+          <req:ref id="D-10034"/>
+       </req:objectreference>
+    </req:attribute>
+   </req:entity>
+  <req:version>$Revision: 1.2 $</req:version>
+</req:requirement>

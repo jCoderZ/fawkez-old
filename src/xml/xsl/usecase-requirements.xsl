@@ -580,15 +580,29 @@
    </xsl:template>
 
    <xsl:template name="uc:list_roles_usecases">
-      <xsl:for-each select="//uc:usecase[generate-id() = generate-id(key('scope-group', @id))]">
+      <xsl:for-each select="//uc:usecase[generate-id() = generate-id(key('scope-group', concat(@level, '-', uc:scope)))]">
+         <xsl:variable name="level_name" select="@level"/>
          <xsl:variable name="scope_name" select="uc:scope"/>
          <section>
-            <title><xsl:value-of select="uc:scope"/></title>
+            <xsl:choose>
+               <xsl:when test="@level='Summary'">
+                  <title><xsl:value-of select="$strSummaryLevel"/> - <xsl:value-of select="uc:scope"/></title>
+               </xsl:when>
+               <xsl:when test="@level='UserGoal'">
+                  <title><xsl:value-of select="$strUserGoalLevel"/> - <xsl:value-of select="uc:scope"/></title>
+               </xsl:when>
+               <xsl:when test="@level='Component'">
+                  <title><xsl:value-of select="$strComponentLevel"/> - <xsl:value-of select="uc:scope"/></title>
+               </xsl:when>
+               <xsl:otherwise>
+                 <xsl:message>Warning! Unknown use case level detected: <xsl:value-of select="@level"/></xsl:message>
+               </xsl:otherwise>
+            </xsl:choose>
             <informaltable>
                <tgroup cols="2">
                   <tbody>
-                     <xsl:for-each select="//uc:usecase[uc:scope = $scope_name]">
-                       <row id="role_uc_list_{@level}_{@id}" label="{uc:name}">
+                     <xsl:for-each select="//uc:usecase[uc:scope = $scope_name and @level = $level_name]">
+                       <row id="role_uc_list_{@level}_{$scope_name}_{@id}" label="{uc:name}">
                         <entry>
                            <xsl:text> [</xsl:text><xref linkend="{@id}"/><xsl:text>] : </xsl:text>
                         </entry>

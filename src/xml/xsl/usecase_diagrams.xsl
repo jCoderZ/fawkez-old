@@ -44,7 +44,7 @@
       <xsl:apply-templates select="//uc:usecases" mode="roles"/>
       <xsl:apply-templates select="//uc:usecases" mode="roles_category"/>
       <xsl:apply-templates select="//uc:usecases" mode="uc_dep"/>
-      <!-- 
+      <!--
       <xsl:apply-templates select="//uc:usecases" mode="uc_scope_dep"/>
        -->
       <xsl:apply-templates select="//uc:usecase" mode="uc_dep_single"/>
@@ -649,7 +649,11 @@ digraph G {
       <xsl:param name="dm_root_id"/>
       <xsl:for-each select="req:attribute[req:objectreference]">
          <xsl:variable name="dm_id" select="req:objectreference/req:ref/@id"/>
-         <xsl:apply-templates select="//req:requirement[req:key = $dm_id]/req:entity"/>
+
+         <!-- Avoid a repeated self reference here -->
+         <xsl:if test="$dm_id != $dm_root_id)">
+            <xsl:apply-templates select="//req:requirement[req:key = $dm_id]/req:entity"/>
+         </xsl:if>
 
         <xsl:call-template name="create_edge">
            <xsl:with-param name="link_from"  select="../../req:key"/>
@@ -662,14 +666,18 @@ digraph G {
 
       <xsl:for-each select="//req:objectreference[req:ref/@id = $dm_root_id]">
          <xsl:variable name="dm_id" select="../../../req:key"/>
-         <xsl:apply-templates select="//req:requirement[req:key = $dm_id]/req:entity"/>
 
-        <xsl:call-template name="create_edge">
-           <xsl:with-param name="link_from"  select="$dm_id"/>
-           <xsl:with-param name="link_to"    select="$dm_root_id"/>
-           <xsl:with-param name="link_end"   select="req:linkend"/>
-           <xsl:with-param name="link_start" select="req:linkstart"/>
-        </xsl:call-template>
+         <!-- Avoid a repeated self reference here -->
+         <xsl:if test="$dm_id != $dm_root_id)">
+            <xsl:apply-templates select="//req:requirement[req:key = $dm_id]/req:entity"/>
+
+              <xsl:call-template name="create_edge">
+              <xsl:with-param name="link_from"  select="$dm_id"/>
+              <xsl:with-param name="link_to"    select="$dm_root_id"/>
+              <xsl:with-param name="link_end"   select="req:linkend"/>
+              <xsl:with-param name="link_start" select="req:linkstart"/>
+           </xsl:call-template>
+        </xsl:if>
 
       </xsl:for-each>
 
@@ -679,11 +687,14 @@ digraph G {
 
          <xsl:if test="$dm_id = $dm_root_id">
             <xsl:for-each select="//req:objectreference[../../../req:key = $ref_id]">
-               <xsl:call-template name="check_link">
-                  <xsl:with-param name="referencing_node" select="$ref_id"/>
-                  <xsl:with-param name="referenced_node" select="req:ref/@id"/>
-                  <xsl:with-param name="dm_root_id" select="$dm_root_id"/>
-               </xsl:call-template>
+               <!-- Avoid a repeated self reference here -->
+               <xsl:if test="$ref_id != req:ref/@id">
+                  <xsl:call-template name="check_link">
+                     <xsl:with-param name="referencing_node" select="$ref_id"/>
+                     <xsl:with-param name="referenced_node" select="req:ref/@id"/>
+                     <xsl:with-param name="dm_root_id" select="$dm_root_id"/>
+                  </xsl:call-template>
+               </xsl:if>
             </xsl:for-each>
          </xsl:if>
          <xsl:if test="$dm_id != $dm_root_id">

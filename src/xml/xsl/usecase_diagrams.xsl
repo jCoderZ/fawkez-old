@@ -44,7 +44,9 @@
       <xsl:apply-templates select="//uc:usecases" mode="roles"/>
       <xsl:apply-templates select="//uc:usecases" mode="roles_category"/>
       <xsl:apply-templates select="//uc:usecases" mode="uc_dep"/>
+      <!-- 
       <xsl:apply-templates select="//uc:usecases" mode="uc_scope_dep"/>
+       -->
       <xsl:apply-templates select="//uc:usecase" mode="uc_dep_single"/>
       <xsl:apply-templates select="req:requirement[starts-with(req:category/req:primary, 'Role')]"
                            mode="role"/>

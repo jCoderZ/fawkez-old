@@ -250,9 +250,9 @@
                <table frame="all">
                   <title>Test results for issues</title>
                   <tgroup cols="6" align="left" colsep="1" rowsep="1">
-                     <colspec colwidth="45pt" colnum="1" colname="c1"/>
-                     <colspec colwidth="45pt" colnum="2" colname="c2"/>
-                     <colspec colwidth="45pt" colnum="3" colname="c3"/>
+                     <colspec colwidth="60pt" colnum="1" colname="c1"/>
+                     <colspec colwidth="60pt" colnum="2" colname="c2"/>
+                     <colspec colwidth="60pt" colnum="3" colname="c3"/>
                      <colspec colnum="4" colname="c4"/>
                      <colspec colwidth="45pt" colnum="5" colname="c5"/>
                      <colspec colwidth="45pt" colnum="6" colname="c6"/>
@@ -290,7 +290,7 @@
                      <table frame="all">
                         <title>Tests without Testspec</title>
                         <tgroup cols="4" align="left" colsep="1" rowsep="1">
-                           <colspec colwidth="45pt" colnum="1" colname="c1"/>
+                           <colspec colwidth="100pt" colnum="1" colname="c1"/>
                            <colspec colwidth="45pt" colnum="2" colname="c2"/>
                            <colspec colnum="3" colname="c3"/>
                            <colspec colwidth="45pt" colnum="4" colname="c4"/>
@@ -303,13 +303,13 @@
                               </row>
                            </thead>
                            <tbody>
-                              <xsl:for-each select="//testresult[version = $version.releasecandidate and not(shortname = '' or not(shortname))]">
+                              <xsl:for-each select="//tr:testresult[tr:version = $version.releasecandidate and not(tr:shortname = '' or not(tr:shortname))]">
                                  <xsl:sort select="key" order="ascending" data-type="text"/>
                                  <xsl:variable name="shortname" select="shortname"/>
                                  <xsl:variable name="executor"  select="executor"/>
                                  <xsl:variable name="comment"   select="comment"/>
                                  <xsl:variable name="result"    select="result"/>
-                                 <xsl:if test="not(//test[shortname = $shortname])">
+                                 <xsl:if test="not(//tc:test[tc:shortname = $shortname])">
                                      <row>
                                         <entry><xsl:value-of select="$shortname"/></entry>
                                         <entry><xsl:value-of select="$executor"/></entry>
@@ -431,8 +431,8 @@
                   <tbody>
                      <xsl:variable name="number_specified_tests" select="count(//tc:test)"/>
                      <xsl:variable name="number_executed_tests" select="count(key('testresult-group',.))"/>
-                     <xsl:variable name="number_executed_testspecs" select="count(//tc:test[key('testresult-testcase-group',tc:id)/tc:testcase = tc:id])"/>
-                     <xsl:variable name="number_executed_testspecs_passed" select="count(//tc:test[key('testresult-testcase-group',tc:id)[tr:result = 'passed']/tc:testcase = tc:id])"/>
+                     <xsl:variable name="number_executed_testspecs" select="count(//tc:test[key('testresult-testcase-group',tc:id)/tr:testcase = tc:id])"/>
+                     <xsl:variable name="number_executed_testspecs_passed" select="count(//tc:test[key('testresult-testcase-group',tc:id)[tr:result = 'passed']/tr:testcase = tc:id])"/>
                      <xsl:variable name="number_issues" select="count(//cms:issue[(cms:type = $cms.bug.type or cms:type = $cms.cr.type) and contains(cms:version,$version)])"/>
                      <xsl:variable name="number_accepted_issues" select="count(//cms:issue[(cms:type = $cms.bug.type or cms:type = $cms.cr.type) and (cms:state = $cms.state.accepted or cms:state = $cms.state.closed) and contains(cms:version,$version)])"/>
                      <xsl:variable name="number_tests" select="count(//tr:testresult[starts-with(version,$version)])"/>
@@ -758,8 +758,8 @@
          <table frame="all">
             <title>specified test cases for </title>
             <tgroup cols="{$cols_by_type}" align="left" colsep="1" rowsep="1">
-               <colspec colwidth="45pt" colnum="1" colname="c1"/>
-               <colspec colwidth="60pt" colnum="2" colname="c2"/>
+               <colspec colwidth="60pt" colnum="1" colname="c1"/>
+               <colspec colwidth="100pt" colnum="2" colname="c2"/>
                <colspec colnum="3" colname="c3"/>
                <colspec colwidth="45pt" colnum="4" colname="c4"/>
                <colspec colwidth="45pt" colnum="5" colname="c5"/>
@@ -817,8 +817,8 @@
          <table frame="all">
             <title>untested test cases (specified)</title>
             <tgroup cols="4" align="left" colsep="1" rowsep="1">
-               <colspec colwidth="45pt" colnum="1" colname="c1"/>
-               <colspec colwidth="60pt" colnum="2" colname="c2"/>
+               <colspec colwidth="60pt" colnum="1" colname="c1"/>
+               <colspec colwidth="100pt" colnum="2" colname="c2"/>
                <colspec colnum="3" colname="c3"/>
                <colspec colwidth="60pt" colnum="4" colname="c4"/>
                <thead>

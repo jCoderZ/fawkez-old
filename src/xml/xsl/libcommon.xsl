@@ -431,13 +431,14 @@ public <xsl:if test="$object/@final = 'true'">final </xsl:if>class <xsl:value-of
       <xsl:if test="./@initial-value"> = <xsl:value-of
             select="./@initial-value"/></xsl:if>;</xsl:for-each>
 
-   <xsl:variable name="minimum-arguments"><xsl:copy-of
-      select="$object//member[not(@initial-value)][@final = 'true' or ../@final = 'true']"/>
+   <xsl:variable name="minimum-argument-count"><xsl:copy-of
+      select="count($object//member[not(@initial-value)][@final = 'true' or ../@final = 'true'])"/>
    </xsl:variable>
-   <xsl:variable name="maximum-arguments"><xsl:copy-of
-      select="$object//member[not(@initial-value)]"/>
+   <xsl:variable name="maximum-argument-count"><xsl:copy-of
+      select="count($object//member[not(@initial-value)])"/>
    </xsl:variable>
-   <xsl:if test="not($minimum-arguments = $maximum-arguments)">
+   <xsl:if test="$minimum-argument-count != $maximum-argument-count">
+
 
    /**
     * Constructs a <xsl:value-of

@@ -18,7 +18,9 @@
                        uc
                        http://www.jcoderz.org/xsd/xdoc/usecase-SNAPSHOT.xsd">
 
-<xsl:output method="xml"/>
+   <xsl:output method="xml"/>
+
+   <xsl:param name="lang" select="/uc:usecases/uc:info/@lang"/>
 
    <xsl:key name="unique-category-primary-key" match="req:requirement/req:category/req:primary" use="."/>
    <xsl:key name="unique-category-secondary-key" match="req:requirement/req:category/req:secondary" use="."/>

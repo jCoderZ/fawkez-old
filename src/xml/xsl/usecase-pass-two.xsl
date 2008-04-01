@@ -18,7 +18,6 @@
  -->
 
    <xsl:param name="basedir" select="'.'"/>
-   <!--  Our default language is english. -->
    <xsl:param name="lang" select="/uc:usecases/uc:info/@lang"/>
 
    <xsl:include href="libcommon.xsl"/>

@@ -56,7 +56,8 @@
 
    <xsl:template match="uc:usecases" mode="roles">
       <xsl:variable name="file"><xsl:value-of
-         select="$imagedir"/>/roles_model.dot</xsl:variable>
+         select="$imagedir"/>/roles_model<xsl:value-of
+         select="concat('_', $lang)"/>.dot</xsl:variable>
 
        <redirect:write file="{$file}">
 
@@ -176,11 +177,13 @@ digraph G {
          <xsl:choose>
             <xsl:when test="$tertiary_category = ''"><xsl:value-of
                   select="$imagedir"/>/<xsl:value-of
-                  select="$secondary_category"/>_roles_model.dot</xsl:when>
+                  select="$secondary_category"/>_roles_model<xsl:value-of
+         select="concat('_', $lang)"/>.dot</xsl:when>
             <xsl:otherwise><xsl:value-of
                   select="$imagedir"/>/<xsl:value-of
                   select="$secondary_category"/>_<xsl:value-of
-                  select="$tertiary_category"/>_roles_model.dot</xsl:otherwise>
+                  select="$tertiary_category"/>_roles_model<xsl:value-of
+         select="concat('_', $lang)"/>.dot</xsl:otherwise>
          </xsl:choose>
       </xsl:variable>
 
@@ -241,7 +244,8 @@ digraph G {
    <xsl:template match="req:requirement" mode="role">
       <xsl:variable name="file"><xsl:value-of
          select="$imagedir"/>/<xsl:value-of
-         select="req:key"/>.dot</xsl:variable>
+         select="req:key"/><xsl:value-of
+         select="concat('_', $lang)"/>.dot</xsl:variable>
 
        <redirect:write file="{$file}">
 
@@ -296,7 +300,8 @@ digraph G {
 
    <xsl:template match="uc:usecases" mode="dm">
       <xsl:variable name="file"><xsl:value-of
-         select="$imagedir"/>/domain_model.dot</xsl:variable>
+         select="$imagedir"/>/domain_model<xsl:value-of
+         select="concat('_', $lang)"/>.dot</xsl:variable>
 
        <redirect:write file="{$file}">
 
@@ -378,7 +383,8 @@ digraph G {
 
    <xsl:template match="uc:usecases" mode="dm_global_cat">
       <xsl:variable name="file"><xsl:value-of
-         select="$imagedir"/>/domain_model_global_cat.dot</xsl:variable>
+         select="$imagedir"/>/domain_model_global_cat<xsl:value-of
+         select="concat('_', $lang)"/>.dot</xsl:variable>
 
        <redirect:write file="{$file}">
 
@@ -562,11 +568,13 @@ digraph G {
          <xsl:choose>
             <xsl:when test="$tertiary_category = ''"><xsl:value-of
                   select="$imagedir"/>/<xsl:value-of
-                  select="$secondary_category"/>_domain_model.dot</xsl:when>
+                  select="$secondary_category"/>_domain_model<xsl:value-of
+         select="concat('_', $lang)"/>.dot</xsl:when>
             <xsl:otherwise><xsl:value-of
                   select="$imagedir"/>/<xsl:value-of
                   select="$secondary_category"/>_<xsl:value-of
-                  select="$tertiary_category"/>_domain_model.dot</xsl:otherwise>
+                  select="$tertiary_category"/>_domain_model<xsl:value-of
+         select="concat('_', $lang)"/>.dot</xsl:otherwise>
          </xsl:choose>
       </xsl:variable>
 
@@ -606,7 +614,8 @@ digraph G {
    <xsl:template match="req:requirement">
       <xsl:variable name="file"><xsl:value-of
          select="$imagedir"/>/<xsl:value-of
-         select="req:key"/>.dot</xsl:variable>
+         select="req:key"/><xsl:value-of
+         select="concat('_', $lang)"/>.dot</xsl:variable>
 
        <redirect:write file="{$file}">
 
@@ -763,7 +772,8 @@ digraph G {
        <xsl:otherwise>
 	      <xsl:variable name="file"><xsl:value-of
 	         select="$imagedir"/>/<xsl:value-of
-	         select="@id"/>.dot</xsl:variable>
+	         select="@id"/><xsl:value-of
+         select="concat('_', $lang)"/>.dot</xsl:variable>
 
 	      <redirect:write file="{$file}">
 
@@ -1098,7 +1108,8 @@ digraph G {
    <xsl:template match="uc:usecases" mode="uc_dep">
 
       <xsl:variable name="file"><xsl:value-of
-         select="$imagedir"/>/usecase_dependencies.dot</xsl:variable>
+         select="$imagedir"/>/usecase_dependencies<xsl:value-of
+         select="concat('_', $lang)"/>.dot</xsl:variable>
 
       <redirect:write file="{$file}">
 
@@ -1186,7 +1197,8 @@ digraph G {
       <xsl:for-each select="//uc:scope[generate-id() = generate-id(key('unique-usecase-scope-key', .))]">
          <xsl:variable name="file"><xsl:value-of
             select="$imagedir"/>/usecase_<xsl:value-of
-            select="."/>_dependencies.dot</xsl:variable>
+            select="."/>_dependencies<xsl:value-of
+         select="concat('_', $lang)"/>.dot</xsl:variable>
 
          <redirect:write file="{$file}">
 
@@ -1240,7 +1252,8 @@ digraph G {
 
       <xsl:variable name="file"><xsl:value-of
          select="$imagedir"/>/<xsl:value-of
-         select="concat(@id, '-dependencies')"/>.dot</xsl:variable>
+         select="concat(@id, '-dependencies')"/><xsl:value-of
+         select="concat('_', $lang)"/>.dot</xsl:variable>
 
       <xsl:variable name="wrapped_name">
        <xsl:call-template name="wrap-name">

@@ -55,10 +55,10 @@
                       <title><xsl:value-of select="$strCompleteDomainModelDetailed"/></title>
                       <mediaobject id="{concat('diagram-', 'domain_model')}">
                         <imageobject role="fo">
-                          <imagedata format="SVG" fileref="{concat($f, '.svg')}" align="center" valign="top" scalefit="1"/>
+                          <imagedata format="SVG" fileref="{concat($f, '_', $lang, '.svg')}" align="center" valign="top" scalefit="1"/>
                         </imageobject>
                         <imageobject role="html">
-                          <imagedata format="PNG" fileref="{concat($f, '.png')}"/>
+                          <imagedata format="PNG" fileref="{concat($f, '_', $lang, '.png')}"/>
                         </imageobject>
                       </mediaobject>
                     </figure>
@@ -77,10 +77,10 @@
                          <title><xsl:value-of select="$strCompleteRoleDependencies"/></title>
                          <mediaobject id="{concat('diagram-', 'role_model')}">
                            <imageobject role="fo">
-                             <imagedata format="SVG" fileref="{concat($f, '.svg')}" align="center" valign="top" scalefit="1"/>
+                             <imagedata format="SVG" fileref="{concat($f, '_', $lang, '.svg')}" align="center" valign="top" scalefit="1"/>
                            </imageobject>
                            <imageobject role="html">
-                             <imagedata format="PNG" fileref="{concat($f, '.png')}"/>
+                             <imagedata format="PNG" fileref="{concat($f, '_', $lang, '.png')}"/>
                            </imageobject>
                          </mediaobject>
                        </figure>
@@ -107,10 +107,10 @@
                             <title><xsl:value-of select="$strDomainModelForCategory"/><xsl:value-of select="."/>.</title>
                             <mediaobject id="{concat('diagram-', $sec_category, '_domain_model')}">
                               <imageobject  role="fo">
-                                <imagedata format="SVG" fileref="{concat($f, '.svg')}" align="center" valign="top" scalefit="1"/>
+                                <imagedata format="SVG" fileref="{concat($f, '_', $lang, '.svg')}" align="center" valign="top" scalefit="1"/>
                               </imageobject>
                               <imageobject role="html">
-                                <imagedata format="PNG" fileref="{concat($f, '.png')}"/>
+                                <imagedata format="PNG" fileref="{concat($f, '_', $lang, '.png')}"/>
                               </imageobject>
                             </mediaobject>
                           </figure>
@@ -125,10 +125,10 @@
                               <title><xsl:value-of select="$strRoleModelForCategory"/><xsl:value-of select="."/>.</title>
                               <mediaobject id="{concat('diagram-', $sec_category, '_roles_model')}">
                                 <imageobject role="fo">
-                                  <imagedata format="SVG" fileref="{concat($f, '.svg')}" align="center" valign="top" scalefit="1"/>
+                                  <imagedata format="SVG" fileref="{concat($f, '_', $lang, '.svg')}" align="center" valign="top" scalefit="1"/>
                                 </imageobject>
                                 <imageobject role="html">
-                                  <imagedata format="PNG" fileref="{concat($f, '.png')}"/>
+                                  <imagedata format="PNG" fileref="{concat($f, '_', $lang, '.png')}"/>
                                 </imageobject>
                               </mediaobject>
                             </figure>
@@ -154,10 +154,10 @@
                                      <title><xsl:value-of select="$strDomainModelForCategory"/><xsl:value-of select="."/></title>
                                      <mediaobject id="{concat('diagram-', $sec_category, '_', $thi_category, '_domain_model')}">
                                         <imageobject role="fo">
-                                            <imagedata format="SVG" fileref="{concat($f, '.svg')}" align="center" valign="top" scalefit="1"/>
+                                            <imagedata format="SVG" fileref="{concat($f, '_', $lang, '.svg')}" align="center" valign="top" scalefit="1"/>
                                          </imageobject>
                                          <imageobject role="html">
-                                            <imagedata format="PNG" fileref="{concat($f, '.png')}"/>
+                                            <imagedata format="PNG" fileref="{concat($f, '_', $lang, '.png')}"/>
                                          </imageobject>
                                       </mediaobject>
                                     </figure>
@@ -172,10 +172,10 @@
                                      <title><xsl:value-of select="$strRoleModelForCategory"/><xsl:value-of select="."/></title>
                                      <mediaobject id="{concat('diagram-', $sec_category, '_', $thi_category, '_roles_model')}">
                                        <imageobject role="fo">
-                                         <imagedata format="SVG" fileref="{concat($f, '.svg')}" align="center" valign="top" scalefit="1"/>
+                                         <imagedata format="SVG" fileref="{concat($f, '_', $lang, '.svg')}" align="center" valign="top" scalefit="1"/>
                                        </imageobject>
                                        <imageobject role="html">
-                                         <imagedata format="PNG" fileref="{concat($f, '.png')}"/>
+                                         <imagedata format="PNG" fileref="{concat($f, '_', $lang, '.png')}"/>
                                        </imageobject>
                                      </mediaobject>
                                    </figure>
@@ -357,10 +357,10 @@
        <title><xsl:value-of select="$strDomainModelDiagramForEntity"/><xsl:value-of select="../req:key"/><xsl:text> </xsl:text><xsl:value-of select="req:name"/></title>
        <mediaobject id="{concat('diagram-', ../req:key)}">
          <imageobject role="fo">
-           <imagedata format="SVG"  fileref="{concat($f, '.svg')}" align="center" valign="top" scalefit="1"/>
+           <imagedata format="SVG"  fileref="{concat($f, '_', $lang, '.svg')}" align="center" valign="top" scalefit="1"/>
          </imageobject>
          <imageobject role="html">
-           <imagedata format="PNG"  fileref="{concat($f, '.png')}"/>
+           <imagedata format="PNG"  fileref="{concat($f, '_', $lang, '.png')}"/>
          </imageobject>
        </mediaobject>
      </figure>
@@ -507,10 +507,10 @@
        <title><xsl:value-of select="$strRoleDiagramForRole"/><xsl:value-of select="../req:key"/><xsl:text> </xsl:text><xsl:value-of select="req:name"/></title>
        <mediaobject id="{concat('diagram-', ../req:key)}">
          <imageobject role="fo">
-             <imagedata format="SVG"  fileref="{concat($f, '.svg')}" align="center" valign="top" scalefit="1"/>
+             <imagedata format="SVG"  fileref="{concat($f, '_', $lang, '.svg')}" align="center" valign="top" scalefit="1"/>
           </imageobject>
           <imageobject role="html">
-             <imagedata format="PNG"  fileref="{concat($f, '.png')}"/>
+             <imagedata format="PNG"  fileref="{concat($f, '_', $lang, '.png')}"/>
           </imageobject>
         </mediaobject>
       </figure>

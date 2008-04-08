@@ -515,6 +515,16 @@ public final class CheckstyleFindingType
           "Boolean expression complexity is .* \\(max allowed is .*\\)\\.");
 
   /**
+   * Checkstyle finding type that relates to:
+   * <i>String comparison with ==.</i>.
+   */
+  public static final CheckstyleFindingType CS_STRING_EQUALS_COMPARISON =
+      new CheckstyleFindingType("CS_STRING_EQUALS_COMPARISON",
+          "String comparison with ==.",
+          "String comparison with ==.",
+          "Literal Strings should be compared using equals\\(\\), not '=='\\.");
+
+  /**
    * A internal checkstyle exception was triggered we shoulds also
    * report this!
    */

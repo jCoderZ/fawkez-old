@@ -5,13 +5,13 @@
    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
    xmlns:jxb="http://java.sun.com/xml/ns/jaxb"
    xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc"
-   jxb:extensionBindingPrefixes="xjc" 
+   jxb:extensionBindingPrefixes="xjc"
    jxb:version="1.0">
 
    <!-- copied from JAXB sample schema -->
    <xsd:annotation>
       <xsd:appinfo>
-      
+
          <jxb:globalBindings
             fixedAttributeAsConstantProperty="true"
             collectionType="java.util.ArrayList"
@@ -35,20 +35,20 @@
    </xsd:annotation>
 
   <xsd:simpleType name='Priority'>
-	  <xsd:annotation>
+      <xsd:annotation>
          <xsd:appinfo>
- 	        <jxb:javaType 
-		       name="org.jcoderz.phoenix.report.Severity" 
-		       parseMethod="fromFindBugsPriority" 
-		       printMethod="toFindBugsPriority"/>
-		  </xsd:appinfo>
+             <jxb:javaType
+               name="org.jcoderz.phoenix.report.Severity"
+               parseMethod="fromFindBugsPriority"
+               printMethod="toFindBugsPriority"/>
+          </xsd:appinfo>
       </xsd:annotation>
       <xsd:restriction base='xsd:int'>
          <xsd:enumeration value='1'/>
          <xsd:enumeration value='2'/>
          <xsd:enumeration value='3'/>
       </xsd:restriction>
-	  
+
    </xsd:simpleType>
 
  <xsd:element name='AuxClasspathEntry'>
@@ -94,7 +94,7 @@
         <xsd:element ref='Int'/>
         <xsd:element ref='String'/>
       </xsd:choice>
-   </xsd:sequence>   
+   </xsd:sequence>
    <xsd:attribute name='priority' use='required' type='Priority'/>
    <xsd:attribute name='type' type='xsd:string' use='required'/>
    <xsd:attribute name='abbrev' type='xsd:string' use='optional'/>
@@ -117,7 +117,7 @@
       <xsd:choice>
         <xsd:element ref='Description'/>
       </xsd:choice>
-   </xsd:sequence>   
+   </xsd:sequence>
    <!-- TODO: category might be an enum type: CORRECTNESS, PERFORMANCE, I18N, MT_CORRECTNESS, MALICIOUS_CODE, STYLE -->
    <xsd:attribute name='category' use='required' type='xsd:string'/>
   </xsd:complexType>
@@ -130,7 +130,7 @@
         <xsd:element ref='ShortDescription'/>
         <xsd:element ref='Details'/>
       </xsd:choice>
-   </xsd:sequence>   
+   </xsd:sequence>
    <xsd:attribute name='type' use='required' type='xsd:string'/>
    <!-- TODO: abbrev might be an enum type: FS, ... -->
    <xsd:attribute name='abbrev' use='required' type='xsd:string'/>
@@ -146,7 +146,7 @@
       <xsd:choice>
         <xsd:element ref='Description'/>
       </xsd:choice>
-   </xsd:sequence>   
+   </xsd:sequence>
    <!-- TODO: abbrev might be an enum type: FS, ... -->
    <xsd:attribute name='abbrev' use='required' type='xsd:string'/>
    <xsd:attribute name='cweid' use='optional' type='xsd:positiveInteger'/>
@@ -160,6 +160,7 @@
         <xsd:element ref="Message" minOccurs="0" />
    </xsd:sequence>
    <xsd:attribute name='classname' type='xsd:string' use='required'/>
+   <xsd:attribute name='primary' type='xsd:boolean' use='optional'/>
    <xsd:attribute name='role' use='optional' type="xsd:string"/>
   </xsd:complexType>
  </xsd:element>
@@ -214,7 +215,7 @@
                  minOccurs='0' maxOccurs='unbounded'/>
    </xsd:sequence>
  </xsd:complexType>
- 
+
  <xsd:element name='Field'>
   <xsd:complexType>
    <xsd:sequence>
@@ -233,6 +234,7 @@
    <xsd:attribute name='name' type='xsd:string' use='required'/>
    <xsd:attribute name='signature' type='xsd:string' use='required'/>
    <xsd:attribute name='role' use='optional' type="xsd:string"/>
+   <xsd:attribute name='primary' type='xsd:boolean' use='optional'/>
   </xsd:complexType>
  </xsd:element>
 
@@ -252,6 +254,7 @@
    <xsd:attribute name='signature'  type='xsd:string' use='required'/>
    <xsd:attribute name='role'       use='optional' type="xsd:string"/>
    <xsd:attribute name='isStatic'   use='optional' type="xsd:boolean"/>
+   <xsd:attribute name='primary' type='xsd:boolean' use='optional'/>
   </xsd:complexType>
  </xsd:element>
 
@@ -264,7 +267,7 @@
    <xsd:attribute name='role' use='optional' type="xsd:string"/>
   </xsd:complexType>
  </xsd:element>
-	
+
  <xsd:element name='Project'>
   <xsd:complexType>
    <xsd:sequence>
@@ -288,10 +291,12 @@
    <xsd:attribute name='role'          type='xsd:string' use='optional'/>
    <xsd:attribute name='sourcefile'    type='xsd:string' use='optional'/>
    <xsd:attribute name="sourcepath"    type="xsd:string" use="optional" />
+   <xsd:attribute name="relSourcepath"    type="xsd:string" use="optional" />
    <xsd:attribute name='start'         type='xsd:int' use='optional'/>
    <xsd:attribute name='startBytecode' type='xsd:int' use='optional'/>
    <xsd:attribute name="synthetic"     type="xsd:boolean" use="optional" />
    <xsd:attribute name='opcodes'       type='xsd:string' use='optional'/>
+   <xsd:attribute name='primary'       type='xsd:boolean' use='optional'/>
   </xsd:complexType>
  </xsd:element>
 
@@ -314,7 +319,7 @@
   <xsd:complexType>
    <xsd:sequence>
     <xsd:element ref='PackageStats' maxOccurs='unbounded'/>
-   </xsd:sequence>  
+   </xsd:sequence>
    <xsd:attribute name='timestamp' use='required' type='xsd:string'/>
    <xsd:attribute name='total_classes' use='required' type='xsd:int'/>
    <xsd:attribute name='total_bugs' use='required' type='xsd:int'/>
@@ -335,7 +340,7 @@
   <xsd:complexType>
    <xsd:sequence>
     <xsd:element ref='ClassStats' maxOccurs='unbounded'/>
-   </xsd:sequence>  
+   </xsd:sequence>
    <xsd:attribute name='package' use='required' type='xsd:string'/>
    <xsd:attribute name='total_bugs' use='required' type='xsd:int'/>
    <xsd:attribute name='total_types' use='required' type='xsd:int'/>
@@ -354,7 +359,7 @@
                <jxb:property name="clazz"/>
             </xsd:appinfo>
          </xsd:annotation>
-   </xsd:attribute>         
+   </xsd:attribute>
    <xsd:attribute name='interface' use='required' type='xsd:string'/>
    <xsd:attribute name='sourceFile' use='optional' type='xsd:string'/>
    <xsd:attribute name='size' use='required' type='xsd:int'/>

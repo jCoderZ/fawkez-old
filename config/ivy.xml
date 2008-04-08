@@ -31,7 +31,7 @@
         <dependency org="org.docbook" name="docbook-xsl" rev="1.73.2">
             <artifact name="docbook-xsl" type="zip"/>
         </dependency>
-        <dependency org="findbugs" name="findbugs" rev="1.3.2">
+        <dependency org="findbugs" name="findbugs" rev="1.3.3">
             <artifact name="bcel" type="jar"/>
             <artifact name="dom4j-full" type="jar"/>
             <artifact name="coreplugin" type="jar"/>
@@ -43,7 +43,6 @@
             <artifact name="luntbuild-api" type="jar"/>
             <artifact name="hessian-3.0.8" type="jar"/>
         </dependency>
-        <dependency org="pmd" name="pmd" rev="4.1"/>
         <dependency org="XDoclet Team" name="xdoclet" rev="1.2.2">
             <artifact name="xdoclet" type="jar"/>
             <artifact name="xdoclet-web-module" type="jar"/>
@@ -67,9 +66,12 @@
  -->
 
     <!--  Things below here come from an official repository -->
+        <dependency org="pmd" name="pmd" rev="4.1"/>
         <dependency org="org.apache.ant" name="ant" rev="1.7.0" />
         <dependency org="log4j" name="log4j" rev="1.2.14" />
-        <dependency org="velocity" name="velocity" rev="1.4" />
+        <dependency org="org.apache.velocity" name="velocity" rev="1.5">
+            <artifact name="velocity" type="jar"/>
+        </dependency>
         <dependency org="commons-logging" name="commons-logging" rev="1.1.1" />
         <dependency org="commons-collections" name="commons-collections" rev="2.1.1" />
         <dependency org="commons-pool" name="commons-pool" rev="1.4" />
@@ -80,7 +82,6 @@
         <dependency org="oro" name="oro" rev="2.0.8"/>
         <dependency org="junit" name="junit" rev="3.8.2"/>
         <dependency org="xmlunit" name="xmlunit" rev="1.1"/>
-
         <dependency org="xjavadoc" name="xjavadoc" rev="1.1"/>
         <dependency org="geronimo-spec" name="geronimo-spec-j2ee" rev="1.4-rc4"/>
         <dependency org="geronimo-spec" name="geronimo-spec-j2ee-connector" rev="1.5-rc4"/>
@@ -89,23 +90,23 @@
         <dependency org="jivesoftware" name="smack" rev="2.2.1"/>
         <dependency org="jivesoftware" name="smackx" rev="2.2.1"/>
 
-        <dependency org="antlr" name="antlr" rev="2.7.2" />
+        <dependency org="antlr" name="antlr" rev="2.7.7" />
         <dependency org="bcel" name="bcel" rev="5.1"/>
         <!-- jcoverage fork -->
-        <dependency org="cobertura" name="cobertura" rev="1.7" />
-        <dependency org="javancss" name="javancss" rev="21.41"/>
-        <dependency org="javancss" name="ccl" rev="21.41"/>
+        <dependency org="net.sourceforge.cobertura" name="cobertura" rev="1.9" />
+        <dependency org="javancss" name="javancss" rev="28.49"/>
+        <dependency org="javancss" name="ccl" rev="28.49"/>
 
         <dependency org="jtidy" name="jtidy" rev="4aug2000r7-dev"/>
 
-        <dependency org="asm" name="asm-analysis" rev="3.0" />
-        <dependency org="asm" name="asm-commons" rev="3.0" />
-        <dependency org="asm" name="asm-tree" rev="3.0" />
-        <dependency org="asm" name="asm-util" rev="3.0" />
-        <dependency org="asm" name="asm-xml" rev="3.0" />
-        <dependency org="asm" name="asm" rev="3.0" />
+        <dependency org="asm" name="asm-analysis" rev="3.1" />
+        <dependency org="asm" name="asm-commons" rev="3.1" />
+        <dependency org="asm" name="asm-tree" rev="3.1" />
+        <dependency org="asm" name="asm-util" rev="3.1" />
+        <dependency org="asm" name="asm-xml" rev="3.1" />
+        <dependency org="asm" name="asm" rev="3.1" />
 
-        <dependency org="jaxen" name="jaxen" rev="1.1-beta-8"/>
+        <dependency org="jaxen" name="jaxen" rev="1.1.1"/>
         <dependency org="saxpath" name="saxpath" rev="1.0-FCS"/>
         <dependency org="dom4j" name="dom4j" rev="1.6.1"/>
         <dependency org="checkstyle" name="checkstyle" rev="4.4"/>

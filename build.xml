@@ -426,8 +426,7 @@ xerces in current vm: ${xerces.version.ant}
    </target>
    <target name="generate-simple-types-nodeps"
            unless="generate-simple-types.uptodate">
-      <xslt basedir="${base.dir}"
-            in="${base.dir}/src/xml/simple-types.xml"
+      <xslt in="${base.dir}/src/xml/simple-types.xml"
             out="${build.dir}/simple-types.out"
             style="${base.dir}/src/xml/xsl/generate-simple-types.xsl"
             force="true">
@@ -703,6 +702,16 @@ xerces in current vm: ${xerces.version.ant}
     </target>
     <target name="compile-all-nodeps">
         <mkdir dir="${build.dir}/classes"/>
+      <javac destdir="${build.dir}/classes"
+           deprecation="${build.debug}"
+           debug="true"
+           fork="true"
+           source="1.4">
+          <src path="${base.dir}/src/java"/>
+          <src path="${build.dir}/gen-java"/>
+          <exclude name="org/jcoderz/phoenix/report/**"/>
+          <classpath refid="default.classpath"/>
+      </javac>
         <javac destdir="${build.dir}/classes"
              deprecation="${build.debug}"
              debug="true"
@@ -711,17 +720,10 @@ xerces in current vm: ${xerces.version.ant}
             <src path="${base.dir}/src/java"/>
             <src path="${build.dir}/gen-java"/>
             <include name="org/jcoderz/phoenix/report/**"/>
-            <classpath refid="default.classpath"/>
-        </javac>
-        <javac destdir="${build.dir}/classes"
-             deprecation="${build.debug}"
-             debug="true"
-             fork="true"
-             source="1.4">
-            <src path="${base.dir}/src/java"/>
-            <src path="${build.dir}/gen-java"/>
-            <exclude name="org/jcoderz/phoenix/report/**"/>
-            <classpath refid="default.classpath"/>
+          <classpath>
+              <pathelement path="${build.dir}/classes"/>
+              <path refid="default.classpath"/>
+          </classpath>
         </javac>
         <copy todir="${build.dir}/classes">
             <fileset dir="${base.dir}/src/java/">

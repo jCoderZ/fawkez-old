@@ -919,6 +919,59 @@ public final class <xsl:value-of select="$classname"/>
 }
 </xsl:template>
 
+<xsl:template name="restricted-string-user-type">
+   <xsl:param name="classname"/>
+   <xsl:param name="type-classname"/>
+   <xsl:param name="package"/>
+   <xsl:param name="min-length"/>
+   <xsl:param name="max-length"/>
+   <xsl:variable name="classname-constant">TYPE_NAME</xsl:variable>
+   <xsl:call-template name="java-copyright-header"/>
+package <xsl:value-of select="$package"/>;
+
+/**
+ * Hibernate user type for the  <xsl:value-of select="$type-classname"/>.
+ *
+ * @author generated via stylesheet
+ */
+public final class <xsl:value-of select="$classname"/>
+      extends org.jcoderz.commons.util.StringUserTypeBase
+{
+   /**
+    * Null or Empty constant
+    */
+   private static final <xsl:value-of select="$type-classname"/> EMPTY_OR_NULL
+        = <xsl:choose><xsl:when test="$min-length = 0">
+          <xsl:value-of select="$type-classname"/>.fromString("");</xsl:when>
+          <xsl:otherwise>null;</xsl:otherwise>
+          </xsl:choose>
+
+  /**
+   * {@inheritDoc}
+   */
+  public Object fromString(String value)
+  {
+    return <xsl:value-of select="$type-classname"/>.fromString(value);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public Object getEmptyOrNull()
+  {
+    return EMPTY_OR_NULL;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public Class returnedClass()
+  {
+    return <xsl:value-of select="$type-classname"/>.class;
+  }
+}
+</xsl:template>
+
 <xsl:template name="restricted-string-import-hook" priority="-1">
 <xsl:param name="token-type" select="''"/>
 import org.jcoderz.commons.ArgumentMinLengthViolationException;

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-   $Id: generate-simple-types.xsl,v 1.8 2005/09/14 14:46:34 mgriffel Exp $
+   $Id$
 
    Simple type generator. Support type-safe enumerations and restricted
    strings.
@@ -17,7 +17,7 @@
 
 <xsl:include href="libcommon.xsl"/>
 
-<xsl:output method="text" 
+<xsl:output method="text"
             encoding="ISO-8859-1"/>
 
 <xsl:strip-space elements="*"/>
@@ -26,24 +26,24 @@
 
 <xsl:template match="/">
    <!-- log to out -->
-   Generating classes to directory <xsl:value-of select="$outdir"/>. 
-   Found <xsl:value-of select="count(//enumeration)"/> enumerations, 
-   <xsl:value-of select="count(//restrictedString)"/> restricted strings, 
+   Generating classes to directory <xsl:value-of select="$outdir"/>.
+   Found <xsl:value-of select="count(//enumeration)"/> enumerations,
+   <xsl:value-of select="count(//restrictedString)"/> restricted strings,
    <xsl:value-of select="count(//regexString)"/> regex strings and
    <xsl:value-of select="count(//valueObject)"/> value objects.
    <xsl:apply-templates/>
 </xsl:template>
 
 <xsl:template match="enumeration">
-   <xsl:variable name="package.dir"><xsl:value-of 
-      select="$outdir"/>/<xsl:value-of 
-         select="translate(@package, '.', '/')"/></xsl:variable> 
+   <xsl:variable name="package.dir"><xsl:value-of
+      select="$outdir"/>/<xsl:value-of
+         select="translate(@package, '.', '/')"/></xsl:variable>
 
-   <xsl:variable name="file"><xsl:value-of 
-      select="$package.dir"/>/<xsl:value-of 
-         select="@classname"/>.java</xsl:variable> 
+   <xsl:variable name="file"><xsl:value-of
+      select="$package.dir"/>/<xsl:value-of
+         select="@classname"/>.java</xsl:variable>
 
-   <redirect:write file="{$file}">         
+   <redirect:write file="{$file}">
 
    <xsl:call-template name="simple-enum-generator">
       <xsl:with-param name="classname" select="@classname"/>
@@ -51,20 +51,20 @@
       <xsl:with-param name="values" select=".//value"/>
       <xsl:with-param name="javadoc" select="./description"/>
    </xsl:call-template>
-   
+
    </redirect:write>
 </xsl:template>
 
 <xsl:template match="restrictedString">
-   <xsl:variable name="package.dir"><xsl:value-of 
-      select="$outdir"/>/<xsl:value-of 
-         select="translate(@package, '.', '/')"/></xsl:variable> 
+   <xsl:variable name="package.dir"><xsl:value-of
+      select="$outdir"/>/<xsl:value-of
+         select="translate(@package, '.', '/')"/></xsl:variable>
 
-   <xsl:variable name="file"><xsl:value-of 
-      select="$package.dir"/>/<xsl:value-of 
-         select="@classname"/>.java</xsl:variable> 
+   <xsl:variable name="file"><xsl:value-of
+      select="$package.dir"/>/<xsl:value-of
+         select="@classname"/>.java</xsl:variable>
 
-   <redirect:write file="{$file}">         
+   <redirect:write file="{$file}">
 
    <xsl:call-template name="restricted-string">
       <xsl:with-param name="classname" select="@classname"/>
@@ -74,19 +74,35 @@
       <xsl:with-param name="constants" select=".//constant"/>
       <xsl:with-param name="token-type" select="@token-type"/>
    </xsl:call-template>
-   
+
    </redirect:write>
+   <xsl:if test="@user-type = 'true'">
+     <xsl:variable name="user-type-file"><xsl:value-of
+        select="$package.dir"/>/<xsl:value-of
+           select="@classname"/>UserType.java</xsl:variable>
+
+     <redirect:write file="{$user-type-file}">
+       <xsl:call-template name="restricted-string-user-type">
+          <xsl:with-param name="classname"
+            select="concat(@classname, 'UserType')"/>
+          <xsl:with-param name="type-classname"
+            select="@classname"/>
+          <xsl:with-param name="package" select="@package"/>
+          <xsl:with-param name="min-length" select="@min-length"/>
+          <xsl:with-param name="max-length" select="@max-length"/>
+       </xsl:call-template>
+     </redirect:write>
+   </xsl:if>
 </xsl:template>
 
-
 <xsl:template match="regexString">
-   <xsl:variable name="package.dir"><xsl:value-of 
-      select="$outdir"/>/<xsl:value-of 
-         select="translate(@package, '.', '/')"/></xsl:variable> 
+   <xsl:variable name="package.dir"><xsl:value-of
+      select="$outdir"/>/<xsl:value-of
+         select="translate(@package, '.', '/')"/></xsl:variable>
 
-   <xsl:variable name="file"><xsl:value-of 
-      select="$package.dir"/>/<xsl:value-of 
-         select="@classname"/>.java</xsl:variable> 
+   <xsl:variable name="file"><xsl:value-of
+      select="$package.dir"/>/<xsl:value-of
+         select="@classname"/>.java</xsl:variable>
 
   <redirect:write file="{$file}">
 
@@ -96,18 +112,18 @@
       <xsl:with-param name="constants" select=".//constant"/>
       <xsl:with-param name="regex" select=".//regex"/>
    </xsl:call-template>
-   
+
    </redirect:write>
 </xsl:template>
 
 <xsl:template match="valueObject">
-   <xsl:variable name="package.dir"><xsl:value-of 
-      select="$outdir"/>/<xsl:value-of 
-         select="translate(@package, '.', '/')"/></xsl:variable> 
+   <xsl:variable name="package.dir"><xsl:value-of
+      select="$outdir"/>/<xsl:value-of
+         select="translate(@package, '.', '/')"/></xsl:variable>
 
-   <xsl:variable name="file"><xsl:value-of 
-      select="$package.dir"/>/<xsl:value-of 
-         select="@classname"/>.java</xsl:variable> 
+   <xsl:variable name="file"><xsl:value-of
+      select="$package.dir"/>/<xsl:value-of
+         select="@classname"/>.java</xsl:variable>
 
   <redirect:write file="{$file}">
 
@@ -116,21 +132,21 @@
       <xsl:with-param name="package" select="@package"/>
       <xsl:with-param name="object" select="."/>
    </xsl:call-template>
-   
+
    </redirect:write>
 
 </xsl:template>
 
 
 <xsl:template match="restrictedLong">
-   <xsl:variable name="package.dir"><xsl:value-of 
-      select="$outdir"/>/<xsl:value-of 
-         select="translate(@package, '.', '/')"/></xsl:variable> 
-   <xsl:variable name="file"><xsl:value-of 
-      select="$package.dir"/>/<xsl:value-of 
-         select="@classname"/>.java</xsl:variable> 
+   <xsl:variable name="package.dir"><xsl:value-of
+      select="$outdir"/>/<xsl:value-of
+         select="translate(@package, '.', '/')"/></xsl:variable>
+   <xsl:variable name="file"><xsl:value-of
+      select="$package.dir"/>/<xsl:value-of
+         select="@classname"/>.java</xsl:variable>
 
-   <redirect:write file="{$file}">         
+   <redirect:write file="{$file}">
 
    <xsl:call-template name="restricted-long">
       <xsl:with-param name="classname" select="@classname"/>
@@ -139,7 +155,7 @@
       <xsl:with-param name="max-value" select="@max-value"/>
       <xsl:with-param name="constants" select=".//constant"/>
    </xsl:call-template>
-   
+
    </redirect:write>
 </xsl:template>
 

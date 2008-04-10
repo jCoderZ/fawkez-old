@@ -73,6 +73,7 @@
       <xsl:with-param name="max-length" select="@max-length"/>
       <xsl:with-param name="constants" select=".//constant"/>
       <xsl:with-param name="token-type" select="@token-type"/>
+      <xsl:with-param name="regex" select="@regex"/>
    </xsl:call-template>
 
    </redirect:write>

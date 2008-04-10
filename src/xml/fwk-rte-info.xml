@@ -175,4 +175,20 @@
          Supply a correct value for the argument.
       </solution>
    </message>
+   <message
+      id="12"
+      name="ARGUMENT_PATTERN_VIOLATION"
+      level="WARNING"
+      base-exception="org.jcoderz.commons.ArgumentMalformedException">
+      <text>
+         The given argument is at least partly malformed.
+         Argument ''{ARGUMENT_NAME}'' cannot be set to
+         value ''{Serializable:ARGUMENT_VALUE}''. The value
+         does not match the restrictive pattern
+         ''{String:PATTERN}'' for {Class:ARGUMENT_CLASS}.
+      </text>
+      <solution>
+         Supply a correct value for the argument.
+      </solution>
+   </message>
 </group>

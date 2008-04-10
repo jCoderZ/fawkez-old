@@ -787,6 +787,7 @@ import org.jcoderz.commons.util.Assert;
    <xsl:param name="max-length"/>
    <xsl:param name="constants"/>
    <xsl:param name="token-type" select="''"/>
+   <xsl:param name="regex" select="''"/>
    <xsl:variable name="classname-constant">TYPE_NAME</xsl:variable>
    <xsl:call-template name="java-copyright-header"/>
 package <xsl:value-of select="$package"/>;
@@ -795,13 +796,15 @@ package <xsl:value-of select="$package"/>;
 import java.io.Serializable;
 <xsl:call-template name="restricted-string-import-hook">
    <xsl:with-param name="token-type" select="$token-type"/>
+   <xsl:with-param name="regex" select="$regex"/>
 </xsl:call-template>
 
 /**
  * Holds the <xsl:value-of select="$classname"/>.
  * &lt;pre&gt;
  * String.type[<xsl:value-of select="$min-length"/>..<xsl:value-of select="$max-length"/>].
- * &lt;/pre&gt;
+<xsl:if test="$regex"> * regular expression: <xsl:value-of select="$regex"/>
+</xsl:if> * &lt;/pre&gt;
  * Instances of this class are immutable.
  *
  * @author generated via stylesheet
@@ -819,6 +822,17 @@ public final class <xsl:value-of select="$classname"/>
 
    /** The maximal length of <xsl:value-of select="$classname"/>. */
    public static final int MAX_LENGTH = <xsl:value-of select="$max-length"/>;
+<xsl:if test="$regex">
+
+   /** The regular expression matching <xsl:value-of select="$classname"/>. */
+   public static final String REGULAR_EXPRESSION
+         = "<xsl:call-template name="java-string-escape"><xsl:with-param name="s" select="$regex"/></xsl:call-template>";
+
+   /** The compiled pattern for the regular expression. */
+   public static final Pattern REGULAR_EXPRESSION_PATTERN
+         = Pattern.compile(REGULAR_EXPRESSION);
+</xsl:if>
+
 <xsl:for-each select="$constants">
    <xsl:call-template name="java-constant">
       <xsl:with-param name="type" select="$classname"/>
@@ -858,7 +872,14 @@ public final class <xsl:value-of select="$classname"/>
             <xsl:value-of select="$classname-constant"/>,
             str, new Integer(str.length()), new Integer(MAX_LENGTH),
             <xsl:value-of select="$classname"/>.class);
-      }<xsl:if test="$token-type">
+      }<xsl:if test="$regex">
+      if (!REGULAR_EXPRESSION_PATTERN.matcher(str).matches())
+      {
+         throw new ArgumentPatternViolationException(
+            <xsl:value-of select="$classname-constant"/>,
+            str, REGULAR_EXPRESSION,
+            <xsl:value-of select="$classname"/>.class);
+      }</xsl:if><xsl:if test="$token-type">
       if (!XsdUtil.isValidToken(str))
       {
          throw new ArgumentMalformedException(
@@ -974,9 +995,13 @@ public final class <xsl:value-of select="$classname"/>
 
 <xsl:template name="restricted-string-import-hook" priority="-1">
 <xsl:param name="token-type" select="''"/>
+<xsl:param name="regex" select="''"/><xsl:if test="$regex">
+import java.util.regex.Pattern;
+</xsl:if>
 import org.jcoderz.commons.ArgumentMinLengthViolationException;
 import org.jcoderz.commons.ArgumentMaxLengthViolationException;
-import org.jcoderz.commons.ArgumentMalformedException;<xsl:if test="$token-type">
+import org.jcoderz.commons.ArgumentMalformedException;<xsl:if test="$regex">
+import org.jcoderz.commons.ArgumentPatternViolationException;</xsl:if><xsl:if test="$token-type">
 import org.jcoderz.commons.util.XsdUtil;</xsl:if>
 import org.jcoderz.commons.util.Assert;
 </xsl:template>

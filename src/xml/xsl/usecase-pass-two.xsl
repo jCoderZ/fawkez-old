@@ -49,11 +49,14 @@
                    <section>
                       <title><xsl:value-of select="$strSummaryLevel"/></title>
                       <xsl:for-each select="//uc:usecase[@level='Summary' and not(@change_request) and generate-id() = generate-id(key('scope-group', concat(@level, '-', uc:scope)))]">
+                         <xsl:sort data-type="text" select="uc:scope" order="ascending" />
                          <xsl:variable name="scope_id" select="uc:scope"/>
                          <section>
                             <title><xsl:value-of select="uc:scope"/></title>
                             <para>
-                              <xsl:apply-templates select="//uc:usecase[@level='Summary' and not(@change_request) and uc:scope=$scope_id]"/>
+                              <xsl:apply-templates select="//uc:usecase[@level='Summary' and not(@change_request) and uc:scope=$scope_id]">
+                                 <xsl:sort data-type="text" select="@id" order="ascending" />
+                              </xsl:apply-templates>
                             </para>
                          </section>
                       </xsl:for-each>
@@ -63,10 +66,13 @@
                 <section>
                   <title><xsl:value-of select="$strUserGoalLevel"/></title>
                   <xsl:for-each select="//uc:usecase[@level='UserGoal' and not(@change_request) and generate-id() = generate-id(key('scope-group', concat(@level, '-', uc:scope)))]">
+                     <xsl:sort data-type="text" select="uc:scope" order="ascending" />
                      <xsl:variable name="scope_id" select="uc:scope"/>
                      <section>
                         <title><xsl:value-of select="uc:scope"/></title>
-                        <xsl:apply-templates select="//uc:usecase[@level='UserGoal' and not(@change_request) and uc:scope=$scope_id]"/>
+                        <xsl:apply-templates select="//uc:usecase[@level='UserGoal' and not(@change_request) and uc:scope=$scope_id]">
+                           <xsl:sort data-type="text" select="@id" order="ascending" />
+                        </xsl:apply-templates>
                      </section>
                   </xsl:for-each>
                 </section>
@@ -75,10 +81,13 @@
                 <section>
                   <title><xsl:value-of select="$strComponentLevel"/></title>
                   <xsl:for-each select="//uc:usecase[@level='Component' and not(@change_request) and generate-id() = generate-id(key('scope-group', concat(@level, '-', uc:scope)))]">
+                     <xsl:sort data-type="text" select="uc:scope" order="ascending" />
                      <xsl:variable name="scope_id" select="uc:scope"/>
                      <section>
                         <title><xsl:value-of select="uc:scope"/></title>
-                        <xsl:apply-templates select="//uc:usecase[@level='Component' and not(@change_request) and uc:scope=$scope_id]"/>
+                        <xsl:apply-templates select="//uc:usecase[@level='Component' and not(@change_request) and uc:scope=$scope_id]">
+                           <xsl:sort data-type="text" select="@id" order="ascending" />
+                        </xsl:apply-templates>
                      </section>
                   </xsl:for-each>
                 </section>

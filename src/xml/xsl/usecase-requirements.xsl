@@ -34,6 +34,7 @@
          <title>Requirements</title-->
 
          <xsl:for-each select="//req:requirement/req:category/req:primary[generate-id() = generate-id(key('unique-category-primary-key', .))]">
+           <xsl:sort data-type="text" select="req:primary" order="ascending" />
 
            <xsl:variable name="category" select="."/>
 

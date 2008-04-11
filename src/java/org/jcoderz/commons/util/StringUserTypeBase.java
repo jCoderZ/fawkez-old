@@ -51,7 +51,8 @@ import org.hibernate.HibernateException;
 public abstract class StringUserTypeBase
     extends UserTypeBase
 {
-    private static final int[] SQL_TYPES = {Types.VARCHAR};
+    private static final int SQL_TYPE = Types.VARCHAR;
+    private static final int[] SQL_TYPES = {SQL_TYPE};
 
     /**
      * {@inheritDoc}
@@ -62,7 +63,7 @@ public abstract class StringUserTypeBase
     {
         final String value = resultSet.getString(types[0]);
         final Object result;
-        if (resultSet.wasNull())
+        if (value == null || resultSet.wasNull())
         {
             result = null;
         }
@@ -106,7 +107,7 @@ public abstract class StringUserTypeBase
         }
         else
         {
-            statement.setNull(index, Types.VARCHAR);
+            statement.setNull(index, SQL_TYPE);
         }
     }
 

@@ -29,179 +29,182 @@
    <xsl:key name="test-issue-group" match="tc:scrno" use="."/>
 
     <xsl:template match="tc:testspecs">
-       <book lang="en" status="final">
+      <book lang="en" status="final">
           <xsl:apply-templates select="info"/>
-
           <chapter>
              <title>Statistics</title>
              <xsl:call-template name="statistics"/>
           </chapter>
 
-          <chapter id="specifications">
-             <title>Test Specifications</title>
-             <xsl:for-each select="//tc:test[generate-id() = generate-id(key('test-component-group', tc:cut)[1])]">
-                <section>
-                   <title><xsl:value-of select="tc:cut"/></title>
-                   <xsl:if test="key('test-component-group', tc:cut)[tc:areatopic='Functional' and tc:level='System']">
-                     <section>
-                        <title>System Level / Functional</title>
-                        <xsl:if test="key('test-component-group', tc:cut)[tc:areatopic='Functional' and tc:level='System' and tc:priority='High']">
-                           <section>
-                              <title>Priority: High</title>
-                              <xsl:apply-templates select="key('test-component-group', tc:cut)[tc:areatopic='Functional' and tc:level='System' and tc:priority='High']" mode="main">
-                                 <xsl:sort select="tc:id"/>
-                              </xsl:apply-templates>
-                           </section>
-                        </xsl:if>
-                        <xsl:if test="key('test-component-group', tc:cut)[tc:areatopic='Functional' and tc:level='System' and tc:priority='Medium']">
-                           <section>
-                              <title>Priority: Medium</title>
-                              <xsl:apply-templates select="key('test-component-group', tc:cut)[tc:areatopic='Functional' and tc:level='System' and tc:priority='Medium']" mode="main">
-                                 <xsl:sort select="tc:id"/>
-                              </xsl:apply-templates>
-                           </section>
-                        </xsl:if>
-                        <xsl:if test="key('test-component-group', tc:cut)[tc:areatopic='Functional' and tc:level='System' and tc:priority='Low']">
-                           <section>
-                              <title>Priority: Low</title>
-                              <xsl:apply-templates select="key('test-component-group', tc:cut)[tc:areatopic='Functional' and tc:level='System' and tc:priority='Low']" mode="main">
-                                 <xsl:sort select="tc:id"/>
-                              </xsl:apply-templates>
-                           </section>
-                        </xsl:if>
-                        <xsl:if test="key('test-component-group', tc:cut)[tc:areatopic='Functional' and tc:level='System' and not(tc:priority='Low') and not(tc:priority='Medium') and not(tc:priority='High')]">
-                           <section>
-                              <title>Unpriorized</title>
-                              <xsl:apply-templates select="key('test-component-group', tc:cut)[tc:areatopic='Functional' and tc:level='System' and not(tc:priority='Low') and not(tc:priority='Medium') and not(tc:priority='High')]" mode="main">
-                                 <xsl:sort select="tc:id"/>
-                              </xsl:apply-templates>
-                           </section>
-                        </xsl:if>
-                     </section>
-                   </xsl:if>
+          <xsl:if test="//tc:test">
+             <chapter id="specifications">
+                <title>Test Specifications</title>
+                <para></para>
+                <xsl:for-each select="//tc:test[generate-id() = generate-id(key('test-component-group', tc:cut)[1])]">
+                   <section>
+                      <title><xsl:value-of select="tc:cut"/></title>
+                      <xsl:if test="key('test-component-group', tc:cut)[tc:areatopic='Functional' and tc:level='System']">
+                        <section>
+                           <title>System Level / Functional</title>
+                           <xsl:if test="key('test-component-group', tc:cut)[tc:areatopic='Functional' and tc:level='System' and tc:priority='High']">
+                              <section>
+                                 <title>Priority: High</title>
+                                 <xsl:apply-templates select="key('test-component-group', tc:cut)[tc:areatopic='Functional' and tc:level='System' and tc:priority='High']" mode="main">
+                                    <xsl:sort select="tc:id"/>
+                                 </xsl:apply-templates>
+                              </section>
+                           </xsl:if>
+                           <xsl:if test="key('test-component-group', tc:cut)[tc:areatopic='Functional' and tc:level='System' and tc:priority='Medium']">
+                              <section>
+                                 <title>Priority: Medium</title>
+                                 <xsl:apply-templates select="key('test-component-group', tc:cut)[tc:areatopic='Functional' and tc:level='System' and tc:priority='Medium']" mode="main">
+                                    <xsl:sort select="tc:id"/>
+                                 </xsl:apply-templates>
+                              </section>
+                           </xsl:if>
+                           <xsl:if test="key('test-component-group', tc:cut)[tc:areatopic='Functional' and tc:level='System' and tc:priority='Low']">
+                              <section>
+                                 <title>Priority: Low</title>
+                                 <xsl:apply-templates select="key('test-component-group', tc:cut)[tc:areatopic='Functional' and tc:level='System' and tc:priority='Low']" mode="main">
+                                    <xsl:sort select="tc:id"/>
+                                 </xsl:apply-templates>
+                              </section>
+                           </xsl:if>
+                           <xsl:if test="key('test-component-group', tc:cut)[tc:areatopic='Functional' and tc:level='System' and not(tc:priority='Low') and not(tc:priority='Medium') and not(tc:priority='High')]">
+                              <section>
+                                 <title>Unpriorized</title>
+                                 <xsl:apply-templates select="key('test-component-group', tc:cut)[tc:areatopic='Functional' and tc:level='System' and not(tc:priority='Low') and not(tc:priority='Medium') and not(tc:priority='High')]" mode="main">
+                                    <xsl:sort select="tc:id"/>
+                                 </xsl:apply-templates>
+                              </section>
+                           </xsl:if>
+                        </section>
+                      </xsl:if>
+   
+                      <xsl:if test="test[tc:areatopic='Non Functional' and tc:level='System']">
+                         <section>
+                            <title>System Level / Non-Funtional</title>
+                            <xsl:if test="key('test-component-group', tc:cut)[tc:areatopic='Non Functional' and tc:level='System' and tc:priority='High']">
+                              <section>
+                                 <title>Priority: High</title>
+                                 <xsl:apply-templates select="key('test-component-group', tc:cut)[tc:areatopic='Non Functional' and tc:level='System' and tc:priority='High']" mode="main">
+                                    <xsl:sort select="tc:id"/>
+                                 </xsl:apply-templates>
+                              </section>
+                           </xsl:if>
+                           <xsl:if test="key('test-component-group', tc:cut)[tc:areatopic='Non Functional' and tc:level='System' and tc:priority='Medium']">
+                              <section>
+                                 <title>Priority: Medium</title>
+                                 <xsl:apply-templates select="key('test-component-group', tc:cut)[tc:areatopic='Non Functional' and tc:level='System' and tc:priority='Medium']" mode="main">
+                                    <xsl:sort select="tc:id"/>
+                                 </xsl:apply-templates>
+                              </section>
+                           </xsl:if>
+                           <xsl:if test="key('test-component-group', tc:cut)[tc:areatopic='Non Functional' and tc:level='System' and tc:priority='Low']">
+                              <section>
+                                 <title>Priority: Low</title>
+                                 <xsl:apply-templates select="key('test-component-group', tc:cut)[tc:areatopic='Non Functional' and tc:level='System' and tc:priority='Low']" mode="main">
+                                    <xsl:sort select="tc:id"/>
+                                 </xsl:apply-templates>
+                              </section>
+                           </xsl:if>
+                           <xsl:if test="key('test-component-group', tc:cut)[tc:areatopic='Non Functional' and tc:level='System' and not(tc:priority='Low') and not(tc:priority='Medium') and not(tc:priority='High')]">
+                              <section>
+                                 <title>Unpriorized</title>
+                                 <xsl:apply-templates select="key('test-component-group', tc:cut)[tc:areatopic='Non Functional' and tc:level='System' and not(tc:priority='Low') and not(tc:priority='Medium') and not(tc:priority='High')]" mode="main">
+                                    <xsl:sort select="tc:id"/>
+                                 </xsl:apply-templates>
+                              </section>
+                           </xsl:if>
+                         </section>
+                      </xsl:if>
+   
+                      <xsl:if test="tc:test[tc:areatopic='Functional' and tc:level='Integration']">
+                        <section>
+                           <title>Integration Level / Functional</title>
+                           <xsl:if test="key('test-component-group', tc:cut)[tc:areatopic='Functional' and tc:level='Integration' and tc:priority='High']">
+                              <section>
+                                 <title>Priority: High</title>
+                                 <xsl:apply-templates select="key('test-component-group', tc:cut)[tc:areatopic='Functional' and tc:level='Integration' and tc:priority='High']" mode="main">
+                                    <xsl:sort select="tc:id"/>
+                                 </xsl:apply-templates>
+                              </section>
+                           </xsl:if>
+                           <xsl:if test="key('test-component-group', tc:cut)[tc:areatopic='Functional' and tc:level='Integration' and tc:priority='Medium']">
+                              <section>
+                                 <title>Priority: Medium</title>
+                                 <xsl:apply-templates select="key('test-component-group', tc:cut)[tc:areatopic='Functional' and tc:level='Integration' and tc:priority='Medium']" mode="main">
+                                    <xsl:sort select="tc:id"/>
+                                 </xsl:apply-templates>
+                              </section>
+                           </xsl:if>
+                           <xsl:if test="key('test-component-group', tc:cut)[tc:areatopic='Functional' and tc:level='Integration' and tc:priority='Low']">
+                              <section>
+                                 <title>Priority: Low</title>
+                                 <xsl:apply-templates select="key('test-component-group', tc:cut)[tc:areatopic='Functional' and tc:level='Integration' and tc:priority='Low']" mode="main">
+                                    <xsl:sort select="tc:id"/>
+                                 </xsl:apply-templates>
+                              </section>
+                           </xsl:if>
+                           <xsl:if test="key('test-component-group', tc:cut)[tc:areatopic='Functional' and tc:level='Integration' and not(tc:priority='Low') and not(tc:priority='Medium') and not(tc:priority='High')]">
+                              <section>
+                                 <title>Unpriorized</title>
+                                 <xsl:apply-templates select="key('test-component-group', tc:cut)[tc:areatopic='Functional' and tc:level='Integration' and not(tc:priority='Low') and not(tc:priority='Medium') and not(tc:priority='High')]" mode="main">
+                                    <xsl:sort select="tc:id"/>
+                                 </xsl:apply-templates>
+                              </section>
+                           </xsl:if>
+                        </section>
+                      </xsl:if>
+   
+                      <xsl:if test="tc:test[tc:areatopic='Non Functional' and tc:level='Integration']">
+                         <section>
+                            <title>Integration Level / Non-Funtional</title>
+                            <xsl:if test="key('test-component-group', tc:cut)[tc:areatopic='Non Functional' and tc:level='Integration' and tc:priority='High']">
+                              <section>
+                                 <title>Priority: High</title>
+                                 <xsl:apply-templates select="key('test-component-group', tc:cut)[tc:areatopic='Non Functional' and tc:level='Integration' and tc:priority='High']" mode="main">
+                                    <xsl:sort select="tc:id"/>
+                                 </xsl:apply-templates>
+                              </section>
+                           </xsl:if>
+                           <xsl:if test="key('test-component-group', tc:cut)[tc:areatopic='Non Functional' and tc:level='Integration' and tc:priority='Medium']">
+                              <section>
+                                 <title>Priority: Medium</title>
+                                 <xsl:apply-templates select="key('test-component-group', tc:cut)[tc:areatopic='Non Functional' and tc:level='Integration' and tc:priority='Medium']" mode="main">
+                                    <xsl:sort select="tc:id"/>
+                                 </xsl:apply-templates>
+                              </section>
+                           </xsl:if>
+                           <xsl:if test="key('test-component-group', tc:cut)[tc:areatopic='Non Functional' and tc:level='Integration' and tc:priority='Low']">
+                              <section>
+                                 <title>Priority: Low</title>
+                                 <xsl:apply-templates select="key('test-component-group', tc:cut)[tc:areatopic='Non Functional' and tc:level='Integration' and tc:priority='Low']" mode="main">
+                                    <xsl:sort select="tc:id"/>
+                                 </xsl:apply-templates>
+                              </section>
+                           </xsl:if>
+                           <xsl:if test="key('test-component-group', tc:cut)[tc:areatopic='Non Functional' and tc:level='Integration' and not(tc:priority='Low') and not(tc:priority='Medium') and not(tc:priority='High')]">
+                              <section>
+                                 <title>Unpriorized</title>
+                                 <xsl:apply-templates select="key('test-component-group', tc:cut)[tc:areatopic='Non Functional' and tc:level='Integration' and not(tc:priority='Low') and not(tc:priority='Medium') and not(tc:priority='High')]" mode="main">
+                                    <xsl:sort select="tc:id"/>
+                                 </xsl:apply-templates>
+                              </section>
+                           </xsl:if>
+                         </section>
+                      </xsl:if>
+                   </section>
+                </xsl:for-each>
+             </chapter>
+          </xsl:if>
 
-                   <xsl:if test="test[tc:areatopic='Non Functional' and tc:level='System']">
-                      <section>
-                         <title>System Level / Non-Funtional</title>
-                         <xsl:if test="key('test-component-group', tc:cut)[tc:areatopic='Non Functional' and tc:level='System' and tc:priority='High']">
-                           <section>
-                              <title>Priority: High</title>
-                              <xsl:apply-templates select="key('test-component-group', tc:cut)[tc:areatopic='Non Functional' and tc:level='System' and tc:priority='High']" mode="main">
-                                 <xsl:sort select="tc:id"/>
-                              </xsl:apply-templates>
-                           </section>
-                        </xsl:if>
-                        <xsl:if test="key('test-component-group', tc:cut)[tc:areatopic='Non Functional' and tc:level='System' and tc:priority='Medium']">
-                           <section>
-                              <title>Priority: Medium</title>
-                              <xsl:apply-templates select="key('test-component-group', tc:cut)[tc:areatopic='Non Functional' and tc:level='System' and tc:priority='Medium']" mode="main">
-                                 <xsl:sort select="tc:id"/>
-                              </xsl:apply-templates>
-                           </section>
-                        </xsl:if>
-                        <xsl:if test="key('test-component-group', tc:cut)[tc:areatopic='Non Functional' and tc:level='System' and tc:priority='Low']">
-                           <section>
-                              <title>Priority: Low</title>
-                              <xsl:apply-templates select="key('test-component-group', tc:cut)[tc:areatopic='Non Functional' and tc:level='System' and tc:priority='Low']" mode="main">
-                                 <xsl:sort select="tc:id"/>
-                              </xsl:apply-templates>
-                           </section>
-                        </xsl:if>
-                        <xsl:if test="key('test-component-group', tc:cut)[tc:areatopic='Non Functional' and tc:level='System' and not(tc:priority='Low') and not(tc:priority='Medium') and not(tc:priority='High')]">
-                           <section>
-                              <title>Unpriorized</title>
-                              <xsl:apply-templates select="key('test-component-group', tc:cut)[tc:areatopic='Non Functional' and tc:level='System' and not(tc:priority='Low') and not(tc:priority='Medium') and not(tc:priority='High')]" mode="main">
-                                 <xsl:sort select="tc:id"/>
-                              </xsl:apply-templates>
-                           </section>
-                        </xsl:if>
-                      </section>
-                   </xsl:if>
-
-                   <xsl:if test="tc:test[tc:areatopic='Functional' and tc:level='Integration']">
-                     <section>
-                        <title>Integration Level / Functional</title>
-                        <xsl:if test="key('test-component-group', tc:cut)[tc:areatopic='Functional' and tc:level='Integration' and tc:priority='High']">
-                           <section>
-                              <title>Priority: High</title>
-                              <xsl:apply-templates select="key('test-component-group', tc:cut)[tc:areatopic='Functional' and tc:level='Integration' and tc:priority='High']" mode="main">
-                                 <xsl:sort select="tc:id"/>
-                              </xsl:apply-templates>
-                           </section>
-                        </xsl:if>
-                        <xsl:if test="key('test-component-group', tc:cut)[tc:areatopic='Functional' and tc:level='Integration' and tc:priority='Medium']">
-                           <section>
-                              <title>Priority: Medium</title>
-                              <xsl:apply-templates select="key('test-component-group', tc:cut)[tc:areatopic='Functional' and tc:level='Integration' and tc:priority='Medium']" mode="main">
-                                 <xsl:sort select="tc:id"/>
-                              </xsl:apply-templates>
-                           </section>
-                        </xsl:if>
-                        <xsl:if test="key('test-component-group', tc:cut)[tc:areatopic='Functional' and tc:level='Integration' and tc:priority='Low']">
-                           <section>
-                              <title>Priority: Low</title>
-                              <xsl:apply-templates select="key('test-component-group', tc:cut)[tc:areatopic='Functional' and tc:level='Integration' and tc:priority='Low']" mode="main">
-                                 <xsl:sort select="tc:id"/>
-                              </xsl:apply-templates>
-                           </section>
-                        </xsl:if>
-                        <xsl:if test="key('test-component-group', tc:cut)[tc:areatopic='Functional' and tc:level='Integration' and not(tc:priority='Low') and not(tc:priority='Medium') and not(tc:priority='High')]">
-                           <section>
-                              <title>Unpriorized</title>
-                              <xsl:apply-templates select="key('test-component-group', tc:cut)[tc:areatopic='Functional' and tc:level='Integration' and not(tc:priority='Low') and not(tc:priority='Medium') and not(tc:priority='High')]" mode="main">
-                                 <xsl:sort select="tc:id"/>
-                              </xsl:apply-templates>
-                           </section>
-                        </xsl:if>
-                     </section>
-                   </xsl:if>
-
-                   <xsl:if test="tc:test[tc:areatopic='Non Functional' and tc:level='Integration']">
-                      <section>
-                         <title>Integration Level / Non-Funtional</title>
-                         <xsl:if test="key('test-component-group', tc:cut)[tc:areatopic='Non Functional' and tc:level='Integration' and tc:priority='High']">
-                           <section>
-                              <title>Priority: High</title>
-                              <xsl:apply-templates select="key('test-component-group', tc:cut)[tc:areatopic='Non Functional' and tc:level='Integration' and tc:priority='High']" mode="main">
-                                 <xsl:sort select="tc:id"/>
-                              </xsl:apply-templates>
-                           </section>
-                        </xsl:if>
-                        <xsl:if test="key('test-component-group', tc:cut)[tc:areatopic='Non Functional' and tc:level='Integration' and tc:priority='Medium']">
-                           <section>
-                              <title>Priority: Medium</title>
-                              <xsl:apply-templates select="key('test-component-group', tc:cut)[tc:areatopic='Non Functional' and tc:level='Integration' and tc:priority='Medium']" mode="main">
-                                 <xsl:sort select="tc:id"/>
-                              </xsl:apply-templates>
-                           </section>
-                        </xsl:if>
-                        <xsl:if test="key('test-component-group', tc:cut)[tc:areatopic='Non Functional' and tc:level='Integration' and tc:priority='Low']">
-                           <section>
-                              <title>Priority: Low</title>
-                              <xsl:apply-templates select="key('test-component-group', tc:cut)[tc:areatopic='Non Functional' and tc:level='Integration' and tc:priority='Low']" mode="main">
-                                 <xsl:sort select="tc:id"/>
-                              </xsl:apply-templates>
-                           </section>
-                        </xsl:if>
-                        <xsl:if test="key('test-component-group', tc:cut)[tc:areatopic='Non Functional' and tc:level='Integration' and not(tc:priority='Low') and not(tc:priority='Medium') and not(tc:priority='High')]">
-                           <section>
-                              <title>Unpriorized</title>
-                              <xsl:apply-templates select="key('test-component-group', tc:cut)[tc:areatopic='Non Functional' and tc:level='Integration' and not(tc:priority='Low') and not(tc:priority='Medium') and not(tc:priority='High')]" mode="main">
-                                 <xsl:sort select="tc:id"/>
-                              </xsl:apply-templates>
-                           </section>
-                        </xsl:if>
-                      </section>
-                   </xsl:if>
-                </section>
-             </xsl:for-each>
-
-          </chapter>
-
-          <chapter>
-             <title>Issue Mapping</title>
-             <xsl:call-template name="issue_list"/>
-          </chapter>
+          <xsl:if test="//tc:test">
+             <chapter>
+                <title>Issue Mapping</title>
+                <xsl:call-template name="issue_list"/>
+             </chapter>
+          </xsl:if>
 
         <index></index>
 

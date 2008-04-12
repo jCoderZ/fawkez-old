@@ -57,6 +57,7 @@
             <artifact name="xalan"/>
             <artifact name="serializer"/>
         </dependency>
+        <dependency org="pmd" name="pmd" rev="4.2.1"/>
 
 <!--
         <dependency org="xdoclet" name="xdoclet" rev="1.2.3"/>
@@ -72,7 +73,6 @@
             <exclude name="jta"/>
         </dependency>
 
-        <dependency org="pmd" name="pmd" rev="4.1"/>
         <dependency org="org.apache.ant" name="ant" rev="1.7.0" />
         <dependency org="log4j" name="log4j" rev="1.2.14" />
         <dependency org="velocity" name="velocity" rev="1.4" />
@@ -110,7 +110,7 @@
         <dependency org="asm" name="asm-xml" rev="3.1" />
         <dependency org="asm" name="asm" rev="3.1" />
 
-        <dependency org="jaxen" name="jaxen" rev="1.1-beta-8"/>
+        <dependency org="jaxen" name="jaxen" rev="1.1.1"/>
         <dependency org="saxpath" name="saxpath" rev="1.0-FCS"/>
         <dependency org="dom4j" name="dom4j" rev="1.6.1"/>
         <dependency org="checkstyle" name="checkstyle" rev="4.4"/>

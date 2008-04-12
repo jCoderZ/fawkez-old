@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+
+<td:data xmlns:td="http://jcoderz.org/test-data"
+  xmlns:xi="http://www.w3.org/2001/XInclude"
+  xmlns:db="http://docbook.org/ns/docbook"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://jcoderz.org/test-data
+                      http://www.jcoderz.org/xsd/xdoc/test-data-SNAPSHOT.xsd">
+
+  <info project="Fawkez" version="$Name:  $" />
+  <bookinfo>
+    <authorgroup>
+      <author>
+        <firstname>Torsten</firstname>
+        <surname>Stolpmann</surname>
+      </author>
+    </authorgroup>
+  </bookinfo>
+
+  <xi:include href="../testspec/TI1001-DefaultMessage.xml" />
+  <xi:include href="../testspec/TI2001-DefaultPerson.xml" />
+  <xi:include href="../testspec/TI2002-AlternatePerson.xml" />
+  <xi:include href="../testspec/TS1001-DefaultItems.xml" />
+  <xi:include href="../testspec/TS2001-Persons.xml" />
+</td:data>
+
+
+
+

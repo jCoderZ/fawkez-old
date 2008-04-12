@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  xmlns:docbook="http://docbook.org/ns/docbook"
+  xmlns:td="http://jcoderz.org/test-data"
+  targetNamespace="http://jcoderz.org/test-data">
+  <xsd:import schemaLocation="http://www.docbook.org/xsd/4.5/docbook.xsd" />
+
+  <xsd:simpleType name='testDataId'>
+    <xsd:restriction base='xsd:string'>
+      <xsd:pattern value='[A-Z]{3,4}_[1-9]{1}[0-9]{0,1}[0-9]{4}' />
+    </xsd:restriction>
+  </xsd:simpleType>
+
+  <xsd:element name="data">
+    <xsd:complexType>
+      <xsd:choice minOccurs="0" maxOccurs="unbounded">
+        <xsd:element ref="td:set" />
+        <xsd:element ref="td:item" />
+      </xsd:choice>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="set">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="td:id" />
+        <xsd:element ref="td:name" />
+        <xsd:element ref="td:description" />
+        <xsd:element ref="td:ref" minOccurs="0" maxOccurs="unbounded" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="item">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="td:id" />
+        <xsd:element ref="td:type" />
+        <xsd:element ref="td:name" />
+        <xsd:element ref="td:description" />
+        <xsd:element ref="td:attribute" minOccurs="0" maxOccurs="unbounded" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="attribute">
+    <xsd:complexType>
+      <xsd:choice>
+        <xsd:element ref="td:ref" />
+        <xsd:sequence>
+          <xsd:element ref="td:name" />
+          <xsd:element ref="td:value" />
+        </xsd:sequence>
+      </xsd:choice>
+    </xsd:complexType>
+  </xsd:element>
+
+
+  <xsd:element name="id" type="td:testDataId" />
+  <xsd:element name="ref" type="td:testDataId" />
+  <xsd:element name="type" type="xsd:string" />
+  <xsd:element name="name" type="xsd:string" />
+  <xsd:element name="value" type="xsd:string" />
+  <xsd:element name="description" type="xsd:string" />
+
+
+</xsd:schema>

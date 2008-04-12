@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<td:item xmlns:td="http://jcoderz.org/test-data"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://jcoderz.org/test-data
+                      http://www.jcoderz.org/xsd/xdoc/test-data-SNAPSHOT.xsd">
+
+  <td:id>TI1001</td:id>
+  <td:type>DTMMessage</td:type>
+  <td:name>DefaultMessage</td:name>
+  <td:description>An optional description of this sample message.</td:description>
+
+  <td:attribute>
+    <td:ref>TI2001</td:ref>
+  </td:attribute>
+
+  <td:attribute>
+    <td:name>Date</td:name>
+    <td:value>SampleMessage</td:value>
+  </td:attribute>
+
+</td:item>

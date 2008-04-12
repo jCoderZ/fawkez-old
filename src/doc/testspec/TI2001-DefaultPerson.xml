@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<td:item xmlns:td="http://jcoderz.org/test-data"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://jcoderz.org/test-data
+                      http://www.jcoderz.org/xsd/xdoc/test-data-SNAPSHOT.xsd">
+
+  <td:id>TI2001</td:id>
+  <td:type>Person</td:type>
+  <td:name>DefaultPerson</td:name>
+  <td:description>The default person is used in most of the test cases.</td:description>
+
+  <td:attribute>
+    <td:name>Forename</td:name>
+    <td:value>Joltawan</td:value>
+  </td:attribute>
+
+  <td:attribute>
+    <td:name>Surename</td:name>
+    <td:value>Barodscheff</td:value>
+  </td:attribute>
+
+</td:item>

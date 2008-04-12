@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<td:item xmlns:td="http://jcoderz.org/test-data"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://jcoderz.org/test-data
+                      http://www.jcoderz.org/xsd/xdoc/test-data-SNAPSHOT.xsd">
+
+  <td:id>TI2002</td:id>
+  <td:type>Person</td:type>
+  <td:name>AlternatePerson</td:name>
+  <td:description>The alternate person is used in test cases where the default person is not applicable.</td:description>
+
+  <td:attribute>
+    <td:name>Forename</td:name>
+    <td:value>Dschindepscha</td:value>
+  </td:attribute>
+
+  <td:attribute>
+    <td:name>Surename</td:name>
+    <td:value>Gangeresi</td:value>
+  </td:attribute>
+
+</td:item>

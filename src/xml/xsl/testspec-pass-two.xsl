@@ -3,11 +3,13 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
                 xmlns:uc="uc"
                 xmlns:req="req"
+                xmlns:redirect="http://xml.apache.org/xalan/redirect"
                 xmlns:tc="http://jcoderz.org/test-specifications"
                 xmlns:xi="http://www.w3.org/2001/XInclude"
                 xmlns:db="http://docbook.org/ns/docbook"
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                 exclude-result-prefixes="xsl xi db uc req xsi"
+                extension-element-prefixes="redirect"
                 xsi:schemaLocation="req
                                 http://www.jcoderz.org/xsd/xdoc/requirements-SNAPSHOT.xsd
                                 uc
@@ -27,8 +29,29 @@
 
    <xsl:key name="test-component-group" match="tc:test" use="tc:cut"/>
    <xsl:key name="test-issue-group" match="tc:scrno" use="."/>
+   
+   <xsl:template match="/">
+      <xsl:choose>
+         <xsl:when test="count(//tc:test) &gt; 100">
+            <xsl:apply-templates select="//tc:testspecs" mode="chunked"/>
+         </xsl:when>
+         <xsl:otherwise>
+            <xsl:apply-templates select="//tc:testspecs"/>
+         </xsl:otherwise>
+      </xsl:choose>
+   </xsl:template>
+   
+   <xsl:template match="tc:testspecs" mode="chunked">
+      <book lang="en" status="final">
+          <xsl:apply-templates select="info"/>
+          <chapter>
+             <title>Statistics</title>
+             <xsl:call-template name="statistics"/>
+          </chapter>
+      </book>
+   </xsl:template>
 
-    <xsl:template match="tc:testspecs">
+   <xsl:template match="tc:testspecs">
       <book lang="en" status="final">
           <xsl:apply-templates select="info"/>
           <chapter>

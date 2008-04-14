@@ -640,7 +640,7 @@ import java.util.List;
  *
  * The following <xsl:value-of select="$name"/>s are defined:
  * &lt;ul&gt;<xsl:for-each select="$values">
- *    &lt;li&gt;<xsl:value-of select="$classname"/>.<xsl:call-template name="asJavaConstantName"><xsl:with-param name="value" select="."/></xsl:call-template>&lt;/li&gt;</xsl:for-each>
+ *    &lt;li&gt;<xsl:value-of select="$classname"/>.<xsl:call-template name="asJavaConstantName"><xsl:with-param name="value" select="."/></xsl:call-template><xsl:if test="@numeric"> = <xsl:value-of select="@numeric"/></xsl:if>&lt;/li&gt;</xsl:for-each>
  * &lt;/ul&gt;
  *
  * @author generated
@@ -659,11 +659,18 @@ public final class <xsl:value-of select="$classname"/>
    /** Maps a string representation to an enumerated value. */
    private static final Map
       FROM_STRING = new HashMap();
-<xsl:for-each select="$values"><xsl:choose><xsl:when test="not(@description)">
+<xsl:for-each select="$values"><xsl:if test="@numeric">
+   /** Numeric representation for <xsl:value-of select="$classname"/><xsl:text> </xsl:text><xsl:value-of select="."/>. */
+   public static final int <xsl:call-template name="asJavaConstantName"><xsl:with-param
+   name="value" select="."/></xsl:call-template>_NUMERIC = <xsl:value-of select="@numeric"/>;
+</xsl:if><xsl:choose><xsl:when test="not(@description)">
    /** The <xsl:value-of select="$classname"/><xsl:text> </xsl:text><xsl:value-of select="."/>. */</xsl:when><xsl:otherwise>
    /** <xsl:value-of select="./@description"/> (value: <xsl:value-of select="."/>). */</xsl:otherwise></xsl:choose>
    public static final <xsl:value-of select="$classname"/><xsl:text> </xsl:text><xsl:call-template name="asJavaConstantName"><xsl:with-param name="value" select="."/></xsl:call-template>
-      = new <xsl:value-of select="$classname"/>("<xsl:value-of select="."/>");
+      = new <xsl:value-of select="$classname"/>("<xsl:value-of select="."/>"<xsl:if
+         test="@numeric">, <xsl:call-template name="asJavaConstantName">
+           <xsl:with-param name="value" select="."/>
+         </xsl:call-template>_NUMERIC</xsl:if>);
 </xsl:for-each>
 
    /** The serialVersionUID used for serialization. */
@@ -690,14 +697,21 @@ public final class <xsl:value-of select="$classname"/>
 
    /** The name of the <xsl:value-of select="$name"/> */
    private final transient String mName;
+<xsl:if test="$values/@numeric">
 
+   /** The numeric representation of the <xsl:value-of select="$name"/> */
+   private final transient int mNumeric;
+</xsl:if>
    /** Private Constructor */
-   private <xsl:value-of select="$classname"/> (String name)
+   private <xsl:value-of select="$classname"/> (String name<xsl:if
+    test="$values/@numeric">, int numeric</xsl:if>)
    {
-      mName = name;
+      mName = name;<xsl:if test="$values/@numeric">
+      mNumeric = numeric;</xsl:if>
       FROM_STRING.put(mName, this);
    }
 
+<xsl:if test="not($values/@numeric)">
    /**
     * Creates a <xsl:value-of select="$classname"/> object from its int representation.
     *
@@ -717,10 +731,42 @@ public final class <xsl:value-of select="$classname"/>
       {
          throw new ArgumentMalformedException(
                "<xsl:value-of select="$classname"/>",
-               String.valueOf(i),
-               "Illegal int representation of <xsl:value-of select="$classname"/>");
+               new Integer(i),
+               "Illegal int representation of <xsl:value-of select="$classname"/>.");
       }
    }
+</xsl:if>
+
+<xsl:if test="$values/@numeric">
+
+   /**
+    * Creates a <xsl:value-of select="$classname"/> object from its numeric
+    * representation.
+    *
+    * @param i the integer representation of the <xsl:value-of select="$name"/>.
+    * @return the <xsl:value-of select="$classname"/> object represented by this int.
+    * @throws ArgumentMalformedException If the assigned int value isn't
+    *       listed in the internal <xsl:value-of select="$name"/> table.
+    */
+   public static <xsl:value-of select="$classname"/> fromInt (int i)
+         throws ArgumentMalformedException
+   {
+       final <xsl:value-of select="$classname"/> result;
+       switch (i)
+       {<xsl:for-each select="$values"><xsl:if test="not(@numeric)"><xsl:message
+          >No numeric representation defined for <xsl:value-of select="."/> in enumeration type <xsl:value-of select="$classname"/>.</xsl:message></xsl:if>
+           case <xsl:call-template name="asJavaConstantName"><xsl:with-param name="value" select="."/></xsl:call-template>_NUMERIC:
+               result = <xsl:call-template name="asJavaConstantName"><xsl:with-param name="value" select="."/></xsl:call-template>;
+               break;</xsl:for-each>
+           default:
+               throw new ArgumentMalformedException(
+                     "<xsl:value-of select="$classname"/>",
+                     String.valueOf(i),
+                     "Illegal int representation of <xsl:value-of select="$classname"/>.");
+      }
+      return result;
+   }
+</xsl:if>
 
    /**
     * Creates a <xsl:value-of select="$classname"/> object from its String representation.
@@ -754,7 +800,11 @@ public final class <xsl:value-of select="$classname"/>
     */
    public int toInt ()
    {
-      return mOrdinal;
+<xsl:if test="$values/@numeric">
+        return mNumeric;
+</xsl:if><xsl:if test="not($values/@numeric)">
+        return mOrdinal;
+</xsl:if>
    }
 
    /**

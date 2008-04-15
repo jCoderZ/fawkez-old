@@ -323,9 +323,16 @@ public class XtremeDocs
             rasterizeSvgFiles(imageDir); // 4 HTML
             scaleSvgImages(imageDir); // 4 PDF
          }
-
-         final File docBookFile = transformPassTwo(filePassOne);
-         renderDocBook(docBookFile);
+         
+         if ("TestSpec".equals(mType))
+         {
+             renderDocbookFilesFromPassOne(filePassOne);
+         }
+         else
+         {
+             final File docBookFile = transformPassTwo(filePassOne);
+             renderDocBook(docBookFile, mInFile);
+         }
       }
       catch (BuildException e)
       {
@@ -344,16 +351,56 @@ public class XtremeDocs
    }
 
 
-   private void renderDocBook (File docBookFile)
+   private void renderDocBook (File docBookFile, File inFile)
    {
       for (final Iterator i = mFormatters.iterator(); i.hasNext();)
       {
          final FormatterInfoData f = (FormatterInfoData) i.next();
          final Formatter formatter = Formatter.getInstance(f);
          final File out = new File(docBookFile.getParentFile(),
-               AntTaskUtil.stripFileExtention(mInFile.getName())
+               AntTaskUtil.stripFileExtention(inFile.getName())
                + "." + formatter.getFileExtension());
          formatter.transform(this, docBookFile, out);
+      }
+   }
+   
+   private void renderDocbookFilesFromPassOne (File filePassOne)
+   {
+      File docbookDir = new File(filePassOne.getParent());
+      transformPassTwo(filePassOne);
+      log("search files to render in: " + docbookDir.getParent());
+      final File[] docbookFiles = docbookDir.listFiles(new FilenameFilter()
+      {
+         public boolean accept (File dir, String name)
+         {
+            final boolean result;
+            if (name.endsWith(".p2"))
+            {
+               result = true;
+            }
+            else
+            {
+               result = false;
+            }
+            return result;
+         }
+      });
+     
+      if (docbookFiles != null)
+      {
+         for (int i = 0; i < docbookFiles.length; i++)
+         {
+            final File docbookFile = docbookFiles[i];
+            final File passOneFile = new File(AntTaskUtil
+                .stripFileExtention(AntTaskUtil
+                .stripFileExtention(docbookFile.getName())));
+            renderDocBook(docbookFile, passOneFile);
+            log("files to render: " + docbookFile.getName());
+         }
+      }
+      else
+      {
+         log("No .xml files found to render", Project.MSG_VERBOSE);
       }
    }
 

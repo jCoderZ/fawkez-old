@@ -763,8 +763,8 @@ public final class <xsl:value-of select="$classname"/>
        switch (i)
        {<xsl:for-each select="$values"><xsl:variable name="constant-name"><xsl:call-template name="asJavaConstantName"><xsl:with-param
           name="value" select="."/></xsl:call-template></xsl:variable>
-           case <xsl:value-of select="constant-name"/>_NUMERIC:
-               result = <xsl:value-of select="constant-name"/>;
+           case <xsl:value-of select="$constant-name"/>_NUMERIC:
+               result = <xsl:value-of select="$constant-name"/>;
                break;</xsl:for-each>
            default:
                throw new ArgumentMalformedException(

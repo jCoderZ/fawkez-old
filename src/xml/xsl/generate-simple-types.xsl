@@ -53,6 +53,40 @@
    </xsl:call-template>
 
    </redirect:write>
+
+   <xsl:if test="@user-type = 'true' or @user-type = 'string'">
+     <xsl:variable name="user-type-file"><xsl:value-of
+        select="$package.dir"/>/<xsl:value-of
+           select="@classname"/>UserType.java</xsl:variable>
+
+     <redirect:write file="{$user-type-file}">
+       <xsl:call-template name="restricted-string-user-type">
+          <xsl:with-param name="classname"
+            select="concat(@classname, 'UserType')"/>
+          <xsl:with-param name="type-classname"
+            select="@classname"/>
+          <xsl:with-param name="package" select="@package"/>
+          <xsl:with-param name="min-length" select="1"/>
+          <xsl:with-param name="max-length" select="99"/>
+       </xsl:call-template>
+     </redirect:write>
+   </xsl:if>
+
+   <xsl:if test="@user-type = 'numeric' or @user-type = 'integer'">
+     <xsl:variable name="user-type-file"><xsl:value-of
+        select="$package.dir"/>/<xsl:value-of
+           select="@classname"/>UserType.java</xsl:variable>
+
+     <redirect:write file="{$user-type-file}">
+       <xsl:call-template name="restricted-int-user-type">
+          <xsl:with-param name="classname"
+            select="concat(@classname, 'UserType')"/>
+          <xsl:with-param name="type-classname"
+            select="@classname"/>
+          <xsl:with-param name="package" select="@package"/>
+       </xsl:call-template>
+     </redirect:write>
+   </xsl:if>
 </xsl:template>
 
 <xsl:template match="restrictedString">

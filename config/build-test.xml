@@ -88,7 +88,7 @@
     </target>
 
     <target name="test-compile"
-            depends="build, test-webdoclet, test-compile-nodeps"
+            depends="build, gen-test-classes, test-webdoclet, test-compile-nodeps"
             description="Compile JUnit tests"></target>
     <target name="test-compile-nodeps">
         <mkdir dir="${build.dir}/test-classes"/>
@@ -323,6 +323,21 @@
             message="JUnit Report available at ${build.dir}/doc/junit"/>        
     </target>
 
+    <target name="gen-test-classes">
+      <taskdef name="simple-type-generator"
+        classname="org.jcoderz.commons.taskdefs.SimpleTypeGenerator">
+        <classpath>
+          <pathelement location="${build.dir}/classes"/>
+          <path refid="default.classpath"/>
+        </classpath>
+      </taskdef>
+      <simple-type-generator in="${base.dir}/test/xml/simple-types.xml"
+              out="${build.dir}/simple-types.log"
+              destDir="${build.dir}/gen-test"
+              failonerror="true"
+              force="true"/>
+    </target>
+  
    <!-- Tests the execution of some ant tasks provided by this project -->
     <target name="test-ant-tasks">
         <taskdef name="log-message-generator"

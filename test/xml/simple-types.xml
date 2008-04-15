@@ -15,6 +15,46 @@
       </enumeration>
    </typeSafeEnumerations>
 
+      <enumeration
+         classname="TestEnum"
+         package="org.jcoderz.commons.types.samples"
+         user-type="string">
+         <value>Clubs</value>
+         <value>Diamonds</value>
+         <value>Hearts</value>
+         <value>Spades</value>
+      </enumeration>
+
+      <enumeration
+         classname="TestEnumAsString"
+         package="org.jcoderz.commons.types.samples"
+         user-type="string">
+         <value>Clubs</value>
+         <value>Diamonds</value>
+         <value>Hearts</value>
+         <value>Spades</value>
+      </enumeration>
+
+      <enumeration
+         classname="TestEnumAsNumeric"
+         package="org.jcoderz.commons.types.samples"
+         user-type="numeric">
+         <value>Clubs</value>
+         <value>Diamonds</value>
+         <value>Hearts</value>
+         <value>Spades</value>
+      </enumeration>
+
+      <enumeration
+         classname="TestEnumExpliciteValue"
+         package="org.jcoderz.commons.types.samples"
+         user-type="numeric">
+         <value numeric="1">Clubs</value>
+         <value numeric="2">Diamonds</value>
+         <value numeric="4">Hearts</value>
+         <value numeric="8">Spades</value>
+      </enumeration>
+
 <!-- ===============================================================
      RESTRICTED STRINGS
      =============================================================== -->

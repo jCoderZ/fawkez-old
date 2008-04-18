@@ -318,7 +318,7 @@ public class <xsl:value-of select="$classname"/>
        */
       public void log (<xsl:value-of select="$custom-logger-class"/> logger)
       {
-        logger.logp(getLogLevel(),
+        logger.logp(getLogMessageInfo().getLogLevel(),
           <xsl:if test="$custom-logger-class != 'java.util.logging.Logger'">
             getLogMessageInfo().getSymbol(),</xsl:if>
             getSourceClass(),

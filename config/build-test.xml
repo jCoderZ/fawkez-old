@@ -5,14 +5,14 @@
    <property name="initialcontext.factory.bea"
             value="weblogic.jndi.WLInitialContextFactory"/>
 
-   <target name="check-database-settings"/>        
-   <target name="bea-set-properties"/>        
+   <target name="check-database-settings"/>
+   <target name="bea-set-properties"/>
 
     <path id="test.classpath">
         <pathelement path="${build.dir}/classes"/>
         <path refid="default.classpath"/>
     </path>
-            
+
     <path id="test.runtime.classpath">
         <pathelement path="${build.dir}/test-classes"/>
         <pathelement path="${build.dir}/instrumented-classes"/>
@@ -41,8 +41,8 @@
         </uptodate>
     </target>
     <target name="test-ejbdoclet-nodeps" unless="test-ejbdoclet.uptodate">
-        <xdoclet-ejb 
-            destdir="${build.dir}/gen-test" 
+        <xdoclet-ejb
+            destdir="${build.dir}/gen-test"
             dd-dir="${build.dir}/test-deploymentdescriptors">
             <sources>
                 <fileset dir="${base.dir}/test/java">
@@ -54,14 +54,14 @@
                     <exclude name="**/*MBean.java" />
                 </fileset-->
             </sources>
-        </xdoclet-ejb>    
+        </xdoclet-ejb>
     </target>
-    
+
     <!-- =================================================================== -->
     <!-- run Xdoclet/Web for production Servlets                             -->
     <!-- =================================================================== -->
     <target name="test-webdoclet"
-            depends="test-ejbdoclet, test-webdoclet-uptodatecheck, 
+            depends="test-ejbdoclet, test-webdoclet-uptodatecheck,
                 test-webdoclet-nodeps"/>
     <target name="test-webdoclet-uptodatecheck">
         <uptodate property="test-webdoclet.uptodate"
@@ -126,7 +126,7 @@
                 <exclude name="test-classes/**/org/jcoderz/commons/LogFormatterOutputTest.class"/>
             </fileset>
         </cobertura-instrument>
-        <move file="${base.dir}/cobertura.ser" 
+        <move file="${base.dir}/cobertura.ser"
             tofile="${build.dir}/instrumented-classes/cobertura.ser"/>
     </target>
 
@@ -319,8 +319,8 @@
                 style="${base.dir}/config/filter-test-properties.xsl"></xslt>
         <move file="${build.dir}/report/junit/TESTS-TestSuites.xml.tmp"
                 toFile="${build.dir}/report/junit/TESTS-TestSuites.xml"/>
-        <echo level="info" 
-            message="JUnit Report available at ${build.dir}/doc/junit"/>        
+        <echo level="info"
+            message="JUnit Report available at ${build.dir}/doc/junit"/>
     </target>
 
     <target name="gen-test-classes">
@@ -336,8 +336,28 @@
               destDir="${build.dir}/gen-test"
               failonerror="true"
               force="true"/>
+      <simple-type-generator in="${base.dir}/test/xml/simple-types.xml"
+              out="${build.dir}/simple-types.log"
+              destDir="${build.dir}/gen-test"
+              failonerror="true"
+              force="true"/>
+      <taskdef name="log-message-generator"
+               classname="org.jcoderz.commons.taskdefs.LogMessageGenerator">
+          <classpath>
+            <pathelement location="${build.dir}/classes"/>
+            <path refid="default.classpath"/>
+          </classpath>
+      </taskdef>
+      <log-message-generator
+        in="${base.dir}/test/xml/app-info-test.xml"
+        out="${build.dir}/app-info-test-log-message-info.out"
+        destDir="${build.dir}/gen-test"
+        application="TCS"
+        failonerror="true"
+        force="true"/>
     </target>
-  
+
+
    <!-- Tests the execution of some ant tasks provided by this project -->
     <target name="test-ant-tasks">
         <taskdef name="log-message-generator"

@@ -1,0 +1,27 @@
+<!-- =============================================
+  Test Service
+  ============================================= -->
+<app:app-info xmlns:app="http://www.jcoderz.org/app-info-v1.0"
+         xmlns:xi="http://www.w3.org/2001/XInclude">
+  <application
+      id="100"
+      name="Testcase"
+      short-name="TCS"
+      package="org.jcoderz.commons.test">
+     <group id="1" name="Test Service" short-name="TSS"
+      package="org.jcoderz.commons.test.case"
+      base-exception="org.jcoderz.commons.BaseException"
+      base-runtime-exception="org.jcoderz.commons.BaseRuntimeException"
+      service="NONE">
+      <message id="3" name="FUNNY_RUNTIME"
+        level="INFO"
+        business-impact="UNDEFINED"
+        base-exception="org.jcoderz.commons.test.case.TestServiceRuntimeException">
+        <text>Generic technical issue in the caused by '{CAUSE_TEXT}'.</text>
+        <description>
+          Not real fun!
+        </description>
+      </message>
+    </group>
+  </application>
+</app:app-info>

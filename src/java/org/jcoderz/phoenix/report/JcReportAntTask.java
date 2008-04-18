@@ -278,7 +278,7 @@ public class JcReportAntTask
          final CompletionService<File> service
              = new ExecutorCompletionService<File>(
                  new ThreadPoolExecutor(max, max, 0, TimeUnit.SECONDS,
-                     new ArrayBlockingQueue<Runnable>(5))); // 2 max threads?
+                     new ArrayBlockingQueue<Runnable>(mReports.getReports().size()))); // 2 max threads?
 
          final List<Future<File>> jcReports = new ArrayList<Future<File>>();
          final Iterator<NestedReportElement> iterReport

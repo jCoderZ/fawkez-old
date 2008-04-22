@@ -369,10 +369,11 @@ digraph G {
             <!-- xsl:apply-templates select="//req:requirement[req:key = $dm_id]/req:entity"/-->
 
            <xsl:call-template name="create_edge">
-              <xsl:with-param name="link_from"  select="../../req:key"/>
-              <xsl:with-param name="link_to"    select="$dm_id"/>
-              <xsl:with-param name="link_end"   select="req:objectreference/req:linkend"/>
-              <xsl:with-param name="link_start" select="req:objectreference/req:linkstart"/>
+              <xsl:with-param name="link_from"      select="../../req:key"/>
+              <xsl:with-param name="link_to"        select="$dm_id"/>
+              <xsl:with-param name="link_end"       select="req:objectreference/req:linkend"/>
+              <xsl:with-param name="link_start"     select="req:objectreference/req:linkstart"/>
+              <xsl:with-param name="link_arrowhead" select="'normal'"/>
            </xsl:call-template>
         </xsl:if>
 
@@ -551,10 +552,11 @@ digraph G {
             <xsl:apply-templates select="//req:requirement[req:key = $dm_id]/req:entity"/>
 
            <xsl:call-template name="create_edge">
-              <xsl:with-param name="link_from"  select="../../req:key"/>
-              <xsl:with-param name="link_to"    select="$dm_id"/>
-              <xsl:with-param name="link_end"   select="req:objectreference/req:linkend"/>
-              <xsl:with-param name="link_start" select="req:objectreference/req:linkstart"/>
+              <xsl:with-param name="link_from"      select="../../req:key"/>
+              <xsl:with-param name="link_to"        select="$dm_id"/>
+              <xsl:with-param name="link_end"       select="req:objectreference/req:linkend"/>
+              <xsl:with-param name="link_start"     select="req:objectreference/req:linkstart"/>
+              <xsl:with-param name="link_arrowhead" select="'normal'"/>
            </xsl:call-template>
         </xsl:if>
 
@@ -665,10 +667,11 @@ digraph G {
          </xsl:if>
 
         <xsl:call-template name="create_edge">
-           <xsl:with-param name="link_from"  select="../../req:key"/>
-           <xsl:with-param name="link_to"    select="$dm_id"/>
-           <xsl:with-param name="link_end"   select="req:objectreference/req:linkend"/>
-           <xsl:with-param name="link_start" select="req:objectreference/req:linkstart"/>
+           <xsl:with-param name="link_from"      select="../../req:key"/>
+           <xsl:with-param name="link_to"        select="$dm_id"/>
+           <xsl:with-param name="link_end"       select="req:objectreference/req:linkend"/>
+           <xsl:with-param name="link_start"     select="req:objectreference/req:linkstart"/>
+           <xsl:with-param name="link_arrowhead" select="'normal'"/>
         </xsl:call-template>
 
       </xsl:for-each>
@@ -681,10 +684,11 @@ digraph G {
             <xsl:apply-templates select="//req:requirement[req:key = $dm_id]/req:entity"/>
 
               <xsl:call-template name="create_edge">
-              <xsl:with-param name="link_from"  select="$dm_id"/>
-              <xsl:with-param name="link_to"    select="$dm_root_id"/>
-              <xsl:with-param name="link_end"   select="req:linkend"/>
-              <xsl:with-param name="link_start" select="req:linkstart"/>
+              <xsl:with-param name="link_from"      select="$dm_id"/>
+              <xsl:with-param name="link_to"        select="$dm_root_id"/>
+              <xsl:with-param name="link_end"       select="req:linkend"/>
+              <xsl:with-param name="link_start"     select="req:linkstart"/>
+              <xsl:with-param name="link_arrowhead" select="'normal'"/>
            </xsl:call-template>
         </xsl:if>
 
@@ -727,19 +731,21 @@ digraph G {
       <xsl:for-each select="//req:objectreference[../../../req:key = $referenced_node]">
          <xsl:if test="req:ref/@id = $dm_root_id">
            <xsl:call-template name="create_edge">
-              <xsl:with-param name="link_from"  select="$referencing_node"/>
-              <xsl:with-param name="link_to"    select="$referenced_node"/>
-              <xsl:with-param name="link_end"   select="//req:objectreference[../../../req:key = $referencing_node and req:ref/@id = $referenced_node]/req:linkend"/>
-              <xsl:with-param name="link_start" select="//req:objectreference[../../../req:key = $referencing_node and req:ref/@id = $referenced_node]/req:linkstart"/>
+              <xsl:with-param name="link_from"      select="$referencing_node"/>
+              <xsl:with-param name="link_to"        select="$referenced_node"/>
+              <xsl:with-param name="link_end"       select="//req:objectreference[../../../req:key = $referencing_node and req:ref/@id = $referenced_node]/req:linkend"/>
+              <xsl:with-param name="link_start"     select="//req:objectreference[../../../req:key = $referencing_node and req:ref/@id = $referenced_node]/req:linkstart"/>
+              <xsl:with-param name="link_arrowhead" select="'normal'"/>
            </xsl:call-template>
          </xsl:if>
       </xsl:for-each>
       <xsl:for-each select="//req:objectreference[../../../req:key = $dm_root_id and req:ref/@id = $referenced_node]">
            <xsl:call-template name="create_edge">
-              <xsl:with-param name="link_from"  select="$referencing_node"/>
-              <xsl:with-param name="link_to"    select="$referenced_node"/>
-              <xsl:with-param name="link_end"   select="//req:objectreference[../../../req:key = $referencing_node and req:ref/@id = $referenced_node]/req:linkend"/>
-              <xsl:with-param name="link_start" select="//req:objectreference[../../../req:key = $referencing_node and req:ref/@id = $referenced_node]/req:linkstart"/>
+              <xsl:with-param name="link_from"      select="$referencing_node"/>
+              <xsl:with-param name="link_to"        select="$referenced_node"/>
+              <xsl:with-param name="link_end"       select="//req:objectreference[../../../req:key = $referencing_node and req:ref/@id = $referenced_node]/req:linkend"/>
+              <xsl:with-param name="link_start"     select="//req:objectreference[../../../req:key = $referencing_node and req:ref/@id = $referenced_node]/req:linkstart"/>
+              <xsl:with-param name="link_arrowhead" select="'normal'"/>
            </xsl:call-template>
       </xsl:for-each>
    </xsl:template>

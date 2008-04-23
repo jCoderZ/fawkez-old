@@ -30,6 +30,7 @@
    <xsl:key name="test-component-group" match="tc:test" use="tc:cut"/>
    <xsl:key name="test-issue-group"     match="tc:scrno" use="."/>
    <xsl:key name="component-group"      match="tc:cut" use="."/>
+   <xsl:key name="test-state-group"     match="//tc:test" use="tc:state"/>
    
    <xsl:template match="/">
       <xsl:choose>
@@ -322,13 +323,21 @@
            <tgroup cols="2" align="left" colsep="1" rowsep="1">
               <colspec colnum="1" colname="c1"/>
               <colspec colwidth="60" colnum="1" colname="c2"/>
+              <thead>
+                 <row>
+                    <entry></entry>
+                    <entry>(final / draft)</entry>
+                 </row>
+              </thead>
               <tbody>
                 <row>
                    <entry>
                       Test Cases
                    </entry>
                    <entry>
-                      <xsl:value-of select="count(//tc:test)"/>
+                      <xsl:value-of select="count(key('test-state-group', 'final'))"/>
+                      <xsl:text> / </xsl:text>
+                      <xsl:value-of select="count(key('test-state-group', 'draft'))"/> 
                    </entry>
                 </row>
                 <row>
@@ -336,7 +345,10 @@
                       Issues covered by Test Cases
                    </entry>
                    <entry>
-                      <xsl:value-of select="count(//tc:test/tc:scrno[not(.='') and not(.='none')])"/>
+                      <!-- TODO is this count correct? -->
+                      <xsl:value-of select="count(key('test-state-group', 'final')/tc:scrno[not(.='') and not(.='none')])"/>
+                      <xsl:text> / </xsl:text>
+                      <xsl:value-of select="count(key('test-state-group', 'draft')/tc:scrno[not(.='') and not(.='none')])"/>
                    </entry>
                 </row>
                 <row>
@@ -344,7 +356,9 @@
                       Numbers of test cases, prio High
                    </entry>
                    <entry>
-                      <xsl:value-of select="count(//tc:test[tc:priority='High'])"/>
+                      <xsl:value-of select="count(key('test-state-group', 'final')[tc:priority='High'])"/>
+                      <xsl:text> / </xsl:text>
+                      <xsl:value-of select="count(key('test-state-group', 'draft')[tc:priority='High'])"/>
                    </entry>
                 </row>
                 <row>
@@ -352,7 +366,9 @@
                       Numbers of test cases, prio Medium
                    </entry>
                    <entry>
-                      <xsl:value-of select="count(//tc:test[tc:priority='Medium'])"/>
+                      <xsl:value-of select="count(key('test-state-group', 'final')[tc:priority='Medium'])"/>
+                      <xsl:text> / </xsl:text>
+                      <xsl:value-of select="count(key('test-state-group', 'draft')[tc:priority='Medium'])"/>
                    </entry>
                 </row>
                 <row>
@@ -360,7 +376,9 @@
                       Numbers of test cases, prio Low
                    </entry>
                    <entry>
-                      <xsl:value-of select="count(//tc:test[tc:priority='Low'])"/>
+                      <xsl:value-of select="count(key('test-state-group', 'final')[tc:priority='Low'])"/>
+                      <xsl:text> / </xsl:text>
+                      <xsl:value-of select="count(key('test-state-group', 'draft')[tc:priority='Low'])"/>
                    </entry>
                 </row>
               </tbody>
@@ -377,7 +395,7 @@
               <thead>
                  <row>
                    <entry>Component Under Test</entry>
-                   <entry>Number of Test Cases</entry>
+                   <entry>Number of Test Cases (final / draft)</entry>
                  </row>
               </thead>
               <tbody>
@@ -387,7 +405,9 @@
                           <xsl:value-of select="tc:cut"/>
                        </entry>
                        <entry>
-                          <xsl:value-of select="count(key('test-component-group', tc:cut))"/>
+                          <xsl:value-of select="count(key('test-component-group', tc:cut)[tc:state = 'final'])"/>
+                          <xsl:text> / </xsl:text>
+                          <xsl:value-of select="count(key('test-component-group', tc:cut)[tc:state = 'draft'])"/>
                        </entry>
                     </row>
                  </xsl:for-each>
@@ -538,8 +558,13 @@
                   <row>
                     <entry><emphasis role="bold">Component Under Test</emphasis></entry>
                     <entry><xsl:value-of select="tc:cut"/></entry>
+                    <entry><emphasis role="bold">State</emphasis></entry>
+                    <entry><xsl:value-of select="tc:state"/></entry>
+                  </row>
+                  
+                  <row>
                     <entry><emphasis role="bold">Note</emphasis></entry>
-                    <entry><xsl:apply-templates select="tc:note"/></entry>
+                    <entry spanname="hspan"><xsl:apply-templates select="tc:note"/></entry>
                   </row>
 
                   <row>
@@ -623,8 +648,13 @@
                   <row>
                     <entry><emphasis role="bold">Component Under Test</emphasis></entry>
                     <entry><xsl:value-of select="tc:cut"/></entry>
+                    <entry><emphasis role="bold">State</emphasis></entry>
+                    <entry><xsl:value-of select="tc:state"/></entry>
+                  </row>
+                  
+                  <row>
                     <entry><emphasis role="bold">Note</emphasis></entry>
-                    <entry><xsl:apply-templates select="tc:note"/></entry>
+                    <entry spanname="hspan"><xsl:apply-templates select="tc:note"/></entry>
                   </row>
 
                   <row>
@@ -678,7 +708,7 @@
    <xsl:template match="tc:steps">
      <table frame="all" tabstyle="striped"><title>Test Steps</title>
         <tgroup cols="4" align="left" colsep="1" rowsep="1">
-           <colspec colname="c1"/>
+           <colspec colname="c1" colwidth="1.0cm"/>
            <colspec colname="c2"/>
            <colspec colname="c3"/>
            <colspec colname="c4"/>
@@ -686,11 +716,13 @@
            <spanspec spanname="hspan2" namest="c1" nameend="c4" align="center"/>
            <tbody>
              <row>
-               <entry><emphasis role="bold">Precondition</emphasis></entry>
-               <entry spanname="hspan"><xsl:apply-templates select="../tc:precondition"/></entry>
+               <entry spanname="hspan2"><emphasis role="bold">Precondition</emphasis></entry>
              </row>
              <row>
-               <entry><emphasis role="bold">Step-ID</emphasis></entry>
+               <entry spanname="hspan2"><xsl:apply-templates select="../tc:precondition"/></entry>
+             </row>
+             <row>
+               <entry><emphasis role="bold">ID</emphasis></entry>
                <entry><emphasis role="bold">Action</emphasis></entry>
                <entry><emphasis role="bold">Input Values</emphasis></entry>
                <entry><emphasis role="bold">Expected Results</emphasis></entry>
@@ -699,8 +731,10 @@
              <xsl:apply-templates select="tc:step"/>
 
              <row>
-               <entry><emphasis role="bold">Postconditon</emphasis></entry>
-               <entry spanname="hspan"><xsl:apply-templates select="../tc:postcondition"/></entry>
+               <entry spanname="hspan2"><emphasis role="bold">Postconditon</emphasis></entry>
+             </row>
+             <row>
+               <entry spanname="hspan2"><xsl:apply-templates select="../tc:postcondition"/></entry>
              </row>
          </tbody>
        </tgroup>
@@ -710,7 +744,7 @@
    <xsl:template match="tc:steps" mode="nf-tests">
      <table frame="all" tabstyle="striped"><title>Test Groups</title>
         <tgroup cols="4" align="left" colsep="1" rowsep="1">
-           <colspec colname="c1"/>
+           <colspec colname="c1" colwidth="1.0cm"/>
            <colspec colname="c2"/>
            <colspec colname="c3"/>
            <colspec colname="c4"/>
@@ -718,8 +752,10 @@
            <spanspec spanname="hspan2" namest="c1" nameend="c4" align="center"/>
            <tbody>
              <row>
-               <entry><emphasis role="bold">Precondition</emphasis></entry>
-               <entry spanname="hspan"><xsl:apply-templates select="../tc:precondition"/></entry>
+               <entry spanname="hspan2"><emphasis role="bold">Precondition</emphasis></entry>
+             </row>
+             <row>
+               <entry spanname="hspan2"><xsl:apply-templates select="../tc:precondition"/></entry>
              </row>
              <row>
                <entry><emphasis role="bold">Group-ID</emphasis></entry>
@@ -731,8 +767,10 @@
              <xsl:apply-templates select="tc:step"/>
 
              <row>
-               <entry><emphasis role="bold">Postconditon</emphasis></entry>
-               <entry spanname="hspan"><xsl:apply-templates select="../tc:postcondition"/></entry>
+               <entry spanname="hspan2"><emphasis role="bold">Postconditon</emphasis></entry>
+             </row>
+             <row>
+               <entry spanname="hspan2"><xsl:apply-templates select="../tc:postcondition"/></entry>
              </row>
          </tbody>
        </tgroup>

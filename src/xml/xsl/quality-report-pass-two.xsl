@@ -429,7 +429,8 @@
                      </row>
                   </thead>
                   <tbody>
-                     <xsl:variable name="number_specified_tests" select="count(//tc:test)"/>
+                     <xsl:variable name="number_specified_tests" select="count(//tc:test[not(tc:state = 'draft')])"/>
+                     <xsl:variable name="number_specified_tests_draft" select="count(//tc:test[tc:state = 'draft'])"/>
                      <xsl:variable name="number_executed_tests" select="count(key('testresult-group',.))"/>
                      <xsl:variable name="number_executed_testspecs" select="count(//tc:test[key('testresult-testcase-group',tc:id)/tr:testcase = tc:id])"/>
                      <xsl:variable name="number_executed_testspecs_passed" select="count(//tc:test[key('testresult-testcase-group',tc:id)[tr:result = 'passed']/tr:testcase = tc:id])"/>
@@ -650,7 +651,12 @@
                      <row>
                         <xsl:variable name="uc_number" select="count(uc:usecase)"/>
                         <xsl:variable name="uc_covered" select="count(uc:usecase[key('test-group',@id)])"/>
-                        <entry><xsl:value-of select="uc:info/@project"/><xsl:text> </xsl:text>(<xsl:value-of select="uc:info/@version"/>)</entry>
+                        <entry>
+                           <xsl:value-of select="uc:info/@project"/><xsl:text> </xsl:text>(<xsl:value-of select="uc:info/@version"/>)
+                           <xsl:call-template name="link_to_cms">
+                               <xsl:with-param name="issue_id" select="uc:info/@issue"/>
+                           </xsl:call-template>
+                        </entry>
                         <entry><xsl:value-of select="$uc_number"/></entry>
                         <xsl:choose>
                            <xsl:when test="not($uc_number = 0)">
@@ -1340,9 +1346,12 @@
     
    <xsl:template match="uc:usecases" mode="simple_coverage">
       <section>
-         <title><xsl:value-of select="uc:info/@project"/><xsl:text> </xsl:text>(<xsl:value-of select="uc:info/@version"/>)</title>
+         <title><xsl:value-of select="uc:info/@project"/><xsl:text> </xsl:text>(<xsl:value-of select="uc:info/@issue"/>/<xsl:value-of select="uc:info/@version"/>)</title>
          <para>
-            Simple list of use cases with coverage of specified test cases.
+            Simple list of use cases with coverage of specified test cases for issue: 
+            <xsl:call-template name="link_to_cms">
+                <xsl:with-param name="issue_id" select="uc:info/@issue"/>
+            </xsl:call-template>
          </para>
          <xsl:for-each select=".//uc:scope[generate-id() = generate-id(key('scope-group', .))]">
             <xsl:variable name="this_scope" select="."/>

@@ -191,6 +191,22 @@
       <xsl:with-param name="constants" select=".//constant"/>
    </xsl:call-template>
 
+   <xsl:if test="@user-type = 'true' or @user-type = 'numeric' or @user-type = 'integer'">
+     <xsl:variable name="user-type-file"><xsl:value-of
+        select="$package.dir"/>/<xsl:value-of
+           select="@classname"/>UserType.java</xsl:variable>
+
+     <redirect:write file="{$user-type-file}">
+       <xsl:call-template name="restricted-long-user-type">
+          <xsl:with-param name="classname"
+            select="concat(@classname, 'UserType')"/>
+          <xsl:with-param name="type-classname"
+            select="@classname"/>
+          <xsl:with-param name="package" select="@package"/>
+       </xsl:call-template>
+     </redirect:write>
+   </xsl:if>
+
    </redirect:write>
 </xsl:template>
 

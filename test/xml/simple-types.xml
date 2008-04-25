@@ -85,6 +85,17 @@
             value="5"
             comment="Additional Constant defined in the XML document."/>
       </restrictedLong>
+      <restrictedLong
+         classname="SampleLong"
+         package="org.jcoderz.commons.types.samples"
+         min-value="1"
+         max-value="10"
+         user-type="numeric">
+         <constant
+            name="CONSTANT_VALUE"
+            value="5"
+            comment="Additional Constant defined in the XML document."/>
+      </restrictedLong>
    </restrictedLongs>
 
 <!-- ===============================================================

@@ -525,6 +525,17 @@ public final class CheckstyleFindingType
           "Literal Strings should be compared using equals\\(\\), not '=='\\.");
 
   /**
+   * Checkstyle finding type that relates to:
+   * <i>Missing package documentation file.</i>.
+   */
+  public static final CheckstyleFindingType CS_MISSING_PACKAGE_DOCUMENTATION =
+      new CheckstyleFindingType("CS_MISSING_PACKAGE_DOCUMENTATION",
+          "Missing package documentation file.",
+          "Package content should be documentet using a package.html or"
+          + " package.xml file.",
+          "Missing package documentation file\\.");
+
+  /**
    * A internal checkstyle exception was triggered we shoulds also
    * report this!
    */

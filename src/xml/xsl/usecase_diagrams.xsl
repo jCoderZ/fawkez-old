@@ -662,7 +662,7 @@ digraph G {
          <xsl:variable name="dm_id" select="req:objectreference/req:ref/@id"/>
 
          <!-- Avoid a repeated self reference here -->
-         <xsl:if test="$dm_id != $dm_root_id)">
+         <xsl:if test="$dm_id != $dm_root_id">
             <xsl:apply-templates select="//req:requirement[req:key = $dm_id]/req:entity"/>
          </xsl:if>
 
@@ -680,7 +680,7 @@ digraph G {
          <xsl:variable name="dm_id" select="../../../req:key"/>
 
          <!-- Avoid a repeated self reference here -->
-         <xsl:if test="$dm_id != $dm_root_id)">
+         <xsl:if test="$dm_id != $dm_root_id">
             <xsl:apply-templates select="//req:requirement[req:key = $dm_id]/req:entity"/>
 
               <xsl:call-template name="create_edge">
@@ -776,12 +776,12 @@ digraph G {
      <xsl:choose>
        <xsl:when test="@suppress_diagrams = 'true'"/>
        <xsl:otherwise>
-	      <xsl:variable name="file"><xsl:value-of
-	         select="$imagedir"/>/<xsl:value-of
-	         select="@id"/><xsl:value-of
+        <xsl:variable name="file"><xsl:value-of
+           select="$imagedir"/>/<xsl:value-of
+           select="@id"/><xsl:value-of
          select="concat('_', $lang)"/>.dot</xsl:variable>
 
-	      <redirect:write file="{$file}">
+        <redirect:write file="{$file}">
 
 digraph G {
     fontname = "Helvetica"

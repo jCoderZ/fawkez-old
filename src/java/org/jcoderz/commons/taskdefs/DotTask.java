@@ -52,10 +52,8 @@ public class DotTask
       extends Task
 {
    private static final String DEFAULT_OUTPUT_FORMAT = "svg";
-   /** The output file. */
-   private File mOutFile;
-   /** The input file. */
-   private File mInFile;
+   /** The input files. */
+   private File[] mInFiles;
    /** The output format. */
    private String mFormat = DEFAULT_OUTPUT_FORMAT;
    /** terminate ant build on error. */
@@ -68,17 +66,8 @@ public class DotTask
     */
    public void setIn (File f)
    {
-      mInFile = f;
+      mInFiles = new File[] {f};
 
-   }
-
-   /**
-    * Set the destination file into which the result is written.
-    * @param f the name of the destination file.
-    **/
-   public void setOut (File f)
-   {
-       mOutFile = f;
    }
 
    /**
@@ -124,8 +113,12 @@ public class DotTask
          mCommand.createArgument().setValue("-Gfontnames=svg");
          mCommand.createArgument().setValue("-Gcharset=UTF-8");
          mCommand.createArgument().setValue("-T" + mFormat);
-         mCommand.createArgument().setValue("-o" + mOutFile);
-         mCommand.createArgument().setValue(mInFile.getAbsolutePath());
+         mCommand.createArgument().setValue("-O");
+
+         for (int i = 0; i < mInFiles.length; i++)
+         {
+             mCommand.createArgument().setValue(mInFiles[i].getAbsolutePath());
+         }
 
          final Execute exe = new Execute(new LogStreamHandler(
                this, Project.MSG_INFO, Project.MSG_WARN), null);
@@ -158,22 +151,35 @@ public class DotTask
          throws BuildException
    {
       checkAttributeInFile();
-      mOutFile.getParentFile().mkdirs();
    }
 
    private void checkAttributeInFile ()
    {
-      if (mInFile == null)
+      if (mInFiles == null)
       {
          throw new BuildException(
                "Missing mandatory attribute 'in'.", getLocation());
       }
-      if (!mInFile.exists())
+
+      for (int i = 0; i < mInFiles.length; i++)
       {
-         throw new BuildException(
-               "Input file '" + mInFile + "' not found.", getLocation());
-      }
+          if (!mInFiles[i].exists())
+          {
+             throw new BuildException(
+                   "Input file '" + mInFiles[i] + "' not found.",
+                   getLocation());
+          }
+       }
    }
 
+    /**
+     * Set the input files.
+     *
+     * @param inFiles the input files.
+     */
+    public void setInFiles (File[] inFiles)
+    {
+        mInFiles = inFiles;
+    }
 
 }

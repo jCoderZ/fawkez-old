@@ -32,6 +32,7 @@
  */
 package org.jcoderz.commons.taskdefs;
 
+
 import java.io.File;
 import java.io.FilenameFilter;
 
@@ -39,115 +40,129 @@ import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Task;
 
+
 /**
  * Provides utility functions for Ant task.
- * 
+ *
  * @author Michael Griffel
  */
 public final class AntTaskUtil
 {
-   private AntTaskUtil ()
-   {
-      // no instances allowed -- provides only static helper methods.
-   }
+    private AntTaskUtil ()
+    {
+        // no instances allowed -- provides only static helper methods.
+    }
 
-   /**
-    * Ensure the directory exists for a given directory name.
-    *
-    * @param directory the directory name that is required.
-    * @exception BuildException if the directories cannot be created.
-    */
-   public static void ensureDirectory (File directory)
-         throws BuildException 
-   {
-       if (!directory.exists()) 
-       {
-           if (!directory.mkdirs()) 
-           {
-               throw new BuildException("Unable to create directory: "
-                                        + directory.getAbsolutePath());
-           }
-       }
-   }
-
-   /**
-    * Ensure the directory exists for a given file.
-    *
-    * @param targetFile the file for which the directories are required.
-    * @exception BuildException if the directories cannot be created.
-    */
-   public static void ensureDirectoryForFile (File targetFile)
-         throws BuildException 
-   {
-       ensureDirectory(targetFile.getParentFile());
-   }
-
-   public static void dot2pic (Task task, String name, File dotFile, 
-         String imageFormat, boolean failOnError)
-   {
-      final DotTask dot = new DotTask();
-      dot.setProject(task.getProject());
-      dot.setTaskName("dot");
-      dot.setFailonerror(failOnError);
-      dot.setFormat(imageFormat);
-      dot.setIn(dotFile.getAbsoluteFile());
-      final File picFile = new File(dotFile.getParentFile(), 
-            name + "." + dot.getFileExtension());
-      dot.setOut(picFile);
-      dot.execute();
-   }
-
-   public static String stripFileExtention (String fileWithExtension)
-   {
-      final int lastIndexOfDot = fileWithExtension.lastIndexOf('.');
-      final String result;
-      if (lastIndexOfDot != -1)
-      {
-         result = fileWithExtension.substring(0, lastIndexOfDot);
-      }
-      else
-      {
-         result = fileWithExtension;
-      }
-      return result;
-   }
-
-   public static void renderDotFiles (Task task, File dotDir, 
-         boolean failOnError)
-   {
-      final File[] dotFiles = dotDir.listFiles(new FilenameFilter()
+    /**
+     * Ensure the directory exists for a given directory name.
+     *
+     * @param directory the directory name that is required.
+     * @exception BuildException if the directories cannot be created.
+     */
+    public static void ensureDirectory (File directory)
+        throws BuildException
+    {
+        if (!directory.exists())
+        {
+            if (!directory.mkdirs())
             {
-               public boolean accept (File dir, String name)
-               {
-                  final boolean result;
-                  if (name.endsWith(".dot"))
-                  {
-                     result = true;
-                  }
-                  else
-                  {
-                     result = false;
-                  }
-                  return result;
-               }
-            });
-   
-      if (dotFiles != null)
-      {
-         for (int i = 0; i < dotFiles.length; i++)
-         {
-            final File dotFile = dotFiles[i];
-            final String name = stripFileExtention(dotFile.getName());
-            dot2pic(task, name, dotFile, "svg", failOnError);
-      
-            task.log("Generated diagrams for '" + name + "'");
-         }
-      }
-      else
-      {
-         task.log("No .dot files found to render", Project.MSG_VERBOSE);
-      }
-   }
-   
+                throw new BuildException("Unable to create directory: "
+                    + directory.getAbsolutePath());
+            }
+        }
+    }
 
+    /**
+     * Ensure the directory exists for a given file.
+     *
+     * @param targetFile the file for which the directories are
+     *        required.
+     * @exception BuildException if the directories cannot be created.
+     */
+    public static void ensureDirectoryForFile (File targetFile)
+        throws BuildException
+    {
+        ensureDirectory(targetFile.getParentFile());
+    }
+
+    /**
+     * Strip file extension.
+     *
+     * @param fileWithExtension the file with extension
+     *
+     * @return the string
+     */
+    public static String stripFileExtension (String fileWithExtension)
+    {
+        final int lastIndexOfDot = fileWithExtension.lastIndexOf('.');
+        final String result;
+        if (lastIndexOfDot != -1)
+        {
+            result = fileWithExtension.substring(0, lastIndexOfDot);
+        }
+        else
+        {
+            result = fileWithExtension;
+        }
+        return result;
+    }
+
+    /**
+     * Render dot files.
+     *
+     * @param task the task
+     * @param dotDir the dot dir
+     * @param failOnError the fail on error
+     */
+    public static void renderDotFiles (Task task, File dotDir,
+        boolean failOnError)
+    {
+        final File[] dotFiles = dotDir.listFiles(new FilenameFilter()
+        {
+            public boolean accept (File dir, String name)
+            {
+                final boolean result;
+                if (name.endsWith(".dot"))
+                {
+                    result = true;
+                }
+                else
+                {
+                    result = false;
+                }
+                return result;
+            }
+        });
+        if (dotFiles != null)
+        {
+            dots2svgs(task, failOnError, dotFiles);
+        }
+        else
+        {
+            task.log("No .dot files found to render", Project.MSG_VERBOSE);
+        }
+    }
+
+    private static void dots2svgs (Task task, boolean failOnError,
+        final File[] dotFiles)
+    {
+        final DotTask dot = new DotTask();
+        dot.setProject(task.getProject());
+        dot.setTaskName("dot");
+        dot.setFailonerror(failOnError);
+        dot.setFormat("svg");
+        dot.setInFiles(dotFiles);
+        dot.execute();
+
+        // Silly Graphviz always appends the new extension.
+        for (int i = 0; i < dotFiles.length; i++)
+        {
+            File generatedFile = new File(dotFiles[i].getParentFile(),
+                dotFiles[i].getName() + "." + dot.getFileExtension());
+            File targetFile = new File(dotFiles[i].getParentFile(),
+                stripFileExtension(dotFiles[i].getName()) + "."
+                    + dot.getFileExtension());
+            generatedFile.renameTo(targetFile);
+        }
+    }
 }

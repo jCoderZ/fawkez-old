@@ -32,6 +32,7 @@
  */
 package org.jcoderz.commons.taskdefs;
 
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -48,12 +49,16 @@ import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
+import org.apache.tools.ant.AntClassLoader;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Task;
+import org.apache.tools.ant.types.Path;
+import org.apache.tools.ant.types.Reference;
 import org.jcoderz.commons.util.StringUtil;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
+
 
 /**
  * This class implements common functionality for XSLT based Ant tasks.
@@ -61,340 +66,435 @@ import org.xml.sax.SAXException;
  * @author Michael Griffel
  */
 public abstract class XsltBasedTask
-      extends Task
+    extends Task
 {
-   /** System property for the XML Parser Configuration (Xalan2). */
-   private static final String XML_PARSER_CONFIGURATION_PROPERTY
-         = "org.apache.xerces.xni.parser.XMLParserConfiguration";
+    /** System property for the XML Parser Configuration (Xalan2). */
+    private static final String XML_PARSER_CONFIGURATION_PROPERTY =
+        "org.apache.xerces.xni.parser.XMLParserConfiguration";
 
-   /** Xalan2 XML Parser Configuration w/ XInclude support. */
-   private static final String XML_PARSER_CONFIG_WITH_XINCLUDE
-         = "org.apache.xerces.parsers.XIncludeParserConfiguration";
+    /** Xalan2 XML Parser Configuration w/ XInclude support. */
+    private static final String XML_PARSER_CONFIG_WITH_XINCLUDE =
+        "org.apache.xerces.parsers.XIncludeParserConfiguration";
 
-   /** The fawkeZ VERSION file. */
-   private static final String FAWKEZ_VERSION_FILE
-         = "/org/jcoderz/commons/VERSION";
+    /** The fawkeZ VERSION file. */
+    private static final String FAWKEZ_VERSION_FILE =
+        "/org/jcoderz/commons/VERSION";
 
-   /** The destination directory. */
-   private File mDestDir = null;
+    /** The destination directory. */
+    private File mDestDir = null;
 
-   /** The XSL stylesheet file. */
-   private String mXslFile = null;
+    /** The XSL stylesheet file. */
+    private String mXslFile = null;
 
-   /** The Input XML document (log message info file) to be used. */
-   private File mInFile = null;
+    /** The Input XML document (log message info file) to be used. */
+    private File mInFile = null;
 
-   /** The Output file. */
-   private File mOutFile = null;
+    /** The Output file. */
+    private File mOutFile = null;
 
-   /** force output of target files even if they already exist. */
-   private boolean mForce = false;
+    /** force output of target files even if they already exist. */
+    private boolean mForce = false;
 
-   /** terminate ant build on error. */
-   private boolean mFailOnError = false;
+    /** terminate ant build on error. */
+    private boolean mFailOnError = false;
 
-   private boolean mResolveExternalEntities = true;
+    /** Log level. */
+    private int mLogLevel = Project.MSG_INFO;
 
-   /**
-    * Set the destination directory into which the XSL result
-    * files should be copied to. This parameter is required.
-    * @param dir the name of the destination directory.
-    **/
-   public void setDestdir (File dir)
-   {
-       mDestDir = dir;
-   }
+    private boolean mResolveExternalEntities = true;
 
-   /**
-    * Sets the XSL file that is used to generate the log message info classes.
-    * @param s the XSL file to use.
-    */
-   public void setXsl (String s)
-   {
-      mXslFile = s;
-   }
+    /** Classpath to use when trying to load the XSL processor */
+    private Path mClassPath = null;
 
-   /**
-    * Sets the XML input file that contains the log message info document.
-    * @param f the XML input file (log message info).
-    */
-   public void setIn (File f)
-   {
-      mInFile = f;
-   }
+    /**
+     * AntClassLoader for the nested &lt;classpath&gt; - if set.
+     * <p>
+     * We keep this here in order to reset the context classloader in
+     * execute. We can't use liaison.getClass().getClassLoader() since
+     * the actual liaison class may have been loaded by a loader higher
+     * up (system classloader, for example).
+     * </p>
+     *
+     * @since Ant 1.6.2
+     */
+    private AntClassLoader mClassLoader = null;
 
-   /**
-    * Sets the output file.
-    * @param f The output file.
-    */
-   public void setOut (File f)
-   {
-      mOutFile = f;
-   }
+    /**
+     * Set the destination directory into which the XSL result files
+     * should be copied to. This parameter is required.
+     *
+     * @param dir the name of the destination directory.
+     */
+    public void setDestdir (File dir)
+    {
+        mDestDir = dir;
+    }
 
-   /**
-    * Sets the force output of target files flag to the given value.
-    *
-    * @param b Whether we should force the generation of output files.
-    */
-   public void setForce (boolean b)
-   {
-      mForce = b;
-   }
+    /**
+     * Sets the XSL file that is used to generate the log message info
+     * classes.
+     *
+     * @param s the XSL file to use.
+     */
+    public void setXsl (String s)
+    {
+        mXslFile = s;
+    }
 
-   /**
-    * Set whether we should fail on an error.
-    *
-    * @param b Whether we should fail on an error.
-    */
-   public void setFailonerror (boolean b)
-   {
-      mFailOnError = b;
-   }
+    /**
+     * Sets the XML input file that contains the log message info
+     * document.
+     *
+     * @param f the XML input file (log message info).
+     */
+    public void setIn (File f)
+    {
+        mInFile = f;
+    }
 
-   /**
-    * Execute this task.
-    *
-    * @throws BuildException An building exception occurred.
-    */
-   public void execute ()
-         throws BuildException
-   {
-      try
-      {
-         checkAttributes();
+    /**
+     * Sets the output file.
+     *
+     * @param f The output file.
+     */
+    public void setOut (File f)
+    {
+        mOutFile = f;
+    }
 
-         if (mForce || mInFile.lastModified() > mOutFile.lastModified())
-         {
-            if (mDestDir != null)
+    /**
+     * Sets the force output of target files flag to the given value.
+     *
+     * @param b Whether we should force the generation of output files.
+     */
+    public void setForce (boolean b)
+    {
+        mForce = b;
+    }
+
+    /**
+     * Set whether we should fail on an error.
+     *
+     * @param b Whether we should fail on an error.
+     */
+    public void setFailonerror (boolean b)
+    {
+        mFailOnError = b;
+    }
+
+    /**
+     * Sets the log level.
+     *
+     * @param level the new log level
+     */
+    public void setLogLevel (int level)
+    {
+        mLogLevel = level;
+    }
+
+    /**
+     * Execute this task.
+     *
+     * @throws BuildException An building exception occurred.
+     */
+    public void execute ()
+        throws BuildException
+    {
+        try
+        {
+            checkAttributes();
+            if (mForce || mInFile.lastModified() > mOutFile.lastModified())
             {
-               log("Generating files to directory " + mDestDir);
+                if (mDestDir != null)
+                {
+                    log("Generating files to directory " + mDestDir,
+                        Project.MSG_VERBOSE);
+                }
+                log("Processing " + mInFile + " to " + mOutFile
+                    + " using stylesheet " + mXslFile, mLogLevel);
+                transform();
+                postExecute();
             }
-            log("Processing " + mInFile + " to " + mOutFile
-                  + " using stylesheet " + mXslFile, Project.MSG_VERBOSE);
-            transform();
-            postExecute();
-         }
-      }
-      catch (BuildException e)
-      {
-         if (mFailOnError)
-         {
-            throw e;
-         }
-         log(e.getMessage(), Project.MSG_ERR);
-      }
-   }
+        }
+        catch (BuildException e)
+        {
+            if (mFailOnError)
+            {
+                throw e;
+            }
+            log(e.getMessage(), Project.MSG_ERR);
+        }
+    }
 
-   /**
-    * @return the fawkez version used for build.
-    */
-   public String getFawkezVersionAsString ()
-   {
-      final StringBuffer version = new StringBuffer();
-      try
-      {
-         final Properties fawkezProps
-               = getFawkezVersionProperties();
-         version.append("fawkeZ ");
-         version.append(fawkezProps.getProperty("version"));
-         version.append(", [");
-         version.append(fawkezProps.getProperty("cvs_name"));
-         version.append(']');
-      }
-      catch (Exception x)
-      {
-         // sorry, we cannot read fawkeZ VERSION file
-         version.append("unknown");
-      }
-      return version.toString();
-   }
+    /**
+     * @return the fawkez version used for build.
+     */
+    public String getFawkezVersionAsString ()
+    {
+        final StringBuffer version = new StringBuffer();
+        try
+        {
+            final Properties fawkezProps = getFawkezVersionProperties();
+            version.append("fawkeZ ");
+            version.append(fawkezProps.getProperty("version"));
+            version.append(", [");
+            version.append(fawkezProps.getProperty("cvs_name"));
+            version.append(']');
+        }
+        catch (Exception x)
+        {
+            // sorry, we cannot read fawkeZ VERSION file
+            version.append("unknown");
+        }
+        return version.toString();
+    }
 
-   /**
-    * If set to <tt>false</tt>, external entities will not be resolved.
-    * @param b new value.
-    */
-   public void resolveExternalEntities (boolean b)
-   {
-      mResolveExternalEntities = b;
-   }
+    /**
+     * If set to <tt>false</tt>, external entities will not be
+     * resolved.
+     *
+     * @param b new value.
+     */
+    public void resolveExternalEntities (boolean b)
+    {
+        mResolveExternalEntities = b;
+    }
 
-   static void checkXercesVersion (Task task)
-   {
-       final String xercesVersion =
-           org.apache.xerces.impl.Version.getVersion();
-       if (StringUtil.contains(xercesVersion, ("2.6.2")))
-       {
-           task.log("Found " + xercesVersion + " on classpath.",
-               Project.MSG_WARN);
-           task.log("This Version only supports the outdated 2003 "
-               + "namespace for XInclude ",
-               Project.MSG_WARN);
-           task.log("please put a newer version of xerces on your classpath"
-               + "or use", Project.MSG_WARN);
-           task.log("at least ANT 1.7.0.", Project.MSG_WARN);
-           // TODO: Add hint how to do this + throw exception?
-       }
-   }
+    static void checkXercesVersion (Task task)
+    {
+        final String xercesVersion = org.apache.xerces.impl.Version
+            .getVersion();
+        if (StringUtil.contains(xercesVersion, ("2.6.2")))
+        {
+            task.log("Found " + xercesVersion + " on classpath.",
+                Project.MSG_WARN);
+            task.log("This Version only supports the outdated 2003 "
+                + "namespace for XInclude ", Project.MSG_WARN);
+            task.log("please put a newer version of xerces on your classpath"
+                + "or use", Project.MSG_WARN);
+            task.log("at least ANT 1.7.0.", Project.MSG_WARN);
+            // TODO: Add hint how to do this + throw exception?
+        }
+    }
 
-   /**
-    * Returns the build-in default stylesheet file name that
-    * should be used by XSL transformer.
-    * <p>
-    * The stylesheet must be stored in the
-    * <tt>/org/jcoderz/commons/taskdefs</tt> directory.
-    * @return the default stylesheet file name.
-    */
-   abstract String getDefaultStyleSheet ();
+    /**
+     * Returns the build-in default stylesheet file name that should be
+     * used by XSL transformer.
+     * <p>
+     * The stylesheet must be stored in the
+     * <tt>/org/jcoderz/commons/taskdefs</tt> directory.
+     *
+     * @return the default stylesheet file name.
+     */
+    abstract String getDefaultStyleSheet ();
 
-   /**
-    * This method can be overwritten by subclasses to set additional
-    * transformer parameters.
-    * @param transformer the XSL transformer.
-    */
-   void setAdditionalTransformerParameters (Transformer transformer)
-   {
-      // NOP
-   }
+    /**
+     * This method can be overwritten by subclasses to set additional
+     * transformer parameters.
+     *
+     * @param transformer the XSL transformer.
+     */
+    void setAdditionalTransformerParameters (Transformer transformer)
+    {
+        // NOP
+    }
 
+    File getInFile ()
+    {
+        return mInFile;
+    }
 
-   File getInFile ()
-   {
-      return mInFile;
-   }
+    File getOutFile ()
+    {
+        return mOutFile;
+    }
 
-   File getOutFile ()
-   {
-      return mOutFile;
-   }
+    File getDestDir ()
+    {
+        return mDestDir;
+    }
 
-   File getDestDir ()
-   {
-      return mDestDir;
-   }
+    boolean getFailOnError ()
+    {
+        return mFailOnError;
+    }
 
-   boolean getFailOnError ()
-   {
-      return mFailOnError;
-   }
+    /**
+     * Checks the attributes provided by this class.
+     *
+     * @throws BuildException
+     */
+    void checkAttributes ()
+        throws BuildException
+    {
+        checkAttributeInFile();
+        checkAttributeOutFile();
+        checkAttributeDestDir();
+        checkAttributeXslFile();
+        checkXercesVersion(this);
+    }
 
-   /**
-    * Checks the attributes provided by this class.
-    * @throws BuildException
-    */
-   void checkAttributes ()
-         throws BuildException
-   {
-      checkAttributeInFile();
-      checkAttributeOutFile();
-      checkAttributeDestDir();
-      checkAttributeXslFile();
-      checkXercesVersion(this);
-   }
+    void checkAttributeXslFile ()
+    {
+        if (mXslFile == null || !new File(mXslFile).exists())
+        {
+            mXslFile = getDefaultStyleSheet();
+        }
+    }
 
-   void checkAttributeXslFile ()
-   {
-      if (mXslFile == null || !new File(mXslFile).exists())
-      {
-         mXslFile = getDefaultStyleSheet();
-      }
-   }
+    void checkAttributeDestDir ()
+    {
+        if (mDestDir == null)
+        {
+            throw new BuildException("Missing mandatory attribute 'outdir'.",
+                getLocation());
+        }
+        AntTaskUtil.ensureDirectory(mDestDir);
+    }
 
-   void checkAttributeDestDir ()
-   {
-      if (mDestDir == null)
-      {
-         throw new BuildException(
-               "Missing mandatory attribute 'outdir'.", getLocation());
-      }
-      AntTaskUtil.ensureDirectory(mDestDir);
-   }
+    void checkAttributeOutFile ()
+    {
+        if (mOutFile == null)
+        {
+            throw new BuildException("Missing mandatory attribute 'out'.",
+                getLocation());
+        }
+        AntTaskUtil.ensureDirectoryForFile(mOutFile);
+    }
 
-   void checkAttributeOutFile ()
-   {
-      if (mOutFile == null)
-      {
-         throw new BuildException(
-               "Missing mandatory attribute 'out'.", getLocation());
-      }
-      AntTaskUtil.ensureDirectoryForFile(mOutFile);
-   }
+    void checkAttributeInFile ()
+    {
+        if (mInFile == null)
+        {
+            throw new BuildException("Missing mandatory attribute 'in'.",
+                getLocation());
+        }
+        if (!mInFile.exists())
+        {
+            throw new BuildException("Input file '" + mInFile + "' not found.",
+                getLocation());
+        }
+    }
 
-   void checkAttributeInFile ()
-   {
-      if (mInFile == null)
-      {
-         throw new BuildException(
-               "Missing mandatory attribute 'in'.", getLocation());
-      }
-      if (!mInFile.exists())
-      {
-         throw new BuildException(
-               "Input file '" + mInFile + "' not found.", getLocation());
-      }
-   }
+    /**
+     * This method is the last callback in the execute method. Can be
+     * overwritten by subclasses.
+     */
+    void postExecute ()
+    {
+        // NOP
+    }
 
-   /**
-    * This method is the last callback in the execute method.
-    * Can be overwritten by subclasses.
-    */
-   void postExecute ()
-   {
-      // NOP
-   }
+    /**
+     * Execute the XSL transformation.
+     *
+     * @throws BuildException if an error during transformation occurs.
+     */
+    void transform ()
+        throws BuildException
+    {
+        try
+        {
+            final String xmlParserConfig = System
+                .getProperty(XML_PARSER_CONFIGURATION_PROPERTY);
+            if (!XML_PARSER_CONFIG_WITH_XINCLUDE.equals(xmlParserConfig))
+            {
+                System.setProperty(XML_PARSER_CONFIGURATION_PROPERTY,
+                    XML_PARSER_CONFIG_WITH_XINCLUDE);
+                log("Using XML Parser configuration "
+                    + XML_PARSER_CONFIG_WITH_XINCLUDE, Project.MSG_VERBOSE);
+            }
+            // Xalan2 transformer is required,
+            // that why we explicit use this factory
+            System.setProperty("javax.xml.transform.TransformerFactory",
+                "org.apache.xalan.processor.TransformerFactoryImpl");
+            final TransformerFactory factory = (TransformerFactory)
+            (loadClass("org.apache.xalan.processor.TransformerFactoryImpl")
+                .newInstance());
+            factory.setURIResolver(new JarArchiveUriResolver(this));
+            final InputStream xslStream = getXslFileAsStream();
+            final Transformer transformer = factory
+                .newTransformer(new StreamSource(xslStream));
+            setAdditionalTransformerParameters(transformer);
+            transformer.setParameter("outdir", mDestDir != null ? mDestDir
+                .getAbsolutePath() : "");
+            final Source xml = getInAsStreamSource();
+            final StreamResult out = new StreamResult(mOutFile);
+            transformer.setErrorListener(new MyErrorListener());
+            transformer.transform(xml, out);
+        }
+        catch (Exception e)
+        {
+            throw new BuildException("Error during transformation: " + e, e);
+        }
+        finally
+        {
+            if (mClassLoader != null)
+            {
+                mClassLoader.resetThreadContextLoader();
+                mClassLoader = null;
+            }
+        }
+    }
 
-   /**
-    * Execute the XSL transformation.
-    * @throws BuildException if an error during transformation occurs.
-    */
-   void transform ()
-         throws BuildException
-   {
-      try
-      {
-         final String xmlParserConfig
-               = System.getProperty(XML_PARSER_CONFIGURATION_PROPERTY);
-         if (!XML_PARSER_CONFIG_WITH_XINCLUDE.equals(xmlParserConfig))
-         {
-            System.setProperty(XML_PARSER_CONFIGURATION_PROPERTY,
-                  XML_PARSER_CONFIG_WITH_XINCLUDE);
-            log("Using XML Parser configuration "
-                  + XML_PARSER_CONFIG_WITH_XINCLUDE, Project.MSG_VERBOSE);
-         }
+    private Class loadClass (String classname)
+        throws Exception
+    {
+        final Class result;
+        if (mClassPath == null)
+        {
+            result = Class.forName(classname);
+        }
+        else
+        {
+            mClassLoader = getProject().createClassLoader(mClassPath);
+            mClassLoader.setThreadContextLoader();
+            result = Class.forName(classname, true, mClassLoader);
+        }
+        return result;
+    }
 
-         // Xalan2 transformer is required,
-         // that why we explicit use this factory
-         final TransformerFactory factory
-               = new org.apache.xalan.processor.TransformerFactoryImpl();
+    /**
+     * Set the optional classpath to the XSL processor.
+     *
+     * @param classpath the classpath to use when loading the XSL
+     *        processor
+     */
+    public void setClasspath (Path classpath)
+    {
+        createClasspath().append(classpath);
+    }
 
-         factory.setURIResolver(new JarArchiveUriResolver(this));
+    /**
+     * Set the optional classpath to the XSL processor.
+     *
+     * @return a path instance to be configured by the Ant core.
+     */
+    public Path createClasspath ()
+    {
+        if (mClassPath == null)
+        {
+            mClassPath = new Path(getProject());
+        }
+        return mClassPath.createPath();
+    }
 
-         final InputStream xslStream = getXslFileAsStream();
+    /**
+     * Set the reference to an optional classpath to the XSL processor.
+     *
+     * @param r the id of the Ant path instance to act as the classpath
+     *        for loading the XSL processor
+     */
+    public void setClasspathRef (Reference r)
+    {
+        createClasspath().setRefid(r);
+    }
 
-         final Transformer transformer
-               = factory.newTransformer(new StreamSource(xslStream));
-
-         setAdditionalTransformerParameters(transformer);
-         transformer.setParameter("outdir", mDestDir != null
-               ? mDestDir.getAbsolutePath() : "");
-
-         final Source xml = getInAsStreamSource();
-         final StreamResult out = new StreamResult(mOutFile);
-
-         transformer.setErrorListener(new MyErrorListener());
-         transformer.transform(xml, out);
-      }
-      catch (TransformerException e)
-      {
-         throw new BuildException("Error during transformation: " + e, e);
-      }
-   }
-
-   private InputStream getXslFileAsStream ()
-   {
-      final InputStream result;
-      final InputStream xslStream
-          = XsltBasedTask.class.getResourceAsStream(mXslFile);
+    private InputStream getXslFileAsStream ()
+    {
+        final InputStream result;
+        final InputStream xslStream = XsltBasedTask.class
+            .getResourceAsStream(mXslFile);
         if (xslStream == null)
         {
             try
@@ -413,80 +513,81 @@ public abstract class XsltBasedTask
             result = xslStream;
         }
         return result;
-   }
-
-   /**
-    * @return a resource stream from in file.
-    * @throws FileNotFoundException
-    */
-   Source getInAsStreamSource ()
-   {
-      final Source result;
-      if (!mResolveExternalEntities)
-      {
-         final org.xml.sax.XMLReader reader;
-         try
-         {
-            //reader = XMLReaderFactory.createXMLReader(
-            //   "org.apache.xerces.parsers.SAXParser");
-            reader = org.xml.sax.helpers.XMLReaderFactory.createXMLReader();
-            reader.setEntityResolver(new DummyEntityResolver(this));
-            result = new SAXSource(reader,
-                     new InputSource(new FileInputStream(mInFile)));
-         }
-         catch (SAXException e)
-         {
-            throw new BuildException("Cannot create SAX XML Reader: " + e, e);
-         }
-         catch (FileNotFoundException e)
-         {
-            throw new BuildException("Ups, cannot open file: " + e, e);
-         }
-      }
-      else
-      {
-         result =  new StreamSource(mInFile);
-      }
-      return result;
-   }
-
-   /**
-    * Returns the VERSION file properties.
-    * @return the VERSION file properties.
-    * @throws IOException if the VERSION file cannot be found or read.
-    */
-   private Properties getFawkezVersionProperties ()
-         throws IOException
-   {
-      final Properties props = new Properties();
-      props.load(XsltBasedTask.class.getResourceAsStream(
-            FAWKEZ_VERSION_FILE));
-      return props;
-   }
-
-   private static class MyErrorListener
-       implements ErrorListener
-       {
-
-    /** {@inheritDoc} */
-    public void warning (TransformerException arg0)
-            throws TransformerException
-    {
-        throw arg0;
     }
 
-    /** {@inheritDoc} */
-    public void error (TransformerException arg0)
-            throws TransformerException
+    /**
+     * @return a resource stream from in file.
+     * @throws FileNotFoundException
+     */
+    Source getInAsStreamSource ()
     {
-        throw arg0;
+        final Source result;
+        if (!mResolveExternalEntities)
+        {
+            final org.xml.sax.XMLReader reader;
+            try
+            {
+                // reader = XMLReaderFactory.createXMLReader(
+                // "org.apache.xerces.parsers.SAXParser");
+                reader = org.xml.sax.helpers.XMLReaderFactory.createXMLReader();
+                reader.setEntityResolver(new DummyEntityResolver(this));
+                result = new SAXSource(reader, new InputSource(
+                    new FileInputStream(mInFile)));
+            }
+            catch (SAXException e)
+            {
+                throw new BuildException("Cannot create SAX XML Reader: " + e,
+                    e);
+            }
+            catch (FileNotFoundException e)
+            {
+                throw new BuildException("Ups, cannot open file: " + e, e);
+            }
+        }
+        else
+        {
+            result = new StreamSource(mInFile);
+        }
+        return result;
     }
 
-    /** {@inheritDoc} */
-    public void fatalError (TransformerException arg0)
-            throws TransformerException
+    /**
+     * Returns the VERSION file properties.
+     *
+     * @return the VERSION file properties.
+     * @throws IOException if the VERSION file cannot be found or read.
+     */
+    private Properties getFawkezVersionProperties ()
+        throws IOException
     {
-        throw arg0;
+        final Properties props = new Properties();
+        props
+            .load(XsltBasedTask.class.getResourceAsStream(FAWKEZ_VERSION_FILE));
+        return props;
     }
-   }
+
+    private static class MyErrorListener
+        implements ErrorListener
+    {
+        /** {@inheritDoc} */
+        public void warning (TransformerException arg0)
+            throws TransformerException
+        {
+            throw arg0;
+        }
+
+        /** {@inheritDoc} */
+        public void error (TransformerException arg0)
+            throws TransformerException
+        {
+            throw arg0;
+        }
+
+        /** {@inheritDoc} */
+        public void fatalError (TransformerException arg0)
+            throws TransformerException
+        {
+            throw arg0;
+        }
+    }
 }

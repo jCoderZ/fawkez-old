@@ -32,6 +32,7 @@
  */
 package org.jcoderz.commons.taskdefs;
 
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -51,145 +52,154 @@ import org.jcoderz.commons.util.IoUtil;
  * @author Michael Griffel
  */
 public class XsltBatchProcessor
-      extends Task
+    extends Task
 {
-   private String mStyleSheet = "default.xsl";
-   private FileSet mFiles = new FileSet();
-   private boolean mResolveExternalEntities = true;
+    private String mStyleSheet = "default.xsl";
 
-   /** terminate ant build on error. */
-   private boolean mFailOnError = false;
+    private FileSet mFiles = new FileSet();
 
-   /**
-    * Set whether we should fail on an error.
-    *
-    * @param b Whether we should fail on an error.
-    */
-   public void setFailonerror (boolean b)
-   {
-      mFailOnError = b;
-   }
+    private boolean mResolveExternalEntities = true;
 
-   /**
-    * Set the XSL Stylesheet to use.
-    * @param f The name of the XSL Stylesheet file.
-    * @see XsltBasedTask#getDefaultStyleSheet()
-    */
-   public void setXsl (String f)
-   {
-      mStyleSheet = f;
-   }
+    /** terminate ant build on error. */
+    private boolean mFailOnError = false;
 
-   /**
-    * XML files that are used as input documents for the transformation.
-    * @param fs fileset of XML files.
-    */
-   public void addFiles (FileSet fs)
-   {
-      mFiles = fs;
-   }
+    /**
+     * Set whether we should fail on an error.
+     *
+     * @param b Whether we should fail on an error.
+     */
+    public void setFailonerror (boolean b)
+    {
+        mFailOnError = b;
+    }
 
-   /**
-    * {@inheritDoc}
-    */
-   public void execute ()
-         throws BuildException
-   {
-      try
-      {
-         final XsltBasedTask xsltTask = new XsltBasedTask()
-         {
-            String getDefaultStyleSheet ()
+    /**
+     * Set the XSL Stylesheet to use.
+     *
+     * @param f The name of the XSL Stylesheet file.
+     * @see XsltBasedTask#getDefaultStyleSheet()
+     */
+    public void setXsl (String f)
+    {
+        mStyleSheet = f;
+    }
+
+    /**
+     * XML files that are used as input documents for the
+     * transformation.
+     *
+     * @param fs fileset of XML files.
+     */
+    public void addFiles (FileSet fs)
+    {
+        mFiles = fs;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void execute ()
+        throws BuildException
+    {
+        try
+        {
+            final XsltBasedTask xsltTask = new XsltBasedTask()
             {
-               return mStyleSheet;
-            }
-         };
-
-         final Project myProject = getProject();
-         final DirectoryScanner ds
-               = mFiles.getDirectoryScanner(myProject);
-         final String[] includedFiles = ds.getIncludedFiles();
-         for (int i = 0; i < includedFiles.length; i++)
-         {
-            final String f = includedFiles[i];
-            final File orig = new File(ds.getBasedir(), f);
-            final File out;
-            try
+                String getDefaultStyleSheet ()
+                {
+                    return mStyleSheet;
+                }
+            };
+            final Project myProject = getProject();
+            final DirectoryScanner ds = mFiles.getDirectoryScanner(myProject);
+            final String[] includedFiles = ds.getIncludedFiles();
+            log("Transforming " + includedFiles.length + "files in directory "
+                + ds.getBasedir());
+            for (int i = 0; i < includedFiles.length; i++)
             {
-               out = File.createTempFile("jcoderz", "tmp");
+                final String f = includedFiles[i];
+                final File orig = new File(ds.getBasedir(), f);
+                final File out;
+                try
+                {
+                    out = File.createTempFile("jcoderz", "tmp");
+                }
+                catch (IOException e)
+                {
+                    throw new BuildException(
+                        "Failed to create temp file: " + e, e);
+                }
+                xsltTask.setProject(myProject);
+                xsltTask.setTaskName("xslt");
+                xsltTask.setIn(orig);
+                xsltTask.setOut(out);
+                xsltTask.setDestdir(myProject.getBaseDir());
+                xsltTask.setForce(true);
+                xsltTask.setFailonerror(mFailOnError);
+                xsltTask.setLogLevel(Project.MSG_VERBOSE);
+                xsltTask.resolveExternalEntities(mResolveExternalEntities);
+                log("Transforming file " + orig, Project.MSG_VERBOSE);
+                xsltTask.execute();
+                if (out.exists())
+                {
+                    if (!orig.delete())
+                    {
+                        throw new BuildException("Failed to delete " + orig);
+                    }
+                    if (!out.renameTo(orig))
+                    {
+                        // try copy && delete
+                        try
+                        {
+                            safeMove(out, orig);
+                        }
+                        catch (IOException e)
+                        {
+                            throw new BuildException("Failed to move file "
+                                + out, e);
+                        }
+                    }
+                }
             }
-            catch (IOException e)
+        }
+        catch (BuildException e)
+        {
+            if (mFailOnError)
             {
-               throw new BuildException("Failed to create temp file: " + e, e);
+                throw e;
             }
-            xsltTask.setProject(myProject);
-            xsltTask.setTaskName("xslt");
-            xsltTask.setIn(orig);
-            xsltTask.setOut(out);
-            xsltTask.setDestdir(myProject.getBaseDir());
-            xsltTask.setForce(true);
-            xsltTask.setFailonerror(mFailOnError);
-            xsltTask.resolveExternalEntities(mResolveExternalEntities);
-            log("transforming " + orig);
-            xsltTask.execute();
-            if (out.exists())
+            log(e.getMessage(), Project.MSG_ERR);
+        }
+    }
+
+    /**
+     * If set to <tt>false</tt>, external entities will not be
+     * resolved.
+     *
+     * @param b new value.
+     */
+    public void resolveExternalEntities (boolean b)
+    {
+        mResolveExternalEntities = b;
+    }
+
+    private void safeMove (File source, File dest)
+        throws IOException
+    {
+        final FileInputStream in = new FileInputStream(source);
+        final FileOutputStream out = new FileOutputStream(dest);
+        try
+        {
+            IoUtil.copy(in, out);
+            if (!source.delete())
             {
-               if (!orig.delete())
-               {
-                  throw new BuildException("Failed to delete " + orig);
-               }
-               if (!out.renameTo(orig))
-               {
-                  // try copy && delete
-                  try
-                  {
-                     safeMove(out, orig);
-                  }
-                  catch (IOException e)
-                  {
-                     throw new BuildException("Failed to move file " + out, e);
-                  }
-               }
+                throw new BuildException("Failed to delete " + source);
             }
-         }
-
-      }
-      catch (BuildException e)
-      {
-         if (mFailOnError)
-         {
-            throw e;
-         }
-         log(e.getMessage(), Project.MSG_ERR);
-      }
-   }
-
-   /**
-    * If set to <tt>false</tt>, external entities will not be resolved.
-    * @param b new value.
-    */
-   public void resolveExternalEntities (boolean b)
-   {
-      mResolveExternalEntities = b;
-   }
-
-   private void safeMove (File source, File dest)
-         throws IOException
-   {
-      final FileInputStream in = new FileInputStream(source);
-      final FileOutputStream out = new FileOutputStream(dest);
-      try
-      {
-         IoUtil.copy(in, out);
-         if (!source.delete())
-         {
-            throw new BuildException("Failed to delete " + source);
-         }
-      }
-      finally
-      {
-         IoUtil.close(in);
-         IoUtil.close(out);
-      }
-   }
+        }
+        finally
+        {
+            IoUtil.close(in);
+            IoUtil.close(out);
+        }
+    }
 }

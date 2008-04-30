@@ -146,7 +146,7 @@ static-catalog=yes
        <xdoc type="UseCase" in="${base.dir}/src/doc/usecase/sample.xml"
              out="${build.dir}/doc/usecase" failonerror="true"
              xephome="${xep.home}" cclabel="${label}" companyname="JCoderZ.org"
-             companylogo="jcoderz-org">
+             companylogo="jcoderz-org" format="ALL">
           <src dir="${base.dir}/src/java"/>
           <src dir="${build.dir}/gen-java"/>
           <classpath>

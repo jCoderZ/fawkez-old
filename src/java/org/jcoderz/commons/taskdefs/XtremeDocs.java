@@ -67,6 +67,20 @@ import org.jcoderz.commons.util.IoUtil;
 public class XtremeDocs
     extends Task
 {
+    private static final String FORMAT_PDF = "PDF";
+
+    private static final String FORMAT_HTML = "HTML";
+
+    private static final String FORMAT_ALL = "ALL";
+
+    private static final String TYPE_QUALITY_REPORT = "Quality-Report";
+
+    private static final String TYPE_TEST_SPEC = "TestSpec";
+
+    private static final String TYPE_USE_CASE = "UseCase";
+
+    private static final String TYPE_SAD = "SAD";
+
     private static final String IMAGE_DIR = "images";
 
     private static final String APIDOC_DIR = "apidoc";
@@ -91,6 +105,9 @@ public class XtremeDocs
 
     /** Type of document. (SAD|UseCase) */
     private String mType;
+
+    /** Format of document. (HTML|PDF|ALL) */
+    private String mFormat;
 
     private String mTypeLowerCase;
 
@@ -188,6 +205,16 @@ public class XtremeDocs
     {
         mType = type;
         mTypeLowerCase = type.toLowerCase(Constants.SYSTEM_LOCALE);
+    }
+
+    /**
+     * Set the document format.
+     *
+     * @param type the document format.
+     */
+    public void setFormat (String format)
+    {
+        mFormat = format;
     }
 
     /**
@@ -322,12 +349,12 @@ public class XtremeDocs
             final File imageDir = new File(mOutDir, IMAGE_DIR);
             // convertPackageHtml2DocBook();
             final File filePassOne = transformPassOne(mInFile);
-            if ("SAD".equals(mType))
+            if (TYPE_SAD.equals(mType))
             {
                 generateApiDocs(filePassOne);
                 generateSadDiagrams(filePassOne);
             }
-            else if ("UseCase".equals(mType))
+            else if (TYPE_USE_CASE.equals(mType))
             {
                 if (!mValidationOnly)
                 {
@@ -335,11 +362,11 @@ public class XtremeDocs
                     exportToXmi(filePassOne, imageDir);
                 }
             }
-            else if ("TestSpec".equals(mType))
+            else if (TYPE_TEST_SPEC.equals(mType))
             {
                 // Nothing to do
             }
-            else if ("Quality-Report".equals(mType))
+            else if (TYPE_QUALITY_REPORT.equals(mType))
             {
                 // Nothing to do
             }
@@ -349,10 +376,16 @@ public class XtremeDocs
             }
             if (!mValidationOnly)
             {
-                rasterizeSvgFiles(imageDir); // 4 HTML
-                scaleSvgImages(imageDir); // 4 PDF
+                if (isOutputEnabled(FORMAT_HTML))
+                {
+                    rasterizeSvgFiles(imageDir);
+                }
+                if (isOutputEnabled(FORMAT_PDF))
+                {
+                    scaleSvgImages(imageDir);
+                }
             }
-            if ("TestSpec".equals(mType))
+            if (TYPE_TEST_SPEC.equals(mType))
             {
                 renderDocbookFilesFromPassOne(filePassOne);
             }
@@ -372,6 +405,21 @@ public class XtremeDocs
         }
     }
 
+    private boolean isOutputEnabled (String format)
+    {
+        final boolean result;
+        if (mFormat == null || mFormat.equals(FORMAT_ALL)
+            || mFormat.equals(format))
+        {
+            result = true;
+        }
+        else
+        {
+            result = false;
+        }
+        return result;
+    }
+
     File getXepHome ()
     {
         return mXepHome;
@@ -386,7 +434,10 @@ public class XtremeDocs
             final File out = new File(docBookFile.getParentFile(), AntTaskUtil
                 .stripFileExtension(inFile.getName())
                 + "." + formatter.getFileExtension());
-            formatter.transform(this, docBookFile, out);
+            if (isOutputEnabled(formatter.getInfoData().getType()))
+            {
+                formatter.transform(this, docBookFile, out);
+            }
         }
     }
 
@@ -394,7 +445,7 @@ public class XtremeDocs
     {
         File docbookDir = new File(filePassOne.getParent());
         transformPassTwo(filePassOne);
-        log("search files to render in: " + docbookDir.getParent());
+        log("Search files to render in directory: " + docbookDir.getParent());
         final File[] docbookFiles = docbookDir.listFiles(new FilenameFilter()
         {
             public boolean accept (File dir, String name)
@@ -420,7 +471,7 @@ public class XtremeDocs
                     .stripFileExtension(AntTaskUtil
                         .stripFileExtension(docbookFile.getName())));
                 renderDocBook(docbookFile, passOneFile);
-                log("files to render: " + docbookFile.getName());
+                log("Will render file: " + docbookFile.getName(), Project.MSG_VERBOSE);
             }
         }
         else
@@ -646,13 +697,15 @@ public class XtremeDocs
                 return result;
             }
         });
+        log("Creating raster images for " + svgFiles.length
+            + " images", Project.MSG_INFO);
         for (int i = 0; i < svgFiles.length; i++)
         {
             final File svgFile = svgFiles[i];
             try
             {
                 log("Creating raster image for '" + svgFile.getCanonicalPath()
-                    + "'");
+                    + "'", Project.MSG_VERBOSE);
                 /*
                  * final String[] args = new String[] { "-maxw",
                  * "700.0", "-scriptSecurityOff",
@@ -663,7 +716,6 @@ public class XtremeDocs
                     .getName().substring(0, svgFile.getName().indexOf('.'))
                     + ".png");
                 Rasterizer.rasterize(svgFile, pngFile);
-                log("Finished creating raster image '" + pngFile + "'");
             }
             catch (Exception ex)
             {

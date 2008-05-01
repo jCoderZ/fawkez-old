@@ -165,7 +165,7 @@ public final class AntTaskUtil
             dot.setTaskName("dot");
             dot.setFailonerror(failOnError);
             dot.setFormat(FORMAT_SVG);
-            dot.setInFiles(dotFiles);
+            dot.setInFiles(dotPacket);
             dot.execute();
         }
         // Silly Graphviz always appends the new extension.
@@ -189,6 +189,7 @@ public final class AntTaskUtil
             {
                 packet[j] = dotFiles[(i * PACKET_SIZE) + j];
             }
+            result.add(packet);
         }
         return result;
     }

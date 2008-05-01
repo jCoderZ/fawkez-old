@@ -35,6 +35,9 @@ package org.jcoderz.commons.taskdefs;
 
 import java.io.File;
 import java.io.FilenameFilter;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
@@ -48,6 +51,10 @@ import org.apache.tools.ant.Task;
  */
 public final class AntTaskUtil
 {
+    private static final String FORMAT_SVG = "svg";
+
+    private static final int PACKET_SIZE = 20;
+
     private AntTaskUtil ()
     {
         // no instances allowed -- provides only static helper methods.
@@ -89,7 +96,6 @@ public final class AntTaskUtil
      * Strip file extension.
      *
      * @param fileWithExtension the file with extension
-     *
      * @return the string
      */
     public static String stripFileExtension (String fileWithExtension)
@@ -146,23 +152,44 @@ public final class AntTaskUtil
     private static void dots2svgs (Task task, boolean failOnError,
         final File[] dotFiles)
     {
-        final DotTask dot = new DotTask();
-        dot.setProject(task.getProject());
-        dot.setTaskName("dot");
-        dot.setFailonerror(failOnError);
-        dot.setFormat("svg");
-        dot.setInFiles(dotFiles);
-        dot.execute();
-
+        /*
+         * Windows command line size is limited, so we render up to
+         * PACKET_SIZE files at once.
+         */
+        List dotPackets = createPackets(dotFiles);
+        for (Iterator packetIter = dotPackets.iterator(); packetIter.hasNext();)
+        {
+            File[] dotPacket = (File[]) packetIter.next();
+            final DotTask dot = new DotTask();
+            dot.setProject(task.getProject());
+            dot.setTaskName("dot");
+            dot.setFailonerror(failOnError);
+            dot.setFormat(FORMAT_SVG);
+            dot.setInFiles(dotFiles);
+            dot.execute();
+        }
         // Silly Graphviz always appends the new extension.
         for (int i = 0; i < dotFiles.length; i++)
         {
             File generatedFile = new File(dotFiles[i].getParentFile(),
-                dotFiles[i].getName() + "." + dot.getFileExtension());
+                dotFiles[i].getName() + "." + FORMAT_SVG);
             File targetFile = new File(dotFiles[i].getParentFile(),
-                stripFileExtension(dotFiles[i].getName()) + "."
-                    + dot.getFileExtension());
+                stripFileExtension(dotFiles[i].getName()) + "." + FORMAT_SVG);
             generatedFile.renameTo(targetFile);
         }
+    }
+
+    private static List createPackets (File[] dotFiles)
+    {
+        List result = new ArrayList();
+        for (int i = 0; i < dotFiles.length / PACKET_SIZE; i++)
+        {
+            File[] packet = new File[PACKET_SIZE];
+            for (int j = 0; j < packet.length; j++)
+            {
+                packet[j] = dotFiles[(i * PACKET_SIZE) + j];
+            }
+        }
+        return result;
     }
 }

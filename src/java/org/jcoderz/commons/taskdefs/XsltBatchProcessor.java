@@ -113,7 +113,7 @@ public class XsltBatchProcessor
             final Project myProject = getProject();
             final DirectoryScanner ds = mFiles.getDirectoryScanner(myProject);
             final String[] includedFiles = ds.getIncludedFiles();
-            log("Transforming " + includedFiles.length + "files in directory "
+            log("Transforming " + includedFiles.length + " files in directory "
                 + ds.getBasedir());
             for (int i = 0; i < includedFiles.length; i++)
             {

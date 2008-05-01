@@ -35,6 +35,7 @@ package org.jcoderz.phoenix.report;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -100,6 +101,7 @@ public class JcReportAntTask
    private File mTempfolder = null;
    private int mMaxHeap = DEFAULT_MAX_HEAP;
    private int mCpus = DEFAULT_CPUS;
+   private Charset mSourceEncoding = null;
    private boolean mDebug = false;
 
    private File mWorkingDir = null;
@@ -123,6 +125,24 @@ public class JcReportAntTask
     public void setCpus (int cpus)
     {
         mCpus = cpus;
+    }
+
+
+/**
+     * @return the sourceEncoding
+     */
+    public String getEncoding ()
+    {
+        return mSourceEncoding.name();
+    }
+
+
+    /**
+     * @param encoding the sourceEncoding to set
+     */
+    public void setEncoding (String encoding)
+    {
+        mSourceEncoding = Charset.forName(encoding);
     }
 
 
@@ -647,6 +667,11 @@ public class JcReportAntTask
          cmd.createArgument().setValue(mPackageBase);
       }
 
+      if (mSourceEncoding != null)
+      {
+          cmd.createArgument().setValue("-sourceEncoding");
+          cmd.createArgument().setValue(getEncoding());
+      }
       if (mDebug)
       {
          cmd.createArgument().setValue("-loglevel");
@@ -1059,6 +1084,11 @@ public class JcReportAntTask
             cmd.createArgument().setValue("-encoding");
             cmd.createArgument().setValue(mEncoding);
          }
+         else if (mTask.getEncoding() != null)
+         {
+             cmd.createArgument().setValue("-encoding");
+             cmd.createArgument().setValue(mTask.getEncoding());
+         }
 
          if (mTargetjdk != null)
          {
@@ -1090,7 +1120,7 @@ public class JcReportAntTask
    {
       private static final int DEFAULT_MINIMUM_TOKENS = 100;
       private int mMinimumtokens = DEFAULT_MINIMUM_TOKENS;
-      private String mEncoding = "UTF-8";
+      private String mEncoding = null;
       private String mOutputEncoding = "UTF-8";
 
       public NestedCpdElement (JcReportAntTask task)
@@ -1139,8 +1169,17 @@ public class JcReportAntTask
          cmd.createArgument().setValue("--format");
          cmd.createArgument().setValue("net.sourceforge.pmd.cpd.XMLRenderer");
 
-         cmd.createArgument().setValue("--encoding");
-         cmd.createArgument().setValue(mEncoding);
+         if (mEncoding != null)
+         {
+             cmd.createArgument().setValue("--encoding");
+             cmd.createArgument().setValue(mEncoding);
+         }
+         else if (mTask.getEncoding() != null)
+         {
+             cmd.createArgument().setValue("--encoding");
+             cmd.createArgument().setValue(mTask.getEncoding());
+         }
+
 
          cmd.createArgument().setValue("--language");
          cmd.createArgument().setValue("java");
@@ -1422,6 +1461,14 @@ public class JcReportAntTask
          cmd.createArgument().setValue("-r");
          cmd.createArgument().setFile(srcDir);
 
+         if (mTask.getEncoding() != null)
+         {
+             final Variable var = new Variable();
+             var.setKey("file.encoding");
+             var.setValue(mTask.getEncoding());
+             cmd.getSystemProperties().addVariable(var);
+         }
+        
          forkToolProcess(mTask, cmd, new LogStreamHandler(mTask,
             Project.MSG_INFO, Project.MSG_WARN));
 

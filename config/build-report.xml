@@ -101,8 +101,9 @@
                 packagebase="org.jcoderz"
                 projectbase="${base.dir}"
                 tempfolder="${base.dir}/build/jcreport"
-                debug="false"
-                maxheap="128" 
+                debug="true"
+                maxheap="128"
+                encoding="US-ASCII"
                 cpus="0"> <!-- Increase to speed up -->
          <classpath refid="jcreport.classpath"/>
          <reports>   
@@ -122,12 +123,10 @@
          </mappings>   
          <tools>
             <pmd config="${pmd.rules}"
-                 targetjdk="1.4"
-                 encoding="ASCII">
+                 targetjdk="1.4">
                <classpath refid="pmd.classpath"/>
             </pmd>
-            <cpd minimumtokens="100"
-              encoding="ASCII">
+            <cpd minimumtokens="100">
                <classpath refid="pmd.classpath"/>
             </cpd>
            <!-- Could not disable UnreadFields cause further dependencies -->
@@ -141,7 +140,7 @@
                <pluginlist refid="findbugs.plugins"/>
             </findbugs>
             <checkstyle config="${checkstyle.rules}"
-              maxHeap="512"> 
+              maxHeap="256"> 
                <classpath refid="checkstyle.classpath" />
             </checkstyle>
             <!-- cobertura datafile="x.ser">

@@ -33,6 +33,7 @@
 package org.jcoderz.phoenix.report;
 
 import java.io.File;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -59,6 +60,7 @@ public final class HTMLRenderAntTask
    private String mName = null;
    /** The base package name. */
    private String mPackageBase = null;
+   private Charset mSourceEncoding = null;
 
    /**
     * Sets the output directory to given <code>dir</code>.
@@ -84,6 +86,11 @@ public final class HTMLRenderAntTask
    public void setPackageBase (String pkgBase)
    {
      mPackageBase = pkgBase;
+   }
+
+   public void setSourceEncoding (String srcEncoding)
+   {
+     mSourceEncoding = Charset.forName(srcEncoding);
    }
 
    /**
@@ -124,6 +131,11 @@ public final class HTMLRenderAntTask
            argList.add(mPackageBase);
          }
 
+         if (mSourceEncoding != null)
+         {
+             argList.add("-sourceEncoding");
+             argList.add(mSourceEncoding.name());
+         }
          logger.fine("Calling Java2Html with args '" + argList + "'");
          final String[] java2HtmlArgs
             = (String[]) argList.toArray(new String[0]);

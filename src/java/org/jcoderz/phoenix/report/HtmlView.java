@@ -34,8 +34,10 @@ package org.jcoderz.phoenix.report;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -115,6 +117,8 @@ public class HtmlView
    private String mClassname;
    private String mPackage;
    private int mTabIndent = DEFAULT_TAB_INDENT;
+   private Charset mSourceCharset = Charset.forName("US-ASCII");
+
 
    /**
     * Creates a new HtmlView object.
@@ -155,6 +159,22 @@ public class HtmlView
        mTabIndent = tabIndent;
    }
 
+   /**
+    * @return the sourceCharset
+    */
+    public Charset getSourceCharset ()
+    {
+        return mSourceCharset;
+    }
+    
+    /**
+     * @param sourceCharset the sourceCharset to set
+     */
+    public void setSourceCharset (Charset sourceCharset)
+    {
+        mSourceCharset = sourceCharset;
+    }
+    
    /**
     * Returns the given line if available or null if no such line
     * exists.<br />
@@ -300,7 +320,8 @@ public class HtmlView
       int i = 0;
       try
       {
-         br = new BufferedReader(new FileReader(mSourceFile));
+         br = new BufferedReader(new InputStreamReader(
+             new FileInputStream(mSourceFile), mSourceCharset));
          int linePos = 0;
          while ((i = br.read()) >= 0)
          {

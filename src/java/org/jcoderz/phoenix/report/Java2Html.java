@@ -64,6 +64,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -325,9 +326,20 @@ public final class Java2Html
     */
    public void setProjectName (String name)
    {
-      logger.config("Project name set to '" + getProjectName() + "'.");
       Assert.notNull(name, "name");
       mProjectName = name;
+      logger.config("Project name set to '" + getProjectName() + "'.");
+   }
+
+   /**
+    * Sets the char-set used for the source files.
+    * @param charset The char-set in which the source files are expected. 
+    */
+   public void setSourceCharset (Charset charset)
+   {
+      Assert.notNull(charset, "charset");
+      mHtmlView.setSourceCharset(charset);
+      logger.config("Source charset set to '" + charset + "'.");
    }
 
    /**
@@ -582,6 +594,10 @@ public final class Java2Html
             {
                setCoverageData(false);
                i -= 1;
+            }
+            else if ("-sourceEncoding".equals(args[i]))
+            {
+               setSourceCharset(Charset.forName(args[i + 1]));
             }
             else if ("-packageBase".equals(args[i]))
             {

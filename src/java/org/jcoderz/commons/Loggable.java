@@ -35,7 +35,6 @@ package org.jcoderz.commons;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
-import java.util.logging.Level;
 
 /**
  * Interface for all loggable objects.

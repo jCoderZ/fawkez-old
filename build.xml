@@ -1017,7 +1017,8 @@ xerces in current vm: ${xerces.version.ant}
          author="true"
          version="true"
          use="true"
-         additionalparam="-quiet -J-Xmx256m"
+         additionalparam="-quiet"
+      	 locale="en_US"
          breakiterator="true"
          source="1.5">
           <tag name="ejb.create-method"/>

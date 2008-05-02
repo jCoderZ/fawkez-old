@@ -256,7 +256,7 @@ static-catalog=yes
    <!-- =================================================================== -->
    <!-- Saxon (XSLT processing)                                             -->
    <!-- =================================================================== -->
-   <target name="subtarget-saxon" depends="xsl-stylesheets">
+   <target name="subtarget-saxon" depends="xsl-stylesheets, check-have-renderX">
       <java taskname="saxon" fork="true" failonerror="true"
             dir="${build.dir}/docbook"
             classname="com.icl.saxon.StyleSheet">
@@ -275,7 +275,7 @@ static-catalog=yes
          <arg value="html.stylesheet=default.css"/>
          <arg value="use.extensions=1"/>
          <arg value="fop1.extensions=1"/>
-         <arg value="xep.extensions=1"/>
+         <arg value="xep.extensions=${xep.extensions}"/>
          <classpath refid="xdoc.classpath"/>
       </java>
    </target>
@@ -283,7 +283,7 @@ static-catalog=yes
    <!-- =================================================================== -->
    <!-- Xalan2 (XSLT processing)                                             -->
    <!-- =================================================================== -->
-   <target name="subtarget-xalan" depends="xsl-stylesheets">
+   <target name="subtarget-xalan" depends="xsl-stylesheets, check-have-renderX">
       <java taskname="xalan" fork="true" failonerror="true"
             dir="${build.dir}/docbook"
             classname="org.apache.xalan.xslt.Process">
@@ -310,7 +310,12 @@ static-catalog=yes
       <available property="have-renderX"
                  file="/opt/xep/3.6.4/xep.sh"
                  type="file"/>
-      <echo message="renderX=${have-renderX}"/>
+   	  <available property="xep.extensions"
+   	  	 value="1"
+         file="/opt/xep/3.6.4/xep.sh"
+         type="file"/>
+   	  <property name="xep.extensions" value="0"/>
+      <echo message="renderX=${have-renderX} will set xep.extensions to ${xep.extensions}"/>
    </target>
    <target name="xep" if="have-renderX">
       <exec dir="${basedir}"

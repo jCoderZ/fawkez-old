@@ -187,6 +187,7 @@ public class ApiDocTask
         javadocTask.setClasspath(mDocletPath);
         javadocTask.setClasspath(Path.systemClasspath);
         javadocTask.setDestdir(mOutDir);
+        javadocTask.setAdditionalparam("-quiet");
         for (final Iterator i = mSources.iterator(); i.hasNext();)
         {
             final SourceDirectory fs = (SourceDirectory) i.next();

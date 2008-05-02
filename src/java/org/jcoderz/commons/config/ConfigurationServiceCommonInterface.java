@@ -86,7 +86,7 @@ public interface ConfigurationServiceCommonInterface
    int getInt (ConfigurationKey key)
          throws RemoteException, ConfigurationValueNotFoundException,
                ConfigurationTypeConversionFailedException,
-               ArgumentMalformedException;
+               ArgumentMalformedException, NumberFormatException;
 
 
    /**

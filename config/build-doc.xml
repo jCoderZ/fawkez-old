@@ -315,7 +315,9 @@ static-catalog=yes
          file="/opt/xep/3.6.4/xep.sh"
          type="file"/>
    	  <property name="xep.extensions" value="0"/>
-      <echo message="renderX=${have-renderX} will set xep.extensions to ${xep.extensions}"/>
+      <echo
+      	level="info"
+      	message="renderX=${have-renderX} will set xep.extensions to ${xep.extensions}"/>
    </target>
    <target name="xep" if="have-renderX">
       <exec dir="${basedir}"

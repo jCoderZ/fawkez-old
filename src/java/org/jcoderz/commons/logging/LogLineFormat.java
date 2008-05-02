@@ -225,6 +225,7 @@ public abstract class LogLineFormat
     * @throws IllegalArgumentException if no such LogLineType.
     */
    public static LogLineType getLogLineType (final char code)
+       throws IllegalArgumentException
    {
       final LogLineType rc = (LogLineType) LogLineType.TYPE_CODE_MAPPING
             .get(new Character(code));

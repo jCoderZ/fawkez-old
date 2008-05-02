@@ -1,5 +1,5 @@
 /*
- * $Id: FileUtils.java 204 2006-06-22 10:54:21Z amandel $
+ * $Id$
  *
  * Copyright 2006, The jCoderZ.org Project. All rights reserved.
  *

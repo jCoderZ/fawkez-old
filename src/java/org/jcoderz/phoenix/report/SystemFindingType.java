@@ -1,5 +1,5 @@
 /*
- * $Id: CheckstyleFindingType.java 297 2007-11-21 16:41:28Z mgriffel $
+ * $Id$
  *
  * Copyright 2006, The jCoderZ.org Project. All rights reserved.
  *

@@ -184,6 +184,12 @@ public class BaseRuntimeException
       return mLoggable.getSourceMethod();
    }
 
+   /** {@inheritDoc} */
+   public String toString ()
+   {
+       return mLoggable.toString();
+   }
+   
    LoggableImpl getExceptionImpl ()
    {
       return mLoggable;

@@ -36,7 +36,6 @@ package org.jcoderz.commons;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
-import java.util.logging.Level;
 
 
 /**
@@ -174,12 +173,6 @@ public class BaseException
    }
 
    /** {@inheritDoc} */
-   public Level getLogLevel ()
-   {
-      return mLoggable.getLogMessageInfo().getLogLevel();
-   }
-
-   /** {@inheritDoc} */
    public String getSourceClass ()
    {
       return mLoggable.getSourceClass();
@@ -189,6 +182,12 @@ public class BaseException
    public String getSourceMethod ()
    {
       return mLoggable.getSourceMethod();
+   }
+   
+   /** {@inheritDoc} */
+   public String toString ()
+   {
+       return mLoggable.toString();
    }
 
    LoggableImpl getExceptionImpl ()

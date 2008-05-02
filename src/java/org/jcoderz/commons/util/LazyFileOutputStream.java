@@ -166,7 +166,7 @@ public class LazyFileOutputStream
      * @see        java.io.FileInputStream#close()
      */
     protected void finalize ()
-        throws Throwable
+        throws IOException, Throwable
     {
         if (mOutput != null)
         {

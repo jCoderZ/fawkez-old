@@ -109,4 +109,74 @@
       </regexString>
    </regexStrings>
 
+<!-- ===============================================================
+     VALUE OBJECTS
+     =============================================================== -->
+   <valueObjects>
+      <valueObject
+         classname="FooValueObject"
+         package="org.jcoderz.commons.types.samples"
+         serializable="true"
+         final="false" >
+         <description>The Foo is documented here!</description>
+         <xdoclet>
+           <hibernate.class
+             table="FooTable" dynamic-update="true"/>
+           <hibernate.cache usage="read-only"/>
+         </xdoclet>
+         <member
+            name="Id"
+            type="long">
+           <decription>unique identifier for Foo</decription>
+           <xdoclet>
+             <hibernate.id
+               generator-class="native"
+               unsaved-value="-1"/>
+           </xdoclet>
+         </member>
+         <member
+            name="Creation Date"
+            type="org.jcoderz.commons.types.Date">
+            creation date of Buz
+         </member>
+         <member
+            name="Participants"
+            type="java.util.List"
+            initial-value="new java.util.ArrayList()"
+            final="true">List of all Merchants
+         </member>
+      </valueObject> <!--
+      <valueObject
+         classname="Settlement"
+         package="org.jcoderz.commons.types.samples"
+         serializable="true"
+         final="false">
+         <description>The Settlement.</description>
+         <member
+            name="Amount"
+            type="org.jcoderz.commons.types.PrecisionAmount">
+            amount of this settlement
+         </member>
+         <member
+            name="Settlement Date"
+            type="org.jcoderz.commons.types.Date">
+            date of this settlement
+         </member>
+         <member
+            name="Settlement State"
+            type="SettlementState">
+            state of this settlement
+         </member>
+         <member
+            name="Payor"
+            type="org.jcoderz.commons.types.ParticipantId">
+            payor of this settlement
+         </member>
+         <member
+            name="Payee"
+            type="org.jcoderz.commons.types.ParticipantId">
+            payee of this settlement
+         </member>
+      </valueObject> -->
+   </valueObjects>
 </simpleTypes>

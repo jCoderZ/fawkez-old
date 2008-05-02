@@ -134,17 +134,20 @@ public final class XmlDocletConfig
 
       if (option == null)
       {
-         throw new ArgumentMalformedException("option", optionValue,
-               "Unknown option.");
+          logger.fine("Gracefully ignoring unknown option " + optionValue 
+              + " with value " + ArraysUtil.toString(args) + ".");
       }
-      if (args.length != (option.getNumberOfArguments() - 1))
+      else
       {
-         throw new ArgumentMalformedException("number of arguments",
-               String.valueOf(args.length - 1), "The option '" + optionValue
-               + "' expects " + (option.getNumberOfArguments() - 1)
-               + " arguments.");
+          if (args.length != (option.getNumberOfArguments() - 1))
+          {
+             throw new ArgumentMalformedException("number of arguments",
+                   String.valueOf(args.length - 1), "The option '" + optionValue
+                   + "' expects " + (option.getNumberOfArguments() - 1)
+                   + " arguments.");
+          }
+          option.validOption(this, args);
       }
-      option.validOption(this, args);
       if (logger.isLoggable(Level.FINER))
       {
          logger.exiting(CLASSNAME, "parseOption(String, String[])");
@@ -250,8 +253,4 @@ public final class XmlDocletConfig
          return mShortDescription;
       }
    }
-
-
-
-
 }

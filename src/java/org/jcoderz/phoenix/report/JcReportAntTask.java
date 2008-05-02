@@ -64,6 +64,7 @@ import org.apache.tools.ant.taskdefs.PumpStreamHandler;
 import org.apache.tools.ant.types.CommandlineJava;
 import org.apache.tools.ant.types.Path;
 import org.apache.tools.ant.types.Environment.Variable;
+import org.jcoderz.commons.taskdefs.AntTaskUtil;
 import org.jcoderz.commons.types.Date;
 import org.jcoderz.commons.util.FileUtils;
 import org.jcoderz.commons.util.StringUtil;
@@ -188,7 +189,7 @@ public class JcReportAntTask
    public void setDest (String dest)
    {
       mDest = new File(dest);
-      ensureDir(mDest, "dest");
+      AntTaskUtil.ensureDirectory(mDest);
    }
 
 
@@ -281,7 +282,7 @@ public class JcReportAntTask
          if (mDest.exists())
          {
             FileUtils.rmdir(mDest);
-            ensureDir(mDest, "dest");
+            AntTaskUtil.ensureDirectory(mDest);
          }
 
          // Now start processing the different reports
@@ -342,7 +343,7 @@ public class JcReportAntTask
     {
         // Create a temp folder for this report
         final File reportTmpDir = new File(mWorkingDir, nre.getName());
-        ensureDir(reportTmpDir, "tmp-dir");
+        AntTaskUtil.ensureDirectory(reportTmpDir);
         final File srcDir = new File(nre.getSourcePath());
         final File clsDir = new File(nre.getClassPath());
 
@@ -441,9 +442,9 @@ public class JcReportAntTask
            throw new BuildException("You must specify a temporary folder!",
                getLocation());
        }
-       ensureDir(mTempfolder, "tmp-folder");
+       AntTaskUtil.ensureDirectory(mTempfolder);
        mWorkingDir = new File(mTempfolder, mName);
-       ensureDir(mWorkingDir, "working-dir-" + mName);
+       AntTaskUtil.ensureDirectory(mWorkingDir);
 
        // Check that the names of the reports differ!
        final Set<String> reportNames = new HashSet<String>();
@@ -675,18 +676,6 @@ public class JcReportAntTask
    }
 
    
-   private static void ensureDir (File dir, String param)
-   {
-       if (!dir.isDirectory())
-       {
-           if (!dir.mkdirs())
-           {
-               throw new BuildException(param + " must be a directory! Was '"
-                   + dir + "'.");
-           }
-       }
-   }
-
    //
    // Reports section
    //

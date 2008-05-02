@@ -1,5 +1,5 @@
 /*
- * $Id: LoggingProxy.java 101 2006-12-05 20:34:26Z amandel $
+ * $Id$
  *
  * Copyright 2006, The jCoderZ.org Project. All rights reserved.
  *
@@ -67,7 +67,7 @@ public class LazyFileOutputStream
     private InputStream mInputStream;
 
 
-    /** {@see FileOutputStream#FileOutputStream(String, boolean)} */
+    /** @see FileOutputStream#FileOutputStream(String, boolean) */
     public LazyFileOutputStream (File file, boolean append)
         throws FileNotFoundException
     {
@@ -94,21 +94,21 @@ public class LazyFileOutputStream
         }
     }
 
-    /** {@see FileOutputStream#FileOutputStream(File)} */
+    /** @see FileOutputStream#FileOutputStream(File) */
     public LazyFileOutputStream (File file)
         throws FileNotFoundException
     {
         this(file, false);
     }
 
-    /** {@see FileOutputStream#FileOutputStream(String, boolean)} */
+    /** @see FileOutputStream#FileOutputStream(String, boolean) */
     public LazyFileOutputStream (String name, boolean append)
         throws FileNotFoundException
     {
         this(new File(name), append);
     }
 
-    /** {@see FileOutputStream#FileOutputStream(String)} */
+    /** @see FileOutputStream#FileOutputStream(String) */
     public LazyFileOutputStream (String name)
         throws FileNotFoundException
     {

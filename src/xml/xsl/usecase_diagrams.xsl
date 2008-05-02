@@ -38,16 +38,16 @@
       <xsl:apply-templates select="uc:usecase"/>
       <xsl:apply-templates select="req:requirement[req:category/req:primary = 'Domain Model']"/>
       <xsl:apply-templates select="req:requirement[req:category/req:primary = 'Domain Model']" mode="xmi"/>
-      <xsl:apply-templates select="//uc:usecases" mode="dm"/>
-      <xsl:apply-templates select="//uc:usecases" mode="dm_category"/>
-      <xsl:apply-templates select="//uc:usecases" mode="dm_global_cat"/>
-      <xsl:apply-templates select="//uc:usecases" mode="roles"/>
-      <xsl:apply-templates select="//uc:usecases" mode="roles_category"/>
-      <xsl:apply-templates select="//uc:usecases" mode="uc_dep"/>
+      <xsl:apply-templates select="/uc:usecases" mode="dm"/>
+      <xsl:apply-templates select="/uc:usecases" mode="dm_category"/>
+      <xsl:apply-templates select="/uc:usecases" mode="dm_global_cat"/>
+      <xsl:apply-templates select="/uc:usecases" mode="roles"/>
+      <xsl:apply-templates select="/uc:usecases" mode="roles_category"/>
+      <xsl:apply-templates select="/uc:usecases" mode="uc_dep"/>
       <!--
-      <xsl:apply-templates select="//uc:usecases" mode="uc_scope_dep"/>
+      <xsl:apply-templates select="/uc:usecases" mode="uc_scope_dep"/>
        -->
-      <xsl:apply-templates select="//uc:usecase" mode="uc_dep_single"/>
+      <xsl:apply-templates select="uc:usecase" mode="uc_dep_single"/>
       <xsl:apply-templates select="req:requirement[starts-with(req:category/req:primary, 'Role')]"
                            mode="role"/>
    </xsl:template>
@@ -81,16 +81,16 @@ digraph G {
             weight = 10
     ]
 
-    <xsl:apply-templates select="//req:role[not(../req:category/req:secondary)]" mode="complete">
+    <xsl:apply-templates select="/uc:usecases/req:requirement//req:role[not(../req:category/req:secondary)]" mode="complete">
        <xsl:with-param name="suppress_uc" select="'true'"/>
     </xsl:apply-templates>
 
-    <xsl:for-each select="//req:requirement/req:category/req:secondary[generate-id() = generate-id(key('unique-category-secondary-key', .))]">
+    <xsl:for-each select="/uc:usecases/req:requirement/req:category/req:secondary[generate-id() = generate-id(key('unique-category-secondary-key', .))]">
        <xsl:variable name="sec_cat" select="."/>
-       <xsl:if test="//req:role[../req:category/req:secondary = $sec_cat and starts-with(../req:category/req:primary, 'Role')]">
+       <xsl:if test="/uc:usecases/req:requirement//req:role[../req:category/req:secondary = $sec_cat and starts-with(../req:category/req:primary, 'Role')]">
           subgraph cluster<xsl:value-of select="position()"/> {
              label = "<xsl:value-of select="$sec_cat"/>";
-          <xsl:apply-templates select="//req:role[../req:category/req:secondary = $sec_cat]" mode="complete">
+          <xsl:apply-templates select="/uc:usecases/req:requirement//req:role[../req:category/req:secondary = $sec_cat]" mode="complete">
              <xsl:with-param name="suppress_uc" select="'true'"/>
           </xsl:apply-templates>
           }
@@ -109,9 +109,9 @@ digraph G {
         ]
         <xsl:variable name="role_name" select="normalize-space(req:name)"/>
 
-      <xsl:for-each select="//uc:usecase/uc:actors/uc:primary/uc:name">
+      <xsl:for-each select="/uc:usecases/uc:usecase/uc:actors/uc:primary/uc:name">
          <xsl:variable name="actor_id" select="normalize-space(.)"/>
-         <xsl:variable name="role_id" select="//req:requirement[normalize-space(req:role/req:name) = normalize-space($actor_id)]/req:key"/>
+         <xsl:variable name="role_id" select="/uc:usecases/req:requirement[normalize-space(req:role/req:name) = normalize-space($actor_id)]/req:key"/>
 
          <!-- only show entities, if referenced entity is within documents scope (referenced in root file) -->
          <xsl:if test="$role_name = $actor_id">
@@ -136,8 +136,8 @@ digraph G {
 
       <xsl:for-each select="req:superior/req:ref">
          <xsl:variable name="superior_id" select="@id"/>
-         <xsl:variable name="superior_name" select="//req:role/req:name[../../req:key = $superior_id]"/>
-         <xsl:variable name="role_id" select="//req:requirement[normalize-space(req:role/req:name) = $role_name]/req:key"/>
+         <xsl:variable name="superior_name" select="/uc:usecases/req:requirement//req:role/req:name[../../req:key = $superior_id]"/>
+         <xsl:variable name="role_id" select="/uc:usecases/req:requirement[normalize-space(req:role/req:name) = $role_name]/req:key"/>
 
          <xsl:call-template name="create_edge">
             <xsl:with-param name="link_from"      select="$superior_id"/>
@@ -151,15 +151,15 @@ digraph G {
    </xsl:template>
 
    <xsl:template match="uc:usecases" mode="roles_category">
-      <xsl:for-each select="//req:requirement/req:category/req:secondary[generate-id() = generate-id(key('unique-category-secondary-key', .))]">
-         <xsl:if test="//req:requirement/req:category/req:secondary[starts-with(../req:primary, 'Role')]">
+      <xsl:for-each select="/uc:usecases/req:requirement/req:category/req:secondary[generate-id() = generate-id(key('unique-category-secondary-key', .))]">
+         <xsl:if test="/uc:usecases/req:requirement/req:category/req:secondary[starts-with(../req:primary, 'Role')]">
             <xsl:variable name="sec_cat" select="."/>
             <xsl:call-template name="roles_model">
                <xsl:with-param name="secondary_category" select="."/>
                <xsl:with-param name="tertiary_category" select="''"/>
             </xsl:call-template>
-            <xsl:for-each select="//req:requirement/req:category/req:tertiary[generate-id() = generate-id(key('unique-category-tertiary-key', .))]">
-               <xsl:if test="//req:requirement/req:category/req:tertiary[starts-with(../req:primary,'Role') and ../req:secondary = $sec_cat]">
+            <xsl:for-each select="/uc:usecases/req:requirement/req:category/req:tertiary[generate-id() = generate-id(key('unique-category-tertiary-key', .))]">
+               <xsl:if test="/uc:usecases/req:requirement/req:category/req:tertiary[starts-with(../req:primary,'Role') and ../req:secondary = $sec_cat]">
                   <xsl:call-template name="roles_model">
                      <xsl:with-param name="secondary_category" select="$sec_cat"/>
                      <xsl:with-param name="tertiary_category" select="."/>
@@ -210,12 +210,12 @@ digraph G {
     ]
 
     <xsl:if test="$tertiary_category = ''">
-       <xsl:if test="//req:role[../req:category/req:secondary = $secondary_category and starts-with(../req:category/req:primary, 'Role')]">
+       <xsl:if test="/uc:usecases/req:requirement//req:role[../req:category/req:secondary = $secondary_category and starts-with(../req:category/req:primary, 'Role')]">
           subgraph cluster<xsl:value-of select="position()"/> {
              label = "<xsl:value-of select="$secondary_category"/>";
-          <xsl:apply-templates select="//req:role[../req:category/req:secondary = $secondary_category]" mode="complete"/>
+          <xsl:apply-templates select="/uc:usecases/req:requirement//req:role[../req:category/req:secondary = $secondary_category]" mode="complete"/>
           }
-          <xsl:for-each select="//req:role[not(../req:category/req:secondary = $secondary_category) and ../req:key = //req:role[../req:category/req:secondary = $secondary_category]/req:superior/req:ref/@id]">
+          <xsl:for-each select="/uc:usecases/req:requirement//req:role[not(../req:category/req:secondary = $secondary_category) and ../req:key = //req:role[../req:category/req:secondary = $secondary_category]/req:superior/req:ref/@id]">
              "<xsl:value-of select="../req:key"/>" [
                 label = "<xsl:value-of select="normalize-space(req:name)"/>"
              ]
@@ -223,12 +223,12 @@ digraph G {
        </xsl:if>
     </xsl:if>
     <xsl:if test="not($tertiary_category = '')">
-       <xsl:if test="//req:role[../req:category/req:secondary = $secondary_category and starts-with(../req:category/req:primary, 'Role')]">
+       <xsl:if test="/uc:usecases/req:requirement//req:role[../req:category/req:secondary = $secondary_category and starts-with(../req:category/req:primary, 'Role')]">
           subgraph cluster<xsl:value-of select="position()"/> {
              label = "<xsl:value-of select="$secondary_category"/>";
-          <xsl:apply-templates select="//req:role[../req:category/req:secondary = $secondary_category  and ../req:category/req:tertiary = $tertiary_category]" mode="complete"/>
+          <xsl:apply-templates select="/uc:usecases/req:requirement//req:role[../req:category/req:secondary = $secondary_category  and ../req:category/req:tertiary = $tertiary_category]" mode="complete"/>
           }
-          <xsl:for-each select="//req:role[not(../req:category/req:secondary = $secondary_category  and ../req:category/req:tertiary = $tertiary_category) and ../req:key = //req:role[../req:category/req:secondary = $secondary_category  and ../req:category/req:tertiary = $tertiary_category]/req:superior/req:ref/@id]">
+          <xsl:for-each select="/uc:usecases/req:requirement//req:role[not(../req:category/req:secondary = $secondary_category  and ../req:category/req:tertiary = $tertiary_category) and ../req:key = //req:role[../req:category/req:secondary = $secondary_category  and ../req:category/req:tertiary = $tertiary_category]/req:superior/req:ref/@id]">
              "<xsl:value-of select="../req:key"/>" [
                 label = "<xsl:value-of select="normalize-space(req:name)"/>"
              ]
@@ -274,14 +274,14 @@ digraph G {
     <xsl:for-each select="req:role/req:superior">
        <xsl:variable name="superior_id" select="req:ref/@id"/>
        "<xsl:value-of select="$superior_id"/>" [
-                label = "<xsl:value-of select="//req:requirement[req:key = $superior_id]/req:role/req:name"/>"
+                label = "<xsl:value-of select="/uc:usecases/req:requirement[req:key = $superior_id]/req:role/req:name"/>"
         ]
     </xsl:for-each>
 
     <xsl:for-each select="//req:superior[req:ref/@id = $role_id]">
        <xsl:variable name="subordinate_id" select="../../req:key"/>
        "<xsl:value-of select="$subordinate_id"/>" [
-                label = "<xsl:value-of select="//req:requirement[req:key = $subordinate_id]/req:role/req:name"/>"
+                label = "<xsl:value-of select="/uc:usecases/req:requirement[req:key = $subordinate_id]/req:role/req:name"/>"
         ]
         <xsl:call-template name="create_edge">
             <xsl:with-param name="link_from"      select="$role_id"/>
@@ -324,7 +324,7 @@ digraph G {
             weight = 10
     ]
 
-    <xsl:for-each select="//req:requirement/req:category/req:secondary[generate-id() = generate-id(key('unique-category-secondary-key', .))]">
+    <xsl:for-each select="/uc:usecases/req:requirement/req:category/req:secondary[generate-id() = generate-id(key('unique-category-secondary-key', .))]">
        <xsl:variable name="sec_cat" select="."/>
        <xsl:if test="//req:entity[../req:category/req:secondary = $sec_cat and ../req:category/req:primary = 'Domain Model']">
           subgraph cluster<xsl:value-of select="position()"/> {
@@ -334,7 +334,7 @@ digraph G {
        </xsl:if>
     </xsl:for-each>
     <xsl:apply-templates select="//req:entity[not(../req:category/req:secondary)]" mode="complete"/>
-    <xsl:for-each select="//req:requirement/req:category/req:secondary[generate-id() = generate-id(key('unique-category-secondary-key', .))]">
+    <xsl:for-each select="/uc:usecases/req:requirement/req:category/req:secondary[generate-id() = generate-id(key('unique-category-secondary-key', .))]">
        <xsl:variable name="sec_cat" select="."/>
        <xsl:if test="//req:entity[../req:category/req:secondary = $sec_cat and ../req:category/req:primary = 'Domain Model']">
           <xsl:apply-templates select="//req:entity[../req:category/req:secondary = $sec_cat]" mode="complete"/>
@@ -365,8 +365,8 @@ digraph G {
          <xsl:variable name="dm_id" select="req:objectreference/req:ref/@id"/>
 
          <!-- only show entities, if referenced entity is within documents scope (referenced in root file) -->
-         <xsl:if test="//req:requirement[req:key = $dm_id]/req:entity">
-            <!-- xsl:apply-templates select="//req:requirement[req:key = $dm_id]/req:entity"/-->
+         <xsl:if test="/uc:usecases/req:requirement[req:key = $dm_id]/req:entity">
+            <!-- xsl:apply-templates select="/uc:usecases/req:requirement[req:key = $dm_id]/req:entity"/-->
 
            <xsl:call-template name="create_edge">
               <xsl:with-param name="link_from"      select="../../req:key"/>
@@ -408,7 +408,7 @@ digraph G {
             weight = 10
     ]
 
-    <xsl:for-each select="//req:requirement/req:category/req:secondary[generate-id() = generate-id(key('unique-category-secondary-key', .))]">
+    <xsl:for-each select="/uc:usecases/req:requirement/req:category/req:secondary[generate-id() = generate-id(key('unique-category-secondary-key', .))]">
        <xsl:variable name="sec_cat" select="."/>
        <xsl:if test="//req:entity[../req:category/req:secondary = $sec_cat and ../req:category/req:primary = 'Domain Model']">
           subgraph cluster<xsl:value-of select="position()"/> {
@@ -416,8 +416,8 @@ digraph G {
              <xsl:variable name="pos" select="position()"/>
 
              <xsl:choose>
-                <xsl:when test="//req:requirement/req:category/req:tertiary[../req:secondary = $sec_cat and ../req:primary = 'Domain Model']">
-                   <xsl:for-each select="//req:requirement/req:category/req:tertiary[../req:secondary = $sec_cat and generate-id() = generate-id(key('unique-category-tertiary-key', .))]">
+                <xsl:when test="/uc:usecases/req:requirement/req:category/req:tertiary[../req:secondary = $sec_cat and ../req:primary = 'Domain Model']">
+                   <xsl:for-each select="/uc:usecases/req:requirement/req:category/req:tertiary[../req:secondary = $sec_cat and generate-id() = generate-id(key('unique-category-tertiary-key', .))]">
                       <xsl:variable name="ter_cat" select="."/>
                       <xsl:if test="//req:entity[../req:category/req:tertiary = $ter_cat and ../req:category/req:secondary = $sec_cat and ../req:category/req:primary = 'Domain Model']">
                          "<xsl:value-of select="$sec_cat"/>" [label="", color="white"];
@@ -436,14 +436,14 @@ digraph G {
        </xsl:if>
     </xsl:for-each>
 
-    <xsl:for-each select="//req:requirement/req:category/req:secondary[generate-id() = generate-id(key('unique-category-secondary-key', .))]">
+    <xsl:for-each select="/uc:usecases/req:requirement/req:category/req:secondary[generate-id() = generate-id(key('unique-category-secondary-key', .))]">
        <xsl:variable name="sec_cat" select="."/>
        <xsl:if test="//req:entity[../req:category/req:secondary = $sec_cat and ../req:category/req:primary = 'Domain Model']">
           <xsl:variable name="pos" select="position()"/>
 
           <xsl:choose>
-             <xsl:when test="//req:requirement/req:category/req:tertiary[../req:secondary = $sec_cat and ../req:primary = 'Domain Model']">
-                <xsl:for-each select="//req:requirement/req:category/req:tertiary[../req:secondary = $sec_cat and generate-id() = generate-id(key('unique-category-tertiary-key', .))]">
+             <xsl:when test="/uc:usecases/req:requirement/req:category/req:tertiary[../req:secondary = $sec_cat and ../req:primary = 'Domain Model']">
+                <xsl:for-each select="/uc:usecases/req:requirement/req:category/req:tertiary[../req:secondary = $sec_cat and generate-id() = generate-id(key('unique-category-tertiary-key', .))]">
                    <xsl:variable name="ter_cat" select="."/>
 
 
@@ -477,7 +477,7 @@ digraph G {
       <xsl:param name="sec_cat_in" select="$dummy"/>
       <xsl:param name="ter_cat_in" select="$dummy"/>
 
-      <xsl:for-each select="//req:requirement/req:category/req:secondary[../req:primary = 'Domain Model' and not(. = $sec_cat_in)]">
+      <xsl:for-each select="/uc:usecases/req:requirement/req:category/req:secondary[../req:primary = 'Domain Model' and not(. = $sec_cat_in)]">
          <xsl:variable name="sec_cat" select="."/>
          <xsl:variable name="key" select="../../req:key"/>
 
@@ -486,13 +486,13 @@ digraph G {
                 <xsl:for-each select="../req:tertiary[not(. = $ter_cat_in)]">
                    <xsl:variable name="ter_cat" select="."/>
                    <xsl:choose>
-                      <xsl:when test="//req:requirement[req:category/req:primary = 'Domain Model' and req:category/req:secondary = $sec_cat_in and req:category/req:tertiary = $ter_cat_in]/req:entity//req:ref[@id = $key]">
+                      <xsl:when test="/uc:usecases/req:requirement[req:category/req:primary = 'Domain Model' and req:category/req:secondary = $sec_cat_in and req:category/req:tertiary = $ter_cat_in]/req:entity//req:ref[@id = $key]">
                          "<xsl:value-of select="$sec_cat"/>_<xsl:value-of select="$ter_cat"/>" -&gt; "<xsl:value-of select="$sec_cat_in"/>_<xsl:value-of select="$ter_cat_in"/>";
                       </xsl:when>
-                      <xsl:when test="//req:requirement[req:category/req:primary = 'Domain Model' and req:category/req:secondary = $sec_cat_in]/req:entity//req:ref[@id = $key]">
+                      <xsl:when test="/uc:usecases/req:requirement[req:category/req:primary = 'Domain Model' and req:category/req:secondary = $sec_cat_in]/req:entity//req:ref[@id = $key]">
                          "<xsl:value-of select="$sec_cat"/>_<xsl:value-of select="$ter_cat"/>" -&gt; "<xsl:value-of select="$sec_cat_in"/>";
                       </xsl:when>
-                      <!-- xsl:when test="//req:requirement[req:category/req:primary = 'Domain Model']/req:entity//req:ref[@id = $key]">
+                      <!-- xsl:when test="/uc:usecases/req:requirement[req:category/req:primary = 'Domain Model']/req:entity//req:ref[@id = $key]">
                          "<xsl:value-of select="$sec_cat"/>_<xsl:value-of select="$ter_cat"/>" -&gt; "Global Entities (without categories)";
                       </xsl:when -->
                    </xsl:choose>
@@ -500,13 +500,13 @@ digraph G {
              </xsl:when>
              <xsl:otherwise>
                 <xsl:choose>
-                   <xsl:when test="//req:requirement[req:category/req:primary = 'Domain Model' and req:category/req:secondary = $sec_cat_in and req:category/req:tertiary = $ter_cat_in]/req:entity//req:ref[@id = $key]">
+                   <xsl:when test="/uc:usecases/req:requirement[req:category/req:primary = 'Domain Model' and req:category/req:secondary = $sec_cat_in and req:category/req:tertiary = $ter_cat_in]/req:entity//req:ref[@id = $key]">
                       "<xsl:value-of select="$sec_cat"/>" -&gt; "<xsl:value-of select="$sec_cat_in"/>_<xsl:value-of select="$ter_cat_in"/>";
                    </xsl:when>
-                   <xsl:when test="//req:requirement[req:category/req:primary = 'Domain Model' and req:category/req:secondary = $sec_cat_in]/req:entity//req:ref[@id = $key]">
+                   <xsl:when test="/uc:usecases/req:requirement[req:category/req:primary = 'Domain Model' and req:category/req:secondary = $sec_cat_in]/req:entity//req:ref[@id = $key]">
                       "<xsl:value-of select="$sec_cat"/>" -&gt; "<xsl:value-of select="$sec_cat_in"/>";
                    </xsl:when>
-                   <!--xsl:when test="//req:requirement[req:category/req:primary = 'Domain Model']/req:entity//req:ref[@id = $key]">
+                   <!--xsl:when test="/uc:usecases/req:requirement[req:category/req:primary = 'Domain Model']/req:entity//req:ref[@id = $key]">
                       "<xsl:value-of select="$sec_cat"/>" -&gt; "Global Entities (without categories)";
                    </xsl:when-->
                 </xsl:choose>
@@ -520,15 +520,15 @@ digraph G {
    <!-- Requirements UML class diagram (every category and sub-category) -->
 
    <xsl:template match="uc:usecases" mode="dm_category">
-      <xsl:for-each select="//req:requirement/req:category/req:secondary[generate-id() = generate-id(key('unique-category-secondary-key', .))]">
-         <xsl:if test="//req:requirement/req:category/req:secondary[../req:primary = 'Domain Model']">
+      <xsl:for-each select="/uc:usecases/req:requirement/req:category/req:secondary[generate-id() = generate-id(key('unique-category-secondary-key', .))]">
+         <xsl:if test="/uc:usecases/req:requirement/req:category/req:secondary[../req:primary = 'Domain Model']">
             <xsl:variable name="sec_cat" select="."/>
             <xsl:call-template name="domain_model">
                <xsl:with-param name="secondary_category" select="."/>
                <xsl:with-param name="tertiary_category" select="''"/>
             </xsl:call-template>
-            <xsl:for-each select="//req:requirement/req:category/req:tertiary[generate-id() = generate-id(key('unique-category-tertiary-key', .))]">
-               <xsl:if test="//req:requirement/req:category/req:tertiary[../req:primary = 'Domain Model' and ../req:secondary = $sec_cat]">
+            <xsl:for-each select="/uc:usecases/req:requirement/req:category/req:tertiary[generate-id() = generate-id(key('unique-category-tertiary-key', .))]">
+               <xsl:if test="/uc:usecases/req:requirement/req:category/req:tertiary[../req:primary = 'Domain Model' and ../req:secondary = $sec_cat]">
                   <xsl:call-template name="domain_model">
                      <xsl:with-param name="secondary_category" select="$sec_cat"/>
                      <xsl:with-param name="tertiary_category" select="."/>
@@ -548,8 +548,8 @@ digraph G {
          <xsl:variable name="dm_id" select="req:objectreference/req:ref/@id"/>
 
          <!-- only show entities, if referenced entity is within documents scope (referenced in root file) -->
-         <xsl:if test="//req:requirement[req:key = $dm_id]/req:entity">
-            <xsl:apply-templates select="//req:requirement[req:key = $dm_id]/req:entity"/>
+         <xsl:if test="/uc:usecases/req:requirement[req:key = $dm_id]/req:entity">
+            <xsl:apply-templates select="/uc:usecases/req:requirement[req:key = $dm_id]/req:entity"/>
 
            <xsl:call-template name="create_edge">
               <xsl:with-param name="link_from"      select="../../req:key"/>
@@ -663,7 +663,7 @@ digraph G {
 
          <!-- Avoid a repeated self reference here -->
          <xsl:if test="$dm_id != $dm_root_id">
-            <xsl:apply-templates select="//req:requirement[req:key = $dm_id]/req:entity"/>
+            <xsl:apply-templates select="/uc:usecases/req:requirement[req:key = $dm_id]/req:entity"/>
          </xsl:if>
 
         <xsl:call-template name="create_edge">
@@ -681,7 +681,7 @@ digraph G {
 
          <!-- Avoid a repeated self reference here -->
          <xsl:if test="$dm_id != $dm_root_id">
-            <xsl:apply-templates select="//req:requirement[req:key = $dm_id]/req:entity"/>
+            <xsl:apply-templates select="/uc:usecases/req:requirement[req:key = $dm_id]/req:entity"/>
 
               <xsl:call-template name="create_edge">
               <xsl:with-param name="link_from"      select="$dm_id"/>
@@ -991,8 +991,8 @@ digraph G {
 
    <xsl:template name="display_referents">
       <xsl:param name="usecase_id"/>
-      <xsl:if test="//uc:usecase//uc:step//uc:ref[(@id = $usecase_id or contains(@id,concat($usecase_id, '-'))) and not(ancestor-or-self::uc:usecase/@id = $usecase_id)]">
-         <xsl:for-each select="//uc:usecase//uc:step//uc:ref[(@id = $usecase_id or contains(@id,concat($usecase_id, '-'))) and not(ancestor-or-self::uc:usecase/@id = $usecase_id)]">
+      <xsl:if test="/uc:usecases/uc:usecase//uc:step//uc:ref[(@id = $usecase_id or contains(@id,concat($usecase_id, '-'))) and not(ancestor-or-self::uc:usecase/@id = $usecase_id)]">
+         <xsl:for-each select="/uc:usecases/uc:usecase//uc:step//uc:ref[(@id = $usecase_id or contains(@id,concat($usecase_id, '-'))) and not(ancestor-or-self::uc:usecase/@id = $usecase_id)]">
             <xsl:variable name="destination">
                <xsl:call-template name="lookup_name">
                   <xsl:with-param name="key" select="@id"/>
@@ -1070,19 +1070,19 @@ digraph G {
               <xsl:when test="contains($ext,'-')">
                  <xsl:variable name="ext_id" select="substring-before($ext, '-')"/>
                  <xsl:variable name="ext_step" select="substring-after($ext, '-')"/>
-                 <xsl:value-of select="//uc:usecase[@id = $from_uc]/uc:extension[@id = $ext_id]/@name"/>
+                 <xsl:value-of select="/uc:usecases/uc:usecase[@id = $from_uc]/uc:extension[@id = $ext_id]/@name"/>
               </xsl:when>
               <xsl:otherwise>
-                 <xsl:value-of select="//uc:usecase[@id = $from_uc]/uc:extension[@id = $ext]/@name"/>
+                 <xsl:value-of select="/uc:usecases/uc:usecase[@id = $from_uc]/uc:extension[@id = $ext]/@name"/>
               </xsl:otherwise>
            </xsl:choose>
         </xsl:when>
         <xsl:when test="not(contains(substring-after($key,'UC-'),'-'))">
-           <xsl:value-of select="//uc:usecase[@id = $from_uc]/uc:name"/>
+           <xsl:value-of select="/uc:usecases/uc:usecase[@id = $from_uc]/uc:name"/>
         </xsl:when>
         <xsl:otherwise>
            <xsl:variable name="ext" select="substring-after(substring-after($key, '-'), '-')"/>
-           <xsl:value-of select="//uc:usecase[@id = $from_uc]/uc:success/uc:step[@id = $ext]/@desc"/>
+           <xsl:value-of select="/uc:usecases/uc:usecase[@id = $from_uc]/uc:success/uc:step[@id = $ext]/@desc"/>
         </xsl:otherwise>
      </xsl:choose>
    </xsl:template>
@@ -1105,7 +1105,7 @@ digraph G {
            </xsl:otherwise>
          </xsl:choose>
       </xsl:variable>
-      <xsl:value-of select="//uc:usecase[@id = concat('UC-', $uc_id)]/uc:extension[$ext_id = @id]/@desc"/>
+      <xsl:value-of select="/uc:usecases/uc:usecase[@id = concat('UC-', $uc_id)]/uc:extension[$ext_id = @id]/@desc"/>
    </xsl:template>
 
 
@@ -1131,9 +1131,9 @@ digraph G {
 
     label = "\n<xsl:value-of select="$strUseCaseDependencies"/>";
 
-    <xsl:apply-templates select="//uc:usecase" mode="uc_dep_list_uc"/>
-    <xsl:apply-templates select="//uc:usecase" mode="uc_dep_ref_out"/>
-    <xsl:apply-templates select="//uc:usecase" mode="uc_dep_ref_precondition"/>
+    <xsl:apply-templates select="/uc:usecases/uc:usecase" mode="uc_dep_list_uc"/>
+    <xsl:apply-templates select="/uc:usecases/uc:usecase" mode="uc_dep_ref_out"/>
+    <xsl:apply-templates select="/uc:usecases/uc:usecase" mode="uc_dep_ref_precondition"/>
 }
 
       </redirect:write>
@@ -1174,10 +1174,10 @@ digraph G {
    <xsl:template match="uc:usecase" mode="uc_dep_ref_out">
       <xsl:variable name="uc_id" select="@id"/>
 
-      <xsl:for-each select="//uc:usecase[not(@id = $uc_id)]">
+      <xsl:for-each select="/uc:usecases/uc:usecase[not(@id = $uc_id)]">
          <xsl:variable name="target_uc_id" select="@id"/>
 
-         <xsl:if test="//uc:usecase[@id = $uc_id]//uc:ref
+         <xsl:if test="/uc:usecases/uc:usecase[@id = $uc_id]//uc:ref
                            [@id = $target_uc_id or starts-with(@id, concat($target_uc_id, '-'))]">
             "<xsl:value-of select="$uc_id"/>" -&gt; "<xsl:value-of select="$target_uc_id"/>";
          </xsl:if>
@@ -1187,10 +1187,10 @@ digraph G {
    <xsl:template match="uc:usecase" mode="uc_dep_ref_precondition">
       <xsl:variable name="uc_id" select="@id"/>
 
-      <xsl:for-each select="//uc:usecase[not(@id = $uc_id)]">
+      <xsl:for-each select="/uc:usecases/uc:usecase[not(@id = $uc_id)]">
          <xsl:variable name="target_uc_id" select="@id"/>
 
-         <xsl:if test="//uc:usecase[@id = $uc_id]/uc:precondition//uc:ref
+         <xsl:if test="/uc:usecases/uc:usecase[@id = $uc_id]/uc:precondition//uc:ref
                            [@id = $target_uc_id or starts-with(@id, concat($target_uc_id, '-'))]">
                        "<xsl:value-of select="$uc_id"/>" -&gt; "<xsl:value-of select="$target_uc_id"/>" [label = "precondition",style=dotted];
          </xsl:if>
@@ -1200,7 +1200,7 @@ digraph G {
    <!-- scope depending usecase dependency diagrams -->
    <xsl:template match="uc:usecases" mode="uc_scope_dep">
 
-      <xsl:for-each select="//uc:scope[generate-id() = generate-id(key('unique-usecase-scope-key', .))]">
+      <xsl:for-each select="/uc:usecases/uc:usecase/uc:scope[generate-id() = generate-id(key('unique-usecase-scope-key', .))]">
          <xsl:variable name="file"><xsl:value-of
             select="$imagedir"/>/usecase_<xsl:value-of
             select="."/>_dependencies<xsl:value-of
@@ -1221,12 +1221,12 @@ digraph G {
 
             <xsl:variable name="uc_scope" select="."/>
 
-            <xsl:apply-templates select="//uc:usecase[uc:scope = $uc_scope]"
+            <xsl:apply-templates select="/uc:usecases/uc:usecase[uc:scope = $uc_scope]"
                                  mode="uc_dep_list_uc"/>
 
-            <xsl:apply-templates select="//uc:usecase[uc:scope = $uc_scope]"
+            <xsl:apply-templates select="/uc:usecases/uc:usecase[uc:scope = $uc_scope]"
                                  mode="uc_dep_ref_out"/>
-            <xsl:apply-templates select="//uc:usecase[uc:scope = $uc_scope]"
+            <xsl:apply-templates select="/uc:usecases/uc:usecase[uc:scope = $uc_scope]"
                                  mode="uc_dep_ref_precondition"/>
 }
 
@@ -1289,7 +1289,7 @@ digraph G {
      ];
 
       <xsl:variable name="uc_id" select="@id"/>
-      <xsl:for-each select="//uc:usecase[not(@id = $uc_id)]">
+      <xsl:for-each select="/uc:usecases/uc:usecase[not(@id = $uc_id)]">
          <xsl:call-template name="uc_dep_single_list_uc">
             <xsl:with-param name="uc_id" select="$uc_id"/>
          </xsl:call-template>
@@ -1297,7 +1297,7 @@ digraph G {
 
 
       <!--
-         <xsl:apply-templates select="//uc:usecase" mode="uc_dep_ref_precondition"/>
+         <xsl:apply-templates select="/uc:usecases/uc:usecase" mode="uc_dep_ref_precondition"/>
        -->
 }
 

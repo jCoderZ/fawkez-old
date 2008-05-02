@@ -100,6 +100,7 @@ public final class SerializableIterator
     * @see java.util.Iterator#remove()
     */
    public void remove ()
+       throws UnsupportedOperationException
    {
       throw new UnsupportedOperationException(
             "Can't remove from a SerializableIterator");

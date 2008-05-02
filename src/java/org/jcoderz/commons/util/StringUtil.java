@@ -85,6 +85,7 @@ public final class StringUtil
     *       JDK.
     */
    public static String toString (byte[] bytes, int offset, int length)
+       throws RuntimeException
    {
       final String result;
       try
@@ -117,6 +118,7 @@ public final class StringUtil
     *       JDK.
     */
    public static byte[] toBytes (String s)
+       throws RuntimeException
    {
       try
       {

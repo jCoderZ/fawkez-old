@@ -102,7 +102,7 @@ static-catalog=yes
           <src dir="${base.dir}/src/java"/>
           <src dir="${build.dir}/gen-java"/>
           <classpath>
-             <path refid="xdoc.classpath"/>
+             <path refid="default.classpath"/>
           </classpath>
           <formatter type="HTML"
              style="${build.dir}/docbook/jcoderz-html-style.xsl"
@@ -116,7 +116,7 @@ static-catalog=yes
                 <include name="umlgraph/*.jar"/>
                 <include name="default/geronimo-spec/*.jar"/>
              </fileset>
-             <path refid="xdoc.classpath"/>
+             <path refid="default.classpath"/>
           </docletPath>
        </xdoc>
     </target>

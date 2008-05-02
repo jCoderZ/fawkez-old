@@ -210,7 +210,7 @@ public class XtremeDocs
     /**
      * Set the document format.
      *
-     * @param type the document format.
+     * @param format the document format.
      */
     public void setFormat (String format)
     {

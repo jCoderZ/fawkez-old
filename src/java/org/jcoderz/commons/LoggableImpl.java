@@ -48,7 +48,6 @@ import java.util.logging.Logger;
 import org.jcoderz.commons.util.ThrowableUtil;
 
 
-
 /**
  * Implements code common to all Exceptions.
  * <p>
@@ -441,10 +440,10 @@ public class LoggableImpl
       mClassName = frame.getClassName();
       mMethodName = frame.getMethodName();
       final String fileName = frame.getFileName();
-      final int lineNumber = frame.getLineNumber();
       if (fileName != null)
       {
-         if (frame.getLineNumber() >= 0)
+         final int lineNumber = frame.getLineNumber();
+         if (lineNumber >= 0)
          {
             mMethodName = frame.getMethodName()
                   + "(" + fileName + ":" + lineNumber + ")";

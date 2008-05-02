@@ -188,10 +188,7 @@ public class JcReportAntTask
    public void setDest (String dest)
    {
       mDest = new File(dest);
-      if (!mDest.exists())
-      {
-         mDest.mkdirs();
-      }
+      ensureDir(mDest, "dest");
    }
 
 
@@ -284,7 +281,7 @@ public class JcReportAntTask
          if (mDest.exists())
          {
             FileUtils.rmdir(mDest);
-            mDest.mkdirs();
+            ensureDir(mDest, "dest");
          }
 
          // Now start processing the different reports
@@ -298,7 +295,8 @@ public class JcReportAntTask
          final CompletionService<File> service
              = new ExecutorCompletionService<File>(
                  new ThreadPoolExecutor(max, max, 0, TimeUnit.SECONDS,
-                     new ArrayBlockingQueue<Runnable>(mReports.getReports().size()))); // 2 max threads?
+                     new ArrayBlockingQueue<Runnable>(
+                         mReports.getReports().size())));
 
          final List<Future<File>> jcReports = new ArrayList<Future<File>>();
          final Iterator<NestedReportElement> iterReport
@@ -344,7 +342,7 @@ public class JcReportAntTask
     {
         // Create a temp folder for this report
         final File reportTmpDir = new File(mWorkingDir, nre.getName());
-        reportTmpDir.mkdirs();
+        ensureDir(reportTmpDir, "tmp-dir");
         final File srcDir = new File(nre.getSourcePath());
         final File clsDir = new File(nre.getClassPath());
 
@@ -404,10 +402,9 @@ public class JcReportAntTask
 
         // Merge the different reports into one jcoderz-report.xml
         // This must be done on a level by level basis
-        final File jcReport = executeReportNormalizer(srcDir, reportTmpDir,
+        return executeReportNormalizer(srcDir, reportTmpDir,
               nre.getLevel(), checkstyleXml, findbugsXml, pmdXml,
               cpdXml, coberturaXml);
-        return jcReport;
     }
 
 
@@ -444,14 +441,9 @@ public class JcReportAntTask
            throw new BuildException("You must specify a temporary folder!",
                getLocation());
        }
-       mTempfolder.mkdirs();
-       if (!mTempfolder.isDirectory())
-       {
-           throw new BuildException("Temporary folder must be a directory!",
-               getLocation());
-       }
+       ensureDir(mTempfolder, "tmp-folder");
        mWorkingDir = new File(mTempfolder, mName);
-       mWorkingDir.mkdirs();
+       ensureDir(mWorkingDir, "working-dir-" + mName);
 
        // Check that the names of the reports differ!
        final Set<String> reportNames = new HashSet<String>();
@@ -682,6 +674,18 @@ public class JcReportAntTask
          Project.MSG_WARN));
    }
 
+   
+   private static void ensureDir (File dir, String param)
+   {
+       if (!dir.isDirectory())
+       {
+           if (!dir.mkdirs())
+           {
+               throw new BuildException(param + " must be a directory! Was '"
+                   + dir + "'.");
+           }
+       }
+   }
 
    //
    // Reports section
@@ -1131,7 +1135,7 @@ public class JcReportAntTask
 
       public void setMinimumtokens (String minimumtokens)
       {
-         mMinimumtokens = Integer.valueOf(minimumtokens).intValue();
+         mMinimumtokens = Integer.parseInt(minimumtokens);
       }
 
       public void setEncoding (String encoding)
@@ -1252,8 +1256,8 @@ public class JcReportAntTask
 
       public void setEffort (String effort)
       {
-         if (effort.equals("min") || effort.equals("default")
-               || effort.equals("max"))
+         if ("min".equals(effort) || "default".equals(effort)
+               || "max".equals(effort))
          {
             mEffort = effort;
          }
@@ -1266,8 +1270,8 @@ public class JcReportAntTask
 
       public void setWarninglevel (String warninglevel)
       {
-         if (warninglevel.equals("experimental") || warninglevel.equals("low")
-               || warninglevel.equals("medium") || warninglevel.equals("high"))
+         if ("experimental".equals(warninglevel) || "low".equals(warninglevel)
+               || "medium".equals(warninglevel) || "high".equals(warninglevel))
          {
             mWarninglevel = warninglevel;
          }
@@ -1561,7 +1565,7 @@ public class JcReportAntTask
    }
 
 
-   public class NestedFiltersElement
+   public static class NestedFiltersElement
    {
       private List<NestedFilterElement> mFilters
           = new ArrayList<NestedFilterElement>();

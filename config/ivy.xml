@@ -37,6 +37,7 @@
             <artifact name="coreplugin" type="jar"/>
             <artifact name="findbugs" type="jar"/>
             <artifact name="findbugs-ant" type="jar"/>
+            <artifact name="jsr305" type="jar"/>
         </dependency>
         <dependency org="fb-contrib" name="fb-contrib" rev="3.4.2"/>
         <dependency org="luntsys" name="luntbuild" rev="1.3.4">

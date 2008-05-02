@@ -377,7 +377,7 @@ public final class FileUtils
       if (fileName.startsWith(base))
       {
          fileName = fileName.substring(base.length());
-         if (fileName.startsWith("/"))
+         if (fileName.charAt(0) == '/')
          {
             fileName = fileName.substring(1);
          }

@@ -65,8 +65,8 @@ public class AuditLogEvent
    /** the principal of the AuditLogEvent */
    private final AuditPrincipal mAuditPrincipal;
 
-   /** The hashcode value */
-   private transient int mLazyHashCode;
+   /** The hashcode value, lazy initialized. */
+   private transient int mLazyHashCode = 0;
 
    /**
     * Constructor to create a AuditLogEvent instance with the minimum

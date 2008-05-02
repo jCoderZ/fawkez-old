@@ -279,7 +279,7 @@ xerces in current vm: ${xerces.version.ant}
                 <pathelement location="${base.dir}/lib/ivy/ivy-2.0.0-beta2.jar"/>
             </classpath>
         </typedef>
-        <configure file="${base.dir}/config/ivyconf.xml" />
+        <settings file="${base.dir}/config/ivyconf.xml" />
         <resolve file="${base.dir}/config/ivy.xml" conf="default"/>
         <retrieve pattern="${base.dir}/lib/[conf]/[module]/[artifact].[ext]"
             conf="default"/>

@@ -164,7 +164,7 @@ public class XmlDoclet
                "validOptions(String[][], DocErrorReporter)",
                new Object[] {ArraysUtil.toString(arguments), reporter});
       }
-      final boolean result = true;
+      boolean result = true;
       final Iterator i = Arrays.asList(arguments).iterator();
       while (i.hasNext())
       {
@@ -182,9 +182,8 @@ public class XmlDoclet
          }
          catch (ArgumentMalformedException ex)
          {
-            // reporter.printError(ex.getMessage());
-            // result = false;
-            reporter.printNotice(ex.getMessage());
+            reporter.printError(ex.getMessage());
+            result = false;
          }
       }
       if (logger.isLoggable(Level.FINER))
@@ -311,7 +310,6 @@ public class XmlDoclet
          generateConstructorBody(constructor);
          mOut.write("</constructor>\n");
       }
-
 
       // Methods.
       final MethodDoc[] methods = cd.methods();

@@ -53,7 +53,7 @@ public final class AntTaskUtil
 {
     private static final String FORMAT_SVG = "svg";
 
-    private static final int PACKET_SIZE = 20;
+    private static final int PACKET_SIZE = 1;
 
     private AntTaskUtil ()
     {
@@ -175,7 +175,6 @@ public final class AntTaskUtil
                 dotFiles[i].getName() + "." + FORMAT_SVG);
             File targetFile = new File(dotFiles[i].getParentFile(),
                 stripFileExtension(dotFiles[i].getName()) + "." + FORMAT_SVG);
-            System.out.println("Renaming " + generatedFile + " to " + targetFile);
             targetFile.delete();
             generatedFile.renameTo(targetFile);
         }

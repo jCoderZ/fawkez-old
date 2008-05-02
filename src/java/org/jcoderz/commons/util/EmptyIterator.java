@@ -59,6 +59,7 @@ public final class EmptyIterator
     * @throws IllegalStateException always.
     */
    public void remove ()
+       throws IllegalStateException
    {
       throw new IllegalStateException();
    }
@@ -77,6 +78,7 @@ public final class EmptyIterator
     * @throws NoSuchElementException always.
     */
    public Object next ()
+       throws NoSuchElementException
    {
       throw new NoSuchElementException();
    }

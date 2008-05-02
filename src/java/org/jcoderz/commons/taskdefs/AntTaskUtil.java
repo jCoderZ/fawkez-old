@@ -182,12 +182,25 @@ public final class AntTaskUtil
     private static List createPackets (File[] dotFiles)
     {
         List result = new ArrayList();
-        for (int i = 0; i < dotFiles.length / PACKET_SIZE; i++)
+        for (int i = 0; i < (dotFiles.length / PACKET_SIZE) + 1; i++)
         {
-            File[] packet = new File[PACKET_SIZE];
+            final File[] packet;
+            int remaining = dotFiles.length - (i * PACKET_SIZE);
+            if (remaining < PACKET_SIZE)
+            {
+                packet = new File[remaining];
+            }
+            else
+            {
+                packet = new File[PACKET_SIZE];
+            }
             for (int j = 0; j < packet.length; j++)
             {
-                packet[j] = dotFiles[(i * PACKET_SIZE) + j];
+                int index = (i * PACKET_SIZE) + j;
+                if (index < dotFiles.length)
+                {
+                    packet[j] = dotFiles[index];
+                }
             }
             result.add(packet);
         }

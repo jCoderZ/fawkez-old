@@ -40,13 +40,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
-import java.util.logging.Handler;
 import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import org.jcoderz.commons.util.LoggingUtils;
 
 import junit.framework.TestSuite;
+
+import org.jcoderz.commons.util.LoggingUtils;
 
 /**
  * Base class for a JUnit test that provides additional utility methods.

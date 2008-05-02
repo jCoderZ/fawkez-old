@@ -175,6 +175,8 @@ public final class AntTaskUtil
                 dotFiles[i].getName() + "." + FORMAT_SVG);
             File targetFile = new File(dotFiles[i].getParentFile(),
                 stripFileExtension(dotFiles[i].getName()) + "." + FORMAT_SVG);
+            System.out.println("Renaming " + generatedFile + " to " + targetFile);
+            targetFile.delete();
             generatedFile.renameTo(targetFile);
         }
     }

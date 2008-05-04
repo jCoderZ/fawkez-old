@@ -9,14 +9,14 @@
       short-name="TCS"
       package="org.jcoderz.commons.test">
      <group id="1" name="Test Service" short-name="TSS"
-      package="org.jcoderz.commons.test.case"
+      package="org.jcoderz.commons.test"
       base-exception="org.jcoderz.commons.BaseException"
       base-runtime-exception="org.jcoderz.commons.BaseRuntimeException"
       service="NONE">
       <message id="3" name="FUNNY_RUNTIME"
         level="INFO"
         business-impact="UNDEFINED"
-        base-exception="org.jcoderz.commons.test.case.TestServiceRuntimeException">
+        base-exception="org.jcoderz.commons.test.TestServiceRuntimeException">
         <text>Generic technical issue in the caused by '{CAUSE_TEXT}'.</text>
         <description>
           Not real fun!

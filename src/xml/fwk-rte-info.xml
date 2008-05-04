@@ -152,7 +152,7 @@
          The given argument is at least partly malformed.
          Argument ''{ARGUMENT_NAME}'' cannot be set to
          value ''{Serializable:ARGUMENT_VALUE}''. The value
-         exceeds the allowed maximum ({Long:MAX_VALUE})
+         exceeds the allowed maximum ({Number:MAX_VALUE})
          for {Class:ARGUMENT_CLASS}.
       </text>
       <solution>
@@ -168,8 +168,8 @@
          The given argument is at least partly malformed.
          Argument ''{ARGUMENT_NAME}'' cannot be set to
          value ''{Serializable:ARGUMENT_VALUE}''. The value
-         is below the allowed minimum
-         ({Long:MIN_VALUE}) for {Class:ARGUMENT_CLASS}.
+         is below {Number:MIN_VALUE}, the allowed minimum
+         for {Class:ARGUMENT_CLASS}.
       </text>
       <solution>
          Supply a correct value for the argument.
@@ -186,6 +186,23 @@
          value ''{Serializable:ARGUMENT_VALUE}''. The value
          does not match the restrictive pattern
          ''{String:PATTERN}'' for {Class:ARGUMENT_CLASS}.
+      </text>
+      <solution>
+         Supply a correct value for the argument.
+      </solution>
+   </message>
+   <message
+      id="13"
+      name="ARGUMENT_FRACTION_DIGITS_VIOLATION"
+      level="WARNING"
+      base-exception="org.jcoderz.commons.ArgumentMalformedException">
+      <text>
+         The given argument is at least partly malformed.
+         Argument ''{ARGUMENT_NAME}'' cannot be set to
+         value ''{Serializable:ARGUMENT_VALUE}''. The value
+         has {Number:ARGUMENT_FRACTION_DIGITS} fraction digits and
+         exceeds the allowed maximum {Number:MAX_FRACTION_DIGITS}
+         for {Class:ARGUMENT_CLASS}.
       </text>
       <solution>
          Supply a correct value for the argument.

@@ -179,4 +179,15 @@
          </member>
       </valueObject> -->
    </valueObjects>
+   
+  <fixPointNumbers>
+    <fixPointNumber
+         classname="SampleFixPoint"
+         package="org.jcoderz.commons.types.samples"
+         min-value="-100.50"
+         fraction-digits="2"
+         total-digits="5"
+         user-type="true">
+    </fixPointNumber>
+  </fixPointNumbers>
 </simpleTypes>

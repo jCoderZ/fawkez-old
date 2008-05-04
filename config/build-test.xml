@@ -98,13 +98,9 @@
                 source="1.4">
             <src path="${base.dir}/test/java"/>
             <src path="${build.dir}/gen-test"/>
-            <include name="**/*Test.java"/>
-            <include name="**/*Util.java"/>
-            <include name="**/report/samples/*.java"/>
-            <include name="**/*BeanTest.java" unless="build.debug"/>
-            <include name="**/*ServerTest.java" unless="build.debug"/>
             <classpath>
                 <pathelement path="${build.dir}/classes"/>
+                <pathelement path="${build.dir}/test-classes"/>
                 <path refid="test.classpath"/>
             </classpath>
         </javac>

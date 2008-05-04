@@ -4,7 +4,7 @@
 
    Collects common XSL templates.
 
-   Author: Michael Griffel
+   Author: Michael Griffel, Andreas Mandel
   -->
 <xsl:stylesheet
    version="1.0"
@@ -1512,6 +1512,480 @@ public final class <xsl:value-of select="$classname"/>
 <xsl:template name="regex-string-import-hook" priority="-1">
 import org.jcoderz.commons.ArgumentMalformedException;
 import org.jcoderz.commons.util.Assert;
+</xsl:template>
+
+<!-- ===============================================================
+     Fix Point Number generator.
+     =============================================================== -->
+<xsl:template name="fix-point-number">
+   <xsl:param name="classname"/>
+   <xsl:param name="package"/>
+   <xsl:param name="constants" select="''"/>
+   <xsl:param name="fraction-digits" select="'FIXME'"/>
+   <xsl:param name="total-digits" select="'FIXME'"/>
+   <xsl:param name="min-value" select="''"/>
+   <xsl:param name="max-value" select="'FIXME'"/>
+
+  <xsl:variable name="DECIMAL_SCALE">1<xsl:call-template name="repeat">
+       <xsl:with-param name="pattern" select="'0'"/>
+       <xsl:with-param name="count" select="$fraction-digits"/>
+    </xsl:call-template>
+  </xsl:variable>
+  <xsl:variable name="MIN_VALUE">
+    <xsl:choose>
+      <xsl:when test="not($min-value)">-<xsl:call-template name="repeat">
+          <xsl:with-param name="pattern" select="'9'"/>
+          <xsl:with-param
+            name="count" select="$total-digits - $fraction-digits"/>
+        </xsl:call-template>.<xsl:call-template name="repeat">
+          <xsl:with-param name="pattern" select="'9'"/>
+          <xsl:with-param name="count" select="$fraction-digits"/>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$min-value"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <xsl:variable name="MAX_VALUE">
+    <xsl:choose>
+      <xsl:when test="not($max-value)">+<xsl:call-template name="repeat">
+          <xsl:with-param name="pattern" select="'9'"/>
+          <xsl:with-param
+            name="count" select="$total-digits - $fraction-digits"/>
+        </xsl:call-template>.<xsl:call-template name="repeat">
+          <xsl:with-param name="pattern" select="'9'"/>
+          <xsl:with-param name="count" select="$fraction-digits"/>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$max-value"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <!-- TODO: Assert that given max and min-value are in the total-digits
+             range supported -->
+  <!-- TODO might dynamicly switch to int / BD? -->
+  <xsl:variable name="backing-type">long</xsl:variable>
+  <xsl:variable name="backing-class">Long</xsl:variable>
+
+<xsl:call-template name="java-copyright-header"/>
+package <xsl:value-of select="$package"/>;
+
+
+import java.io.Serializable;
+import java.math.BigDecimal;
+
+import org.jcoderz.commons.ArgumentMalformedException;
+import org.jcoderz.commons.ArgumentMaxValueViolationException;
+import org.jcoderz.commons.ArgumentMinValueViolationException;
+import org.jcoderz.commons.ArgumentFractionDigitsViolationException;
+import org.jcoderz.commons.StrongType;
+import org.jcoderz.commons.util.Assert;
+import org.jcoderz.commons.util.HashCodeUtil;
+import org.jcoderz.commons.util.NumberUtil;
+
+
+/**
+ * Fix point numeric to represent <xsl:value-of select="$classname"/>.
+ *
+ * Permitted values range from <xsl:value-of select="$MIN_VALUE"/> to
+ * <xsl:value-of select="$MAX_VALUE"/>. It the number of decimal
+ * digits supported is <xsl:value-of select="$fraction-digits"/> and
+ * the total number of digits is <xsl:value-of select="$total-digits"/>
+ *
+ * Instances of this class are imutable.
+ *
+ * @author generated
+ */
+public final class <xsl:value-of select="$classname"/>
+    extends Number
+    implements Comparable, StrongType, Serializable
+{
+    /**
+     * The name of this type.
+     */
+    public static final String TYPE_NAME = "<xsl:value-of select="$classname"/>";
+
+    /**
+     * The name of this type.
+     */
+    public static final String PREFERED_DATABASE_TYPE
+        = "NUMBER(<xsl:value-of select="$total-digits"/>,<xsl:value-of select="$fraction-digits"/>)";
+
+    /** The minimal unscaled value of <xsl:value-of select="$classname"/>. */
+    public static final <xsl:value-of select="$backing-type"/> MIN_VALUE_UNSCALED
+        = <xsl:call-template name="power10precise">
+          <xsl:with-param name="number" select="$MIN_VALUE"/>
+          <xsl:with-param name="exp" select="$fraction-digits"/>
+        </xsl:call-template>;
+
+    /** The minimal value of <xsl:value-of select="$classname"/>. */
+    public static final <xsl:value-of select="$classname"/> MIN_VALUE
+        = new <xsl:value-of select="$classname"/>(MIN_VALUE_UNSCALED);
+
+    /** The maximal value of <xsl:value-of select="$classname"/>. */
+    public static final <xsl:value-of select="$backing-type"/> MAX_VALUE_UNSCALED
+        = <xsl:call-template name="power10precise">
+          <xsl:with-param name="number" select="$MAX_VALUE"/>
+          <xsl:with-param name="exp" select="$fraction-digits"/>
+        </xsl:call-template>;
+
+    /** The maximal value of <xsl:value-of select="$classname"/>. */
+    public static final <xsl:value-of select="$classname"/> MAX_VALUE
+        = new <xsl:value-of select="$classname"/>(MAX_VALUE_UNSCALED);
+
+    /** The number of fraction digits. */
+    public static final int FRACTION_DIGITS
+        = <xsl:value-of select="$fraction-digits"/>;
+
+    /** The number of fraction digits. */
+    public static final int SCALE
+        = FRACTION_DIGITS;
+
+    /** The number of fraction digits. */
+    public static final <xsl:value-of select="$backing-type"/> DECIMAL_SCALE
+        = <xsl:value-of select="$DECIMAL_SCALE"/>;
+
+    /** The minimal scaled value of <xsl:value-of select="$classname"/>. */
+    public static final <xsl:value-of select="$backing-type"/> MIN_VALUE_SCALED
+        = MIN_VALUE_UNSCALED / DECIMAL_SCALE;
+
+    /** The maximal value of <xsl:value-of select="$classname"/>. */
+    public static final <xsl:value-of select="$backing-type"/> MAX_VALUE_SCALED
+        = MAX_VALUE_UNSCALED / DECIMAL_SCALE;
+
+    /** The number of fraction digits as integer.  */
+    public static final Integer FRACTION_DIGITS_AS_INTEGER
+        = new Integer(FRACTION_DIGITS);
+
+    /** The maximum number of total digits. */
+    public static final int TOTAL_DIGITS
+        = <xsl:value-of select="$total-digits"/>;
+
+    /** The number of fraction digits as integer.  */
+    public static final Integer TOTAL_DIGITS_AS_INTEGER
+        = new Integer(TOTAL_DIGITS);
+
+    /** The serialVersionUID used for serialization. */
+    static final long serialVersionUID = 1;
+
+
+    /** Holds the <xsl:value-of select="$classname"/> in a unscaled <xsl:value-of select="$backing-type"/>. */
+    private final <xsl:value-of select="$backing-type"/> mUnscaled;
+
+    /** Lazy initialized internal String representation. */
+    private volatile String mStringRepresentation = null;
+
+    /** Lazy initialized internal BigDecimal representation. */
+    private volatile BigDecimal mBigDecimal;
+
+
+    /**
+     * Creates a new instance of a <xsl:value-of select="$classname"/>.
+     *
+     * @param unscaledValue unscaled <xsl:value-of select="$backing-type"/> representation
+     * @throws ArgumentMalformedException If the given
+     *   unscaledValue violates the restriction
+     *   of the <xsl:value-of select="$classname"/> type.
+     */
+    private <xsl:value-of select="$classname"/> (final <xsl:value-of select="$backing-type"/> unscaledValue)
+          throws ArgumentMalformedException
+    {
+       if (unscaledValue &lt; MIN_VALUE_UNSCALED)
+       {
+          throw new ArgumentMinValueViolationException(
+             TYPE_NAME,
+             unscaledValue + "/" + DECIMAL_SCALE, MIN_VALUE,
+             <xsl:value-of select="$classname"/>.class);
+       }
+       if (unscaledValue &gt; MAX_VALUE_UNSCALED)
+       {
+          throw new ArgumentMaxValueViolationException(
+             TYPE_NAME, unscaledValue + "/" + DECIMAL_SCALE,
+             MAX_VALUE, <xsl:value-of select="$classname"/>.class);
+       }
+       mUnscaled = unscaledValue;
+    }
+
+    /**
+     * Creates a <xsl:value-of select="$classname"/> object from the String
+     * representation.
+     *
+     * @param str The str representation of the <xsl:value-of select="$classname"/>
+     *   to be returned.
+     * @return The <xsl:value-of select="$classname"/> object represented by this str.
+     * @throws ArgumentMalformedException If the given
+     *   String violates the restriction
+     *   of the <xsl:value-of select="$classname"/> type.
+     */
+    public static <xsl:value-of select="$classname"/> fromString (String str)
+          throws ArgumentMalformedException
+    {
+        Assert.notNull(str, TYPE_NAME);
+
+        final <xsl:value-of select="$classname"/> result;
+        try
+        {
+            result = valueOf(new BigDecimal(str));
+        }
+        catch (NumberFormatException ex)
+        {
+            throw new ArgumentMalformedException(
+                TYPE_NAME, str, "Invalid string representation", ex);
+        }
+        return result;
+
+    }
+
+    /**
+     * Translates a <tt>BigDecimal</tt> value into a
+     * <tt><xsl:value-of select="$classname"/></tt>.
+     *
+     * @param bd the <tt>BigDecimal</tt>.
+     * @return a <tt><xsl:value-of select="$classname"/></tt> whose value is equal
+     *  to bd.
+     * @throws ArgumentMalformedException If the given
+     *   <tt>BigDecimal</tt> violates the restriction
+     *   of the <xsl:value-of select="$classname"/> type.
+     */
+    public static <xsl:value-of select="$classname"/> valueOf (BigDecimal bd)
+    {
+        if (bd.scale() &gt; SCALE)
+        {
+            throw new ArgumentFractionDigitsViolationException(
+                TYPE_NAME, bd, new Integer(bd.scale()),
+                FRACTION_DIGITS_AS_INTEGER,
+                <xsl:value-of select="$classname"/>.class);
+        }
+        return new <xsl:value-of select="$classname"/>(
+            bd.setScale(SCALE).unscaledValue().<xsl:value-of select="$backing-type"/>Value());
+    }
+
+    /**
+     * Translates a <tt>long</tt> value into a
+     * <tt><xsl:value-of select="$classname"/></tt>.
+     *
+     * @param val the <tt>long</tt>.
+     * @return a <tt><xsl:value-of select="$classname"/></tt> whose value is equal
+     *  to the given long.
+     * @throws ArgumentMalformedException If the given
+     *   <tt>long</tt> violates the restriction
+     *   of the <xsl:value-of select="$classname"/> type.
+     * @see BigDecimal#valueOf(long)
+     */
+    public static <xsl:value-of select="$classname"/> valueOf (long val)
+    {
+        if (val &lt; MIN_VALUE_SCALED)
+        {
+           throw new ArgumentMinValueViolationException(
+              TYPE_NAME, new <xsl:value-of select="$backing-class"/>(val), MIN_VALUE,
+              <xsl:value-of select="$classname"/>.class);
+        }
+        if (val &gt; MAX_VALUE_SCALED)
+        {
+           throw new ArgumentMaxValueViolationException(
+              TYPE_NAME, new <xsl:value-of select="$backing-class"/>(val), MAX_VALUE,
+              <xsl:value-of select="$classname"/>.class);
+        }
+        return new <xsl:value-of select="$classname"/>(val * DECIMAL_SCALE);
+    }
+
+    /**
+     * Translates a <tt>long</tt> with the given scale into a
+     * <tt><xsl:value-of select="$classname"/></tt>.
+     *
+     * @param unscaledVal the unscaled value.
+     * @param scale the scale to be applied.
+     * @return a <tt><xsl:value-of select="$classname"/></tt> whose value is
+     *         <tt>(unscaledVal &amp;times; 10<sup>-scale</sup>)</tt>.
+     * @throws ArgumentMalformedException If the given
+     *   long and scale violates the restriction
+     *   of the <xsl:value-of select="$classname"/> type.
+     * @see BigDecimal#valueOf(long, int)
+     */
+    public static <xsl:value-of select="$classname"/> valueOf (long unscaledVal, int scale)
+    {
+        return valueOf(BigDecimal.valueOf(unscaledVal, scale));
+    }
+
+    /**
+     * Returns the unscaled long value of this <xsl:value-of select="$classname"/>.
+     * The actual value is the returned value / DECIMAL_SCALE.
+     * @return The unscaled long value of this <xsl:value-of select="$classname"/>.
+     */
+    public long unscaledLongValue ()
+    {
+        return toBigDecimal().longValue();
+    }
+
+    /**
+     * Returns the String representation of this <xsl:value-of select="$classname"/>.
+     * The implementation does not apply any localization rules.
+     * @return The String representation of this <xsl:value-of select="$classname"/>.
+     * @see BigDecimal#toString()
+     */
+    public String toString ()
+    {
+        if (mStringRepresentation == null)
+        {
+            mStringRepresentation
+                = NumberUtil.toString(mUnscaled, SCALE);
+        }
+       return mStringRepresentation;
+    }
+
+    /**
+     * Returns the BigDecimal representation of this <xsl:value-of select="$classname"/>.
+     * @return The BigDecimal representation of this <xsl:value-of select="$classname"/>.
+     */
+    public BigDecimal toBigDecimal ()
+    {
+        if (mBigDecimal == null)
+        {
+            mBigDecimal = BigDecimal.valueOf(mUnscaled, SCALE);
+        }
+       return mBigDecimal;
+    }
+
+    /** {@inheritDoc} */
+    public boolean equals (Object obj)
+    {
+       return (obj instanceof <xsl:value-of select="$classname"/>
+             &amp;&amp; ((<xsl:value-of select="$classname"/>) obj).mUnscaled == mUnscaled);
+    }
+
+    /** {@inheritDoc} */
+    public int hashCode ()
+    {
+        int hash = HashCodeUtil.SEED;
+        return HashCodeUtil.hash(hash, mUnscaled);
+    }
+
+    /** {@inheritDoc} */
+    public double doubleValue ()
+    {
+        return toBigDecimal().doubleValue();
+    }
+
+    /** {@inheritDoc} */
+    public float floatValue ()
+    {
+        return toBigDecimal().floatValue();
+    }
+
+    /** {@inheritDoc} */
+    public int intValue ()
+    {
+        return toBigDecimal().intValue();
+    }
+
+    /** {@inheritDoc} */
+    public long longValue ()
+    {
+        return toBigDecimal().longValue();
+    }
+
+    /** {@inheritDoc} */
+    public int compareTo (Object o)
+    {
+        final long thisVal = mUnscaled;
+        final long anotherVal = ((<xsl:value-of select="$classname"/>) o).mUnscaled;
+        return (thisVal &lt; anotherVal ? -1 : (thisVal == anotherVal ? 0 : 1));
+     }
+}
+</xsl:template> <!-- fix-point-number -->
+
+<!-- TODO: We might map this to Long on DB??? as an option? -->
+<xsl:template name="fix-point-user-type">
+   <xsl:param name="classname"/>
+   <xsl:param name="type-classname"/>
+   <xsl:param name="package"/>
+   <xsl:variable name="classname-constant">TYPE_NAME</xsl:variable>
+   <xsl:call-template name="java-copyright-header"/>
+package <xsl:value-of select="$package"/>;
+
+
+import java.math.BigDecimal;
+
+
+/**
+ * Hibernate user type for the  <xsl:value-of select="$type-classname"/>.
+ *
+ * @author generated via stylesheet
+ */
+public final class <xsl:value-of select="$classname"/>
+      extends org.jcoderz.commons.util.BigDecimalUserTypeBase
+{
+  /**
+   * {@inheritDoc}
+   */
+  public Object fromBigDecimal(BigDecimal value)
+  {
+    return <xsl:value-of select="$type-classname"/>.valueOf(value);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public BigDecimal toBigDecimal(Object value)
+  {
+    return ((<xsl:value-of select="$type-classname"/>) value).toBigDecimal();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public Class returnedClass()
+  {
+    return <xsl:value-of select="$type-classname"/>.class;
+  }
+}
+</xsl:template>
+
+<xsl:template name="repeat">
+   <xsl:param name="pattern"/>
+   <xsl:param name="count"/>
+  <xsl:if test="$count > 0">
+    <xsl:call-template name="repeat">
+      <xsl:with-param name="pattern" select="$pattern"/>
+      <xsl:with-param name="count" select="$count - 1"/>
+    </xsl:call-template>
+    <xsl:value-of select="$pattern"/>
+  </xsl:if>
+</xsl:template>
+
+<xsl:template name="power10precise">
+   <xsl:param name="number"/>
+   <xsl:param name="exp"/>
+  <xsl:choose>
+    <xsl:when test="$exp > 0">
+      <xsl:call-template name="power10precise">
+        <xsl:with-param name="number">
+          <xsl:call-template name="times10precize">
+            <xsl:with-param name="number" select="$number"/>
+          </xsl:call-template>
+        </xsl:with-param>
+        <xsl:with-param name="exp" select="$exp - 1"/>
+      </xsl:call-template>
+    </xsl:when>
+    <xsl:otherwise><xsl:value-of select="$number"/></xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<xsl:template name="times10precize">
+   <xsl:param name="number"/>
+  <xsl:choose>
+    <xsl:when test="contains($number, '.')">
+      <xsl:variable name="pos" select="string-length(substring-before($number, '.'))"/>
+      <xsl:value-of
+        select="concat(substring($number, 0, $pos + 1), substring($number, $pos + 2, 1))"/>
+      <xsl:if test="string-length(substring($number, $pos + 3)) &gt; 0"
+        >.<xsl:value-of select="substring($number, $pos + 3)"/>
+      </xsl:if>
+    </xsl:when>
+    <xsl:otherwise><xsl:value-of select="$number"/>0</xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
 <!-- ===============================================================

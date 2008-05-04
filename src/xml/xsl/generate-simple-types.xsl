@@ -151,6 +151,45 @@
    </redirect:write>
 </xsl:template>
 
+<xsl:template match="fixPointNumber">
+   <xsl:variable name="package.dir"><xsl:value-of
+      select="$outdir"/>/<xsl:value-of
+         select="translate(@package, '.', '/')"/></xsl:variable>
+
+   <xsl:variable name="file"><xsl:value-of
+      select="$package.dir"/>/<xsl:value-of
+         select="@classname"/>.java</xsl:variable>
+
+    <redirect:write file="{$file}">
+        <xsl:call-template name="fix-point-number">
+            <xsl:with-param name="classname" select="@classname"/>
+            <xsl:with-param name="package" select="@package"/>
+            <xsl:with-param name="fraction-digits" select="@fraction-digits"/>
+            <xsl:with-param name="total-digits" select="@total-digits"/>
+            <xsl:with-param name="min-value" select="@min-value"/>
+            <xsl:with-param name="max-value" select="@max-value"/>
+            <xsl:with-param name="constants" select=".//constant"/>
+        </xsl:call-template>
+    </redirect:write>
+
+   <xsl:if test="@user-type = 'true' or @user-type = 'big-decimal'">
+     <xsl:variable name="user-type-file"><xsl:value-of
+        select="$package.dir"/>/<xsl:value-of
+           select="@classname"/>UserType.java</xsl:variable>
+
+     <redirect:write file="{$user-type-file}">
+       <xsl:call-template name="fix-point-user-type">
+          <xsl:with-param name="classname"
+            select="concat(@classname, 'UserType')"/>
+          <xsl:with-param name="type-classname"
+            select="@classname"/>
+          <xsl:with-param name="package" select="@package"/>
+       </xsl:call-template>
+     </redirect:write>
+   </xsl:if>
+
+</xsl:template>
+
 <xsl:template match="valueObject">
    <xsl:variable name="package.dir"><xsl:value-of
       select="$outdir"/>/<xsl:value-of

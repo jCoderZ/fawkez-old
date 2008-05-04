@@ -93,7 +93,7 @@ public class WhitespaceFormatTest
    }
 
    /**
-    * Tests formatting of strings, with mixd whitespacee.
+    * Tests formatting of strings, with mixed whitespaces.
     */
    public void testMixedWhiteSpace ()
    {

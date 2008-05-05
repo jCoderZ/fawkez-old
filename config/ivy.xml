@@ -31,6 +31,9 @@
         <dependency org="org.docbook" name="docbook-xsl" rev="1.73.2">
             <artifact name="docbook-xsl" type="zip"/>
         </dependency>
+        <dependency org="offo" name="offo" rev="unknown">
+            <artifact name="fop-hyph"/>
+        </dependency>
         <dependency org="findbugs" name="findbugs" rev="1.3.3">
             <artifact name="bcel" type="jar"/>
             <artifact name="dom4j-full" type="jar"/>

@@ -406,11 +406,17 @@ public abstract class XsltBasedTask
             }
             // Xalan2 transformer is required,
             // that why we explicit use this factory
-            System.setProperty("javax.xml.transform.TransformerFactory",
-                "org.apache.xalan.processor.TransformerFactoryImpl");
-            final TransformerFactory factory = (TransformerFactory)
-            (loadClass("org.apache.xalan.processor.TransformerFactoryImpl")
-                .newInstance());
+// Disabled because of unwanted side effects in build process (Andreas)
+//            System.setProperty("javax.xml.transform.TransformerFactory",
+//                "org.apache.xalan.processor.TransformerFactoryImpl");
+//            final TransformerFactory factory = (TransformerFactory)
+//            (loadClass("org.apache.xalan.processor.TransformerFactoryImpl")
+//                .newInstance());
+
+            final TransformerFactory factory
+                = new org.apache.xalan.processor.TransformerFactoryImpl();
+
+
             factory.setURIResolver(new JarArchiveUriResolver(this));
             final InputStream xslStream = getXslFileAsStream();
             final Transformer transformer = factory

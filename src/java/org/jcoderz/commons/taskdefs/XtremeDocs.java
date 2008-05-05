@@ -74,6 +74,8 @@ public class XtremeDocs
     private static final String FORMAT_ALL = "ALL";
 
     private static final String TYPE_QUALITY_REPORT = "Quality-Report";
+    
+    private static final String TYPE_RELEASE_NOTES = "Release-Notes";
 
     private static final String TYPE_TEST_SPEC = "TestSpec";
 
@@ -367,6 +369,10 @@ public class XtremeDocs
                 // Nothing to do
             }
             else if (TYPE_QUALITY_REPORT.equals(mType))
+            {
+                // Nothing to do
+            }
+            else if (TYPE_RELEASE_NOTES.equals(mType))
             {
                 // Nothing to do
             }

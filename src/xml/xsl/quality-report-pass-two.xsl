@@ -1460,35 +1460,4 @@
       </xsl:text>
    </xsl:template>
    
-   
-   <!-- 
-       ****************
-       Helper templates
-       ****************
-    -->
-   
-   <xsl:template name="lookup_testcase_id">
-      <xsl:param name="shortname"/>
-      <xsl:choose>
-          <xsl:when test="key('test-shortname-group',$shortname)"><xsl:for-each select="key('test-shortname-group',$shortname)"><xsl:value-of select="tc:id"/></xsl:for-each></xsl:when>
-          <xsl:otherwise>STEPS</xsl:otherwise>
-      </xsl:choose>
-   </xsl:template>
-   
-   <xsl:template name="link_to_cms">
-      <xsl:param name="issue_id"/>
-      <xsl:variable name="dest_url"><xsl:call-template name="lookup_issue_url">
-          <xsl:with-param name="issue_id" select="$issue_id"/>
-      </xsl:call-template></xsl:variable>
-      <ulink url="{$dest_url}">
-         <citetitle><xsl:value-of select="$issue_id"/></citetitle>
-      </ulink>
-   </xsl:template>
-   
-   <xsl:template name="lookup_issue_url">
-      <xsl:param name="issue_id"/>
-      <xsl:for-each select="//cms:linkroot">
-          <xsl:if test="contains($issue_id, cms:text)"><xsl:value-of select="concat(cms:url, $issue_id)"/></xsl:if>
-      </xsl:for-each>
-   </xsl:template>
 </xsl:stylesheet>

@@ -209,9 +209,9 @@
                <table frame="all">
                   <title>Test results for issues</title>
                   <tgroup cols="6" align="left" colsep="1" rowsep="1">
-                     <colspec colwidth="45pt" colnum="1" colname="c1"/>
-                     <colspec colwidth="45pt" colnum="2" colname="c2"/>
-                     <colspec colwidth="45pt" colnum="3" colname="c3"/>
+                     <colspec colwidth="60pt" colnum="1" colname="c1"/>
+                     <colspec colwidth="60pt" colnum="2" colname="c2"/>
+                     <colspec colwidth="60pt" colnum="3" colname="c3"/>
                      <colspec colnum="4" colname="c4"/>
                      <colspec colwidth="45pt" colnum="5" colname="c5"/>
                      <colspec colwidth="45pt" colnum="6" colname="c6"/>
@@ -1151,6 +1151,18 @@
                         <xsl:call-template name="link_to_cms">
                             <xsl:with-param name="issue_id" select="$key_local_unmodified"/>
                         </xsl:call-template><xsl:if test="$type = 'internal'">(<xsl:value-of select="$status_local"/>)</xsl:if>
+                     </entry>
+                     <entry>
+                        <xsl:choose>
+                           <xsl:when test="cms:external-id">
+                              <xsl:for-each select="cms:external-id">
+                                 <xsl:call-template name="link_to_cms">
+                                     <xsl:with-param name="issue_id" select="."/>
+                                 </xsl:call-template>
+                              </xsl:for-each>        
+                           </xsl:when>
+                           <xsl:otherwise>none</xsl:otherwise> 
+                        </xsl:choose>
                      </entry>
                      <entry>
                         <ulink url="all_testspec.html#{$testcase_id}">

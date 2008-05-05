@@ -1319,7 +1319,7 @@
      </xsl:if>
    </xsl:template>
    
-   <xsl:template match="result">
+   <xsl:template match="tr:result">
       <xsl:choose>
           <xsl:when test=". = 'passed'"><xsl:text disable-output-escaping="yes">
 &lt;?dbhtml bgcolor="Lime" ?&gt;&lt;?dbfo bgcolor="Lime" ?&gt;</xsl:text><xsl:value-of select="."/></xsl:when>
@@ -1400,8 +1400,8 @@
       <xsl:param name="uc_id" select="@id"/>
       <row>
          <xsl:variable name="cover_num" select="count(key('test-group',$uc_id))"/>
-         <xsl:variable name="tc_executed" select="count(key('test-group',$uc_id)[key('testresult-testcase-group',id) or key('testresult-shortname-group',tr:shortname)])"/>
-         <xsl:variable name="tc_passed"   select="count(key('test-group',$uc_id)[key('testresult-passed-testcase-group',id) or key('testresult-passed-shortname-group',tr:shortname)])"/>
+         <xsl:variable name="tc_executed" select="count(key('test-group',$uc_id)[key('testresult-testcase-group',tc:id) or key('testresult-shortname-group',tr:shortname)])"/>
+         <xsl:variable name="tc_passed"   select="count(key('test-group',$uc_id)[key('testresult-passed-testcase-group',tc:id) or key('testresult-passed-shortname-group',tr:shortname)])"/>
          <xsl:choose>
             <xsl:when test="$cover_num = 0">
                <xsl:text disable-output-escaping="yes">

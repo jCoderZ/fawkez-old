@@ -73,8 +73,10 @@
                                    <xsl:with-param name="component" select="."/>
                                 </xsl:call-template>
                              </xsl:variable>
-                             <ulink url="{concat(substring-before($file_name, '.p1.p2'), '.pdf')}">
-                                <citetitle><xsl:value-of select="$file_name"/></citetitle>
+                             <xsl:variable name="pdf_name"
+                                           select="concat(substring-before($file_name, '.p1.p2'), '.pdf')"/>
+                             <ulink url="{$pdf_name}">
+                                <citetitle><xsl:value-of select="$pdf_name"/></citetitle>
                              </ulink>
                            </entry>
                          </row>

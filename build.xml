@@ -42,10 +42,18 @@
     <!-- =================================================================== -->
     <!-- Classpath                                                           -->
     <!-- =================================================================== -->
+    <path id="xalan.classpath">
+       <fileset dir="${base.dir}/lib">
+         <include name="default/xalan/xalan.jar"/>
+         <include name="default/xalan/serializer.jar"/>
+         <include name="default/xercesImpl/xml-apis.jar"/>
+         <include name="default/xercesImpl/xercesImpl.jar"/>
+         <include name="default/xml-resolver/xml-resolver.jar"/>
+       </fileset>
+    </path>
     <path id="default.classpath">
+      <path refid="xalan.classpath"/>
       <path location="${base.dir}/lib/eclipse/tools.jar"/>
-      <!-- This is 2.8.1 -->
-      <path location="${base.dir}/lib/default/xercesImpl/xercesImpl.jar"/>
       <fileset dir="${base.dir}/lib">
         <include name="default/**/*.jar"/>
         <!-- special BCEL version -->
@@ -172,7 +180,7 @@ xerces in current vm: ${xerces.version.ant}
     </target>
     <target name="check-xerces-classpath-available">
       <available property="xerces.classpath.present"
-                 classpathref="default.classpath"
+                 classpathref="xalan.classpath"
                  ignoresystemclasses="true"
                  classname="org.apache.xerces.impl.Version">
       </available>
@@ -180,7 +188,7 @@ xerces in current vm: ${xerces.version.ant}
     <target name="check-xerces-classpath-version"
       if="xerces.classpath.present">
       <java classname="org.apache.xerces.impl.Version"
-        classpathref="default.classpath"
+        classpathref="xalan.classpath"
         outputproperty="xerces.version"/>
     </target>
 
@@ -429,7 +437,8 @@ xerces in current vm: ${xerces.version.ant}
       <xslt in="${base.dir}/src/xml/simple-types.xml"
             out="${build.dir}/simple-types.out"
             style="${base.dir}/src/xml/xsl/generate-simple-types.xsl"
-            force="true">
+            force="true"
+            classpathref="xalan.classpath">
          <param name="outdir" expression="${base.dir}/build/gen-java"/>
       </xslt>
       <touch file="${build.dir}/simple-types.out"/>
@@ -1018,7 +1027,7 @@ xerces in current vm: ${xerces.version.ant}
          version="true"
          use="true"
          additionalparam="-quiet"
-      	 locale="en_US"
+         locale="en_US"
          breakiterator="true"
          source="1.5">
           <tag name="ejb.create-method"/>
@@ -1131,6 +1140,7 @@ xerces in current vm: ${xerces.version.ant}
    <!-- =================================================================== -->
    <target name="libclean" depends="distclean"
            description="Clean up everything including most of the lib directory">
+      <delete file="${base.dir}/lib/default/retrieve-3rd-party-libs.done"/>
       <delete dir="${base.dir}/lib/default"/>
       <delete dir="${base.dir}/lib/jaxb-compile"/>
       <delete dir="${base.dir}/lib/test"/>

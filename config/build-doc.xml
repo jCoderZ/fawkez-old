@@ -3,6 +3,7 @@
 <project name="build-doc">
 
     <path id="xdoc.classpath">
+       <path refid="xalan.classpath"/>
        <pathelement path="${build.dir}/classes"/>
        <pathelement path="${build.dir}/docbook/"/> <!-- CatalogManager -->
        <pathelement path="${build.dir}/docbook/docbook-xsl-1.73.2/extensions/saxon65.jar"/>
@@ -12,11 +13,8 @@
           <include name="default/saxon/*.jar"/>
           <include name="default/fop/*.jar"/>
           <include name="default/batik*/*.jar"/>
-          <include name="default/xml-resolver/*.jar"/>
           <include name="default/xmlgraphics-commons/*.jar"/>
           <include name="default/avalon-framework/*.jar"/>
-          <include name="default/xerces/*.jar"/>
-          <include name="default/xalan/*.jar"/>
          <include name="offo/fop-hyph.jar"/>
          <include name="jimi/jimi.jar"/>
        </fileset>
@@ -70,7 +68,7 @@ relative-catalogs=false
 static-catalog=yes
 # end-of-file
        </echo>
-		<!-- Make it work in a windows environment -->
+    <!-- Make it work in a windows environment -->
         <replace file="${build.dir}/docbook/CatalogManager.properties"
             token="\" value="\\"/>
     </target>
@@ -162,7 +160,7 @@ static-catalog=yes
           </docletPath>
       </xdoc>
    </target>
-  
+
    <target name="testspec" depends="compile-all, xsl-stylesheets, testspec-nodeps"/>
    <target name="testspec-nodeps">
       <taskdef name="xdoc"
@@ -205,7 +203,7 @@ static-catalog=yes
          </docletPath>
      </xdoc>
    </target>
-  
+
    <target name="quality-report" depends="compile-all, xsl-stylesheets, quality-report-nodeps"/>
    <target name="quality-report-nodeps">
      <taskdef name="xdoc"
@@ -215,7 +213,7 @@ static-catalog=yes
            <path refid="xdoc.classpath"/>
         </classpath>
      </taskdef>
-     
+
      <mkdir dir="${build.dir}/doc/quality-report"/>
      <mkdir dir="${build.dir}/doc/quality-report/images"/>
      <copy todir="${build.dir}/doc/quality-report/images"
@@ -298,7 +296,10 @@ static-catalog=yes
          <arg file="${xmlfile}"/>
          <arg value="-xsl"/>
          <arg value="${stylesheet}"/>
-         <jvmarg value="-Xbootclasspath/p:${xalan.jar}"/>
+         <bootclasspath>
+             <path refid="xalan.classpath"/>
+             <pathelement path="${sun.boot.class.path}"/>
+         </bootclasspath>
          <classpath refid="xdoc.classpath"/>
       </java>
    </target>
@@ -310,14 +311,14 @@ static-catalog=yes
       <available property="have-renderX"
                  file="/opt/xep/3.6.4/xep.sh"
                  type="file"/>
-   	  <available property="xep.extensions"
-   	  	 value="1"
+       <available property="xep.extensions"
+          value="1"
          file="/opt/xep/3.6.4/xep.sh"
          type="file"/>
-   	  <property name="xep.extensions" value="0"/>
+       <property name="xep.extensions" value="0"/>
       <echo
-      	level="info"
-      	message="renderX=${have-renderX} will set xep.extensions to ${xep.extensions}"/>
+        level="info"
+        message="renderX=${have-renderX} will set xep.extensions to ${xep.extensions}"/>
    </target>
    <target name="xep" if="have-renderX">
       <exec dir="${basedir}"
@@ -374,7 +375,7 @@ static-catalog=yes
    <!-- =================================================================== -->
    <target name="java-codesnippets"
            depends="prepare, compile-all,
-			   java-codesnippets_uptodatecheck, java-codesnippets-nodeps">
+         java-codesnippets_uptodatecheck, java-codesnippets-nodeps">
    </target>
    <target name="java-codesnippets_uptodatecheck">
       <uptodate property="java-codesnippets_uptodate"

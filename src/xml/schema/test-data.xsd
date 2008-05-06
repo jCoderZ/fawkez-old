@@ -11,6 +11,13 @@
     </xsd:restriction>
   </xsd:simpleType>
 
+  <xsd:simpleType name="testDataState">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="draft" />
+      <xsd:enumeration value="final" />
+    </xsd:restriction>
+  </xsd:simpleType>
+
   <xsd:element name="data">
     <xsd:complexType>
       <xsd:choice minOccurs="0" maxOccurs="unbounded">
@@ -25,6 +32,7 @@
       <xsd:sequence>
         <xsd:element ref="td:id" />
         <xsd:element ref="td:name" />
+        <xsd:element name="state" type="td:testDataState"/>
         <xsd:element ref="td:description" />
         <xsd:element ref="td:ref" minOccurs="0" maxOccurs="unbounded" />
       </xsd:sequence>
@@ -37,6 +45,7 @@
         <xsd:element ref="td:id" />
         <xsd:element ref="td:type" />
         <xsd:element ref="td:name" />
+        <xsd:element name="state" type="td:testDataState"/>
         <xsd:element ref="td:description" />
         <xsd:element ref="td:attribute" minOccurs="0" maxOccurs="unbounded" />
       </xsd:sequence>
@@ -55,13 +64,11 @@
     </xsd:complexType>
   </xsd:element>
 
-
   <xsd:element name="id" type="td:testDataId" />
   <xsd:element name="ref" type="td:testDataId" />
   <xsd:element name="type" type="xsd:string" />
   <xsd:element name="name" type="xsd:string" />
   <xsd:element name="value" type="xsd:string" />
   <xsd:element name="description" type="xsd:string" />
-
 
 </xsd:schema>

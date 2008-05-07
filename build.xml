@@ -382,7 +382,7 @@ xerces in current vm: ${xerces.version.ant}
          <classpath>
             <pathelement location="${build.dir}/classes"/>
             <pathelement location="${build.dir}/bootstrap-classes"/>
-            <path refid="default.classpath"/>
+            <path refid="xalan.classpath"/>
          </classpath>
       </taskdef>
       <log-message-generator
@@ -391,6 +391,7 @@ xerces in current vm: ${xerces.version.ant}
          destDir="${build.dir}/gen-java"
          application="FWK"
          failonerror="true"
+         classpathref="xalan.classpath"
          force="true"/>
    </target>
 
@@ -404,7 +405,7 @@ xerces in current vm: ${xerces.version.ant}
          <classpath>
             <pathelement location="${build.dir}/classes"/>
             <pathelement location="${build.dir}/bootstrap-classes"/>
-            <path refid="default.classpath"/>
+            <path refid="xalan.classpath"/>
          </classpath>
       </taskdef>
       <app-info
@@ -455,7 +456,7 @@ xerces in current vm: ${xerces.version.ant}
          <classpath>
             <pathelement location="${build.dir}/classes"/>
             <pathelement location="${build.dir}/bootstrap-classes"/>
-            <path refid="default.classpath"/>
+            <path refid="xalan.classpath"/>
          </classpath>
       </taskdef>
       <config-classes-generator
@@ -490,7 +491,7 @@ xerces in current vm: ${xerces.version.ant}
           <classpath>
             <pathelement location="${build.dir}/classes"/>
             <pathelement location="${build.dir}/bootstrap-classes"/>
-            <path refid="default.classpath"/>
+            <path refid="xalan.classpath"/>
           </classpath>
        </taskdef>
        <!-- for database solution -->

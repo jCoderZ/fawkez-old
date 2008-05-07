@@ -53,8 +53,6 @@ import org.apache.tools.ant.AntClassLoader;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Task;
-import org.apache.tools.ant.types.Path;
-import org.apache.tools.ant.types.Reference;
 import org.jcoderz.commons.util.StringUtil;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -102,9 +100,6 @@ public abstract class XsltBasedTask
     private int mLogLevel = Project.MSG_INFO;
 
     private boolean mResolveExternalEntities = true;
-
-    /** Classpath to use when trying to load the XSL processor */
-    private Path mClassPath = null;
 
     /**
      * AntClassLoader for the nested &lt;classpath&gt; - if set.
@@ -273,7 +268,6 @@ public abstract class XsltBasedTask
             task.log("please put a newer version of xerces on your classpath"
                 + "or use", Project.MSG_WARN);
             task.log("at least ANT 1.7.0.", Project.MSG_WARN);
-            // TODO: Add hint how to do this + throw exception?
         }
     }
 
@@ -406,16 +400,9 @@ public abstract class XsltBasedTask
             }
             // Xalan2 transformer is required,
             // that why we explicit use this factory
-// Disabled because of unwanted side effects in build process (Andreas)
-//            System.setProperty("javax.xml.transform.TransformerFactory",
-//                "org.apache.xalan.processor.TransformerFactoryImpl");
-//            final TransformerFactory factory = (TransformerFactory)
-//            (loadClass("org.apache.xalan.processor.TransformerFactoryImpl")
-//                .newInstance());
-
-            final TransformerFactory factory
-                = new org.apache.xalan.processor.TransformerFactoryImpl();
-
+            final TransformerFactory factory = (TransformerFactory)
+            (loadClass("org.apache.xalan.processor.TransformerFactoryImpl")
+                .newInstance());
 
             factory.setURIResolver(new JarArchiveUriResolver(this));
             final InputStream xslStream = getXslFileAsStream();
@@ -438,6 +425,7 @@ public abstract class XsltBasedTask
             if (mClassLoader != null)
             {
                 mClassLoader.resetThreadContextLoader();
+                mClassLoader.cleanup();
                 mClassLoader = null;
             }
         }
@@ -447,53 +435,21 @@ public abstract class XsltBasedTask
         throws Exception
     {
         final Class result;
-        if (mClassPath == null)
+        if (getClass().getClassLoader() instanceof AntClassLoader)
         {
-            result = Class.forName(classname);
-        }
-        else
-        {
-            mClassLoader = getProject().createClassLoader(mClassPath);
+            mClassLoader = (AntClassLoader) getClass().getClassLoader();
             mClassLoader.setThreadContextLoader();
             result = Class.forName(classname, true, mClassLoader);
+            log("Loading '" + classname + "' via " + mClassLoader,
+                Project.MSG_VERBOSE);
+        }
+        else // if (mClassPath == null)
+        {
+            result = Class.forName(classname);
+            log("No ant-classloader fount to load '" + classname + "'",
+                Project.MSG_INFO);
         }
         return result;
-    }
-
-    /**
-     * Set the optional classpath to the XSL processor.
-     *
-     * @param classpath the classpath to use when loading the XSL
-     *        processor
-     */
-    public void setClasspath (Path classpath)
-    {
-        createClasspath().append(classpath);
-    }
-
-    /**
-     * Set the optional classpath to the XSL processor.
-     *
-     * @return a path instance to be configured by the Ant core.
-     */
-    public Path createClasspath ()
-    {
-        if (mClassPath == null)
-        {
-            mClassPath = new Path(getProject());
-        }
-        return mClassPath.createPath();
-    }
-
-    /**
-     * Set the reference to an optional classpath to the XSL processor.
-     *
-     * @param r the id of the Ant path instance to act as the classpath
-     *        for loading the XSL processor
-     */
-    public void setClasspathRef (Reference r)
-    {
-        createClasspath().setRefid(r);
     }
 
     private InputStream getXslFileAsStream ()

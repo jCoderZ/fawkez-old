@@ -432,7 +432,7 @@ public abstract class XsltBasedTask
     }
 
     private Class loadClass (String classname)
-        throws Exception
+        throws ClassNotFoundException
     {
         final Class result;
         if (getClass().getClassLoader() instanceof AntClassLoader)
@@ -446,8 +446,9 @@ public abstract class XsltBasedTask
         else // if (mClassPath == null)
         {
             result = Class.forName(classname);
-            log("No ant-classloader fount to load '" + classname + "'",
-                Project.MSG_INFO);
+            log("No ant-classloader found to load '" + classname + "',"
+                + "using 'normal' Class.forName(classname).",
+                Project.MSG_VERBOSE);
         }
         return result;
     }
@@ -455,8 +456,8 @@ public abstract class XsltBasedTask
     private InputStream getXslFileAsStream ()
     {
         final InputStream result;
-        final InputStream xslStream = XsltBasedTask.class
-            .getResourceAsStream(mXslFile);
+        final InputStream xslStream
+            = XsltBasedTask.class.getResourceAsStream(mXslFile);
         if (xslStream == null)
         {
             try
@@ -467,7 +468,7 @@ public abstract class XsltBasedTask
             catch (FileNotFoundException e)
             {
                 throw new BuildException("Cannot locate stylesheet "
-                    + mXslFile);
+                    + mXslFile, e);
             }
         }
         else

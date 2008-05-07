@@ -211,7 +211,6 @@
 package <xsl:value-of select="$package"/>;
 
 import java.io.Serializable;
-import <xsl:value-of select="$message/@base-exception"/>;
 
 /**
  * Exception thrown when a <xsl:value-of select="$display-name"/> occurred.

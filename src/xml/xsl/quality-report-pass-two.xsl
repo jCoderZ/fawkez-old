@@ -432,8 +432,8 @@
                      <xsl:variable name="number_specified_tests" select="count(//tc:test[not(tc:state = 'draft')])"/>
                      <xsl:variable name="number_specified_tests_draft" select="count(//tc:test[tc:state = 'draft'])"/>
                      <xsl:variable name="number_executed_tests" select="count(key('testresult-group',.))"/>
-                     <xsl:variable name="number_executed_testspecs" select="count(//tc:test[key('testresult-testcase-group',tc:id)/tr:testcase = tc:id])"/>
-                     <xsl:variable name="number_executed_testspecs_passed" select="count(//tc:test[key('testresult-testcase-group',tc:id)[tr:result = 'passed']/tr:testcase = tc:id])"/>
+                     <xsl:variable name="number_executed_testspecs" select="count(//tc:test[key('testresult-testcase-group',tc:id)/tr:testcase = tc:id or key('testresult-testcase-group',tc:id)/tr:shortname = tc:shortname])"/>
+                     <xsl:variable name="number_executed_testspecs_passed" select="count(//tc:test[key('testresult-testcase-group',tc:id)[tr:result = 'passed']/tr:testcase = tc:id or key('testresult-testcase-group',tc:id)[tr:result = 'passed']/tr:shortname = tc:shortname])"/>
                      <xsl:variable name="number_issues" select="count(//cms:issue[(cms:type = $cms.bug.type or cms:type = $cms.cr.type) and contains(cms:version,$version)])"/>
                      <xsl:variable name="number_accepted_issues" select="count(//cms:issue[(cms:type = $cms.bug.type or cms:type = $cms.cr.type) and (cms:state = $cms.state.accepted or cms:state = $cms.state.closed) and contains(cms:version,$version)])"/>
                      <xsl:variable name="number_tests" select="count(//tr:testresult[starts-with(tr:version,$version)])"/>

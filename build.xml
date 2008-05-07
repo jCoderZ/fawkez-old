@@ -391,7 +391,6 @@ xerces in current vm: ${xerces.version.ant}
          destDir="${build.dir}/gen-java"
          application="FWK"
          failonerror="true"
-         classpathref="xalan.classpath"
          force="true"/>
    </target>
 

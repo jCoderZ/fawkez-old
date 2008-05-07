@@ -393,6 +393,19 @@
          = new <xsl:value-of select="$type"/>(<xsl:value-of select="$quote-char"/><xsl:value-of select="$value"/><xsl:value-of select="$quote-char"/>);
 </xsl:template>
 
+<!-- ===============================================================
+     generates a single constant with fromString factory
+     =============================================================== -->
+<xsl:template name="java-constant-from-string">
+   <xsl:param name="type"/>
+   <xsl:param name="name"/>
+   <xsl:param name="value"/>
+   <xsl:param name="comment"/>
+   <xsl:param name="quote-char" select="'&quot;'"/>
+   /**<xsl:text> </xsl:text><xsl:value-of select="normalize-space($comment)"/><xsl:text> </xsl:text>*/
+   public static final <xsl:value-of select="$type"/><xsl:text> </xsl:text><xsl:value-of select="$name"/>
+         = <xsl:value-of select="$type"/>.fromString(<xsl:value-of select="$quote-char"/><xsl:value-of select="$value"/><xsl:value-of select="$quote-char"/>);
+</xsl:template>
 
 <!-- ===============================================================
      Value Object Generator
@@ -1531,38 +1544,52 @@ import org.jcoderz.commons.util.Assert;
        <xsl:with-param name="count" select="$fraction-digits"/>
     </xsl:call-template>
   </xsl:variable>
-  <xsl:variable name="MIN_VALUE">
-    <xsl:choose>
-      <xsl:when test="not($min-value)">-<xsl:call-template name="repeat">
-          <xsl:with-param name="pattern" select="'9'"/>
-          <xsl:with-param
+  <xsl:variable name="MIN_INTERNAL">-<xsl:call-template name="repeat">
+       <xsl:with-param name="pattern" select="'9'"/>
+       <xsl:with-param
             name="count" select="$total-digits - $fraction-digits"/>
-        </xsl:call-template>.<xsl:call-template name="repeat">
-          <xsl:with-param name="pattern" select="'9'"/>
-          <xsl:with-param name="count" select="$fraction-digits"/>
-        </xsl:call-template>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select="$min-value"/>
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
+       </xsl:call-template>.<xsl:call-template name="repeat">
+         <xsl:with-param name="pattern" select="'9'"/>
+         <xsl:with-param name="count" select="$fraction-digits"/>
+       </xsl:call-template></xsl:variable>
+  <xsl:variable name="MAX_INTERNAL"><xsl:call-template name="repeat">
+        <xsl:with-param name="pattern" select="'9'"/>
+        <xsl:with-param
+          name="count" select="$total-digits - $fraction-digits"/>
+      </xsl:call-template>.<xsl:call-template name="repeat">
+        <xsl:with-param name="pattern" select="'9'"/>
+        <xsl:with-param name="count" select="$fraction-digits"/>
+      </xsl:call-template></xsl:variable>
+
   <xsl:variable name="MAX_VALUE">
     <xsl:choose>
-      <xsl:when test="not($max-value)">+<xsl:call-template name="repeat">
-          <xsl:with-param name="pattern" select="'9'"/>
-          <xsl:with-param
-            name="count" select="$total-digits - $fraction-digits"/>
-        </xsl:call-template>.<xsl:call-template name="repeat">
-          <xsl:with-param name="pattern" select="'9'"/>
-          <xsl:with-param name="count" select="$fraction-digits"/>
-        </xsl:call-template>
+      <xsl:when test="not($max-value)"><xsl:value-of select="$MAX_INTERNAL"/>
       </xsl:when>
       <xsl:otherwise>
+        <xsl:if test="$MAX_INTERNAL &lt; $max-value">
+          <xsl:message terminate="yes">
+             WARNING: Max value can not be represented by <xsl:value-of select="$classname"/>
+          </xsl:message>
+        </xsl:if>
         <xsl:value-of select="$max-value"/>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
+  <xsl:variable name="MIN_VALUE">
+    <xsl:choose>
+      <xsl:when test="not($min-value)"><xsl:value-of select="$MIN_INTERNAL"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:if test="$MIN_INTERNAL &gt; $min-value">
+          <xsl:message terminate="yes">
+             WARNING: Min value can not be represented by <xsl:value-of select="$classname"/>
+          </xsl:message>
+        </xsl:if>
+        <xsl:value-of select="$min-value"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+
   <!-- TODO: Assert that given max and min-value are in the total-digits
              range supported -->
   <!-- TODO might dynamicly switch to int / BD? -->
@@ -1594,7 +1621,7 @@ import org.jcoderz.commons.util.NumberUtil;
  * digits supported is <xsl:value-of select="$fraction-digits"/> and
  * the total number of digits is <xsl:value-of select="$total-digits"/>
  *
- * Instances of this class are imutable.
+ * Instances of this class are immutable.
  *
  * @author generated
  */
@@ -1620,20 +1647,12 @@ public final class <xsl:value-of select="$classname"/>
           <xsl:with-param name="exp" select="$fraction-digits"/>
         </xsl:call-template>;
 
-    /** The minimal value of <xsl:value-of select="$classname"/>. */
-    public static final <xsl:value-of select="$classname"/> MIN_VALUE
-        = new <xsl:value-of select="$classname"/>(MIN_VALUE_UNSCALED);
-
     /** The maximal value of <xsl:value-of select="$classname"/>. */
     public static final <xsl:value-of select="$backing-type"/> MAX_VALUE_UNSCALED
         = <xsl:call-template name="power10precise">
           <xsl:with-param name="number" select="$MAX_VALUE"/>
           <xsl:with-param name="exp" select="$fraction-digits"/>
         </xsl:call-template>;
-
-    /** The maximal value of <xsl:value-of select="$classname"/>. */
-    public static final <xsl:value-of select="$classname"/> MAX_VALUE
-        = new <xsl:value-of select="$classname"/>(MAX_VALUE_UNSCALED);
 
     /** The number of fraction digits. */
     public static final int FRACTION_DIGITS
@@ -1667,6 +1686,23 @@ public final class <xsl:value-of select="$classname"/>
     public static final Integer TOTAL_DIGITS_AS_INTEGER
         = new Integer(TOTAL_DIGITS);
 
+    /** The minimal value of <xsl:value-of select="$classname"/>. */
+    public static final <xsl:value-of select="$classname"/> MIN_VALUE
+        = new <xsl:value-of select="$classname"/>(MIN_VALUE_UNSCALED);
+
+    /** The maximal value of <xsl:value-of select="$classname"/>. */
+    public static final <xsl:value-of select="$classname"/> MAX_VALUE
+        = new <xsl:value-of select="$classname"/>(MAX_VALUE_UNSCALED);
+<!-- It is important to define the constants at the verry end of the statics
+     -->
+<xsl:for-each select="$constants">
+   <xsl:call-template name="java-constant-from-string">
+      <xsl:with-param name="type" select="$classname"/>
+      <xsl:with-param name="name" select="./@name"/>
+      <xsl:with-param name="value" select="./@value"/>
+      <xsl:with-param name="comment" select="./@comment"/>
+   </xsl:call-template>
+</xsl:for-each>
     /** The serialVersionUID used for serialization. */
     static final long serialVersionUID = 1;
 

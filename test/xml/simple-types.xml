@@ -179,7 +179,7 @@
          </member>
       </valueObject> -->
    </valueObjects>
-   
+
   <fixPointNumbers>
     <fixPointNumber
          classname="SampleFixPoint"
@@ -188,6 +188,14 @@
          fraction-digits="2"
          total-digits="5"
          user-type="true">
+         <constant
+            name="ZERO"
+            value="0.00"
+            comment="The ZERO instance."/>
+         <constant
+            name="CONSTANT_VALUE"
+            value="5.12"
+            comment="Additional Constant defined in the XML document."/>
     </fixPointNumber>
   </fixPointNumbers>
 </simpleTypes>

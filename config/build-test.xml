@@ -22,7 +22,7 @@
    <!-- =================================================================== -->
    <!-- TEST SECTION                                                        -->
    <!-- =================================================================== -->
-       <!-- =================================================================== -->
+    <!-- =================================================================== -->
     <!-- run Xdoclet for all Beans                                           -->
     <!-- =================================================================== -->
     <target name="test-ejbdoclet"
@@ -392,132 +392,132 @@
                 force="true"/>
     </target>
 
-	
-	<!-- Test report encoding support -->
+
+  <!-- Test report encoding support -->
    <!-- The ruleset files -->
    <property name="pmd.rules" value="${base.dir}/config/jcoderz-pmd.xml"/>
    <property name="checkstyle.rules" value="${base.dir}/config/jcoderz-checkstyle.xml" />
    <property name="findbugs.rules" value="${base.dir}/config/jcoderz-findbugs.xml" />
    <property name="filter.rules" value="${base.dir}/config/jcoderz-report-filter.xsl" />
 
-	
-	
-	<target name="report-test">
-	      <!-- This is the classpath used by the JcReportAntTask -->   
-	      <path id="jcreport.classpath">
-	         <pathelement path="${base.dir}/build/classes"/>
-	         <fileset dir="${base.dir}/lib">
-	            <include name="default/jaxb/*.jar"/>
-	            <include name="default/chart2d/*.jar"/>
-	         </fileset>
-	      </path>
-	      <taskdef name="jcreport"
-	               classname="org.jcoderz.phoenix.report.JcReportAntTask">
-	         <classpath refid="jcreport.classpath" />
-	      </taskdef>
 
-	      <!-- This classpath is used by the checkstyle process -->   
-	      <path id="checkstyle.classpath">
-	         <fileset dir="${base.dir}/lib">
-	            <include name="default/antlr/*.jar"/>
-	            <include name="default/checkstyle/*.jar"/>
-	            <include name="default/commons-beanutils/*.jar"/>
-	            <include name="default/commons-beanutils-core/*.jar"/>
-	            <include name="default/commons-cli/*.jar"/>
-	            <include name="default/commons-logging/*.jar"/>
-	         </fileset>
-	      </path>
-	      <!-- This classpath is used by the pmd and cpd process -->   
-	      <path id="pmd.classpath">
-	         <fileset dir="${base.dir}/lib">
-	            <include name="default/pmd/*.jar"/>
-	            <include name="default/asm*/*.jar"/>
-	            <include name="default/backport-util-concurrent/*.jar"/>
-	            <include name="default/jaxen/*.jar"/>
-	            <include name="default/oro/*.jar"/>
-	         </fileset>
-	      </path>
-	      <!-- This classpath is used by the findbugs process -->   
-	      <path id="findbugs.classpath">
-	         <fileset dir="${base.dir}/lib">
-	            <include name="default/findbugs/*.jar"/>
-	            <include name="default/asm*/*.jar"/>
-	            <include name="default/jaxen/*.jar"/>
-	            <exclude name="**/coreplugin.jar"/>
-	            <exclude name="**/fb-contrib.jar"/>
-	         </fileset>
-	      </path>
-	      <path id="findbugs.plugins">
-	          <path location="${base.dir}/lib/default/findbugs/coreplugin.jar"/>
-	          <path location="${base.dir}/lib/default/fb-contrib/fb-contrib.jar"/>
-	      </path>
-	      <!-- This is the auxiliary classpath used by findbugs -->   
-	      <path id="findbugs.aux.classpath">
-	         <path location="${base.dir}/build/classes"/>
-	         <path location="${env.JAVA_HOME}/lib/tools.jar"/>
-	         <fileset dir="${base.dir}/lib">
-	            <include name="default/**/*.jar"/>
-	         </fileset>
-	      </path>
 
-	      <delete dir="${build.dir}/report-test"/>
-          <property name="utf8-base.dir" 
+  <target name="report-test">
+        <!-- This is the classpath used by the JcReportAntTask -->
+        <path id="jcreport.classpath">
+           <pathelement path="${base.dir}/build/classes"/>
+           <fileset dir="${base.dir}/lib">
+              <include name="default/jaxb/*.jar"/>
+              <include name="default/chart2d/*.jar"/>
+           </fileset>
+        </path>
+        <taskdef name="jcreport"
+                 classname="org.jcoderz.phoenix.report.JcReportAntTask">
+           <classpath refid="jcreport.classpath" />
+        </taskdef>
+
+        <!-- This classpath is used by the checkstyle process -->
+        <path id="checkstyle.classpath">
+           <fileset dir="${base.dir}/lib">
+              <include name="default/antlr/*.jar"/>
+              <include name="default/checkstyle/*.jar"/>
+              <include name="default/commons-beanutils/*.jar"/>
+              <include name="default/commons-beanutils-core/*.jar"/>
+              <include name="default/commons-cli/*.jar"/>
+              <include name="default/commons-logging/*.jar"/>
+           </fileset>
+        </path>
+        <!-- This classpath is used by the pmd and cpd process -->
+        <path id="pmd.classpath">
+           <fileset dir="${base.dir}/lib">
+              <include name="default/pmd/*.jar"/>
+              <include name="default/asm*/*.jar"/>
+              <include name="default/backport-util-concurrent/*.jar"/>
+              <include name="default/jaxen/*.jar"/>
+              <include name="default/oro/*.jar"/>
+           </fileset>
+        </path>
+        <!-- This classpath is used by the findbugs process -->
+        <path id="findbugs.classpath">
+           <fileset dir="${base.dir}/lib">
+              <include name="default/findbugs/*.jar"/>
+              <include name="default/asm*/*.jar"/>
+              <include name="default/jaxen/*.jar"/>
+              <exclude name="**/coreplugin.jar"/>
+              <exclude name="**/fb-contrib.jar"/>
+           </fileset>
+        </path>
+        <path id="findbugs.plugins">
+            <path location="${base.dir}/lib/default/findbugs/coreplugin.jar"/>
+            <path location="${base.dir}/lib/default/fb-contrib/fb-contrib.jar"/>
+        </path>
+        <!-- This is the auxiliary classpath used by findbugs -->
+        <path id="findbugs.aux.classpath">
+           <path location="${base.dir}/build/classes"/>
+           <path location="${env.JAVA_HOME}/lib/tools.jar"/>
+           <fileset dir="${base.dir}/lib">
+              <include name="default/**/*.jar"/>
+           </fileset>
+        </path>
+
+        <delete dir="${build.dir}/report-test"/>
+          <property name="utf8-base.dir"
             location="${build.dir}/report-test/utf8"/>
-		  <property name="utf8-src.dir" 
-		  	location="${base.dir}/test/charset/java-utf8"/>
-          <property name="utf8-class.dir" 
+      <property name="utf8-src.dir"
+        location="${base.dir}/test/charset/java-utf8"/>
+          <property name="utf8-class.dir"
             location="${utf8-base.dir}/classes"/>
-		  <mkdir dir="${utf8-class.dir}"/>
-		  <javac encoding="UTF-8"
-		       srcdir="${utf8-src.dir}"
-		       destdir="${utf8-class.dir}"/>
-	      <jcreport name="fawkez"
-	                dest="${utf8-base.dir}/doc/findings-report"
-	                wikibase="http://www.jcoderz.org/fawkez/wiki/jcreport:"
-	                webrcsbase="http://www.jcoderz.org/fawkez/browser/trunk"
-	                webrcssuffix=""
-	                packagebase="org.jcoderz"
-	                projectbase="${base.dir}"
-	                tempfolder="${utf8-base.dir}/tmp"
-	                debug="false"
-	                encoding="utf-8"
-	                cpus="0"> <!-- Increase to speed up -->
-	         <classpath refid="jcreport.classpath"/>
-	         <reports>   
-	            <report name="fawkez-test"
-	                    level="prod"
-	                    sourcepath="${utf8-src.dir}"
-	                    classpath="${utf8-class.dir}">
-	            </report>    
-	         </reports>
-	         <tools>
-	            <pmd config="${pmd.rules}"
-	                 targetjdk="1.4">
-	               <classpath refid="pmd.classpath"/>
-	            </pmd>
-	            <cpd minimumtokens="100">
-	               <classpath refid="pmd.classpath"/>
-	            </cpd>
-	           <!-- Could not disable UnreadFields cause further dependencies -->
-	           <findbugs maxheap="256" >
-	               <classpath refid="findbugs.classpath"/>
-	               <auxclasspath refid="findbugs.aux.classpath"/>
-	               <pluginlist refid="findbugs.plugins"/>
-	            </findbugs>
-	            <checkstyle config="${checkstyle.rules}"> 
-	               <classpath refid="checkstyle.classpath" />
-	            </checkstyle>
-	         </tools>
-	      </jcreport>   
+      <mkdir dir="${utf8-class.dir}"/>
+      <javac encoding="UTF-8"
+           srcdir="${utf8-src.dir}"
+           destdir="${utf8-class.dir}"/>
+        <jcreport name="fawkez"
+                  dest="${utf8-base.dir}/doc/findings-report"
+                  wikibase="http://www.jcoderz.org/fawkez/wiki/jcreport:"
+                  webrcsbase="http://www.jcoderz.org/fawkez/browser/trunk"
+                  webrcssuffix=""
+                  packagebase="org.jcoderz"
+                  projectbase="${base.dir}"
+                  tempfolder="${utf8-base.dir}/tmp"
+                  debug="false"
+                  encoding="utf-8"
+                  cpus="0"> <!-- Increase to speed up -->
+           <classpath refid="jcreport.classpath"/>
+           <reports>
+              <report name="fawkez-test"
+                      level="prod"
+                      sourcepath="${utf8-src.dir}"
+                      classpath="${utf8-class.dir}">
+              </report>
+           </reports>
+           <tools>
+              <pmd config="${pmd.rules}"
+                   targetjdk="1.4">
+                 <classpath refid="pmd.classpath"/>
+              </pmd>
+              <cpd minimumtokens="100">
+                 <classpath refid="pmd.classpath"/>
+              </cpd>
+             <!-- Could not disable UnreadFields cause further dependencies -->
+             <findbugs maxheap="256" >
+                 <classpath refid="findbugs.classpath"/>
+                 <auxclasspath refid="findbugs.aux.classpath"/>
+                 <pluginlist refid="findbugs.plugins"/>
+              </findbugs>
+              <checkstyle config="${checkstyle.rules}">
+                 <classpath refid="checkstyle.classpath" />
+              </checkstyle>
+           </tools>
+        </jcreport>
 
-        <property name="cp500-base.dir" 
+        <property name="cp500-base.dir"
           location="${build.dir}/report-test/cp500"/>
-        <property name="cp500-src.dir" 
+        <property name="cp500-src.dir"
           location="${base.dir}/test/charset/java-cp500"/>
-        <property name="cp500-class.dir" 
+        <property name="cp500-class.dir"
           location="${cp500-base.dir}/classes"/>
         <mkdir dir="${cp500-class.dir}"/>
-        <javac encoding="cp500" 
+        <javac encoding="cp500"
              srcdir="${cp500-src.dir}"
              destdir="${cp500-class.dir}"/>
         <jcreport name="fawkez"
@@ -532,12 +532,12 @@
                   encoding="cp500"
                   cpus="0"> <!-- Increase to speed up -->
            <classpath refid="jcreport.classpath"/>
-           <reports>   
+           <reports>
               <report name="fawkez-test"
                       level="prod"
                       sourcepath="${cp500-src.dir}"
                       classpath="${cp500-class.dir}">
-              </report>    
+              </report>
            </reports>
            <tools>
               <pmd config="${pmd.rules}" targetjdk="1.4">
@@ -551,12 +551,12 @@
                  <auxclasspath refid="findbugs.aux.classpath"/>
                  <pluginlist refid="findbugs.plugins"/>
               </findbugs>
-              <checkstyle config="${checkstyle.rules}"> 
+              <checkstyle config="${checkstyle.rules}">
                  <classpath refid="checkstyle.classpath" />
               </checkstyle>
            </tools>
-        </jcreport>   
-	
-	</target>   
+        </jcreport>
+
+  </target>
 
 </project>

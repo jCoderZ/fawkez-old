@@ -919,12 +919,16 @@ xerces in current vm: ${xerces.version.ant}
         </fileset>
       </copy>
 
+      <java classpath="${dist.dir}/fawkez-all.jar"
+         classname="${project.package}.Version"
+         outputproperty="release-version"/>
+
       <!-- DONE -->
       <echo level="info" taskname="**">
 +-----------------------------------------------------------------+
 | C O N G R A T U L A T I O N !                                   |
 |                                                                 |
-| The build of ${name}/${version} was successful.
+| The build of ${release-version} was successful.
 | You will find the complete distribution in the                  |
 |                                                                 |
 |    ${base.dir}/dist

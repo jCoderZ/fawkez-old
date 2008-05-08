@@ -62,7 +62,7 @@ public final class Version
     /** Name of the property holding the compile time (w/o date). */
     public static final String COMPILE_TIME = "compile.time";
 
-    
+
     private static final Map /* <String, String> */ PROPERTIES;
     static
     {
@@ -73,12 +73,12 @@ public final class Version
         m.put(PROJECT_NAME_LOWERCASE, "${name}");
         m.put(PROJECT_PACKAGE, "${project.package}");
         m.put(COPYRIGHT_YEAR, "${copyright.year}");
-        
+
         // Compile time
         m.put(COMPILE_DATE, "${DSTAMP}");
         m.put(COMPILE_TIME, "${TSTAMP}");
         m.put("compile.user.name", "${user.name}");
-        
+
         m.put("cclabel", "${label}");
         // Compile environment
         m.put("ant.version", "${ant.version}");
@@ -90,14 +90,14 @@ public final class Version
         m.put("os.name", "${os.name}");
         m.put("os.version", "${os.version}");
         m.put("file.encoding", "${file.encoding}");
-        
+
         PROPERTIES = Collections.unmodifiableMap(m);
-    }  
-    
+    }
+
     /**
-     * Returns a unmodifiable {@link java.util.Map} &lt;String, String&gt; 
+     * Returns a unmodifiable {@link java.util.Map} &lt;String, String&gt;
      * of all compile time properties.
-     * @return a unmodifiable  {@link java.util.Map} &lt;String, String&gt; 
+     * @return a unmodifiable  {@link java.util.Map} &lt;String, String&gt;
      *     of all compile time properties.
      */
     public static Map getProperties ()
@@ -169,7 +169,7 @@ public final class Version
     {
         return (String) PROPERTIES.get(key);
     }
-    
+
     public static String getDescription ()
     {
         final StringBuffer sb = new StringBuffer();
@@ -177,9 +177,38 @@ public final class Version
         sb.append(getProjectName());
         sb.append("/");
         sb.append(getReleaseVersion());
-        sb.append(" ");
+        sb.append("/");
+        final String ccLabel = getProperty("cclabel");
+        if (ccLabel != null && ccLabel.contains("_"))
+        {
+          sb.append(ccLabel);
+        }
+        else
+        {
+           sb.append(getCompileDateString());
+           sb.append('-');
+           sb.append(getCompileTimeString());
+           sb.append('-');
+           sb.append(getProperty("compile.user.name"));
+        }
+        sb.append("/");
         sb.append(Version.class.getPackage().getName());
         return sb.toString();
+    }
+
+    /**
+     * Dump the build version to System.out
+     */
+    public static void main (String[] args)
+    {
+        if (args.length == 0)
+        {
+          System.out.println(getDescription());
+        }
+        else
+        {
+          System.out.println(getProperty(args[0]));
+        }
     }
 
 }

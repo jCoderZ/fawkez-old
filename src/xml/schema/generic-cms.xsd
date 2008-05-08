@@ -93,6 +93,7 @@
    <xsd:element name="affects-version"  type="cms:VersionIdType" />
    <xsd:element name="state"            type="cms:IssueStateType" />
    <xsd:element name="summary"          type="xsd:string" />
+   <xsd:element name="priority"         type="xsd:string" />
    <xsd:element name="linktype"         type="xsd:string" />
    <xsd:element name="efforttype"       type="xsd:string" />
    <xsd:element name="original-effort"  type="xsd:decimal" />
@@ -141,6 +142,7 @@
             <xsd:element ref="cms:state"             minOccurs="1" maxOccurs="1"/>
             <xsd:element ref="cms:summary"           minOccurs="1" maxOccurs="1"/>
             <xsd:element ref="cms:link"              minOccurs="0" maxOccurs="unbounded"/>
+            <xsd:element ref="cms:priority"          minOccurs="1" maxOccurs="1"/>
             <xsd:element ref="cms:module"            minOccurs="0" maxOccurs="unbounded"/>
             <xsd:element ref="cms:assignee"          minOccurs="0" maxOccurs="1"/>
             <xsd:element ref="cms:effort"            minOccurs="1" maxOccurs="unbounded"/>

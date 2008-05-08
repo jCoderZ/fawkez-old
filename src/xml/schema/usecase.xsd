@@ -246,6 +246,11 @@
            </xsd:annotation>
          </xsd:attribute>
          <xsd:attribute name="suppress_revision_list" type="xsd:boolean" use="optional">
+           <xsd:annotation>
+             <xsd:documentation xml:lang="en">When set to true the list of use case
+              revisions in the generated document will be suppressed.</xsd:documentation>
+           </xsd:annotation>
+         </xsd:attribute>
       </xsd:complexType>
    </xsd:element>
 

@@ -20,7 +20,20 @@
        </fileset>
     </path>
 
-    <target name="xsl-stylesheets" depends="xsl-stylesheets_uptodatecheck,
+    <path id="hibernate-tools.classpath">
+      <fileset dir="${base.dir}/lib">
+        <include name="default/commons-collections/*.jar"/>
+        <include name="default/commons-logging/*.jar"/>
+        <include name="default/dom4j/*.jar"/>
+        <include name="default/freemarker/*.jar"/>
+        <include name="default/hibernate/*.jar"/>
+        <include name="default/hibernate-tools/*.jar"/>
+      </fileset>
+      <pathelement path="${build.dir}/doc/usecase" />
+      <pathelement path="${build.dir}/hibernate-classes" />
+    </path>
+
+	<target name="xsl-stylesheets" depends="xsl-stylesheets_uptodatecheck,
        xsl-stylesheets-nodeps" />
     <target name="xsl-stylesheets_uptodatecheck">
       <uptodate property="xsl-stylesheets_uptodate"
@@ -128,6 +141,9 @@ static-catalog=yes
              <path refid="xdoc.classpath"/>
           </classpath>
        </taskdef>
+       <taskdef name="hibernatetool"
+       	        classname="org.hibernate.tool.ant.HibernateToolTask"
+       	        classpathref="hibernate-tools.classpath" />
 
        <mkdir dir="${build.dir}/doc/usecase/images"/>
        <copy todir="${build.dir}/doc/usecase/images"
@@ -159,6 +175,17 @@ static-catalog=yes
              <path refid="xdoc.classpath"/>
           </docletPath>
       </xdoc>
+      <hibernatetool>
+          <configuration configurationfile="${build.dir}/doc/usecase/hibernate.cfg.xml"
+          	             propertyfile="config/hibernate.properties" />
+          <hbm2java templatepath="${build.dir}/doc/usecase" destdir="${build.dir}/gen-hibernate" />
+          <hbm2ddl export="false" destdir="${build.dir}/doc/usecase" outputfilename="usecase-sql.ddl"/>
+      </hibernatetool>
+      <javac classpathref="hibernate-tools.classpath"
+      	     srcdir="${build.dir}/gen-hibernate"
+      	     destdir="${build.dir}/hibernate-classes"
+      	     source="1.4">
+      </javac>
    </target>
 
    <target name="testspec" depends="compile-all, xsl-stylesheets, testspec-nodeps"/>

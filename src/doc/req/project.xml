@@ -10,7 +10,7 @@
      <req:secondary>Project Structure</req:secondary>
   </req:category>
   <req:key>D-80000</req:key>
-  <req:summary>Project</req:summary>  
+  <req:summary>Project</req:summary>
   <req:priority>High</req:priority>
   <req:description>
 
@@ -27,7 +27,7 @@
       <req:objectreference>
         <req:linkstart>0..*</req:linkstart>
         <req:linkend>0..1</req:linkend>
-        <req:ref id="D-90018"/>        
+        <req:ref id="D-90018"/>
       </req:objectreference>
     </req:attribute>
     <req:attribute>
@@ -44,7 +44,7 @@
       <req:objectreference>
         <req:linkstart>0..*</req:linkstart>
         <req:linkend>1</req:linkend>
-        <req:ref id="D-10050"/>        
+        <req:ref id="D-10050"/>
       </req:objectreference>
     </req:attribute>
     <req:attribute>
@@ -53,7 +53,7 @@
       <req:objectreference>
         <req:linkstart>0..*</req:linkstart>
         <req:linkend>0..*</req:linkend>
-        <req:ref id="D-10050"/>        
+        <req:ref id="D-10050"/>
       </req:objectreference>
     </req:attribute>
     <req:attribute>
@@ -62,7 +62,7 @@
       <req:objectreference>
         <req:linkstart>1</req:linkstart>
         <req:linkend>0..*</req:linkend>
-        <req:ref id="D-80001"/>        
+        <req:ref id="D-80000"/>
       </req:objectreference>
     </req:attribute>
   </req:entity>

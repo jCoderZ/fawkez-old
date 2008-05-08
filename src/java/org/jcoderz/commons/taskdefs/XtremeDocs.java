@@ -362,6 +362,9 @@ public class XtremeDocs
                 {
                     generateUseCaseDiagrams(filePassOne, imageDir);
                     exportToXmi(filePassOne, imageDir);
+                    AntTaskUtil.renderDotFiles(this, imageDir, mFailOnError);
+                    exportToHbCfg(filePassOne);
+                    exportToHbm(filePassOne);
                 }
             }
             else if (TYPE_TEST_SPEC.equals(mType))
@@ -501,7 +504,7 @@ public class XtremeDocs
             }
         };
         task.setProject(getProject());
-        task.setTaskName(mTypeLowerCase + "2db:p1");
+        task.setTaskName(mTypeLowerCase + "-p1");
         task.setIn(in);
         task.setForce(true); // FIXME
         final File outFile = new File(mOutDir, in.getName() + ".p1");
@@ -527,7 +530,7 @@ public class XtremeDocs
             }
         };
         task.setProject(getProject());
-        task.setTaskName(mTypeLowerCase + "2db:p2");
+        task.setTaskName(mTypeLowerCase + "-p2");
         task.setIn(filePassOne);
         task.setForce(true); // FIXME
         final File outFile = new File(mOutDir, filePassOne.getName() + ".p2");
@@ -555,7 +558,7 @@ public class XtremeDocs
             }
         };
         task.setProject(getProject());
-        task.setTaskName("uc-diagrams");
+        task.setTaskName("diagrams");
         task.setIn(filePassOne);
         task.setForce(true); // FIXME
         final File outFile = new File(mOutDir, "use-case-diagrams" + ".tmp");
@@ -563,8 +566,6 @@ public class XtremeDocs
         task.setFailonerror(mFailOnError);
         task.setDestdir(outFile.getParentFile());
         task.execute();
-        // .dot files -> .svg files
-        AntTaskUtil.renderDotFiles(this, imageDir, mFailOnError);
     }
 
     private void exportToXmi (File filePassOne, final File imageDir)
@@ -592,8 +593,58 @@ public class XtremeDocs
         task.setFailonerror(mFailOnError);
         task.setDestdir(outFile.getParentFile());
         task.execute();
-        // .dot files -> .svg files
-        AntTaskUtil.renderDotFiles(this, imageDir, mFailOnError);
+    }
+
+    private void exportToHbm (File filePassOne)
+    {
+        final XsltBasedTask task = new XsltBasedTask()
+        {
+            String getDefaultStyleSheet ()
+            {
+                return "usecase_hbm_export.xsl";
+            }
+
+            void setAdditionalTransformerParameters (Transformer transformer)
+            {
+                transformer.setParameter("targetdir", getProject().getBaseDir()
+                    .toString());
+            }
+        };
+        task.setProject(getProject());
+        task.setTaskName("uc-hbm");
+        task.setIn(filePassOne);
+        task.setForce(true); // FIXME
+        final File outFile = new File(mOutDir, "use-case-xmi" + ".tmp");
+        task.setOut(outFile);
+        task.setFailonerror(mFailOnError);
+        task.setDestdir(outFile.getParentFile());
+        task.execute();
+    }
+
+    private void exportToHbCfg (File filePassOne)
+    {
+        final XsltBasedTask task = new XsltBasedTask()
+        {
+            String getDefaultStyleSheet ()
+            {
+                return "usecase_hbcfg_export.xsl";
+            }
+
+            void setAdditionalTransformerParameters (Transformer transformer)
+            {
+                transformer.setParameter("targetdir", getProject().getBaseDir()
+                    .toString());
+            }
+        };
+        task.setProject(getProject());
+        task.setTaskName("uc-hbm");
+        task.setIn(filePassOne);
+        task.setForce(true); // FIXME
+        final File outFile = new File(mOutDir, "use-case-xmi" + ".tmp");
+        task.setOut(outFile);
+        task.setFailonerror(mFailOnError);
+        task.setDestdir(outFile.getParentFile());
+        task.execute();
     }
 
     private void generateSadDiagrams (File in)

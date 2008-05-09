@@ -73,8 +73,10 @@ public class XtremeDocs
 
     private static final String FORMAT_ALL = "ALL";
 
+    private static final String FORMAT_NONE = "NONE";
+
     private static final String TYPE_QUALITY_REPORT = "Quality-Report";
-    
+
     private static final String TYPE_RELEASE_NOTES = "Release-Notes";
 
     private static final String TYPE_TEST_SPEC = "TestSpec";
@@ -422,9 +424,13 @@ public class XtremeDocs
         {
             result = true;
         }
-        else
+        else if (mFormat.equals(FORMAT_NONE))
         {
             result = false;
+        }
+        else
+        {
+            result = true;
         }
         return result;
     }
@@ -543,29 +549,32 @@ public class XtremeDocs
 
     private void generateUseCaseDiagrams (File filePassOne, final File imageDir)
     {
-        final XsltBasedTask task = new XsltBasedTask()
+        if (isOutputEnabled(FORMAT_PDF) || isOutputEnabled(FORMAT_HTML))
         {
-            String getDefaultStyleSheet ()
+            final XsltBasedTask task = new XsltBasedTask()
             {
-                return "usecase_diagrams.xsl";
-            }
+                String getDefaultStyleSheet ()
+                {
+                    return "usecase_diagrams.xsl";
+                }
 
-            void setAdditionalTransformerParameters (Transformer transformer)
-            {
-                transformer.setParameter("basedir", getProject().getBaseDir()
-                    .toString());
-                transformer.setParameter("imagedir", imageDir.toString());
-            }
-        };
-        task.setProject(getProject());
-        task.setTaskName("diagrams");
-        task.setIn(filePassOne);
-        task.setForce(true); // FIXME
-        final File outFile = new File(mOutDir, "use-case-diagrams" + ".tmp");
-        task.setOut(outFile);
-        task.setFailonerror(mFailOnError);
-        task.setDestdir(outFile.getParentFile());
-        task.execute();
+                void setAdditionalTransformerParameters (Transformer transformer)
+                {
+                    transformer.setParameter("basedir", getProject().getBaseDir()
+                        .toString());
+                    transformer.setParameter("imagedir", imageDir.toString());
+                }
+            };
+            task.setProject(getProject());
+            task.setTaskName("diagrams");
+            task.setIn(filePassOne);
+            task.setForce(true); // FIXME
+            final File outFile = new File(mOutDir, "use-case-diagrams" + ".tmp");
+            task.setOut(outFile);
+            task.setFailonerror(mFailOnError);
+            task.setDestdir(outFile.getParentFile());
+            task.execute();
+        }
     }
 
     private void exportToXmi (File filePassOne, final File imageDir)

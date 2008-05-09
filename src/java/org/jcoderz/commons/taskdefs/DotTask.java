@@ -121,7 +121,7 @@ public class DotTask
          }
 
          final Execute exe = new Execute(new LogStreamHandler(
-               this, Project.MSG_INFO, Project.MSG_WARN), null);
+               this, Project.MSG_VERBOSE, Project.MSG_WARN), null);
          exe.setCommandline(mCommand.getCommandline());
          log(mCommand.describeCommand(), Project.MSG_VERBOSE);
          try

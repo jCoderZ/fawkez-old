@@ -9,9 +9,8 @@
                        req
                        http://www.jcoderz.org/xsd/xdoc/requirements-SNAPSHOT.xsd">
 
-   <xsl:param name="targetdir" select="'.'" />
-   <xsl:param name="session-factory" select="'default'" />
-   <xsl:param name="package-root" select="'org.jcoderz.hibernate'" />
+   <xsl:param name="target-directory" select="'hibernate'" />
+   <xsl:param name="session-factory" select="'Default'" />
 
    <xsl:include href="libcommon.xsl"/>
 
@@ -20,9 +19,7 @@
       doctype-system="http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd" />
 
    <xsl:template match="uc:usecases">
-      <xsl:variable name="file">hibernate.cfg.xml</xsl:variable>
-
-      <redirect:write file="{$file}" method="xml">
+      <redirect:write file="{$target-directory}/hibernate.cfg.xml" method="xml">
          <hibernate-configuration>
             <session-factory>
                <xsl:attribute name="name">

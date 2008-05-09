@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="build/gen-java"/>
+	<classpathentry kind="src" path="build/doc/usecase/hibernate"/>
 	<classpathentry kind="src" path="build/gen-hibernate"/>
-	<classpathentry kind="src" path="build/doc/usecase"/>
 	<classpathentry kind="src" path="build/gen-test"/>
 	<classpathentry kind="src" path="src/java"/>
 	<classpathentry kind="src" path="test/java"/>

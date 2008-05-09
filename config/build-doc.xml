@@ -28,8 +28,9 @@
         <include name="default/freemarker/*.jar"/>
         <include name="default/hibernate/*.jar"/>
         <include name="default/hibernate-tools/*.jar"/>
+        <include name="default/derby/*.jar"/>
       </fileset>
-      <pathelement path="${build.dir}/doc/usecase" />
+      <pathelement path="${build.dir}/doc/usecase/hibernate" />
       <pathelement path="${build.dir}/hibernate-classes" />
     </path>
 
@@ -147,7 +148,7 @@ static-catalog=yes
 
        <mkdir dir="${build.dir}/doc/usecase/images"/>
        <copy todir="${build.dir}/doc/usecase/images"
-            overwrite="true">
+            overwrite="true" verbose="false">
          <fileset dir="${base.dir}/src/doc/usecase/images">
             <include name="*.svg"/>
             <include name="*.png"/>
@@ -160,7 +161,7 @@ static-catalog=yes
        <xdoc type="UseCase" in="${base.dir}/src/doc/usecase/sample.xml"
              out="${build.dir}/doc/usecase" failonerror="true"
              xephome="${xep.home}" cclabel="${label}" companyname="JCoderZ.org"
-             companylogo="jcoderz-org" format="ALL">
+             companylogo="jcoderz-org" format="NONE">
           <src dir="${base.dir}/src/java"/>
           <src dir="${build.dir}/gen-java"/>
           <classpath>
@@ -176,11 +177,13 @@ static-catalog=yes
           </docletPath>
       </xdoc>
       <hibernatetool>
-          <configuration configurationfile="${build.dir}/doc/usecase/hibernate.cfg.xml"
+          <configuration configurationfile="${build.dir}/doc/usecase/hibernate/hibernate.cfg.xml"
           	             propertyfile="config/hibernate.properties" />
           <hbm2java templatepath="${build.dir}/doc/usecase" destdir="${build.dir}/gen-hibernate" />
-          <hbm2ddl export="false" destdir="${build.dir}/doc/usecase" outputfilename="usecase-sql.ddl"/>
+          <hbm2doc destdir="${build.dir}/gen-hibernate-doc"/>
+          <hbm2ddl export="false" destdir="${build.dir}/doc/usecase/hibernate" outputfilename="usecase-sql.ddl"/>
       </hibernatetool>
+      <mkdir dir="${build.dir}/hibernate-classes"/>
       <javac classpathref="hibernate-tools.classpath"
       	     srcdir="${build.dir}/gen-hibernate"
       	     destdir="${build.dir}/hibernate-classes"

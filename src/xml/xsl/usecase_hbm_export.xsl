@@ -9,9 +9,9 @@
                        req
                        http://www.jcoderz.org/xsd/xdoc/requirements-SNAPSHOT.xsd">
 
-   <xsl:param name="targetdir" select="'.'" />
-   <xsl:param name="session-factory" select="'default'" />
+   <xsl:param name="target-directory" select="'hibernate'" />
    <xsl:param name="package-root" select="'org.jcoderz.hibernate'" />
+   <xsl:param name="tablename-prefix" select="'PPG_'" />
 
    <xsl:include href="libcommon.xsl" />
 
@@ -23,7 +23,7 @@
       <xsl:apply-templates
          select="req:requirement[req:category/req:primary = 'Domain Model']/req:entity" mode="hbm" />
 
-      <redirect:write file="Dummy.hbm.xml" method="xml">
+      <redirect:write file="{$target-directory}/Dummy.hbm.xml" method="xml">
 
          <hibernate-mapping>
             <xsl:attribute name="package">
@@ -34,7 +34,7 @@
                <id column="ID" name="id" type="integer">
                   <meta attribute="use-in-tostring">false</meta>
                </id>
-               <property name="dummy" column="DUMMY" type="string" />
+               <property name="dummy" column="DUMMY" type="string" length="5" />
             </class>
          </hibernate-mapping>
       </redirect:write>
@@ -57,7 +57,7 @@
          <xsl:text>.hbm.xml</xsl:text>
       </xsl:variable>
 
-      <redirect:write file="{$file}" method="xml">
+      <redirect:write file="{$target-directory}/{$file}" method="xml">
 
          <hibernate-mapping>
             <xsl:attribute name="package">
@@ -71,17 +71,18 @@
                   </xsl:call-template>
               </xsl:attribute>
                <xsl:attribute name="table">
-                  <xsl:text>PPG-</xsl:text>
+                  <xsl:value-of select="$tablename-prefix" />
                   <xsl:call-template name="toUpperCase">
                      <xsl:with-param name="s" select="req:name" />
                   </xsl:call-template>
               </xsl:attribute>
 
-               <xsl:if test="req:description">
-                  <meta attribute="field-description">
-                     <xsl:value-of select="normalize-space(req:description)" />
-                  </meta>
-               </xsl:if>
+               <meta attribute="field-description">
+                  <xsl:value-of select="$name" />
+                  <xsl:text>
+                  </xsl:text>
+                  <xsl:value-of select="normalize-space(req:description)" />
+               </meta>
 
                <id column="ID" name="id" type="long">
                   <meta attribute="use-in-tostring">false</meta>
@@ -94,8 +95,48 @@
                         <xsl:variable name="linkstart" select="req:objectreference/req:linkstart" />
                         <xsl:variable name="linkend" select="req:objectreference/req:linkend" />
 
+                        <xsl:variable name="from-count">
+                           <xsl:choose>
+                              <xsl:when test="$linkstart = '1'">
+                                 <xsl:text>one</xsl:text>
+                              </xsl:when>
+                              <xsl:when test="$linkstart = '0..1'">
+                                 <xsl:text>one</xsl:text>
+                              </xsl:when>
+                              <xsl:when test="$linkstart = '0..*'">
+                                 <xsl:text>many</xsl:text>
+                              </xsl:when>
+                              <xsl:when test="$linkstart = '1..*'">
+                                 <xsl:text>many</xsl:text>
+                              </xsl:when>
+                              <xsl:otherwise>
+                                 <xsl:text>one</xsl:text>
+                              </xsl:otherwise>
+                           </xsl:choose>
+                        </xsl:variable>
+
+                        <xsl:variable name="to-count">
+                           <xsl:choose>
+                              <xsl:when test="$linkstart = '1'">
+                                 <xsl:text>one</xsl:text>
+                              </xsl:when>
+                              <xsl:when test="$linkstart = '0..1'">
+                                 <xsl:text>one</xsl:text>
+                              </xsl:when>
+                              <xsl:when test="$linkstart = '0..*'">
+                                 <xsl:text>many</xsl:text>
+                              </xsl:when>
+                              <xsl:when test="$linkstart = '1..*'">
+                                 <xsl:text>many</xsl:text>
+                              </xsl:when>
+                              <xsl:otherwise>
+                                 <xsl:text>one</xsl:text>
+                              </xsl:otherwise>
+                           </xsl:choose>
+                        </xsl:variable>
+
                         <xsl:choose>
-                           <xsl:when test="$linkstart = '1' and $linkend = '1'">
+                           <xsl:when test="from-count = 'one' and to-count = 'one'">
                               <one-to-one>
                                  <xsl:attribute name="class">
                                     <xsl:call-template name="findClassForId">
@@ -109,7 +150,7 @@
                                  </xsl:attribute>
                               </one-to-one>
                            </xsl:when>
-                           <xsl:when test="$linkstart != '1' and $linkend = '1'">
+                           <xsl:when test="from-count = 'many' and to-count = 'one'">
                               <many-to-one>
                                  <xsl:attribute name="class">
                                     <xsl:call-template name="findClassForId">
@@ -123,7 +164,7 @@
                                  </xsl:attribute>
                               </many-to-one>
                            </xsl:when>
-                           <xsl:when test="$linkstart = '1' and $linkend != '1'">
+                           <xsl:when test="from-count = 'one' and to-count = 'many'">
                               <set>
                                  <xsl:attribute name="name">
                                     <xsl:call-template name="asJavaParameter">
@@ -140,8 +181,7 @@
                                  </one-to-many>
                               </set>
                            </xsl:when>
-                           <xsl:when
-                              test="req:objectreference/req:linkstart != '1' and req:objectreference/req:linkend != '1'">
+                           <xsl:when test="from-count = 'many' and to-count = 'many'">
                               <set>
                                  <xsl:attribute name="name">
                                     <xsl:call-template name="asJavaParameter">
@@ -182,12 +222,12 @@
          </xsl:call-template>
       </xsl:attribute>
       <!--
-      <xsl:attribute name="column">
+         <xsl:attribute name="column">
          <xsl:call-template name="asColumnName">
-            <xsl:with-param name="name" select="req:name" />
+         <xsl:with-param name="name" select="req:name" />
          </xsl:call-template>
-      </xsl:attribute>
-          -->
+         </xsl:attribute>
+      -->
 
       <xsl:choose>
          <xsl:when test="req:pattern = 'Integer'">
@@ -224,7 +264,7 @@
       </xsl:variable>
 
       <xsl:call-template name="toUpperCase">
-         <xsl:with-param name="s" select="$cookedName" />
+         <xsl:with-param name="s" select="translate($cookedName,' ','_')" />
       </xsl:call-template>
    </xsl:template>
 

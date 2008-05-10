@@ -419,8 +419,8 @@ public class XtremeDocs
     private boolean isOutputEnabled (String format)
     {
         final boolean result;
-        if (mFormat == null || mFormat.equals(FORMAT_ALL)
-            || mFormat.equals(format))
+        if (mFormat == null || mFormat.equals("")
+            || mFormat.equals(FORMAT_ALL) || mFormat.equals(format))
         {
             result = true;
         }
@@ -615,15 +615,14 @@ public class XtremeDocs
 
             void setAdditionalTransformerParameters (Transformer transformer)
             {
-                transformer.setParameter("targetdir", getProject().getBaseDir()
-                    .toString());
+                transformer.setParameter("targetdir", mOutDir + File.separator + "hibernate");
             }
         };
         task.setProject(getProject());
         task.setTaskName("uc-hbm");
         task.setIn(filePassOne);
         task.setForce(true); // FIXME
-        final File outFile = new File(mOutDir, "use-case-xmi" + ".tmp");
+        final File outFile = new File(mOutDir, "use-case-hbm" + ".tmp");
         task.setOut(outFile);
         task.setFailonerror(mFailOnError);
         task.setDestdir(outFile.getParentFile());
@@ -641,15 +640,14 @@ public class XtremeDocs
 
             void setAdditionalTransformerParameters (Transformer transformer)
             {
-                transformer.setParameter("targetdir", getProject().getBaseDir()
-                    .toString());
+                transformer.setParameter("targetdir", mOutDir + File.separator + "hibernate");
             }
         };
         task.setProject(getProject());
         task.setTaskName("uc-hbm");
         task.setIn(filePassOne);
         task.setForce(true); // FIXME
-        final File outFile = new File(mOutDir, "use-case-xmi" + ".tmp");
+        final File outFile = new File(mOutDir, "use-case-hbcfg" + ".tmp");
         task.setOut(outFile);
         task.setFailonerror(mFailOnError);
         task.setDestdir(outFile.getParentFile());

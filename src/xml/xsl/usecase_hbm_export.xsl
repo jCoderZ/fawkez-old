@@ -11,7 +11,7 @@
                        req
                        http://www.jcoderz.org/xsd/xdoc/requirements-SNAPSHOT.xsd">
 
-  <xsl:param name="target-directory" select="'hibernate'" />
+  <xsl:param name="targetdir" />
   <xsl:param name="package-root" select="'org.jcoderz.hibernate'" />
   <xsl:param name="tablename-prefix" select="'PPG_'" />
 
@@ -26,7 +26,7 @@
       select="req:requirement[req:category/req:primary = 'Domain Model']/req:entity"
       mode="hbm" />
 
-    <redirect:write file="{$target-directory}/Dummy.hbm.xml" method="xml">
+    <redirect:write file="{$targetdir}/Dummy.hbm.xml" method="xml">
 
       <hibernate-mapping>
         <xsl:attribute name="package">
@@ -74,7 +74,7 @@
       <xsl:text>.hbm.xml</xsl:text>
     </xsl:variable>
 
-    <redirect:write file="{$target-directory}/{$file}" method="xml">
+    <redirect:write file="{$targetdir}/{$file}" method="xml">
 
       <hibernate-mapping>
         <xsl:attribute name="package">

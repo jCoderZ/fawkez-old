@@ -606,6 +606,10 @@ public class XtremeDocs
 
     private void exportToHbm (File filePassOne)
     {
+        final String targetdir = buildTargetDir(filePassOne.getName());
+        File dir = new File(targetdir);
+        dir.mkdir();
+
         final XsltBasedTask task = new XsltBasedTask()
         {
             String getDefaultStyleSheet ()
@@ -615,7 +619,7 @@ public class XtremeDocs
 
             void setAdditionalTransformerParameters (Transformer transformer)
             {
-                transformer.setParameter("targetdir", mOutDir + File.separator + "hibernate");
+                transformer.setParameter("targetdir", targetdir);
             }
         };
         task.setProject(getProject());
@@ -631,6 +635,10 @@ public class XtremeDocs
 
     private void exportToHbCfg (File filePassOne)
     {
+        final String targetdir = buildTargetDir(filePassOne.getName());
+        File dir = new File(targetdir);
+        dir.mkdir();
+
         final XsltBasedTask task = new XsltBasedTask()
         {
             String getDefaultStyleSheet ()
@@ -640,7 +648,7 @@ public class XtremeDocs
 
             void setAdditionalTransformerParameters (Transformer transformer)
             {
-                transformer.setParameter("targetdir", mOutDir + File.separator + "hibernate");
+                transformer.setParameter("targetdir", targetdir);
             }
         };
         task.setProject(getProject());
@@ -652,6 +660,14 @@ public class XtremeDocs
         task.setFailonerror(mFailOnError);
         task.setDestdir(outFile.getParentFile());
         task.execute();
+    }
+
+    private String buildTargetDir (String name)
+    {
+        String strippedName = name.substring(0, name.lastIndexOf(".xml.p1"));
+        String dir = mOutDir + File.separator + strippedName
+                       + File.separator + "hibernate";
+        return dir;
     }
 
     private void generateSadDiagrams (File in)

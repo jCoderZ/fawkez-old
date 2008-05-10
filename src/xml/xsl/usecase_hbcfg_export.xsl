@@ -11,7 +11,7 @@
                        req
                        http://www.jcoderz.org/xsd/xdoc/requirements-SNAPSHOT.xsd">
 
-  <xsl:param name="target-directory" select="'hibernate'" />
+  <xsl:param name="targetdir" />
   <xsl:param name="session-factory" select="'Default'" />
 
   <xsl:include href="libcommon.xsl" />
@@ -21,7 +21,7 @@
     doctype-system="http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd" />
 
   <xsl:template match="uc:usecases">
-    <redirect:write file="{$target-directory}/hibernate.cfg.xml" method="xml">
+    <redirect:write file="{$targetdir}/hibernate.cfg.xml" method="xml">
       <hibernate-configuration>
         <session-factory>
           <xsl:attribute name="name">

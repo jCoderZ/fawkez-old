@@ -857,7 +857,7 @@
       <xsl:variable name="testcase_id">
          <xsl:choose>
             <xsl:when test="string-length(tr:testcase) &gt; 0"><xsl:value-of select="tr:testcase"/></xsl:when>
-            <xsl:when test="key('test-shortname-group',$this_shortname)"><xsl:call-template name="lookup_testcase_id"><xsl:with-param name="shortname" select="$this_shortname"/></xsl:call-template></xsl:when>
+            <xsl:when test="key('test-shortname-group',$this_shortname)"><xsl:value-of select="key('test-shortname-group',$this_shortname)/tc:id"/></xsl:when>
             <xsl:otherwise>STEPS</xsl:otherwise>
          </xsl:choose>
       </xsl:variable>
@@ -962,7 +962,7 @@
    <xsl:template match="tc:test" mode="untested">
       <xsl:param name="this_shortname" select="tc:shortname"/>
       <xsl:param name="this_id" select="tc:id"/>
-      <xsl:if test="not(key('testresult-testcase-group',$this_id) or key('testresult-shortname-group',$this_shortname))">
+      <xsl:if test="not(key('testresult-testcase-group',$this_id) and key('testresult-shortname-group',$this_shortname))">
          <row>
 <xsl:text disable-output-escaping="yes">&lt;?dbhtml bgcolor="yellow" ?&gt;&lt;?dbfo bgcolor="yellow" ?&gt;</xsl:text>
             <entry>

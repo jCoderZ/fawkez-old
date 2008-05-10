@@ -136,7 +136,7 @@
                </thead>
                <tbody>
                   <xsl:variable name="number_issues" select="count(//cms:issue[cms:version = $version and (cms:type = 'Change Request' or cms:type = 'Bug')])"/>
-                  <xsl:variable name="number_change_requests" select="count(//cms:module[cms:version = $version and cms:type = 'Change Request' and cms:external-id])"/>
+                  <xsl:variable name="number_change_requests" select="count(//cms:issue[cms:version = $version and cms:type = 'Change Request' and cms:external-id])"/>
                   <xsl:variable name="number_bug_fixes" select="count(//cms:issue[cms:version = $version and cms:type = 'Bug' and cms:external-id])"/>
                   <xsl:variable name="number_change_requests_resolved" select="count(//cms:issue[cms:version = $version and cms:type = 'Change Request' and cms:state = 'Accepted' and cms:external-id])"/>
                   <xsl:variable name="number_bug_fixes_resolved" select="count(//cms:issue[cms:version = $version and cms:type = 'Bug' and cms:state = 'Accepted' and cms:external-id])"/>

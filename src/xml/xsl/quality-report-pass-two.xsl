@@ -305,10 +305,10 @@
                            <tbody>
                               <xsl:for-each select="//tr:testresult[tr:version = $version.releasecandidate and not(tr:shortname = '' or not(tr:shortname))]">
                                  <xsl:sort select="key" order="ascending" data-type="text"/>
-                                 <xsl:variable name="shortname" select="shortname"/>
-                                 <xsl:variable name="executor"  select="executor"/>
-                                 <xsl:variable name="comment"   select="comment"/>
-                                 <xsl:variable name="result"    select="result"/>
+                                 <xsl:variable name="shortname" select="tr:shortname"/>
+                                 <xsl:variable name="executor"  select="tr:executor"/>
+                                 <xsl:variable name="comment"   select="tr:comment"/>
+                                 <xsl:variable name="result"    select="tr:result"/>
                                  <xsl:if test="not(//tc:test[tc:shortname = $shortname])">
                                      <row>
                                         <entry><xsl:value-of select="$shortname"/></entry>

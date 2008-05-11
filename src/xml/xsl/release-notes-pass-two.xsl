@@ -172,7 +172,7 @@
          <title>Resolved Change Requests</title>
          <table frame="all">
             <title>Resolved Change Requests</title>
-            <para>These change requests have been implemented and have been tested by quality assurance.</para>
+            <para>These change requests have been implemented, but are not accepted by quality assurance, yet.</para>
             <tgroup cols="4" align="left" colsep="1" rowsep="1">
                <colspec colwidth="60" colnum="1" colname="c1"/>
                <colspec colnum="1" colname="c2" align="right"/>
@@ -204,7 +204,7 @@
    <xsl:template name="resolved_bugs">
       <section>
          <title>Resolved Bug Fix Requests</title>
-         <para>These bugs have been fixed and have been tested by quality assurance.</para>
+         <para>These bugs have been fixed and have been accepted by quality assurance.</para>
          <table frame="all">
             <title>Resolved Bug Fix Requests</title>
             <tgroup cols="4" align="left" colsep="1" rowsep="1">
@@ -239,8 +239,7 @@
       <section>
          <title>Resolved but Untested Change Requests</title>
          <para>
-            The implementation of these issues is done already, but they could not be tested
-            by quality assurance, yet.
+            The implementation of these issues is done already, but are not accepted by quality assurance, yet.
          </para>
          <table frame="all">
             <title>Resolved but Untested Change Requests</title>
@@ -276,8 +275,7 @@
       <section>
          <title>Resolved but Untested Bug Fix Requests</title>
          <para>
-            The implementation of these bug fixes is done already, but they could not be tested
-            by quality assurance, yet.
+            The implementation of these bug fixes is done already, but are not accepted by quality assurance, yet.
          </para>
          <table frame="all">
             <title>Resolved but Untested Bug Fix Requests</title>
@@ -420,7 +418,7 @@
       <xsl:param name="category"/>
       <section>
          <title>Resolved but Untested Internal Issues (<xsl:value-of select="$category"/>)</title>
-         <para>Internal Issues of Category <xsl:value-of select="$category"/>, which have been fixed, but not been tested and accepted by Quality Assurance.</para>
+         <para>Internal Issues of Category <xsl:value-of select="$category"/>, which have been fixed, but not been accepted by Quality Assurance.</para>
          <table frame="all">
             <title>Untested (<xsl:value-of select="$category"/>)</title>
             <tgroup cols="4" align="left" colsep="1" rowsep="1">

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="build/gen-java"/>
-	<classpathentry kind="src" path="build/doc/usecase/hibernate"/>
+	<classpathentry kind="src" path="build/doc/usecase/sample/hibernate"/>
 	<classpathentry kind="src" path="build/gen-hibernate"/>
 	<classpathentry kind="src" path="build/gen-test"/>
 	<classpathentry kind="src" path="src/java"/>
@@ -157,6 +157,5 @@
 			<attribute name="javadoc_location" value="http://www.hibernate.org/hib_docs/v3/api/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Program Files/Java/jdk1.5.0_13/lib/tools.jar"/>
 	<classpathentry kind="output" path="eclipse/bin"/>
 </classpath>

@@ -187,7 +187,7 @@ static-catalog=yes
           	            propertyfile="config/hibernate.properties" />
          <hbm2java destdir="${build.dir}/gen-hibernate"/>
          <hbm2doc destdir="${build.dir}/gen-hibernate-doc">
-            <property key="dot.executable" value="dot.exe"/>
+            <property key="dot.executable" value="dot"/>
          </hbm2doc>
          <hbm2ddl export="false" destdir="${build.dir}/doc/usecase/hibernate" outputfilename="usecase-sql.ddl"/>
       </hibernatetool>

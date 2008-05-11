@@ -158,6 +158,10 @@
                      <entry><xsl:value-of select="$number_change_requests_resolved"/></entry>
                   </row>
                   <row>
+                     <entry><emphasis role="bold">Bug Fixes Resolved</emphasis></entry>
+                     <entry><xsl:value-of select="$number_bug_fixes_resolved"/></entry>
+                  </row>
+                  <row>
                      <entry><emphasis role="bold">Resolved Internal Bugs</emphasis></entry>
                      <entry><xsl:value-of select="$number_internals_resolved_bugs"/></entry>
                   </row>

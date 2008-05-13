@@ -446,8 +446,8 @@
                      <xsl:variable name="number_automated_selenium_tests_passed" select="count(//tr:testresult[tr:result = 'passed' and string-length(tr:shortname) &gt; 0 and tr:executor = 'Selenium'])"/>
                      <xsl:variable name="number_automated_selenium_tests_failed" select="count(//tr:testresult[tr:result = 'failed' and string-length(tr:shortname) &gt; 0 and tr:executor = 'Selenium'])"/>
                      <row>
-                        <entry><emphasis role="bold">Test Specifications</emphasis></entry>
-                        <entry><xsl:value-of select="$number_specified_tests"/></entry>
+                        <entry><emphasis role="bold">Test Specifications (final/draft)</emphasis></entry>
+                        <entry><xsl:value-of select="$number_specified_tests"/>/<xsl:value-of select="$number_specified_tests_draft"/></entry>
                      </row><xsl:text>
                      </xsl:text>
                      <row>

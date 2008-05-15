@@ -57,6 +57,8 @@
    <xsl:key name="usecases-group"          match="uc:usecases" use="."/>
    
    <xsl:key name="test-group"                         match="//tc:test" use="tc:traceability"/>
+   <xsl:key name="test-group-final"                   match="//tc:test[tc:state = 'final' or tc:state = '' or not(tc:state)]" use="tc:traceability"/>
+   <xsl:key name="test-group-draft"                   match="//tc:test[tc:state = 'draft']" use="tc:traceability"/>
    <xsl:key name="test-shortname-group"               match="//tc:test" use="tc:shortname"/>
    <xsl:key name="usecase-group"                      match="//uc:usecase" use="@id"/>
    <xsl:key name="usecase-scope-group"                match="//uc:usecase" use="uc:scope"/>
@@ -641,7 +643,7 @@
                   <row>
                      <entry>Root File</entry>
                      <entry>Use Cases</entry>
-                     <entry>Use Case Coverage</entry>
+                     <entry>Use Case Coverage (draft/final)</entry>
                      <entry>Path Coverage</entry>
                      <entry>Test Coverage</entry>
                   </row>
@@ -649,8 +651,9 @@
                <tbody>
                   <xsl:for-each select="//uc:usecases[generate-id() = generate-id(key('usecases-group', .))]">
                      <row>
-                        <xsl:variable name="uc_number" select="count(uc:usecase)"/>
-                        <xsl:variable name="uc_covered" select="count(uc:usecase[key('test-group',@id)])"/>
+                        <xsl:variable name="uc_number"        select="count(uc:usecase)"/>
+                        <xsl:variable name="uc_covered"       select="count(uc:usecase[key('test-group-final',@id)])"/>
+                        <xsl:variable name="uc_covered_draft" select="count(uc:usecase[key('test-group-draft',@id)])"/>
                         <entry>
                            <xsl:value-of select="uc:info/@project"/><xsl:text> </xsl:text>(<xsl:value-of select="uc:info/@version"/>)
                            <xsl:call-template name="link_to_cms">
@@ -660,7 +663,7 @@
                         <entry><xsl:value-of select="$uc_number"/></entry>
                         <xsl:choose>
                            <xsl:when test="not($uc_number = 0)">
-                              <entry><xsl:value-of select="$uc_covered"/><xsl:text> (~ </xsl:text><xsl:value-of select="round(($uc_covered div $uc_number) * 100)"/><xsl:value-of select="' %)'"/></entry>
+                              <entry><xsl:value-of select="$uc_covered"/>/<xsl:value-of select="$uc_covered_draft"/><xsl:text> (~ </xsl:text><xsl:value-of select="round(($uc_covered div $uc_number) * 100)"/><xsl:value-of select="' %)'"/>/<xsl:value-of select="round(($uc_covered_draft div $uc_number) * 100)"/><xsl:value-of select="' %)'"/></entry>
                            </xsl:when>
                            <xsl:otherwise>
                               <entry><xsl:value-of select="$uc_covered"/><xsl:text> (0 %)</xsl:text></entry>
@@ -1411,9 +1414,10 @@
    <xsl:template match="uc:usecase" mode="simple_coverage">
       <xsl:param name="uc_id" select="@id"/>
       <row>
-         <xsl:variable name="cover_num" select="count(key('test-group',$uc_id))"/>
-         <xsl:variable name="tc_executed" select="count(key('test-group',$uc_id)[key('testresult-testcase-group',tc:id) or key('testresult-shortname-group',tr:shortname)])"/>
-         <xsl:variable name="tc_passed"   select="count(key('test-group',$uc_id)[key('testresult-passed-testcase-group',tc:id) or key('testresult-passed-shortname-group',tr:shortname)])"/>
+         <xsl:variable name="cover_num" select="count(key('test-group-final',$uc_id))"/>
+         <xsl:variable name="cover_num_draft" select="count(key('test-group-draft',$uc_id))"/>
+         <xsl:variable name="tc_executed" select="count(key('test-group-final',$uc_id)[key('testresult-testcase-group',tc:id) or key('testresult-shortname-group',tr:shortname)])"/>
+         <xsl:variable name="tc_passed"   select="count(key('test-group-final',$uc_id)[key('testresult-passed-testcase-group',tc:id) or key('testresult-passed-shortname-group',tr:shortname)])"/>
          <xsl:choose>
             <xsl:when test="$cover_num = 0">
                <xsl:text disable-output-escaping="yes">
@@ -1439,7 +1443,7 @@
             </xsl:for-each>
          </entry>
          <entry>
-            <xsl:value-of select="$cover_num"/>
+            <xsl:value-of select="$cover_num"/>/ (<xsl:value-of select="$cover_num_draft"/>)
          </entry>
          <entry>
             <xsl:choose>

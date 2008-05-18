@@ -713,6 +713,13 @@ public final class <xsl:value-of select="$classname"/>
    public static final List VALUES
          = Collections.unmodifiableList(Arrays.asList(PRIVATE_VALUES));
 
+   /**
+    * Immutable map using the name string as key holding the
+    * <xsl:value-of select="$classname"/>s as values.
+    */
+   public static final Map VALUE_MAP
+         = Collections.unmodifiableMap(FROM_STRING);
+
    /** Assign a ordinal to this <xsl:value-of select="$name"/> */
    private final int mOrdinal = sNextOrdinal++;
 

@@ -101,4 +101,13 @@ public class TestEnumTest
             // fine
         }
     }
+
+    /** Test the fromInt method. */
+    public void testValueMap ()
+        throws Throwable
+    {
+        assertEquals("Number of entries in the value map", 4, TestEnum.VALUE_MAP.size());
+        assertSame("Wrone entry in the value map", TestEnum.fromString("Clubs"),
+            TestEnum.VALUE_MAP.get("Clubs"));
+    }
 }

@@ -84,8 +84,8 @@ public final class Version
         m.put("ant.version", "${ant.version}");
         m.put("java.vm.info", "${java.vm.info}");
         m.put("java.vm.name", "${java.vm.name}");
-        m.put("java.vm.vendor", "${java.vm.vendor}");
-        m.put("java.vm.version", "${java.vm.version}");
+        m.put("java.vendor", "${java.vendor}");
+        m.put("java.version", "${java.version}");
         m.put("os.arch", "${os.arch}");
         m.put("os.name", "${os.name}");
         m.put("os.version", "${os.version}");

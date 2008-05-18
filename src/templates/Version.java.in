@@ -179,7 +179,7 @@ public final class Version
         sb.append(getReleaseVersion());
         sb.append("/");
         final String ccLabel = getProperty("cclabel");
-        if (ccLabel != null && ccLabel.contains("_"))
+        if (ccLabel != null && ccLabel.indexOf("_") != -1)
         {
           sb.append(ccLabel);
         }

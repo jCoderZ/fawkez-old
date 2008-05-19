@@ -177,8 +177,15 @@ static-catalog=yes
           </docletPath>
       </xdoc>
       <!--
+      -->
       <mkdir dir="${build.dir}/gen-hibernate"/>
       <mkdir dir="${build.dir}/gen-hibernate-doc"/>
+      <condition property="extension" value=".exe">
+        <os family="windows" />
+      </condition>
+      <condition property="extension" value="">
+        <os family="unix" />
+      </condition>
       <hibernatetool>
          <classpath>
            <pathelement path="${build.dir}/doc/usecase/sample/hibernate/" />
@@ -188,9 +195,9 @@ static-catalog=yes
           	            propertyfile="config/hibernate.properties" />
          <hbm2java destdir="${build.dir}/gen-hibernate"/>
          <hbm2doc destdir="${build.dir}/gen-hibernate-doc">
-            <property key="dot.executable" value="dot.exe"/>
+            <property key="dot.executable" value="dot${extension}"/>
          </hbm2doc>
-         <hbm2ddl export="false" destdir="${build.dir}/doc/usecase/hibernate" outputfilename="usecase-sql.ddl"/>
+         <hbm2ddl export="false" destdir="${build.dir}/doc/usecase/sample/hibernate" outputfilename="usecase-sql.ddl"/>
       </hibernatetool>
       <mkdir dir="${build.dir}/hibernate-classes"/>
       <javac classpathref="hibernate-tools.classpath"
@@ -198,7 +205,6 @@ static-catalog=yes
       	     destdir="${build.dir}/hibernate-classes"
       	     source="1.4">
       </javac>
-      -->
    </target>
 
    <target name="testspec" depends="compile-all, xsl-stylesheets, testspec-nodeps"/>

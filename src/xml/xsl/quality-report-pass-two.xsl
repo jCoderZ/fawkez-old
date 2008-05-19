@@ -631,58 +631,124 @@
    <xsl:template name="coverage_stats">
       <section>
          <title>Coverage Statistics</title>
-         <table frame="all">
-            <title>Covered Use Cases</title>
-            <tgroup cols="5" align="left" colsep="1" rowsep="1">
-               <colspec colwidth="250pt" colnum="1" colname="c1"/>
-               <colspec colnum="2" colname="c2"/>
-               <colspec colwidth="50pt" colnum="3" colname="c3"/>
-               <colspec colwidth="50pt" colnum="4" colname="c4"/>
-               <colspec colwidth="50pt" colnum="5" colname="c5"/>
-               <thead>
-                  <row>
-                     <entry>Root File</entry>
-                     <entry>Use Cases</entry>
-                     <entry>Use Case Coverage (draft/final)</entry>
-                     <entry>Path Coverage</entry>
-                     <entry>Test Coverage</entry>
-                  </row>
-               </thead>
-               <tbody>
-                  <xsl:for-each select="//uc:usecases[generate-id() = generate-id(key('usecases-group', .))]">
+         <section>
+            <title>Change Requests for Version <xsl:value-of select="$version"/></title>
+            <table frame="all">
+               <title>Covered Use Cases</title>
+               <tgroup cols="5" align="left" colsep="1" rowsep="1">
+                  <colspec colwidth="250pt" colnum="1" colname="c1"/>
+                  <colspec colnum="2" colname="c2"/>
+                  <colspec colwidth="50pt" colnum="3" colname="c3"/>
+                  <colspec colwidth="50pt" colnum="4" colname="c4"/>
+                  <colspec colwidth="50pt" colnum="5" colname="c5"/>
+                  <thead>
                      <row>
-                        <xsl:variable name="uc_number"        select="count(uc:usecase)"/>
-                        <xsl:variable name="uc_covered"       select="count(uc:usecase[key('test-group-final',@id)])"/>
-                        <xsl:variable name="uc_covered_draft" select="count(uc:usecase[key('test-group-draft',@id)])"/>
-                        <entry>
-                           <xsl:value-of select="uc:info/@project"/><xsl:text> </xsl:text>(<xsl:value-of select="uc:info/@version"/>)
-                           <xsl:call-template name="link_to_cms">
-                               <xsl:with-param name="issue_id" select="uc:info/@issue"/>
-                           </xsl:call-template>
-                        </entry>
-                        <entry><xsl:value-of select="$uc_number"/></entry>
-                        <xsl:choose>
-                           <xsl:when test="not($uc_number = 0)">
-                              <entry><xsl:value-of select="$uc_covered"/>/<xsl:value-of select="$uc_covered_draft"/><xsl:text> (~ </xsl:text><xsl:value-of select="round(($uc_covered div $uc_number) * 100)"/><xsl:value-of select="' %)'"/>/<xsl:value-of select="round(($uc_covered_draft div $uc_number) * 100)"/><xsl:value-of select="' %)'"/></entry>
-                           </xsl:when>
-                           <xsl:otherwise>
-                              <entry><xsl:value-of select="$uc_covered"/><xsl:text> (0 %)</xsl:text></entry>
-                           </xsl:otherwise>
-                        </xsl:choose>
-                        <entry>N/A</entry>
-                        <entry>N/A</entry>
+                        <entry>Root File</entry>
+                        <entry>Use Cases</entry>
+                        <entry>Use Case Coverage (draft/final)</entry>
+                        <entry>Path Coverage</entry>
+                        <entry>Test Coverage</entry>
                      </row>
-                  </xsl:for-each>
-                  <row>
-                     <entry></entry>
-                     <entry></entry>
-                     <entry></entry>
-                     <entry></entry>
-                     <entry></entry>
-                  </row>
-               </tbody>
-            </tgroup>
-         </table>
+                  </thead>
+                  <tbody>
+                     <xsl:for-each select="//uc:usecases[generate-id() = generate-id(key('usecases-group', .))]">
+                        <xsl:variable name="cr_id"      select="uc:info/@issue"/>
+                        <xsl:variable name="cr_version" select="//cms:issue[cms:id = $cr_id]/cms:version"/>
+                        <xsl:if test="$cr_version = $version">
+                           <row>
+                              <xsl:variable name="uc_number"        select="count(uc:usecase)"/>
+                              <xsl:variable name="uc_covered"       select="count(uc:usecase[key('test-group-final',@id)])"/>
+                              <xsl:variable name="uc_covered_draft" select="count(uc:usecase[key('test-group-draft',@id)])"/>
+                              <entry>
+                                 <xsl:value-of select="uc:info/@project"/><xsl:text> </xsl:text>(<xsl:value-of select="uc:info/@version"/>)
+                                 <xsl:call-template name="link_to_cms">
+                                     <xsl:with-param name="issue_id" select="uc:info/@issue"/>
+                                 </xsl:call-template>
+                              </entry>
+                              <entry><xsl:value-of select="$uc_number"/></entry>
+                              <xsl:choose>
+                                 <xsl:when test="not($uc_number = 0)">
+                                    <entry><xsl:value-of select="$uc_covered"/>/<xsl:value-of select="$uc_covered_draft"/><xsl:text> (~ </xsl:text><xsl:value-of select="round(($uc_covered div $uc_number) * 100)"/><xsl:value-of select="' %)'"/>/<xsl:value-of select="round(($uc_covered_draft div $uc_number) * 100)"/><xsl:value-of select="' %)'"/></entry>
+                                 </xsl:when>
+                                 <xsl:otherwise>
+                                    <entry><xsl:value-of select="$uc_covered"/><xsl:text> (0 %)</xsl:text></entry>
+                                 </xsl:otherwise>
+                              </xsl:choose>
+                              <entry>N/A</entry>
+                              <entry>N/A</entry>
+                           </row>
+                        </xsl:if>
+                     </xsl:for-each>
+                     <row>
+                        <entry></entry>
+                        <entry></entry>
+                        <entry></entry>
+                        <entry></entry>
+                        <entry></entry>
+                     </row>
+                  </tbody>
+               </tgroup>
+            </table>
+         </section>
+         <section>
+            <title>Change Requests for other Versions</title>
+            <table frame="all">
+               <title>Covered Use Cases</title>
+               <tgroup cols="5" align="left" colsep="1" rowsep="1">
+                  <colspec colwidth="250pt" colnum="1" colname="c1"/>
+                  <colspec colnum="2" colname="c2"/>
+                  <colspec colwidth="50pt" colnum="3" colname="c3"/>
+                  <colspec colwidth="50pt" colnum="4" colname="c4"/>
+                  <colspec colwidth="50pt" colnum="5" colname="c5"/>
+                  <thead>
+                     <row>
+                        <entry>Root File</entry>
+                        <entry>Use Cases</entry>
+                        <entry>Use Case Coverage (final/draft)</entry>
+                        <entry>Path Coverage</entry>
+                        <entry>Test Coverage</entry>
+                     </row>
+                  </thead>
+                  <tbody>
+                     <xsl:for-each select="//uc:usecases[generate-id() = generate-id(key('usecases-group', .))]">
+                        <xsl:variable name="cr_id"      select="uc:info/@issue"/>
+                        <xsl:variable name="cr_version" select="//cms:issue[cms:id = $cr_id]/cms:version"/>
+                        <xsl:if test="not($cr_version = $version)">
+                           <row>
+                              <xsl:variable name="uc_number"        select="count(uc:usecase)"/>
+                              <xsl:variable name="uc_covered"       select="count(uc:usecase[key('test-group-final',@id)])"/>
+                              <xsl:variable name="uc_covered_draft" select="count(uc:usecase[key('test-group-draft',@id)])"/>
+                              <entry>
+                                 <xsl:value-of select="uc:info/@project"/><xsl:text> </xsl:text>(<xsl:value-of select="uc:info/@version"/>)
+                                 <xsl:call-template name="link_to_cms">
+                                     <xsl:with-param name="issue_id" select="uc:info/@issue"/>
+                                 </xsl:call-template>, Version: <xsl:value-of select="$cr_version"/>
+                              </entry>
+                              <entry><xsl:value-of select="$uc_number"/></entry>
+                              <xsl:choose>
+                                 <xsl:when test="not($uc_number = 0)">
+                                    <entry><xsl:value-of select="$uc_covered"/>/<xsl:value-of select="$uc_covered_draft"/><xsl:text> (~ </xsl:text><xsl:value-of select="round(($uc_covered div $uc_number) * 100)"/><xsl:value-of select="' %)'"/>/<xsl:value-of select="round(($uc_covered_draft div $uc_number) * 100)"/><xsl:value-of select="' %)'"/></entry>
+                                 </xsl:when>
+                                 <xsl:otherwise>
+                                    <entry><xsl:value-of select="$uc_covered"/><xsl:text> (0 %)</xsl:text></entry>
+                                 </xsl:otherwise>
+                              </xsl:choose>
+                              <entry>N/A</entry>
+                              <entry>N/A</entry>
+                           </row>
+                        </xsl:if>
+                     </xsl:for-each>
+                     <row>
+                        <entry></entry>
+                        <entry></entry>
+                        <entry></entry>
+                        <entry></entry>
+                        <entry></entry>
+                     </row>
+                  </tbody>
+               </tgroup>
+            </table>
+         </section>
       </section>
    </xsl:template>
    

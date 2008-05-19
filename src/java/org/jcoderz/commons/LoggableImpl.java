@@ -365,10 +365,16 @@ public class LoggableImpl
    public String toString ()
    {
       final StringBuffer sb = new StringBuffer();
+      if (mOuter != null)
+      {
+          sb.append(mOuter.getClass().getName());
+      }
+      else
+      {
+          sb.append(getClass().getName());
+      }
+      sb.append(" :");
       getLogMessageInfo().formatMessage(mParameters, sb);
-      sb.append(hashCode());
-      sb.append('@');
-      sb.append(CLASSNAME);
       return sb.toString();
    }
 

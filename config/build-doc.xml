@@ -15,8 +15,8 @@
           <include name="default/batik*/*.jar"/>
           <include name="default/xmlgraphics-commons/*.jar"/>
           <include name="default/avalon-framework/*.jar"/>
-         <include name="offo/fop-hyph.jar"/>
-         <include name="jimi/jimi.jar"/>
+          <include name="offo/fop-hyph.jar"/>
+          <include name="jimi/jimi.jar"/>
        </fileset>
     </path>
 
@@ -30,6 +30,7 @@
         <include name="default/dom4j/*.jar"/>
         <include name="default/freemarker/*.jar"/>
         <include name="default/hibernate/*.jar"/>
+        <include name="default/hibernate-annotations/*.jar"/>
         <include name="default/hibernate-tools/*.jar"/>
         <include name="default/derby/*.jar"/>
       </fileset>
@@ -194,7 +195,8 @@ static-catalog=yes
            <pathelement path="${build.dir}/hibernate-classes" />
          </classpath>
          <configuration configurationfile="${build.dir}/doc/usecase/sample/hibernate/hibernate.cfg.xml"
-          	            propertyfile="config/hibernate.properties" />
+          	            propertyfile="config/hibernate.properties" 
+                        namingstrategy="org.hibernate.cfg.DefaultComponentSafeNamingStrategy" />
          <hbm2java destdir="${build.dir}/gen-hibernate"/>
          <!-- <hbm2dao destdir="${build.dir}/gen-hibernate"/> -->
          <hbm2doc destdir="${build.dir}/gen-hibernate-doc">

@@ -18,6 +18,18 @@
   <req:entity>
     <req:name>Feature presentation</req:name>
     <req:attribute>
+       <req:name>stringValue</req:name>
+       <req:pattern>String (30)</req:pattern>
+    </req:attribute>
+    <req:attribute>
+       <req:name>numberValue</req:name>
+       <req:pattern>Number (10)</req:pattern>
+    </req:attribute>
+    <req:attribute>
+       <req:name>booleanValue</req:name>
+       <req:pattern>Boolean</req:pattern>
+    </req:attribute>
+    <req:attribute>
        <req:name>feature</req:name>
        <req:pattern></req:pattern>
        <req:objectreference>

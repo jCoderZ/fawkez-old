@@ -80,6 +80,11 @@
           name="hibernate-tools" rev="3.2.0.ga" transitive="true">
             <artifact name="hibernate-tools"/>
         </dependency>
+        <dependency org="org.hibernate"
+          name="hibernate-annotations" rev="3.3.1.GA" transitive="true">
+            <artifact name="hibernate-annotations"/>
+            <exclude name="jta"/>
+        </dependency>
         <!--
         <dependency org="mysql" name="mysql-connector-java" rev="5.1.6"/>
           -->

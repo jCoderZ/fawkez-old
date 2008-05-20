@@ -2,10 +2,11 @@
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:redirect="http://xml.apache.org/xalan/redirect"
+  xmlns:saxon="http://icl.com/saxon"
   xmlns:xalan2="http://xml.apache.org/xslt" xmlns:uc="uc" xmlns:req="req"
   extension-element-prefixes="redirect"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  exclude-result-prefixes="uc req xsi xalan2"
+  exclude-result-prefixes="uc req xsi xalan2 saxon"
   xsi:schemaLocation="uc
                        http://www.jcoderz.org/xsd/xdoc/usecase-SNAPSHOT.xsd
                        req
@@ -18,7 +19,8 @@
 
   <xsl:output method="xml" encoding="UTF-8" indent="yes"
     doctype-public="-//Hibernate/Hibernate Configuration DTD 3.0//EN"
-    doctype-system="http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd" />
+    doctype-system="http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd"
+    xalan2:indent-amount="2" saxon:indent-spaces="2" />
 
   <xsl:template match="uc:usecases">
     <redirect:write file="{$targetdir}/hibernate.cfg.xml" method="xml">

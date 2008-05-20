@@ -139,6 +139,8 @@ public class XtremeDocs
     /** List of Variables set as Properties in the Transformer context. */
     private final List mTransformerProperties = new ArrayList();
 
+    private HibernateInfoData mHibernateInfoData;
+
     /**
      * Add the given property to be sent to the transformer.
      *
@@ -303,6 +305,19 @@ public class XtremeDocs
         final FormatterInfoData result = FormatterInfoData.create();
         mFormatters.add(result);
         return result;
+    }
+
+    /**
+     * Creates a new HibernateInfoData object used as nested element to
+     * describe the Hibernate Generator options.
+     *
+     * @return a new FormatterInfoData object.
+     */
+    public HibernateInfoData createHibernate ()
+    {
+        final HibernateInfoData hibernateInfoData = HibernateInfoData.create();
+        mHibernateInfoData = hibernateInfoData;
+        return hibernateInfoData;
     }
 
     /**
@@ -620,6 +635,7 @@ public class XtremeDocs
             void setAdditionalTransformerParameters (Transformer transformer)
             {
                 transformer.setParameter("targetdir", targetdir);
+                transformer.setParameter("package-root", mHibernateInfoData.getPackage());
             }
         };
         task.setProject(getProject());
@@ -649,6 +665,7 @@ public class XtremeDocs
             void setAdditionalTransformerParameters (Transformer transformer)
             {
                 transformer.setParameter("targetdir", targetdir);
+                transformer.setParameter("session-factory", mHibernateInfoData.getSessionFactory());
             }
         };
         task.setProject(getProject());
@@ -927,4 +944,73 @@ public class XtremeDocs
             return new FormatterInfoData();
         }
     }
+
+    /**
+     * The Class HibernateInfoData.
+     */
+    public static class HibernateInfoData
+    {
+        private static final String DEFAULT_HIBERNATE_PACKAGE = "org.jcoderz.hibernate";
+
+        private static final String DEFAULT_HIBERNATE_SESSION_FACTORY = "Default";
+
+        /** Hibernate root package. */
+        private String mHibernatePackage = DEFAULT_HIBERNATE_PACKAGE;
+
+        /** Hibernate session factory. */
+        private String mHibernateSessionFactory = DEFAULT_HIBERNATE_SESSION_FACTORY;
+
+        /**
+         * Create the hibernate info data.
+         *
+         * @return the hibernate info data
+         */
+        public static HibernateInfoData create ()
+        {
+            return new HibernateInfoData();
+        }
+
+        /**
+         * Sets the package.
+         *
+         * @param hibernatePackage the new package
+         */
+        public void setPackage (String hibernatePackage)
+        {
+            this.mHibernatePackage = hibernatePackage;
+        }
+
+        /**
+         * Gets the package.
+         *
+         * @return the package
+         */
+        public String getPackage ()
+        {
+            return mHibernatePackage;
+        }
+
+        /**
+         * Sets the session factory.
+         *
+         * @param hibernateSessionFactory the new session factory
+         */
+        public void setSessionFactory (
+            String hibernateSessionFactory)
+        {
+            this.mHibernateSessionFactory = hibernateSessionFactory;
+        }
+
+        /**
+         * Gets the session factory.
+         *
+         * @return the session factory
+         */
+        public String getSessionFactory ()
+        {
+            return mHibernateSessionFactory;
+        }
+
+    }
+
 }

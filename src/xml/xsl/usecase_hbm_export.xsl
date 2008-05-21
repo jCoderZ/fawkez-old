@@ -12,7 +12,7 @@
 
    <xsl:param name="targetdir" />
    <xsl:param name="package-root" select="'org.jcoderz.hibernate'" />
-   <xsl:param name="tablename-prefix" select="'PPG_'" />
+   <xsl:param name="tablename-prefix" select="'S0IR_PPG_'" />
 
    <xsl:include href="libcommon.xsl" />
 
@@ -77,33 +77,36 @@
 
          <hibernate-mapping>
             <xsl:attribute name="package">
-          <xsl:value-of select="$package-root" />
-          <xsl:if test="$package">
-            <xsl:text>.</xsl:text>
-            <xsl:call-template name="toLowerCase">
-               <xsl:with-param name="s">
-                  <xsl:call-template name="asJavaIdentifier">
-                     <xsl:with-param name="name" select="$package" />
-                  </xsl:call-template>
-               </xsl:with-param>
-            </xsl:call-template>
-          </xsl:if>
-        </xsl:attribute>
+               <xsl:value-of select="$package-root" />
+               <xsl:if test="$package">
+               <xsl:text>.</xsl:text>
+               <xsl:call-template name="toLowerCase">
+                  <xsl:with-param name="s">
+                     <xsl:call-template name="asJavaIdentifier">
+                        <xsl:with-param name="name" select="$package" />
+                     </xsl:call-template>
+                  </xsl:with-param>
+               </xsl:call-template>
+               </xsl:if>
+            </xsl:attribute>
+
+            <xsl:variable name="tableName">
+               <xsl:value-of select="$tablename-prefix" />
+               <xsl:call-template name="asColumnName">
+                  <xsl:with-param name="name" select="req:name" />
+               </xsl:call-template>
+               <xsl:text>S</xsl:text>
+            </xsl:variable>
 
             <class>
                <xsl:attribute name="name">
                   <xsl:call-template name="asJavaIdentifier">
                      <xsl:with-param name="name" select="req:name" />
                   </xsl:call-template>
-              </xsl:attribute>
-               <!--
-                  <xsl:attribute name="table">
-                  <xsl:value-of select="$tablename-prefix" />
-                  <xsl:call-template name="toUpperCase">
-                  <xsl:with-param name="s" select="req:name" />
-                  </xsl:call-template>
-                  </xsl:attribute>
-               -->
+               </xsl:attribute>
+               <xsl:attribute name="table">
+                  <xsl:value-of select="$tableName" />
+               </xsl:attribute>
                <meta attribute="class-description">
                   <xsl:text>This class has been auto-generated from the entity </xsl:text>
                   <xsl:value-of select="$name" />
@@ -196,6 +199,9 @@
                                        <xsl:with-param name="name" select="req:name" />
                                     </xsl:call-template>
                                  </xsl:attribute>
+                                 <xsl:attribute name="column">
+                                    <xsl:value-of select="'ID'"/>
+                                 </xsl:attribute>
                               </many-to-one>
                            </xsl:when>
                            <xsl:when test="$from-count = 'one' and $to-count = 'many'">
@@ -204,6 +210,14 @@
                                     <xsl:call-template name="asJavaParameter">
                                        <xsl:with-param name="name" select="req:name" />
                                     </xsl:call-template>
+                                 </xsl:attribute>
+                                 <xsl:attribute name="table">
+                                    <xsl:value-of select="$tableName" />
+                                    <xsl:text>_</xsl:text>
+                                    <xsl:call-template name="asColumnName">
+                                       <xsl:with-param name="name" select="req:name" />
+                                    </xsl:call-template>
+                                    <xsl:text>S</xsl:text>
                                  </xsl:attribute>
                                  <key column="ID" />
                                  <one-to-many>
@@ -221,6 +235,14 @@
                                     <xsl:call-template name="asJavaParameter">
                                        <xsl:with-param name="name" select="req:name" />
                                     </xsl:call-template>
+                                 </xsl:attribute>
+                                 <xsl:attribute name="table">
+                                    <xsl:value-of select="$tableName" />
+                                    <xsl:text>_</xsl:text>
+                                    <xsl:call-template name="asColumnName">
+                                       <xsl:with-param name="name" select="req:name" />
+                                    </xsl:call-template>
+                                    <xsl:text>S</xsl:text>
                                  </xsl:attribute>
                                  <key column="ID" />
                                  <many-to-many>
@@ -251,11 +273,17 @@
 
    <xsl:template match="req:attribute" mode="attributes">
 
+      <xsl:variable name="unifiedName">
+         <xsl:call-template name="asJavaConstantName">
+            <xsl:with-param name="value" select="req:name" />
+         </xsl:call-template>
+      </xsl:variable>
+
       <xsl:attribute name="name">
-      <xsl:call-template name="asJavaParameter">
-         <xsl:with-param name="name" select="req:name" />
-      </xsl:call-template>
-    </xsl:attribute>
+       <xsl:call-template name="asJavaParameter">
+         <xsl:with-param name="name" select="$unifiedName" />
+       </xsl:call-template>
+      </xsl:attribute>
 
       <xsl:variable name="patternType">
          <xsl:choose>
@@ -362,6 +390,13 @@
          </xsl:otherwise>
       </xsl:choose>
 
+      <xsl:attribute name="column">
+         <xsl:call-template name="asColumnName">
+            <xsl:with-param name="name" select="req:name" />
+            <xsl:with-param name="type" select="$patternType" />
+         </xsl:call-template>
+      </xsl:attribute>
+
       <xsl:if test="req:description">
          <meta attribute="field-description">
             <xsl:value-of select="normalize-space(req:description)" />
@@ -371,16 +406,30 @@
 
    <xsl:template name="asColumnName">
       <xsl:param name="name" />
+      <xsl:param name="type" />
+
+      <xsl:choose>
+         <xsl:when test="$type = 'boolean'">
+           <xsl:text>F_</xsl:text>
+         </xsl:when>
+         <xsl:when test="$type = 'date'">
+           <xsl:text>DT_</xsl:text>
+         </xsl:when>
+         <xsl:when test="$type = 'calendardate'">
+           <xsl:text>DT_</xsl:text>
+         </xsl:when>
+      </xsl:choose>
 
       <xsl:variable name="cookedName">
-         <xsl:call-template name="asJavaParameter">
-            <xsl:with-param name="name" select="$name" />
+         <xsl:call-template name="asJavaConstantName">
+            <xsl:with-param name="value" select="$name" />
          </xsl:call-template>
       </xsl:variable>
 
       <xsl:call-template name="toUpperCase">
          <xsl:with-param name="s" select="translate($cookedName,' ','_')" />
       </xsl:call-template>
+
    </xsl:template>
 
    <xsl:template name="findClassForId">

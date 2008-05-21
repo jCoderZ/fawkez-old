@@ -536,6 +536,17 @@ public final class CheckstyleFindingType
           "Missing package documentation file\\.");
 
   /**
+   * Checkstyle finding type that relates to:
+   * <i>Unable to get class information for EJBException..</i>.
+   */
+  public static final CheckstyleFindingType CS_EXCEPTION_CLASS_NOT_FOUND =
+      new CheckstyleFindingType("CS_MISSING_PACKAGE_DOCUMENTATION",
+          "Unable to get class information for certain class.",
+          "Mostly this is caused by a checkstyle internal issue or a finder"
+          + "class path setting.",
+          "Unable to get class information for .*\\.");
+
+  /**
    * A internal checkstyle exception was triggered we shoulds also
    * report this!
    */

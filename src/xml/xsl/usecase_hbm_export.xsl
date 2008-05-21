@@ -12,7 +12,10 @@
 
    <xsl:param name="targetdir" />
    <xsl:param name="package-root" select="'org.jcoderz.hibernate'" />
+   <xsl:param name="foreign-key-prefix" select="'S0IS_PPG_'" />
+   <xsl:param name="foreign-key-suffix" select="'_F'" />
    <xsl:param name="tablename-prefix" select="'S0IR_PPG_'" />
+   <xsl:param name="tablename-suffix" select="'S'" />
 
    <xsl:include href="libcommon.xsl" />
 
@@ -90,12 +93,16 @@
                </xsl:if>
             </xsl:attribute>
 
-            <xsl:variable name="tableName">
-               <xsl:value-of select="$tablename-prefix" />
+            <xsl:variable name="entityName">
                <xsl:call-template name="asColumnName">
                   <xsl:with-param name="name" select="req:name" />
                </xsl:call-template>
-               <xsl:text>S</xsl:text>
+            </xsl:variable>
+
+            <xsl:variable name="tableName">
+               <xsl:value-of select="$tablename-prefix" />
+               <xsl:value-of select="$entityName" />
+               <xsl:value-of select="$tablename-suffix" />
             </xsl:variable>
 
             <class>
@@ -125,8 +132,16 @@
                   <meta attribute="use-in-tostring">false</meta>
                </id>
 
+               <xsl:variable name="foreignKeyIndex">
+                  <xsl:value-of select="0" />
+               </xsl:variable>
+
                <xsl:for-each select="req:attribute">
-                  <xsl:choose>
+
+                  <xsl:variable name="foreignKeyIndex">
+                       <xsl:number format="01" value="position()" />
+                 </xsl:variable>
+                   <xsl:choose>
                      <xsl:when test="req:objectreference">
                         <xsl:variable name="ref_id" select="req:objectreference/req:ref/@id" />
                         <xsl:variable name="linkstart" select="req:objectreference/req:linkstart" />
@@ -202,6 +217,12 @@
                                  <xsl:attribute name="column">
                                     <xsl:value-of select="'ID'"/>
                                  </xsl:attribute>
+                                 <xsl:attribute name="foreign-key">
+                                    <xsl:value-of select="$foreign-key-prefix" />
+                                    <xsl:value-of select="$entityName" />
+                                    <xsl:value-of select="$foreign-key-suffix" />
+                                    <xsl:value-of select="$foreignKeyIndex" />
+                                 </xsl:attribute>
                               </many-to-one>
                            </xsl:when>
                            <xsl:when test="$from-count = 'one' and $to-count = 'many'">
@@ -219,7 +240,14 @@
                                     </xsl:call-template>
                                     <xsl:text>S</xsl:text>
                                  </xsl:attribute>
-                                 <key column="ID" />
+                                 <key column="ID">
+                                    <xsl:attribute name="foreign-key">
+                                       <xsl:value-of select="$foreign-key-prefix" />
+                                       <xsl:value-of select="$entityName" />
+                                       <xsl:value-of select="$foreign-key-suffix" />
+                                       <xsl:value-of select="$foreignKeyIndex" />
+                                    </xsl:attribute>
+                                 </key>
                                  <one-to-many>
                                     <xsl:attribute name="class">
                                     <xsl:call-template name="findClassForId">
@@ -244,13 +272,26 @@
                                     </xsl:call-template>
                                     <xsl:text>S</xsl:text>
                                  </xsl:attribute>
-                                 <key column="ID" />
+                                 <key column="ID">
+                                    <xsl:attribute name="foreign-key">
+                                       <xsl:value-of select="$foreign-key-prefix" />
+                                       <xsl:value-of select="$entityName" />
+                                       <xsl:value-of select="$foreign-key-suffix" />
+                                       <xsl:value-of select="$foreignKeyIndex" />
+                                    </xsl:attribute>
+                                 </key>
                                  <many-to-many>
                                     <xsl:attribute name="class">
-                                    <xsl:call-template name="findClassForId">
-                                       <xsl:with-param name="id" select="$ref_id" />
-                                    </xsl:call-template>
-                                 </xsl:attribute>
+                                       <xsl:call-template name="findClassForId">
+                                          <xsl:with-param name="id" select="$ref_id" />
+                                       </xsl:call-template>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="foreign-key">
+                                       <xsl:value-of select="$foreign-key-prefix" />
+                                       <xsl:value-of select="$entityName" />
+                                       <xsl:value-of select="$foreign-key-suffix" />
+                                       <xsl:value-of select="$foreignKeyIndex" />
+                                    </xsl:attribute>
                                  </many-to-many>
                               </set>
                            </xsl:when>

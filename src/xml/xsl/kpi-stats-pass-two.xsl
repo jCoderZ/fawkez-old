@@ -304,7 +304,7 @@
       </xsl:call-template>
       <xsl:call-template name="entry">
          <xsl:with-param name="key" select="$kpi.jira.issue.bugs.resolved_or_accepted.number.version"/>
-         <xsl:with-param name="value" select="count(//cms:issue[(cms:type = $cms.bug.type) and (cms:state = $cms.state.resolved or csm:status = $cms.state.accepted or cms:state = $cms.state.closed) and contains(cms.version,$version)])"/>
+         <xsl:with-param name="value" select="count(//cms:issue[(cms:type = $cms.bug.type) and (cms:state = $cms.state.resolved or cms:status = $cms.state.accepted or cms:state = $cms.state.closed) and contains(cms:version,$version)])"/>
       </xsl:call-template>
       <xsl:call-template name="entry">
          <xsl:with-param name="key" select="$kpi.jira.issue.bugs.accepted.number.version"/>
@@ -316,7 +316,7 @@
       </xsl:call-template>
       <xsl:call-template name="entry">
          <xsl:with-param name="key" select="$kpi.jira.issue.crs.accepted.number.version"/>
-         <xsl:with-param name="value" select="count(//cms:issue[(cms:type = $cms.cr.type) and (cms:state = $cms.state.accepted or cms:state = $cms.state.closed) and contains($cms:version,$version)])"/>
+         <xsl:with-param name="value" select="count(//cms:issue[(cms:type = $cms.cr.type) and (cms:state = $cms.state.accepted or cms:state = $cms.state.closed) and contains(cms:version,$version)])"/>
       </xsl:call-template>
       <xsl:call-template name="entry">
          <xsl:with-param name="key" select="$kpi.jira.issue.internal.resolved_or_accepted.number.version"/>
@@ -338,58 +338,58 @@
       
       <xsl:call-template name="entry">
          <xsl:with-param name="key" select="$kpi.jira.issue.external.resolved_or_accepted.number"/>
-         <xsl:with-param name="value" select="count(//item[(type = $jira.cr.type or type = $jira.bug.type) and (status = 'Resolved' or status = 'Accepted' or status = 'Closed')])"/>
+         <xsl:with-param name="value" select="count(//cms:issue[(cms:type = $cms.cr.type or type = $cms.bug.type) and (cms:state = $cms.state.resolved or cms:state = $cms.state.accepted or cms:state = $cms.state.closed)])"/>
       </xsl:call-template>
       <xsl:call-template name="entry">
          <xsl:with-param name="key" select="$kpi.jira.issue.external.accepted.number"/>
-         <xsl:with-param name="value" select="count(//item[(type = $jira.cr.type or type = $jira.bug.type) and (status = 'Accepted' or status = 'Closed')])"/>
+         <xsl:with-param name="value" select="count(//cms:issue[(cms:type = $cms.cr.type or type = $cms.bug.type) and (cms:state = $cms.state.accepted or cms:state = $cms.state.closed)])"/>
       </xsl:call-template>
       <xsl:call-template name="entry">
          <xsl:with-param name="key" select="$kpi.jira.issue.bugs.resolved_or_accepted.number"/>
-         <xsl:with-param name="value" select="count(//item[(type = $jira.bug.type) and (status = 'Resolved' or status = 'Accepted' or status = 'Closed')])"/>
+         <xsl:with-param name="value" select="count(//cms:issue[cms:type = $cms.bug.type and (cms:state = $cms.state.resolved or cms:state = $cms.state.accepted or cms:state = $cms.state.closed)])"/>
       </xsl:call-template>
       <xsl:call-template name="entry">
          <xsl:with-param name="key" select="$kpi.jira.issue.bugs.unscheduled"/>
-         <xsl:with-param name="value" select="count(//item[(type = $jira.bug.type) and (fixVersion = '' or not(fixVersion) and not(status = 'Closed'))])"/>
+         <xsl:with-param name="value" select="count(//cms:issue[(cms:type = $cms.bug.type) and (cms:version = '' or not(cms:version) and not(cms:state = $cms.state.closed))])"/>
       </xsl:call-template>
       <xsl:call-template name="entry">
          <xsl:with-param name="key" select="$kpi.jira.issue.bugs.accepted.number"/>
-         <xsl:with-param name="value" select="count(//item[(type = $jira.bug.type) and (status = 'Accepted' or status = 'Closed')])"/>
+         <xsl:with-param name="value" select="count(//cms:issue[(cms:type = $cms.bug.type) and (cms:state = $cms.state.accepted or cms:state = $cms.state.closed)])"/>
       </xsl:call-template>
       <xsl:call-template name="entry">
          <xsl:with-param name="key" select="$kpi.jira.issue.crs.resolved_or_accepted.number"/>
-         <xsl:with-param name="value" select="count(//item[(type = $jira.cr.type) and (status = 'Resolved' or status = 'Accepted' or status = 'Closed')])"/>
+         <xsl:with-param name="value" select="count(//cms:issue[(cms:type = $cms.cr.type) and (cms:state = $cms.state.accepted or cms:state = $cms.state.closed)])"/>
       </xsl:call-template>
       <xsl:call-template name="entry">
          <xsl:with-param name="key" select="$kpi.jira.issue.crs.accepted.number"/>
-         <xsl:with-param name="value" select="count(//item[(type = $jira.cr.type) and (status = 'Accepted' or status = 'Closed')])"/>
+         <xsl:with-param name="value" select="count(//cms:issue[(cms:type = $cms.cr.type) and (cms:state = $cms.state.accepted or cms:state = $cms.state.closed)])"/>
       </xsl:call-template>
       <xsl:call-template name="entry">
          <xsl:with-param name="key" select="$kpi.jira.issue.internal.resolved_or_accepted.number"/>
-         <xsl:with-param name="value" select="count(//item[type = $jira.internal.type and (status = 'Resolved' or status = 'Accepted' or status = 'Closed')])"/>
+         <xsl:with-param name="value" select="count(//cms:issue[not(cms:external-id) and (cms:state = $cms.state.resolved or cms:state = $cms.state.accepted or cms:state = $cms.state.closed)])"/>
       </xsl:call-template>
       <xsl:call-template name="entry">
          <xsl:with-param name="key" select="$kpi.jira.issue.internal.accepted.number"/>
-         <xsl:with-param name="value" select="count(//item[type = $jira.internal.type and (status = 'Accepted' or status = 'Closed')])"/>
+         <xsl:with-param name="value" select="count(//cms:issue[not(cms:external-id) and (status = 'Accepted' or status = 'Closed')])"/>
       </xsl:call-template>
       <xsl:call-template name="entry">
          <xsl:with-param name="key" select="$kpi.jira.issue.internal.found.number.affected"/>
-         <xsl:with-param name="value" select="count(//item[type = $jira.internal.type])"/>
+         <xsl:with-param name="value" select="count(//cms:issue[not(cms:external-id) and cms:affects-version = $version])"/>
       </xsl:call-template>
       <xsl:call-template name="entry">
          <xsl:with-param name="key" select="$kpi.jira.issue.external.found.number.affected"/>
-         <xsl:with-param name="value" select="count(//item[type = $jira.bug.type])"/>
+         <xsl:with-param name="value" select="count(//cms:issue[cms:type = $cms.bug.type and cms:affects-version = $version])"/>
       </xsl:call-template>      
       
       
       <!-- Internal Bugs found with for a release (affected versions)  -->
       <xsl:call-template name="entry">
          <xsl:with-param name="key" select="$kpi.jira.issue.internal.class.bug.version"/>
-         <xsl:with-param name="value" select="count(//item[type = $jira.internal.type and contains(version,$version) and customfields/customfield[customfieldname='Classification']/customfieldvalues[customfieldvalue = 'Bug']])"/>
+         <xsl:with-param name="value" select="count(//cms:issue[cms:type = $cms.bug.type and not(cms:external-id) and contains(cms:affects-version,$version)])"/>
       </xsl:call-template>
       <xsl:call-template name="entry">
          <xsl:with-param name="key" select="$kpi.jira.issue.internal.class.bug"/>
-         <xsl:with-param name="value" select="count(//item[type = $jira.internal.type and customfields/customfield[customfieldname='Classification']/customfieldvalues[customfieldvalue = 'Bug']])"/>
+         <xsl:with-param name="value" select="count(//cms:issue[cms:type = $cms.bug.type and not(cms:external-id)])"/>
       </xsl:call-template>      
       <xsl:call-template name="entry">
          <xsl:with-param name="key" select="$kpi.jira.issue.internal.class.refactoring.version"/>
@@ -410,7 +410,7 @@
       
       <xsl:call-template name="entry">
          <xsl:with-param name="key" select="$kpi.jira.issue.internal.class.bug.open.version"/>
-         <xsl:with-param name="value" select="count(//item[type = $jira.internal.type and not(status = 'Accepted' or status = 'Closed') and contains(version,$version) and customfields/customfield[customfieldname='Classification']/customfieldvalues[customfieldvalue = 'Bug']])"/>
+         <xsl:with-param name="value" select="count(//cms:issue[cms:type = $cms.bug.type and not(cms:external-id) and not(cms:state = $cms.state.accepted or cms:state = $cms.state.closed)])"/>
       </xsl:call-template>
       <xsl:call-template name="entry">
          <xsl:with-param name="key" select="$kpi.jira.issue.internal.class.bug.resolved.version"/>

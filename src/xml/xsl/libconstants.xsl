@@ -42,9 +42,12 @@
     <xsl:variable name="cms.task.type"         select="'Task'"/>
    
     <xsl:variable name="cms.state.draft"       select="'Draft'"/>
+    <xsl:variable name="cms.state.reported"    select="'Reported'"/>
+    <xsl:variable name="cms.state.verified"    select="'Verified'"/>
     <xsl:variable name="cms.state.open"        select="'Open'"/>
     <xsl:variable name="cms.state.accepted"    select="'Accepted'"/>
     <xsl:variable name="cms.state.resolved"    select="'Resolved'"/>
+    <xsl:variable name="cms.state.released"    select="'Released'"/>
     <xsl:variable name="cms.state.closed"      select="'Closed'"/>
    
     <xsl:variable name="jira.bug.type"          select="'Bug Fix'"/>

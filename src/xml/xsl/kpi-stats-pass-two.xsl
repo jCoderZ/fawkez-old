@@ -414,11 +414,11 @@
       </xsl:call-template>
       <xsl:call-template name="entry">
          <xsl:with-param name="key" select="$kpi.jira.issue.internal.class.bug.resolved.version"/>
-         <xsl:with-param name="value" select="count(//item[type = $jira.internal.type and (status = 'Accepted' or status = 'Closed' or status = 'Resolved') and contains(version,$version) and customfields/customfield[customfieldname='Classification']/customfieldvalues[customfieldvalue = 'Bug']])"/>
+         <xsl:with-param name="value" select="count(//cms:issue[cms:type = $cms.bug.type and not(cms:external-id) and (cms:state = $cms.state.resolved or cms:state = $cms.state.accepted or cms:state = $cms.state.closed) and contains(cms:affects-version,$version)])"/>
       </xsl:call-template>
       <xsl:call-template name="entry">
          <xsl:with-param name="key" select="$kpi.jira.issue.internal.class.bug.open"/>
-         <xsl:with-param name="value" select="count(//item[type = $jira.internal.type and not(status = 'Accepted' or status = 'Closed') and customfields/customfield[customfieldname='Classification']/customfieldvalues[customfieldvalue = 'Bug']])"/>
+         <xsl:with-param name="value" select="count(//cms:issue[cms:type = $cms.bug.type and not(cms:external-id) and not(cms:state = $cms.state.accepted or cms:state = $cms.state.closed) ])"/>
       </xsl:call-template>      
       <xsl:call-template name="entry">
          <xsl:with-param name="key" select="$kpi.jira.issue.internal.class.refactoring.open.version"/>
@@ -440,27 +440,27 @@
       <!-- external Jira issues -->
       <xsl:call-template name="entry">
          <xsl:with-param name="key" select="$kpi.jira.issue.external.bugs.number"/>
-         <xsl:with-param name="value" select="count(//item[type = $jira.bug.external.type])"/>
+         <xsl:with-param name="value" select="count(//cms:issue[cms:type = $cms.bug.type and cms:external-id])"/>
       </xsl:call-template>
       <xsl:call-template name="entry">
          <xsl:with-param name="key" select="$kpi.jira.issue.external.bugs.verifikation.number"/>
-         <xsl:with-param name="value" select="count(//item[type = $jira.bug.external.type and status = 'Reported'])"/>
+         <xsl:with-param name="value" select="count(//cms:issue[cms:type = $cms.bug.type and cms:external-id and cms:state = $cms.state.reported])"/>
       </xsl:call-template>
       <xsl:call-template name="entry">
          <xsl:with-param name="key" select="$kpi.jira.issue.external.bugs.verified.number"/>
-         <xsl:with-param name="value" select="count(//item[type = $jira.bug.external.type and status = 'Verified'])"/>
+         <xsl:with-param name="value" select="count(//cms:issue[cms:type = $cms.bug.type and cms:external-id and cms:state = $cms.state.verified])"/>
       </xsl:call-template>
       <xsl:call-template name="entry">
          <xsl:with-param name="key" select="$kpi.jira.issue.external.bugs.inprogress.number"/>
-         <xsl:with-param name="value" select="count(//item[type = $jira.bug.external.type and status = 'Open'])"/>
+         <xsl:with-param name="value" select="count(//cms:issue[cms:type = $cms.bug.type and cms:external-id and cms:state = $cms.state.open])"/>
       </xsl:call-template>
       <xsl:call-template name="entry">
          <xsl:with-param name="key" select="$kpi.jira.issue.external.bugs.resolved.number"/>
-         <xsl:with-param name="value" select="count(//item[type = $jira.bug.external.type and status = 'Resolved'])"/>
+         <xsl:with-param name="value" select="count(//cms:issue[cms:type = $cms.bug.type and cms:external-id and cms:state = $cms.state.resolved])"/>
       </xsl:call-template>
       <xsl:call-template name="entry">
          <xsl:with-param name="key" select="$kpi.jira.issue.external.bugs.released.number"/>
-         <xsl:with-param name="value" select="count(//item[type = $jira.bug.external.type and (status = 'Accepted' or status = 'Released')])"/>
+         <xsl:with-param name="value" select="count(//cms:issue[cms:type = $cms.bug.type and cms:external-id and (cms:state = $cms.state.accepted or cms:state = $cms.state.released)])"/>
       </xsl:call-template>      
    </xsl:template>
           
@@ -487,31 +487,31 @@
       </xsl:call-template>
       <xsl:call-template name="entry">
          <xsl:with-param name="key" select="$kpi.testcases.executed.version.number"/>
-         <xsl:with-param name="value" select="count(//testresult[starts-with(version,$version)])"/>
+         <xsl:with-param name="value" select="count(//tr:testresult[starts-with(tr:version,$version)])"/>
       </xsl:call-template>
       <xsl:call-template name="entry">
          <xsl:with-param name="key" select="$kpi.testcases.executed.passed.version.number"/>
-         <xsl:with-param name="value" select="count(//testresult[starts-with(version,$version) and result = 'passed'])"/>
+         <xsl:with-param name="value" select="count(//tr:testresult[starts-with(tr:version,$version) and tr:result = 'passed'])"/>
       </xsl:call-template>
       <xsl:call-template name="entry">
          <xsl:with-param name="key" select="$kpi.testcases.executed.version.rc.number"/>
-         <xsl:with-param name="value" select="count(//testresult[version = $version.releasecandidate])"/>
+         <xsl:with-param name="value" select="count(//tr:testresult[tr:version = $version.releasecandidate])"/>
       </xsl:call-template>      
       <xsl:call-template name="entry">
          <xsl:with-param name="key" select="$kpi.testcases.automated.executed.version.rc.number"/>
-         <xsl:with-param name="value" select="count(//testresult[version = $version.releasecandidate and executor = 'JMeter'])"/>
+         <xsl:with-param name="value" select="count(//tr:testresult[tr:version = $version.releasecandidate and tr:executor = 'JMeter'])"/>
       </xsl:call-template>
       <xsl:call-template name="entry">
          <xsl:with-param name="key" select="$kpi.testcases.automated.executed.version.rc.passed.number"/>
-         <xsl:with-param name="value" select="count(//testresult[version = $version.releasecandidate and executor = 'JMeter' and result = 'passed'])"/>
+         <xsl:with-param name="value" select="count(//tr:testresult[tr:version = $version.releasecandidate and tr:executor = 'JMeter' and tr:result = 'passed'])"/>
       </xsl:call-template>
       <xsl:call-template name="entry">
          <xsl:with-param name="key" select="$kpi.testcases.issue.executed.version.number"/>
-         <xsl:with-param name="value" select="count(//testresult[starts-with(version,$version) and not(executor = 'JMeter')])"/>
+         <xsl:with-param name="value" select="count(//tr:testresult[starts-with(tr:version,$version) and not(tr:executor = 'JMeter')])"/>
       </xsl:call-template>
       <xsl:call-template name="entry">
          <xsl:with-param name="key" select="$kpi.testcases.issue.executed.version.passed.number"/>
-         <xsl:with-param name="value" select="count(//testresult[starts-with(version,$version) and not(executor = 'JMeter') and result = 'passed'])"/>
+         <xsl:with-param name="value" select="count(//tr:testresult[starts-with(tr:version,$version) and not(tr:executor = 'JMeter') and tr:result = 'passed'])"/>
       </xsl:call-template>
 
       <xsl:call-template name="entry">
@@ -553,12 +553,12 @@
    </xsl:template>  
    
    <xsl:template name="efficiency">
-      <xsl:variable name="tr_at_all"           select="count(//testresult[number(time) = number(time)])"/>
-      <xsl:variable name="tr_issue_at_all"     select="count(//testresult[issue and not(issue = '') and number(time) = number(time)])"/>
-      <xsl:variable name="tr_test_at_all"      select="count(//testresult[testcase and not(testcase = '') and number(time) = number(time)])"/>
-      <xsl:variable name="tr_time_spent"       select="sum(//testresult/time[number(.)=number(.)])"/>
-      <xsl:variable name="tr_issue_time_spent" select="sum(//testresult[issue and not(issue = '')]/time[number(.) = number(.)])"/>
-      <xsl:variable name="tr_test_time_spent"  select="sum(//testresult[testcase and not(testcase = '')]/time[number(.) = number(.)])"/>
+      <xsl:variable name="tr_at_all"           select="count(//tr:testresult[number(tr:time) = number(tr:time)])"/>
+      <xsl:variable name="tr_issue_at_all"     select="count(//tr:testresult[tr:issue and not(tr:issue = '') and number(tr:time) = number(tr:time)])"/>
+      <xsl:variable name="tr_test_at_all"      select="count(//tr:testresult[tr:testcase and not(tr:testcase = '') and number(tr:time) = number(tr:time)])"/>
+      <xsl:variable name="tr_time_spent"       select="sum(//tr:testresult/tr:time[number(.)=number(.)])"/>
+      <xsl:variable name="tr_issue_time_spent" select="sum(//tr:testresult[tr:issue and not(tr:issue = '')]/tr:time[number(.) = number(.)])"/>
+      <xsl:variable name="tr_test_time_spent"  select="sum(//tr:testresult[tr:testcase and not(tr:testcase = '')]/tr:time[number(.) = number(.)])"/>
       <xsl:variable name="tr_avg_time"         select="$tr_time_spent div $tr_at_all"/>
       <xsl:variable name="tr_issue_avg_time"   select="$tr_issue_time_spent div $tr_issue_at_all"/>
       <xsl:variable name="tr_test_avg_time"    select="$tr_test_time_spent div $tr_test_at_all"/>
@@ -601,12 +601,12 @@
    </xsl:template>
    
    <xsl:template name="efficiency_release">
-      <xsl:variable name="tr_at_all"           select="count(//testresult[starts-with(version,$version) and number(time) = number(time)])"/>
-      <xsl:variable name="tr_issue_at_all"     select="count(//testresult[starts-with(version,$version) and issue and not(issue = '') and number(time) = number(time)])"/>
-      <xsl:variable name="tr_test_at_all"      select="count(//testresult[starts-with(version,$version) and testcase and not(testcase = '') and number(time) = number(time)])"/>
-      <xsl:variable name="tr_time_spent"       select="sum(//testresult[starts-with(version,$version)]/time[number(.)=number(.)])"/>
-      <xsl:variable name="tr_issue_time_spent" select="sum(//testresult[starts-with(version,$version) and issue and not(issue = '')]/time[number(.) = number(.)])"/>
-      <xsl:variable name="tr_test_time_spent"  select="sum(//testresult[starts-with(version,$version) and testcase and not(testcase = '')]/time[number(.) = number(.)])"/>
+      <xsl:variable name="tr_at_all"           select="count(//tr:testresult[starts-with(tr:version,$version) and number(tr:time) = number(tr:time)])"/>
+      <xsl:variable name="tr_issue_at_all"     select="count(//tr:testresult[starts-with(tr:version,$version) and tr:issue and not(tr:issue = '') and number(tr:time) = number(tr:time)])"/>
+      <xsl:variable name="tr_test_at_all"      select="count(//tr:testresult[starts-with(tr:version,$version) and tr:testcase and not(tr:testcase = '') and number(tr:time) = number(tr:time)])"/>
+      <xsl:variable name="tr_time_spent"       select="sum(//tr:testresult[starts-with(tr:version,$version)]/tr:time[number(.)=number(.)])"/>
+      <xsl:variable name="tr_issue_time_spent" select="sum(//tr:testresult[starts-with(tr:version,$version) and tr:issue and not(tr:issue = '')]/tr:time[number(.) = number(.)])"/>
+      <xsl:variable name="tr_test_time_spent"  select="sum(//tr:testresult[starts-with(tr:version,$version) and tr:testcase and not(tr:testcase = '')]/tr:time[number(.) = number(.)])"/>
       <xsl:variable name="tr_avg_time"         select="$tr_time_spent div $tr_at_all"/>
       <xsl:variable name="tr_issue_avg_time"   select="$tr_issue_time_spent div $tr_issue_at_all"/>
       <xsl:variable name="tr_test_avg_time"    select="$tr_issue_time_spent div $tr_test_at_all"/>

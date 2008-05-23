@@ -25,8 +25,7 @@
 
    <!--xsl:include href="libcommon.xsl"/-->
    <xsl:include href="libxdoc.xsl"/>
-   <!--xsl:include href="html2docbook.xsl"/>
-   <xsl:include href="usecase-requirements.xsl"/-->
+   <xsl:include href="libconstants.xsl"/>
 
    <xsl:param name="lang" select="default"/>
    <xsl:param name="basedir" select="'.'"/>
@@ -35,24 +34,6 @@
    <xsl:param name="version.releasecandidate"/>
    <!-- wether it is an "internal" or "external" report. -->
    <xsl:param name="type" select="'internal'"/>
-   
-   <!-- constants -->
-   <xsl:variable name="cms.bug.type"       select="'Bug'"/>
-   <xsl:variable name="cms.cr.type"        select="'Change Request'"/>
-   <xsl:variable name="cms.task.type"      select="'Task'"/>
-   
-   <xsl:variable name="cms.state.draft"    select="'Draft'"/>
-   <xsl:variable name="cms.state.open"     select="'Open'"/>
-   <xsl:variable name="cms.state.accepted" select="'Accepted'"/>
-   <xsl:variable name="cms.state.resolved" select="'Resolved'"/>
-   <xsl:variable name="cms.state.closed"   select="'Closed'"/>
-   
-   <!-- old -->
-   <xsl:variable name="jira.bug.type"      select="'Bug Fix'"/>
-   <xsl:variable name="jira.cr.type"       select="'Change Request'"/>
-   <xsl:variable name="jira.internal.type" select="'Internal Issue'"/>
-   <xsl:variable name="jira.testing.type"  select="'Testing Sub-Task'"/>
-   <xsl:variable name="jira.impl.type"     select="'Implementation Sub-Task'"/> 
    
    <xsl:key name="usecases-group"          match="uc:usecases" use="."/>
    

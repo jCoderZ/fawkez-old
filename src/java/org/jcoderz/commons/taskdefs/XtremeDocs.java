@@ -76,6 +76,10 @@ public class XtremeDocs
     private static final String FORMAT_NONE = "NONE";
 
     private static final String TYPE_QUALITY_REPORT = "Quality-Report";
+    
+    private static final String TYPE_KPI_STATS = "KPI-Stats";
+    
+    private static final String TYPE_KPI_REPORT = "KPI-Report";
 
     private static final String TYPE_RELEASE_NOTES = "Release-Notes";
 
@@ -384,6 +388,18 @@ public class XtremeDocs
                     exportToHbm(filePassOne);
                 }
             }
+            else if (TYPE_KPI_STATS.equals(mType))
+            {
+                final File kpiFile = transformPassTwo(filePassOne);
+                File newFile = new File(AntTaskUtil.stripFileExtension(AntTaskUtil
+                    .stripFileExtension(kpiFile.getAbsolutePath())));
+                kpiFile.renameTo(newFile);
+            }
+            else if (TYPE_KPI_REPORT.equals(mType))
+            {
+                generateKeyPerformanceDiagrams(filePassOne, imageDir);
+                // TODO render gnuplot files
+            }
             else if (TYPE_TEST_SPEC.equals(mType))
             {
                 // Nothing to do
@@ -400,20 +416,33 @@ public class XtremeDocs
             {
                 throw new RuntimeException("Unsupported type " + mType);
             }
-            if (!mValidationOnly)
+            
+            if (TYPE_KPI_STATS.equals(mType))
             {
-                if (isOutputEnabled(FORMAT_HTML))
+                // do nothing
+            }
+            else
+            {
+                if (!mValidationOnly)
                 {
-                    rasterizeSvgFiles(imageDir);
-                }
-                if (isOutputEnabled(FORMAT_PDF))
-                {
-                    scaleSvgImages(imageDir);
+                    if (isOutputEnabled(FORMAT_HTML))
+                    {
+                        rasterizeSvgFiles(imageDir);
+                    }
+                    if (isOutputEnabled(FORMAT_PDF))
+                    {
+                        scaleSvgImages(imageDir);
+                    }
                 }
             }
+            
             if (TYPE_TEST_SPEC.equals(mType))
             {
                 renderDocbookFilesFromPassOne(filePassOne);
+            }
+            else if (TYPE_KPI_STATS.equals(mType))
+            {
+                // do nothing
             }
             else
             {
@@ -585,6 +614,36 @@ public class XtremeDocs
             task.setIn(filePassOne);
             task.setForce(true); // FIXME
             final File outFile = new File(mOutDir, "use-case-diagrams" + ".tmp");
+            task.setOut(outFile);
+            task.setFailonerror(mFailOnError);
+            task.setDestdir(outFile.getParentFile());
+            task.execute();
+        }
+    }
+    
+    private void generateKeyPerformanceDiagrams (File filePassOne, final File imageDir)
+    {
+        if (isOutputEnabled(FORMAT_PDF) || isOutputEnabled(FORMAT_HTML))
+        {
+            final XsltBasedTask task = new XsltBasedTask()
+            {
+                String getDefaultStyleSheet ()
+                {
+                    return "key_performance_diagrams.xsl";
+                }
+
+                void setAdditionalTransformerParameters (Transformer transformer)
+                {
+                    transformer.setParameter("basedir", getProject().getBaseDir()
+                        .toString());
+                    transformer.setParameter("imagedir", imageDir.toString());
+                }
+            };
+            task.setProject(getProject());
+            task.setTaskName("diagrams");
+            task.setIn(filePassOne);
+            task.setForce(true); // FIXME
+            final File outFile = new File(mOutDir, "key-performance-diagrams" + ".tmp");
             task.setOut(outFile);
             task.setFailonerror(mFailOnError);
             task.setDestdir(outFile.getParentFile());

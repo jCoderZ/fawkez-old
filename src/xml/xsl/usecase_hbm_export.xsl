@@ -490,8 +490,8 @@
       <xsl:choose>
          <xsl:when test="$title">
             <xsl:value-of select="$package-prefix" />
-            <xsl:text>.</xsl:text>
             <xsl:if test="$category">
+               <xsl:text>.</xsl:text>
                <xsl:call-template name="toLowerCase">
                   <xsl:with-param name="s">
                      <xsl:call-template name="asJavaIdentifier">
@@ -499,9 +499,9 @@
                      </xsl:call-template>
                   </xsl:with-param>
                </xsl:call-template>
-               <xsl:text>.</xsl:text>
             </xsl:if>
             <xsl:value-of select="$package-suffix" />
+            <xsl:text>.</xsl:text>
             <xsl:call-template name="asJavaIdentifier">
                <xsl:with-param name="name" select="$title" />
             </xsl:call-template>

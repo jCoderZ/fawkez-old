@@ -177,7 +177,7 @@ static-catalog=yes
           <docletPath>
              <path refid="xdoc.classpath"/>
           </docletPath>
-          <hibernate package="org.jcoderz.usecase.hibernate" sessionFactory="Default" />
+          <hibernate packagePrefix="org.jcoderz.usecase.hibernate" sessionFactory="Default" />
       </xdoc>
       <!--
       -->

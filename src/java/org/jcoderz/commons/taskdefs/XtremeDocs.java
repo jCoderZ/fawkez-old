@@ -114,7 +114,7 @@ public class XtremeDocs
     /** Type of document. (SAD|UseCase) */
     private String mType;
 
-    /** Format of document. (HTML|PDF|ALL) */
+    /** Format of document. (NONE|HTML|PDF|ALL) */
     private String mFormat;
 
     private String mTypeLowerCase;
@@ -694,7 +694,12 @@ public class XtremeDocs
             void setAdditionalTransformerParameters (Transformer transformer)
             {
                 transformer.setParameter("targetdir", targetdir);
-                transformer.setParameter("package-root", mHibernateInfoData.getPackage());
+                transformer.setParameter("package-prefix", mHibernateInfoData.getPackagePrefix());
+                transformer.setParameter("package-suffix", mHibernateInfoData.getPackageSuffix());
+                transformer.setParameter("tablename-prefix", mHibernateInfoData.getTableNamePrefix());
+                transformer.setParameter("tablename-suffix", mHibernateInfoData.getTableNameSuffix());
+                transformer.setParameter("foreign-key-prefix", mHibernateInfoData.getForeignKeyPrefix());
+                transformer.setParameter("foreign-key-suffix", mHibernateInfoData.getForeignKeySuffix());
             }
         };
         task.setProject(getProject());
@@ -1009,12 +1014,34 @@ public class XtremeDocs
      */
     public static class HibernateInfoData
     {
-        private static final String DEFAULT_HIBERNATE_PACKAGE = "org.jcoderz.hibernate";
+        private static final String DEFAULT_PACKAGE_PREFIX = "org.jcoderz.hibernate";
+        private static final String DEFAULT_PACKAGE_SUFFIX = "";
+
+        private static final String DEFAULT_TABLE_NAME_PREFIX = "JC_";
+        private static final String DEFAULT_TABLE_NAME_SUFFIX = "S";
+
+        private static final String DEFAULT_FOREIGN_KEY_PREFIX = "FK_";
+        private static final String DEFAULT_FOREIGN_KEY_SUFFIX = "";
 
         private static final String DEFAULT_HIBERNATE_SESSION_FACTORY = "Default";
 
-        /** Hibernate root package. */
-        private String mHibernatePackage = DEFAULT_HIBERNATE_PACKAGE;
+        /** Package prefix. */
+        private String mPackagePrefix = DEFAULT_PACKAGE_PREFIX;
+
+        /** Package suffix. */
+        private String mPackageSuffix = DEFAULT_PACKAGE_SUFFIX;
+
+        /** Table name prefix. */
+        private String mTableNamePrefix = DEFAULT_TABLE_NAME_PREFIX;
+
+        /** Table name suffix. */
+        private String mTableNameSuffix = DEFAULT_TABLE_NAME_SUFFIX;
+
+        /** Foreign key name prefix. */
+        private String mForeignKeyPrefix = DEFAULT_FOREIGN_KEY_PREFIX;
+
+        /** Foreign key name suffix. */
+        private String mForeignKeySuffix = DEFAULT_FOREIGN_KEY_SUFFIX;
 
         /** Hibernate session factory. */
         private String mHibernateSessionFactory = DEFAULT_HIBERNATE_SESSION_FACTORY;
@@ -1027,26 +1054,6 @@ public class XtremeDocs
         public static HibernateInfoData create ()
         {
             return new HibernateInfoData();
-        }
-
-        /**
-         * Sets the package.
-         *
-         * @param hibernatePackage the new package
-         */
-        public void setPackage (String hibernatePackage)
-        {
-            this.mHibernatePackage = hibernatePackage;
-        }
-
-        /**
-         * Gets the package.
-         *
-         * @return the package
-         */
-        public String getPackage ()
-        {
-            return mHibernatePackage;
         }
 
         /**
@@ -1068,6 +1075,121 @@ public class XtremeDocs
         public String getSessionFactory ()
         {
             return mHibernateSessionFactory;
+        }
+
+        /**
+         * Sets the package prefix.
+         *
+         * @param mPackagePrefix the new package prefix
+         */
+        public void setPackagePrefix (String mPackagePrefix)
+        {
+            this.mPackagePrefix = mPackagePrefix;
+        }
+
+        /**
+         * Gets the package prefix.
+         *
+         * @return the package prefix
+         */
+        public String getPackagePrefix ()
+        {
+            return mPackagePrefix;
+        }
+
+        /**
+         * Sets the package suffix.
+         *
+         * @param mPackageSuffix the new package suffix
+         */
+        public void setPackageSuffix (String mPackageSuffix)
+        {
+            this.mPackageSuffix = mPackageSuffix;
+        }
+
+        /**
+         * Gets the package suffix.
+         *
+         * @return the package suffix
+         */
+        public String getPackageSuffix ()
+        {
+            return mPackageSuffix;
+        }
+
+        /**
+         * Sets the table name prefix.
+         *
+         * @param mTableNamePrefix the new table name prefix
+         */
+        public void setTableNamePrefix (String tableNamePrefix)
+        {
+            mTableNamePrefix = tableNamePrefix;
+        }
+
+        /**
+         * Gets the table name prefix.
+         *
+         * @return the table name prefix
+         */
+        public String getTableNamePrefix ()
+        {
+            return mTableNamePrefix;
+        }
+
+        /**
+         * Sets the table name suffix.
+         *
+         * @param mTableNameSuffix the new table name suffix
+         */
+        public void setTableNameSuffix (String tableNameSuffix)
+        {
+            mTableNameSuffix = tableNameSuffix;
+        }
+
+        /**
+         * Gets the table name suffix.
+         *
+         * @return the table name suffix
+         */
+        public String getTableNameSuffix ()
+        {
+            return mTableNameSuffix;
+        }
+
+        /**
+         * Sets the foreign key prefix.
+         *
+         * @param mForeignKeyPrefix the new foreign key prefix
+         */
+        public void setForeignKeyPrefix (String foreignKeyPrefix)
+        {
+            mForeignKeyPrefix = foreignKeyPrefix;
+        }
+
+        /**
+         * Gets the foreign key prefix.
+         *
+         * @return the foreign key prefix
+         */
+        public String getForeignKeyPrefix ()
+        {
+            return mForeignKeyPrefix;
+        }
+
+        /**
+         * Sets the foreign key suffix.
+         *
+         * @param mForeignKeySuffix the new foreign key suffix
+         */
+        public void setForeignKeySuffix (String foreignKeySuffix)
+        {
+            mForeignKeySuffix = foreignKeySuffix;
+        }
+
+        public String getForeignKeySuffix ()
+        {
+            return mForeignKeySuffix;
         }
 
     }

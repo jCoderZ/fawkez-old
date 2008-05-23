@@ -11,7 +11,8 @@
                        http://www.jcoderz.org/xsd/xdoc/requirements-SNAPSHOT.xsd">
 
    <xsl:param name="targetdir" />
-   <xsl:param name="package-root" select="'org.jcoderz.hibernate'" />
+   <xsl:param name="package-prefix" select="'org.jcoderz.hibernate'" />
+   <xsl:param name="package-suffix" select="''" />
    <xsl:param name="foreign-key-prefix" select="'S0IS_PPG_'" />
    <xsl:param name="foreign-key-suffix" select="'_F'" />
    <xsl:param name="tablename-prefix" select="'S0IR_PPG_'" />
@@ -32,8 +33,9 @@
 
          <hibernate-mapping>
             <xsl:attribute name="package">
-           <xsl:value-of select="$package-root" />
-        </xsl:attribute>
+               <xsl:value-of select="$package-prefix" />
+               <xsl:value-of select="$package-suffix" />
+            </xsl:attribute>
 
             <class name="Dummy" table="DUMMY">
                <id column="ID" name="id" type="integer">
@@ -49,7 +51,7 @@
 
    <xsl:template match="req:entity" mode="hbm">
 
-      <xsl:variable name="package">
+      <xsl:variable name="category">
          <xsl:value-of select="../req:category/req:secondary" />
       </xsl:variable>
 
@@ -60,11 +62,11 @@
       </xsl:variable>
 
       <xsl:variable name="file">
-         <xsl:if test="$package">
+         <xsl:if test="$category">
             <xsl:call-template name="toLowerCase">
                <xsl:with-param name="s">
                   <xsl:call-template name="asJavaIdentifier">
-                     <xsl:with-param name="name" select="$package" />
+                     <xsl:with-param name="name" select="$category" />
                   </xsl:call-template>
                </xsl:with-param>
             </xsl:call-template>
@@ -80,17 +82,18 @@
 
          <hibernate-mapping>
             <xsl:attribute name="package">
-               <xsl:value-of select="$package-root" />
-               <xsl:if test="$package">
+               <xsl:value-of select="$package-prefix" />
+               <xsl:if test="$category">
                <xsl:text>.</xsl:text>
                <xsl:call-template name="toLowerCase">
                   <xsl:with-param name="s">
                      <xsl:call-template name="asJavaIdentifier">
-                        <xsl:with-param name="name" select="$package" />
+                        <xsl:with-param name="name" select="$category" />
                      </xsl:call-template>
                   </xsl:with-param>
                </xsl:call-template>
                </xsl:if>
+               <xsl:value-of select="$package-suffix" />
             </xsl:attribute>
 
             <xsl:variable name="entityName">
@@ -480,30 +483,32 @@
          <xsl:value-of select="//req:requirement[req:key = $id]/req:title" />
       </xsl:variable>
 
-      <xsl:variable name="package">
+      <xsl:variable name="category">
          <xsl:value-of select="//req:requirement[req:key = $id]/req:category/req:secondary" />
       </xsl:variable>
 
       <xsl:choose>
          <xsl:when test="$title">
-            <xsl:value-of select="$package-root" />
+            <xsl:value-of select="$package-prefix" />
             <xsl:text>.</xsl:text>
-            <xsl:if test="$package">
+            <xsl:if test="$category">
                <xsl:call-template name="toLowerCase">
                   <xsl:with-param name="s">
                      <xsl:call-template name="asJavaIdentifier">
-                        <xsl:with-param name="name" select="$package" />
+                        <xsl:with-param name="name" select="$category" />
                      </xsl:call-template>
                   </xsl:with-param>
                </xsl:call-template>
                <xsl:text>.</xsl:text>
             </xsl:if>
+            <xsl:value-of select="$package-suffix" />
             <xsl:call-template name="asJavaIdentifier">
                <xsl:with-param name="name" select="$title" />
             </xsl:call-template>
          </xsl:when>
          <xsl:otherwise>
-            <xsl:value-of select="$package-root" />
+            <xsl:value-of select="$package-prefix" />
+            <xsl:value-of select="$package-suffix" />
             <xsl:text>.</xsl:text>
             <xsl:text>Dummy</xsl:text>
          </xsl:otherwise>

@@ -351,6 +351,53 @@
            </tbody>
          </tgroup>
       </table>
+      
+      <xsl:variable name="entity_id" select="../req:key"/>
+      <xsl:if test="//req:ref[../req:linkstart and @id=$entity_id]">
+         <table frame="all">
+            <title><xsl:value-of select="$strEntityReferences"/></title>
+            <tgroup cols='4' align='left' colsep='1' rowsep='1'>
+               <colspec colname="c1"/>
+               <colspec colname="c2"/>
+               <colspec colname="c3"/>
+               <colspec colname="c4"/>
+               <thead>
+                  <row>
+                     <entry>
+                        <emphasis role="bold"><xsl:value-of select="$strEntity"/></emphasis>
+                     </entry>
+                     <entry>
+                        <emphasis role="bold"><xsl:value-of select="$strRelation"/></emphasis>
+                     </entry>
+                     <entry>
+                        <emphasis role="bold"><xsl:value-of select="$strConstraints"/></emphasis>
+                     </entry>
+                     <entry>
+                        <emphasis role="bold"><xsl:value-of select="$strPattern"/></emphasis>
+                     </entry>
+                  </row>
+               </thead>
+               <tbody>
+                  <xsl:for-each select="//req:ref[../req:linkstart and @id=$entity_id]">
+                     <row>
+                        <entry>
+                           <xsl:text> [</xsl:text><xref linkend="{../../../../req:key}"/><xsl:text>] </xsl:text>
+                        </entry>
+                        <entry>
+                           <xsl:value-of select="../req:linkstart"/>:<xsl:value-of select="../req:linkend"/>
+                        </entry>
+                        <entry>
+                           <xsl:value-of select="../req:constraints"/>
+                        </entry>
+                        <entry>
+                           <xsl:value-of select="../req:pattern"/>
+                        </entry>
+                     </row>
+                  </xsl:for-each>
+              </tbody>
+            </tgroup>
+         </table>
+      </xsl:if>
 
       <xsl:variable name="f" select="concat('images/', ../req:key)"/>
       <figure>

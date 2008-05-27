@@ -197,5 +197,14 @@
             value="5.12"
             comment="Additional Constant defined in the XML document."/>
     </fixPointNumber>
+    <fixPointNumber
+      classname="TestFixPoint"
+      package="org.jcoderz.commons.types.samples"
+      min-value="-9999999.999"
+      max-value="9999999.999"
+      fraction-digits="3"
+      total-digits="10"
+      user-type="true">
+    </fixPointNumber>
   </fixPointNumbers>
 </simpleTypes>

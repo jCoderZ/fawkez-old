@@ -1602,6 +1602,7 @@ import org.jcoderz.commons.util.Assert;
   <!-- TODO might dynamicly switch to int / BD? -->
   <xsl:variable name="backing-type">long</xsl:variable>
   <xsl:variable name="backing-class">Long</xsl:variable>
+  <xsl:variable name="backing-char">L</xsl:variable>
 
 <xsl:call-template name="java-copyright-header"/>
 package <xsl:value-of select="$package"/>;
@@ -1652,14 +1653,14 @@ public final class <xsl:value-of select="$classname"/>
         = <xsl:call-template name="power10precise">
           <xsl:with-param name="number" select="$MIN_VALUE"/>
           <xsl:with-param name="exp" select="$fraction-digits"/>
-        </xsl:call-template>;
+        </xsl:call-template><xsl:value-of select="$backing-char"/>;
 
     /** The maximal value of <xsl:value-of select="$classname"/>. */
     public static final <xsl:value-of select="$backing-type"/> MAX_VALUE_UNSCALED
         = <xsl:call-template name="power10precise">
           <xsl:with-param name="number" select="$MAX_VALUE"/>
           <xsl:with-param name="exp" select="$fraction-digits"/>
-        </xsl:call-template>;
+        </xsl:call-template><xsl:value-of select="$backing-char"/>;
 
     /** The number of fraction digits. */
     public static final int FRACTION_DIGITS

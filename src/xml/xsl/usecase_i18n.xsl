@@ -274,7 +274,7 @@
        </xsl:otherwise>
      </xsl:choose>
    </xsl:variable>
-   
+
    <xsl:variable name="strEntity">
      <xsl:choose>
        <xsl:when test="$lang='de'">
@@ -659,14 +659,14 @@
        </xsl:otherwise>
      </xsl:choose>
    </xsl:variable>
-   
+
    <xsl:variable name="strEntityReferences">
      <xsl:choose>
        <xsl:when test="$lang='de'">
           <xsl:text>Referenzierende Entitäten</xsl:text>
        </xsl:when>
        <xsl:otherwise>
-          <xsl:text>Refering Entities</xsl:text>
+          <xsl:text>Referring Entities</xsl:text>
        </xsl:otherwise>
      </xsl:choose>
    </xsl:variable>

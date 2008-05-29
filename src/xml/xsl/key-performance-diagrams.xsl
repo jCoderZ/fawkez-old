@@ -147,8 +147,18 @@
          select="$imagedir"/>/data_time_monthly</xsl:variable>
 
       <redirect:write file="{$file}">
-      
-         
+
+         <xsl:for-each select="//kpi:timestamp[generate-id(.) = generate-id(key('timestamp-group', substring(.,1,6)))]">
+            <xsl:sort select="." 
+                      order="ascending" 
+                      data-type="text"/>                         
+               <xsl:variable name="first" select="."/>
+               <xsl:value-of select="$first"/><xsl:text>
+               </xsl:text>
+               <xsl:apply-templates select="//kpi:kpi_list[kpi:meta/kpi:timestamp = $first]" 
+                          mode="timestamp">
+               </xsl:apply-templates>
+         </xsl:for-each>
 
       </redirect:write>
    </xsl:template>

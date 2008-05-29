@@ -5,7 +5,7 @@
    xmlns:tc="http://jcoderz.org/test-specifications" xmlns:req="req"
    xmlns:uc="uc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
    <kpi:meta>
-      <kpi:timestamp>2008029000000</kpi:timestamp>
+      <kpi:timestamp>2008022900000</kpi:timestamp>
       <kpi:version1>1.0.0.0</kpi:version1>
       <kpi:version2>1.0.0.0.1</kpi:version2>
       <kpi:version3 />

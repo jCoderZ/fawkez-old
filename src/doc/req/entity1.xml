@@ -36,6 +36,15 @@
         <req:description>Attribute description is here.</req:description>
      </req:attribute>
      <req:attribute>
+        <req:name>self reference</req:name>
+        <req:pattern></req:pattern>
+        <req:objectreference>
+           <req:linkstart>1</req:linkstart>
+           <req:linkend>1</req:linkend>
+           <req:ref id="D-90005"/>
+        </req:objectreference>
+     </req:attribute>
+     <req:attribute>
         <req:name>Pointer1</req:name>
         <req:pattern></req:pattern>
         <req:objectreference>

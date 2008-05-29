@@ -112,7 +112,8 @@ static-catalog=yes
        </copy>
        <xdoc type="SAD" in="${base.dir}/src/doc/sad/sad.xml"
              out="${build.dir}/doc/sad" failonerror="true"
-             xephome="${xep.home}" cclabel="${label}">
+             xephome="${xep.home}" cclabel="${label}"
+             format="ALL">
           <src dir="${base.dir}/src/java"/>
           <src dir="${build.dir}/gen-java"/>
           <classpath>
@@ -282,7 +283,8 @@ static-catalog=yes
      <xdoc type="Quality-Report" in="${base.dir}/src/doc/quality-report/quality-report.xml"
            out="${build.dir}/doc/quality-report" failonerror="true"
            xephome="${xep.home}" cclabel="${label}" companyname="JCoderZ.org"
-           companylogo="jcoderz-org">
+           companylogo="jcoderz-org"
+           format="ALL">
         <!-- hardcoded test parameters to create sample documents -->
         <param key="version" value="1.0.0.0"/>
         <param key="version.releasecandidate" value="1.0.0.0.1"/>
@@ -328,7 +330,8 @@ static-catalog=yes
        <xdoc type="Release-Notes" in="${base.dir}/src/doc/quality-report/release-notes.xml"
              out="${build.dir}/doc/release-notes" failonerror="true"
              xephome="${xep.home}" cclabel="${label}" companyname="JCoderZ.org"
-             companylogo="jcoderz-org">
+             companylogo="jcoderz-org"
+             format="ALL">
           <!-- hardcoded test parameters to create sample documents -->
           <param key="version" value="1.0.0.0"/>
           <param key="version.releasecandidate" value="1.0.0.0.1"/>
@@ -361,7 +364,8 @@ static-catalog=yes
        <xdoc type="KPI-Stats" in="${base.dir}/src/doc/quality-report/kpi.xml"
              out="${build.dir}/doc/kpi-report" failonerror="true"
              xephome="${xep.home}" cclabel="${label}" companyname="JCoderZ.org"
-             companylogo="jcoderz-org">
+             companylogo="jcoderz-org"
+             format="ALL">
           <!-- hardcoded test parameters to create sample documents -->
           <param key="version" value="1.0.0.0"/>
           <param key="version.releasecandidate" value="1.0.0.0.1"/>
@@ -402,7 +406,8 @@ static-catalog=yes
       <xdoc type="KPI-Report" in="${base.dir}/src/doc/quality-report/kpi-all.xml"
             out="${build.dir}/doc/kpi-report/" failonerror="true"
             xephome="${xep.home}" cclabel="${label}" companyname="JCoderZ.org"
-            companylogo="jcoderz-org">
+            companylogo="jcoderz-org"
+            format="ALL">
          <!-- hardcoded test parameters to create sample documents -->
          <param key="version" value="1.0.0.0"/>
          <param key="version.releasecandidate" value="1.0.0.0.1"/>

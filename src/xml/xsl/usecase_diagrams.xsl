@@ -694,29 +694,36 @@ digraph G {
 
       </xsl:for-each>
 
+      <!-- find out links from referring or referrenced entities of dm_root to each other -->
       <xsl:for-each select="//req:objectreference[req:ref/@id = $dm_root_id or ../../../req:key = $dm_root_id]">
          <xsl:variable name="dm_id" select="../../../req:key"/>
          <xsl:variable name="ref_id" select="req:ref/@id"/>
 
+         <!-- look out for all entities, which are referenced by dm_root -->
          <xsl:if test="$dm_id = $dm_root_id">
             <xsl:for-each select="//req:objectreference[../../../req:key = $ref_id]">
                <!-- Avoid a repeated self reference here -->
                <xsl:if test="$ref_id != req:ref/@id">
+                  <xsl:if test="$ref_id != $dm_root_id and req:ref/@id != $dm_root_id">
+                     <xsl:call-template name="check_link">
+                        <xsl:with-param name="referencing_node" select="$ref_id"/>
+                        <xsl:with-param name="referenced_node" select="req:ref/@id"/>
+                        <xsl:with-param name="dm_root_id" select="$dm_root_id"/>
+                     </xsl:call-template>
+                  </xsl:if>
+               </xsl:if>
+            </xsl:for-each>
+         </xsl:if>
+         <!-- look out for all entities (exclusive of dm_root) referring to dm_root -->
+         <xsl:if test="$dm_id != $dm_root_id">
+            <xsl:for-each select="//req:objectreference[../../../req:key = $dm_id and not(req:ref/@id = $dm_root_id)]">
+               <xsl:if test="$dm_id != $dm_root_id and req:ref/@id = $dm_root_id">
                   <xsl:call-template name="check_link">
-                     <xsl:with-param name="referencing_node" select="$ref_id"/>
+                     <xsl:with-param name="referencing_node" select="$dm_id"/>
                      <xsl:with-param name="referenced_node" select="req:ref/@id"/>
                      <xsl:with-param name="dm_root_id" select="$dm_root_id"/>
                   </xsl:call-template>
                </xsl:if>
-            </xsl:for-each>
-         </xsl:if>
-         <xsl:if test="$dm_id != $dm_root_id">
-            <xsl:for-each select="//req:objectreference[../../../req:key = $dm_id and not(req:ref/@id = $dm_root_id)]">
-               <xsl:call-template name="check_link">
-                  <xsl:with-param name="referencing_node" select="$dm_id"/>
-                  <xsl:with-param name="referenced_node" select="req:ref/@id"/>
-                  <xsl:with-param name="dm_root_id" select="$dm_root_id"/>
-               </xsl:call-template>
             </xsl:for-each>
          </xsl:if>
       </xsl:for-each>

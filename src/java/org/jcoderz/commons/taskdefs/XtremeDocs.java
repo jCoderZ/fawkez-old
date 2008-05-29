@@ -398,7 +398,7 @@ public class XtremeDocs
             else if (TYPE_KPI_REPORT.equals(mType))
             {
                 generateKeyPerformanceDiagrams(filePassOne, imageDir);
-                // TODO render gnuplot files
+                AntTaskUtil.renderGnuplotFiles(this, imageDir, mFailOnError);
             }
             else if (TYPE_TEST_SPEC.equals(mType))
             {
@@ -629,7 +629,7 @@ public class XtremeDocs
             {
                 String getDefaultStyleSheet ()
                 {
-                    return "key_performance_diagrams.xsl";
+                    return "key-performance-diagrams.xsl";
                 }
 
                 void setAdditionalTransformerParameters (Transformer transformer)

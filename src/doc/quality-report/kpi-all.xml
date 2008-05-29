@@ -24,7 +24,10 @@
                                  http://jcoderz.org/key-performance
                                  http://www.jcoderz.org/xsd/xdoc/key-performance-SNAPSHOT.xsd">
 
-      <xi:include href="../../../build/doc/kpi.xml" parse="xml"/>
+      <xi:include href="../../../build/doc/kpi-report/kpi.xml" parse="xml"/>
+      <xi:include href="kpi/kpi_hist1.xml" parse="xml"/>
+      <xi:include href="kpi/kpi_hist2.xml" parse="xml"/>
+      <xi:include href="kpi/kpi_hist3.xml" parse="xml"/>
 
 </root>
 

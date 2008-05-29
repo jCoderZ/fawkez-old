@@ -72,12 +72,10 @@
             <kpi:version2><xsl:value-of select="$version.releasecandidate"/></kpi:version2>
             <kpi:version3><xsl:value-of select="$branch"/></kpi:version3>
          </kpi:meta>
+         <kpi:keys>
+            <xsl:call-template name="kpikeys"/>
+         </kpi:keys>
          <kpi:entries>
-            <xsl:text>
-            </xsl:text>
-            <kpi:keys>
-               <xsl:call-template name="kpikeys"/>
-            </kpi:keys>
             <xsl:text>
             </xsl:text>
             <xsl:call-template name="testcases"/>
@@ -668,7 +666,7 @@
    <xsl:template name="lookup_testcase_id">
       <xsl:param name="shortname"/>
       <xsl:choose>
-          <xsl:when test="//test[shortname = $shortname]"><xsl:for-each select="//test[shortname = $shortname]"><xsl:value-of select="id"/></xsl:for-each></xsl:when>
+          <xsl:when test="//tc:test[tc:shortname = $shortname]"><xsl:for-each select="//tc:test[tc:shortname = $shortname]"><xsl:value-of select="tc:id"/></xsl:for-each></xsl:when>
           <xsl:otherwise>STEPS</xsl:otherwise>
       </xsl:choose>
    </xsl:template>

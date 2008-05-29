@@ -148,6 +148,42 @@ public final class AntTaskUtil
             task.log("No .dot files found to render", Project.MSG_VERBOSE);
         }
     }
+    
+    /**
+     * Render .gnuplot files.
+     *
+     * @param task the task
+     * @param gnuplotDir the gnuplot dir
+     * @param failOnError the fail on error
+     */
+    public static void renderGnuplotFiles (Task task, File gnuplotDir,
+        boolean failOnError)
+    {
+        final File[] gnuplotFiles = gnuplotDir.listFiles(new FilenameFilter()
+        {
+            public boolean accept (File dir, String name)
+            {
+                final boolean result;
+                if (name.endsWith(".gnuplot"))
+                {
+                    result = true;
+                }
+                else
+                {
+                    result = false;
+                }
+                return result;
+            }
+        });
+        if (gnuplotFiles != null)
+        {
+            gnuplots2svgs(task, failOnError, gnuplotFiles);
+        }
+        else
+        {
+            task.log("No .gnuplot files found to render", Project.MSG_VERBOSE);
+        }
+    }
 
     private static void dots2svgs (Task task, boolean failOnError,
         final File[] dotFiles)
@@ -177,6 +213,26 @@ public final class AntTaskUtil
                 stripFileExtension(dotFiles[i].getName()) + "." + FORMAT_SVG);
             targetFile.delete();
             generatedFile.renameTo(targetFile);
+        }
+    }
+    
+    private static void gnuplots2svgs (Task task, boolean failOnError,
+        final File[] dotFiles)
+    {
+        /*
+         * Windows command line size is limited, so we render up to
+         * PACKET_SIZE files at once.
+         */
+        List gnuplotPackets = createPackets(dotFiles);
+        for (Iterator packetIter = gnuplotPackets.iterator(); packetIter.hasNext();)
+        {
+            File[] gnuplotPacket = (File[]) packetIter.next();
+            final GnuplotTask dot = new GnuplotTask();
+            dot.setProject(task.getProject());
+            dot.setTaskName("gnuplot");
+            dot.setFailonerror(failOnError);
+            dot.setInFiles(gnuplotPacket);
+            dot.execute();
         }
     }
 

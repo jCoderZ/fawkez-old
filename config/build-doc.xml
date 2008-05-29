@@ -369,6 +369,7 @@ static-catalog=yes
           <!-- hardcoded test parameters to create sample documents -->
           <param key="version" value="1.0.0.0"/>
           <param key="version.releasecandidate" value="1.0.0.0.1"/>
+          <param key="timestamp" value="20080601000000"/>
           <src dir="${base.dir}/src/java"/>
           <src dir="${build.dir}/gen-java"/>
           <classpath>
@@ -392,6 +393,9 @@ static-catalog=yes
       
       <mkdir dir="${build.dir}/doc/kpi-report"/>
       <mkdir dir="${build.dir}/doc/kpi-report/images"/>
+      <mkdir dir="${build.dir}/doc/kpi-report/images/svg"/>
+      <mkdir dir="${build.dir}/doc/kpi-report/images/png"/>
+      <mkdir dir="${build.dir}/doc/kpi-report/images/jpg"/>
       <copy todir="${build.dir}/doc/kpi-report/images"
            overwrite="true">
         <fileset dir="${base.dir}/src/doc/usecase/images">

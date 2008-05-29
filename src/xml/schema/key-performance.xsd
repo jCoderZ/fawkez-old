@@ -15,14 +15,14 @@
     </xsd:restriction>
   </xsd:simpleType>
 
-  <xsd:element name="timestamp" type="timestampType"/>
-  <xsd:element name="version1"  type="versionType"/>
-  <xsd:element name="version2"  type="versionType"/>
-  <xsd:element name="version3"  type="versionType"/>
-  <xsd:element name="version4"  type="versionType"/>
+  <xsd:element name="timestamp" type="kpi:timestampType"/>
+  <xsd:element name="version1"  type="kpi:versionType"/>
+  <xsd:element name="version2"  type="kpi:versionType"/>
+  <xsd:element name="version3"  type="kpi:versionType"/>
+  <xsd:element name="version4"  type="kpi:versionType"/>
   
   <xsd:element name="key"       type="xsd:string"/>
-  <xsd:element name="value"     type="xsd:number"/>
+  <xsd:element name="value"     type="xsd:int"/>
   
   <xsd:element name="entry">
     <xsd:complexType>

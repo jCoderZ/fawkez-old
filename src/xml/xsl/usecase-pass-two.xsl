@@ -665,7 +665,12 @@
         <listitem>
            <para>
               <xsl:choose>
-                  <xsl:when test="//req:role[req:name = $actor_name]"><xsl:value-of select="$strPrimary"/>: <xsl:text> [</xsl:text><xref linkend="{//req:role[req:name = $actor_name]/../req:key}"/><xsl:text>]</xsl:text></xsl:when>
+                  <xsl:when test="//req:role[req:name = $actor_name] and $actor_type = 'Primary'">
+                    <xsl:value-of select="$strPrimary"/>: <xsl:text> [</xsl:text><xref linkend="{//req:role[req:name = $actor_name]/../req:key}"/><xsl:text>]</xsl:text>
+                  </xsl:when>
+                  <xsl:when test="//req:role[req:name = $actor_name] and $actor_type = 'Secondary'">
+                    <xsl:value-of select="$strSecondary"/>: <xsl:text> [</xsl:text><xref linkend="{//req:role[req:name = $actor_name]/../req:key}"/><xsl:text>]</xsl:text>
+                  </xsl:when>
                   <xsl:otherwise><xsl:value-of select="$actor_type"/>: <xsl:value-of select="$strNoRoleForActor"/><xsl:value-of select="$actor_name"/></xsl:otherwise>
               </xsl:choose>
               <xsl:if test="uc:channel">

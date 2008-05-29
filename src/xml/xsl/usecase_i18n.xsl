@@ -121,6 +121,17 @@
      </xsl:choose>
    </xsl:variable>
 
+   <xsl:variable name="strSecondary">
+     <xsl:choose>
+       <xsl:when test="$lang='de'">
+          <xsl:text>Sekundär</xsl:text>
+       </xsl:when>
+       <xsl:otherwise>
+          <xsl:text>Secondary</xsl:text>
+       </xsl:otherwise>
+     </xsl:choose>
+   </xsl:variable>
+
    <xsl:variable name="strNoRoleForActor">
      <xsl:choose>
        <xsl:when test="$lang='de'">

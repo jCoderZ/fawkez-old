@@ -8,7 +8,6 @@
   <xsl:param name ="body.font.family">sans-serif</xsl:param>
   <xsl:param name ="body.font.master">10</xsl:param>
   <xsl:param name ="body.margin.top">1.5cm</xsl:param>
-  <xsl:param name ="body.start.indent">2pt</xsl:param>
   <xsl:param name ="chapter.autolabel">1</xsl:param>
   <xsl:param name ="column.count.back">1</xsl:param>
   <xsl:param name ="column.count.body">1</xsl:param>

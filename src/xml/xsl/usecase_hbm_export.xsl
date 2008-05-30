@@ -55,8 +55,12 @@
          <xsl:value-of select="../req:category/req:secondary" />
       </xsl:variable>
 
-      <xsl:variable name="name">
+      <xsl:variable name="id">
          <xsl:value-of select="../req:key" />
+      </xsl:variable>
+
+      <xsl:variable name="name">
+         <xsl:value-of select="$id" />
          <xsl:text>-</xsl:text>
          <xsl:value-of select="req:name" />
       </xsl:variable>
@@ -108,15 +112,48 @@
                <xsl:value-of select="$tablename-suffix" />
             </xsl:variable>
 
-            <class>
+            <xsl:variable name="classType">
+               <xsl:choose>
+                  <xsl:when test="count(req:attribute/req:objectreference[req:linkstart = 'extends']) > 0">
+                     <xsl:text>subclass</xsl:text>
+                  </xsl:when>
+                  <xsl:otherwise>
+                     <xsl:text>class</xsl:text>
+                  </xsl:otherwise>
+               </xsl:choose>
+            </xsl:variable>
+
+            <xsl:element name="{$classType}">
                <xsl:attribute name="name">
                   <xsl:call-template name="asJavaIdentifier">
                      <xsl:with-param name="name" select="req:name" />
                   </xsl:call-template>
                </xsl:attribute>
-               <xsl:attribute name="table">
-                  <xsl:value-of select="$tableName" />
-               </xsl:attribute>
+
+               <xsl:if test="count(req:attribute/req:objectreference[req:linkstart = 'extends']) > 1">
+                  <!--
+                  <xsl:message terminate="no">Error generating hibernate mapping for entity <xsl:value-of select="req:key" /></xsl:message>
+                  <xsl:message terminate="no">Multiple inheritance is not supported!</xsl:message>
+                   -->
+               </xsl:if>
+
+               <xsl:for-each select="req:attribute/req:objectreference[req:linkstart = 'extends']">
+                  <xsl:attribute name="extends">
+                     <xsl:call-template name="findClassForId">
+                        <xsl:with-param name="id" select="req:ref/@id" />
+                     </xsl:call-template>
+                  </xsl:attribute>
+                  <xsl:attribute name="discriminator-value">
+                     <xsl:value-of select="../req:name" />
+                  </xsl:attribute>
+               </xsl:for-each>
+
+               <xsl:if test="$classType = 'class'">
+                  <xsl:attribute name="table">
+                     <xsl:value-of select="$tableName" />
+                  </xsl:attribute>
+               </xsl:if>
+
                <meta attribute="class-description">
                   <xsl:text>This class has been auto-generated from the entity </xsl:text>
                   <xsl:value-of select="$name" />
@@ -131,9 +168,16 @@
                   </xsl:if>
                </meta>
 
-               <id column="ID" name="id" type="long">
-                  <meta attribute="use-in-tostring">false</meta>
-               </id>
+               <xsl:if test="$classType = 'class'">
+                  <id column="ID" name="id" type="long">
+                     <meta attribute="use-in-tostring">false</meta>
+                  </id>
+               </xsl:if>
+
+               <xsl:if test="count(../../req:requirement/req:entity/req:attribute/req:objectreference[req:linkstart='extends' and req:ref/@id=$id]) > 0">
+                  <discriminator column="TYPE" type="string"/>
+               </xsl:if>
+
 
                <xsl:variable name="foreignKeyIndex">
                   <xsl:value-of select="0" />
@@ -150,8 +194,22 @@
                         <xsl:variable name="linkstart" select="req:objectreference/req:linkstart" />
                         <xsl:variable name="linkend" select="req:objectreference/req:linkend" />
 
+                        <xsl:variable name="relation">
+                           <xsl:choose>
+                              <xsl:when test="$linkstart = 'extends'">
+                                 <xsl:text>extends</xsl:text>
+                              </xsl:when>
+                              <xsl:otherwise>
+                                 <xsl:text>none</xsl:text>
+                              </xsl:otherwise>
+                           </xsl:choose>
+                        </xsl:variable>
+
                         <xsl:variable name="from-count">
                            <xsl:choose>
+                              <xsl:when test="$linkstart = 'extends'">
+                                 <xsl:text>none</xsl:text>
+                              </xsl:when>
                               <xsl:when test="$linkstart = '1'">
                                  <xsl:text>one</xsl:text>
                               </xsl:when>
@@ -191,20 +249,6 @@
                         </xsl:variable>
 
                         <xsl:choose>
-                           <xsl:when test="$from-count = 'one' and $to-count = 'one'">
-                              <one-to-one>
-                                 <xsl:attribute name="class">
-                                    <xsl:call-template name="findClassForId">
-                                       <xsl:with-param name="id" select="$ref_id" />
-                                    </xsl:call-template>
-                                 </xsl:attribute>
-                                 <xsl:attribute name="name">
-                                    <xsl:call-template name="asJavaParameter">
-                                       <xsl:with-param name="name" select="req:name" />
-                                    </xsl:call-template>
-                                 </xsl:attribute>
-                              </one-to-one>
-                           </xsl:when>
                            <xsl:when test="$from-count = 'many' and $to-count = 'one'">
                               <many-to-one>
                                  <xsl:attribute name="class">
@@ -308,7 +352,7 @@
                   </xsl:choose>
                </xsl:for-each>
 
-            </class>
+            </xsl:element>
 
          </hibernate-mapping>
       </redirect:write>

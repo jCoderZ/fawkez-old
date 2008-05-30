@@ -86,6 +86,7 @@
    <xi:include href="../req/entity4.xml" parse="xml"/>
    <xi:include href="../req/entity5.xml" parse="xml"/>
    <xi:include href="../req/entity6.xml" parse="xml"/>
+   <xi:include href="../req/entity7.xml" parse="xml"/>
 
    <xi:include href="../req/project.xml" parse="xml"/>
    <xi:include href="../req/model.xml" parse="xml"/>

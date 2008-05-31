@@ -373,7 +373,7 @@ public class LoggableImpl
       {
           sb.append(getClass().getName());
       }
-      sb.append(" :");
+      sb.append(": ");
       getLogMessageInfo().formatMessage(mParameters, sb);
       return sb.toString();
    }

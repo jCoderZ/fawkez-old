@@ -189,23 +189,7 @@ public final class StackTraceFormat
       {
          text.append(CAUSED_BY_CLAUSE);
       }
-      if (thrown instanceof Loggable)
-      {
-         final Loggable nested = (Loggable) thrown;
-         final String message = nested.getLogMessageInfo().getSymbol();
-         if (!StringUtil.isEmptyOrNull(message))
-         {
-             text.append(message);
-         }
-         else
-         {
-             text.append(thrown.toString());
-         }
-      }
-      else
-      {
-         text.append(thrown.toString());
-      }
+      text.append(thrown.toString());
       setText(text.toString());
       basicFormat(sb, record, loggable, trackingIdSequence);
    }

@@ -77,6 +77,21 @@
          <xsd:enumeration value="final" />
       </xsd:restriction>
    </xsd:simpleType>
+   
+  <xsd:element name="ref">
+    <xsd:complexType>
+      <xsd:attribute name="id" type="xsd:string" use="required"/>
+    </xsd:complexType>
+  </xsd:element>
+  
+  <xsd:element name="precondition">
+     <xsd:complexType mixed="true">
+        <xsd:choice>
+           <xsd:element ref="tc:ref" maxOccurs="unbounded" minOccurs="0"/>
+        </xsd:choice>
+      </xsd:complexType>
+   </xsd:element>
+    
   <xsd:element name="action" type="xsd:string" />
   <xsd:element name="areatopic" type="tc:AreaTopicType">
 
@@ -104,7 +119,6 @@
     </xsd:element>
   <xsd:element name="note" type="xsd:string"/>
   <xsd:element name="postcondition" type="xsd:string" />
-  <xsd:element name="precondition" type="xsd:string" />
   <xsd:element name="priority" type="tc:PriorityType" />
   <xsd:element name="revision" type="xsd:string" />
   <xsd:element name="scrno" type="tc:scrnoType" />

@@ -24,6 +24,9 @@
    <xi:include href="../testspec/T1002-Module1PositiveTest-002.xml" parse="xml"/>
    <xi:include href="../testspec/T1003-Module2PositiveTest-001.xml" parse="xml"/>
    <xi:include href="../testspec/T1004-Module3PositiveTest-001.xml" parse="xml"/>
+   
+   <!-- Include the test data root file. -->
+   <xi:include href="../testspec/test_data.xml" parse="xml"/>
 </tc:testspecs>
              
              

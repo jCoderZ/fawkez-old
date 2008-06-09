@@ -32,7 +32,8 @@
     
   </tc:description>
   <tc:precondition>
-    
+    The precodition of this test specification is, that following test data has to be available:
+    <tc:ref id="TI1001"/> and <tc:ref id="TS1001"/>.
   </tc:precondition>
   <tc:inputvalues>None</tc:inputvalues>
   <tc:steps>
@@ -52,7 +53,9 @@
       <tc:action>
         Select "Data" in the tree view on the navigation frame.
       </tc:action>
-      <tc:input>none</tc:input>
+      <tc:input>
+         <tc:ref id="TS2002"/>
+      </tc:input>
       <tc:expected>
         Content will be reloaded displaying the Data start
         page.

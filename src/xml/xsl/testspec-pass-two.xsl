@@ -5,6 +5,7 @@
                 xmlns:req="req"
                 xmlns:redirect="http://xml.apache.org/xalan/redirect"
                 xmlns:tc="http://jcoderz.org/test-specifications"
+                xmlns:td="http://jcoderz.org/test-data"
                 xmlns:xi="http://www.w3.org/2001/XInclude"
                 xmlns:db="http://docbook.org/ns/docbook"
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -15,7 +16,9 @@
                                 uc
                                 http://www.jcoderz.org/xsd/xdoc/usecase-SNAPSHOT.xsd
                                 http://jcoderz.org/test-specifications
-                                http://www.jcoderz.org/xsd/xdoc/test-specification-SNAPSHOT.xsd"  
+                                http://www.jcoderz.org/xsd/xdoc/test-specification-SNAPSHOT.xsd
+                                http://jcoderz.org/test-data
+                                http://www.jcoderz.org/xsd/xdoc/test-data-SNAPSHOT.xsd"  
                 version="1.0">
    <xsl:output encoding="UTF-8"/>
 
@@ -41,6 +44,8 @@
             <xsl:apply-templates select="//tc:testspecs"/>
          </xsl:otherwise>
       </xsl:choose>
+      
+      <xsl:call-template name="testdata_chunked"/>
    </xsl:template>
    
    <xsl:template match="tc:testspecs" mode="chunked">
@@ -82,9 +87,18 @@
                          </row>
                        </xsl:for-each>
                        <row>
-                          <entry></entry>
-                          <entry></entry>
-                        </row>
+                        <entry>Initial Test Data</entry>
+                        <entry>
+                          <xsl:variable name="file_name">
+                             <xsl:value-of select="'test-data.pdf'"/>
+                          </xsl:variable>
+                          <xsl:variable name="pdf_name"
+                                        select="$file_name"/>
+                          <ulink url="{$pdf_name}">
+                             <citetitle><xsl:value-of select="$pdf_name"/></citetitle>
+                          </ulink>
+                        </entry>
+                      </row>
                     </tbody>
                  </tgroup>
                </table>
@@ -125,6 +139,76 @@
             </book>
          </redirect:write>
       </xsl:for-each>
+   </xsl:template>
+   
+   <xsl:template name="testdata_chunked">
+      <xsl:variable name="file">
+         <xsl:value-of select="'test-specification-initial-data.p1.p2'"/>
+      </xsl:variable>
+      
+      <redirect:write file="{$file}">
+         <book lang="en" status="final">
+            <chapter>
+               <title>Initial Test Data</title>
+               <xsl:apply-templates select="//td:item"/>
+            </chapter>          
+         </book>
+      </redirect:write>
+   </xsl:template>
+   
+   <xsl:template match="td:item">
+      <para>
+        <table frame="all" 
+               tabstyle="striped" 
+               id="{td:id}" 
+               xreflabel="{td:name}">
+           <title><xsl:value-of select="td:id"/> - <xsl:value-of select="td:name"/></title>
+           <tgroup cols="2" align="left" colsep="1" rowsep="1">
+              <colspec colwidth="150" colname="c1"/>
+              <colspec colname="c2"/>
+              <spanspec spanname="hspan" namest="c1" nameend="c2" align="center"/>
+              <thead>
+                 <row>
+                   <entry>Element</entry>
+                   <entry>Value</entry>
+                 </row>
+              </thead>
+              <tbody>
+                 <row>
+                   <entry>Type</entry>
+                   <entry><xsl:value-of select="td:type"/></entry>
+                 </row>
+                 <row>
+                   <entry spanname="hspan">Description</entry>
+                 </row>
+                 <row>
+                   <entry spanname="hspan"><xsl:value-of select="td:description"/></entry>
+                 </row>
+                 <row>
+                   <entry spanname="hspan">Attributes</entry>
+                 </row>
+                 
+                 <xsl:apply-templates select="td:attribute"/>
+
+              </tbody>
+           </tgroup>
+        </table>
+      </para>
+   </xsl:template>
+   
+   <xsl:template match="td:attribute">
+     <row>
+        <xsl:choose>
+          <xsl:when test=".//td:ref">
+             <entry>Reference</entry>
+             <entry><xsl:apply-templates select=".//td:ref"/></entry>
+          </xsl:when>
+          <xsl:otherwise>
+             <entry><xsl:value-of select="td:name"/></entry>
+             <entry><xsl:value-of select="td:value"/></entry>
+          </xsl:otherwise>
+        </xsl:choose>
+     </row>
    </xsl:template>
    
    <xsl:template name="single_chunk">
@@ -540,7 +624,7 @@
                     </xsl:for-each>
                     </entry>
                     <entry><emphasis role="bold">Depends on</emphasis></entry>
-                    <entry><xsl:value-of select="tc:depends"/></entry>
+                    <entry><xsl:apply-templates select="tc:depends"/></entry>
                   </row>
 
                   <row>
@@ -630,7 +714,7 @@
                     </xsl:for-each>
                     </entry>
                     <entry><emphasis role="bold">Depends on</emphasis></entry>
-                    <entry><xsl:value-of select="tc:depends"/></entry>
+                    <entry><xsl:apply-templates select="tc:depends"/></entry>
                   </row>
 
                   <row>
@@ -810,6 +894,14 @@
          <xsl:apply-templates select="//bookinfo"/>
       </bookinfo>
       <xsl:apply-templates select="//chapter"/>
+   </xsl:template>
+   
+   <xsl:template match="tc:ref">
+     <xsl:text> [</xsl:text><xref linkend="{@id}"/><xsl:text>] </xsl:text>
+   </xsl:template>
+   
+   <xsl:template match="td:ref|tc:depends">
+     <xsl:text> [</xsl:text><xref linkend="{.}"/><xsl:text>] </xsl:text>
    </xsl:template>
 
       <!-- BEGIN: generic copy -->

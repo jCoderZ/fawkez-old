@@ -416,6 +416,9 @@
          <xsl:when test="$patternType = 'boolean'">
             <xsl:attribute name="type">boolean</xsl:attribute>
          </xsl:when>
+         <xsl:when test="$patternType = 'int'">
+            <xsl:attribute name="type">integer</xsl:attribute>
+         </xsl:when>
          <xsl:when test="$patternType = 'integer'">
             <xsl:attribute name="type">integer</xsl:attribute>
          </xsl:when>

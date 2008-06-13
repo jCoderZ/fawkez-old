@@ -212,9 +212,6 @@
          select="$imagedir"/>/data_current</xsl:variable>
 
       <redirect:write file="{$file}">
-      
-      <xsl:for-each select="//cms:version[generate-id() = generate-id(key('version-group', .))]">
-         <xsl:variable name="version" select="."/>
          <xsl:value-of select="'Version'"/><xsl:text> </xsl:text>
          <xsl:value-of select="'Bugs'"/><xsl:text> </xsl:text>
          <xsl:value-of select="'CRs'"/><xsl:text> </xsl:text>
@@ -226,6 +223,8 @@
          <xsl:value-of select="'Open'"/><xsl:text> </xsl:text>        
          <xsl:text>
 </xsl:text>
+      <xsl:for-each select="//cms:version[generate-id() = generate-id(key('version-group', .))]">
+         <xsl:variable name="version" select="."/>
          <xsl:value-of select="$version"/><xsl:text> </xsl:text>
          <xsl:value-of select="count(//cms:issue[cms:version = $version and cms:type = $cms.cr.type and not(cms:state = $cms.state.closed)])"/><xsl:text> </xsl:text>
          <xsl:value-of select="count(//cms:issue[cms:version = $version and cms:type = $cms.bug.type and cms:external-id and not(cms:state = $cms.state.closed)])"/><xsl:text> </xsl:text>

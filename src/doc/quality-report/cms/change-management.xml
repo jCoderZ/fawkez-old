@@ -95,5 +95,28 @@
             <cms:linktype>Dependency</cms:linktype>
          </cms:link>
       </cms:issue>
+      
+      <cms:issue>
+         <cms:id>TRAC-88</cms:id>
+         <cms:external-id>TREC-66</cms:external-id>
+         <cms:type>Bug</cms:type>
+         <cms:version>1.0.0.1</cms:version>
+         <cms:affects-version>0.8.7.0</cms:affects-version>
+         <cms:state>Accepted</cms:state>
+         <cms:summary>Hello You.</cms:summary>
+         <cms:assignee>John Doe</cms:assignee>
+         <cms:effort>
+            <cms:efforttype>Bug Fixing</cms:efforttype>
+            <cms:original-effort>3.4</cms:original-effort>
+            <cms:remaining-effort>0.0</cms:remaining-effort>
+            <cms:spent-effort>3.6</cms:spent-effort>
+         </cms:effort>
+         <cms:module>Administration</cms:module>
+         <cms:module>Core</cms:module>
+         <cms:link>
+            <cms:id>TRAC-123</cms:id>
+            <cms:linktype>Dependency</cms:linktype>
+         </cms:link>
+      </cms:issue>
    </cms:issues>
 </cms:cms>

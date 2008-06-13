@@ -214,18 +214,22 @@
       <redirect:write file="{$file}">
          <xsl:value-of select="'Version'"/><xsl:text> </xsl:text>
          <xsl:value-of select="'Bugs'"/><xsl:text> </xsl:text>
-         <xsl:value-of select="'CRs'"/><xsl:text> </xsl:text>
-         <xsl:value-of select="'Internals'"/><xsl:text> </xsl:text>
+         <xsl:value-of select="'Change_Requests'"/><xsl:text> </xsl:text>
+         <xsl:value-of select="'Internal_Bugs'"/><xsl:text> </xsl:text>
          <xsl:value-of select="'Tasks'"/><xsl:text> </xsl:text>
          <xsl:value-of select="'Open'"/><xsl:text> </xsl:text>
          <xsl:value-of select="'Open'"/><xsl:text> </xsl:text>
          <xsl:value-of select="'Open'"/><xsl:text> </xsl:text>
-         <xsl:value-of select="'Open'"/><xsl:text> </xsl:text>        
+         <xsl:value-of select="'Open'"/><xsl:text> </xsl:text>
+         <xsl:value-of select="'Resolved'"/><xsl:text> </xsl:text>
+         <xsl:value-of select="'Resolved'"/><xsl:text> </xsl:text>
+         <xsl:value-of select="'Resolved'"/><xsl:text> </xsl:text>
+         <xsl:value-of select="'Resolved'"/><xsl:text> </xsl:text>        
          <xsl:text>
 </xsl:text>
       <xsl:for-each select="//cms:version[generate-id() = generate-id(key('version-group', .))]">
          <xsl:variable name="version" select="."/>
-         <xsl:value-of select="$version"/><xsl:text> </xsl:text>
+         <xsl:value-of select="translate($version,' ','_')"/><xsl:text> </xsl:text>
          <xsl:value-of select="count(//cms:issue[cms:version = $version and cms:type = $cms.cr.type and not(cms:state = $cms.state.closed)])"/><xsl:text> </xsl:text>
          <xsl:value-of select="count(//cms:issue[cms:version = $version and cms:type = $cms.bug.type and cms:external-id and not(cms:state = $cms.state.closed)])"/><xsl:text> </xsl:text>
          <xsl:value-of select="count(//cms:issue[cms:version = $version and cms:type = $cms.bug.type and not(cms:external-id) and not(cms:state = $cms.state.closed)])"/><xsl:text> </xsl:text>
@@ -233,7 +237,11 @@
          <xsl:value-of select="count(//cms:issue[cms:version = $version and cms:type = $cms.cr.type and cms:state = $cms.state.closed])"/><xsl:text> </xsl:text>
          <xsl:value-of select="count(//cms:issue[cms:version = $version and cms:type = $cms.bug.type and cms:external-id and cms:state = $cms.state.closed])"/><xsl:text> </xsl:text>
          <xsl:value-of select="count(//cms:issue[cms:version = $version and cms:type = $cms.bug.type and not(cms:external-id) and cms:state = $cms.state.closed])"/><xsl:text> </xsl:text>
-         <xsl:value-of select="count(//cms:issue[cms:version = $version and cms:type = $cms.task.type and cms:state = $cms.state.closed])"/><xsl:text> </xsl:text>        
+         <xsl:value-of select="count(//cms:issue[cms:version = $version and cms:type = $cms.task.type and cms:state = $cms.state.closed])"/><xsl:text> </xsl:text>
+         <xsl:value-of select="count(//cms:issue[cms:version = $version and cms:type = $cms.cr.type and (cms:state = $cms.state.resolved or cms:state = $cms.state.accepted)])"/><xsl:text> </xsl:text>
+         <xsl:value-of select="count(//cms:issue[cms:version = $version and cms:type = $cms.bug.type and cms:external-id and (cms:state = $cms.state.resolved or cms:state = $cms.state.accepted)])"/><xsl:text> </xsl:text>
+         <xsl:value-of select="count(//cms:issue[cms:version = $version and cms:type = $cms.bug.type and not(cms:external-id) and (cms:state = $cms.state.resolved or cms:state = $cms.state.accepted)])"/><xsl:text> </xsl:text>
+         <xsl:value-of select="count(//cms:issue[cms:version = $version and cms:type = $cms.task.type and (cms:state = $cms.state.resolved or cms:state = $cms.state.accepted)])"/><xsl:text> </xsl:text>        
          <xsl:text>
 </xsl:text>
       </xsl:for-each>
@@ -246,22 +254,25 @@
          select="$imagedir"/>/data_current_open</xsl:variable>
 
       <redirect:write file="{$file}">
-      
+         <xsl:value-of select="'Version'"/><xsl:text> </xsl:text>
+         <xsl:value-of select="'Bugs'"/><xsl:text> </xsl:text>
+         <xsl:value-of select="'Change_Requests'"/><xsl:text> </xsl:text>
+         <xsl:value-of select="'Internal_Bugs'"/><xsl:text> </xsl:text>
+         <xsl:value-of select="'Tasks'"/><xsl:text> </xsl:text>
+         <xsl:value-of select="'Open'"/><xsl:text> </xsl:text>
+         <xsl:value-of select="'Open'"/><xsl:text> </xsl:text>
+         <xsl:value-of select="'Open'"/><xsl:text> </xsl:text>
+         <xsl:value-of select="'Open'"/><xsl:text> </xsl:text>
+         <xsl:value-of select="'Resolved'"/><xsl:text> </xsl:text>
+         <xsl:value-of select="'Resolved'"/><xsl:text> </xsl:text>
+         <xsl:value-of select="'Resolved'"/><xsl:text> </xsl:text>
+         <xsl:value-of select="'Resolved'"/><xsl:text> </xsl:text>        
+         <xsl:text>
+</xsl:text>
       <xsl:for-each select="//cms:version[generate-id() = generate-id(key('version-group', .))]">
          <xsl:variable name="version" select="."/>
          <xsl:if test="//cms:issue[cms:version = $version and not(cms:state = $cms.state.closed)]">
-            <xsl:value-of select="'Version'"/><xsl:text> </xsl:text>
-            <xsl:value-of select="'Bugs'"/><xsl:text> </xsl:text>
-            <xsl:value-of select="'CRs'"/><xsl:text> </xsl:text>
-            <xsl:value-of select="'Internals'"/><xsl:text> </xsl:text>
-            <xsl:value-of select="'Tasks'"/><xsl:text> </xsl:text>
-            <xsl:value-of select="'Open'"/><xsl:text> </xsl:text>
-            <xsl:value-of select="'Open'"/><xsl:text> </xsl:text>
-            <xsl:value-of select="'Open'"/><xsl:text> </xsl:text>
-            <xsl:value-of select="'Open'"/><xsl:text> </xsl:text>        
-            <xsl:text>
-</xsl:text>
-            <xsl:value-of select="$version"/><xsl:text> </xsl:text>
+            <xsl:value-of select="translate($version,' ','_')"/><xsl:text> </xsl:text>
             <xsl:value-of select="count(//cms:issue[cms:version = $version and cms:type = $cms.cr.type and not(cms:state = $cms.state.closed)])"/><xsl:text> </xsl:text>
             <xsl:value-of select="count(//cms:issue[cms:version = $version and cms:type = $cms.bug.type and cms:external-id and not(cms:state = $cms.state.closed)])"/><xsl:text> </xsl:text>
             <xsl:value-of select="count(//cms:issue[cms:version = $version and cms:type = $cms.bug.type and not(cms:external-id) and not(cms:state = $cms.state.closed)])"/><xsl:text> </xsl:text>
@@ -269,7 +280,11 @@
             <xsl:value-of select="count(//cms:issue[cms:version = $version and cms:type = $cms.cr.type and cms:state = $cms.state.closed])"/><xsl:text> </xsl:text>
             <xsl:value-of select="count(//cms:issue[cms:version = $version and cms:type = $cms.bug.type and cms:external-id and cms:state = $cms.state.closed])"/><xsl:text> </xsl:text>
             <xsl:value-of select="count(//cms:issue[cms:version = $version and cms:type = $cms.bug.type and not(cms:external-id) and cms:state = $cms.state.closed])"/><xsl:text> </xsl:text>
-            <xsl:value-of select="count(//cms:issue[cms:version = $version and cms:type = $cms.task.type and cms:state = $cms.state.closed])"/><xsl:text> </xsl:text>        
+            <xsl:value-of select="count(//cms:issue[cms:version = $version and cms:type = $cms.task.type and cms:state = $cms.state.closed])"/><xsl:text> </xsl:text>
+            <xsl:value-of select="count(//cms:issue[cms:version = $version and cms:type = $cms.cr.type and (cms:state = $cms.state.resolved or cms:state = $cms.state.accepted)])"/><xsl:text> </xsl:text>
+            <xsl:value-of select="count(//cms:issue[cms:version = $version and cms:type = $cms.bug.type and cms:external-id and (cms:state = $cms.state.resolved or cms:state = $cms.state.accepted)])"/><xsl:text> </xsl:text>
+            <xsl:value-of select="count(//cms:issue[cms:version = $version and cms:type = $cms.bug.type and not(cms:external-id) and (cms:state = $cms.state.resolved or cms:state = $cms.state.accepted)])"/><xsl:text> </xsl:text>
+            <xsl:value-of select="count(//cms:issue[cms:version = $version and cms:type = $cms.task.type and (cms:state = $cms.state.resolved or cms:state = $cms.state.accepted)])"/><xsl:text> </xsl:text>        
             <xsl:text>
 </xsl:text>
          </xsl:if>
@@ -967,32 +982,35 @@ set ylabel "Number of Issues"
 # setting style of the lines (ls 1 and ls 2)
 set style line 1 lt rgb "#00FF00"
 set style line 2 lt rgb "#FF0000"
+set style line 3 lt rgb "#0000FF"
 
-set terminal svg size 800 600 
+set terminal svg size 1024 768 
 set output 'svg/gnuplot_issues_version2_histogram.svg'
 
-plot newhistogram "Bugs", 'data_current' using 2:xtic(1) t 2 ls 1, '' u 6 t 6 ls 2, \
-     newhistogram "CRs", 'data_current' using 3:xtic(1) t 3 ls 1, '' u 7 t 7 ls 2, \
-     newhistogram "Internal Bugs", 'data_current' using 4:xtic(1) t 4 ls 1, '' u 8 t 8 ls 2, \
-     newhistogram "Tasks", 'data_current' using 5:xtic(1) t 5 ls 1, '' u 9 t 9 ls 2
-set output 'svg/gnuplot_issues_version2_histogram_open.svg'
-
-plot newhistogram "Bugs", 'data_current_open' using 2:xtic(1) t 2 ls 1, '' u 6 t 6 ls 2, \
-     newhistogram "CRs", 'data_current_open' using 3:xtic(1) t 3 ls 1, '' u 7 t 7 ls 2, \
-     newhistogram "Internal Bugs", 'data_current_open' using 4:xtic(1) t 4 ls 1, '' u 8 t 8 ls 2, \
-     newhistogram "Tasks", 'data_current_open' using 5:xtic(1) t 5 ls 1, '' u 9 t 9 ls 2
+plot newhistogram "Bugs", 'data_current' using 2:xtic(1) t 2 ls 1, '' u 10 t 10 ls 3, '' u 6 t 6 ls 2, \
+     newhistogram "CRs", 'data_current' using 3:xtic(1) t 3 ls 1, '' u 11 t 11 ls 3, '' u 7 t 7 ls 2, \
+     newhistogram "Internal Bugs", 'data_current' using 4:xtic(1) t 4 ls 1, '' u 12 t 12 ls 3, '' u 8 t 8 ls 2, \
+     newhistogram "Tasks", 'data_current' using 5:xtic(1) t 5 ls 1, '' u 13 t 13 ls 3, '' u 9 t 9 ls 2
      
-set terminal jpeg size 800 600
+set output 'svg/gnuplot_issues_version2_histogram_open.svg'
+plot newhistogram "Bugs", 'data_current_open' using 2:xtic(1) t 2 ls 1, '' u 10 t 10 ls 3, '' u 6 t 6 ls 2, \
+     newhistogram "CRs", 'data_current_open' using 3:xtic(1) t 3 ls 1, '' u 11 t 11 ls 3, '' u 7 t 7 ls 2, \
+     newhistogram "Internal Bugs", 'data_current_open' using 4:xtic(1) t 4 ls 1, '' u 12 t 12 ls 3, '' u 8 t 8 ls 2, \
+     newhistogram "Tasks", 'data_current_open' using 5:xtic(1) t 5 ls 1, '' u 13 t 13 ls 3, '' u 9 t 9 ls 2
+     
+set terminal jpeg size 1024 768
 set output 'jpg/gnuplot_issues_version2_histogram.jpg'
-plot newhistogram "Bugs", 'data_current' using 2:xtic(1) t 2 ls 1, '' u 6 t 6 ls 2, \
-     newhistogram "CRs", 'data_current' using 3:xtic(1) t 3 ls 1, '' u 7 t 7 ls 2, \
-     newhistogram "Internal Bugs", 'data_current' using 4:xtic(1) t 4 ls 1, '' u 8 t 8 ls 2, \
-     newhistogram "Tasks", 'data_current' using 5:xtic(1) t 5 ls 1, '' u 9 t 9 ls 2
+plot newhistogram "Bugs", 'data_current' using 2:xtic(1) t 2 ls 1, '' u 10 t 10 ls 3, '' u 6 t 6 ls 2, \
+     newhistogram "CRs", 'data_current' using 3:xtic(1) t 3 ls 1, '' u 11 t 11 ls 3, '' u 7 t 7 ls 2, \
+     newhistogram "Internal Bugs", 'data_current' using 4:xtic(1) t 4 ls 1, '' u 12 t 12 ls 3, '' u 8 t 8 ls 2, \
+     newhistogram "Tasks", 'data_current' using 5:xtic(1) t 5 ls 1, '' u 13 t 13 ls 3, '' u 9 t 9 ls 2
+     
 set output 'jpg/gnuplot_issues_version2_histogram_open.jpg'
-plot newhistogram "Bugs", 'data_current_open' using 2:xtic(1) t 2 ls 1, '' u 6 t 6 ls 2, \
-     newhistogram "CRs", 'data_current_open' using 3:xtic(1) t 3 ls 1, '' u 7 t 7 ls 2, \
-     newhistogram "Internal Bugs", 'data_current_open' using 4:xtic(1) t 4 ls 1, '' u 8 t 8 ls 2, \
-     newhistogram "Tasks", 'data_current_open' using 5:xtic(1) t 5 ls 1, '' u 9 t 9 ls 2      </redirect:write>
+plot newhistogram "Bugs", 'data_current_open' using 2:xtic(1) t 2 ls 1, '' u 10 t 10 ls 3, '' u 6 t 6 ls 2, \
+     newhistogram "CRs", 'data_current_open' using 3:xtic(1) t 3 ls 1, '' u 11 t 11 ls 3, '' u 7 t 7 ls 2, \
+     newhistogram "Internal Bugs", 'data_current_open' using 4:xtic(1) t 4 ls 1, '' u 12 t 12 ls 3, '' u 8 t 8 ls 2, \
+     newhistogram "Tasks", 'data_current_open' using 5:xtic(1) t 5 ls 1, '' u 13 t 13 ls 3, '' u 9 t 9 ls 2  
+     </redirect:write>
    </xsl:template>
    
    <xsl:template name="gnuplot_coverage">

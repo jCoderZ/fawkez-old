@@ -444,6 +444,13 @@ public class XtremeDocs
             {
                 // do nothing
             }
+            else if (TYPE_KPI_REPORT.equals(mType))
+            {
+                final File docBookFile = transformPassTwo(filePassOne);
+                // rendering is placed here, thus PassTwo will also generate diagrams
+                AntTaskUtil.renderGnuplotFiles(this, imageDir, mFailOnError);
+                renderDocBook(docBookFile, mInFile);
+            }
             else
             {
                 final File docBookFile = transformPassTwo(filePassOne);

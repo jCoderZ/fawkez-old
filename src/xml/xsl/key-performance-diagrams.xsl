@@ -228,13 +228,14 @@
          <xsl:text>
 </xsl:text>
       <xsl:for-each select="//cms:version[generate-id() = generate-id(key('version-group', .))]">
-         <xsl:variable name="version">
+         <xsl:variable name="version_name">
             <xsl:choose>
                <xsl:when test="not(. = '')"><xsl:value-of select="."/></xsl:when>
                <xsl:when test=". = ''"><xsl:value-of select="'No Version'"/></xsl:when>
             </xsl:choose>
          </xsl:variable>
-         <xsl:value-of select="translate($version,' ','_')"/><xsl:text> </xsl:text>
+         <xsl:variable name="version" select="."/>
+         <xsl:value-of select="translate($version_name,' ','_')"/><xsl:text> </xsl:text>
          <xsl:value-of select="count(//cms:issue[cms:version = $version and cms:type = $cms.cr.type and not(cms:state = $cms.state.closed)])"/><xsl:text> </xsl:text>
          <xsl:value-of select="count(//cms:issue[cms:version = $version and cms:type = $cms.bug.type and cms:external-id and not(cms:state = $cms.state.closed)])"/><xsl:text> </xsl:text>
          <xsl:value-of select="count(//cms:issue[cms:version = $version and cms:type = $cms.bug.type and not(cms:external-id) and not(cms:state = $cms.state.closed)])"/><xsl:text> </xsl:text>
@@ -275,14 +276,15 @@
          <xsl:text>
 </xsl:text>
       <xsl:for-each select="//cms:version[generate-id() = generate-id(key('version-group', .))]">
-         <xsl:variable name="version">
+         <xsl:variable name="version_name">
             <xsl:choose>
                <xsl:when test="not(. = '')"><xsl:value-of select="."/></xsl:when>
                <xsl:when test=". = ''"><xsl:value-of select="'No Version'"/></xsl:when>
             </xsl:choose>
          </xsl:variable>
+         <xsl:variable name="version" select="."/>
          <xsl:if test="//cms:issue[cms:version = $version and not(cms:state = $cms.state.closed)]">
-            <xsl:value-of select="translate($version,' ','_')"/><xsl:text> </xsl:text>
+            <xsl:value-of select="translate($version_name,' ','_')"/><xsl:text> </xsl:text>
             <xsl:value-of select="count(//cms:issue[cms:version = $version and cms:type = $cms.cr.type and not(cms:state = $cms.state.closed)])"/><xsl:text> </xsl:text>
             <xsl:value-of select="count(//cms:issue[cms:version = $version and cms:type = $cms.bug.type and cms:external-id and not(cms:state = $cms.state.closed)])"/><xsl:text> </xsl:text>
             <xsl:value-of select="count(//cms:issue[cms:version = $version and cms:type = $cms.bug.type and not(cms:external-id) and not(cms:state = $cms.state.closed)])"/><xsl:text> </xsl:text>

@@ -292,7 +292,7 @@
 
       </redirect:write>
    </xsl:template>
-      
+   
    <xsl:template match="kpi:kpi_list" mode="timestamp">
       <xsl:variable name="time" select="kpi:meta/kpi:timestamp"/>
       <xsl:value-of select="kpi:meta/kpi:timestamp"/><xsl:text> </xsl:text>
@@ -739,36 +739,36 @@ show title
             <xsl:with-param name="key" select="$kpi.jira.issue.bugs.unscheduled"/>
          </xsl:call-template></xsl:variable>
 
-set output 'svg/issues_intbugs.svg'
-plot 'data_time' using 1:<xsl:value-of select="$position.1"/> w lines title 'Open Internal Bugs'
-set output 'svg/issues_internal.svg'
-plot 'data_time' using 1:<xsl:value-of select="$position.4"/> w lines title 'Open Internal Issues'
-set output 'svg/issues_version_bugs.svg'     
-plot 'data_time' using 1:<xsl:value-of select="$position.7"/> w lines title 'Open External Bugs'
-set output 'svg/issues_allbugs.svg'
-plot 'data_time' using 1:<xsl:value-of select="$position.1"/> w lines title 'Open Internal Bugs',\
-     'data_time' using 1:<xsl:value-of select="$position.7"/> w lines title 'Open External Bugs(Unclosed)',\
-     'data_time' using 1:($<xsl:value-of select="$position.5"/> - $<xsl:value-of select="$position.6"/>) w lines title 'Open External Bugs(Unresolved)'
-set output 'svg/issues_extbugs.svg'
-plot 'data_time' using 1:<xsl:value-of select="$position.7"/> w lines title 'Open External Bugs(Unclosed)',\
-     'data_time' using 1:($<xsl:value-of select="$position.5"/> - $<xsl:value-of select="$position.6"/>) w lines title 'Open External Bugs(Unresolved)',\
-     'data_time' using 1:<xsl:value-of select="$position.8"/> w lines title 'Open External Bugs(Unscheduled)'
+set output '<xsl:value-of select="$imagedir"/>/svg/issues_intbugs.svg'
+plot '<xsl:value-of select="$imagedir"/>/data_time' using 1:<xsl:value-of select="$position.1"/> w lines title 'Open Internal Bugs'
+set output '<xsl:value-of select="$imagedir"/>/svg/issues_internal.svg'
+plot '<xsl:value-of select="$imagedir"/>/data_time' using 1:<xsl:value-of select="$position.4"/> w lines title 'Open Internal Issues'
+set output '<xsl:value-of select="$imagedir"/>/svg/issues_version_bugs.svg'     
+plot '<xsl:value-of select="$imagedir"/>/data_time' using 1:<xsl:value-of select="$position.7"/> w lines title 'Open External Bugs'
+set output '<xsl:value-of select="$imagedir"/>/svg/issues_allbugs.svg'
+plot '<xsl:value-of select="$imagedir"/>/data_time' using 1:<xsl:value-of select="$position.1"/> w lines title 'Open Internal Bugs',\
+     '<xsl:value-of select="$imagedir"/>/data_time' using 1:<xsl:value-of select="$position.7"/> w lines title 'Open External Bugs(Unclosed)',\
+     '<xsl:value-of select="$imagedir"/>/data_time' using 1:($<xsl:value-of select="$position.5"/> - $<xsl:value-of select="$position.6"/>) w lines title 'Open External Bugs(Unresolved)'
+set output '<xsl:value-of select="$imagedir"/>/svg/issues_extbugs.svg'
+plot '<xsl:value-of select="$imagedir"/>/data_time' using 1:<xsl:value-of select="$position.7"/> w lines title 'Open External Bugs(Unclosed)',\
+     '<xsl:value-of select="$imagedir"/>/data_time' using 1:($<xsl:value-of select="$position.5"/> - $<xsl:value-of select="$position.6"/>) w lines title 'Open External Bugs(Unresolved)',\
+     '<xsl:value-of select="$imagedir"/>/data_time' using 1:<xsl:value-of select="$position.8"/> w lines title 'Open External Bugs(Unscheduled)'
 
 set terminal jpeg size 800 600     
-set output 'jpg/issues_intbugs.jpg'
-plot 'data_time' using 1:<xsl:value-of select="$position.1"/> w lines title 'Open Internal Bugs'
-set output 'jpg/issues_internal.jpg'
-plot 'data_time' using 1:<xsl:value-of select="$position.4"/> w lines title 'Open Internal Issues'
-set output 'jpg/issues_version_bugs.jpg'     
-plot 'data_time' using 1:<xsl:value-of select="$position.7"/> w lines title 'Open External Bugs'
-set output 'jpg/issues_allbugs.jpg'
-plot 'data_time' using 1:<xsl:value-of select="$position.1"/> w lines title 'Open Internal Bugs',\
-     'data_time' using 1:<xsl:value-of select="$position.7"/> w lines title 'Open External Bugs(Unclosed)',\
-     'data_time' using 1:($<xsl:value-of select="$position.5"/> - $<xsl:value-of select="$position.6"/>) w lines title 'Open External Bugs(Unresolved)'
-set output 'jpg/issues_extbugs.jpg'
-plot 'data_time' using 1:<xsl:value-of select="$position.7"/> w lines title 'Open External Bugs(Unclosed)',\
-     'data_time' using 1:($<xsl:value-of select="$position.5"/> - $<xsl:value-of select="$position.6"/>) w lines title 'Open External Bugs(Unresolved)',\
-     'data_time' using 1:<xsl:value-of select="$position.8"/> w lines title 'Open External Bugs(Unscheduled)'
+set output '<xsl:value-of select="$imagedir"/>/jpg/issues_intbugs.jpg'
+plot '<xsl:value-of select="$imagedir"/>/data_time' using 1:<xsl:value-of select="$position.1"/> w lines title 'Open Internal Bugs'
+set output '<xsl:value-of select="$imagedir"/>/jpg/issues_internal.jpg'
+plot '<xsl:value-of select="$imagedir"/>/data_time' using 1:<xsl:value-of select="$position.4"/> w lines title 'Open Internal Issues'
+set output '<xsl:value-of select="$imagedir"/>/jpg/issues_version_bugs.jpg'     
+plot '<xsl:value-of select="$imagedir"/>/data_time' using 1:<xsl:value-of select="$position.7"/> w lines title 'Open External Bugs'
+set output '<xsl:value-of select="$imagedir"/>/jpg/issues_allbugs.jpg'
+plot '<xsl:value-of select="$imagedir"/>/data_time' using 1:<xsl:value-of select="$position.1"/> w lines title 'Open Internal Bugs',\
+     '<xsl:value-of select="$imagedir"/>/data_time' using 1:<xsl:value-of select="$position.7"/> w lines title 'Open External Bugs(Unclosed)',\
+     '<xsl:value-of select="$imagedir"/>/data_time' using 1:($<xsl:value-of select="$position.5"/> - $<xsl:value-of select="$position.6"/>) w lines title 'Open External Bugs(Unresolved)'
+set output '<xsl:value-of select="$imagedir"/>/jpg/issues_extbugs.jpg'
+plot '<xsl:value-of select="$imagedir"/>/data_time' using 1:<xsl:value-of select="$position.7"/> w lines title 'Open External Bugs(Unclosed)',\
+     '<xsl:value-of select="$imagedir"/>/data_time' using 1:($<xsl:value-of select="$position.5"/> - $<xsl:value-of select="$position.6"/>) w lines title 'Open External Bugs(Unresolved)',\
+     '<xsl:value-of select="$imagedir"/>/data_time' using 1:<xsl:value-of select="$position.8"/> w lines title 'Open External Bugs(Unscheduled)'
       </redirect:write>
    </xsl:template>
    
@@ -807,26 +807,26 @@ show title
             <xsl:with-param name="key" select="$kpi.jira.issue.cr.number"/>
          </xsl:call-template></xsl:variable>
 
-set output 'svg/crs_tasks.svg'
-plot 'data_time' using 1:<xsl:value-of select="$position.1"/> w lines title 'Open Internal Tasks'
-set output 'svg/crs_refactoring.svg'
-plot 'data_time' using 1:<xsl:value-of select="$position.3"/> w lines title 'Open Refactoring Issues'
-set output 'svg/crs_external.svg'     
-plot 'data_time' using 1:($<xsl:value-of select="$position.6"/> - $<xsl:value-of select="$position.5"/>) w lines title 'Open External CRs'
-set output 'svg/crs_internal.svg'
-plot 'data_time' using 1:<xsl:value-of select="$position.3"/> w lines title 'Open Refactoring Issues', \
-     'data_time' using 1:<xsl:value-of select="$position.1"/> w lines title 'Open Internal Tasks'
+set output '<xsl:value-of select="$imagedir"/>/svg/crs_tasks.svg'
+plot '<xsl:value-of select="$imagedir"/>/data_time' using 1:<xsl:value-of select="$position.1"/> w lines title 'Open Internal Tasks'
+set output '<xsl:value-of select="$imagedir"/>/svg/crs_refactoring.svg'
+plot '<xsl:value-of select="$imagedir"/>/data_time' using 1:<xsl:value-of select="$position.3"/> w lines title 'Open Refactoring Issues'
+set output '<xsl:value-of select="$imagedir"/>/svg/crs_external.svg'     
+plot '<xsl:value-of select="$imagedir"/>/data_time' using 1:($<xsl:value-of select="$position.6"/> - $<xsl:value-of select="$position.5"/>) w lines title 'Open External CRs'
+set output '<xsl:value-of select="$imagedir"/>/svg/crs_internal.svg'
+plot '<xsl:value-of select="$imagedir"/>/data_time' using 1:<xsl:value-of select="$position.3"/> w lines title 'Open Refactoring Issues', \
+     '<xsl:value-of select="$imagedir"/>/data_time' using 1:<xsl:value-of select="$position.1"/> w lines title 'Open Internal Tasks'
 
 set terminal jpeg size 800 600
-set output 'jpg/crs_tasks.jpg'
-plot 'data_time' using 1:<xsl:value-of select="$position.1"/> w lines title 'Open Internal Tasks'
-set output 'jpg/crs_refactoring.jpg'
-plot 'data_time' using 1:<xsl:value-of select="$position.3"/> w lines title 'Open Refactoring Issues'
-set output 'jpg/crs_external.jpg'     
-plot 'data_time' using 1:($<xsl:value-of select="$position.6"/> - $<xsl:value-of select="$position.5"/>) w lines title 'Open External CRs'
-set output 'jpg/crs_internal.jpg'
-plot 'data_time' using 1:<xsl:value-of select="$position.3"/> w lines title 'Open Refactoring Issues', \
-     'data_time' using 1:<xsl:value-of select="$position.1"/> w lines title 'Open Internal Tasks'
+set output '<xsl:value-of select="$imagedir"/>/jpg/crs_tasks.jpg'
+plot '<xsl:value-of select="$imagedir"/>/data_time' using 1:<xsl:value-of select="$position.1"/> w lines title 'Open Internal Tasks'
+set output '<xsl:value-of select="$imagedir"/>/jpg/crs_refactoring.jpg'
+plot '<xsl:value-of select="$imagedir"/>/data_time' using 1:<xsl:value-of select="$position.3"/> w lines title 'Open Refactoring Issues'
+set output '<xsl:value-of select="$imagedir"/>/jpg/crs_external.jpg'     
+plot '<xsl:value-of select="$imagedir"/>/data_time' using 1:($<xsl:value-of select="$position.6"/> - $<xsl:value-of select="$position.5"/>) w lines title 'Open External CRs'
+set output '<xsl:value-of select="$imagedir"/>/jpg/crs_internal.jpg'
+plot '<xsl:value-of select="$imagedir"/>/data_time' using 1:<xsl:value-of select="$position.3"/> w lines title 'Open Refactoring Issues', \
+     '<xsl:value-of select="$imagedir"/>/data_time' using 1:<xsl:value-of select="$position.1"/> w lines title 'Open Internal Tasks'
       </redirect:write>
    </xsl:template>
    
@@ -865,58 +865,58 @@ show title
             <xsl:with-param name="key" select="$kpi.jira.issue.cr.number.version"/>
          </xsl:call-template></xsl:variable>
 
-set output 'svg/crs_version_tasks.svg'
-plot 'data_time_version1' using 1:<xsl:value-of select="$position.2"/> w lines title 'Internal Tasks', \
-     'data_time_version1' using 1:($<xsl:value-of select="$position.2"/> - $<xsl:value-of select="$position.1"/>) w lines title 'Resolved Internal Tasks'
-set output 'svg/crs_version_refactoring.svg'
-plot 'data_time_version1' using 1:<xsl:value-of select="$position.4"/> w lines title 'Refactoring Issues', \
-     'data_time_version1' using 1:($<xsl:value-of select="$position.4"/> - $<xsl:value-of select="$position.3"/>) w lines title 'Resolved Refactoring Issues'
-set output 'svg/crs_version_external.svg'     
-plot 'data_time_version1' using 1:<xsl:value-of select="$position.6"/> w lines title 'External CRs', \
-     'data_time_version1' using 1:<xsl:value-of select="$position.5"/> w lines title 'Resolved External CRs'
+set output '<xsl:value-of select="$imagedir"/>/svg/crs_version_tasks.svg'
+plot '<xsl:value-of select="$imagedir"/>/data_time_version1' using 1:<xsl:value-of select="$position.2"/> w lines title 'Internal Tasks', \
+     '<xsl:value-of select="$imagedir"/>/data_time_version1' using 1:($<xsl:value-of select="$position.2"/> - $<xsl:value-of select="$position.1"/>) w lines title 'Resolved Internal Tasks'
+set output '<xsl:value-of select="$imagedir"/>/svg/crs_version_refactoring.svg'
+plot '<xsl:value-of select="$imagedir"/>/data_time_version1' using 1:<xsl:value-of select="$position.4"/> w lines title 'Refactoring Issues', \
+     '<xsl:value-of select="$imagedir"/>/data_time_version1' using 1:($<xsl:value-of select="$position.4"/> - $<xsl:value-of select="$position.3"/>) w lines title 'Resolved Refactoring Issues'
+set output '<xsl:value-of select="$imagedir"/>/svg/crs_version_external.svg'     
+plot '<xsl:value-of select="$imagedir"/>/data_time_version1' using 1:<xsl:value-of select="$position.6"/> w lines title 'External CRs', \
+     '<xsl:value-of select="$imagedir"/>/data_time_version1' using 1:<xsl:value-of select="$position.5"/> w lines title 'Resolved External CRs'
 
-set output 'svg/crs_version_internal.svg'
-plot 'data_time_version1' using 1:<xsl:value-of select="$position.2"/> w lines title 'Internal Tasks', \
-     'data_time_version1' using 1:($<xsl:value-of select="$position.2"/> - $<xsl:value-of select="$position.1"/>) w lines title 'Resolved Internal Tasks', \
-     'data_time_version1' using 1:<xsl:value-of select="$position.4"/> w lines title 'Refactoring Issues', \
-     'data_time_version1' using 1:($<xsl:value-of select="$position.4"/> - $<xsl:value-of select="$position.3"/>) w lines title 'Resolved Refactoring Issues'
+set output '<xsl:value-of select="$imagedir"/>/svg/crs_version_internal.svg'
+plot '<xsl:value-of select="$imagedir"/>/data_time_version1' using 1:<xsl:value-of select="$position.2"/> w lines title 'Internal Tasks', \
+     '<xsl:value-of select="$imagedir"/>/data_time_version1' using 1:($<xsl:value-of select="$position.2"/> - $<xsl:value-of select="$position.1"/>) w lines title 'Resolved Internal Tasks', \
+     '<xsl:value-of select="$imagedir"/>/data_time_version1' using 1:<xsl:value-of select="$position.4"/> w lines title 'Refactoring Issues', \
+     '<xsl:value-of select="$imagedir"/>/data_time_version1' using 1:($<xsl:value-of select="$position.4"/> - $<xsl:value-of select="$position.3"/>) w lines title 'Resolved Refactoring Issues'
 
 set title "Change Requests for Branch <xsl:value-of select="$branch"/>"     
-set output 'svg/crs_branch_external.svg'     
-plot 'data_time_branch' using 1:<xsl:value-of select="$position.6"/> w lines title 'External CRs', \
-     'data_time_branch' using 1:<xsl:value-of select="$position.5"/> w lines title 'Resolved External Crs'
-set output 'svg/crs_branch_internal.svg'
-plot 'data_time_branch' using 1:<xsl:value-of select="$position.2"/> w lines title 'Internal Tasks', \
-     'data_time_branch' using 1:($<xsl:value-of select="$position.2"/> - $<xsl:value-of select="$position.1"/>) w lines title 'Resolved Internal Tasks', \
-     'data_time_branch' using 1:<xsl:value-of select="$position.4"/> w lines title 'Refactoring Issues', \
-     'data_time_branch' using 1:($<xsl:value-of select="$position.4"/> - $<xsl:value-of select="$position.3"/>) w lines title 'Resolved Refactoring Issues'
+set output '<xsl:value-of select="$imagedir"/>/svg/crs_branch_external.svg'     
+plot '<xsl:value-of select="$imagedir"/>/data_time_branch' using 1:<xsl:value-of select="$position.6"/> w lines title 'External CRs', \
+     '<xsl:value-of select="$imagedir"/>/data_time_branch' using 1:<xsl:value-of select="$position.5"/> w lines title 'Resolved External Crs'
+set output '<xsl:value-of select="$imagedir"/>/svg/crs_branch_internal.svg'
+plot '<xsl:value-of select="$imagedir"/>/data_time_branch' using 1:<xsl:value-of select="$position.2"/> w lines title 'Internal Tasks', \
+     '<xsl:value-of select="$imagedir"/>/data_time_branch' using 1:($<xsl:value-of select="$position.2"/> - $<xsl:value-of select="$position.1"/>) w lines title 'Resolved Internal Tasks', \
+     '<xsl:value-of select="$imagedir"/>/data_time_branch' using 1:<xsl:value-of select="$position.4"/> w lines title 'Refactoring Issues', \
+     '<xsl:value-of select="$imagedir"/>/data_time_branch' using 1:($<xsl:value-of select="$position.4"/> - $<xsl:value-of select="$position.3"/>) w lines title 'Resolved Refactoring Issues'
 
 set terminal jpeg size 800 600     
-set output 'jpg/crs_version_tasks.jpg'
-plot 'data_time_version1' using 1:<xsl:value-of select="$position.2"/> w lines title 'Internal Tasks', \
-     'data_time_version1' using 1:($<xsl:value-of select="$position.2"/> - $<xsl:value-of select="$position.1"/>) w lines title 'Resolved Internal Tasks'
-set output 'jpg/crs_version_refactoring.jpg'
-plot 'data_time_version1' using 1:<xsl:value-of select="$position.4"/> w lines title 'Refactoring Issues', \
-     'data_time_version1' using 1:($<xsl:value-of select="$position.4"/> - $<xsl:value-of select="$position.3"/>) w lines title 'Resolved Refactoring Issues'
-set output 'jpg/crs_version_external.jpg'     
-plot 'data_time_version1' using 1:<xsl:value-of select="$position.6"/> w lines title 'External CRs', \
-     'data_time_version1' using 1:<xsl:value-of select="$position.5"/> w lines title 'Resolved External CRs'
+set output '<xsl:value-of select="$imagedir"/>/jpg/crs_version_tasks.jpg'
+plot '<xsl:value-of select="$imagedir"/>/data_time_version1' using 1:<xsl:value-of select="$position.2"/> w lines title 'Internal Tasks', \
+     '<xsl:value-of select="$imagedir"/>/data_time_version1' using 1:($<xsl:value-of select="$position.2"/> - $<xsl:value-of select="$position.1"/>) w lines title 'Resolved Internal Tasks'
+set output '<xsl:value-of select="$imagedir"/>/jpg/crs_version_refactoring.jpg'
+plot '<xsl:value-of select="$imagedir"/>/data_time_version1' using 1:<xsl:value-of select="$position.4"/> w lines title 'Refactoring Issues', \
+     '<xsl:value-of select="$imagedir"/>/data_time_version1' using 1:($<xsl:value-of select="$position.4"/> - $<xsl:value-of select="$position.3"/>) w lines title 'Resolved Refactoring Issues'
+set output '<xsl:value-of select="$imagedir"/>/jpg/crs_version_external.jpg'     
+plot '<xsl:value-of select="$imagedir"/>/data_time_version1' using 1:<xsl:value-of select="$position.6"/> w lines title 'External CRs', \
+     '<xsl:value-of select="$imagedir"/>/data_time_version1' using 1:<xsl:value-of select="$position.5"/> w lines title 'Resolved External CRs'
 
-set output 'jpg/crs_version_internal.jpg'
-plot 'data_time_version1' using 1:<xsl:value-of select="$position.2"/> w lines title 'Internal Tasks', \
-     'data_time_version1' using 1:($<xsl:value-of select="$position.2"/> - $<xsl:value-of select="$position.1"/>) w lines title 'Resolved Internal Tasks', \
-     'data_time_version1' using 1:<xsl:value-of select="$position.4"/> w lines title 'Refactoring Issues', \
-     'data_time_version1' using 1:($<xsl:value-of select="$position.4"/> - $<xsl:value-of select="$position.3"/>) w lines title 'Resolved Refactoring Issues'
+set output '<xsl:value-of select="$imagedir"/>/jpg/crs_version_internal.jpg'
+plot '<xsl:value-of select="$imagedir"/>/data_time_version1' using 1:<xsl:value-of select="$position.2"/> w lines title 'Internal Tasks', \
+     '<xsl:value-of select="$imagedir"/>/data_time_version1' using 1:($<xsl:value-of select="$position.2"/> - $<xsl:value-of select="$position.1"/>) w lines title 'Resolved Internal Tasks', \
+     '<xsl:value-of select="$imagedir"/>/data_time_version1' using 1:<xsl:value-of select="$position.4"/> w lines title 'Refactoring Issues', \
+     '<xsl:value-of select="$imagedir"/>/data_time_version1' using 1:($<xsl:value-of select="$position.4"/> - $<xsl:value-of select="$position.3"/>) w lines title 'Resolved Refactoring Issues'
 
 set title "Change Requests for Branch <xsl:value-of select="$branch"/>"     
-set output 'jpg/crs_branch_external.jpg'     
-plot 'data_time_branch' using 1:<xsl:value-of select="$position.6"/> w lines title 'External CRs', \
-     'data_time_branch' using 1:<xsl:value-of select="$position.5"/> w lines title 'Resolved External Crs'
-set output 'jpg/crs_branch_internal.jpg'
-plot 'data_time_branch' using 1:<xsl:value-of select="$position.2"/> w lines title 'Internal Tasks', \
-     'data_time_branch' using 1:($<xsl:value-of select="$position.2"/> - $<xsl:value-of select="$position.1"/>) w lines title 'Resolved Internal Tasks', \
-     'data_time_branch' using 1:<xsl:value-of select="$position.4"/> w lines title 'Refactoring Issues', \
-     'data_time_branch' using 1:($<xsl:value-of select="$position.4"/> - $<xsl:value-of select="$position.3"/>) w lines title 'Resolved Refactoring Issues'
+set output '<xsl:value-of select="$imagedir"/>/jpg/crs_branch_external.jpg'     
+plot '<xsl:value-of select="$imagedir"/>/data_time_branch' using 1:<xsl:value-of select="$position.6"/> w lines title 'External CRs', \
+     '<xsl:value-of select="$imagedir"/>/data_time_branch' using 1:<xsl:value-of select="$position.5"/> w lines title 'Resolved External Crs'
+set output '<xsl:value-of select="$imagedir"/>/jpg/crs_branch_internal.jpg'
+plot '<xsl:value-of select="$imagedir"/>/data_time_branch' using 1:<xsl:value-of select="$position.2"/> w lines title 'Internal Tasks', \
+     '<xsl:value-of select="$imagedir"/>/data_time_branch' using 1:($<xsl:value-of select="$position.2"/> - $<xsl:value-of select="$position.1"/>) w lines title 'Resolved Internal Tasks', \
+     '<xsl:value-of select="$imagedir"/>/data_time_branch' using 1:<xsl:value-of select="$position.4"/> w lines title 'Refactoring Issues', \
+     '<xsl:value-of select="$imagedir"/>/data_time_branch' using 1:($<xsl:value-of select="$position.4"/> - $<xsl:value-of select="$position.3"/>) w lines title 'Resolved Refactoring Issues'
       </redirect:write>
    </xsl:template>
    
@@ -950,21 +950,21 @@ show title
             <xsl:with-param name="key" select="$kpi.testresults.testcases.number"/>
          </xsl:call-template></xsl:variable>
 
-set output 'svg/test_efficiency.svg'
-plot 'data_time' using 1:($<xsl:value-of select="$position.1"/> / $<xsl:value-of select="$position.2"/>) w lines title 'Test Efficiency(Issues)', \
-     'data_time' using 1:($<xsl:value-of select="$position.3"/> / $<xsl:value-of select="$position.4"/>) w lines title 'Test Efficiency(Testcases)'
+set output '<xsl:value-of select="$imagedir"/>/svg/test_efficiency.svg'
+plot '<xsl:value-of select="$imagedir"/>/data_time' using 1:($<xsl:value-of select="$position.1"/> / $<xsl:value-of select="$position.2"/>) w lines title 'Test Efficiency(Issues)', \
+     '<xsl:value-of select="$imagedir"/>/data_time' using 1:($<xsl:value-of select="$position.3"/> / $<xsl:value-of select="$position.4"/>) w lines title 'Test Efficiency(Testcases)'
 
 set terminal jpeg size 800 600
-set output 'jpg/test_efficiency.jpg'
-plot 'data_time' using 1:($<xsl:value-of select="$position.1"/> / $<xsl:value-of select="$position.2"/>) w lines title 'Test Efficiency(Issues)', \
-     'data_time' using 1:($<xsl:value-of select="$position.3"/> / $<xsl:value-of select="$position.4"/>) w lines title 'Test Efficiency(Testcases)'
+set output '<xsl:value-of select="$imagedir"/>/jpg/test_efficiency.jpg'
+plot '<xsl:value-of select="$imagedir"/>/data_time' using 1:($<xsl:value-of select="$position.1"/> / $<xsl:value-of select="$position.2"/>) w lines title 'Test Efficiency(Issues)', \
+     '<xsl:value-of select="$imagedir"/>/data_time' using 1:($<xsl:value-of select="$position.3"/> / $<xsl:value-of select="$position.4"/>) w lines title 'Test Efficiency(Testcases)'
 
       </redirect:write>
    </xsl:template>
    
    <xsl:template name="gnuplot_issues_current_histogram">
       <xsl:variable name="file"><xsl:value-of
-                    select="$imagedir"/>/gnuplot_issues_version2_histogram.gnuplot</xsl:variable>
+                    select="$imagedir"/>/issues_version_histogram.gnuplot</xsl:variable>
 
       <redirect:write file="{$file}">
 set border 3 front linetype -1 linewidth 1.000
@@ -985,31 +985,31 @@ set style line 2 lt rgb "#FF0000"
 set style line 3 lt rgb "#0000FF"
 
 set terminal svg size 1024 768 
-set output 'svg/gnuplot_issues_version2_histogram.svg'
+set output '<xsl:value-of select="$imagedir"/>/svg/issues_version_histogram.svg'
 
-plot newhistogram "Bugs", 'data_current' using 2:xtic(1) t 2 ls 1, '' u 10 t 10 ls 3, '' u 6 t 6 ls 2, \
-     newhistogram "CRs", 'data_current' using 3:xtic(1) t 3 ls 1, '' u 11 t 11 ls 3, '' u 7 t 7 ls 2, \
-     newhistogram "Internal Bugs", 'data_current' using 4:xtic(1) t 4 ls 1, '' u 12 t 12 ls 3, '' u 8 t 8 ls 2, \
-     newhistogram "Tasks", 'data_current' using 5:xtic(1) t 5 ls 1, '' u 13 t 13 ls 3, '' u 9 t 9 ls 2
+plot newhistogram "Bugs", '<xsl:value-of select="$imagedir"/>/data_current' using 2:xtic(1) t 2 ls 1, '' u 10 t 10 ls 3, '' u 6 t 6 ls 2, \
+     newhistogram "CRs", '<xsl:value-of select="$imagedir"/>/data_current' using 3:xtic(1) t 3 ls 1, '' u 11 t 11 ls 3, '' u 7 t 7 ls 2, \
+     newhistogram "Internal Bugs", '<xsl:value-of select="$imagedir"/>/data_current' using 4:xtic(1) t 4 ls 1, '' u 12 t 12 ls 3, '' u 8 t 8 ls 2, \
+     newhistogram "Tasks", '<xsl:value-of select="$imagedir"/>/data_current' using 5:xtic(1) t 5 ls 1, '' u 13 t 13 ls 3, '' u 9 t 9 ls 2
      
-set output 'svg/gnuplot_issues_version2_histogram_open.svg'
-plot newhistogram "Bugs", 'data_current_open' using 2:xtic(1) t 2 ls 1, '' u 10 t 10 ls 3, '' u 6 t 6 ls 2, \
-     newhistogram "CRs", 'data_current_open' using 3:xtic(1) t 3 ls 1, '' u 11 t 11 ls 3, '' u 7 t 7 ls 2, \
-     newhistogram "Internal Bugs", 'data_current_open' using 4:xtic(1) t 4 ls 1, '' u 12 t 12 ls 3, '' u 8 t 8 ls 2, \
-     newhistogram "Tasks", 'data_current_open' using 5:xtic(1) t 5 ls 1, '' u 13 t 13 ls 3, '' u 9 t 9 ls 2
+set output '<xsl:value-of select="$imagedir"/>/svg/issues_version_histogram_open.svg'
+plot newhistogram "Bugs", '<xsl:value-of select="$imagedir"/>/data_current_open' using 2:xtic(1) t 2 ls 1, '' u 10 t 10 ls 3, '' u 6 t 6 ls 2, \
+     newhistogram "CRs", '<xsl:value-of select="$imagedir"/>/data_current_open' using 3:xtic(1) t 3 ls 1, '' u 11 t 11 ls 3, '' u 7 t 7 ls 2, \
+     newhistogram "Internal Bugs", '<xsl:value-of select="$imagedir"/>/data_current_open' using 4:xtic(1) t 4 ls 1, '' u 12 t 12 ls 3, '' u 8 t 8 ls 2, \
+     newhistogram "Tasks", '<xsl:value-of select="$imagedir"/>/data_current_open' using 5:xtic(1) t 5 ls 1, '' u 13 t 13 ls 3, '' u 9 t 9 ls 2
      
 set terminal jpeg size 1024 768
-set output 'jpg/gnuplot_issues_version2_histogram.jpg'
-plot newhistogram "Bugs", 'data_current' using 2:xtic(1) t 2 ls 1, '' u 10 t 10 ls 3, '' u 6 t 6 ls 2, \
-     newhistogram "CRs", 'data_current' using 3:xtic(1) t 3 ls 1, '' u 11 t 11 ls 3, '' u 7 t 7 ls 2, \
-     newhistogram "Internal Bugs", 'data_current' using 4:xtic(1) t 4 ls 1, '' u 12 t 12 ls 3, '' u 8 t 8 ls 2, \
-     newhistogram "Tasks", 'data_current' using 5:xtic(1) t 5 ls 1, '' u 13 t 13 ls 3, '' u 9 t 9 ls 2
+set output '<xsl:value-of select="$imagedir"/>/jpg/issues_version_histogram.jpg'
+plot newhistogram "Bugs", '<xsl:value-of select="$imagedir"/>/data_current' using 2:xtic(1) t 2 ls 1, '' u 10 t 10 ls 3, '' u 6 t 6 ls 2, \
+     newhistogram "CRs", '<xsl:value-of select="$imagedir"/>/data_current' using 3:xtic(1) t 3 ls 1, '' u 11 t 11 ls 3, '' u 7 t 7 ls 2, \
+     newhistogram "Internal Bugs", '<xsl:value-of select="$imagedir"/>/data_current' using 4:xtic(1) t 4 ls 1, '' u 12 t 12 ls 3, '' u 8 t 8 ls 2, \
+     newhistogram "Tasks", '<xsl:value-of select="$imagedir"/>/data_current' using 5:xtic(1) t 5 ls 1, '' u 13 t 13 ls 3, '' u 9 t 9 ls 2
      
-set output 'jpg/gnuplot_issues_version2_histogram_open.jpg'
-plot newhistogram "Bugs", 'data_current_open' using 2:xtic(1) t 2 ls 1, '' u 10 t 10 ls 3, '' u 6 t 6 ls 2, \
-     newhistogram "CRs", 'data_current_open' using 3:xtic(1) t 3 ls 1, '' u 11 t 11 ls 3, '' u 7 t 7 ls 2, \
-     newhistogram "Internal Bugs", 'data_current_open' using 4:xtic(1) t 4 ls 1, '' u 12 t 12 ls 3, '' u 8 t 8 ls 2, \
-     newhistogram "Tasks", 'data_current_open' using 5:xtic(1) t 5 ls 1, '' u 13 t 13 ls 3, '' u 9 t 9 ls 2  
+set output '<xsl:value-of select="$imagedir"/>/jpg/issues_version_histogram_open.jpg'
+plot newhistogram "Bugs", '<xsl:value-of select="$imagedir"/>/data_current_open' using 2:xtic(1) t 2 ls 1, '' u 10 t 10 ls 3, '' u 6 t 6 ls 2, \
+     newhistogram "CRs", '<xsl:value-of select="$imagedir"/>/data_current_open' using 3:xtic(1) t 3 ls 1, '' u 11 t 11 ls 3, '' u 7 t 7 ls 2, \
+     newhistogram "Internal Bugs", '<xsl:value-of select="$imagedir"/>/data_current_open' using 4:xtic(1) t 4 ls 1, '' u 12 t 12 ls 3, '' u 8 t 8 ls 2, \
+     newhistogram "Tasks", '<xsl:value-of select="$imagedir"/>/data_current_open' using 5:xtic(1) t 5 ls 1, '' u 13 t 13 ls 3, '' u 9 t 9 ls 2  
      </redirect:write>
    </xsl:template>
    
@@ -1042,22 +1042,22 @@ show title
             <xsl:with-param name="key" select="$kpi.req.all.spec.usecase.covered.number"/>
          </xsl:call-template></xsl:variable>
 
-set output 'svg/test_coverage.svg'
-plot 'data_time' using 1:<xsl:value-of select="$position.1"/> w lines title 'Usecases in TACO', \
-     'data_time' using 1:<xsl:value-of select="$position.2"/> w lines title 'Covered Usecases'
+set output '<xsl:value-of select="$imagedir"/>/svg/test_coverage.svg'
+plot '<xsl:value-of select="$imagedir"/>/data_time' using 1:<xsl:value-of select="$position.1"/> w lines title 'Usecases in TACO', \
+     '<xsl:value-of select="$imagedir"/>/data_time' using 1:<xsl:value-of select="$position.2"/> w lines title 'Covered Usecases'
      
-set output 'svg/test_coverage_all.svg'     
-plot 'data_time' using 1:<xsl:value-of select="$position.3"/> w lines title 'Usecases over all CRs', \
-     'data_time' using 1:<xsl:value-of select="$position.1"/> w lines title 'Covered Usecases'
+set output '<xsl:value-of select="$imagedir"/>/svg/test_coverage_all.svg'     
+plot '<xsl:value-of select="$imagedir"/>/data_time' using 1:<xsl:value-of select="$position.3"/> w lines title 'Usecases over all CRs', \
+     '<xsl:value-of select="$imagedir"/>/data_time' using 1:<xsl:value-of select="$position.1"/> w lines title 'Covered Usecases'
      
 set terminal jpeg size 800 600
-set output 'jpg/test_coverage.jpg'
-plot 'data_time' using 1:<xsl:value-of select="$position.1"/> w lines title 'Usecases in TACO', \
-     'data_time' using 1:<xsl:value-of select="$position.2"/> w lines title 'Covered Usecases'
+set output '<xsl:value-of select="$imagedir"/>/jpg/test_coverage.jpg'
+plot '<xsl:value-of select="$imagedir"/>/data_time' using 1:<xsl:value-of select="$position.1"/> w lines title 'Usecases in TACO', \
+     '<xsl:value-of select="$imagedir"/>/data_time' using 1:<xsl:value-of select="$position.2"/> w lines title 'Covered Usecases'
      
-set output 'jpg/test_coverage_all.jpg'     
-plot 'data_time' using 1:<xsl:value-of select="$position.3"/> w lines title 'Usecases over all CRs', \
-     'data_time' using 1:<xsl:value-of select="$position.1"/> w lines title 'Covered Usecases'
+set output '<xsl:value-of select="$imagedir"/>/jpg/test_coverage_all.jpg'     
+plot '<xsl:value-of select="$imagedir"/>/data_time' using 1:<xsl:value-of select="$position.3"/> w lines title 'Usecases over all CRs', \
+     '<xsl:value-of select="$imagedir"/>/data_time' using 1:<xsl:value-of select="$position.1"/> w lines title 'Covered Usecases'
       </redirect:write>
    </xsl:template>
          

@@ -1,5 +1,5 @@
 /*
- * $Id: ArraysUtil.java 107 2006-12-06 11:27:11Z amandel $
+ * $Id$
  *
  * Copyright 2006, The jCoderZ.org Project. All rights reserved.
  *

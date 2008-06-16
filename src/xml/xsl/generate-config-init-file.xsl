@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-   $Id: generate-config-init-file.xsl,v 1.1 2005/03/22 13:22:59 lmenne Exp $
+   $Id$
 
    Generator for Configuration Service Properties file or database init script.
 

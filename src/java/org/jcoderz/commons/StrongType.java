@@ -1,5 +1,5 @@
 /*
- * $Id: CommonsTestRunnerException.java 1 2006-11-25 14:41:52Z amandel $
+ * $Id$
  *
  * Copyright 2008, The jCoderZ.org Project. All rights reserved.
  *

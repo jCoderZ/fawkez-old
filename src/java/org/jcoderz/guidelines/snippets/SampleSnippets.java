@@ -1,6 +1,6 @@
 // BEGIN SNIPPET: CopyrightHeader.xml
 /*
- * $Id: SampleSnippets.java 259 2006-07-21 07:55:02Z amandel $
+ * $Id$
  *
  * Copyright 2006, The jCoderZ.org Project. All rights reserved.
  *

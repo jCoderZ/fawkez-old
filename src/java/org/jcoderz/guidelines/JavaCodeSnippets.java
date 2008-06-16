@@ -1,5 +1,5 @@
 /*
- * $Id: JavaCodeSnippets.java 255 2006-07-12 14:38:21Z amandel $
+ * $Id$
  *
  * Copyright 2006, The jCoderZ.org Project. All rights reserved.
  *

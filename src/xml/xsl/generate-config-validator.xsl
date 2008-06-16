@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-   $Id: generate-config-validator.xsl,v 1.1 2005/04/22 15:11:34 lmenne Exp $
+   $Id$
 
    Generator for Configuration Service Validator class that supports
    the Administration Tool by checking configuration keys and

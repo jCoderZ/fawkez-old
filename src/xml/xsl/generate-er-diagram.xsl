@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-   $Id: generate-er-diagram.xsl,v 1.2 2005/08/10 09:19:01 mgriffel Exp $
+   $Id$
   -->
 <xsl:stylesheet
    version="1.0"

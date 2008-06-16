@@ -1,5 +1,5 @@
 /*
- * $Id: LoggingProxy.java 101 2006-12-05 20:34:26Z amandel $
+ * $Id$
  *
  * Copyright 2006, The jCoderZ.org Project. All rights reserved.
  *

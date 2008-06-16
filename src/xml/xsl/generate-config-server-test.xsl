@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-   $Id: generate-config-server-test.xsl,v 1.2 2005/04/07 13:28:01 lmenne Exp $
+   $Id$
 
    Generator for Configuration Service Test Cases.
 

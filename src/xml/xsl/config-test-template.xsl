@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-   $Id: config-test-template.xsl,v 1.2 2005/04/07 13:28:01 lmenne Exp $
+   $Id$
 
    Config Service Configuration Interface Generator Template.
 

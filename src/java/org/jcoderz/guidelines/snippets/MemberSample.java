@@ -1,5 +1,5 @@
 /*
- * $Id: MemberSample.java 259 2006-07-21 07:55:02Z amandel $
+ * $Id$
  *
  * Copyright 2006, The jCoderZ.org Project. All rights reserved.
  *

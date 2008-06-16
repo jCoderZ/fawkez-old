@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-   $Id: pmd-rules.xsl,v 1.1 2004/11/05 08:44:24 mgriffel Exp $
+   $Id$
   -->
 <xsl:stylesheet
    version="1.0"

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-   $Id: generate-config-classes.xsl,v 1.1 2005/03/22 13:22:59 lmenne Exp $
+   $Id$
 
    Generator for Confiuration Service Classes including
    ServiceConfiguration interfaces and impls, 

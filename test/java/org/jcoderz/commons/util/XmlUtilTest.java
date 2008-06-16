@@ -1,5 +1,5 @@
 /*
- * $Id: FindingsSummary.java 137 2006-12-11 13:01:58Z amandel $
+ * $Id$
  *
  * Copyright 2006, The jCoderZ.org Project. All rights reserved.
  *

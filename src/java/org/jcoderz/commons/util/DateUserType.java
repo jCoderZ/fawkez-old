@@ -1,5 +1,5 @@
 /*
- * $Id: Constants.java 1 2006-11-25 14:41:52Z amandel $
+ * $Id$
  *
  * Copyright 2006, The jCoderZ.org Project. All rights reserved.
  *

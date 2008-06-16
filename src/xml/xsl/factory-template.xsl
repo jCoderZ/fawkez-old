@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-   $Id: factory-template.xsl,v 1.4 2005/04/01 07:39:01 cloroff Exp $
+   $Id$
 
    Service Factory Generator Template for Client and Container Factories.
 

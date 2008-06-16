@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-   $Id: html2docbook.xsl,v 1.8 2005/09/09 11:44:09 mgriffel Exp $
+   $Id$
 
    Provides templates to convert HTML tags to DocBook.
 

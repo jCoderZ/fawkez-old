@@ -1,5 +1,5 @@
 /*
- * $Id: DotTask.java 905 2008-05-09 13:41:24Z tstolpma $
+ * $Id$
  *
  * Copyright 2006, The jCoderZ.org Project. All rights reserved.
  *

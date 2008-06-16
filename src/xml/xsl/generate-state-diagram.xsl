@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-   $Id: generate-state-diagram.xsl,v 1.2 2005/07/27 14:18:05 mgriffel Exp $
+   $Id$
   -->
 <xsl:stylesheet
    version="1.0"

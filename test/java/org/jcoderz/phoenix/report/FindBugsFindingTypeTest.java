@@ -1,5 +1,5 @@
 /*
- * $Id: TokenType.java 97 2006-12-05 16:44:05Z amandel $
+ * $Id$
  *
  * Copyright 2006, The jCoderZ.org Project. All rights reserved.
  *

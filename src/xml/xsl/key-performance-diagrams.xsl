@@ -1030,7 +1030,17 @@ set output '<xsl:value-of select="$imagedir"/>/jpg/issues_version_histogram_open
 plot newhistogram "Bugs", '<xsl:value-of select="$imagedir"/>/data_current_open' using 2:xtic(1) t 2 ls 1, '' u 10 t 10 ls 3, '' u 6 t 6 ls 2, \
      newhistogram "CRs", '<xsl:value-of select="$imagedir"/>/data_current_open' using 3:xtic(1) t 3 ls 1, '' u 11 t 11 ls 3, '' u 7 t 7 ls 2, \
      newhistogram "Internal Bugs", '<xsl:value-of select="$imagedir"/>/data_current_open' using 4:xtic(1) t 4 ls 1, '' u 12 t 12 ls 3, '' u 8 t 8 ls 2, \
-     newhistogram "Tasks", '<xsl:value-of select="$imagedir"/>/data_current_open' using 5:xtic(1) t 5 ls 1, '' u 13 t 13 ls 3, '' u 9 t 9 ls 2  
+     newhistogram "Tasks", '<xsl:value-of select="$imagedir"/>/data_current_open' using 5:xtic(1) t 5 ls 1, '' u 13 t 13 ls 3, '' u 9 t 9 ls 2
+     
+set output '<xsl:value-of select="$imagedir"/>/jpg/issues_version_histogram_open_bugs.jpg'
+plot newhistogram "Bugs", '<xsl:value-of select="$imagedir"/>/data_current_open' using 2:xtic(1) t 2 ls 1, '' u 10 t 10 ls 3, '' u 6 t 6 ls 2
+set output '<xsl:value-of select="$imagedir"/>/jpg/issues_version_histogram_open_crs.jpg'
+plot newhistogram "CRs", '<xsl:value-of select="$imagedir"/>/data_current_open' using 3:xtic(1) t 3 ls 1, '' u 11 t 11 ls 3, '' u 7 t 7 ls 2
+set output '<xsl:value-of select="$imagedir"/>/jpg/issues_version_histogram_open_internalbugs.jpg'
+plot newhistogram "Internal Bugs", '<xsl:value-of select="$imagedir"/>/data_current_open' using 4:xtic(1) t 4 ls 1, '' u 12 t 12 ls 3, '' u 8 t 8 ls 2
+set output '<xsl:value-of select="$imagedir"/>/jpg/issues_version_histogram_open_tasks.jpg'
+plot newhistogram "Tasks", '<xsl:value-of select="$imagedir"/>/data_current_open' using 5:xtic(1) t 5 ls 1, '' u 13 t 13 ls 3, '' u 9 t 9 ls 2
+  
      </redirect:write>
    </xsl:template>
    

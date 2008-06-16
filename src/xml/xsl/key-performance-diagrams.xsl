@@ -236,14 +236,14 @@
          </xsl:variable>
          <xsl:variable name="version" select="."/>
          <xsl:value-of select="translate($version_name,' ','_')"/><xsl:text> </xsl:text>
-         <xsl:value-of select="count(//cms:issue[cms:version = $version and cms:type = $cms.cr.type and not(cms:state = $cms.state.closed)])"/><xsl:text> </xsl:text>
-         <xsl:value-of select="count(//cms:issue[cms:version = $version and cms:type = $cms.bug.type and cms:external-id and not(cms:state = $cms.state.closed)])"/><xsl:text> </xsl:text>
-         <xsl:value-of select="count(//cms:issue[cms:version = $version and cms:type = $cms.bug.type and not(cms:external-id) and not(cms:state = $cms.state.closed)])"/><xsl:text> </xsl:text>
-         <xsl:value-of select="count(//cms:issue[cms:version = $version and cms:type = $cms.task.type and not(cms:state = $cms.state.closed)])"/><xsl:text> </xsl:text>
          <xsl:value-of select="count(//cms:issue[cms:version = $version and cms:type = $cms.cr.type and cms:state = $cms.state.closed])"/><xsl:text> </xsl:text>
          <xsl:value-of select="count(//cms:issue[cms:version = $version and cms:type = $cms.bug.type and cms:external-id and cms:state = $cms.state.closed])"/><xsl:text> </xsl:text>
          <xsl:value-of select="count(//cms:issue[cms:version = $version and cms:type = $cms.bug.type and not(cms:external-id) and cms:state = $cms.state.closed])"/><xsl:text> </xsl:text>
          <xsl:value-of select="count(//cms:issue[cms:version = $version and cms:type = $cms.task.type and cms:state = $cms.state.closed])"/><xsl:text> </xsl:text>
+         <xsl:value-of select="count(//cms:issue[cms:version = $version and cms:type = $cms.cr.type and not(cms:state = $cms.state.resolved or cms:state = $cms.state.accepted or cms:state = $cms.state.closed)])"/><xsl:text> </xsl:text>
+         <xsl:value-of select="count(//cms:issue[cms:version = $version and cms:type = $cms.bug.type and cms:external-id and not(cms:state = $cms.state.resolved or cms:state = $cms.state.accepted or cms:state = $cms.state.closed)])"/><xsl:text> </xsl:text>
+         <xsl:value-of select="count(//cms:issue[cms:version = $version and cms:type = $cms.bug.type and not(cms:external-id) and not(cms:state = $cms.state.resolved or cms:state = $cms.state.accepted or cms:state = $cms.state.closed)])"/><xsl:text> </xsl:text>
+         <xsl:value-of select="count(//cms:issue[cms:version = $version and cms:type = $cms.task.type and not(cms:state = $cms.state.resolved or cms:state = $cms.state.accepted or cms:state = $cms.state.closed)])"/><xsl:text> </xsl:text>
          <xsl:value-of select="count(//cms:issue[cms:version = $version and cms:type = $cms.cr.type and (cms:state = $cms.state.resolved or cms:state = $cms.state.accepted)])"/><xsl:text> </xsl:text>
          <xsl:value-of select="count(//cms:issue[cms:version = $version and cms:type = $cms.bug.type and cms:external-id and (cms:state = $cms.state.resolved or cms:state = $cms.state.accepted)])"/><xsl:text> </xsl:text>
          <xsl:value-of select="count(//cms:issue[cms:version = $version and cms:type = $cms.bug.type and not(cms:external-id) and (cms:state = $cms.state.resolved or cms:state = $cms.state.accepted)])"/><xsl:text> </xsl:text>
@@ -285,14 +285,14 @@
          <xsl:variable name="version" select="."/>
          <xsl:if test="//cms:issue[cms:version = $version and not(cms:state = $cms.state.closed)]">
             <xsl:value-of select="translate($version_name,' ','_')"/><xsl:text> </xsl:text>
-            <xsl:value-of select="count(//cms:issue[cms:version = $version and cms:type = $cms.cr.type and not(cms:state = $cms.state.closed)])"/><xsl:text> </xsl:text>
-            <xsl:value-of select="count(//cms:issue[cms:version = $version and cms:type = $cms.bug.type and cms:external-id and not(cms:state = $cms.state.closed)])"/><xsl:text> </xsl:text>
-            <xsl:value-of select="count(//cms:issue[cms:version = $version and cms:type = $cms.bug.type and not(cms:external-id) and not(cms:state = $cms.state.closed)])"/><xsl:text> </xsl:text>
-            <xsl:value-of select="count(//cms:issue[cms:version = $version and cms:type = $cms.task.type and not(cms:state = $cms.state.closed)])"/><xsl:text> </xsl:text>
             <xsl:value-of select="count(//cms:issue[cms:version = $version and cms:type = $cms.cr.type and cms:state = $cms.state.closed])"/><xsl:text> </xsl:text>
             <xsl:value-of select="count(//cms:issue[cms:version = $version and cms:type = $cms.bug.type and cms:external-id and cms:state = $cms.state.closed])"/><xsl:text> </xsl:text>
             <xsl:value-of select="count(//cms:issue[cms:version = $version and cms:type = $cms.bug.type and not(cms:external-id) and cms:state = $cms.state.closed])"/><xsl:text> </xsl:text>
             <xsl:value-of select="count(//cms:issue[cms:version = $version and cms:type = $cms.task.type and cms:state = $cms.state.closed])"/><xsl:text> </xsl:text>
+            <xsl:value-of select="count(//cms:issue[cms:version = $version and cms:type = $cms.cr.type and not(cms:state = $cms.state.resolved or cms:state = $cms.state.accepted or cms:state = $cms.state.closed)])"/><xsl:text> </xsl:text>
+            <xsl:value-of select="count(//cms:issue[cms:version = $version and cms:type = $cms.bug.type and cms:external-id and not(cms:state = $cms.state.resolved or cms:state = $cms.state.accepted or cms:state = $cms.state.closed)])"/><xsl:text> </xsl:text>
+            <xsl:value-of select="count(//cms:issue[cms:version = $version and cms:type = $cms.bug.type and not(cms:external-id) and not(cms:state = $cms.state.resolved or cms:state = $cms.state.accepted or cms:state = $cms.state.closed)])"/><xsl:text> </xsl:text>
+            <xsl:value-of select="count(//cms:issue[cms:version = $version and cms:type = $cms.task.type and not(cms:state = $cms.state.resolved or cms:state = $cms.state.accepted or cms:state = $cms.state.closed)])"/><xsl:text> </xsl:text>
             <xsl:value-of select="count(//cms:issue[cms:version = $version and cms:type = $cms.cr.type and (cms:state = $cms.state.resolved or cms:state = $cms.state.accepted)])"/><xsl:text> </xsl:text>
             <xsl:value-of select="count(//cms:issue[cms:version = $version and cms:type = $cms.bug.type and cms:external-id and (cms:state = $cms.state.resolved or cms:state = $cms.state.accepted)])"/><xsl:text> </xsl:text>
             <xsl:value-of select="count(//cms:issue[cms:version = $version and cms:type = $cms.bug.type and not(cms:external-id) and (cms:state = $cms.state.resolved or cms:state = $cms.state.accepted)])"/><xsl:text> </xsl:text>

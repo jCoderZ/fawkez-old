@@ -382,7 +382,7 @@ public class XtremeDocs
                 if (!mValidationOnly)
                 {
                     generateUseCaseDiagrams(filePassOne, imageDir);
-                    exportToXmi(filePassOne, imageDir);
+                    //exportToXmi(filePassOne, imageDir);
                     AntTaskUtil.renderDotFiles(this, imageDir, mFailOnError);
                     exportToHbCfg(filePassOne);
                     exportToHbm(filePassOne);

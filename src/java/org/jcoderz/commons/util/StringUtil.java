@@ -239,6 +239,47 @@ public final class StringUtil
    }
 
    /**
+    * Returns <code>true</code> if given string is <code>null</code>, the
+    * length is zero (empty string) or if it only contains white spaces.
+    * The whitespace check is done using Character.isWhitespace().
+    * @param s the string to test.
+    * @return Returns <code>true</code> if given string is <code>null</code>,
+    *       the length is zero (empty string) or the String contains only
+    *       whitespace characters; <code>false</code> otherwise.
+    */
+   public static boolean isNullOrBlank (String s)
+   {
+       boolean result = true;
+       if (s != null)
+       {
+           final int length = s.length();
+           for (int i = 0; i < length; i++)
+           {
+               if (!Character.isWhitespace(s.charAt(i)))
+               {
+                   result = false;
+                   break;
+               }
+           }
+      }
+      return result;
+   }
+
+   /**
+    * Returns <code>true</code> if given string is <code>null</code>, the
+    * length is zero (empty string) or if it only contains white spaces.
+    * The whitespace check is done using Character.isWhitespace().
+    * @param s the string to test.
+    * @return Returns <code>true</code> if given string is <code>null</code>,
+    *       the length is zero (empty string) or the String contains only
+    *       whitespace characters; <code>false</code> otherwise.
+    */
+   public static boolean isBlankOrNull (String s)
+   {
+      return isNullOrBlank(s);
+   }
+
+   /**
     * Returns <tt>true</tt> if the two specified strings are
     * <i>equal</i> to one another. Two strings <tt>a</tt>
     * and <tt>b</tt> are considered <i>equal</i> if <tt>(a==null ? b == null

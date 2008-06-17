@@ -159,6 +159,25 @@ public class StringUtilTest
    }
 
    /**
+    * Tests the method {@link StringUtil#isNullOrBlank(String)}.
+    */
+   public void testIsNullOrBlank ()
+   {
+      assertTrue("null string should be true", StringUtil.isNullOrBlank(null));
+      assertTrue("empty string should be true", StringUtil.isNullOrBlank(""));
+      assertTrue("tab string should be true", StringUtil.isNullOrBlank("\t"));
+      assertTrue("whitespace string should be true", StringUtil.isNullOrBlank(" "));
+      assertFalse("any string should be false",
+            StringUtil.isNullOrEmpty(FOO_STRING));
+      assertFalse("any string should be false",
+          StringUtil.isNullOrEmpty(" " + FOO_STRING + " "));
+      assertFalse("'x ' string should be false",
+          StringUtil.isNullOrEmpty("x "));
+      assertFalse("' x' string should be false",
+          StringUtil.isNullOrEmpty(" x"));
+   }
+
+   /**
     * Tests the method {@link StringUtil#equals(String, String)}.
     */
    public void testEquals ()

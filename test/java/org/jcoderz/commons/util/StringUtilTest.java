@@ -168,13 +168,13 @@ public class StringUtilTest
       assertTrue("tab string should be true", StringUtil.isNullOrBlank("\t"));
       assertTrue("whitespace string should be true", StringUtil.isNullOrBlank(" "));
       assertFalse("any string should be false",
-            StringUtil.isNullOrEmpty(FOO_STRING));
+            StringUtil.isNullOrBlank(FOO_STRING));
       assertFalse("any string should be false",
-          StringUtil.isNullOrEmpty(" " + FOO_STRING + " "));
+          StringUtil.isNullOrBlank(" " + FOO_STRING + " "));
       assertFalse("'x ' string should be false",
-          StringUtil.isNullOrEmpty("x "));
+          StringUtil.isNullOrBlank("x "));
       assertFalse("' x' string should be false",
-          StringUtil.isNullOrEmpty(" x"));
+          StringUtil.isNullOrBlank(" x"));
    }
 
    /**

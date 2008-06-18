@@ -57,6 +57,8 @@
                                                               use="reporter/@username"/>
    <xsl:key name="issues-impl-reporter-version-group"         match="//channel//item[type = $jira.impl.type and contains(fixVersion,$version)]" 
                                                               use="reporter/@username"/>
+                                                              
+   <xsl:key name="efforttype-group"                   match="//cms:efforttype" use="."/>
    
    <!-- 
        *******
@@ -434,6 +436,63 @@
          <xsl:with-param name="key" select="$kpi.jira.issue.internal.class.task.open"/>
          <xsl:with-param name="value" select="count(//item[type = $jira.internal.type and not(status = 'Accepted' or status = 'Closed') and customfields/customfield[customfieldname='Classification']/customfieldvalues[customfieldvalue = 'Task']])"/>
       </xsl:call-template>
+      
+      <xsl:for-each select="//cms:efforttype[generate-id() = generate-id(key('efforttype-group', .))]">
+         <xsl:variable name="effort_type" select="."/>
+         <xsl:call-template name="entry">
+            <xsl:with-param name="key" select="concat($kpi.jira.issue.crs.effort.remaining.version.prefix, $effort_type)"/>
+            <xsl:with-param name="value" select="sum(//cms:remaining-effort[../../cms:type = $cms.cr.type 
+                                                     and ../../cms:version = $version
+                                                     and ../cms:efforttype = $effort_type])"/>
+         </xsl:call-template>
+         <xsl:call-template name="entry">
+            <xsl:with-param name="key" select="concat($kpi.jira.issue.bugs.effort.remaining.version.prefix, $effort_type)"/>
+            <xsl:with-param name="value" select="sum(//cms:remaining-effort[../../cms:type = $cms.bug.type
+                                                     and ../../cms:external-id
+                                                     and ../../cms:version = $version
+                                                     and ../cms:efforttype = $effort_type])"/>
+         </xsl:call-template>
+         <xsl:call-template name="entry">
+            <xsl:with-param name="key" select="concat($kpi.jira.issue.bugs.internal.effort.remaining.version.prefix, $effort_type)"/>
+            <xsl:with-param name="value" select="sum(//cms:remaining-effort[../../cms:type = $cms.bug.type
+                                                     and not(../../cms:external-id)
+                                                     and ../../cms:version = $version
+                                                     and ../cms:efforttype = $effort_type])"/>
+         </xsl:call-template>
+         <xsl:call-template name="entry">
+            <xsl:with-param name="key" select="concat($kpi.jira.issue.tasks.effort.remaining.version.prefix, $effort_type)"/>
+            <xsl:with-param name="value" select="sum(//cms:remaining-effort[../../cms:type = $cms.task.type
+                                                     and ../../cms:version = $version
+                                                     and ../cms:efforttype = $effort_type])"/>
+         </xsl:call-template>
+         
+         <xsl:call-template name="entry">
+            <xsl:with-param name="key" select="concat($kpi.jira.issue.crs.effort.spent.version.prefix, $effort_type)"/>
+            <xsl:with-param name="value" select="sum(//cms:spent-effort[../../cms:type = $cms.cr.type 
+                                                     and ../../cms:version = $version
+                                                     and ../cms:efforttype = $effort_type])"/>
+         </xsl:call-template>
+         <xsl:call-template name="entry">
+            <xsl:with-param name="key" select="concat($kpi.jira.issue.bugs.effort.spent.version.prefix, $effort_type)"/>
+            <xsl:with-param name="value" select="sum(//cms:spent-effort[../../cms:type = $cms.bug.type
+                                                     and ../../cms:external-id
+                                                     and ../../cms:version = $version
+                                                     and ../cms:efforttype = $effort_type])"/>
+         </xsl:call-template>
+         <xsl:call-template name="entry">
+            <xsl:with-param name="key" select="concat($kpi.jira.issue.bugs.internal.effort.spent.version.prefix, $effort_type)"/>
+            <xsl:with-param name="value" select="sum(//cms:spent-effort[../../cms:type = $cms.bug.type
+                                                     and not(../../cms:external-id)
+                                                     and ../../cms:version = $version
+                                                     and ../cms:efforttype = $effort_type])"/>
+         </xsl:call-template>
+         <xsl:call-template name="entry">
+            <xsl:with-param name="key" select="concat($kpi.jira.issue.tasks.effort.spent.version.prefix, $effort_type)"/>
+            <xsl:with-param name="value" select="sum(//cms:spent-effort[../../cms:type = $cms.task.type
+                                                     and ../../cms:version = $version
+                                                     and ../cms:efforttype = $effort_type])"/>
+         </xsl:call-template>
+      </xsl:for-each>
       
       <!-- external Jira issues -->
       <xsl:call-template name="entry">

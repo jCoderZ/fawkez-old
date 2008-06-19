@@ -80,6 +80,7 @@
       <xsl:call-template name="gnuplot_crs"/>
       <xsl:call-template name="gnuplot_crs_version"/>
       <xsl:call-template name="gnuplot_issues_current_histogram"/>
+      <xsl:call-template name="gnuplot_affects_issues_current_histogram"/>
       <xsl:call-template name="gnuplot_coverage"/>
       <xsl:call-template name="gnuplot_release_criteria">
          <xsl:with-param name="source_file" select="'data_time_version1'"/>
@@ -224,7 +225,9 @@
          <xsl:value-of select="'Resolved'"/><xsl:text> </xsl:text>
          <xsl:value-of select="'Resolved'"/><xsl:text> </xsl:text>
          <xsl:value-of select="'Resolved'"/><xsl:text> </xsl:text>
-         <xsl:value-of select="'Resolved'"/><xsl:text> </xsl:text>        
+         <xsl:value-of select="'Resolved'"/><xsl:text> </xsl:text>
+         <xsl:value-of select="'External_Bugs'"/><xsl:text> </xsl:text>
+         <xsl:value-of select="'Internal_Bugs'"/><xsl:text> </xsl:text>
          <xsl:text>
 </xsl:text>
       <xsl:for-each select="//cms:version[generate-id() = generate-id(key('version-group', .))]">
@@ -247,7 +250,9 @@
          <xsl:value-of select="count(//cms:issue[cms:version = $version and cms:type = $cms.cr.type and (cms:state = $cms.state.resolved or cms:state = $cms.state.accepted)])"/><xsl:text> </xsl:text>
          <xsl:value-of select="count(//cms:issue[cms:version = $version and cms:type = $cms.bug.type and cms:external-id and (cms:state = $cms.state.resolved or cms:state = $cms.state.accepted)])"/><xsl:text> </xsl:text>
          <xsl:value-of select="count(//cms:issue[cms:version = $version and cms:type = $cms.bug.type and not(cms:external-id) and (cms:state = $cms.state.resolved or cms:state = $cms.state.accepted)])"/><xsl:text> </xsl:text>
-         <xsl:value-of select="count(//cms:issue[cms:version = $version and cms:type = $cms.task.type and (cms:state = $cms.state.resolved or cms:state = $cms.state.accepted)])"/><xsl:text> </xsl:text>        
+         <xsl:value-of select="count(//cms:issue[cms:version = $version and cms:type = $cms.task.type and (cms:state = $cms.state.resolved or cms:state = $cms.state.accepted)])"/><xsl:text> </xsl:text>
+         <xsl:value-of select="count(//cms:issue[cms:affects-version = $version and cms:type = $cms.bug.type and cms:external-id])"/><xsl:text> </xsl:text>
+         <xsl:value-of select="count(//cms:issue[cms:affects-version = $version and cms:type = $cms.bug.type and not(cms:external-id)])"/><xsl:text> </xsl:text>        
          <xsl:text>
 </xsl:text>
       </xsl:for-each>
@@ -1010,6 +1015,11 @@ plot newhistogram "Bugs", '<xsl:value-of select="$imagedir"/>/data_current_open'
      newhistogram "Internal Bugs", '<xsl:value-of select="$imagedir"/>/data_current_open' using 4:xtic(1) t 4 ls 1, '' u 12 t 12 ls 3, '' u 8 t 8 ls 2, \
      newhistogram "Tasks", '<xsl:value-of select="$imagedir"/>/data_current_open' using 5:xtic(1) t 5 ls 1, '' u 13 t 13 ls 3, '' u 9 t 9 ls 2
 
+set style histogram cluster gap 1
+set output '<xsl:value-of select="$imagedir"/>/svg/issues_affects_version_histogram_bugs.svg'
+plot newhistogram "Bugs", '<xsl:value-of select="$imagedir"/>/data_current' using 14:xtic(1) t 14 ls 2, '' u 15 t 15 ls 1
+set style histogram rowstacked title  offset character 2, 0.25, 0
+
 set output '<xsl:value-of select="$imagedir"/>/svg/issues_version_histogram_open_bugs.svg'
 plot newhistogram "Bugs", '<xsl:value-of select="$imagedir"/>/data_current_open' using 2:xtic(1) t 2 ls 1, '' u 10 t 10 ls 3, '' u 6 t 6 ls 2
 set output '<xsl:value-of select="$imagedir"/>/svg/issues_version_histogram_open_crs.svg'
@@ -1041,6 +1051,35 @@ plot newhistogram "Internal Bugs", '<xsl:value-of select="$imagedir"/>/data_curr
 set output '<xsl:value-of select="$imagedir"/>/jpg/issues_version_histogram_open_tasks.jpg'
 plot newhistogram "Tasks", '<xsl:value-of select="$imagedir"/>/data_current_open' using 5:xtic(1) t 5 ls 1, '' u 13 t 13 ls 3, '' u 9 t 9 ls 2
   
+     </redirect:write>
+   </xsl:template>
+   
+   <xsl:template name="gnuplot_affects_issues_current_histogram">
+      <xsl:variable name="file"><xsl:value-of
+                    select="$imagedir"/>/affects_issues_version_histogram.gnuplot</xsl:variable>
+
+      <redirect:write file="{$file}">
+set border 3 front linetype -1 linewidth 1.000
+set boxwidth 0.8 absolute
+set style fill  solid 1.00 noborder
+set style histogram cluster gap 1
+set datafile missing '-'
+
+set style data histograms
+set title "External and Internal Bugs found with Version" 
+set xtics border in scale 1,0.5 nomirror rotate by -45  offset character 0, 0, 0
+set xlabel  offset character 0, -2, 0 font "" textcolor lt -1 norotate
+set ylabel "Number of Issues" 
+
+# setting style of the lines (ls 1 and ls 2)
+set style line 1 lt rgb "#00FF00"
+set style line 2 lt rgb "#FF0000"
+set style line 3 lt rgb "#0000FF"
+
+set terminal svg size 1024 768 
+
+set output '<xsl:value-of select="$imagedir"/>/svg/issues_affects_version_histogram_bugs.svg'
+plot newhistogram "Bugs", '<xsl:value-of select="$imagedir"/>/data_current' using 14:xtic(1) t 14 ls 2, '' u 15 t 15 ls 1
      </redirect:write>
    </xsl:template>
    

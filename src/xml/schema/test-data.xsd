@@ -1,74 +1,74 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-  xmlns:docbook="http://docbook.org/ns/docbook"
-  xmlns:td="http://jcoderz.org/test-data"
-  targetNamespace="http://jcoderz.org/test-data"
-  elementFormDefault="qualified">
+   xmlns:docbook="http://docbook.org/ns/docbook" xmlns:td="http://jcoderz.org/test-data"
+   targetNamespace="http://jcoderz.org/test-data" elementFormDefault="qualified">
 
-  <xsd:simpleType name='testDataId'>
-    <xsd:restriction base='xsd:string'>
-      <xsd:pattern value='[A-Z]{2,4}_[1-9]{1}[0-9]{0,1}[0-9]{4}' />
-    </xsd:restriction>
-  </xsd:simpleType>
+   <xsd:simpleType name='testDataId'>
+      <xsd:restriction base='xsd:string'>
+         <xsd:pattern value='[A-Z]{2,4}_[1-9]{1}[0-9]{0,1}[0-9]{4}' />
+      </xsd:restriction>
+   </xsd:simpleType>
 
-  <xsd:simpleType name="testDataState">
-    <xsd:restriction base="xsd:string">
-      <xsd:enumeration value="draft" />
-      <xsd:enumeration value="final" />
-    </xsd:restriction>
-  </xsd:simpleType>
+   <xsd:simpleType name="testDataState">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="draft" />
+         <xsd:enumeration value="final" />
+      </xsd:restriction>
+   </xsd:simpleType>
 
-  <xsd:element name="data">
-    <xsd:complexType>
-      <xsd:choice minOccurs="0" maxOccurs="unbounded">
-        <xsd:element ref="td:set" />
-        <xsd:element ref="td:item" />
-      </xsd:choice>
-    </xsd:complexType>
-  </xsd:element>
+   <xsd:element name="data">
+      <xsd:complexType>
+         <xsd:choice minOccurs="0" maxOccurs="unbounded">
+            <xsd:element ref="td:set" />
+            <xsd:element ref="td:item" />
+         </xsd:choice>
+      </xsd:complexType>
+   </xsd:element>
 
-  <xsd:element name="set">
-    <xsd:complexType>
-      <xsd:sequence>
-        <xsd:element ref="td:id" />
-        <xsd:element ref="td:name" />
-        <xsd:element name="state" type="td:testDataState"/>
-        <xsd:element ref="td:description" />
-        <xsd:element ref="td:ref" minOccurs="0" maxOccurs="unbounded" />
-      </xsd:sequence>
-    </xsd:complexType>
-  </xsd:element>
+   <xsd:element name="set">
+      <xsd:complexType>
+         <xsd:sequence>
+            <xsd:element ref="td:id" />
+            <xsd:element ref="td:name" />
+            <xsd:element name="state" type="td:testDataState" />
+            <xsd:element ref="td:description" />
+            <xsd:element ref="td:ref" minOccurs="0" maxOccurs="unbounded" />
+         </xsd:sequence>
+      </xsd:complexType>
+   </xsd:element>
 
-  <xsd:element name="item">
-    <xsd:complexType>
-      <xsd:sequence>
-        <xsd:element ref="td:id" />
-        <xsd:element ref="td:type" />
-        <xsd:element ref="td:name" />
-        <xsd:element name="state" type="td:testDataState"/>
-        <xsd:element ref="td:description" />
-        <xsd:element ref="td:attribute" minOccurs="0" maxOccurs="unbounded" />
-      </xsd:sequence>
-    </xsd:complexType>
-  </xsd:element>
+   <xsd:element name="item">
+      <xsd:complexType>
+         <xsd:sequence>
+            <xsd:element ref="td:id" />
+            <xsd:element ref="td:type" />
+            <xsd:element ref="td:name" />
+            <xsd:element name="state" type="td:testDataState" />
+            <xsd:element ref="td:description" />
+            <xsd:element ref="td:attribute" minOccurs="0" maxOccurs="unbounded" />
+         </xsd:sequence>
+      </xsd:complexType>
+   </xsd:element>
 
-  <xsd:element name="attribute">
-    <xsd:complexType>
-      <xsd:choice>
-        <xsd:element ref="td:ref" />
-        <xsd:sequence>
-          <xsd:element ref="td:name" />
-          <xsd:element ref="td:value" />
-        </xsd:sequence>
-      </xsd:choice>
-    </xsd:complexType>
-  </xsd:element>
+   <xsd:element name="attribute">
+      <xsd:complexType>
+         <xsd:sequence>
+            <xsd:element ref="td:name" />
+            <xsd:choice>
+               <xsd:element ref="td:ref" />
+               <xsd:element ref="td:value" />
+               <xsd:element ref="td:autovalue" />
+            </xsd:choice>
+         </xsd:sequence>
+      </xsd:complexType>
+   </xsd:element>
 
-  <xsd:element name="id" type="td:testDataId" />
-  <xsd:element name="ref" type="td:testDataId" />
-  <xsd:element name="type" type="xsd:string" />
-  <xsd:element name="name" type="xsd:string" />
-  <xsd:element name="value" type="xsd:string" />
-  <xsd:element name="description" type="xsd:string" />
+   <xsd:element name="id" type="td:testDataId" />
+   <xsd:element name="ref" type="td:testDataId" />
+   <xsd:element name="type" type="xsd:string" />
+   <xsd:element name="name" type="xsd:string" />
+   <xsd:element name="autovalue" />
+   <xsd:element name="value" type="xsd:string" />
+   <xsd:element name="description" type="xsd:string" />
 
 </xsd:schema>

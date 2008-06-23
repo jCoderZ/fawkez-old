@@ -52,6 +52,8 @@
    <xsl:key name="version-group"        match="//cms:version" use="."/>
    
    <xsl:key name="key-current-group"    match="//kpi:entry[../../kpi:meta/kpi:timestamp = $timestamp]" use="kpi:key"/>
+   
+   <xsl:key name="efforttype-group"     match="//cms:efforttype" use="."/>
                                                       
    
    <!-- 
@@ -95,6 +97,19 @@
          <xsl:with-param name="suffix" select="'branch'"/>
       </xsl:call-template>
       <xsl:call-template name="gnuplot_issues"/>
+      
+      <xsl:for-each select="//cms:efforttype[generate-id() = generate-id(key('efforttype-group', .))]">
+         <xsl:variable name="effort_type_urified">
+            <xsl:call-template name="make_uri">
+               <xsl:with-param name="string" select="."/>
+            </xsl:call-template>
+         </xsl:variable>
+         <xsl:call-template name="gnuplot_efforts_type">
+            <xsl:with-param name="source_file" select="concat($imagedir,'/data_time_version1')"/>
+            <xsl:with-param name="suffix" select="$effort_type_urified"/>
+            <xsl:with-param name="effort_type" select="."/>
+         </xsl:call-template>
+      </xsl:for-each>
    
    </xsl:template>
    <!-- 
@@ -140,7 +155,7 @@
          select="$imagedir"/>/data_time_version1</xsl:variable>
 
       <redirect:write file="{$file}">
-      
+            
       <xsl:apply-templates select="//kpi:kpi_list[kpi:meta/kpi:version1 = $version]" mode="timestamp">
          <xsl:sort select="kpi:meta/kpi:timestamp" order="ascending" data-type="text"/>
       </xsl:apply-templates>
@@ -715,6 +730,95 @@ plot '<xsl:value-of select="$source_file"/>' using 1:<xsl:value-of select="$posi
       </redirect:write>
    </xsl:template>
    
+   <xsl:template name="gnuplot_efforts_type">
+      <xsl:param name="source_file"/>
+      <xsl:param name="suffix"/>
+      <xsl:param name="effort_type"/>
+      <xsl:variable name="file"><xsl:value-of
+                    select="$imagedir"/>/efforts_version_<xsl:value-of
+                    select="$suffix"/>.gnuplot</xsl:variable>
+
+      <redirect:write file="{$file}">
+set terminal svg size 1024 800 fsize 8
+set xdata time
+set format x "%m/%y"
+set xtics nomirror rotate by -45
+set timefmt "%Y%m%d%H%M"
+set key outside
+set style fill solid 1.0 border -1
+set boxwidth 0.5 relative
+set yrange [0:]
+
+# setting style of the lines (ls 1 and ls 2)
+set style line 1 lt rgb "#00FF00"
+set style line 2 lt rgb "#FF0000"
+set style line 3 lt rgb "#0000FF"
+
+set title "Efforts for <xsl:value-of select="$effort_type"/>"
+show title
+         <xsl:variable name="position.1"><xsl:call-template name="get_position">
+            <xsl:with-param name="key" select="concat($kpi.jira.issue.bugs.internal.effort.remaining.version.prefix, $effort_type)"/>
+         </xsl:call-template></xsl:variable>
+         <xsl:variable name="position.2"><xsl:call-template name="get_position">
+            <xsl:with-param name="key" select="concat($kpi.jira.issue.bugs.internal.effort.spent.version.prefix, $effort_type)"/>
+         </xsl:call-template></xsl:variable>
+         <xsl:variable name="position.3"><xsl:call-template name="get_position">
+            <xsl:with-param name="key" select="concat($kpi.jira.issue.bugs.effort.remaining.version.prefix, $effort_type)"/>
+         </xsl:call-template></xsl:variable>
+         <xsl:variable name="position.4"><xsl:call-template name="get_position">
+            <xsl:with-param name="key" select="concat($kpi.jira.issue.bugs.effort.spent.version.prefix, $effort_type)"/>
+         </xsl:call-template></xsl:variable>
+         <xsl:variable name="position.5"><xsl:call-template name="get_position">
+            <xsl:with-param name="key" select="concat($kpi.jira.issue.crs.effort.remaining.version.prefix, $effort_type)"/>
+         </xsl:call-template></xsl:variable>
+         <xsl:variable name="position.6"><xsl:call-template name="get_position">
+            <xsl:with-param name="key" select="concat($kpi.jira.issue.crs.effort.spent.version.prefix, $effort_type)"/>
+         </xsl:call-template></xsl:variable>
+         <xsl:variable name="position.7"><xsl:call-template name="get_position">
+            <xsl:with-param name="key" select="concat($kpi.jira.issue.tasks.effort.remaining.version.prefix, $effort_type)"/>
+         </xsl:call-template></xsl:variable>
+         <xsl:variable name="position.8"><xsl:call-template name="get_position">
+            <xsl:with-param name="key" select="concat($kpi.jira.issue.tasks.effort.spent.version.prefix, $effort_type)"/>
+         </xsl:call-template></xsl:variable>
+         
+set output '<xsl:value-of select="$imagedir"/>/svg/efforts_version_bugs_internal_<xsl:value-of
+                          select="$suffix"/>.svg'
+plot '<xsl:value-of select="$source_file"/>' using 1:($<xsl:value-of select="$position.1"/>+$<xsl:value-of select="$position.2"/>) w lines title 'Complete Effort',\
+     '<xsl:value-of select="$source_file"/>' using 1:<xsl:value-of select="$position.2"/> w lines title 'Effort Spent'
+set output '<xsl:value-of select="$imagedir"/>/svg/efforts_version_bugs_<xsl:value-of
+                          select="$suffix"/>.svg'
+plot '<xsl:value-of select="$source_file"/>' using 1:($<xsl:value-of select="$position.3"/>+$<xsl:value-of select="$position.4"/>) w lines title 'Complete Effort',\
+     '<xsl:value-of select="$source_file"/>' using 1:<xsl:value-of select="$position.4"/> w lines title 'Effort Spent'
+set output '<xsl:value-of select="$imagedir"/>/svg/efforts_version_crs_<xsl:value-of
+                          select="$suffix"/>.svg'
+plot '<xsl:value-of select="$source_file"/>' using 1:($<xsl:value-of select="$position.5"/>+$<xsl:value-of select="$position.6"/>) w lines title 'Complete Effort',\
+     '<xsl:value-of select="$source_file"/>' using 1:<xsl:value-of select="$position.6"/> w lines title 'Effort Spent'
+set output '<xsl:value-of select="$imagedir"/>/svg/efforts_version_tasks_<xsl:value-of
+                          select="$suffix"/>.svg'
+plot '<xsl:value-of select="$source_file"/>' using 1:($<xsl:value-of select="$position.7"/>+$<xsl:value-of select="$position.8"/>) w lines title 'Complete Effort',\
+     '<xsl:value-of select="$source_file"/>' using 1:<xsl:value-of select="$position.8"/> w lines title 'Effort Spent'
+
+set terminal jpeg size 800 600     
+set output '<xsl:value-of select="$imagedir"/>/jpg/efforts_version_bugs_internal_<xsl:value-of
+                          select="$suffix"/>.jpg'
+plot '<xsl:value-of select="$source_file"/>' using 1:($<xsl:value-of select="$position.1"/>+$<xsl:value-of select="$position.2"/>) w lines title 'Complete Effort',\
+     '<xsl:value-of select="$source_file"/>' using 1:<xsl:value-of select="$position.2"/> w lines title 'Effort Spent'
+set output '<xsl:value-of select="$imagedir"/>/jpg/efforts_version_bugs_<xsl:value-of
+                          select="$suffix"/>.jpg'
+plot '<xsl:value-of select="$source_file"/>' using 1:($<xsl:value-of select="$position.3"/>+$<xsl:value-of select="$position.4"/>) w lines title 'Complete Effort',\
+     '<xsl:value-of select="$source_file"/>' using 1:<xsl:value-of select="$position.4"/> w lines title 'Effort Spent'
+set output '<xsl:value-of select="$imagedir"/>/jpg/efforts_version_crs_<xsl:value-of
+                          select="$suffix"/>.jpg'
+plot '<xsl:value-of select="$source_file"/>' using 1:($<xsl:value-of select="$position.5"/>+$<xsl:value-of select="$position.6"/>) w lines title 'Complete Effort',\
+     '<xsl:value-of select="$source_file"/>' using 1:<xsl:value-of select="$position.6"/> w lines title 'Effort Spent'
+set output '<xsl:value-of select="$imagedir"/>/jpg/efforts_version_tasks_<xsl:value-of
+                          select="$suffix"/>.jpg'
+plot '<xsl:value-of select="$source_file"/>' using 1:($<xsl:value-of select="$position.7"/>+$<xsl:value-of select="$position.8"/>) w lines title 'Complete Effort',\
+     '<xsl:value-of select="$source_file"/>' using 1:<xsl:value-of select="$position.8"/> w lines title 'Effort Spent'
+
+      </redirect:write>
+   </xsl:template>
+   
    <xsl:template name="gnuplot_issues">
       <xsl:variable name="file"><xsl:value-of
                     select="$imagedir"/>/issues_version.gnuplot</xsl:variable>
@@ -1136,6 +1240,11 @@ plot '<xsl:value-of select="$imagedir"/>/data_time' using 1:<xsl:value-of select
        Helper templates
        ****************
     -->
+   <xsl:template name="make_uri">
+      <xsl:param name="string"/>
+      <xsl:value-of select="translate(translate($string,' ','_'),':','_')"/>
+   </xsl:template> 
+    
    <xsl:template name="get_position">
       <xsl:param name="key"/>
       <xsl:for-each select="//kpi:keys/kpi:key[generate-id() = generate-id(key('key-group', .))]">

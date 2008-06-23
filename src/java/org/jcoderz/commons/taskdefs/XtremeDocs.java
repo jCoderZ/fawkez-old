@@ -641,8 +641,7 @@ public class XtremeDocs
 
                 void setAdditionalTransformerParameters (Transformer transformer)
                 {
-                    transformer.setParameter("basedir", getProject().getBaseDir()
-                        .toString());
+                    setXdocTransformerParams(transformer);
                     transformer.setParameter("imagedir", imageDir.toString());
                 }
             };

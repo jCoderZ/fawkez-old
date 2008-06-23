@@ -514,5 +514,14 @@
          <kpi:key>KPI_MINUTES_TESTCASES_AVERAGE_TESTRESULTS_RELEASE</kpi:key>
          <kpi:value>4.173333333333333</kpi:value>
       </kpi:entry>
+      
+      <kpi:entry>
+         <kpi:key>KPI_JIRA_ISSUE_BUGS_EFFORT_REMAINING_VERSION_Bug Fixing</kpi:key>
+         <kpi:value>3.1</kpi:value>
+      </kpi:entry>
+      <kpi:entry>
+         <kpi:key>KPI_JIRA_ISSUE_BUGS_EFFORT_SPENT_VERSION_Bug Fixing</kpi:key>
+         <kpi:value>3.0</kpi:value>
+      </kpi:entry>
    </kpi:entries>
 </kpi:kpi_list>

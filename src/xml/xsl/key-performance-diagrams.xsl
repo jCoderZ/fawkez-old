@@ -246,6 +246,7 @@
          <xsl:text>
 </xsl:text>
       <xsl:for-each select="//cms:version[generate-id() = generate-id(key('version-group', .))]">
+         <xsl:sort select="." order="ascending" data-type="text"/>
          <xsl:variable name="version_name">
             <xsl:choose>
                <xsl:when test="not(. = '')"><xsl:value-of select="."/></xsl:when>
@@ -296,6 +297,7 @@
          <xsl:text>
 </xsl:text>
       <xsl:for-each select="//cms:version[generate-id() = generate-id(key('version-group', .))]">
+         <xsl:sort select="." order="ascending" data-type="text"/>
          <xsl:variable name="version_name">
             <xsl:choose>
                <xsl:when test="not(. = '')"><xsl:value-of select="."/></xsl:when>

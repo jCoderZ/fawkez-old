@@ -110,6 +110,19 @@
             <xsl:with-param name="effort_type" select="."/>
          </xsl:call-template>
       </xsl:for-each>
+      
+      <xsl:for-each select="//cms:efforttype[generate-id() = generate-id(key('efforttype-group', .))]">
+         <xsl:variable name="effort_type_urified">
+            <xsl:call-template name="make_uri">
+               <xsl:with-param name="string" select="."/>
+            </xsl:call-template>
+         </xsl:variable>
+         <xsl:call-template name="gnuplot_efforts_type">
+            <xsl:with-param name="source_file" select="concat($imagedir,'/data_time')"/>
+            <xsl:with-param name="suffix" select="concat($effort_type_urified,'_all_versions')"/>
+            <xsl:with-param name="effort_type" select="."/>
+         </xsl:call-template>
+      </xsl:for-each>
    
    </xsl:template>
    <!-- 

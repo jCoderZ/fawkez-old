@@ -77,6 +77,23 @@ public class AssertTest
       }
    }
 
+   /** Test the not fail method. */
+   public final void testFail ()
+   {
+      try
+      {
+         Assert.fail(BAR_STRING);
+         fail("Assertion fail should not pass.");
+      }
+      catch (AssertionFailedException ex)
+      {
+         assertEquals("Parameter message should be as given.",
+             BAR_STRING,
+               ex.getParameter(
+                  RteLogMessage.AssertionFailed.PARAM_MESSAGE));
+      }
+   }
+
    /**
     * Tests the method {@link Assert#assertTrue(String, boolean)}.
     */

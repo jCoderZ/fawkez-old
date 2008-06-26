@@ -42,6 +42,8 @@
    <xsl:param name="imagedir" select="'images'"/>
    
    <xsl:key name="test-group"           match="//tc:test" use="traceability"/>
+   <xsl:key name="test-scope-group"     match="//tc:test" use="tc:cut"/>
+   <xsl:key name="scope-group"          match="//tc:cut" use="."/>
    <xsl:key name="entry-group"          match="//kpi:kpi_list//kpi:entry"     use="../../kpi:meta/kpi:timestamp"/>
    <xsl:key name="entry-version1-group" match="//kpi:kpi_list//kpi:entry"     use="../../kpi:meta/kpi:version1"/>
    <xsl:key name="entry-version2-group" match="//kpi:kpi_list//kpi:entry"     use="../../kpi:meta/kpi:version2"/>
@@ -187,8 +189,6 @@
                       order="ascending" 
                       data-type="text"/>                         
                <xsl:variable name="first" select="."/>
-               <xsl:value-of select="$first"/><xsl:text>
-               </xsl:text>
                <xsl:apply-templates select="//kpi:kpi_list[kpi:meta/kpi:timestamp = $first]" 
                           mode="timestamp">
                </xsl:apply-templates>
@@ -635,6 +635,7 @@ set xdata time
 set format x "%m/%y"
 set timefmt "%Y%m%d%H%M"
 set xtics nomirror rotate by -45
+set yrange [0:]
 
 set title "<xsl:value-of select="$key_name"/>"
 show title
@@ -656,19 +657,38 @@ plot '<xsl:value-of select="$imagedir"/>/data_time' using 1:<xsl:value-of
 
       <redirect:write file="{$file}">
 set output '<xsl:value-of select="$imagedir"/>/svg/summary_testcases.svg'
-set terminal svg size 400 320 fsize 8
 set xdata time
 set format x "%m/%y"
 set timefmt "%Y%m%d%H%M"
 set key outside
+
 set style fill solid 1.0 border -1
 set boxwidth 0.5 relative
 set xtics nomirror rotate by -45
 
-set title "Test Cases"
+set title 'Testcases'
 show title
 
-<!-- TODO implement module/component based history view -->
+set terminal svg size 1024 768 
+
+plot '<xsl:value-of select="$imagedir"/>/data_time_monthly' \<xsl:text>
+</xsl:text><xsl:for-each select="//tc:cut[generate-id() = generate-id(key('scope-group', .))]">
+              <xsl:variable name="scope_text" select="."/>
+              <xsl:variable name="position.t"><xsl:call-template name="get_position">
+                 <xsl:with-param name="key" select="concat($kpi.testcases.number.module.prefix, $scope_text)"/>
+              </xsl:call-template></xsl:variable>
+               
+               <xsl:text>using </xsl:text>
+               <xsl:text>1:</xsl:text>
+               <xsl:value-of select="$position.t"/>
+               <xsl:text> title '</xsl:text>
+               <xsl:value-of select="$scope_text"/>
+               <xsl:text>'</xsl:text>
+               <xsl:if test="not(position() = last())">
+                  <xsl:text>, \
+</xsl:text>
+               </xsl:if>
+           </xsl:for-each>
 
       </redirect:write>
    </xsl:template>
@@ -689,6 +709,7 @@ set timefmt "%Y%m%d%H%M"
 set key outside
 set style fill solid 1.0 border -1
 set boxwidth 0.5 relative
+set yrange [0:]
 
 set title "Bugs <xsl:value-of select="$version"/>"
 show title
@@ -936,6 +957,7 @@ set timefmt "%Y%m%d%H%M"
 set key outside
 set style fill solid 1.0 border -1
 set boxwidth 0.5 relative
+set yrange [0:]
 
 set title "Bugs"
 show title
@@ -1010,6 +1032,7 @@ set timefmt "%Y%m%d%H%M"
 set key outside
 set style fill solid 1.0 border -1
 set boxwidth 0.5 relative
+set yrange [0:]
 
 set title "Change Requests"
 show title
@@ -1068,6 +1091,7 @@ set timefmt "%Y%m%d%H%M"
 set key outside
 set style fill solid 1.0 border -1
 set boxwidth 0.5 relative
+set yrange [0:]
 
 set title "Change Requests for <xsl:value-of select="$version"/>"
 show title
@@ -1159,6 +1183,7 @@ set timefmt "%Y%m%d%H%M"
 set key outside
 set style fill solid 1.0 border -1
 set boxwidth 0.5 relative
+set yrange [0:]
 
 set title "Test Efficiency"
 show title
@@ -1304,6 +1329,7 @@ set timefmt "%Y%m%d%H%M"
 set key outside
 set style fill solid 1.0 border -1
 set boxwidth 0.5 relative
+set yrange [0:]
 
 set title "Test Coverage"
 show title

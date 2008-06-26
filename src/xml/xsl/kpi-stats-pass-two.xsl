@@ -40,6 +40,8 @@
    <xsl:key name="usecases-group"   match="uc:usecases" use="."/>
    
    <xsl:key name="test-group"                         match="//tc:test" use="tc:traceability"/>
+   <xsl:key name="test-scope-group"                   match="//tc:test" use="tc:cut"/>
+   <xsl:key name="scope-group"                        match="//tc:cut" use="."/>
    <xsl:key name="usecase-group"                      match="//uc:usecase" use="@id"/>
    <xsl:key name="testresult-group"                   match="//tr:testresult[starts-with(tr:version,$version)]" use="."/>
    <xsl:key name="testresult-executor-group"          match="//tr:testresult[tr:version = $version.releasecandidate]" use="tr:executor"/>
@@ -109,6 +111,12 @@
       <kpi:key><xsl:value-of select="$kpi.testcases.executed.version.number"/></kpi:key><xsl:text></xsl:text>
       <kpi:key><xsl:value-of select="$kpi.testcases.executed.passed.version.number"/></kpi:key><xsl:text></xsl:text>
       <kpi:key><xsl:value-of select="$kpi.testcases.executed.version.rc.number"/></kpi:key><xsl:text></xsl:text>
+      
+      <xsl:for-each select="//tc:cut[generate-id() = generate-id(key('scope-group', .))]">
+         <xsl:variable name="scope_text" select="."/>
+         <kpi:key><xsl:value-of select="concat($kpi.testcases.number.module.prefix, 
+                                        $scope_text)"/></kpi:key><xsl:text></xsl:text>
+      </xsl:for-each>
       
       <kpi:key><xsl:value-of select="$kpi.jira.issue.number"/></kpi:key><xsl:text></xsl:text>
       <kpi:key><xsl:value-of select="$kpi.jira.issue.bugs.number"/></kpi:key><xsl:text></xsl:text>
@@ -662,6 +670,15 @@
          <xsl:with-param name="key" select="$kpi.testcases.issues.covered.number"/>
          <xsl:with-param name="value" select="count(//tc:scrno[not(.='') and not(.='none')])"/>
       </xsl:call-template>
+      
+      <xsl:for-each select="//tc:cut[generate-id() = generate-id(key('scope-group', .))]">
+         <xsl:variable name="scope_text" select="."/>
+         <xsl:call-template name="entry">
+            <xsl:with-param name="key" select="concat($kpi.testcases.number.module.prefix, 
+                                               $scope_text)"/>
+            <xsl:with-param name="value" select="count(key('test-scope-group',$scope_text))"/>
+         </xsl:call-template>
+      </xsl:for-each>
       
       
       <!-- Test Coverage -->

@@ -91,7 +91,7 @@
    <xsl:variable name="kpi.testcases.issue.executed.version.passed.number" select="'KPI_NUMBER_EXECUTED_MANUAL_PASSED_TESTCASES'"/>
    
    <!-- number of specified test cases modules-->
-   <xsl:variable name="kpi.testcases.number.module."        select="'KPI_NUMBER_TESTCASES_MODULE_'"/>
+   <xsl:variable name="kpi.testcases.number.module.prefix"   select="'KPI_NUMBER_TESTCASES_MODULE_'"/>
    
    <xsl:variable name="kpi.testcases.priority.high.number"   select="'KPI_NUMBER_TESTCASES_PRIORITY_HIGH'"/>
    <xsl:variable name="kpi.testcases.priority.medium.number" select="'KPI_NUMBER_TESTCASES_PRIORITY_MEDIUM'"/>

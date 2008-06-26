@@ -215,6 +215,18 @@
          <kpi:key><xsl:value-of select="concat($kpi.jira.issue.bugs.effort.remaining.version.prefix, $effort_type)"/></kpi:key><xsl:text></xsl:text>
          <kpi:key><xsl:value-of select="concat($kpi.jira.issue.bugs.effort.spent.version.prefix, $effort_type)"/></kpi:key><xsl:text></xsl:text>
       </xsl:for-each>
+      
+      <xsl:for-each select="//cms:efforttype[generate-id() = generate-id(key('efforttype-group', .))]">
+         <xsl:variable name="effort_type" select="."/>
+         <kpi:key><xsl:value-of select="concat($kpi.jira.issue.crs.effort.remaining.all.version.prefix, $effort_type)"/></kpi:key><xsl:text></xsl:text>
+         <kpi:key><xsl:value-of select="concat($kpi.jira.issue.crs.effort.spent.all.version.prefix, $effort_type)"/></kpi:key><xsl:text></xsl:text>
+         <kpi:key><xsl:value-of select="concat($kpi.jira.issue.bugs.internal.effort.remaining.all.version.prefix, $effort_type)"/></kpi:key><xsl:text></xsl:text>
+         <kpi:key><xsl:value-of select="concat($kpi.jira.issue.bugs.internal.effort.spent.all.version.prefix, $effort_type)"/></kpi:key><xsl:text></xsl:text>
+         <kpi:key><xsl:value-of select="concat($kpi.jira.issue.tasks.effort.remaining.all.version.prefix, $effort_type)"/></kpi:key><xsl:text></xsl:text>
+         <kpi:key><xsl:value-of select="concat($kpi.jira.issue.tasks.effort.spent.all.version.prefix, $effort_type)"/></kpi:key><xsl:text></xsl:text>
+         <kpi:key><xsl:value-of select="concat($kpi.jira.issue.bugs.effort.remaining.all.version.prefix, $effort_type)"/></kpi:key><xsl:text></xsl:text>
+         <kpi:key><xsl:value-of select="concat($kpi.jira.issue.bugs.effort.spent.all.version.prefix, $effort_type)"/></kpi:key><xsl:text></xsl:text>
+      </xsl:for-each>
    </xsl:template>
    
    <!-- 

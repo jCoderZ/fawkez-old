@@ -48,8 +48,10 @@ class AppInfoSaxHandler
 {
    /** Application Identifier of fawkeZ. */
    public static final int APPLICATION_ID_FWK = 1;
-   /** Application Identifier of asfw. */
-   public static final int APPLICATION_ID_ASFW = 100;
+   /** Application Identifier of asf. */
+   public static final int APPLICATION_ID_ASF = 100;
+   /** Application Identifier of ppg. */
+   public static final int APPLICATION_ID_PPG = 101;
 
    private static final Pattern REGEX_SINGLE_QUOTES
          = Pattern.compile(".*[^']'[^'].*",
@@ -85,7 +87,8 @@ class AppInfoSaxHandler
    public AppInfoSaxHandler ()
    {
       mMap.registerApplication(APPLICATION_ID_FWK, "FWK");
-      mMap.registerApplication(APPLICATION_ID_ASFW, "ASFW");
+      mMap.registerApplication(APPLICATION_ID_ASF, "ASF");
+      mMap.registerApplication(APPLICATION_ID_PPG, "PPG");
    }
 
    /** {@inheritDoc} */

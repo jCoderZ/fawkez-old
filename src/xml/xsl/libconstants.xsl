@@ -225,7 +225,17 @@
    <xsl:variable name="kpi.jira.issue.crs.effort.spent.version.prefix" select="'KPI_JIRA_ISSUE_CRS_EFFORT_SPENT_VERSION_'"/>
    <xsl:variable name="kpi.jira.issue.bugs.effort.spent.version.prefix" select="'KPI_JIRA_ISSUE_BUGS_EFFORT_SPENT_VERSION_'"/>
    <xsl:variable name="kpi.jira.issue.bugs.internal.effort.spent.version.prefix" select="'KPI_JIRA_ISSUE_BUGS_INTERNAL_EFFORT_SPENT_VERSION_'"/>
-   <xsl:variable name="kpi.jira.issue.tasks.effort.spent.version.prefix" select="'KPI_JIRA_ISSUE_TASKS_EFFORT_SPENT_VERSION_'"/>      
+   <xsl:variable name="kpi.jira.issue.tasks.effort.spent.version.prefix" select="'KPI_JIRA_ISSUE_TASKS_EFFORT_SPENT_VERSION_'"/>
+   
+   <xsl:variable name="kpi.jira.issue.crs.effort.remaining.all.version.prefix" select="'KPI_JIRA_ISSUE_CRS_EFFORT_REMAINING_ALL_VERSION_'"/>
+   <xsl:variable name="kpi.jira.issue.bugs.effort.remaining.all.version.prefix" select="'KPI_JIRA_ISSUE_BUGS_EFFORT_REMAINING_ALL_VERSION_'"/>
+   <xsl:variable name="kpi.jira.issue.bugs.internal.effort.remaining.all.version.prefix" select="'KPI_JIRA_ISSUE_BUGS_INTERNAL_EFFORT_REMAINING_ALL_VERSION_'"/>
+   <xsl:variable name="kpi.jira.issue.tasks.effort.remaining.all.version.prefix" select="'KPI_JIRA_ISSUE_TASKS_EFFORT_REMAINING_ALL_VERSION_'"/>
+   
+   <xsl:variable name="kpi.jira.issue.crs.effort.spent.all.version.prefix" select="'KPI_JIRA_ISSUE_CRS_EFFORT_SPENT_ALL_VERSION_'"/>
+   <xsl:variable name="kpi.jira.issue.bugs.effort.spent.all.version.prefix" select="'KPI_JIRA_ISSUE_BUGS_EFFORT_SPENT_ALL_VERSION_'"/>
+   <xsl:variable name="kpi.jira.issue.bugs.internal.effort.spent.all.version.prefix" select="'KPI_JIRA_ISSUE_BUGS_INTERNAL_EFFORT_SPENT_ALL_VERSION_'"/>
+   <xsl:variable name="kpi.jira.issue.tasks.effort.spent.all.version.prefix" select="'KPI_JIRA_ISSUE_TASKS_EFFORT_SPENT_ALL_VERSION_'"/>      
    
    <!-- **************** Test Coverage ******** -->
    <xsl:variable name="kpi.req.main.spec.usecase.number" select="'KPI_REQ_MAIN_SPEC_USECASE_NUMBER'"/>

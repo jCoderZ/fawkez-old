@@ -32,6 +32,8 @@
  */
 package org.jcoderz.commons.util;
 
+import java.rmi.UnexpectedException;
+
 import org.jcoderz.commons.ArgumentMalformedException;
 import org.jcoderz.commons.AssertionFailedException;
 
@@ -123,4 +125,33 @@ public final class Assert
          throw new AssertionFailedException(message);
       }
    }
+
+   /**
+    * Can be called if an assertion already failed. This can be used at
+    * code positions that should never be reached at all. It throws
+    * an AssertionFailedException with the given message.
+    *
+    * @param message The message to be used in the exception.
+    * @throws AssertionFailedException always.
+    */
+   public static void fail (String message)
+         throws AssertionFailedException
+   {
+      throw new AssertionFailedException(message);
+   }
+
+   /**
+    * Can be called if an exception is unexpectedly caught. This can
+    * be used at catch blocks that should never be reached at all.
+    * It throws an AssertionFailedException with the given nested
+    * exception.
+    *
+    * @param ex the exception that was not expected
+    * @throws UnexpectedExceptionException always.
+    */
+//   public static void fail (Throwable ex)
+//         throws UnexpectedException
+//   {
+//      throw new UnexpectedExceptionException(ex);
+//   }
 }

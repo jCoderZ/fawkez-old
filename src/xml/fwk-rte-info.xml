@@ -208,4 +208,18 @@
          Supply a correct value for the argument.
       </solution>
    </message>
+
+   <message
+      id="14"
+      name="UNEXPECTED_EXCEPTION"
+      level="SEVERE"
+      base-exception="org.jcoderz.commons.BaseRuntimeException">
+      <text>
+         An exeption occured that was not expected in the current
+         code.
+      </text>
+      <solution>
+         .
+      </solution>
+   </message>
 </group>

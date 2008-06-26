@@ -183,7 +183,7 @@ public class BaseException
    {
       return mLoggable.getSourceMethod();
    }
-   
+
    /** {@inheritDoc} */
    public String toString ()
    {

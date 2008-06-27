@@ -47,6 +47,7 @@
          <value>pmd</value>
          <value>cpd</value>
          <value>cobertura</value>
+         <value>emma</value>
       </enumeration>
 
       <enumeration

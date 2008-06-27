@@ -157,5 +157,6 @@
 			<attribute name="javadoc_location" value="http://www.hibernate.org/hib_docs/v3/api/"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="lib/default/emma/emma.jar"/>
 	<classpathentry kind="output" path="eclipse/bin"/>
 </classpath>

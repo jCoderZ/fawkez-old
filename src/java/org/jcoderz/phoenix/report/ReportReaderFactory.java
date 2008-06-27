@@ -36,7 +36,7 @@ import javax.xml.bind.JAXBException;
 
 /**
  * Factory class to create a report reader for the requested report format.
- * 
+ *
  * @author Michael Griffel
  */
 public final class ReportReaderFactory
@@ -49,7 +49,7 @@ public final class ReportReaderFactory
 
     /**
      * Creates a report reader for the given report format.
-     * 
+     *
      * @param format the report format.
      * @return a report reader for the given report format.
      */
@@ -85,6 +85,10 @@ public final class ReportReaderFactory
             else if (ReportFormat.SOURCE_DIRECTORY == format)
             {
                 result = new SourceDirectoryReader();
+            }
+            else if (ReportFormat.EMMA == format)
+            {
+                result = new EmmaReportReader();
             }
             else if (ReportFormat.JCODERZ == format)
             {

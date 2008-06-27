@@ -401,11 +401,21 @@ public class JcReportAntTask
             coberturaXml = coberturaResult.get();
         }
 
+        final File emmaFile;
+        if (mTools.getEmma() != null)
+        {   // EXCEPTION?
+            emmaFile = new File(mTools.getEmma().mDatafile);
+        }
+        else
+        {
+            emmaFile = null;
+        }
+
         // Merge the different reports into one jcoderz-report.xml
         // This must be done on a level by level basis
         return executeReportNormalizer(srcDir, reportTmpDir,
               nre.getLevel(), checkstyleXml, findbugsXml, pmdXml,
-              cpdXml, coberturaXml);
+              cpdXml, coberturaXml, emmaFile);
     }
 
 
@@ -487,7 +497,8 @@ public class JcReportAntTask
     */
    private File executeReportNormalizer (File srcDir, File reportDir,
             ReportLevel level, File checkstyleXml,
-            File findbugsXml, File pmdXml, File cpdXml, File coberturaXml)
+            File findbugsXml, File pmdXml, File cpdXml, File coberturaXml,
+            File emmaSummary)
        throws IOException, JAXBException, TransformerException
    {
       // INLINE failed, got java.lang.OutOfMemoryError: PermGen space
@@ -542,6 +553,12 @@ public class JcReportAntTask
       {
          cmd.createArgument().setValue("-cobertura");
          cmd.createArgument().setFile(coberturaXml);
+      }
+
+      if (emmaSummary != null)
+      {
+         cmd.createArgument().setValue("-emma");
+         cmd.createArgument().setFile(emmaSummary);
       }
 
       forkToolProcess(this, cmd, new LogStreamHandler(this, Project.MSG_INFO,
@@ -675,7 +692,7 @@ public class JcReportAntTask
          Project.MSG_WARN));
    }
 
-   
+
    //
    // Reports section
    //
@@ -897,6 +914,7 @@ public class JcReportAntTask
       private NestedFindbugsElement mFindbugs = null;
       private NestedCheckstyleElement mCheckstyle = null;
       private NestedCoberturaElement mCobertura = null;
+      private NestedEmmaElement mEmma = null;
 
       public NestedToolsElement (JcReportAntTask task)
       {
@@ -971,6 +989,18 @@ public class JcReportAntTask
       public NestedCoberturaElement getCobertura ()
       {
          return mCobertura;
+      }
+
+      public NestedEmmaElement createEmma ()
+      {
+         mTask.log("Creating Emma element...");
+         mEmma = new NestedEmmaElement(mTask);
+         return mEmma;
+      }
+
+      public NestedEmmaElement getEmma ()
+      {
+         return mEmma;
       }
    }
 
@@ -1461,7 +1491,7 @@ public class JcReportAntTask
              var.setValue(mTask.getEncoding());
              cmd.getSystemProperties().addVariable(var);
          }
-        
+
          forkToolProcess(mTask, cmd, new LogStreamHandler(mTask,
             Project.MSG_INFO, Project.MSG_WARN));
 
@@ -1536,7 +1566,29 @@ public class JcReportAntTask
       }
    }
 
+   public static class NestedEmmaElement
+        extends NestedToolElement
+    {
+        private String mDatafile;
 
+        public NestedEmmaElement (JcReportAntTask task)
+        {
+            super(task);
+        }
+
+        public void setDatafile (String datafile)
+        {
+            mDatafile = datafile;
+        }
+
+        /**
+         * Nothing to be done for emma.
+         */
+        public File execute (File reportDir, File srcDir, File clsPath)
+        {
+            return new File(mDatafile);
+        }
+    }
    //
    // Filters section
    //

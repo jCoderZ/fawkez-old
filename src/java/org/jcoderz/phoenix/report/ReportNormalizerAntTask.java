@@ -80,8 +80,8 @@ public final class ReportNormalizerAntTask
    private final List mReportFiles = new ArrayList();
    /** The Java Commandline */
    private final CommandlineJava mCommandline = new CommandlineJava();
-   /** 
-    * List of source directories of type JcoderzReportAntTask.SourceDirectory. 
+   /**
+    * List of source directories of type JcoderzReportAntTask.SourceDirectory.
     */
    private final List mSourceDirectories = new ArrayList();
 
@@ -272,7 +272,7 @@ public final class ReportNormalizerAntTask
 
       cmd.setClassname(ReportNormalizer.class.getName());
 
-      cmd.createVmArgument().setValue("-Xmx1500m");
+// WOW      cmd.createVmArgument().setValue("-Xmx1500m");
 
       cmd.createArgument().setValue("-out");
       cmd.createArgument().setFile(mOut);

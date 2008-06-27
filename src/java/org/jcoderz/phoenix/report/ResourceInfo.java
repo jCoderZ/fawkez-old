@@ -148,6 +148,32 @@ public final class ResourceInfo
     }
 
     /**
+     * Searches the resource with the given class name and package.
+     *
+     * @param packageName resource package name.
+     * @param className resource class name.
+     * @return the resource for the given name or <tt>null</tt> if not found.
+     */
+    public static ResourceInfo lookup (String packageName, String className)
+    {
+        ResourceInfo result = null;
+        for (ResourceInfo resource: RESOURCES.values())
+        {
+            if (resource.getClassname().equals(className)
+                && resource.getPackage().equals(packageName))
+            {
+                result = resource;
+                break;
+            }
+        }
+        return result;
+    }
+
+    static String dump ()
+    {
+        return RESOURCES.toString();
+    }
+    /**
      * Returns the number of lines for the given file <tt>filename</tt>.
      * @param fileName the name of the file.
      * @return the number of lines.
@@ -269,7 +295,8 @@ public final class ResourceInfo
     public String toString ()
     {
         return "[ResourceInfo: name=" + mResourceName + ", pkg=" + mPackage
-                + ", sourceDir=" + mSourcDir + "]";
+                + ", sourceDir=" + mSourcDir + ", mClassname=" + mClassname
+                + "]";
     }
 
     /**

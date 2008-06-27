@@ -139,6 +139,11 @@
         <dependency org="avalon-framework" name="avalon-framework" rev="4.1.5">
             <artifact name="avalon-framework" type="jar"/>
         </dependency>
+
+        <dependency org="emma" name="emma" rev="2.0.5312">
+            <artifact name="emma" type="jar"/>
+            <artifact name="emma_ant" type="jar"/>
+        </dependency>
    </dependencies>
 
 </ivy-module>

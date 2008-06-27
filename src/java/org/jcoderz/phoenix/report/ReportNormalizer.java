@@ -338,6 +338,10 @@ public final class ReportNormalizer
                 {
                     addReport(ReportFormat.PMD, args[i + 1]);
                 }
+                else if (args[i].equals("-emma"))
+                {
+                    addReport(ReportFormat.EMMA, args[i + 1]);
+                }
                 else if (args[i].equals("-cpd"))
                 {
                     addReport(ReportFormat.CPD, args[i + 1]);

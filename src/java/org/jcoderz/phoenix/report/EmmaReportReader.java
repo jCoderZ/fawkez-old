@@ -118,27 +118,23 @@ public class EmmaReportReader
         while (i.hasNext())
         {
             ClassDescriptor clazz = (ClassDescriptor) i.next();
-            DataHolder coverage = mEmmaCoverageData.getCoverage(clazz);
-            if (coverage != null)
+            final String classname
+                = clazz.getClassVMName().substring(
+                    clazz.getClassVMName().lastIndexOf('/') + 1);
+            final ResourceInfo source
+                = ResourceInfo.lookup(
+                    clazz.getPackageVMName().replaceAll("/", "."), classname);
+            if (source != null)
             {
-                final String classname
-                    = clazz.getClassVMName().substring(
-                        clazz.getClassVMName().lastIndexOf('/') + 1);
-                final ResourceInfo source
-                    = ResourceInfo.lookup(
-                        clazz.getPackageVMName().replaceAll("/", "."),
-                        classname);
-                if (source != null)
-                {
-                    processClazz(itemMap, source, clazz, coverage);
-                }
-                else
-                {
-                    logger.finer(
-                        "Ignoring coverage info for resource "
-                            + clazz.getPackageVMName().replaceAll("/", ".")
-                            + classname);
-                }
+                processClazz(itemMap, source, clazz,
+                    mEmmaCoverageData.getCoverage(clazz));
+            }
+            else
+            {
+                logger.finer(
+                    "Ignoring coverage info for resource "
+                        + clazz.getPackageVMName().replaceAll("/", ".")
+                        + classname);
             }
         }
         return itemMap;
@@ -190,14 +186,17 @@ public class EmmaReportReader
             if (method.getBlockSizes() != null
                 && method.getBlockMap() != null)
             {
-                final boolean[] methodCoverage
-                    = coverage.m_coverage[methodNr];
+                boolean[] methodCoverage = null;
+                if (coverage!= null)
+                {
+                    methodCoverage = coverage.m_coverage[methodNr];
+                }
                 final int[][] map = method.getBlockMap();
                 for (int blockNr = 0;
-                    blockNr < methodCoverage.length; blockNr++)
+                    blockNr < map.length; blockNr++)
                 {
                     int[] blockLines = map[blockNr];
-                    if (methodCoverage[blockNr])
+                    if (methodCoverage != null && methodCoverage[blockNr])
                     {
                         markCovered(lineCoverage, blockLines);
                     }

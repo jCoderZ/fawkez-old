@@ -50,6 +50,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.xml.bind.JAXBException;
@@ -100,6 +101,16 @@ public class EmmaReportReader
             mEmmaMetaData = (IMetaData) emmaReport[DataFactory.TYPE_METADATA];
             mEmmaCoverageData = (ICoverageData)
                 emmaReport[DataFactory.TYPE_COVERAGEDATA];
+            if (mEmmaMetaData == null)
+            {
+                logger.warning(
+                    "Read no meta data from emma in file '" + f + "'." );
+            }
+            if (mEmmaCoverageData == null)
+            {
+                logger.warning(
+                    "Read no coverage info from emma in file '" + f + "'." );
+            }
         }
         catch (IOException e)
         {
@@ -118,23 +129,44 @@ public class EmmaReportReader
         while (i.hasNext())
         {
             ClassDescriptor clazz = (ClassDescriptor) i.next();
+            final String srcFileName = clazz.getSrcFileName();
+            final String fileName;
+            if (srcFileName != null)
+            {
+                fileName = srcFileName.substring(
+                    0, srcFileName.lastIndexOf('.'));
+            }
+            else
+            {   // fallback if data is not available.
+                fileName = clazz.getClassVMName().substring(
+                    clazz.getClassVMName().lastIndexOf('/') + 1);
+            }
             final String classname
                 = clazz.getClassVMName().substring(
                     clazz.getClassVMName().lastIndexOf('/') + 1);
             final ResourceInfo source
                 = ResourceInfo.lookup(
-                    clazz.getPackageVMName().replaceAll("/", "."), classname);
+                    clazz.getPackageVMName().replaceAll("/", "."), fileName);
             if (source != null)
             {
+                if (logger.isLoggable(Level.FINER))
+                {
+                    logger.finer(
+                        "Processing coverage info for resource " + source);
+                }
                 processClazz(itemMap, source, clazz,
-                    mEmmaCoverageData.getCoverage(clazz));
+                   mEmmaCoverageData == null
+                       ? null : mEmmaCoverageData.getCoverage(clazz));
             }
             else
             {
-                logger.finer(
-                    "Ignoring coverage info for resource "
-                        + clazz.getPackageVMName().replaceAll("/", ".")
-                        + classname);
+                if (logger.isLoggable(Level.FINER))
+                {
+                    logger.finer(
+                        "Ignoring coverage info for class "
+                        + clazz.getPackageVMName().replaceAll("/", ".") + "."
+                        + classname + "@" + clazz.getSrcFileName());
+                }
             }
         }
         return itemMap;

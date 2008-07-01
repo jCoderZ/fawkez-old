@@ -2037,8 +2037,7 @@ public final class <xsl:value-of select="$classname"/>
      =============================================================== -->
 <xsl:template name="java-copyright-header" priority="-1">
 <xsl:text>/*
- * Generated source file, not in CVS repository
- * Copyright (C) 2006, The jCoderZ Project. All rights reserved.
+ * Generated source file, not in CVS/SVN repository
  */</xsl:text>
 </xsl:template>
 

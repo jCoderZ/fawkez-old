@@ -72,6 +72,17 @@
                This is the solution of the test message.
             </solution>
          </message>
+         <message 
+            id="65535" 
+            name="TEST_MESSAGE">
+            <text>
+               This is an other test message and should not be used 
+			   in a production environment.
+            </text>
+            <solution>
+               This is the solution of the 2nd test message.
+            </solution>
+         </message>
       </group>   
    </application>
 </messages>

@@ -763,13 +763,12 @@ public abstract class <xsl:value-of select="$classname"/>
                   <xsl:with-param name="isAudit" select="$isAudit"/>
                </xsl:call-template>
        */
-      public static void log (<xsl:value-of select="$custom-logger-class"/> logger,
-          <xsl:call-template
+      public static void log (<xsl:value-of select="$custom-logger-class"/> logger<xsl:if 
+	     test="$isAudit or normalize-space($tokens)">, <xsl:call-template
                   name="inner-clazz-log-parameter-list">
                   <xsl:with-param name="tokens" select="$tokens"/>
                   <xsl:with-param name="isAudit" select="$isAudit"/>
-          </xsl:call-template>
-            )
+          </xsl:call-template></xsl:if>)
       {
         final <xsl:value-of select="$log-event-class"/> logEvent
           = new <xsl:value-of select="$log-event-class"/>(<xsl:value-of
@@ -804,12 +803,12 @@ public abstract class <xsl:value-of select="$classname"/>
                </xsl:call-template>
        * @param cause the Throwable that causes this message to be logged.
        */
-      public static void log (<xsl:value-of select="$custom-logger-class"/> logger,
-          <xsl:call-template
+      public static void log (<xsl:value-of select="$custom-logger-class"/> logger<xsl:if 
+	     test="$isAudit or normalize-space($tokens)">, <xsl:call-template
                   name="inner-clazz-log-parameter-list">
                   <xsl:with-param name="tokens" select="$tokens"/>
                   <xsl:with-param name="isAudit" select="$isAudit"/>
-          </xsl:call-template><xsl:if test="$isAudit or normalize-space($tokens)">,</xsl:if>
+          </xsl:call-template></xsl:if>, 
                Throwable cause
             )
       {

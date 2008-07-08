@@ -68,6 +68,7 @@ import javax.sql.DataSource;
 import org.jcoderz.commons.util.Constants;
 import org.jcoderz.commons.util.DbUtil;
 import org.jcoderz.commons.util.IoUtil;
+import org.jcoderz.commons.util.LoggingUtils;
 import org.jcoderz.commons.util.XmlUtil;
 
 
@@ -78,13 +79,13 @@ import org.jcoderz.commons.util.XmlUtil;
  */
 public class DbView
 {
-   /** Default database jndi name. */ 
+   /** Default database jndi name. */
    public static final String DATASOURCE = "java:comp/env/jdbc/svs/db";
 
    /** Line separator to be used in output files. */
    public static final String LINE_SEPARATOR = Constants.LINE_SEPARATOR;
 
-   private static final int MILLIS_PER_SECOND 
+   private static final int MILLIS_PER_SECOND
            = org.jcoderz.commons.types.Date.MILLIS_PER_SECOND;
    private static final String SELECT_ALL_TABLES = "select * from tab";
    private static final String CLASSNAME = DbView.class.getName();
@@ -92,7 +93,7 @@ public class DbView
 
    private final Map mTypeMapper = new HashMap();
    private final DateFormat mDateFormater
-         = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss.SSS", 
+         = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss.SSS",
                  Constants.SYSTEM_LOCALE);
 
    {
@@ -181,8 +182,9 @@ public class DbView
          {
             final String tableName = rs.getString(1);
             performConvertion(
-                  new File(dir, tableName + ".xml").getCanonicalPath(),
-                  dbConnection, "select * from " + tableName);
+                  new File(dir,
+                      escapeTableName(tableName) + ".xml").getCanonicalPath(),
+                      dbConnection, "select * from \"" + tableName + '"');
          }
       }
       finally
@@ -238,8 +240,9 @@ public class DbView
             }
             else if ("-loglevel".equals(args[i]))
             {
-               mLogLevel = Level.parse(args[i + 1]);
+               mLogLevel = Level.parse(args[++i]);
                Logger.getLogger("").setLevel(mLogLevel);
+               LoggingUtils.setGlobalHandlerLogLevel(mLogLevel);
             }
             else
             {
@@ -330,6 +333,7 @@ public class DbView
          final Connection dbConnection, String query)
          throws IOException, SQLException
    {
+      logger.fine("about to dump '" + query + "' into '" + fileName +"'.");
       PrintWriter out = null;
       PreparedStatement statement = null;
       try
@@ -353,7 +357,7 @@ public class DbView
       }
    }
 
-   private Connection getConnectionFromDataSource () 
+   private Connection getConnectionFromDataSource ()
        throws NamingException, SQLException
    {
       final Context ctx = new InitialContext();
@@ -557,7 +561,7 @@ public class DbView
       return result;
    }
 
-   private Object readBlob (ResultSet rs, int column) 
+   private Object readBlob (ResultSet rs, int column)
          throws SQLException
    {
       final Blob blob = rs.getBlob(column);
@@ -586,13 +590,20 @@ public class DbView
    {
       final String result;
       final Reader reader = rs.getCharacterStream(column);
-      try
+      if (reader != null)
       {
-         result = IoUtil.readFully(reader);
+          try
+          {
+             result = IoUtil.readFully(reader);
+          }
+          finally
+          {
+             IoUtil.close(reader);
+          }
       }
-      finally
+      else
       {
-         IoUtil.close(reader);
+          result = null;
       }
       return result;
    }
@@ -720,7 +731,7 @@ public class DbView
       {
          // ts.getTime does not return millis....
          d = new Date(((ts.getTime() / MILLIS_PER_SECOND) * MILLIS_PER_SECOND)
-               + (ts.getNanos() 
+               + (ts.getNanos()
                    / org.jcoderz.commons.types.Date.NANOS_PER_MILLI));
       }
       else
@@ -803,7 +814,7 @@ public class DbView
             }
             else
             {
-               final IllegalArgumentException axe 
+               final IllegalArgumentException axe
                      = new IllegalArgumentException(
                         "Could not map type for object '" + String.valueOf(in)
                         + "' of class " + in.getClass().getName()
@@ -815,5 +826,10 @@ public class DbView
          }
          return (String) mToString.invoke(type, null);
       }
+   }
+
+   public static String escapeTableName (String in)
+   {
+       return in.replaceAll("[/\\\\$]", "#");
    }
 }

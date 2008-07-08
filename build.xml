@@ -719,6 +719,7 @@ xerces in current vm: ${xerces.version.ant}
           <src path="${base.dir}/src/java"/>
           <src path="${build.dir}/gen-java"/>
           <exclude name="org/jcoderz/phoenix/report/**"/>
+          <exclude name="org/jcoderz/testdata/**"/>
           <classpath refid="default.classpath"/>
       </javac>
         <javac destdir="${build.dir}/classes"
@@ -729,6 +730,7 @@ xerces in current vm: ${xerces.version.ant}
             <src path="${base.dir}/src/java"/>
             <src path="${build.dir}/gen-java"/>
             <include name="org/jcoderz/phoenix/report/**"/>
+            <include name="org/jcoderz/testdata/**"/>
           <classpath>
               <pathelement path="${build.dir}/classes"/>
               <path refid="default.classpath"/>

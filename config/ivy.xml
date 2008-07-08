@@ -85,10 +85,8 @@
             <artifact name="hibernate-annotations"/>
             <exclude name="jta"/>
         </dependency>
-        <!--
-        <dependency org="mysql" name="mysql-connector-java" rev="5.1.6"/>
-          -->
         <dependency org="org.apache.derby" name="derby" rev="10.4.1.3"/>
+        <dependency org="xom" name="xom" rev="1.1" />
 
         <dependency org="org.apache.ant" name="ant" rev="1.7.0" />
         <dependency org="log4j" name="log4j" rev="1.2.14" />

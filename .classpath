@@ -158,5 +158,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="lib/default/emma/emma.jar"/>
+	<classpathentry kind="lib" path="lib/default/xom/xom.jar"/>
 	<classpathentry kind="output" path="eclipse/bin"/>
 </classpath>

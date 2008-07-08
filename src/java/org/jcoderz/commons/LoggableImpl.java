@@ -187,20 +187,21 @@ public class LoggableImpl
       INSTANCE_ID = getStaticInstanceId();
    }
 
-   LoggableImpl (Loggable outer, LogMessageInfo errorId)
+   public LoggableImpl (Loggable outer, LogMessageInfo errorId)
    {
       this(outer, errorId, THREAD_ID_GENERATOR.getThreadId(),
             INSTANCE_ID, NODE_ID);
    }
 
-   LoggableImpl (Loggable outer, LogMessageInfo errorId, Throwable cause)
+   public LoggableImpl (Loggable outer, LogMessageInfo errorId,
+       Throwable cause)
    {
       this(outer, errorId, THREAD_ID_GENERATOR.getThreadId(), INSTANCE_ID,
             NODE_ID, cause);
    }
 
-   LoggableImpl (Loggable outer, LogMessageInfo errorId, long threadId,
-         String instanceId, String nodeId)
+   public LoggableImpl (Loggable outer, LogMessageInfo errorId,
+       long threadId, String instanceId, String nodeId)
    {
       mEventTime = System.currentTimeMillis();
       mTrackingNumber = Integer.toHexString(RANDOM_ID_GENERATOR.nextInt());
@@ -212,8 +213,8 @@ public class LoggableImpl
       initInternalParameters();
    }
 
-   LoggableImpl (Loggable outer, LogMessageInfo errorId, long threadId,
-         String instanceId, String nodeId, Throwable cause)
+   public LoggableImpl (Loggable outer, LogMessageInfo errorId,
+       long threadId, String instanceId, String nodeId, Throwable cause)
    {
       mEventTime = System.currentTimeMillis();
       if (cause instanceof Loggable)

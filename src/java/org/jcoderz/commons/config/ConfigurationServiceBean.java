@@ -36,7 +36,7 @@ import javax.ejb.SessionBean;
 
 
 /**
- * The (stateless) session bean fascade of the Configuration Service.
+ * The (stateless) session bean facade of the Configuration Service.
  *
  * XDoclet tags for the Bean must be declared in this class; XDoclet tags for
  * the Bean methods must be declared in the super impl class.

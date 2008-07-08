@@ -45,7 +45,7 @@ public interface ServiceConfiguration
    // currently no common method for all interfaces
 
    /**
-    * selects the chache mode,if the types interface implementation should cache
+    * selects the cache mode,if the types interface implementation should cache
     * its configuration. The caching is enabled by default.
     *
     * NOTE: Please remark that this caching mode only determines the caching

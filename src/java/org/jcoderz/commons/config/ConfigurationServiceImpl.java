@@ -41,16 +41,16 @@ import org.jcoderz.commons.util.Assert;
 /**
  * Implementation of the ConfigurationService business methods.
  *
- * This class holds all business logic of the service to fetch specifc
+ * This class holds all business logic of the service to fetch specific
  * configuration data.
  * Implementing the business interface ConfigurationServiceInterface.
  *
- * On this level only primitve types String, int, long and boolean are used.
- * The wellformed and complex typed interfaces for the specific services are
+ * On this level only primitive types String, int, long and boolean are used.
+ * The well-formed and complex typed interfaces for the specific services are
  * using this more simple interface.
  *
  * IMPORTANT:
- * Because of XDoclet Bug in current version, we define deligators to the super
+ * Because of XDoclet Bug in current version, we define delegators to the super
  * class with ejb-tags here.
  * These should be deleted if XDoclet is fixed.
  *
@@ -84,7 +84,7 @@ public class ConfigurationServiceImpl
       getConfigurationCacheCurrent().addConfigurationListener(listener);
    }
 
- 
+
    /** {@inheritDoc} */
    public ServiceConfiguration getServiceConfiguration (
          String classname)
@@ -105,7 +105,7 @@ public class ConfigurationServiceImpl
    }
 
    // IMPORTANT:
-   // Because of XDoclet Bug in current version, we define the deligators
+   // Because of XDoclet Bug in current version, we define the delegators
    // here with ejb-tags.
    // Normally the implementation from CommonImpl is already inherited.
    // FIXME: This should be changed when XDoclet BugFix is available.

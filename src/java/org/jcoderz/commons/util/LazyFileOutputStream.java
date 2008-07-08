@@ -41,6 +41,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.logging.Logger;
 
 /**
  * Purpose of this class is to avoid writing a File if it already
@@ -61,6 +62,9 @@ import java.io.OutputStream;
 public class LazyFileOutputStream
     extends OutputStream
 {
+    private static final String CLASSNAME
+        = LazyFileOutputStream.class.getName();
+    private static final Logger logger = Logger.getLogger(CLASSNAME);
     private boolean mBuffering;
     private OutputStream mOutput;
     private File mFile;
@@ -154,6 +158,10 @@ public class LazyFileOutputStream
         {
             mOutput.close();
             mOutput = null;
+            if (mBuffering)
+            {
+                logger.fine("Avoided to touch " + mFile);
+            }
         }
     }
 

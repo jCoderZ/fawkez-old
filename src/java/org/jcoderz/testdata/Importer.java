@@ -132,6 +132,8 @@ public class Importer {
 
                 if (importer.generateQueries(result, items, queries, tableNames)) {
                     importer.executeQueries(properties, queries);
+                } else {
+                    logger.severe("No insert statements have been executed since errors are detected.");
                 }
             }
         }

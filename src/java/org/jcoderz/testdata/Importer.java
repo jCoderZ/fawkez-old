@@ -45,7 +45,7 @@ public class Importer
 {
     private static final String DEFAULT_TABLE_PREFIX = "S0IR_";
 
-    private static final long DEFAULT_SEQUENCE_BASE = 1000000000L;
+    private static final long DEFAULT_SEQUENCE_BASE = 100000L;
 
     private static final String SUFFIX_XML = ".xml";
 
@@ -118,7 +118,7 @@ public class Importer
             while (iter.hasNext())
             {
                 Table table = (Table) iter.next();
-                tableNames.add(table.getName());
+                tableNames.add(table.getName().toUpperCase());
             }
         }
         catch (IOException e)
@@ -145,7 +145,7 @@ public class Importer
                 else
                 {
                     logger
-                        .severe("No insert statements have been executed since errors are detected.");
+                        .severe("No insert statements have been executed since errors have been detected.");
                 }
             }
         }
@@ -189,11 +189,13 @@ public class Importer
             }
             for (String query : queries)
             {
+                logger.info(query);
                 Statement stmt = conn.createStatement();
                 ResultSet rs = stmt.executeQuery(query);
                 rs.close();
                 stmt.close();
             }
+            conn.commit();
             conn.close();
         }
         catch (SQLException e)
@@ -304,7 +306,6 @@ public class Importer
                 query.append(" VALUES ");
                 query.append(values);
             }
-            // logger.info(query.toString());
             queries.add(query.toString());
         }
         return valid;

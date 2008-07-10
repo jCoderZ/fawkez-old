@@ -583,11 +583,11 @@ public <xsl:if test="$object/@final = 'true'">final </xsl:if>class <xsl:value-of
    }
 
    /**
-    * Returns <code>true</code> if this <code><xsl:value-of select="$classname"/></code>
-    * is equal to <tt>object</tt>.
+    * Returns &lt;code>true&lt;/code> if this &lt;code><xsl:value-of select="$classname"/>&lt;/code>
+    * is equal to &lt;tt>object&lt;/tt>.
     * @param object the object to compare to.
-    * @return <code>true</code> if this <code><xsl:value-of select="$classname"/></code>
-    *       is equal to <tt>object</tt>.
+    * @return &lt;code>true&lt;/code> if this &lt;code><xsl:value-of select="$classname"/>&lt;/code>
+    *       is equal to &lt;tt>object&lt;/tt>.
     */
    public boolean equals (Object object)
    {
@@ -894,14 +894,14 @@ public final class <xsl:value-of select="$classname"/>
       implements Serializable, org.jcoderz.commons.StrongType
 {
    /**
-    * The name of this type.
+    * <xsl:value-of select="$classname"/> - the name of this type as string constant.
     */
    public static final String TYPE_NAME = "<xsl:value-of select="$classname"/>";
 
-   /** The minimal length of <xsl:value-of select="$classname"/>. */
+   /** The minimal length of <xsl:value-of select="$classname"/> (<xsl:value-of select="$min-length"/>). */
    public static final int MIN_LENGTH = <xsl:value-of select="$min-length"/>;
 
-   /** The maximal length of <xsl:value-of select="$classname"/>. */
+   /** The maximal length of <xsl:value-of select="$classname"/> (<xsl:value-of select="$max-length"/>). */
    public static final int MAX_LENGTH = <xsl:value-of select="$max-length"/>;
 <xsl:if test="$regex">
 
@@ -931,10 +931,9 @@ public final class <xsl:value-of select="$classname"/>
    /**
     * Creates a new instance of a <xsl:value-of select="$classname"/>.
     *
-    * @param str the <xsl:value-of select="$classname"/> as string representation
-    * @throws ArgumentMalformedException If the given string <code>str</code>
+    * @param str the <xsl:value-of select="$classname"/> as string representation.
+    * @throws ArgumentMalformedException If the given string &lt;code>str&lt;/code>
     *         violates the restriction of this type.
-    *         <xsl:value-of select="$classname"/>.
     */
    private <xsl:value-of select="$classname"/> (final String str)
          throws ArgumentMalformedException
@@ -975,9 +974,8 @@ public final class <xsl:value-of select="$classname"/>
     *
     * @param str The str representation of the <xsl:value-of select="$classname"/> to be returned.
     * @return The <xsl:value-of select="$classname"/> object represented by this str.
-    * @throws ArgumentMalformedException If the given string <code>str</code>
+    * @throws ArgumentMalformedException If the given string &lt;code>str&lt;/code>
     *         violates the restriction of this type.
-    *         <xsl:value-of select="$classname"/>.
     */
    public static <xsl:value-of select="$classname"/> fromString (String str)
          throws ArgumentMalformedException
@@ -1039,9 +1037,11 @@ package <xsl:value-of select="$package"/>;
 public final class <xsl:value-of select="$classname"/>
       extends org.jcoderz.commons.util.StringUserTypeBase
 {
-   /**
-    * Null or Empty constant
-    */
+   /** <xsl:choose>
+        <xsl:when
+          test="$min-length = 0">Holds the empty string representation of the type.</xsl:when>
+          <xsl:otherwise>Holds null as empty representation of this type.</xsl:otherwise>
+      </xsl:choose> */
    private static final <xsl:value-of select="$type-classname"/> EMPTY_OR_NULL
         = <xsl:choose><xsl:when test="$min-length = 0">
           <xsl:value-of select="$type-classname"/>.fromString("");</xsl:when>
@@ -1049,23 +1049,32 @@ public final class <xsl:value-of select="$classname"/>
           </xsl:choose>
 
   /**
-   * {@inheritDoc}
+   * Creates a <xsl:value-of select="$type-classname"/> from its String
+   * database representation.
+   * @param value a string holding the database representation of the
+   *    <xsl:value-of select="$type-classname"/>.
+   * @return a <xsl:value-of select="$type-classname"/> representing the
+   *    given string.
+   * @see <xsl:value-of select="$type-classname"/>#fromString(String)
    */
   public Object fromString(String value)
   {
     return <xsl:value-of select="$type-classname"/>.fromString(value);
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  /** <xsl:choose>
+        <xsl:when
+          test="$min-length = 0">@return the empty string as null representation of the type.</xsl:when>
+          <xsl:otherwise>@return &lt;code>null&lt;/code> as null representation of the type.</xsl:otherwise>
+      </xsl:choose> */
   public Object getEmptyOrNull()
   {
     return EMPTY_OR_NULL;
   }
 
   /**
-   * {@inheritDoc}
+   * @return <xsl:value-of select="$type-classname"/>.class as the supported
+   * class of this user type.
    */
   public Class returnedClass()
   {
@@ -1118,17 +1127,17 @@ public final class <xsl:value-of select="$classname"/>
       implements Serializable, org.jcoderz.commons.StrongType
 {
    /**
-    * The name of this type.
+    * <xsl:value-of select="$classname"/> - the name of this type as string constant.
     */
    public static final String TYPE_NAME = "<xsl:value-of select="$classname"/>";
 
    /**
-    * The minimum value of a <xsl:value-of select="$classname"/>.
+    * The minimum value of a <xsl:value-of select="$classname"/> (<xsl:value-of select="$min-value"/>).
     */
    public static final long MIN_VALUE = <xsl:value-of select="$min-value"/>;
 
    /**
-    * The maximum value of a <xsl:value-of select="$classname"/>.
+    * The maximum value of a <xsl:value-of select="$classname"/> (<xsl:value-of select="$max-value"/>).
     */
    public static final long MAX_VALUE = <xsl:value-of select="$max-value"/>;
 
@@ -1155,13 +1164,13 @@ public final class <xsl:value-of select="$classname"/>
     * Creates a new instance of a <xsl:value-of select="$classname"/>.
     *
     * @param id the <xsl:value-of select="$classname"/> as long representation
-    * @throws ArgumentMalformedException If the given long <code>id</code>
+    * @throws ArgumentMalformedException If the given long &lt;code>id&lt;/code>
     *         violates the restriction of the type
     *         <xsl:value-of select="$classname"/>.
     * @throws ArgumentMinValueViolationException If the value of the given
-    *         long <code>id</code> is below <code>MIN_VALUE</code>.
+    *         long &lt;code>id&lt;/code> is below {@link #MIN_VALUE}.
     * @throws ArgumentMaxValueViolationException If the value of the given
-    *         long <code>id</code> is above <code>MAX_VALUE</code>.
+    *         long &lt;code>id&lt;/code> is above {@link #MAX_VALUE}.
     */
    private <xsl:value-of select="$classname"/> (long id)
    {
@@ -1184,13 +1193,13 @@ public final class <xsl:value-of select="$classname"/>
     * Construct a <xsl:value-of select="$classname"/> object from its long representation.
     * @param id the long representation of the <xsl:value-of select="$classname"/>
     * @return the <xsl:value-of select="$classname"/> object represented by the given long
-    * @throws ArgumentMalformedException If the given long <code>id</code>
+    * @throws ArgumentMalformedException If the given long &lt;code>id&lt;/code>
     *         violates the restriction of the type
     *         <xsl:value-of select="$classname"/>.
     * @throws ArgumentMinValueViolationException If the value of the given
-    *         long <code>id</code> is below <code>MIN_VALUE</code>.
+    *         long &lt;code>id&lt;/code> is below {@link #MIN_VALUE}.
     * @throws ArgumentMaxValueViolationException If the value of the given
-    *         long <code>id</code> is above <code>MAX_VALUE</code>.
+    *         long &lt;code>id&lt;/code> is above {@link #MAX_VALUE}.
     */
    public static <xsl:value-of select="$classname"/> fromLong (long id)
          throws ArgumentMalformedException
@@ -1202,13 +1211,13 @@ public final class <xsl:value-of select="$classname"/>
     * Construct a <xsl:value-of select="$classname"/> object from its string representation.
     * @param s the string representation of the <xsl:value-of select="$classname"/>
     * @return the <xsl:value-of select="$classname"/> object represented by the given string
-    * @throws ArgumentMalformedException If the given string <code>s</code>
+    * @throws ArgumentMalformedException If the given string &lt;code>s&lt;/code>
     *         violates the restriction of the type
     *         <xsl:value-of select="$classname"/>.
-    * @throws ArgumentMinValueViolationException If the long value of the given
-    *         string <code>s</code> is below <code>MIN_VALUE</code>.
-    * @throws ArgumentMaxValueViolationException If the long value of the given
-    *         string <code>s</code> is above <code>MAX_VALUE</code>.
+    * @throws ArgumentMinValueViolationException If the value of the given
+    *         long &lt;code>id&lt;/code> is below {@link #MIN_VALUE}.
+    * @throws ArgumentMaxValueViolationException If the value of the given
+    *         long &lt;code>id&lt;/code> is above {@link #MAX_VALUE}.
     */
    public static <xsl:value-of select="$classname"/> fromString (String s)
          throws ArgumentMalformedException
@@ -1230,13 +1239,13 @@ public final class <xsl:value-of select="$classname"/>
     * Construct a <xsl:value-of select="$classname"/> object from its Long representation.
     * @param id the Long representation of the <xsl:value-of select="$classname"/>
     * @return the <xsl:value-of select="$classname"/> object represented by the given Long
-    * @throws ArgumentMalformedException If the given Long <code>id</code>
+    * @throws ArgumentMalformedException If the given Long &lt;code>id&lt;/code>
     *         is null or violates the restriction of the type
     *         <xsl:value-of select="$classname"/>.
     * @throws ArgumentMinValueViolationException If the value of the given
-    *         long <code>id</code> is below <code>MIN_VALUE</code>.
+    *         long &lt;code>id&lt;/code> is below {@link #MIN_VALUE}.
     * @throws ArgumentMaxValueViolationException If the value of the given
-    *         long <code>id</code> is above <code>MAX_VALUE</code>.
+    *         long &lt;code>id&lt;/code> is above {@link #MAX_VALUE}.
     */
    public static <xsl:value-of select="$classname"/> fromLong (Long id)
          throws ArgumentMalformedException
@@ -1321,7 +1330,13 @@ public final class <xsl:value-of select="$classname"/>
       extends org.jcoderz.commons.util.IntUserTypeBase
 {
   /**
-   * {@inheritDoc}
+   * Creates a <xsl:value-of select="$type-classname"/> from its numeric
+   * int database representation.
+   * @param value a int holding the database representation of the
+   *    <xsl:value-of select="$type-classname"/>.
+   * @return a <xsl:value-of select="$type-classname"/> representing the
+   *    given int.
+   * @see <xsl:value-of select="$type-classname"/>#fromInt(int)
    */
   public Object fromInt(int value)
   {
@@ -1329,7 +1344,13 @@ public final class <xsl:value-of select="$classname"/>
   }
 
   /**
-   * {@inheritDoc}
+   * Converts the <xsl:value-of select="$type-classname"/> to its numeric
+   * int database representation.
+   * @param value the <xsl:value-of select="$type-classname"/> to be
+   *    converted.
+   * @return a int representing the
+   *    given <xsl:value-of select="$type-classname"/>.
+   * @see <xsl:value-of select="$type-classname"/>#toInt()
    */
   public int toInt(Object value)
   {
@@ -1337,7 +1358,8 @@ public final class <xsl:value-of select="$classname"/>
   }
 
   /**
-   * {@inheritDoc}
+   * @return <xsl:value-of select="$type-classname"/>.class as the supported
+   * class of this user type.
    */
   public Class returnedClass()
   {
@@ -1365,7 +1387,13 @@ public final class <xsl:value-of select="$classname"/>
       extends org.jcoderz.commons.util.LongUserTypeBase
 {
   /**
-   * {@inheritDoc}
+   * Creates a <xsl:value-of select="$type-classname"/> from its numeric
+   * long database representation.
+   * @param value a long holding the database representation of the
+   *    <xsl:value-of select="$type-classname"/>.
+   * @return a <xsl:value-of select="$type-classname"/> representing the
+   *    given long.
+   * @see <xsl:value-of select="$type-classname"/>#fromLong(long)
    */
   public Object fromLong(long value)
   {
@@ -1373,7 +1401,13 @@ public final class <xsl:value-of select="$classname"/>
   }
 
   /**
-   * {@inheritDoc}
+   * Converts the <xsl:value-of select="$type-classname"/> to its numeric
+   * long database representation.
+   * @param value the <xsl:value-of select="$type-classname"/> to be
+   *    converted.
+   * @return a long representing the
+   *    given <xsl:value-of select="$type-classname"/>.
+   * @see <xsl:value-of select="$type-classname"/>#toLong()
    */
   public long toLong(Object value)
   {
@@ -1381,7 +1415,8 @@ public final class <xsl:value-of select="$classname"/>
   }
 
   /**
-   * {@inheritDoc}
+   * @return <xsl:value-of select="$type-classname"/>.class as the supported
+   * class of this user type.
    */
   public Class returnedClass()
   {
@@ -1459,7 +1494,7 @@ public final class <xsl:value-of select="$classname"/>
     * Creates a new instance of a <xsl:value-of select="$classname"/>.
     *
     * @param str the <xsl:value-of select="$classname"/> as string representation
-    * @throws ArgumentMalformedException If the given string <code>str</code>
+    * @throws ArgumentMalformedException If the given string &lt;code>str&lt;/code>
     *         does not conform to the Simpay Scheme representation of the
     *         <xsl:value-of select="$classname"/>.
     */
@@ -1483,7 +1518,7 @@ public final class <xsl:value-of select="$classname"/>
     *
     * @param str The str representation of the <xsl:value-of select="$classname"/> to be returned.
     * @return The <xsl:value-of select="$classname"/> object represented by this str.
-    * @throws ArgumentMalformedException If the given string <code>s</code>
+    * @throws ArgumentMalformedException If the given string &lt;code>s&lt;/code>
     *         does not conform to the Simpay Interface representation of
     *         <xsl:value-of select="$classname"/>.
     */
@@ -1624,10 +1659,10 @@ import org.jcoderz.commons.util.NumberUtil;
 /**
  * Fix point numeric to represent <xsl:value-of select="$classname"/>.
  *
- * Permitted values range from <xsl:value-of select="$MIN_VALUE"/> to
+ * &lt;p>Permitted values range from <xsl:value-of select="$MIN_VALUE"/> to
  * <xsl:value-of select="$MAX_VALUE"/>. It the number of decimal
  * digits supported is <xsl:value-of select="$fraction-digits"/> and
- * the total number of digits is <xsl:value-of select="$total-digits"/>
+ * the total number of digits is <xsl:value-of select="$total-digits"/>&lt;/p>
  *
  * Instances of this class are immutable.
  *
@@ -1638,67 +1673,65 @@ public final class <xsl:value-of select="$classname"/>
     implements Comparable, StrongType, Serializable
 {
     /**
-     * The name of this type.
+     * <xsl:value-of select="$classname"/> - the name of this type as String constant.
      */
     public static final String TYPE_NAME = "<xsl:value-of select="$classname"/>";
 
-    /**
-     * The name of this type.
-     */
+    /** The preffered database representation of this type. */
     public static final String PREFERED_DATABASE_TYPE
         = "NUMBER(<xsl:value-of select="$total-digits"/>,<xsl:value-of select="$fraction-digits"/>)";
 
-    /** The minimal unscaled value of <xsl:value-of select="$classname"/>. */
+    /** The minimal unscaled value of <xsl:value-of select="$classname"/> ({@value}). */
     public static final <xsl:value-of select="$backing-type"/> MIN_VALUE_UNSCALED
         = <xsl:call-template name="power10precise">
           <xsl:with-param name="number" select="$MIN_VALUE"/>
           <xsl:with-param name="exp" select="$fraction-digits"/>
         </xsl:call-template><xsl:value-of select="$backing-char"/>;
 
-    /** The maximal value of <xsl:value-of select="$classname"/>. */
+    /** The maximal value of <xsl:value-of select="$classname"/> ({@value}). */
     public static final <xsl:value-of select="$backing-type"/> MAX_VALUE_UNSCALED
         = <xsl:call-template name="power10precise">
           <xsl:with-param name="number" select="$MAX_VALUE"/>
           <xsl:with-param name="exp" select="$fraction-digits"/>
         </xsl:call-template><xsl:value-of select="$backing-char"/>;
 
-    /** The number of fraction digits. */
+    /** The number of fraction digits (<xsl:value-of select="$fraction-digits"/>). */
     public static final int FRACTION_DIGITS
         = <xsl:value-of select="$fraction-digits"/>;
 
-    /** The number of fraction digits. */
+    /** The number of fraction digits (<xsl:value-of select="$fraction-digits"/>). */
     public static final int SCALE
         = FRACTION_DIGITS;
 
-    /** The number of fraction digits. */
+    /** The scale (<xsl:value-of select="$DECIMAL_SCALE"/>). */
     public static final <xsl:value-of select="$backing-type"/> DECIMAL_SCALE
         = <xsl:value-of select="$DECIMAL_SCALE"/>;
 
-    /** The minimal scaled value of <xsl:value-of select="$classname"/>. */
+    /** The minimal scaled value of <xsl:value-of select="$classname"/> ({@value}). */
     public static final <xsl:value-of select="$backing-type"/> MIN_VALUE_SCALED
         = MIN_VALUE_UNSCALED / DECIMAL_SCALE;
 
-    /** The maximal value of <xsl:value-of select="$classname"/>. */
+    /** The maximal scaled value of <xsl:value-of select="$classname"/> ({@value}). */
     public static final <xsl:value-of select="$backing-type"/> MAX_VALUE_SCALED
         = MAX_VALUE_UNSCALED / DECIMAL_SCALE;
 
-    /** The number of fraction digits as integer.  */
+    /** The number of fraction digits as integer (<xsl:value-of select="$fraction-digits"/>).  */
     public static final Integer FRACTION_DIGITS_AS_INTEGER
         = new Integer(FRACTION_DIGITS);
 
-    /** The maximum number of total digits. */
+    /** The maximum number of digits (<xsl:value-of select="$total-digits"/>). */
     public static final int TOTAL_DIGITS
         = <xsl:value-of select="$total-digits"/>;
 
-    /** The number of fraction digits as integer.  */
+    /** The maximum number of digits as Integer (<xsl:value-of select="$total-digits"/>).  */
     public static final Integer TOTAL_DIGITS_AS_INTEGER
         = new Integer(TOTAL_DIGITS);
 
-    /** The minimal value of <xsl:value-of select="$classname"/>. */
+    /** The minimal value of <xsl:value-of select="$classname"/> (<xsl:value-of select="$MIN_VALUE"/>). */
     public static final <xsl:value-of select="$classname"/> MIN_VALUE
         = new <xsl:value-of select="$classname"/>(MIN_VALUE_UNSCALED);
 
-    /** The maximal value of <xsl:value-of select="$classname"/>. */
+    /** The maximal value of <xsl:value-of select="$classname"/> (<xsl:value-of select="$MAX_VALUE"/>). */
     public static final <xsl:value-of select="$classname"/> MAX_VALUE
         = new <xsl:value-of select="$classname"/>(MAX_VALUE_UNSCALED);
 <!-- It is important to define the constants at the verry end of the statics
@@ -1952,7 +1985,6 @@ package <xsl:value-of select="$package"/>;
 
 import java.math.BigDecimal;
 
-
 /**
  * Hibernate user type for the  <xsl:value-of select="$type-classname"/>.
  *
@@ -1962,7 +1994,13 @@ public final class <xsl:value-of select="$classname"/>
       extends org.jcoderz.commons.util.BigDecimalUserTypeBase
 {
   /**
-   * {@inheritDoc}
+   * Creates a <xsl:value-of select="$type-classname"/> from its numeric
+   * BigDecimal database representation.
+   * @param value a BigDecimal holding the database representation of the
+   *    <xsl:value-of select="$type-classname"/>.
+   * @return a <xsl:value-of select="$type-classname"/> representing the
+   *    given BigDecimal.
+   * @see <xsl:value-of select="$type-classname"/>#valueOf(BigDecimal)
    */
   public Object fromBigDecimal(BigDecimal value)
   {
@@ -1970,7 +2008,13 @@ public final class <xsl:value-of select="$classname"/>
   }
 
   /**
-   * {@inheritDoc}
+   * Converts the <xsl:value-of select="$type-classname"/> to its numeric
+   * BigDecimal database representation.
+   * @param value the <xsl:value-of select="$type-classname"/> to be
+   *    converted.
+   * @return a BigDecimal representing the
+   *    given <xsl:value-of select="$type-classname"/>.
+   * @see <xsl:value-of select="$type-classname"/>#toBigDecimal()
    */
   public BigDecimal toBigDecimal(Object value)
   {
@@ -1978,7 +2022,7 @@ public final class <xsl:value-of select="$classname"/>
   }
 
   /**
-   * {@inheritDoc}
+   * @return <xsl:value-of select="$type-classname"/>.class as the supported class of this user type.
    */
   public Class returnedClass()
   {

@@ -1816,14 +1816,14 @@ public final class <xsl:value-of select="$classname"/>
     }
 
     /**
-     * Translates a <tt>BigDecimal</tt> value into a
-     * <tt><xsl:value-of select="$classname"/></tt>.
+     * Translates a &lt;tt>BigDecimal&lt;/tt> value into a
+     * &lt;tt><xsl:value-of select="$classname"/>&lt;/tt>.
      *
-     * @param bd the <tt>BigDecimal</tt>.
-     * @return a <tt><xsl:value-of select="$classname"/></tt> whose value is equal
+     * @param bd the &lt;tt>BigDecimal&lt;/tt>.
+     * @return a &lt;tt><xsl:value-of select="$classname"/>&lt;/tt> whose value is equal
      *  to bd.
      * @throws ArgumentMalformedException If the given
-     *   <tt>BigDecimal</tt> violates the restriction
+     *   &lt;tt>BigDecimal&lt;/tt> violates the restriction
      *   of the <xsl:value-of select="$classname"/> type.
      */
     public static <xsl:value-of select="$classname"/> valueOf (BigDecimal bd)
@@ -1840,14 +1840,14 @@ public final class <xsl:value-of select="$classname"/>
     }
 
     /**
-     * Translates a <tt>long</tt> value into a
-     * <tt><xsl:value-of select="$classname"/></tt>.
+     * Translates a &lt;tt>long&lt;/tt> value into a
+     * &lt;tt><xsl:value-of select="$classname"/>&lt;/tt>.
      *
-     * @param val the <tt>long</tt>.
-     * @return a <tt><xsl:value-of select="$classname"/></tt> whose value is equal
+     * @param val the &lt;tt>long&lt;/tt>.
+     * @return a &lt;tt><xsl:value-of select="$classname"/>&lt;/tt> whose value is equal
      *  to the given long.
      * @throws ArgumentMalformedException If the given
-     *   <tt>long</tt> violates the restriction
+     *   &lt;tt>long&lt;/tt> violates the restriction
      *   of the <xsl:value-of select="$classname"/> type.
      * @see BigDecimal#valueOf(long)
      */
@@ -1869,13 +1869,13 @@ public final class <xsl:value-of select="$classname"/>
     }
 
     /**
-     * Translates a <tt>long</tt> with the given scale into a
-     * <tt><xsl:value-of select="$classname"/></tt>.
+     * Translates a &lt;tt>long&lt;/tt> with the given scale into a
+     * &lt;tt><xsl:value-of select="$classname"/>&lt;/tt>.
      *
      * @param unscaledVal the unscaled value.
      * @param scale the scale to be applied.
-     * @return a <tt><xsl:value-of select="$classname"/></tt> whose value is
-     *         <tt>(unscaledVal &amp;times; 10<sup>-scale</sup>)</tt>.
+     * @return a &lt;tt><xsl:value-of select="$classname"/>&lt;/tt> whose value is
+     *         &lt;tt>(unscaledVal &amp;times; 10&lt;sup>-scale&lt;/sup>)&lt;/tt>.
      * @throws ArgumentMalformedException If the given
      *   long and scale violates the restriction
      *   of the <xsl:value-of select="$classname"/> type.

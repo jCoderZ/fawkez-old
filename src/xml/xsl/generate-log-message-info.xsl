@@ -213,7 +213,9 @@ package <xsl:value-of select="$package"/>;
 import java.io.Serializable;
 
 /**
- * Exception thrown when a <xsl:value-of select="$display-name"/> occurred.
+ * <xsl:value-of select="$message/description"/>
+ *
+ * <xsl:value-of select="$message/text"/>
  *
  * This exception encapsulates the log message
  * {@link <xsl:value-of select="$package"/>.<xsl:value-of select="$group-classname"/>#<xsl:value-of select="$constant-name"/>}.
@@ -231,7 +233,7 @@ public class <xsl:value-of select="$classname"/>
             <xsl:with-param name="tokens" select="$tokens"/></xsl:call-template></xsl:if>
 
    /**
-    * Constructs a <xsl:value-of select="$display-name"/> exception with a <tt>cause</tt>.<xsl:call-template
+    * Constructs a <xsl:value-of select="$display-name"/> exception with a &lt;tt>cause&lt;/tt>.<xsl:call-template
       name="inner-clazz-log-parameter-javadoc">
                 <xsl:with-param name="tokens" select="$tokens"/>
     </xsl:call-template>
@@ -255,7 +257,7 @@ public class <xsl:value-of select="$classname"/>
    }
 
    /**
-    * Constructs a <xsl:value-of select="$display-name"/> exception with a <tt>cause</tt>.<xsl:call-template
+    * Constructs a <xsl:value-of select="$display-name"/> exception with a &lt;tt>cause&lt;/tt>.<xsl:call-template
       name="inner-clazz-log-parameter-javadoc">
                 <xsl:with-param name="tokens" select="$tokens"/>
     </xsl:call-template>
@@ -279,6 +281,7 @@ public class <xsl:value-of select="$classname"/>
 
    /**
     * Constructor getting an log message info.
+    * This constructor is for generated exceptions internal use only.
     *
     * @param messageInfo the log message info for this exception
     */
@@ -294,6 +297,7 @@ public class <xsl:value-of select="$classname"/>
 
    /**
     * Constructor getting an log message info and a root exception.
+    * This constructor is for generated exceptions internal use only.
     *
     * @param messageInfo the log message info for this exception
     * @param cause the problem that caused this exception to be thrown
@@ -311,7 +315,7 @@ public class <xsl:value-of select="$classname"/>
       <xsl:if test="$custom-logger-class">
       /**
        * Logs the exception
-       * <tt>"<xsl:value-of select="normalize-space($message/text)"/>"</tt>
+       * &lt;tt>"<xsl:value-of select="normalize-space($message/text)"/>"&lt;/tt>
        * to the custom logger.
        * @param logger the custom logger to log to.
        */
@@ -367,8 +371,6 @@ import <xsl:value-of select="$base-exception"/>;
 import org.jcoderz.commons.LogMessageInfo;
 
 /**
- * Exception thrown when a <xsl:value-of select="$display-name"/> occurred.
- *
  * This is the base exception for all message in
  * the package {@link <xsl:value-of select="$package"/>}.
  *
@@ -382,6 +384,7 @@ public class <xsl:value-of select="$classname"/>
 
    /**
     * Constructor getting an log message info.
+    * This constructor is for generated exceptions internal use only.
     *
     * @param messageInfo the log message info for this exception
     */
@@ -392,6 +395,7 @@ public class <xsl:value-of select="$classname"/>
 
    /**
     * Constructor getting an log message info and a root exception.
+    * This constructor is for generated exceptions internal use only.
     *
     * @param messageInfo the log message info for this exception
     * @param cause the problem that caused this exception to be thrown
@@ -427,9 +431,9 @@ import org.jcoderz.commons.Loggable;
 import org.jcoderz.commons.AuditPrincipal;
 
 /**
- * Enumeration of all <xsl:value-of select="$group/@name"/>.
+ * Enumeration of all <xsl:value-of select="$group/@name"/> log messages.
  *
- * Instances of this class are immutable.
+ * &lt;p>Instances of this class are immutable.&lt;/p>
  *
  * The following <xsl:value-of select="$group/@name"/> are defined:
  * &lt;ul&gt;<xsl:for-each select="$group//message">
@@ -445,7 +449,7 @@ public abstract class <xsl:value-of select="$classname"/>
    static final long serialVersionUID = 1L;
 
    /**
-    * Constructor.
+    * Private constructor used by the inner classes.
     * @param symbol The symbolic name of the log message.
     * @param id The unique numeric id of the log message.
     * @param level The log level that is used to log such a message.
@@ -473,7 +477,37 @@ public abstract class <xsl:value-of select="$classname"/>
          <xsl:with-param name="name" select="./@name"/>
       </xsl:call-template>
    </xsl:variable>
-   /** The log message &lt;code&gt;<xsl:value-of select="./@name"/>&lt;/code&gt;. */
+   /**
+    <xsl:choose>
+      <xsl:when test="description">
+       <xsl:value-of select="normalize-space(description)"/>
+      </xsl:when>
+      <xsl:when test="text">
+       <xsl:value-of select="normalize-space(text)"/>
+      </xsl:when>
+    </xsl:choose>
+    * .
+    * &lt;p>This class holds the static data for the &lt;code&gt;<xsl:value-of select="./@name"/>&lt;/code&gt;
+    * log message.&lt;/p>
+    * &lt;p>It holds the following parameters:&lt;/p>
+    * &lt;ul>
+    * <xsl:if test="text">
+       &lt;li>Message: <xsl:value-of select="normalize-space(text)"/>&lt;/li>
+      </xsl:if>
+      <xsl:if test="description">
+       &lt;li>Description: <xsl:value-of select="normalize-space(description)"/>&lt;/li>
+      </xsl:if>
+      <xsl:if test="solution">
+       &lt;li>Solution <xsl:value-of select="normalize-space(solution)"/>&lt;/li>
+      </xsl:if>
+      <xsl:if test="procedure">
+       &lt;li>Procedure <xsl:value-of select="normalize-space(procedure)"/>&lt;/li>
+      </xsl:if>
+      <xsl:if test="verification">
+       &lt;li>Verification <xsl:value-of select="normalize-space(verification)"/>&lt;/li>
+      </xsl:if>
+    * &lt;/ul>
+    */
    public static final class <xsl:value-of select="$inner-classname"/>
          extends <xsl:value-of select="$classname"/>
          implements Serializable
@@ -491,7 +525,7 @@ public abstract class <xsl:value-of select="$classname"/>
          <xsl:with-param name="name" select="./@name"/>
       </xsl:call-template>
    </xsl:variable>
-   /** The log message &lt;code&gt;<xsl:value-of select="./@name"/>&lt;/code&gt;. */
+   /** The log message for thwe event &lt;code&gt;<xsl:value-of select="./@name"/>&lt;/code&gt;. */
    public static final <xsl:value-of select="$inner-classname"/><xsl:text> </xsl:text><xsl:value-of select="./@name"/>
          = new <xsl:value-of select="$inner-classname"/>();
 </xsl:for-each>
@@ -694,7 +728,7 @@ public abstract class <xsl:value-of select="$classname"/>
         <xsl:if test="$allow-use-of-base-logger">
       /**
        * Logs the message
-       * <tt>"<xsl:value-of select="normalize-space($message/text)"/>"</tt>
+       * &lt;tt>"<xsl:value-of select="normalize-space($message/text)"/>"&lt;/tt>
        * with the given parameters.<xsl:call-template
                   name="inner-clazz-log-parameter-javadoc">
                   <xsl:with-param name="tokens" select="$tokens"/>
@@ -723,7 +757,7 @@ public abstract class <xsl:value-of select="$classname"/>
 
       /**
        * Logs the message
-       * <tt>"<xsl:value-of select="normalize-space($message/text)"/>"</tt>
+       * &lt;tt>"<xsl:value-of select="normalize-space($message/text)"/>"&lt;/tt>
        * with the given parameters.<xsl:call-template
                   name="inner-clazz-log-parameter-javadoc">
                   <xsl:with-param name="tokens" select="$tokens"/>
@@ -755,7 +789,7 @@ public abstract class <xsl:value-of select="$classname"/>
         <xsl:if test="$custom-logger-class">
       /**
        * Logs the message
-       * <tt>"<xsl:value-of select="normalize-space($message/text)"/>"</tt>
+       * &lt;tt>"<xsl:value-of select="normalize-space($message/text)"/>"&lt;/tt>
        * with the given parameters to the custom logger.
        * @param logger the custom logger to log to.<xsl:call-template
                   name="inner-clazz-log-parameter-javadoc">
@@ -763,8 +797,8 @@ public abstract class <xsl:value-of select="$classname"/>
                   <xsl:with-param name="isAudit" select="$isAudit"/>
                </xsl:call-template>
        */
-      public static void log (<xsl:value-of select="$custom-logger-class"/> logger<xsl:if 
-	     test="$isAudit or normalize-space($tokens)">, <xsl:call-template
+      public static void log (<xsl:value-of select="$custom-logger-class"/> logger<xsl:if
+       test="$isAudit or normalize-space($tokens)">, <xsl:call-template
                   name="inner-clazz-log-parameter-list">
                   <xsl:with-param name="tokens" select="$tokens"/>
                   <xsl:with-param name="isAudit" select="$isAudit"/>
@@ -794,7 +828,7 @@ public abstract class <xsl:value-of select="$classname"/>
 
       /**
        * Logs the message
-       * <tt>"<xsl:value-of select="normalize-space($message/text)"/>"</tt>
+       * &lt;tt>"<xsl:value-of select="normalize-space($message/text)"/>"&lt;/tt>
        * with the given parameters to the custom logger.
        * @param logger the custom logger to log to.<xsl:call-template
                   name="inner-clazz-log-parameter-javadoc">
@@ -803,12 +837,12 @@ public abstract class <xsl:value-of select="$classname"/>
                </xsl:call-template>
        * @param cause the Throwable that causes this message to be logged.
        */
-      public static void log (<xsl:value-of select="$custom-logger-class"/> logger<xsl:if 
-	     test="$isAudit or normalize-space($tokens)">, <xsl:call-template
+      public static void log (<xsl:value-of select="$custom-logger-class"/> logger<xsl:if
+       test="$isAudit or normalize-space($tokens)">, <xsl:call-template
                   name="inner-clazz-log-parameter-list">
                   <xsl:with-param name="tokens" select="$tokens"/>
                   <xsl:with-param name="isAudit" select="$isAudit"/>
-          </xsl:call-template></xsl:if>, 
+          </xsl:call-template></xsl:if>,
                Throwable cause
             )
       {
@@ -841,7 +875,7 @@ public abstract class <xsl:value-of select="$classname"/>
       <xsl:if test="$isAudit">
       /**
        * Creates the audit log event
-       * <tt>"<xsl:value-of select="normalize-space($message/text)"/>"</tt>
+       * &lt;tt>"<xsl:value-of select="normalize-space($message/text)"/>"&lt;/tt>
        * with the given parameters.<xsl:call-template
                   name="inner-clazz-log-parameter-javadoc">
                   <xsl:with-param name="tokens" select="$tokens"/>
@@ -870,7 +904,7 @@ public abstract class <xsl:value-of select="$classname"/>
 
       /**
        * Creates the audit log event
-       * <tt>"<xsl:value-of select="normalize-space($message/text)"/>"</tt>
+       * &lt;tt>"<xsl:value-of select="normalize-space($message/text)"/>"&lt;/tt>
        * with the given parameters.<xsl:call-template
                   name="inner-clazz-log-parameter-javadoc">
                   <xsl:with-param name="tokens" select="$tokens"/>
@@ -902,12 +936,12 @@ public abstract class <xsl:value-of select="$classname"/>
       </xsl:if>
 
       /**
-       * Adds the given message parameters to the <tt>loggable</tt>.
+       * Adds the given message parameters to the &lt;tt>loggable&lt;/tt>.
        * @param loggable the loggable to initialize. <xsl:call-template
                   name="inner-clazz-log-parameter-javadoc">
                   <xsl:with-param name="tokens" select="$tokens"/>
                </xsl:call-template>
-       * @return the given initialized <tt>loggable</tt>.
+       * @return the given initialized &lt;tt>loggable&lt;/tt>.
        */
       public static Loggable addParameters (Loggable loggable<xsl:if
          test="normalize-space($tokens)">,</xsl:if> <xsl:call-template

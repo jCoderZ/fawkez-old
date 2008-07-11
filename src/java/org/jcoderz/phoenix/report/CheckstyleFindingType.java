@@ -537,7 +537,7 @@ public final class CheckstyleFindingType
 
   /**
    * Checkstyle finding type that relates to:
-   * <i>Unable to get class information for EJBException..</i>.
+   * <i>Unable to get class information for .....</i>.
    */
   public static final CheckstyleFindingType CS_EXCEPTION_CLASS_NOT_FOUND =
       new CheckstyleFindingType("CS_EXCEPTION_CLASS_NOT_FOUND",
@@ -545,6 +545,16 @@ public final class CheckstyleFindingType
           "Mostly this is caused by a checkstyle internal issue or a finder"
           + "class path setting.",
           "Unable to get class information for .*\\.");
+
+  /**
+   * Checkstyle finding type that relates to:
+   * <i>Using '.*' is not allowed.</i>.
+   */
+  public static final CheckstyleFindingType CS_TYPE_NOT_ALLOWED =
+      new CheckstyleFindingType("CS_TYPE_NOT_ALLOWED",
+          "Use of a type that is not permited.",
+          "The type noted in the message should not be used.",
+          "Using '.*' is not allowed\\.");
 
   /**
    * A internal checkstyle exception was triggered we shoulds also

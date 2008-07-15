@@ -137,6 +137,8 @@ public class Importer
             if (importer.reOrderItems(items, dependencyMap, result))
             {
                 List<String> queries = new ArrayList<String>();
+                queries.add(
+                    "ALTER SESSION SET NLS_NUMERIC_CHARACTERS = ',.'");
                 if (importer
                     .generateQueries(result, items, queries, tableNames))
                 {

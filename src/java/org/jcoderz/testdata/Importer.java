@@ -137,8 +137,11 @@ public class Importer
             if (importer.reOrderItems(items, dependencyMap, result))
             {
                 List<String> queries = new ArrayList<String>();
-                queries.add(
-                    "ALTER SESSION SET NLS_NUMERIC_CHARACTERS = ',.'");
+// Enable this to read numbers where , is used a decimal separator
+// and . is used for optional 'nice formatting' 
+// 123456 / 100 = 1.234,56 
+//                queries.add(
+//                    "ALTER SESSION SET NLS_NUMERIC_CHARACTERS = ',.'");
                 if (importer
                     .generateQueries(result, items, queries, tableNames))
                 {

@@ -1037,6 +1037,9 @@ package <xsl:value-of select="$package"/>;
 public final class <xsl:value-of select="$classname"/>
       extends org.jcoderz.commons.util.StringUserTypeBase
 {
+   /** The serialVersionUID used for serialization. */
+   static final long serialVersionUID = 1;
+
    /** <xsl:choose>
         <xsl:when
           test="$min-length = 0">Holds the empty string representation of the type.</xsl:when>
@@ -1329,6 +1332,9 @@ package <xsl:value-of select="$package"/>;
 public final class <xsl:value-of select="$classname"/>
       extends org.jcoderz.commons.util.IntUserTypeBase
 {
+   /** The serialVersionUID used for serialization. */
+   static final long serialVersionUID = 1;
+
   /**
    * Creates a <xsl:value-of select="$type-classname"/> from its numeric
    * int database representation.
@@ -1386,6 +1392,9 @@ package <xsl:value-of select="$package"/>;
 public final class <xsl:value-of select="$classname"/>
       extends org.jcoderz.commons.util.LongUserTypeBase
 {
+   /** The serialVersionUID used for serialization. */
+   static final long serialVersionUID = 1;
+
   /**
    * Creates a <xsl:value-of select="$type-classname"/> from its numeric
    * long database representation.
@@ -1993,6 +2002,9 @@ import java.math.BigDecimal;
 public final class <xsl:value-of select="$classname"/>
       extends org.jcoderz.commons.util.BigDecimalUserTypeBase
 {
+  /** The serialVersionUID used for serialization. */
+  static final long serialVersionUID = 1;
+
   /**
    * Creates a <xsl:value-of select="$type-classname"/> from its numeric
    * BigDecimal database representation.

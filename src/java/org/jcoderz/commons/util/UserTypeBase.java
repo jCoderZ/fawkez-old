@@ -48,7 +48,7 @@ import org.hibernate.usertype.UserType;
  *
  * @author thomas.bodemer
  */
-public abstract class UserTypeBase implements UserType
+public abstract class UserTypeBase implements UserType, Serializable
 {
 
     /**

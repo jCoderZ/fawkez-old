@@ -50,6 +50,7 @@ import org.jcoderz.commons.types.Date;
 public class DateUserType
     extends UserTypeBase
 {
+    private static final long serialVersionUID = 1L;
     private static final int SQL_TYPE = Types.TIMESTAMP;
     private static final int[] SQL_TYPES = {SQL_TYPE};
 

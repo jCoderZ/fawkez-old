@@ -149,30 +149,41 @@ public abstract class LogMessageInfoImpl
    /** {@inheritDoc} */
    public final StringBuffer formatMessage (Map parameters, StringBuffer buffer)
    {
-      final MessageFormat formatter = new MessageFormat(getMessagePattern());
+       final StringBuffer result
+           = buffer != null ? buffer : new StringBuffer();
+       try
+       {
+          final MessageFormat formatter = new MessageFormat(getMessagePattern());
 
-      final List parameter = new ArrayList();
+          final List parameter = new ArrayList();
 
-      if (parameters != null && !getParameterList().isEmpty())
-      {
-         final Iterator i = getParameterList().iterator();
-         while (i.hasNext())
-         {
-            final String parameterName = (String) i.next();
-            final List parameterValues = (List) parameters.get(parameterName);
-            if (parameterValues == null || parameterValues.isEmpty())
-            {
-               parameter.add(null);
-            }
-            else
-            {
-               parameter.add(parameterValues.get(0));
-            }
-         }
-      }
-
-      return formatter.format(parameter.toArray(),
-            buffer != null ? buffer : new StringBuffer(), null);
+          if (parameters != null && !getParameterList().isEmpty())
+          {
+             final Iterator i = getParameterList().iterator();
+             while (i.hasNext())
+             {
+                final String parameterName = (String) i.next();
+                final List parameterValues = (List) parameters.get(parameterName);
+                if (parameterValues == null || parameterValues.isEmpty())
+                {
+                   parameter.add(null);
+                }
+                else
+                {
+                   parameter.add(parameterValues.get(0));
+                }
+             }
+          }
+          formatter.format(parameter.toArray(), result, null);
+       }
+       // could be caused by invalid message format!
+       catch (Exception ex)
+       {
+           result.append(getParameterList());
+           result.append(' ');
+           result.append(getMessagePattern());
+       }
+      return result;
    }
 
    /** {@inheritDoc} */

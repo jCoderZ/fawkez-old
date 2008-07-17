@@ -356,6 +356,7 @@
          <property name="allowUnchecked" value="true"/>
          <property name="allowSubclasses" value="true"/>
          <property name="severity" value="warning"/>
+         <property name="logLoadErrors" value="true"/>
       </module>
 
       <!-- Checks for overly complicated boolean expressions.

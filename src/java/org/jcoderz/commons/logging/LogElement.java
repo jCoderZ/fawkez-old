@@ -190,8 +190,7 @@ public class LogElement
          setSymbol(TRACEMSG);
          setSymbolId(TRACEMSG);
          setThreadId(mLogRecord.getThreadID());
-         setTimestamp(Date.fromUtilDate(
-               new java.util.Date(mLogRecord.getMillis())));
+         setTimestamp(Date.fromLong(mLogRecord.getMillis()));
          setTrackingNumber(Integer.toHexString(
                (int) mLogRecord.getSequenceNumber()));
       }

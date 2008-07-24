@@ -538,7 +538,7 @@ public class BasicPrinter
     * @param sourceClass The name of the source class.
     * @param sourceMethod The name of the source method.
     *
-    * @return null if none of source lcass or method is to display;
+    * @return null if none of source class or method is to display;
     * StringBuffer containing the displayable parts of source class name
     * and source method name, else
     */

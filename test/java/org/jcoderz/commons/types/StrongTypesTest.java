@@ -38,6 +38,7 @@ import org.jcoderz.commons.ArgumentMinLengthViolationException;
 import org.jcoderz.commons.ArgumentMinValueViolationException;
 import org.jcoderz.commons.config.ConfigurationKey;
 import org.jcoderz.commons.test.RestrictedLong;
+import org.jcoderz.commons.types.samples.SampleFixPoint;
 
 import junit.framework.TestCase;
 
@@ -129,4 +130,21 @@ public class StrongTypesTest
             // expected;
         }
     }
+
+    /**
+     * Test method for comparison.
+     */
+    public void testComparison ()
+    {
+        assertEquals("Comparing equal values", 0,
+            RestrictedLong.fromString("15")
+            .compareTo(RestrictedLong.fromString("15")));
+        assertTrue("Comparing different values",
+            RestrictedLong.fromString("15")
+                .compareTo(RestrictedLong.fromString("21")) < 0);
+        assertTrue("Comparing different values",
+            RestrictedLong.fromString("21")
+                .compareTo(RestrictedLong.fromString("15")) > 0);
+    }
+
 }

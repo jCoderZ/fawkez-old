@@ -63,7 +63,8 @@
          classname="FooString"
          package="org.jcoderz.commons"
          min-length="1"
-         max-length="10">
+         max-length="10"
+         user-type="true">
          <constant
             name="CONSTANT_VALUE"
             value="foo"

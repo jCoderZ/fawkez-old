@@ -888,10 +888,13 @@ import java.io.Serializable;
 </xsl:if> * &lt;/pre&gt;
  * Instances of this class are immutable.
  *
+ * &lt;p>This class implements the Comparable interface based on the natural
+ * order of the String representation of its instances.&lt;/p>
+ *
  * @author generated via stylesheet
  */
 public final class <xsl:value-of select="$classname"/>
-      implements Serializable, org.jcoderz.commons.StrongType
+      implements Serializable, org.jcoderz.commons.StrongType, Comparable
 {
    /**
     * <xsl:value-of select="$classname"/> - the name of this type as string constant.
@@ -1016,6 +1019,23 @@ public final class <xsl:value-of select="$classname"/>
    {
       return m<xsl:value-of select="$classname"/>.hashCode();
    }
+
+   /**
+    * Compares this <xsl:value-of select="$classname"/> with an other.
+    * The order is based on the natural order of the String representation
+    * of the compared instances.
+    *
+    * @return a negative integer, zero, or a positive integer as this
+    *   object is less than, equal to, or greater than the specified object.
+    * @throws ClassCastException if the specified object's type prevents
+    *   it from being compared to this Object.
+    * @see String#compareTo(Object)
+    */
+   public int compareTo(Object o)
+   {
+      return toString().compareTo(
+        ((<xsl:value-of select="$classname"/>) o).toString());
+   }
 }
 </xsl:template>
 
@@ -1124,10 +1144,13 @@ import org.jcoderz.commons.util.HashCodeUtil;
  * &lt;/pre&gt;
  * Instances of this class are immutable.
  *
+ * &lt;p>This class implements the Comparable interface based on the numeric
+ * order of its instances.&lt;/p>
+ *
  * @author generated via stylesheet
  */
 public final class <xsl:value-of select="$classname"/>
-      implements Serializable, org.jcoderz.commons.StrongType
+      implements Serializable, org.jcoderz.commons.StrongType, Comparable
 {
    /**
     * <xsl:value-of select="$classname"/> - the name of this type as string constant.
@@ -1311,6 +1334,25 @@ public final class <xsl:value-of select="$classname"/>
       }
       return mHashCode;
    }
+
+   /**
+    * Compares this <xsl:value-of select="$classname"/> with an other.
+    * The order is based on the numeric order of the
+    * of the compared instances.
+    *
+    * @return a negative integer, zero, or a positive integer as this
+    *   object is less than, equal to, or greater than the specified object.
+    * @throws ClassCastException if the specified object's type prevents
+    *   it from being compared to this Object.
+    * @see Long#compareTo(Object)
+    */
+   public int compareTo(Object o)
+   {
+     final long thisVal = toLong();
+     final long anotherVal = ((<xsl:value-of select="$classname"/>) o).toLong();
+     return (thisVal &lt; anotherVal ? -1 : (thisVal == anotherVal ? 0 : 1));
+   }
+
 }
 </xsl:template>
 
@@ -1978,7 +2020,7 @@ public final class <xsl:value-of select="$classname"/>
         final long thisVal = mUnscaled;
         final long anotherVal = ((<xsl:value-of select="$classname"/>) o).mUnscaled;
         return (thisVal &lt; anotherVal ? -1 : (thisVal == anotherVal ? 0 : 1));
-     }
+    }
 }
 </xsl:template> <!-- fix-point-number -->
 

@@ -90,7 +90,7 @@ public class AssertTest
          assertEquals("Parameter message should be as given.",
              BAR_STRING,
                ex.getParameter(
-                  RteLogMessage.AssertionFailed.PARAM_MESSAGE));
+                  RteLogMessage.AssertionFailed.PARAM_MESSAGE).get(0));
       }
    }
 

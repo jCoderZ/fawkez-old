@@ -112,9 +112,9 @@ public final class Date
    public static final int MILLIS_PER_SECOND = 1000;
 
    /** Number of nano seconds in a second. */
-   public static final long NANOS_PER_SECOND 
+   public static final long NANOS_PER_SECOND
            = NANOS_PER_MILLI * MILLIS_PER_SECOND;
-   
+
    /**
     * Number of seconds in a minute.
     */
@@ -213,7 +213,7 @@ public final class Date
     *       &#46;1&#46;1970.
     * @see java.util.Date#Date()
     */
-   public Date fromLong (long time)
+   public static Date fromLong (long time)
    {
       return new Date(time);
    }

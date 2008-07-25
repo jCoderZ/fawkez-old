@@ -1012,7 +1012,7 @@
    <xsl:template match="tc:test" mode="untested">
       <xsl:param name="this_shortname" select="tc:shortname"/>
       <xsl:param name="this_id" select="tc:id"/>
-      <xsl:if test="not(key('testresult-testcase-group',$this_id) and key('testresult-shortname-group',$this_shortname))">
+      <xsl:if test="not(key('testresult-testcase-group',$this_id)) and not(key('testresult-shortname-group',$this_shortname))">
          <row>
 <xsl:text disable-output-escaping="yes">&lt;?dbhtml bgcolor="yellow" ?&gt;&lt;?dbfo bgcolor="yellow" ?&gt;</xsl:text>
             <entry>

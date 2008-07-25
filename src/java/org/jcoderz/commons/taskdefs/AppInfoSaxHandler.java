@@ -52,6 +52,8 @@ class AppInfoSaxHandler
    public static final int APPLICATION_ID_ASF = 100;
    /** Application Identifier of ppg. */
    public static final int APPLICATION_ID_PPG = 101;
+   /** Application Identifier of taco. */
+   public static final int APPLICATION_ID_TAC = 102;
 
    private static final Pattern REGEX_SINGLE_QUOTES
          = Pattern.compile(".*[^']'[^'].*",
@@ -89,6 +91,7 @@ class AppInfoSaxHandler
       mMap.registerApplication(APPLICATION_ID_FWK, "FWK");
       mMap.registerApplication(APPLICATION_ID_ASF, "ASF");
       mMap.registerApplication(APPLICATION_ID_PPG, "PPG");
+      mMap.registerApplication(APPLICATION_ID_TAC, "TAC");
    }
 
    /** {@inheritDoc} */

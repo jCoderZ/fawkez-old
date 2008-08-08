@@ -341,7 +341,7 @@
                <xsl:apply-templates select="//uc:usecases[uc:info/@project = 'Main Specification']" mode="simple_coverage"/>
                
                <section>
-                  <title>Change Requests</title>
+                  <title>Change Requests / Specifications</title>
                   <xsl:apply-templates select="//uc:usecases[not(uc:info/@project = 'Main Specification')]" mode="simple_coverage"/>
                </section>
             </chapter>

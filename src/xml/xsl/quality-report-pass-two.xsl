@@ -1043,114 +1043,170 @@
       <xsl:param name="summary_local" select="cms:summary"/>
       <xsl:param name="status_local" select="cms:state"/>
       
-      <!-- if there is a test result for this Jira issue without any existing testspec for this Jira issue-->
-      <xsl:if test="key('issue-group',$key_local)[(not(../tr:testcase) or ../tr:testcase = '' or not(tr:testcase = //tc:scrno[contains(. , $key_local) or contains(. , $key_local_unmodified)]/../tc:id))] and not(//tc:scrno[contains(. , $key_local) or contains(. , $key_local_unmodified)])">
-         <!-- for each test result for test result for this Jira issue without any existing testspec for this Jira issue-->
-         <xsl:for-each select="key('issue-group',$key_local)[(not(../tr:testcase) or ../tr:testcase = '' or not(tr:testcase = //tc:scrno[contains(. , $key_local) or contains(. , $key_local_unmodified)]/../tc:id)) and not(//tc:scrno[contains(. , $key_local) or contains(. , $key_local_unmodified)])]">
-            <row>
-               <entry>
-                  <xsl:call-template name="link_to_cms">
-                      <xsl:with-param name="issue_id" select="$key_local_unmodified"/>
-                  </xsl:call-template><xsl:if test="$type = 'internal'">(<xsl:value-of select="$status_local"/>)</xsl:if>           
-               </entry>
-               <entry>
-                  <xsl:choose>
-                     <xsl:when test="cms:external-id">
-                        <xsl:for-each select="cms:external-id">
-                           <xsl:call-template name="link_to_cms">
-                               <xsl:with-param name="issue_id" select="."/>
-                           </xsl:call-template>
-                        </xsl:for-each>        
-                     </xsl:when>
-                     <xsl:otherwise>none</xsl:otherwise> 
-                  </xsl:choose>   
-               </entry>
-               <entry>
-                  <xsl:choose>
-                     <xsl:when test="//tc:scrno[contains(. , $key_local) or contains(. , $key_local_unmodified)]">
-                        <xsl:for-each select="//tc:scrno[contains(. , $key_local) or contains(. , $key_local_unmodified)]">
-                           <xsl:variable name="t_id" select="../tc:id"/>
-                           <ulink url="all_testspec.html#{$t_id}">
-                              <citetitle><xsl:value-of select="$t_id"/></citetitle>
-                           </ulink>
-                           <xsl:if test="not(position() = last()) "><xsl:text>,</xsl:text><sbr/></xsl:if>
-                        </xsl:for-each>
-                     </xsl:when>
-                     <xsl:when test="../tr:testcase and not(../tr:testcase = '')">
-                        <ulink url="all_testspec.html#{../tr:testcase}">
-                           <citetitle><xsl:value-of select="../tr:testcase"/></citetitle>
-                        </ulink>
-                     </xsl:when>
-                     <xsl:otherwise>
-                        none
-                     </xsl:otherwise>
-                  </xsl:choose>
-               </entry>
-               <entry>
-                  <xsl:value-of select="../tr:comment"/>
-               </entry>
-               <entry>
-                  <xsl:choose>
-                     <xsl:when test="../tr:version = $version.releasecandidate">
-<xsl:text disable-output-escaping="yes">
-&lt;?dbhtml bgcolor="Lime" ?&gt;&lt;?dbfo bgcolor="Lime" ?&gt;</xsl:text>
-                        <xsl:value-of select="../tr:version"/>
-                     </xsl:when>
-                     <xsl:otherwise>
-<xsl:text disable-output-escaping="yes">
-&lt;?dbhtml bgcolor="yellow" ?&gt;&lt;?dbfo bgcolor="yellow" ?&gt;</xsl:text>
-                        <xsl:value-of select="../tr:version"/>
-                     </xsl:otherwise>            
-                  </xsl:choose>
-               </entry>
-               <entry>
-                  <xsl:choose>
-                     <xsl:when test="//tc:scrno[contains(. , $key_local) or contains(. , $key_local_unmodified)]">
-                        <!--
-                        TODO: find a way to decide, when to paint entry green, red or yellow.
-                        <xsl:choose>
-                           <xsl:when test="count(key('issue-group', $key_local)[../testcase = $t_id]/../result[. = passed]) = count(key('issue-group', $key_local)[../testcase = $t_id]/../result) and count(key('issue-group', $key_local)[../testcase = $t_id]/../result) > 0"><xsl:text disable-output-escaping="yes"> &lt;?dbhtml bgcolor="Lime" ?&gt;&lt;?dbfo bgcolor="Lime" ?&gt;</xsl:text></xsl:when>
-                           <xsl:when test="count(key('issue-group', $key_local)[../testcase = $t_id]/../result) > count(key('issue-group', $key_local)[../testcase = $t_id]/../result[. = passed]) and count(key('issue-group', $key_local)[../testcase = $t_id]/../result) > 0"><xsl:text disable-output-escaping="yes"> &lt;?dbhtml bgcolor="Yellow" ?&gt;&lt;?dbfo bgcolor="Yellow" ?&gt;</xsl:text></xsl:when>
-                        </xsl:choose>
-                        -->
-<xsl:text disable-output-escaping="yes">
-&lt;?dbhtml bgcolor="white" ?&gt;&lt;?dbfo bgcolor="white" ?&gt;</xsl:text>
-                        <xsl:for-each select="//tc:scrno[contains(. , $key_local) or contains(. , $key_local_unmodified)]">
-                           <xsl:variable name="t_id" select="../tc:id"/>
-                           <xsl:choose>
-                              <xsl:when test="key('issue-group', $key_local)[../tr:testcase = $t_id]">
-                                 <xsl:apply-templates select="key('issue-group', $key_local)[../tr:testcase = $t_id]/../tr:result"/>
-                              </xsl:when>
-                              <xsl:otherwise>
-                                  no test result
-                              </xsl:otherwise>
-                           </xsl:choose>
-                           <xsl:if test="not(position() = last())"><xsl:text>,</xsl:text><sbr/></xsl:if>
-                        </xsl:for-each>
-                     </xsl:when>
-                     <xsl:otherwise>
-                        <xsl:apply-templates select="../tr:result"/>
-                     </xsl:otherwise>
-                  </xsl:choose>   
-               </entry>
-            </row><xsl:text>
-            </xsl:text>
-         </xsl:for-each>
-      </xsl:if>
+      <!-- if the state of the issue is beyond resolved -->
+      <xsl:if test="$status_local = $cms.state.accepted 
+                    or $status_local = $cms.state.resolved
+                    or $status_local = $cms.state.released
+                    or $status_local = $cms.state.closed">
       
-      <!-- if there is/are test specification(s) for this Jira issue -->
-      <xsl:if test="//tc:scrno[contains(. , $key_local) or contains(. , $key_local_unmodified)]">
-         <!-- for each test specification for this Jira issue -->
-         <xsl:for-each select="//tc:scrno[contains(. , $key_local) or contains(. , $key_local_unmodified)]">
-            <xsl:variable name="testcase_id" select="../tc:id"/>
-            <xsl:choose>
-               <xsl:when test="key('testresult-testcase-group',$testcase_id)">
-                  <xsl:for-each select="key('testresult-testcase-group',$testcase_id)">
+         <!-- if there is a test result for this Jira issue without any existing testspec for this Jira issue-->
+         <xsl:if test="key('issue-group',$key_local)[(not(../tr:testcase) or ../tr:testcase = '' or not(tr:testcase = //tc:scrno[contains(. , $key_local) or contains(. , $key_local_unmodified)]/../tc:id))] and not(//tc:scrno[contains(. , $key_local) or contains(. , $key_local_unmodified)])">
+            <!-- for each test result for test result for this Jira issue without any existing testspec for this Jira issue-->
+            <xsl:for-each select="key('issue-group',$key_local)[(not(../tr:testcase) or ../tr:testcase = '' or not(tr:testcase = //tc:scrno[contains(. , $key_local) or contains(. , $key_local_unmodified)]/../tc:id)) and not(//tc:scrno[contains(. , $key_local) or contains(. , $key_local_unmodified)])]">
+               <row>
+                  <entry>
+                     <xsl:call-template name="link_to_cms">
+                         <xsl:with-param name="issue_id" select="$key_local_unmodified"/>
+                     </xsl:call-template><xsl:if test="$type = 'internal'">(<xsl:value-of select="$status_local"/>)</xsl:if>           
+                  </entry>
+                  <entry>
+                     <xsl:choose>
+                        <xsl:when test="cms:external-id">
+                           <xsl:for-each select="cms:external-id">
+                              <xsl:call-template name="link_to_cms">
+                                  <xsl:with-param name="issue_id" select="."/>
+                              </xsl:call-template>
+                           </xsl:for-each>        
+                        </xsl:when>
+                        <xsl:otherwise>none</xsl:otherwise> 
+                     </xsl:choose>   
+                  </entry>
+                  <entry>
+                     <xsl:choose>
+                        <xsl:when test="//tc:scrno[contains(. , $key_local) or contains(. , $key_local_unmodified)]">
+                           <xsl:for-each select="//tc:scrno[contains(. , $key_local) or contains(. , $key_local_unmodified)]">
+                              <xsl:variable name="t_id" select="../tc:id"/>
+                              <ulink url="all_testspec.html#{$t_id}">
+                                 <citetitle><xsl:value-of select="$t_id"/></citetitle>
+                              </ulink>
+                              <xsl:if test="not(position() = last()) "><xsl:text>,</xsl:text><sbr/></xsl:if>
+                           </xsl:for-each>
+                        </xsl:when>
+                        <xsl:when test="../tr:testcase and not(../tr:testcase = '')">
+                           <ulink url="all_testspec.html#{../tr:testcase}">
+                              <citetitle><xsl:value-of select="../tr:testcase"/></citetitle>
+                           </ulink>
+                        </xsl:when>
+                        <xsl:otherwise>
+                           none
+                        </xsl:otherwise>
+                     </xsl:choose>
+                  </entry>
+                  <entry>
+                     <xsl:value-of select="../tr:comment"/>
+                  </entry>
+                  <entry>
+                     <xsl:choose>
+                        <xsl:when test="../tr:version = $version.releasecandidate">
+   <xsl:text disable-output-escaping="yes">
+   &lt;?dbhtml bgcolor="Lime" ?&gt;&lt;?dbfo bgcolor="Lime" ?&gt;</xsl:text>
+                           <xsl:value-of select="../tr:version"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+   <xsl:text disable-output-escaping="yes">
+   &lt;?dbhtml bgcolor="yellow" ?&gt;&lt;?dbfo bgcolor="yellow" ?&gt;</xsl:text>
+                           <xsl:value-of select="../tr:version"/>
+                        </xsl:otherwise>            
+                     </xsl:choose>
+                  </entry>
+                  <entry>
+                     <xsl:choose>
+                        <xsl:when test="//tc:scrno[contains(. , $key_local) or contains(. , $key_local_unmodified)]">
+                           <!--
+                           TODO: find a way to decide, when to paint entry green, red or yellow.
+                           <xsl:choose>
+                              <xsl:when test="count(key('issue-group', $key_local)[../testcase = $t_id]/../result[. = passed]) = count(key('issue-group', $key_local)[../testcase = $t_id]/../result) and count(key('issue-group', $key_local)[../testcase = $t_id]/../result) > 0"><xsl:text disable-output-escaping="yes"> &lt;?dbhtml bgcolor="Lime" ?&gt;&lt;?dbfo bgcolor="Lime" ?&gt;</xsl:text></xsl:when>
+                              <xsl:when test="count(key('issue-group', $key_local)[../testcase = $t_id]/../result) > count(key('issue-group', $key_local)[../testcase = $t_id]/../result[. = passed]) and count(key('issue-group', $key_local)[../testcase = $t_id]/../result) > 0"><xsl:text disable-output-escaping="yes"> &lt;?dbhtml bgcolor="Yellow" ?&gt;&lt;?dbfo bgcolor="Yellow" ?&gt;</xsl:text></xsl:when>
+                           </xsl:choose>
+                           -->
+   <xsl:text disable-output-escaping="yes">
+   &lt;?dbhtml bgcolor="white" ?&gt;&lt;?dbfo bgcolor="white" ?&gt;</xsl:text>
+                           <xsl:for-each select="//tc:scrno[contains(. , $key_local) or contains(. , $key_local_unmodified)]">
+                              <xsl:variable name="t_id" select="../tc:id"/>
+                              <xsl:choose>
+                                 <xsl:when test="key('issue-group', $key_local)[../tr:testcase = $t_id]">
+                                    <xsl:apply-templates select="key('issue-group', $key_local)[../tr:testcase = $t_id]/../tr:result"/>
+                                 </xsl:when>
+                                 <xsl:otherwise>
+                                     no test result
+                                 </xsl:otherwise>
+                              </xsl:choose>
+                              <xsl:if test="not(position() = last())"><xsl:text>,</xsl:text><sbr/></xsl:if>
+                           </xsl:for-each>
+                        </xsl:when>
+                        <xsl:otherwise>
+                           <xsl:apply-templates select="../tr:result"/>
+                        </xsl:otherwise>
+                     </xsl:choose>   
+                  </entry>
+               </row><xsl:text>
+               </xsl:text>
+            </xsl:for-each>
+         </xsl:if>
+         
+         <!-- if there is/are test specification(s) for this Jira issue -->
+         <xsl:if test="//tc:scrno[contains(. , $key_local) or contains(. , $key_local_unmodified)]">
+            <!-- for each test specification for this Jira issue -->
+            <xsl:for-each select="//tc:scrno[contains(. , $key_local) or contains(. , $key_local_unmodified)]">
+               <xsl:variable name="testcase_id" select="../tc:id"/>
+               <xsl:choose>
+                  <xsl:when test="key('testresult-testcase-group',$testcase_id)">
+                     <xsl:for-each select="key('testresult-testcase-group',$testcase_id)">
+                        <row>
+                           <entry>
+                              <xsl:call-template name="link_to_cms">
+                                  <xsl:with-param name="issue_id" select="$key_local_unmodified"/>
+                              </xsl:call-template><xsl:if test="$type = 'internal'">(<xsl:value-of select="$status_local"/>)</xsl:if>      
+                           </entry>
+                           <entry>
+                              <xsl:choose>
+                                 <xsl:when test="cms:external-id">
+                                    <xsl:for-each select="cms:external-id">
+                                       <xsl:call-template name="link_to_cms">
+                                           <xsl:with-param name="issue_id" select="."/>
+                                       </xsl:call-template>
+                                    </xsl:for-each>        
+                                 </xsl:when>
+                                 <xsl:otherwise>none</xsl:otherwise> 
+                              </xsl:choose>
+                           </entry>
+                           <entry>
+                              <ulink url="all_testspec.html#{$testcase_id}">
+                                 <citetitle><xsl:value-of select="$testcase_id"/></citetitle>
+                              </ulink>
+                           </entry>
+                           <entry>
+                              <xsl:value-of select="tr:comment"/>
+                           </entry>
+                           <entry>
+                              <xsl:choose>
+                                 <xsl:when test="tr:version = $version.releasecandidate">
+                                    <xsl:text disable-output-escaping="yes">
+   &lt;?dbhtml bgcolor="Lime" ?&gt;&lt;?dbfo bgcolor="Lime" ?&gt;</xsl:text>
+                                    <xsl:value-of select="tr:version"/>
+                                 </xsl:when>
+                                 <xsl:otherwise>
+                                    <xsl:text disable-output-escaping="yes">
+   &lt;?dbhtml bgcolor="yellow" ?&gt;&lt;?dbfo bgcolor="yellow" ?&gt;</xsl:text>
+                                    <xsl:value-of select="tr:version"/>
+                                 </xsl:otherwise>            
+                              </xsl:choose>
+                           </entry>
+                           <entry>
+                              <xsl:apply-templates select="tr:result"/>
+                           </entry>
+                        </row><xsl:text>
+                        </xsl:text>
+                     </xsl:for-each>
+                  </xsl:when>
+                  <xsl:otherwise>
                      <row>
+                        <xsl:text disable-output-escaping="yes">
+   &lt;?dbhtml bgcolor="yellow" ?&gt;&lt;?dbfo bgcolor="yellow" ?&gt;</xsl:text>
                         <entry>
                            <xsl:call-template name="link_to_cms">
                                <xsl:with-param name="issue_id" select="$key_local_unmodified"/>
-                           </xsl:call-template><xsl:if test="$type = 'internal'">(<xsl:value-of select="$status_local"/>)</xsl:if>      
+                           </xsl:call-template><xsl:if test="$type = 'internal'">(<xsl:value-of select="$status_local"/>)</xsl:if>
                         </entry>
                         <entry>
                            <xsl:choose>
@@ -1167,137 +1223,88 @@
                         <entry>
                            <ulink url="all_testspec.html#{$testcase_id}">
                               <citetitle><xsl:value-of select="$testcase_id"/></citetitle>
-                           </ulink>
+                           </ulink>            
                         </entry>
                         <entry>
-                           <xsl:value-of select="tr:comment"/>
+                           <xsl:value-of select="$summary_local"/>
                         </entry>
                         <entry>
-                           <xsl:choose>
-                              <xsl:when test="tr:version = $version.releasecandidate">
-                                 <xsl:text disable-output-escaping="yes">
-&lt;?dbhtml bgcolor="Lime" ?&gt;&lt;?dbfo bgcolor="Lime" ?&gt;</xsl:text>
-                                 <xsl:value-of select="tr:version"/>
-                              </xsl:when>
-                              <xsl:otherwise>
-                                 <xsl:text disable-output-escaping="yes">
-&lt;?dbhtml bgcolor="yellow" ?&gt;&lt;?dbfo bgcolor="yellow" ?&gt;</xsl:text>
-                                 <xsl:value-of select="tr:version"/>
-                              </xsl:otherwise>            
-                           </xsl:choose>
                         </entry>
                         <entry>
-                           <xsl:apply-templates select="tr:result"/>
+                           no test result
                         </entry>
                      </row><xsl:text>
                      </xsl:text>
-                  </xsl:for-each>
-               </xsl:when>
-               <xsl:otherwise>
-                  <row>
-                     <xsl:text disable-output-escaping="yes">
-&lt;?dbhtml bgcolor="yellow" ?&gt;&lt;?dbfo bgcolor="yellow" ?&gt;</xsl:text>
-                     <entry>
-                        <xsl:call-template name="link_to_cms">
-                            <xsl:with-param name="issue_id" select="$key_local_unmodified"/>
-                        </xsl:call-template><xsl:if test="$type = 'internal'">(<xsl:value-of select="$status_local"/>)</xsl:if>
-                     </entry>
-                     <entry>
-                        <xsl:choose>
-                           <xsl:when test="cms:external-id">
-                              <xsl:for-each select="cms:external-id">
-                                 <xsl:call-template name="link_to_cms">
-                                     <xsl:with-param name="issue_id" select="."/>
-                                 </xsl:call-template>
-                              </xsl:for-each>        
-                           </xsl:when>
-                           <xsl:otherwise>none</xsl:otherwise> 
-                        </xsl:choose>
-                     </entry>
-                     <entry>
-                        <ulink url="all_testspec.html#{$testcase_id}">
-                           <citetitle><xsl:value-of select="$testcase_id"/></citetitle>
-                        </ulink>            
-                     </entry>
-                     <entry>
-                        <xsl:value-of select="$summary_local"/>
-                     </entry>
-                     <entry>
-                     </entry>
-                     <entry>
-                        no test result
-                     </entry>
-                  </row><xsl:text>
-                  </xsl:text>
-               </xsl:otherwise>
-            </xsl:choose>
-         </xsl:for-each>
-      </xsl:if>
-      
-      <!-- if there is no test result for Jira issue and no test spec -->
-      <xsl:if test="not(
-                        key('issue-group',$key_local)
-                        [
-                              not(../testcase) 
-                              or ../testcase = '' 
-                              or not(
-                                 testcase = //scrno
-                                    [
-                                       contains(. , $key_local) 
-                                       or contains(. , $key_local_unmodified)
-                                    ]/../id
-                              )
-                        ]
-                     )
-                     and not(
-                        //scrno
-                        [
-                             contains(. , $key_local)
-                             or contains(. , $key_local_unmodified)
-                        ]
-                     )">         
-         <row>
-            <xsl:text disable-output-escaping="yes">
-&lt;?dbhtml bgcolor="yellow" ?&gt;&lt;?dbfo bgcolor="yellow" ?&gt;</xsl:text>
-            <entry>
-               <xsl:call-template name="link_to_cms">
-                   <xsl:with-param name="issue_id" select="$key_local_unmodified"/>
-               </xsl:call-template><xsl:if test="$type = 'internal'">(<xsl:value-of select="$status_local"/>)</xsl:if>
-            </entry>
-            <entry>
-               <xsl:choose>
-                  <xsl:when test="cms:external-id">
-                     <xsl:for-each select="cms:external-id">
-                        <xsl:call-template name="link_to_cms">
-                            <xsl:with-param name="issue_id" select="."/>
-                        </xsl:call-template>
-                     </xsl:for-each>        
-                  </xsl:when>
-                  <xsl:otherwise>none</xsl:otherwise> 
-               </xsl:choose>  
-            </entry>
-            <entry>
-               <xsl:choose>
-                  <xsl:when test="//tc:scrno[contains(. , $key_local) or contains(. , $key_local_unmodified)]">
-                     <xsl:variable name="t_id" select="//tc:scrno[contains(. , $key_local) or contains(. , $key_local_unmodified)]/../id"/>
-                     <ulink url="all_testspec.html#{$t_id}">
-                        <citetitle><xsl:value-of select="$t_id"/></citetitle>
-                     </ulink>
-                  </xsl:when>
-                  <xsl:otherwise>
-                     none
                   </xsl:otherwise>
-               </xsl:choose>            
-            </entry>
-            <entry>
-               <xsl:value-of select="$summary_local"/>
-            </entry>
-            <entry></entry>
-            <entry>
-               no test result
-            </entry>
-         </row><xsl:text>
-         </xsl:text>
+               </xsl:choose>
+            </xsl:for-each>
+         </xsl:if>
+         
+         <!-- if there is no test result for Jira issue and no test spec -->
+         <xsl:if test="not(
+                           key('issue-group',$key_local)
+                           [
+                                 not(../testcase) 
+                                 or ../testcase = '' 
+                                 or not(
+                                    testcase = //scrno
+                                       [
+                                          contains(. , $key_local) 
+                                          or contains(. , $key_local_unmodified)
+                                       ]/../id
+                                 )
+                           ]
+                        )
+                        and not(
+                           //scrno
+                           [
+                                contains(. , $key_local)
+                                or contains(. , $key_local_unmodified)
+                           ]
+                        )">         
+            <row>
+               <xsl:text disable-output-escaping="yes">
+   &lt;?dbhtml bgcolor="yellow" ?&gt;&lt;?dbfo bgcolor="yellow" ?&gt;</xsl:text>
+               <entry>
+                  <xsl:call-template name="link_to_cms">
+                      <xsl:with-param name="issue_id" select="$key_local_unmodified"/>
+                  </xsl:call-template><xsl:if test="$type = 'internal'">(<xsl:value-of select="$status_local"/>)</xsl:if>
+               </entry>
+               <entry>
+                  <xsl:choose>
+                     <xsl:when test="cms:external-id">
+                        <xsl:for-each select="cms:external-id">
+                           <xsl:call-template name="link_to_cms">
+                               <xsl:with-param name="issue_id" select="."/>
+                           </xsl:call-template>
+                        </xsl:for-each>        
+                     </xsl:when>
+                     <xsl:otherwise>none</xsl:otherwise> 
+                  </xsl:choose>  
+               </entry>
+               <entry>
+                  <xsl:choose>
+                     <xsl:when test="//tc:scrno[contains(. , $key_local) or contains(. , $key_local_unmodified)]">
+                        <xsl:variable name="t_id" select="//tc:scrno[contains(. , $key_local) or contains(. , $key_local_unmodified)]/../id"/>
+                        <ulink url="all_testspec.html#{$t_id}">
+                           <citetitle><xsl:value-of select="$t_id"/></citetitle>
+                        </ulink>
+                     </xsl:when>
+                     <xsl:otherwise>
+                        none
+                     </xsl:otherwise>
+                  </xsl:choose>            
+               </entry>
+               <entry>
+                  <xsl:value-of select="$summary_local"/>
+               </entry>
+               <entry></entry>
+               <entry>
+                  no test result
+               </entry>
+            </row><xsl:text>
+            </xsl:text>
+         </xsl:if>
       </xsl:if>
    </xsl:template>
    

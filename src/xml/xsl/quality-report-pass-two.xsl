@@ -1491,7 +1491,9 @@
          <entry>
             <xsl:for-each select="key('test-group',$uc_id)">
                <ulink url="all_testspec.html#{tc:id}">
-                  <citetitle><xsl:value-of select="tc:id"/></citetitle>
+                  <citetitle><xsl:if test="tc:state = 'draft'">(</xsl:if>
+                  <xsl:value-of select="tc:id"/></citetitle>
+                  <xsl:if test="tc:state = 'draft'">)</xsl:if>
                </ulink><xsl:if test="not(position() = last())"><xsl:text>, 
                </xsl:text></xsl:if>
             </xsl:for-each>

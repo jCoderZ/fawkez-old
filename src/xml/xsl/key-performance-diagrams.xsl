@@ -153,8 +153,15 @@
       <redirect:write file="{$file}">
       
       <xsl:text></xsl:text><xsl:value-of select="'Date'"/><xsl:text> </xsl:text>
+      <xsl:value-of select="'Revision1'"/><xsl:text> </xsl:text>
+      <xsl:value-of select="'Revision2'"/><xsl:text> </xsl:text>
       <xsl:for-each select="//kpi:keys/kpi:key[generate-id() = generate-id(key('key-group', .))]">
-         <xsl:value-of select="."/><xsl:text> </xsl:text>
+         <xsl:variable name="kpi_name_urified">
+            <xsl:call-template name="make_uri">
+               <xsl:with-param name="string" select="."/>
+            </xsl:call-template>
+         </xsl:variable>
+         <xsl:value-of select="$kpi_name_urified"/><xsl:text> </xsl:text>
       </xsl:for-each>
       <xsl:text>
 </xsl:text>
@@ -359,8 +366,12 @@
    </xsl:template>
    
    <xsl:template match="kpi:kpi_list" mode="csv_list">
-      <xsl:variable name="time" select="kpi:meta/kpi:timestamp"/>
+      <xsl:variable name="time"     select="kpi:meta/kpi:timestamp"/>
+      <xsl:variable name="version1" select="kpi:meta/kpi:version1"/>
+      <xsl:variable name="version2" select="kpi:meta/kpi:version2"/>
       <xsl:value-of select="kpi:meta/kpi:timestamp"/><xsl:text> </xsl:text>
+      <xsl:value-of select="kpi:meta/kpi:version1"/><xsl:text> </xsl:text>
+      <xsl:value-of select="kpi:meta/kpi:version2"/><xsl:text> </xsl:text>
       <xsl:for-each select="//kpi:keys/kpi:key[generate-id() = generate-id(key('key-group', .))]">
          <xsl:variable name="key_name" select="."/>
          <xsl:choose>

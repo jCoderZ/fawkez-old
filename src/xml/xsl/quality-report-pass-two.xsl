@@ -453,49 +453,6 @@
                         <entry><xsl:value-of select="$number_accepted_issues"/> (<xsl:value-of select="round($number_accepted_issues div $number_issues * 1000) div 10"/> %)</entry>
                      </row><xsl:text>
                      </xsl:text>
-                     <row>
-                        <entry><emphasis role="bold">Overall Test Cases Executed</emphasis></entry>
-                        <entry><xsl:value-of select="$number_tests"/></entry>
-                     </row><xsl:text>
-                     </xsl:text>
-                     <row>
-                        <entry><emphasis role="bold">Overall Test Cases Passed</emphasis></entry>
-                        <entry><xsl:value-of select="$number_tests_passed"/> (<xsl:value-of select="round($number_tests_passed div $number_tests * 1000) div 10"/> %)</entry>
-                     </row><xsl:text>
-                     </xsl:text>
-                     <row>
-                        <entry><emphasis role="bold">Overall Test Cases Failed</emphasis></entry>
-                        <entry><xsl:value-of select="$number_tests_failed"/> (<xsl:value-of select="round($number_tests_failed div $number_tests * 1000) div 10"/> %)</entry>
-                     </row><xsl:text>
-                     </xsl:text>
-                     <row>
-                        <entry><emphasis role="bold">Test Cases automated with JMeter</emphasis></entry>
-                        <entry><xsl:value-of select="$number_automated_jmeter_tests"/></entry>
-                     </row><xsl:text>
-                     </xsl:text>
-                     <row>
-                        <entry><emphasis role="bold">JMeter Tests Passed</emphasis></entry>
-                        <entry><xsl:value-of select="$number_automated_jmeter_tests_passed"/> (<xsl:value-of select="round($number_automated_jmeter_tests_passed div $number_automated_jmeter_tests * 1000) div 10"/> %)</entry>
-                     </row><xsl:text>
-                     </xsl:text>
-                     <row>
-                        <entry><emphasis role="bold">JMeter Tests Failed</emphasis></entry>
-                        <entry><xsl:value-of select="$number_automated_jmeter_tests_failed"/> (<xsl:value-of select="round($number_automated_jmeter_tests_failed div $number_automated_jmeter_tests * 1000) div 10"/> %)</entry>
-                     </row>                     
-                     <row>
-                        <entry><emphasis role="bold">Test Cases automated with Selenium</emphasis></entry>
-                        <entry><xsl:value-of select="$number_automated_selenium_tests"/></entry>
-                     </row><xsl:text>
-                     </xsl:text>
-                     <row>
-                        <entry><emphasis role="bold">Selenium Tests Passed</emphasis></entry>
-                        <entry><xsl:value-of select="$number_automated_selenium_tests_passed"/> (<xsl:value-of select="round($number_automated_selenium_tests_passed div $number_automated_selenium_tests * 1000) div 10"/> %)</entry>
-                     </row><xsl:text>
-                     </xsl:text>
-                     <row>
-                        <entry><emphasis role="bold">Selenium Tests Failed</emphasis></entry>
-                        <entry><xsl:value-of select="$number_automated_selenium_tests_failed"/> (<xsl:value-of select="round($number_automated_selenium_tests_failed div $number_automated_selenium_tests * 1000) div 10"/> %)</entry>
-                     </row>
                   </tbody>
                </tgroup>
             </table>

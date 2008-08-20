@@ -68,6 +68,10 @@
    <!-- number of specified test cases -->
    <xsl:variable name="kpi.testcases.number" select="'KPI_NUMBER_TESTCASES'"/>
    <!-- number of automated test cases -->
+   <xsl:variable name="kpi.testcases.draft.number" select="'KPI_NUMBER_DRAFT_TESTCASES'"/>
+   <!-- number of automated test cases -->
+   <xsl:variable name="kpi.testcases.final.number" select="'KPI_NUMBER_FINAL_TESTCASES'"/>
+   <!-- number of automated test cases -->
    <xsl:variable name="kpi.testcases.automated.jmeter.number" select="'KPI_NUMBER_AUTOMATED_JMETER_TESTCASES'"/>
    <!-- number of automated jmeter test cases -->
    <xsl:variable name="kpi.testcases.automated.jmeter.passed.number" select="'KPI_NUMBER_AUTOMATED_JMETER_PASSED_TESTCASES'"/>

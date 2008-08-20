@@ -104,6 +104,8 @@
     
    <xsl:template name="kpikeys">
       <kpi:key><xsl:value-of select="$kpi.testcases.number"/></kpi:key><xsl:text></xsl:text>
+      <kpi:key><xsl:value-of select="$kpi.testcases.draft.number"/></kpi:key><xsl:text></xsl:text>
+      <kpi:key><xsl:value-of select="$kpi.testcases.final.number"/></kpi:key><xsl:text></xsl:text>
       <kpi:key><xsl:value-of select="$kpi.testcases.automated.jmeter.number"/></kpi:key><xsl:text></xsl:text>
       <kpi:key><xsl:value-of select="$kpi.testcases.automated.selenium.number"/></kpi:key><xsl:text></xsl:text>
       <kpi:key><xsl:value-of select="$kpi.testcases.automated.jmeter.passed.number"/></kpi:key><xsl:text></xsl:text>
@@ -607,6 +609,14 @@
       <xsl:call-template name="entry">
          <xsl:with-param name="key" select="$kpi.testcases.number"/>
          <xsl:with-param name="value" select="count(//tc:test)"/>
+      </xsl:call-template>
+      <xsl:call-template name="entry">
+         <xsl:with-param name="key" select="$kpi.testcases.draft.number"/>
+         <xsl:with-param name="value" select="count(//tc:test[tc:state = 'draft'])"/>
+      </xsl:call-template>
+      <xsl:call-template name="entry">
+         <xsl:with-param name="key" select="$kpi.testcases.final.number"/>
+         <xsl:with-param name="value" select="count(//tc:test[tc:state = 'final'])"/>
       </xsl:call-template>
       <xsl:call-template name="entry">
          <xsl:with-param name="key" select="$kpi.testcases.automated.jmeter.number"/>

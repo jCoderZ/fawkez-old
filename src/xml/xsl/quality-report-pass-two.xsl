@@ -700,7 +700,7 @@
                               <xsl:variable name="uc_covered"       select="count(uc:usecase[key('test-group-final',@id)])"/>
                               <xsl:variable name="uc_covered_draft" select="count(uc:usecase[key('test-group-draft',@id)])"/>
                               <entry>
-                                 <xsl:value-of select="uc:info/@project"/><xsl:text> </xsl:text>(<xsl:value-of select="uc:info/@version"/>)
+                                 <xsl:value-of select="uc:info/@project"/><xsl:text> </xsl:text>(<xsl:value-of select="$cr_version"/>)
                                  <xsl:call-template name="link_to_cms">
                                      <xsl:with-param name="issue_id" select="uc:info/@issue"/>
                                  </xsl:call-template>, Version: <xsl:value-of select="$cr_version"/>

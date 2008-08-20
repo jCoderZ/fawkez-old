@@ -247,6 +247,10 @@
    <xsl:variable name="kpi.req.all.spec.usecase.number" select="'KPI_REQ_ALL_SPEC_USECASE_NUMBER'"/>
    <xsl:variable name="kpi.req.all.spec.usecase.covered.number" select="'KPI_REQ_ALL_SPEC_USECASE_COVERED_NUMBER'"/>
    
+   <xsl:variable name="kpi.req.spec.usecase.final.covered.number.prefix" select="'KPI_REQ_SPEC_USECASE_FINAL_COVERED_NUMBER_PREFIX_'"/>
+   <xsl:variable name="kpi.req.spec.usecase.draft.covered.number.prefix" select="'KPI_REQ_SPEC_USECASE_DRAFT_COVERED_NUMBER_PREFIX_'"/>
+   <xsl:variable name="kpi.req.spec.usecase.number.prefix" select="'KPI_REQ_SPEC_USECASE_NUMBER_PREFIX_'"/>   
+   
    <!--  *************** SCARAB ***************-->
    <!-- number of scarab issues -->
    <xsl:variable name="kpi.scarab.issue.number" select="'KPI_SCARAB_ISSUE_NUMBER'"/>

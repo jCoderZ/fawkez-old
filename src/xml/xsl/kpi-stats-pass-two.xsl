@@ -40,6 +40,8 @@
    <xsl:key name="usecases-group"   match="uc:usecases" use="."/>
    
    <xsl:key name="test-group"                         match="//tc:test" use="tc:traceability"/>
+   <xsl:key name="test-group-final"                   match="//tc:test[tc:state = 'final' or tc:state = '' or not(tc:state)]" use="tc:traceability"/>
+   <xsl:key name="test-group-draft"                   match="//tc:test[tc:state = 'draft']" use="tc:traceability"/>
    <xsl:key name="test-scope-group"                   match="//tc:test" use="tc:cut"/>
    <xsl:key name="scope-group"                        match="//tc:cut" use="."/>
    <xsl:key name="usecase-group"                      match="//uc:usecase" use="@id"/>
@@ -237,6 +239,15 @@
          <kpi:key><xsl:value-of select="concat($kpi.jira.issue.bugs.effort.remaining.all.version.prefix, $effort_type)"/></kpi:key><xsl:text></xsl:text>
          <kpi:key><xsl:value-of select="concat($kpi.jira.issue.bugs.effort.spent.all.version.prefix, $effort_type)"/></kpi:key><xsl:text></xsl:text>
       </xsl:for-each>
+      
+      <xsl:for-each select="//uc:usecases[generate-id() = generate-id(key('usecases-group', .))]">
+         <xsl:variable name="cr_id"      select="uc:info/@issue"/>
+         <xsl:variable name="cr_version" select="//cms:issue[cms:id = $cr_id]/cms:version"/>
+   
+         <kpi:key><xsl:value-of select="concat($kpi.req.spec.usecase.final.covered.number.prefix,$cr_id)"/></kpi:key><xsl:text></xsl:text>
+         <kpi:key><xsl:value-of select="concat($kpi.req.spec.usecase.draft.covered.number.prefix,$cr_id)"/></kpi:key><xsl:text></xsl:text>
+         <kpi:key><xsl:value-of select="concat($kpi.req.spec.usecase.number.prefix,$cr_id)"/></kpi:key><xsl:text></xsl:text>
+      </xsl:for-each>        
    </xsl:template>
    
    <!-- 
@@ -708,6 +719,28 @@
          <xsl:with-param name="key" select="$kpi.req.all.spec.usecase.covered.number"/>
          <xsl:with-param name="value" select="count(//uc:usecase[key('test-group',@id)])"/>
       </xsl:call-template>
+      
+      <xsl:for-each select="//uc:usecases[generate-id() = generate-id(key('usecases-group', .))]">
+         <xsl:variable name="cr_id"      select="uc:info/@issue"/>
+         <xsl:variable name="cr_version" select="//cms:issue[cms:id = $cr_id]/cms:version"/>
+         
+         <xsl:variable name="uc_number"        select="count(uc:usecase)"/>
+         <xsl:variable name="uc_covered"       select="count(uc:usecase[key('test-group-final',@id)])"/>
+         <xsl:variable name="uc_covered_draft" select="count(uc:usecase[key('test-group-draft',@id)])"/>
+
+         <xsl:call-template name="entry">
+            <xsl:with-param name="key" select="concat($kpi.req.spec.usecase.final.covered.number.prefix,$cr_id)"/>
+            <xsl:with-param name="value" select="$uc_covered"/>
+         </xsl:call-template>
+         <xsl:call-template name="entry">
+            <xsl:with-param name="key" select="concat($kpi.req.spec.usecase.draft.covered.number.prefix,$cr_id)"/>
+            <xsl:with-param name="value" select="$uc_covered_draft"/>
+         </xsl:call-template>
+         <xsl:call-template name="entry">
+            <xsl:with-param name="key" select="concat($kpi.req.spec.usecase.number.prefix,$cr_id)"/>
+            <xsl:with-param name="value" select="$uc_number"/>
+         </xsl:call-template>
+      </xsl:for-each>            
    </xsl:template>  
    
    <xsl:template name="efficiency">

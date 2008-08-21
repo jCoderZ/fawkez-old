@@ -591,7 +591,15 @@
                   <tbody>
                      <xsl:for-each select="//uc:usecases[generate-id() = generate-id(key('usecases-group', .))]">
                         <xsl:variable name="cr_id"      select="uc:info/@issue"/>
-                        <xsl:variable name="cr_version" select="//cms:issue[cms:external-id = $cr_id]/cms:version"/>
+                        <xsl:variable name="cr_version">
+                           <xsl:choose>
+                              <xsl:when test="not(//cms:issue[cms:external-id = $cr_id]/cms:version) 
+                                              or //cms:issue[cms:external-id = $cr_id]/cms:version = ''">
+                                 <xsl:value-of select="//cms:issue[cms:external-id = $cr_id]/cms:version"/>
+                              </xsl:when>
+                              <xsl:otherwise>unplanned</xsl:otherwise>
+                           </xsl:choose>
+                        </xsl:variable>
                         <xsl:if test="$cr_version = $version">
                            <row>
                               <xsl:variable name="uc_number"        select="count(uc:usecase)"/>
@@ -650,7 +658,15 @@
                   <tbody>
                      <xsl:for-each select="//uc:usecases[generate-id() = generate-id(key('usecases-group', .))]">
                         <xsl:variable name="cr_id"      select="uc:info/@issue"/>
-                        <xsl:variable name="cr_version" select="//cms:issue[cms:external-id = $cr_id]/cms:version"/>
+                        <xsl:variable name="cr_version">
+                           <xsl:choose>
+                              <xsl:when test="not(//cms:issue[cms:external-id = $cr_id]/cms:version) 
+                                              or //cms:issue[cms:external-id = $cr_id]/cms:version = ''">
+                                 <xsl:value-of select="//cms:issue[cms:external-id = $cr_id]/cms:version"/>
+                              </xsl:when>
+                              <xsl:otherwise>unplanned</xsl:otherwise>
+                           </xsl:choose>
+                        </xsl:variable>
                         <xsl:if test="not($cr_version = $version)">
                            <row>
                               <xsl:variable name="uc_number"        select="count(uc:usecase)"/>
@@ -1372,7 +1388,15 @@
     
    <xsl:template match="uc:usecases" mode="simple_coverage">
       <xsl:variable name="cr_id"      select="uc:info/@issue"/>
-      <xsl:variable name="cr_version" select="//cms:issue[cms:external-id = $cr_id]/cms:version"/>
+      <xsl:variable name="cr_version">
+         <xsl:choose>
+            <xsl:when test="not(//cms:issue[cms:external-id = $cr_id]/cms:version) 
+                            or //cms:issue[cms:external-id = $cr_id]/cms:version = ''">
+               <xsl:value-of select="//cms:issue[cms:external-id = $cr_id]/cms:version"/>
+            </xsl:when>
+            <xsl:otherwise>unplanned</xsl:otherwise>
+         </xsl:choose>
+      </xsl:variable>
       <section>
          <title><xsl:value-of select="uc:info/@project"/><xsl:text> </xsl:text>(<xsl:value-of select="uc:info/@issue"/>/<xsl:value-of select="$cr_version"/>)</title>
          <para>

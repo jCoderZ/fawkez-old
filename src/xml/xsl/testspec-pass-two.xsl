@@ -580,8 +580,8 @@
                <colspec colname="c2"/>
                <colspec colname="c3"/>
                <colspec colname="c4"/>
-               <spanspec spanname="hspan" namest="c2" nameend="c4" align="center"/>
-               <spanspec spanname="hspan2" namest="c1" nameend="c4" align="center"/>
+               <spanspec spanname="hspan" namest="c2" nameend="c4" align="left"/>
+               <spanspec spanname="hspan2" namest="c1" nameend="c4" align="left"/>
                <!--thead>
                   <row>
                     <entry>Horizontal Span</entry>
@@ -687,8 +687,8 @@
                <colspec colname="c2"/>
                <colspec colname="c3"/>
                <colspec colname="c4"/>
-               <spanspec spanname="hspan" namest="c2" nameend="c4" align="center"/>
-               <spanspec spanname="hspan2" namest="c1" nameend="c4" align="center"/>
+               <spanspec spanname="hspan" namest="c2" nameend="c4" align="left"/>
+               <spanspec spanname="hspan2" namest="c1" nameend="c4" align="left"/>
                <tbody>
                   <row>
                     <entry><emphasis role="bold">Test Type</emphasis></entry>
@@ -798,8 +798,8 @@
            <colspec colname="c2"/>
            <colspec colname="c3"/>
            <colspec colname="c4"/>
-           <spanspec spanname="hspan" namest="c2" nameend="c4" align="center"/>
-           <spanspec spanname="hspan2" namest="c1" nameend="c4" align="center"/>
+           <spanspec spanname="hspan" namest="c2" nameend="c4" align="left"/>
+           <spanspec spanname="hspan2" namest="c1" nameend="c4" align="left"/>
            <tbody>
              <row>
                <entry spanname="hspan2"><emphasis role="bold">Precondition</emphasis></entry>
@@ -834,7 +834,7 @@
            <colspec colname="c2"/>
            <colspec colname="c3"/>
            <colspec colname="c4"/>
-           <spanspec spanname="hspan" namest="c2" nameend="c4" align="center"/>
+           <spanspec spanname="hspan" namest="c2" nameend="c4" align="left"/>
            <spanspec spanname="hspan2" namest="c1" nameend="c4" align="left"/>
            <tbody>
              <row>

@@ -45,6 +45,7 @@
             <xsd:element ref="td:name" />
             <xsd:element name="state" type="td:testDataState" />
             <xsd:element ref="td:description" />
+            <xsd:element ref="td:dependency" minOccurs="0" maxOccurs="unbounded" />
             <xsd:element ref="td:attribute" minOccurs="0" maxOccurs="unbounded" />
          </xsd:sequence>
       </xsd:complexType>
@@ -70,5 +71,6 @@
    <xsd:element name="autovalue" />
    <xsd:element name="value" type="xsd:string" />
    <xsd:element name="description" type="xsd:string" />
+   <xsd:element name="dependency" type="td:testDataId" />
 
 </xsd:schema>

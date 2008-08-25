@@ -594,7 +594,7 @@
                         <xsl:variable name="cr_version">
                            <xsl:choose>
                               <xsl:when test="not(//cms:issue[cms:external-id = $cr_id]/cms:version) 
-                                              or //cms:issue[cms:external-id = $cr_id]/cms:version = ''">
+                                              and not(//cms:issue[cms:external-id = $cr_id]/cms:version = '')">
                                  <xsl:value-of select="//cms:issue[cms:external-id = $cr_id]/cms:version"/>
                               </xsl:when>
                               <xsl:otherwise>unplanned</xsl:otherwise>
@@ -661,7 +661,7 @@
                         <xsl:variable name="cr_version">
                            <xsl:choose>
                               <xsl:when test="not(//cms:issue[cms:external-id = $cr_id]/cms:version) 
-                                              or //cms:issue[cms:external-id = $cr_id]/cms:version = ''">
+                                              and not(//cms:issue[cms:external-id = $cr_id]/cms:version = '')">
                                  <xsl:value-of select="//cms:issue[cms:external-id = $cr_id]/cms:version"/>
                               </xsl:when>
                               <xsl:otherwise>unplanned</xsl:otherwise>
@@ -1391,7 +1391,7 @@
       <xsl:variable name="cr_version">
          <xsl:choose>
             <xsl:when test="not(//cms:issue[cms:external-id = $cr_id]/cms:version) 
-                            or //cms:issue[cms:external-id = $cr_id]/cms:version = ''">
+                            and not(//cms:issue[cms:external-id = $cr_id]/cms:version = '')">
                <xsl:value-of select="//cms:issue[cms:external-id = $cr_id]/cms:version"/>
             </xsl:when>
             <xsl:otherwise>unplanned</xsl:otherwise>

@@ -594,7 +594,7 @@
                         <xsl:variable name="cr_id"      select="uc:info/@issue"/>
                         <xsl:variable name="cr_version">
                            <xsl:choose>
-                              <xsl:when test="not(//cms:issue[cms:external-id = $cr_id]/cms:version) 
+                              <xsl:when test="//cms:issue[cms:external-id = $cr_id]/cms:version 
                                               and not(//cms:issue[cms:external-id = $cr_id]/cms:version = '')">
                                  <xsl:value-of select="//cms:issue[cms:external-id = $cr_id]/cms:version"/>
                               </xsl:when>
@@ -661,7 +661,7 @@
                         <xsl:variable name="cr_id"      select="uc:info/@issue"/>
                         <xsl:variable name="cr_version">
                            <xsl:choose>
-                              <xsl:when test="not(//cms:issue[cms:external-id = $cr_id]/cms:version) 
+                              <xsl:when test="//cms:issue[cms:external-id = $cr_id]/cms:version 
                                               and not(//cms:issue[cms:external-id = $cr_id]/cms:version = '')">
                                  <xsl:value-of select="//cms:issue[cms:external-id = $cr_id]/cms:version"/>
                               </xsl:when>
@@ -1391,7 +1391,7 @@
       <xsl:variable name="cr_id"      select="uc:info/@issue"/>
       <xsl:variable name="cr_version">
          <xsl:choose>
-            <xsl:when test="not(//cms:issue[cms:external-id = $cr_id]/cms:version) 
+            <xsl:when test="//cms:issue[cms:external-id = $cr_id]/cms:version 
                             and not(//cms:issue[cms:external-id = $cr_id]/cms:version = '')">
                <xsl:value-of select="//cms:issue[cms:external-id = $cr_id]/cms:version"/>
             </xsl:when>
@@ -1406,7 +1406,7 @@
                 <xsl:with-param name="issue_id" select="uc:info/@issue"/>
             </xsl:call-template>
          </para>
-         <xsl:for-each select=".//uc:scope[generate-id() = generate-id(key('scope-group', .)) and ../../uc:info/@issue = $cr_id]">
+         <xsl:for-each select="//uc:scope[generate-id() = generate-id(key('scope-group', .))][../../uc:info/@issue = $cr_id]">
             <xsl:variable name="this_scope" select="."/>
             <xsl:choose>
                <xsl:when test="key('usecase-scope-group', $this_scope)">

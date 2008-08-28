@@ -43,6 +43,7 @@
    <xsl:key name="test-shortname-group"               match="//tc:test" use="tc:shortname"/>
    <xsl:key name="usecase-group"                      match="//uc:usecase" use="@id"/>
    <xsl:key name="usecase-scope-group"                match="//uc:usecase" use="uc:scope"/>
+   <xsl:key name="usecase-issue-group"                match="//uc:usecase" use="../uc:info/@issue"/>
    <xsl:key name="scope-group"                        match="//uc:scope" use="."/>
    <xsl:key name="testresult-group"                   match="//tr:testresult[starts-with(tr:version,$version)]" use="."/>
    <xsl:key name="testresult-testcase-group"          match="//tr:testresult[starts-with(tr:version,$version)]" use="tr:testcase"/>
@@ -1405,7 +1406,7 @@
                 <xsl:with-param name="issue_id" select="uc:info/@issue"/>
             </xsl:call-template>
          </para>
-         <xsl:for-each select=".//uc:scope[generate-id() = generate-id(key('scope-group', .))]">
+         <xsl:for-each select=".//uc:scope[generate-id() = generate-id(key('scope-group', .)) and ../../uc:info/@issue = $cr_id]">
             <xsl:variable name="this_scope" select="."/>
             <xsl:choose>
                <xsl:when test="key('usecase-scope-group', $this_scope)">
@@ -1430,7 +1431,7 @@
                               </row>
                            </thead>
                            <tbody>
-                              <xsl:apply-templates select="key('usecase-scope-group', $this_scope)" mode="simple_coverage">
+                              <xsl:apply-templates select="key('usecase-issue-group', $cr_id)[uc:scope = $this_scope]" mode="simple_coverage">
                                  <xsl:sort select="@id" order="ascending" data-type="text"/>
                               </xsl:apply-templates>
                            </tbody>

@@ -39,6 +39,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Formatter;
 import java.util.logging.LogRecord;
+import java.util.logging.Logger;
 
 import org.jcoderz.commons.logging.LogLineFormat;
 import org.jcoderz.commons.logging.LogLineFormatFactory;
@@ -53,7 +54,13 @@ import org.jcoderz.commons.logging.LogLineFormatFactory;
 public class LogFormatter
       extends Formatter
 {
-   private final ThreadLocal mMessageFormatters = new ThreadLocal();
+    /**
+     * Name of the logger that controls which log level is needed as minimum to trigger
+     * stack traces with log messages.
+     */
+    public static final String MSG_LOGGER_STACK_TRACE = "msgLoggerStackTrace";
+    private final ThreadLocal mMessageFormatters = new ThreadLocal();
+    private final Logger FWK_TRACE_LOGGER_LOGGER = Logger.getLogger(MSG_LOGGER_STACK_TRACE);
 
    /** {@inheritDoc} */
    public String format (LogRecord record)
@@ -233,8 +240,13 @@ public class LogFormatter
             }
          }
       }
-      trackingIds = initialiseTrackingIds(record, loggable);
-      appendStackTrace(sb, record, loggable, trackingIds);
+      // do not log stack traces for log messages of level below the FWK_TRACE_LOGGER_LOGGER
+      // log level.
+      if (loggable == null || FWK_TRACE_LOGGER_LOGGER.isLoggable(record.getLevel()))
+      {
+          trackingIds = initialiseTrackingIds(record, loggable);
+          appendStackTrace(sb, record, loggable, trackingIds);
+      }
    }
 
    private void formatLoggable (

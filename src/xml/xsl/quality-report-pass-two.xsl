@@ -1409,51 +1409,53 @@
          </para>
          <xsl:for-each select="//uc:scope[generate-id() = generate-id(key('scope-group', .))]">
             <xsl:variable name="this_scope" select="."/>
-            <xsl:choose>
-               <xsl:when test="key('usecase-scope-group', $this_scope)">
-                  <para>
-                     <table frame="all">
-                        <title>Use Cases - Simple Coverage (<xsl:value-of select="$this_scope"/>)</title>
-                        <tgroup cols="6" align="left" colsep="1" rowsep="1">
-                           <colspec colnum="1" colname="c1"/>
-                           <colspec colwidth="250pt" colnum="2" colname="c2"/>
-                           <colspec colnum="3" colname="c3"/>
-                           <colspec colwidth="30pt" colnum="4" colname="c4"/>
-                           <colspec colwidth="30pt" colnum="5" colname="c5"/>
-                           <colspec colwidth="30pt" colnum="6" colname="c6"/>
-                           <thead>
-                              <row>
-                                 <entry>UC-ID</entry>
-                                 <entry>Description</entry>
-                                 <entry>Test Cases</entry>
-                                 <entry>Count</entry>
-                                 <entry>TC Executed</entry>
-                                 <entry>TC Passed</entry>
-                              </row>
-                           </thead>
-                           <tbody>
-                              <xsl:apply-templates select="key('usecase-issue-group', $cr_id)[uc:scope = $this_scope]" mode="simple_coverage">
-                                 <xsl:sort select="@id" order="ascending" data-type="text"/>
-                              </xsl:apply-templates>
-                              <row>
-                                 <entry></entry>
-                                 <entry></entry>
-                                 <entry></entry>
-                                 <entry></entry>
-                                 <entry></entry>
-                                 <entry></entry>
-                              </row>
-                           </tbody>
-                        </tgroup>
-                     </table>
-                  </para>
-               </xsl:when>
-               <xsl:otherwise>
-                  <para>
-                     No use cases found.
-                  </para>
-               </xsl:otherwise>
-            </xsl:choose>
+            <xsl:if test="//uc:scope[. = $this_scope and ../../uc:info/@issue = $cr_id]">
+               <xsl:choose>
+                  <xsl:when test="key('usecase-scope-group', $this_scope)">
+                     <para>
+                        <table frame="all">
+                           <title>Use Cases - Simple Coverage (<xsl:value-of select="$this_scope"/>)</title>
+                           <tgroup cols="6" align="left" colsep="1" rowsep="1">
+                              <colspec colnum="1" colname="c1"/>
+                              <colspec colwidth="250pt" colnum="2" colname="c2"/>
+                              <colspec colnum="3" colname="c3"/>
+                              <colspec colwidth="30pt" colnum="4" colname="c4"/>
+                              <colspec colwidth="30pt" colnum="5" colname="c5"/>
+                              <colspec colwidth="30pt" colnum="6" colname="c6"/>
+                              <thead>
+                                 <row>
+                                    <entry>UC-ID</entry>
+                                    <entry>Description</entry>
+                                    <entry>Test Cases</entry>
+                                    <entry>Count</entry>
+                                    <entry>TC Executed</entry>
+                                    <entry>TC Passed</entry>
+                                 </row>
+                              </thead>
+                              <tbody>
+                                 <xsl:apply-templates select="key('usecase-issue-group', $cr_id)[uc:scope = $this_scope]" mode="simple_coverage">
+                                    <xsl:sort select="@id" order="ascending" data-type="text"/>
+                                 </xsl:apply-templates>
+                                 <row>
+                                    <entry></entry>
+                                    <entry></entry>
+                                    <entry></entry>
+                                    <entry></entry>
+                                    <entry></entry>
+                                    <entry></entry>
+                                 </row>
+                              </tbody>
+                           </tgroup>
+                        </table>
+                     </para>
+                  </xsl:when>
+                  <xsl:otherwise>
+                     <para>
+                        No use cases found.
+                     </para>
+                  </xsl:otherwise>
+               </xsl:choose>
+            </xsl:if>
          </xsl:for-each>
       </section>
    </xsl:template>

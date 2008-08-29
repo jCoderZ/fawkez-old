@@ -49,8 +49,8 @@
    <xsl:key name="testresult-group"                   match="//tr:testresult[starts-with(tr:version,$version)]" use="."/>
    <xsl:key name="testresult-testcase-group"          match="//tr:testresult[starts-with(tr:version,$version)]" use="tr:testcase"/>
    <xsl:key name="testresult-shortname-group"         match="//tr:testresult[starts-with(tr:version,$version)]" use="tr:shortname"/>
-   <xsl:key name="testresult-passed-testcase-group"   match="//tr:testresult[starts-with(tr:version,$version) and tr:result = 'passed']" use="tr:testcase"/>
-   <xsl:key name="testresult-passed-shortname-group"  match="//tr:testresult[starts-with(tr:version,$version) and tr:result = 'passed']" use="tr:shortname"/>
+   <xsl:key name="testresult-passed-testcase-group"   match="//tr:testresult[starts-with(tr:version,$version) and tr:result = 'passed']" use="normalize-space(tr:testcase)"/>
+   <xsl:key name="testresult-passed-shortname-group"  match="//tr:testresult[starts-with(tr:version,$version) and tr:result = 'passed']" use="normalize-space(tr:shortname)"/>
    
    <xsl:key name="issue-group"                        match="//tr:issue[starts-with(../tr:version,$version)]" use="."/>
    <xsl:key name="scarab-id"                          match="//cms:issues//cms:issue"
@@ -344,6 +344,54 @@
                
                <section>
                   <title>Change Requests / Specifications</title>
+                  <section>
+                     <title>Description</title>
+                     <para>
+                        The coverage statistics gives transparency about the current quality of the specified
+                        use cases for the software. It displays several levels of coverage and quality. The
+                        rows of the coverage tables are defined as:
+                        <itemizedlist>
+                           <listitem>
+                              <para>
+                                 First row is the use case ID giving you a fix reference to the use case. 
+                              </para>
+                           </listitem>
+                           <listitem>
+                              <para>
+                                 Second row is the name or short description of the use case giving you
+                                 hint about the functionality. 
+                              </para>
+                           </listitem>
+                           <listitem>
+                              <para>
+                                 Third row is the list of test specifications covering this use case. If they
+                                 are displayed within brackets e.g. (TEST_0001) it is a draft test specification
+                                 not yet finalized and useful for regression testing. Without brackets it is a full
+                                 test specification within the regression test suite.
+                              </para>
+                           </listitem>
+                           <listitem>
+                              <para>
+                                 Fourth row is the count of test specifications covering this use case. The number
+                                 outside of the brackets are the final test specifications. The number within the
+                                 brackets are the draft ones. 
+                              </para>
+                           </listitem>
+                           <listitem>
+                              <para>
+                                 The fifth row is showing how many test specifications have been executed for this
+                                 release. 
+                              </para>
+                           </listitem>
+                           <listitem>
+                              <para>
+                                 The last row is showing how many of the executed test specifications have been set to
+                                 passed. The have been executed without raising any erroneous behaviour. 
+                              </para>
+                           </listitem>
+                        </itemizedlist> 
+                     </para>
+                  </section>
                   <xsl:apply-templates select="//uc:usecases[not(uc:info/@project = 'Main Specification')]" mode="simple_coverage"/>
                </section>
             </chapter>
@@ -571,6 +619,48 @@
    <xsl:template name="coverage_stats">
       <section>
          <title>Coverage Statistics</title>
+         <section>
+            <title>Description</title>
+            <para>
+               The coverage statistics gives transparency about the current quality of the specified
+               use cases for the software. It displays several levels of coverage and quality. The
+               rows of the coverage tables are defined as:
+               <itemizedlist>
+                  <listitem>
+                     <para>
+                        First row is the name of the specification document. As available you will
+                        get also the information of the issue number including a reference to the
+                        change management system as well as the version number of the issue related to. 
+                     </para>
+                  </listitem>
+                  <listitem>
+                     <para>
+                        Second row is the count of the use cases within the document.
+                     </para>
+                  </listitem>
+                  <listitem>
+                     <para>
+                        Third row is the count of use cases covered by the test specifications. The
+                        values outside the brackets are showing the use cases covered by at least one
+                        test specification. The values inside the brackets shows the number of use
+                        cases covered by draft test specifications. There may be use cases, for
+                        which you have draft and final test specifications. Thes use cases will be
+                        counted for both draft and final coverage.  
+                     </para>
+                  </listitem>
+                  <listitem>
+                     <para>
+                        The fourth row path coverage is not supported, yet. 
+                     </para>
+                  </listitem>
+                  <listitem>
+                     <para>
+                        The fifth row test coverage is not supported, yet. 
+                     </para>
+                  </listitem>
+               </itemizedlist> 
+            </para>
+         </section>
          <section>
             <title>Change Requests for Version <xsl:value-of select="$version"/></title>
             <table frame="all">
@@ -1465,8 +1555,8 @@
       <row>
          <xsl:variable name="cover_num" select="count(key('test-group-final',$uc_id))"/>
          <xsl:variable name="cover_num_draft" select="count(key('test-group-draft',$uc_id))"/>
-         <xsl:variable name="tc_executed" select="count(key('test-group-final',$uc_id)[key('testresult-testcase-group',tc:id) or key('testresult-shortname-group',tr:shortname)])"/>
-         <xsl:variable name="tc_passed"   select="count(key('test-group-final',$uc_id)[key('testresult-passed-testcase-group',tc:id) or key('testresult-passed-shortname-group',tr:shortname)])"/>
+         <xsl:variable name="tc_executed" select="count(key('test-group-final',$uc_id)[key('testresult-testcase-group',normalize-space(tc:id)) or key('testresult-shortname-group',normalize-space(tc:shortname))])"/>
+         <xsl:variable name="tc_passed"   select="count(key('test-group-final',$uc_id)[key('testresult-passed-testcase-group',normalize-space(tc:id)) or key('testresult-passed-shortname-group',normalize-space(tc:shortname))])"/>
          <xsl:choose>
             <xsl:when test="$cover_num = 0">
                <xsl:text disable-output-escaping="yes">

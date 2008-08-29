@@ -1407,7 +1407,7 @@
                 <xsl:with-param name="issue_id" select="uc:info/@issue"/>
             </xsl:call-template>
          </para>
-         <xsl:for-each select="//uc:scope[generate-id() = generate-id(key('scope-issue-group', $cr_id))]">
+         <xsl:for-each select="//uc:scope[generate-id() = generate-id(key('scope-group', .))]">
             <xsl:variable name="this_scope" select="."/>
             <xsl:choose>
                <xsl:when test="key('usecase-scope-group', $this_scope)">
@@ -1435,6 +1435,14 @@
                               <xsl:apply-templates select="key('usecase-issue-group', $cr_id)[uc:scope = $this_scope]" mode="simple_coverage">
                                  <xsl:sort select="@id" order="ascending" data-type="text"/>
                               </xsl:apply-templates>
+                              <row>
+                                 <entry></entry>
+                                 <entry></entry>
+                                 <entry></entry>
+                                 <entry></entry>
+                                 <entry></entry>
+                                 <entry></entry>
+                              </row>
                            </tbody>
                         </tgroup>
                      </table>

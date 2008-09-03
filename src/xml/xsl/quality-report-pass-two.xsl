@@ -1126,8 +1126,8 @@
                   </entry>
                   <entry>
                      <xsl:choose>
-                        <xsl:when test="cms:external-id">
-                           <xsl:for-each select="cms:external-id">
+                        <xsl:when test="//cms:issue[cms:id = $key_local]/cms:external-id">
+                           <xsl:for-each select="//cms:issue[cms:id = $key_local]/cms:external-id">
                               <xsl:call-template name="link_to_cms">
                                   <xsl:with-param name="issue_id" select="."/>
                               </xsl:call-template>
@@ -1225,8 +1225,8 @@
                            </entry>
                            <entry>
                               <xsl:choose>
-                                 <xsl:when test="cms:external-id">
-                                    <xsl:for-each select="cms:external-id">
+                                 <xsl:when test="//cms:issue[cms:id = $key_local]/cms:external-id">
+                                    <xsl:for-each select="//cms:issue[cms:id = $key_local]/cms:external-id">
                                        <xsl:call-template name="link_to_cms">
                                            <xsl:with-param name="issue_id" select="."/>
                                        </xsl:call-template>
@@ -1337,15 +1337,15 @@
                </entry>
                <entry>
                   <xsl:choose>
-                     <xsl:when test="cms:external-id">
-                        <xsl:for-each select="cms:external-id">
+                     <xsl:when test="//cms:issue[cms:id = $key_local]/cms:external-id">
+                        <xsl:for-each select="//cms:issue[cms:id = $key_local]/cms:external-id">
                            <xsl:call-template name="link_to_cms">
                                <xsl:with-param name="issue_id" select="."/>
                            </xsl:call-template>
                         </xsl:for-each>        
                      </xsl:when>
                      <xsl:otherwise>none</xsl:otherwise> 
-                  </xsl:choose>  
+                  </xsl:choose>
                </entry>
                <entry>
                   <xsl:choose>

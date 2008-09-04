@@ -329,6 +329,17 @@
        </xsl:otherwise>
      </xsl:choose>
    </xsl:variable>
+   
+   <xsl:variable name="strReferences">
+     <xsl:choose>
+       <xsl:when test="$lang='de'">
+          <xsl:text>Referenzen aus Requirements</xsl:text>
+       </xsl:when>
+       <xsl:otherwise>
+          <xsl:text>Referents from requirements</xsl:text>
+       </xsl:otherwise>
+     </xsl:choose>
+   </xsl:variable>
 
    <xsl:variable name="strStakeholder">
      <xsl:choose>
@@ -447,6 +458,17 @@
        </xsl:when>
        <xsl:otherwise>
           <xsl:text>Referencing use cases</xsl:text>
+       </xsl:otherwise>
+     </xsl:choose>
+   </xsl:variable>
+   
+   <xsl:variable name="strReferencingRequirements">
+     <xsl:choose>
+       <xsl:when test="$lang='de'">
+          <xsl:text>Referenzierende Requriements</xsl:text>
+       </xsl:when>
+       <xsl:otherwise>
+          <xsl:text>Referencing requirements</xsl:text>
        </xsl:otherwise>
      </xsl:choose>
    </xsl:variable>

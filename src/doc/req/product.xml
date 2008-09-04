@@ -14,6 +14,7 @@
   <req:priority>High</req:priority>
   <req:description>
       A Data Model
+      This is a reference to a use case <req:ref id="UC-10"/>.
   </req:description>
   <req:version>$Revision: 1.3 $</req:version>
 </req:requirement>

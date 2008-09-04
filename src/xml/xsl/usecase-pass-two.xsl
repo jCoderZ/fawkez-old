@@ -480,9 +480,10 @@
 		     <xsl:variable name="usecase_id" select="@id"/>
          <xsl:variable name="hasContent" select="string-length(uc:precondition) &gt; 0"/>
          <xsl:variable name="hasReferringUseCases" select="//uc:usecase//uc:ref[(@id = $usecase_id or contains(@id,concat($usecase_id, '-'))) and not(ancestor-or-self::uc:usecase/@id = $usecase_id)]"/>
+         <xsl:variable name="hasReferringRequirements" select="//req:requirement//req:ref[(@id = $usecase_id or contains(@id,concat($usecase_id, '-')))]"/>
          <xsl:choose>
 	         <xsl:when test="boolean(uc:precondition)">
-             <xsl:if test="$hasContent or $hasReferringUseCases">
+             <xsl:if test="$hasContent or $hasReferringUseCases or $hasReferringRequirements">
 			         <section id="{@id}_preconditions">
 			            <title><xsl:value-of select="$strPreconditions"/></title>
 			            <xsl:if test="$hasContent">
@@ -493,16 +494,25 @@
 			            <xsl:call-template name="list_referents">
 			               <xsl:with-param name="usecase_id" select="@id"/>
 			            </xsl:call-template>
+                     <xsl:call-template name="list_req_referents">
+                        <xsl:with-param name="usecase_id" select="@id"/>
+                     </xsl:call-template>
 			         </section>
              </xsl:if>
 	         </xsl:when>
-		       <xsl:when test="$hasReferringUseCases">
+		       <xsl:when test="$hasReferringUseCases or $hasReferringRequirements">
 		         <section id="{@id}_referring_use_cases">
 		            <title><xsl:value-of select="$strPreconditions"/></title>
 		            <xsl:call-template name="list_referents">
 		               <xsl:with-param name="usecase_id" select="@id"/>
 		            </xsl:call-template>
 		         </section>
+               <section id="{@id}_referring_requirements">
+                  <title><xsl:value-of select="$strReferences"/></title>
+                  <xsl:call-template name="list_req_referents">
+                     <xsl:with-param name="usecase_id" select="@id"/>
+                  </xsl:call-template>
+               </section>
 	         </xsl:when>
          </xsl:choose>
 
@@ -778,22 +788,47 @@
       <xsl:param name="usecase_id"/>
       <xsl:if test="//uc:usecase//uc:ref[(@id = $usecase_id or contains(@id,concat($usecase_id, '-'))) and not(ancestor-or-self::uc:usecase/@id = $usecase_id)]">
          <para><emphasis role="bold"><xsl:value-of select="$strReferencingUseCases"/>:</emphasis></para>
-         <xsl:if test="//uc:usecase//uc:ref[(@id = $usecase_id or contains(@id,concat($usecase_id, '-'))) and not(ancestor-or-self::uc:usecase/@id = $usecase_id)]">
-            <itemizedlist>
-               <xsl:for-each select="//uc:usecase//uc:ref[(@id = $usecase_id or contains(@id,concat($usecase_id, '-'))) and not(ancestor-or-self::uc:usecase/@id = $usecase_id)]">
-                  <listitem>
-                     <para>
-                        <xsl:variable name="source">
-                           <xsl:if test="ancestor-or-self::uc:usecase"><xsl:value-of select="ancestor-or-self::uc:usecase/@id"/></xsl:if>
-                           <xsl:if test="ancestor-or-self::uc:extension"><xsl:text>-</xsl:text><xsl:value-of select="ancestor-or-self::uc:extension/@id"/></xsl:if>
-                           <xsl:if test="ancestor-or-self::uc:step"><xsl:text>-</xsl:text><xsl:value-of select="ancestor-or-self::uc:step/@id"/></xsl:if>
-                        </xsl:variable>
-                        <xsl:text> [</xsl:text><xref linkend="{$source}"/><xsl:text>] </xsl:text>
-                     </para>
-                  </listitem>
-               </xsl:for-each>
-            </itemizedlist>
-         </xsl:if>
+         <para>
+            <xsl:if test="//uc:usecase//uc:ref[(@id = $usecase_id or contains(@id,concat($usecase_id, '-'))) and not(ancestor-or-self::uc:usecase/@id = $usecase_id)]">
+               <itemizedlist>
+                  <xsl:for-each select="//uc:usecase//uc:ref[(@id = $usecase_id or contains(@id,concat($usecase_id, '-'))) and not(ancestor-or-self::uc:usecase/@id = $usecase_id)]">
+                     <listitem>
+                        <para>
+                           <xsl:variable name="source">
+                              <xsl:if test="ancestor-or-self::uc:usecase"><xsl:value-of select="ancestor-or-self::uc:usecase/@id"/></xsl:if>
+                              <xsl:if test="ancestor-or-self::uc:extension"><xsl:text>-</xsl:text><xsl:value-of select="ancestor-or-self::uc:extension/@id"/></xsl:if>
+                              <xsl:if test="ancestor-or-self::uc:step"><xsl:text>-</xsl:text><xsl:value-of select="ancestor-or-self::uc:step/@id"/></xsl:if>
+                           </xsl:variable>
+                           <xsl:text> [</xsl:text><xref linkend="{$source}"/><xsl:text>] </xsl:text>
+                        </para>
+                     </listitem>
+                  </xsl:for-each>
+               </itemizedlist>
+            </xsl:if>
+         </para>
+      </xsl:if>
+   </xsl:template>
+   
+   <xsl:template name="list_req_referents">
+      <xsl:param name="usecase_id"/>
+      <xsl:if test="//req:requirement//req:ref[(@id = $usecase_id or contains(@id,concat($usecase_id, '-')))]">
+         <para><emphasis role="bold"><xsl:value-of select="$strReferencingRequirements"/>:</emphasis></para>
+         <para>
+            <xsl:if test="//req:requirement//req:ref[(@id = $usecase_id or contains(@id,concat($usecase_id, '-')))]">
+               <itemizedlist>
+                  <xsl:for-each select="//req:requirement//req:ref[(@id = $usecase_id or contains(@id,concat($usecase_id, '-'))) and not(ancestor-or-self::uc:usecase/@id = $usecase_id)]">
+                     <listitem>
+                        <para>
+                           <xsl:variable name="source">
+                              <xsl:if test="ancestor-or-self::req:requirement"><xsl:value-of select="ancestor-or-self::req:requirement/req:key"/></xsl:if>
+                           </xsl:variable>
+                           <xsl:text> [</xsl:text><xref linkend="{$source}"/><xsl:text>] </xsl:text>
+                        </para>
+                     </listitem>
+                  </xsl:for-each>
+               </itemizedlist>
+            </xsl:if>
+         </para>
       </xsl:if>
    </xsl:template>
 

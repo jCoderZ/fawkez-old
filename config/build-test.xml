@@ -159,7 +159,7 @@
         <mkdir dir="${build.dir}/report/junit"/>
         <junit printsummary="yes" haltonfailure="no"
                 dir="${base.dir}/build" fork="true" timeout="600000"
-                forkmode="perBatch">
+                forkmode="perTest"> <!-- should be forkmode="perBatch" after timeout fix --> 
             <classpath refid="test.runtime.classpath"/>
             <sysproperty key="basedir" value="${base.dir}"/>
             <sysproperty key="java.util.logging.config.file"

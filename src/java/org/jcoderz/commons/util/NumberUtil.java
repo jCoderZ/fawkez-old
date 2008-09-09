@@ -116,14 +116,19 @@ public final class NumberUtil
     {
         Assert.assertTrue("Scale must not be negative.", scale >= 0);
         final StringBuffer sb = new StringBuffer();
-        sb.append(unscaledValue);
-        if (sb.length() <= scale)
+        sb.append(Math.abs(unscaledValue));
+        final int missingDigits = 1 + scale - sb.length();
+        if (missingDigits > 0)
         {
-            sb.insert(0, ZEROS, sb.length(), scale - 1);
+            sb.insert(0, ZEROS, 0, 1 + scale - sb.length());
         }
         if (scale > 0)
         {
             sb.insert(sb.length() - scale, '.');
+        }
+        if (unscaledValue < 0)
+        {
+            sb.insert(0, '-');
         }
         return sb.toString();
     }

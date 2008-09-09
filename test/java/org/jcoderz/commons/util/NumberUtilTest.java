@@ -88,6 +88,21 @@ public class NumberUtilTest
        checkToString(987654321, 5, "9876.54321");
     }
 
+    public void testToStringLongIntErrorPattern ()
+    {
+       checkToString(58000, 5, "0.58000");
+    }
+
+    public void testToStringLongIntNegative ()
+    {
+       checkToString(-58000, 5, "-0.58000");
+    }
+
+    public void testToStringLongIntErrorPatternZero ()
+    {
+       checkToString(0, 5, "0.00000");
+    }
+
     private void checkNumberOfDigits (long test)
     {
         final int result = 1 + (int) Math.log10(Math.abs(test));

@@ -36,6 +36,14 @@
       </enumeration>
 
       <enumeration
+         classname="TestRoles"
+         package="org.jcoderz.commons.types.samples"
+         user-type="string">
+         <value description="Experts">FOO.R10021</value>
+         <value description="Guests">FOO.R10022</value>
+      </enumeration>
+
+      <enumeration
          classname="TestEnumAsNumeric"
          package="org.jcoderz.commons.types.samples"
          user-type="numeric">
@@ -53,6 +61,15 @@
          <value numeric="2">Diamonds</value>
          <value numeric="4">Hearts</value>
          <value numeric="8">Spades</value>
+      </enumeration>
+
+     <enumeration
+         classname="TestEnumWiredText"
+         package="org.jcoderz.commons.types.samples"
+         user-type="string">
+         <value>Zues (1)</value>
+         <value symbol="TEST">Strange!</value>
+         <value>5.7.2.6 / 12</value>
       </enumeration>
 
 <!-- ===============================================================

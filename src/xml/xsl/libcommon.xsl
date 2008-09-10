@@ -17,6 +17,8 @@
 <xsl:variable name="lowercase-a_z" select="'abcdefghijklmnopqrstuvwxyz'"/>
 <xsl:variable name="uppercase-a_z" select="'ABCDEFGHIJKLMNOPQRSTUVWXYZ'"/>
 <xsl:variable name="magic-hashes"  select="'##########################'"/>
+<xsl:variable name="java-letter-or-digit"
+  select="'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_$01234567890'"/>
 
 <!-- ===============================================================
           _        _                             _   _
@@ -63,6 +65,32 @@
          <xsl:call-template name="replace-char">
             <xsl:with-param name="s" select="$s"/>
             <xsl:with-param name="char" select="$char"/>
+            <xsl:with-param name="new" select="$new"/>
+            <xsl:with-param name="pos" select="$pos + 1"/>
+         </xsl:call-template>
+   </xsl:if>
+</xsl:template>
+
+<!--
+   Replaces the non java symbol characters
+  -->
+<xsl:template name="replace-not-java-letters-or-digit">
+   <xsl:param name="s" select="''"/>
+   <xsl:param name="new" select="'_'"/>
+   <xsl:param name="pos" select="1"/>
+   <xsl:if test="$pos &lt;= string-length($s)">
+     <xsl:variable name="current-char" select="substring($s, $pos, 1)"/>
+         <!-- Contains upper case character at position $pos? -->
+         <xsl:choose>
+            <xsl:when test="not(contains($java-letter-or-digit, $current-char))">
+               <xsl:value-of select="$new"/>
+            </xsl:when>
+            <xsl:otherwise>
+               <xsl:value-of select="$current-char"/>
+            </xsl:otherwise>
+         </xsl:choose>
+         <xsl:call-template name="replace-not-java-letters-or-digit">
+            <xsl:with-param name="s" select="$s"/>
             <xsl:with-param name="new" select="$new"/>
             <xsl:with-param name="pos" select="$pos + 1"/>
          </xsl:call-template>
@@ -158,6 +186,19 @@
 -->
 <xsl:template name="asJavaConstantName">
    <xsl:param name="value"/>
+   <xsl:variable name="the-clean-value">
+     <xsl:call-template name="replace-not-java-letters-or-digit">
+       <xsl:with-param name="s" select="$value"/>
+     </xsl:call-template>
+   </xsl:variable>
+   <xsl:call-template name="asJavaConstantName-clean">
+     <xsl:with-param name="value" select="$the-clean-value"/>
+   </xsl:call-template>
+</xsl:template>
+
+<xsl:template name="asJavaConstantName-clean">
+   <xsl:param name="value"/>
+
    <xsl:if test="contains('0123456789', substring($value, 1, 1))">
       <xsl:text>V_</xsl:text>
    </xsl:if>
@@ -177,7 +218,7 @@
                   select="substring($value,7,2)"/></xsl:with-param>
             </xsl:call-template><xsl:value-of select="substring($value, 9)"/>
          </xsl:variable>
-         <xsl:call-template name="asJavaConstantName">
+         <xsl:call-template name="asJavaConstantName-clean">
             <xsl:with-param name="value"><xsl:value-of
                select="$mangled-value"></xsl:value-of></xsl:with-param>
          </xsl:call-template>
@@ -654,7 +695,7 @@ import java.util.List;
  *
  * The following <xsl:value-of select="$name"/>s are defined:
  * &lt;ul&gt;<xsl:for-each select="$values">
- *    &lt;li&gt;<xsl:value-of select="$classname"/>.<xsl:call-template name="asJavaConstantName"><xsl:with-param name="value" select="."/></xsl:call-template><xsl:if test="@numeric"> = <xsl:value-of select="@numeric"/></xsl:if>&lt;/li&gt;</xsl:for-each>
+ *    &lt;li&gt;<xsl:value-of select="$classname"/>.<xsl:call-template name="pic-symbolic-name"><xsl:with-param name="value" select="."/></xsl:call-template><xsl:if test="@numeric"> = <xsl:value-of select="@numeric"/></xsl:if> = '<xsl:value-of select="."/>'&lt;/li&gt;</xsl:for-each>
  * &lt;/ul&gt;
  *
  * <xsl:if test="$numeric">The values of this enum have beside the internal
@@ -680,7 +721,7 @@ public final class <xsl:value-of select="$classname"/>
    /** Maps a string representation to an enumerated value. */
    private static final Map
       FROM_STRING = new HashMap();
-<xsl:for-each select="$values"><xsl:variable name="constant-name"><xsl:call-template name="asJavaConstantName"><xsl:with-param
+<xsl:for-each select="$values"><xsl:variable name="constant-name"><xsl:call-template name="pic-symbolic-name"><xsl:with-param
       name="value" select="."/></xsl:call-template></xsl:variable><xsl:if test="$numeric">
    /** Numeric representation for <xsl:value-of select="$classname"/><xsl:text> </xsl:text><xsl:value-of select="."/>. */
    public static final int <xsl:value-of select="$constant-name"/>_NUMERIC = <xsl:value-of select="@numeric"/>;
@@ -689,7 +730,7 @@ public final class <xsl:value-of select="$classname"/>
 </xsl:if><xsl:choose><xsl:when test="not(@description)">
    /** The <xsl:value-of select="$classname"/><xsl:text> </xsl:text><xsl:value-of select="."/>. */</xsl:when><xsl:otherwise>
    /** <xsl:value-of select="./@description"/> (value: <xsl:value-of select="."/>). */</xsl:otherwise></xsl:choose>
-   public static final <xsl:value-of select="$classname"/><xsl:text> </xsl:text><xsl:call-template name="asJavaConstantName"><xsl:with-param name="value" select="."/></xsl:call-template>
+   public static final <xsl:value-of select="$classname"/><xsl:text> </xsl:text><xsl:call-template name="pic-symbolic-name"><xsl:with-param name="value" select="."/></xsl:call-template>
       = new <xsl:value-of select="$classname"/>("<xsl:value-of select="."/>"<xsl:if
          test="$numeric">, <xsl:value-of select="$constant-name"/>_NUMERIC</xsl:if>);
 </xsl:for-each>
@@ -702,7 +743,7 @@ public final class <xsl:value-of select="$classname"/>
          =
             {
                <xsl:for-each select="$values">
-                  <xsl:value-of select="$classname"/>.<xsl:call-template name="asJavaConstantName"><xsl:with-param name="value" select="."/></xsl:call-template>
+                  <xsl:value-of select="$classname"/>.<xsl:call-template name="pic-symbolic-name"><xsl:with-param name="value" select="."/></xsl:call-template>
                <xsl:if test="position() != last()">
                <xsl:text>,
                </xsl:text>
@@ -781,7 +822,7 @@ public final class <xsl:value-of select="$classname"/>
    {
        final <xsl:value-of select="$classname"/> result;
        switch (i)
-       {<xsl:for-each select="$values"><xsl:variable name="constant-name"><xsl:call-template name="asJavaConstantName"><xsl:with-param
+       {<xsl:for-each select="$values"><xsl:variable name="constant-name"><xsl:call-template name="pic-symbolic-name"><xsl:with-param
           name="value" select="."/></xsl:call-template></xsl:variable>
            case <xsl:value-of select="$constant-name"/>_NUMERIC:
                result = <xsl:value-of select="$constant-name"/>;
@@ -856,6 +897,21 @@ public final class <xsl:value-of select="$classname"/>
 <xsl:template name="simple-enum-generator-import-hook" priority="-1">
 import org.jcoderz.commons.ArgumentMalformedException;
 import org.jcoderz.commons.util.Assert;
+</xsl:template>
+
+<!-- find the best name for the symbol -->
+<xsl:template name="pic-symbolic-name">
+  <xsl:param name="value"/>
+  <xsl:choose>
+    <xsl:when test="$value/@symbol">
+      <xsl:call-template name="asJavaConstantName"><xsl:with-param
+      name="value" select="$value/@symbol"/></xsl:call-template>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:call-template name="asJavaConstantName"><xsl:with-param
+      name="value" select="."/></xsl:call-template>
+    </xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
 <!-- ===============================================================

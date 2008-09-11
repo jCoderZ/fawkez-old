@@ -240,9 +240,10 @@ public class LogFormatter
             }
          }
       }
-      // do not log stack traces for log messages of level below the FWK_TRACE_LOGGER_LOGGER
-      // log level.
-      if (loggable == null || FWK_TRACE_LOGGER_LOGGER.isLoggable(record.getLevel()))
+      // for messages: do not log stack traces for log messages of level
+      // below the FWK_TRACE_LOGGER_LOGGER log level.
+      if (!(loggable instanceof LogEvent)
+          || FWK_TRACE_LOGGER_LOGGER.isLoggable(record.getLevel()))
       {
           trackingIds = initialiseTrackingIds(record, loggable);
           appendStackTrace(sb, record, loggable, trackingIds);

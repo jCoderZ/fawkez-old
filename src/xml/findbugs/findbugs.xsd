@@ -261,6 +261,7 @@
  <xsd:element name='Type'>
   <xsd:complexType>
    <xsd:sequence>
+    <xsd:element ref='SourceLine' minOccurs="0" />
     <xsd:element ref="Message" minOccurs="0" />
    </xsd:sequence>
    <xsd:attribute name='descriptor'  type='xsd:string' use='required'/>
@@ -318,7 +319,14 @@
  <xsd:element name='FindBugsSummary'>
   <xsd:complexType>
    <xsd:sequence>
-    <xsd:element ref='PackageStats' maxOccurs='unbounded'/>
+     <xsd:element name="FileStats" maxOccurs="unbounded">
+       <xsd:complexType>
+         <xsd:attribute name="path" type="xsd:string" use="required" />
+         <xsd:attribute name="bugCount" type="xsd:unsignedInt" use="required" />
+         <xsd:attribute name="bugHash" type="xsd:string" use="optional" />
+       </xsd:complexType>
+      </xsd:element>
+      <xsd:element ref='PackageStats' maxOccurs='unbounded'/>
    </xsd:sequence>
    <xsd:attribute name='timestamp' use='required' type='xsd:string'/>
    <xsd:attribute name='total_classes' use='required' type='xsd:int'/>

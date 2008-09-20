@@ -780,7 +780,7 @@ xerces in current vm: ${xerces.version.ant}
               tofile="${build.dir}/classes/org/jcoderz/phoenix/findbugs/fb-contrib-messages.xml"/>
         <!-- extract findbugs messages.xml -->
         <unjar dest="${build.dir}/classes/org/jcoderz/phoenix/findbugs"
-               src="${base.dir}/lib/default/findbugs/coreplugin.jar">
+               src="${base.dir}/lib/default/findbugs/findbugs.jar">
             <patternset>
                 <include name="messages.xml"/>
             </patternset>

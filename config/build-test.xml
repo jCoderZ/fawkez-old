@@ -443,12 +443,10 @@
               <include name="default/findbugs/*.jar"/>
               <include name="default/asm*/*.jar"/>
               <include name="default/jaxen/*.jar"/>
-              <exclude name="**/coreplugin.jar"/>
               <exclude name="**/fb-contrib.jar"/>
            </fileset>
         </path>
         <path id="findbugs.plugins">
-            <path location="${base.dir}/lib/default/findbugs/coreplugin.jar"/>
             <path location="${base.dir}/lib/default/fb-contrib/fb-contrib.jar"/>
         </path>
         <!-- This is the auxiliary classpath used by findbugs -->

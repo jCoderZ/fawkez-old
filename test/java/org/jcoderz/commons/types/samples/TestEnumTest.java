@@ -44,35 +44,46 @@ import junit.framework.TestCase;
 public class TestEnumTest
     extends TestCase
 {
+    private static final int TEST_ENUM_ENTRIES = 4;
     private static final int TEST_ILLEGAL_INT_REPRESENTATION = 100;
 
-    /** Test the fromInt method. */
+    /**
+     * Test the fromInt method.
+     * @throws Throwable in case of any error.
+     */
     public void testFromInt ()
         throws Throwable
     {
-        TestEnum result = TestEnum.fromInt(0);
+        final TestEnum result = TestEnum.fromInt(0);
         assertEquals("result.toInt()", 0, result.toInt());
     }
 
-    /** Test the toInt method. */
+    /**
+     * Test the toInt method.
+     * @throws Throwable in case of any error.
+     */
     public void testToInt ()
         throws Throwable
     {
-        final TestEnum testEnum = TestEnum.CLUBS;
-        testEnum.toInt();
-        assertTrue("Test call resulted in expected outcome", true);
+        assertEquals("CLUBS.toInt()", 0, TestEnum.CLUBS.toInt());
     }
 
-    /** Test the toString method. */
+    /**
+     * Test the toString method.
+     * @throws Throwable in case of any error.
+     */
     public void testToString ()
         throws Throwable
     {
         final TestEnum testEnum = TestEnum.CLUBS;
-        String result = testEnum.toString();
+        final String result = testEnum.toString();
         assertEquals("result", "Clubs", result);
     }
 
-    /** Test failure of fromInt method. */
+    /**
+     * Test failure of fromInt method.
+     * @throws Throwable in case of any error.
+     */
     public void testFromIntThrowsRuntimeException ()
         throws Throwable
     {
@@ -87,7 +98,10 @@ public class TestEnumTest
         }
     }
 
-    /** Test failure of fromString method. */
+    /**
+     * Test failure of fromString method.
+     * @throws Throwable in case of any error.
+     */
     public void testFromStringThrowsRuntimeException ()
         throws Throwable
     {
@@ -102,11 +116,15 @@ public class TestEnumTest
         }
     }
 
-    /** Test the fromInt method. */
+    /**
+     * Test the fromInt method.
+     * @throws Throwable in case of any error.
+     */
     public void testValueMap ()
         throws Throwable
     {
-        assertEquals("Number of entries in the value map", 4, TestEnum.VALUE_MAP.size());
+        assertEquals("Number of entries in the value map", TEST_ENUM_ENTRIES,
+            TestEnum.VALUE_MAP.size());
         assertSame("Wrone entry in the value map", TestEnum.fromString("Clubs"),
             TestEnum.VALUE_MAP.get("Clubs"));
     }

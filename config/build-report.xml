@@ -81,7 +81,6 @@
          </fileset>
       </path>
       <path id="findbugs.plugins">
-		  <path location="${base.dir}/lib/default/findbugs/coreplugin.jar"/>
 		  <path location="${base.dir}/lib/default/fb-contrib/fb-contrib.jar"/>
       </path>
       <!-- This is the auxiliary classpath used by findbugs -->   
@@ -134,7 +133,7 @@
            <findbugs maxheap="256" 
               effort="max"
               debug="false"
-              omitVisitors="RuntimeExceptionCapture,FindUncalledPrivateMethods,CustomBuiltXML,DeclaredRuntimeException,PossiblyRedundantMethodCalls"
+              omitVisitors="RuntimeExceptionCapture,FindUncalledPrivateMethods,CustomBuiltXML,DeclaredRuntimeException,PossiblyRedundantMethodCalls,ExceptionSoftening"
               warninglevel="low">
                <classpath refid="findbugs.classpath"/>
                <auxclasspath refid="findbugs.aux.classpath"/>

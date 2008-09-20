@@ -58,6 +58,7 @@
             <include name="default/commons-cli/*.jar"/>
             <include name="default/commons-logging/*.jar"/>
          </fileset>
+         <path location="${base.dir}/build/classes"/>
       </path>
       <!-- This classpath is used by the pmd and cpd process -->   
       <path id="pmd.classpath">
@@ -75,7 +76,7 @@
             <include name="default/findbugs/*.jar"/>
             <include name="default/asm*/*.jar"/>
             <include name="default/jaxen/*.jar"/>
-            <exclude name="**/coreplugin.jar"/>
+            <include name="default/dom4j/*.jar"/>
             <exclude name="**/fb-contrib.jar"/>
          </fileset>
       </path>

@@ -32,8 +32,6 @@
  */
 package org.jcoderz.commons.util;
 
-import java.rmi.UnexpectedException;
-
 import org.jcoderz.commons.ArgumentMalformedException;
 import org.jcoderz.commons.AssertionFailedException;
 
@@ -146,12 +144,13 @@ public final class Assert
     * It throws an AssertionFailedException with the given nested
     * exception.
     *
+    * @param message The message to be used in the exception.
     * @param ex the exception that was not expected
-    * @throws UnexpectedExceptionException always.
+    * @throws AssertionFailedException always.
     */
-//   public static void fail (Throwable ex)
-//         throws UnexpectedException
-//   {
-//      throw new UnexpectedExceptionException(ex);
-//   }
+   public static void fail (String message, Throwable ex)
+       throws AssertionFailedException
+   {
+     throw new AssertionFailedException(message, ex);
+   }
 }

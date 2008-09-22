@@ -112,6 +112,16 @@ public final class CheckstyleFindingType
 
    /**
     * Checkstyle finding type that relates to:
+    * <i>Missing a Javadoc comment</i>.
+    */
+   public static final CheckstyleFindingType CS_JAVADOC_EMPTY_DESC =
+      new CheckstyleFindingType("CS_JAVADOC_EMPTY_DESC",
+         "Javadoc has empty description section.",
+         "Javadoc has empty description section.",
+         "Javadoc has empty description section\\.");
+
+   /**
+    * Checkstyle finding type that relates to:
     * <i>Unused Javadoc tag</i>.
     */
    public static final CheckstyleFindingType CS_JAVADOC_UNUSED_TAG =

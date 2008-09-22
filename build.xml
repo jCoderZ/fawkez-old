@@ -526,7 +526,7 @@ xerces in current vm: ${xerces.version.ant}
         <mkdir dir="${build.dir}/classes"/>
         <javac destdir="${build.dir}/classes"
             deprecation="${build.debug}"
-            debug="${build.debug}"
+            debug="true"
             classpathref="default.classpath"
             source="1.4">
             <src path="${base.dir}/src/java"/>
@@ -793,7 +793,19 @@ xerces in current vm: ${xerces.version.ant}
 
     <target name="fawkez-jar" depends="compile-all, fawkez-jar-nodeps"/>
     <target name="fawkez-jar-nodeps">
-        <jar jarfile="${build.dir}/fawkez.jar">
+         <manifest file="${build.dir}/MANIFEST.MF">
+           <attribute name="Main-Class" value="org.jcoderz.commons.Version"/>
+           <attribute name="Built-By" value="${user.name}"/>
+           <attribute name="Built-At" value="${build.time}"/>
+           <section name="common">
+             <attribute name="Implementation-Title" value="${Name}"/>
+             <attribute name="Implementation-Version" value="${version} ${label}"/>
+             <attribute name="Implementation-Vendor" value="jcoderZ.org"/>
+             <attribute name="Implementation-URL" value="http://www.jcoderz.org/fawkez/"/>
+           </section>
+        </manifest>
+        <jar jarfile="${build.dir}/fawkez.jar"
+          manifest="${build.dir}/MANIFEST.MF">
             <fileset dir="${build.dir}/classes">
                 <include name="org/jcoderz/commons/*"/>
                 <include name="org/jcoderz/commons/statistics/**"/>
@@ -801,23 +813,28 @@ xerces in current vm: ${xerces.version.ant}
                 <include name="org/jcoderz/commons/util/**"/>
             </fileset>
         </jar>
-        <jar jarfile="${build.dir}/fawkez-tools.jar">
+        <jar jarfile="${build.dir}/fawkez-tools.jar"
+          manifest="${build.dir}/MANIFEST.MF">
             <fileset dir="${build.dir}/classes">
+                <include name="org/jcoderz/commons/Version.*"/>
                 <include name="org/jcoderz/commons/doclet/**"/>
                 <include name="org/jcoderz/commons/taskdefs/*"/>
                 <include name="org/jcoderz/commons/types/**"/>
                 <include name="org/jcoderz/commons/phoenix/**"/>
             </fileset>
         </jar>
-        <jar jarfile="${build.dir}/fawkez-server.jar">
+        <jar jarfile="${build.dir}/fawkez-server.jar"
+          manifest="${build.dir}/MANIFEST.MF">
             <fileset dir="${build.dir}/classes">
+              <include name="org/jcoderz/commons/Version.*"/>
               <include name="org/jcoderz/commons/config/**"/>
               <include name="org/jcoderz/commons/connector/**"/>
               <include name="org/jcoderz/commons/logging/**"/>
               <!-- TODO: DDs-->
             </fileset>
         </jar>
-        <jar jarfile="${build.dir}/fawkez-all.jar">
+        <jar jarfile="${build.dir}/fawkez-all.jar"
+          manifest="${build.dir}/MANIFEST.MF">
             <fileset dir="${build.dir}/classes"/>
         </jar>
         <append-version jarfile="${build.dir}/fawkez.jar"/>

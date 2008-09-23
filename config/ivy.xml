@@ -34,7 +34,7 @@
         <dependency org="offo" name="offo" rev="unknown">
             <artifact name="fop-hyph"/>
         </dependency>
-        <dependency org="findbugs" name="findbugs" rev="1.3.3">
+        <dependency org="findbugs" name="findbugs" rev="1.3.5">
             <artifact name="bcel" type="jar"/>
             <artifact name="findbugs" type="jar"/>
             <artifact name="findbugs-ant" type="jar"/>
@@ -59,7 +59,7 @@
             <artifact name="xalan"/>
             <artifact name="serializer"/>
         </dependency>
-        <dependency org="pmd" name="pmd" rev="4.2.1"/>
+        <dependency org="pmd" name="pmd" rev="4.2.3"/>
 
 <!--
         <dependency org="xdoclet" name="xdoclet" rev="1.2.3"/>

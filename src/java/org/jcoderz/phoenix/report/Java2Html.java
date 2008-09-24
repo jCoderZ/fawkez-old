@@ -171,7 +171,8 @@ public final class Java2Html
    /** HtmlView object used to render input source into html code. */
    private final HtmlView mHtmlView = new HtmlView();
    private String mProjectName = "";
-   private String mCvsBase = null;
+   private String mWebVcBase = null;
+   private String mWebVcSuffix = "";
    private String mProjectHome;
    private String mTimestamp = null;
    private String mStyle = DEFAULT_STYLESHEET; // the CSS stuff to use
@@ -305,8 +306,18 @@ public final class Java2Html
     */
    public void setCvsBase (String cvsBase)
    {
-      mCvsBase = cvsBase;
-      logger.config("CVS base set to '" + mCvsBase + "'.");
+      mWebVcBase = cvsBase;
+      logger.config("CVS base set to '" + mWebVcBase + "'.");
+   }
+
+   /**
+    * Suffix to be added at the end of web vc links.
+    * @param suffix String, to be added at the end of web vc links.
+    */
+   public void setCvsSuffix (String suffix)
+   {
+       mWebVcSuffix = suffix;
+       logger.config("CVS suffix set to '" + suffix + "'.");
    }
 
    /**
@@ -333,7 +344,7 @@ public final class Java2Html
 
    /**
     * Sets the char-set used for the source files.
-    * @param charset The char-set in which the source files are expected. 
+    * @param charset The char-set in which the source files are expected.
     */
    public void setSourceCharset (Charset charset)
    {
@@ -577,6 +588,10 @@ public final class Java2Html
             else if ("-cvsBase".equals(args[i]))
             {
                setCvsBase(args[i + 1]);
+            }
+            else if ("-cvsSuffix".equals(args[i]))
+            {
+               setCvsSuffix(args[i + 1]);
             }
             else if ("-timestamp".equals(args[i]))
             {
@@ -1487,7 +1502,7 @@ public final class Java2Html
    private String getCvsLink (String absFile)
    {
       String result;
-      if (mCvsBase == null || mProjectHome == null)
+      if (mWebVcBase == null || mProjectHome == null)
       {
          result = null;
       }
@@ -1512,7 +1527,7 @@ public final class Java2Html
       }
       if (result != null)
       {
-         result = mCvsBase + result;
+         result = mWebVcBase + result + mWebVcSuffix;
          result = result.replaceAll("\\\\", "/");
       }
       return result;

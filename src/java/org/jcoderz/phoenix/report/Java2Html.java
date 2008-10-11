@@ -84,6 +84,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 
+import org.jcoderz.commons.util.ArraysUtil;
 import org.jcoderz.commons.util.Assert;
 import org.jcoderz.commons.util.Constants;
 import org.jcoderz.commons.util.EmptyIterator;
@@ -641,7 +642,8 @@ public final class Java2Html
       catch (Exception e)
       {
          final IllegalArgumentException ex = new IllegalArgumentException(
-               "Problem with arument value for " + args[args.length - 1]);
+               "Problem with arument value for " + args[args.length - 1]
+               + "Argument line was "+ ArraysUtil.toString(args));
          ex.initCause(e);
          throw ex;
       }

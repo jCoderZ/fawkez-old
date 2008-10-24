@@ -219,7 +219,7 @@ public class EmmaReportReader
                 && method.getBlockMap() != null)
             {
                 boolean[] methodCoverage = null;
-                if (coverage!= null)
+                if (coverage!= null && coverage.m_coverage.length > methodNr)
                 {
                     methodCoverage = coverage.m_coverage[methodNr];
                 }
@@ -228,7 +228,9 @@ public class EmmaReportReader
                     blockNr < map.length; blockNr++)
                 {
                     int[] blockLines = map[blockNr];
-                    if (methodCoverage != null && methodCoverage[blockNr])
+                    if (methodCoverage != null
+                        && methodCoverage.length > blockNr
+                        && methodCoverage[blockNr])
                     {
                         markCovered(lineCoverage, blockLines);
                     }

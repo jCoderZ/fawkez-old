@@ -310,6 +310,9 @@
             <xsl:value-of select="translate(substring($s, $pos, 1),
                   $lowercase-a_z, $uppercase-a_z)"/>
          </xsl:when>
+         <xsl:when test="contains($lowercase-a_z, substring($s, $pos - 1, 1))"> <!-- previous lowercase? -->
+            <xsl:value-of select="substring($s, $pos, 1)"/>
+         </xsl:when>
          <xsl:otherwise>
             <xsl:value-of select="translate(substring($s, $pos, 1),
                   $uppercase-a_z, $lowercase-a_z)"/>

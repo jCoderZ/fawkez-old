@@ -283,7 +283,7 @@ public final class FileSummary
         mFiles++;
         if (mCoverageData || other.isWithCoverage()
             || mCoveredLinesOfCode > 0
-            || mViolations[Severity.COVERAGE.toInt()] > 0)
+            || getNotCoveredLinesOfCode() > 0)
         {
             mCoverageData = true;
         }
@@ -460,8 +460,7 @@ public final class FileSummary
     /** @return the coverage percentage as int. */
     public int getCoverage ()
     {
-        final int notCoveredLinesOfCode
-                = mViolations[Severity.COVERAGE.toInt()];
+        final int notCoveredLinesOfCode = getNotCoveredLinesOfCode();
 
         int notCovered;
         if (mCoveredLinesOfCode != 0)
@@ -482,6 +481,14 @@ public final class FileSummary
             notCovered = 0;
         }
         return MAX_PERCENTAGE - notCovered;
+    }
+
+    /**
+     * @return the number of not covered lines of code.
+     */
+    public int getNotCoveredLinesOfCode ()
+    {
+        return mViolations[Severity.COVERAGE.toInt()];
     }
 
     /**
@@ -588,7 +595,7 @@ public final class FileSummary
         else
         {
             final int notCoveredLines
-                = mViolations[Severity.COVERAGE.toInt()];
+                = getNotCoveredLinesOfCode();
             coverageViolationPercentage = calcPercentage(
                 notCoveredLines * Severity.COVERAGE.getPenalty(),
                 Severity.PENALTY_SCALE
@@ -677,6 +684,14 @@ public final class FileSummary
                 result = -1;
             }
             else if (coverA > coverB)
+            {
+                result = 1;
+            }
+            else if (a.getNotCoveredLinesOfCode() > b.getNotCoveredLinesOfCode())
+            {
+                result = -1;
+            }
+            else if (a.getNotCoveredLinesOfCode() < b.getNotCoveredLinesOfCode())
             {
                 result = 1;
             }

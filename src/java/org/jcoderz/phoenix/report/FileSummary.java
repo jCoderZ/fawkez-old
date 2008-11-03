@@ -33,8 +33,11 @@
 package org.jcoderz.phoenix.report;
 
 import java.io.Serializable;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.Comparator;
 import java.util.Iterator;
+
 import org.jcoderz.commons.util.Assert;
 import org.jcoderz.commons.util.StringUtil;
 import org.jcoderz.phoenix.report.jaxb.File;
@@ -57,6 +60,11 @@ public final class FileSummary
 
     /** Constant for percentage calculation 1% = 1 / MAX_PERCENTAGE. */
     private static final int MAX_PERCENTAGE = 100;
+
+    private static final float MAX_PERCENTAGE_FLOAT = 100;
+
+    private final NumberFormat mCoveragePercantageFormatter =
+        new DecimalFormat("##0.00");
 
     /** Counts the number of files added up in this summary. */
     private int mFiles = 0;
@@ -456,6 +464,38 @@ public final class FileSummary
         return mViolations[severity.toInt()];
     }
 
+    /**
+     * Get the coverage percentage in double precision.
+     * @return the coverage percentage in double precision.
+     */
+    public float getCoverageAsFloat ()
+    {
+        final float allLinesOfCode
+            = getNotCoveredLinesOfCode() + mCoveredLinesOfCode;
+        float result;
+        if (allLinesOfCode != 0)
+        {
+            result = mCoveredLinesOfCode / allLinesOfCode;
+        }
+        else if (getNotCoveredLinesOfCode() > 0)
+        {
+            result = 0;
+        }
+        else // no coverage at all (might be interface...
+        {
+            result = 1;
+        }
+        return result * MAX_PERCENTAGE_FLOAT;
+    }
+
+    /**
+     * Returns the coverage as user string.
+     * @return the coverage as user string.
+     */
+    public String getCoverageAsString ()
+    {
+        return mCoveragePercantageFormatter.format(getCoverageAsFloat()) + "%";
+    }
 
     /** @return the coverage percentage as int. */
     public int getCoverage ()
@@ -675,8 +715,8 @@ public final class FileSummary
 
         public int compare (FileSummary a, FileSummary b)
         {
-            final long coverA = a.getCoverage();
-            final long coverB = b.getCoverage();
+            final float coverA = a.getCoverageAsFloat();
+            final float coverB = b.getCoverageAsFloat();
 
             final int result;
             if (coverA < coverB)

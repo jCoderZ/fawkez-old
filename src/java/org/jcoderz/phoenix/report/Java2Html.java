@@ -1312,7 +1312,7 @@ public final class Java2Html
           hitsCell(bw, String.valueOf(mGlobalSummary.getLinesOfCode()), true);
           if (mCoverageData)
           {
-             hitsCell(bw, String.valueOf(mGlobalSummary.getCoverage()) + "%",
+             hitsCell(bw, String.valueOf(mGlobalSummary.getCoverageAsString()),
                      true);
              bw.write("<td valign='middle' class='hits" + LAST_MARKER
                    + "' width='100'>");
@@ -1424,7 +1424,7 @@ public final class Java2Html
          hitsCell(bw, String.valueOf(pkg.getLinesOfCode()), isLast);
          if (mCoverageData)
          {
-            hitsCell(bw, String.valueOf(pkg.getCoverage()) + "%", isLast);
+            hitsCell(bw, String.valueOf(pkg.getCoverageAsString()), isLast);
             bw.write("<td valign='middle' class='hits");
             appendIf(bw, isLast, LAST_MARKER);
             bw.write("' width='100'>");
@@ -1712,7 +1712,7 @@ public final class Java2Html
         hitsCell(bw, String.valueOf(file.getLinesOfCode()), isLast);
         if (mCoverageData)
         {
-           hitsCell(bw, String.valueOf(file.getCoverage()) + "%", isLast);
+           hitsCell(bw, file.getCoverageAsString(), isLast);
            bw.write("<td valign='middle' class='hits");
            appendIf(bw, isLast, LAST_MARKER);
            bw.write("' width='100'>");

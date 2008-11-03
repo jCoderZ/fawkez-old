@@ -668,7 +668,7 @@ public class JcReportAntTask
       cmd.createArgument().setValue("-cvsBase");
       cmd.createArgument().setValue(mWebRcsBase);
 
-      if (StringUtil.isNullOrBlank(mWebRcsSuffix))
+      if (!StringUtil.isNullOrBlank(mWebRcsSuffix))
       {
           cmd.createArgument().setValue("-cvsSuffix");
           cmd.createArgument().setValue(mWebRcsSuffix);

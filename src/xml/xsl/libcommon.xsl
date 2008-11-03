@@ -475,7 +475,8 @@ import org.jcoderz.commons.util.ObjectUtil;
 </xsl:call-template>
  * @author generated
  */
-public <xsl:if test="$object/@final = 'true'">final </xsl:if>class <xsl:value-of select="$classname"/><xsl:if test="$object/@serializable">
+public <xsl:if test="$object/@final = 'true'">final </xsl:if>class <xsl:value-of select="$classname"/><xsl:if test="$object/@baseclass">
+  extends <xsl:value-of select="$object/@baseclass"/></xsl:if><xsl:if test="$object/@serializable">
       implements java.io.Serializable</xsl:if>
 {
 <xsl:if test="$object/@serializable">

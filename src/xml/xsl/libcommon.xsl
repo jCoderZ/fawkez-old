@@ -2004,7 +2004,7 @@ public final class <xsl:value-of select="$classname"/>
      */
     public long unscaledLongValue ()
     {
-        return toBigDecimal().longValue();
+        return mUnscaled;
     }
 
     /**

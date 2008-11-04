@@ -179,7 +179,7 @@ public abstract class LogMessageInfoImpl
        // could be caused by invalid message format!
        catch (Exception ex)
        {
-           result.append(getParameterList());
+           result.append(parameters);
            result.append(' ');
            result.append(getMessagePattern());
        }

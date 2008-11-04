@@ -712,7 +712,7 @@ import java.util.List;
  * @author generated
  */
 public final class <xsl:value-of select="$classname"/>
-      implements Serializable, org.jcoderz.commons.StrongType
+      implements Serializable, org.jcoderz.commons.EnumType
 {
    /**
     * The name of this type.
@@ -954,7 +954,7 @@ import java.io.Serializable;
  * @author generated via stylesheet
  */
 public final class <xsl:value-of select="$classname"/>
-      implements Serializable, org.jcoderz.commons.StrongType, Comparable
+      implements Serializable, org.jcoderz.commons.RestrictedString, Comparable
 {
    /**
     * <xsl:value-of select="$classname"/> - the name of this type as string constant.
@@ -1210,7 +1210,7 @@ import org.jcoderz.commons.util.HashCodeUtil;
  * @author generated via stylesheet
  */
 public final class <xsl:value-of select="$classname"/>
-      implements Serializable, org.jcoderz.commons.StrongType, Comparable
+      implements Serializable, org.jcoderz.commons.RestrictedLong, Comparable
 {
    /**
     * <xsl:value-of select="$classname"/> - the name of this type as string constant.
@@ -1761,7 +1761,7 @@ import org.jcoderz.commons.ArgumentMalformedException;
 import org.jcoderz.commons.ArgumentMaxValueViolationException;
 import org.jcoderz.commons.ArgumentMinValueViolationException;
 import org.jcoderz.commons.ArgumentFractionDigitsViolationException;
-import org.jcoderz.commons.StrongType;
+import org.jcoderz.commons.FixPointNumber;
 import org.jcoderz.commons.util.Assert;
 import org.jcoderz.commons.util.HashCodeUtil;
 import org.jcoderz.commons.util.NumberUtil;
@@ -1781,7 +1781,7 @@ import org.jcoderz.commons.util.NumberUtil;
  */
 public final class <xsl:value-of select="$classname"/>
     extends Number
-    implements Comparable, StrongType, Serializable
+    implements Comparable, FixPointNumber, Serializable
 {
     /**
      * <xsl:value-of select="$classname"/> - the name of this type as String constant.
@@ -2039,15 +2039,14 @@ public final class <xsl:value-of select="$classname"/>
     /** {@inheritDoc} */
     public boolean equals (Object obj)
     {
-       return (obj instanceof <xsl:value-of select="$classname"/>
+        return (obj instanceof <xsl:value-of select="$classname"/>
              &amp;&amp; ((<xsl:value-of select="$classname"/>) obj).mUnscaled == mUnscaled);
     }
 
     /** {@inheritDoc} */
     public int hashCode ()
     {
-        int hash = HashCodeUtil.SEED;
-        return HashCodeUtil.hash(hash, mUnscaled);
+        return HashCodeUtil.hash(HashCodeUtil.SEED, mUnscaled);
     }
 
     /** {@inheritDoc} */

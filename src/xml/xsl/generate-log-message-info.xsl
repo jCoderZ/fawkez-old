@@ -94,6 +94,7 @@
                <xsl:with-param name="package" select="@package"/>
                <xsl:with-param name="classname" select="$classname"/>
                <xsl:with-param name="base-exception" select="./@base-exception"/>
+               <xsl:with-param name="abstract" select="'abstract'"/>
             </xsl:call-template>
          </redirect:write>
       </xsl:if>
@@ -110,6 +111,7 @@
                <xsl:with-param name="package" select="@package"/>
                <xsl:with-param name="classname" select="$classname"/>
                <xsl:with-param name="base-exception" select="./@base-runtime-exception"/>
+               <xsl:with-param name="abstract" select="'abstract'"/>
             </xsl:call-template>
          </redirect:write>
       </xsl:if>
@@ -157,6 +159,7 @@
             <xsl:with-param name="classname" select="$classname"/>
             <xsl:with-param name="base-exception" select="./@base-exception"/>
             <xsl:with-param name="short-name" select="./@short-name"/>
+            <xsl:with-param name="abstract" select="'abstract'"/>
          </xsl:call-template>
       </redirect:write>
    </xsl:if>
@@ -175,6 +178,7 @@
             <xsl:with-param name="classname" select="$classname"/>
             <xsl:with-param name="base-exception" select="./@base-runtime-exception"/>
             <xsl:with-param name="short-name" select="./@short-name"/>
+            <xsl:with-param name="abstract" select="'abstract'"/>
          </xsl:call-template>
       </redirect:write>
    </xsl:if>
@@ -187,6 +191,7 @@
    <xsl:param name="package" select="'fixme'"/>
    <xsl:param name="classname" select="'fixme'"/>
    <xsl:param name="name" select="'fixme'"/>
+   <xsl:param name="abstract" select="''"/>
    <xsl:call-template name="java-copyright-header"/>
    <xsl:variable name="group-classname"><xsl:call-template
          name="shortnameToJava">
@@ -222,7 +227,7 @@ import java.io.Serializable;
  *
  * @author generated
  */
-public class <xsl:value-of select="$classname"/>
+public <xsl:value-of select="$abstract"/> class <xsl:value-of select="$classname"/>
       extends <xsl:value-of select="$message/@base-exception"/>
 {
    /** use this serialVersionUID for serialization. */
@@ -348,6 +353,7 @@ public class <xsl:value-of select="$classname"/>
    <xsl:param name="classname" select="'fixme'"/>
    <xsl:param name="base-exception" select="'fixme'"/>
    <xsl:param name="short-name" select="''"/>
+   <xsl:param name="abstract" select="''"/>
    <xsl:call-template name="java-copyright-header"/>
    <xsl:variable name="group-classname">
    <xsl:choose>
@@ -376,7 +382,7 @@ import org.jcoderz.commons.LogMessageInfo;
  *
  * @author generated
  */
-public class <xsl:value-of select="$classname"/>
+public <xsl:value-of select="$abstract"/> class <xsl:value-of select="$classname"/>
       extends <xsl:value-of select="$base-exception"/>
 {
    /** use this serialVersionUID for serialization. */

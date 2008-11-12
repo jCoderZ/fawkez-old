@@ -669,6 +669,8 @@ digraph G {
 
    <xsl:template match="req:entity" mode="others">
       <xsl:param name="dm_root_id"/>
+      
+      <!-- create nodes for all referenced entites from root entity and create edges -->
       <xsl:for-each select="req:attribute[req:objectreference]">
          <xsl:variable name="dm_id" select="req:objectreference/req:ref/@id"/>
 
@@ -693,6 +695,7 @@ digraph G {
 
       </xsl:for-each>
 
+      <!-- create all nodes, which are referencing to the root node and create the edges. -->
       <xsl:for-each select="//req:objectreference[req:ref/@id = $dm_root_id]">
          <xsl:variable name="dm_id" select="../../../req:key"/>
 

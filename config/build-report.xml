@@ -104,7 +104,7 @@
                 debug="false"
                 maxheap="128"
                 encoding="US-ASCII"
-                cpus="0"> <!-- Increase to speed up -->
+                cpus="1"> <!-- Increase to speed up -->
          <classpath refid="jcreport.classpath"/>
          <reports>   
             <report name="fawkez-test"

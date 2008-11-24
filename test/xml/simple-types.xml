@@ -163,6 +163,24 @@
             initial-value="new java.util.ArrayList()"
             final="true">List of all Merchants
          </member>
+      </valueObject>
+      <valueObject
+         classname="BarValueObject"
+         package="org.jcoderz.commons.types.samples"
+         serializable="true"
+         final="false" >
+         <description>The Bar is documented here!</description>
+         <member
+            name="Id"
+            type="long">
+           <decription>unique identifier for Foo</decription>
+         </member>
+         <member
+            name="Creation Date"
+            type="org.jcoderz.commons.types.Date"
+            final="true">
+            creation date of Buz
+         </member>
       </valueObject> <!--
       <valueObject
          classname="Settlement"

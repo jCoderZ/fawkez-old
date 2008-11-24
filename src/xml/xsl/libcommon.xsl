@@ -558,6 +558,26 @@ public <xsl:if test="$object/@final = 'true'">final </xsl:if>class <xsl:value-of
             select="$identifier"/>;</xsl:for-each>
     }
 
+  <!-- Do not provide the copy constructor if we have final, initialized fields. -->
+  <xsl:if test="not($object//member[@initial-value][@final = 'true' or ../@final = 'true'])">
+   /**
+    * Copy constructor for <xsl:value-of
+      select="$classname"/>. No deep copy is performed.
+    * @param a<xsl:value-of select="$classname"/> The <xsl:value-of select="$classname"/>
+    *   to be copied.
+    */
+    public <xsl:value-of select="$classname"/> (<xsl:value-of
+    select="$classname"/> a<xsl:value-of select="$classname"/>)
+    {  <xsl:for-each select="member">
+       <xsl:variable name="identifier"><xsl:call-template
+          name="asJavaIdentifier">
+             <xsl:with-param name="name" select="./@name"/></xsl:call-template>
+       </xsl:variable>
+       m<xsl:value-of select="$identifier"/> = a<xsl:value-of select="$classname"/>.m<xsl:value-of
+            select="$identifier"/>;</xsl:for-each>
+    }
+  </xsl:if>
+
    <xsl:for-each select="$object//member">
    <xsl:variable name="display-name"><xsl:call-template name="asDisplayName"><xsl:with-param
          name="name" select="./@name"/></xsl:call-template>

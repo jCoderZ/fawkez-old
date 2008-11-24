@@ -256,7 +256,7 @@ public final class StringUtil
            for (int i = 0; i < length; i++)
            {
                if (!Character.isWhitespace(s.charAt(i)))
-               {
+               {    
                    result = false;
                    break;
                }

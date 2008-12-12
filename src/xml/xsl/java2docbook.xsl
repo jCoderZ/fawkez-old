@@ -23,13 +23,13 @@
    <section>
       <title>
          <xsl:value-of select="translate(substring(@type, 1, 1), $lowercase-a_z, $uppercase-a_z)"/>
-         <xsl:value-of select="substring(@type, 2)"/> 
+         <xsl:value-of select="substring(@type, 2)"/>
          <xsl:text> </xsl:text>
          <xsl:value-of select="@name"/></title>
          <para><xsl:apply-templates select="doc"/></para>
       <programlisting format="java">
 package <xsl:value-of select="../@name"/>;
-      
+
 <xsl:value-of select="@modifiers"/> class <xsl:value-of select="@name"/>
 <!-- extends -->
 <xsl:if test="@superclass">
@@ -46,13 +46,13 @@ package <xsl:value-of select="../@name"/>;
       <xsl:with-param name="n" select=".//interface"/>
    </xsl:call-template>
 </xsl:if>
-{ 
+{
 <xsl:if test=".//field">
    <xsl:text>   // fields</xsl:text>
    <xsl:value-of select="$NEWLINE"/>
    <xsl:for-each select=".//field">
       <xsl:variable name="f">
-         <xsl:if test="@modifiers">         
+         <xsl:if test="@modifiers">
             <xsl:value-of select="@modifiers"/>
             <xsl:text> </xsl:text>
          </xsl:if>
@@ -67,11 +67,11 @@ package <xsl:value-of select="../@name"/>;
             <xsl:value-of select="@value"/>
          </xsl:if>
          <xsl:text>;</xsl:text>
-      </xsl:variable>   
+      </xsl:variable>
       <xsl:call-template name="java-formatter">
          <xsl:with-param name="line" select="$f"/>
-      </xsl:call-template>   
-      <xsl:value-of select="$NEWLINE"/>      
+      </xsl:call-template>
+      <xsl:value-of select="$NEWLINE"/>
    </xsl:for-each>
 </xsl:if>
 
@@ -81,7 +81,7 @@ package <xsl:value-of select="../@name"/>;
 </xsl:if>
 <xsl:for-each select=".//method">
    <xsl:variable name="m">
-      <xsl:if test="@modifiers">         
+      <xsl:if test="@modifiers">
          <xsl:value-of select="@modifiers"/>
          <xsl:text> </xsl:text>
       </xsl:if>
@@ -95,7 +95,7 @@ package <xsl:value-of select="../@name"/>;
       <xsl:call-template name="params">
          <xsl:with-param name="n" select=".//parameter"/>
       </xsl:call-template>
-   </xsl:variable>   
+   </xsl:variable>
    <xsl:call-template name="java-formatter">
       <xsl:with-param name="line" select="$m"/>
    </xsl:call-template>
@@ -126,7 +126,7 @@ package <xsl:value-of select="../@name"/>;
                         <xsl:value-of select="@name"/>
                      </emphasis>
                   </methodname>
-               </para>   
+               </para>
                <xsl:if test="doc/text()">
                   <para><xsl:apply-templates select="doc"/></para>
                </xsl:if>
@@ -137,9 +137,9 @@ package <xsl:value-of select="../@name"/>;
                         <varlistentry>
                            <term><xsl:value-of select="@name"/></term>
                            <listitem><xsl:apply-templates select="doc"/></listitem>
-                        </varlistentry>         
+                        </varlistentry>
                      </xsl:for-each>
-                  </variablelist>   
+                  </variablelist>
                </xsl:if>
             </section>
          </xsl:for-each>
@@ -172,7 +172,7 @@ package <xsl:value-of select="../@name"/>;
                         <xsl:with-param name="remove-package" select="true()"/>
                      </xsl:call-template>
                   </methodname>
-               </para>   
+               </para>
                <xsl:if test="doc/text()">
                   <para><xsl:apply-templates select="doc"/></para>
                </xsl:if>
@@ -183,9 +183,9 @@ package <xsl:value-of select="../@name"/>;
                         <varlistentry>
                            <term><xsl:value-of select="@name"/></term>
                            <listitem><xsl:apply-templates select="doc"/></listitem>
-                        </varlistentry>         
+                        </varlistentry>
                      </xsl:for-each>
-                  </variablelist>   
+                  </variablelist>
                </xsl:if>
                <xsl:if test="./return[doc]">
                   <variablelist>
@@ -193,8 +193,8 @@ package <xsl:value-of select="../@name"/>;
                      <varlistentry>
                         <term></term>
                         <listitem><xsl:apply-templates select="./return/doc"/></listitem>
-                     </varlistentry>         
-                  </variablelist>   
+                     </varlistentry>
+                  </variablelist>
                </xsl:if>
                <xsl:if test=".//throws[doc][@type != 'java.rmi.RemoteException']">
                   <variablelist>
@@ -214,18 +214,18 @@ package <xsl:value-of select="../@name"/>;
                         <varlistentry>
                            <term><classname><xsl:value-of select="$c"/></classname></term>
                            <listitem><xsl:apply-templates select="doc"/></listitem>
-                        </varlistentry>         
+                        </varlistentry>
                      </xsl:for-each>
-                  </variablelist>   
+                  </variablelist>
                </xsl:if>
             </section>
          </xsl:for-each>
    </section>
 </xsl:if>
 
-   </section>   
-</xsl:template>   
-   
+   </section>
+</xsl:template>
+
 
 <xsl:template name="classname">
    <xsl:param name="class"/>
@@ -266,9 +266,9 @@ package <xsl:value-of select="../@name"/>;
          <xsl:with-param name="remove-package" select="$remove-package"/>
       </xsl:call-template>
       <xsl:value-of select="$nbsp"/>
-      <xsl:value-of select="@name"/>      
+      <xsl:value-of select="@name"/>
       <xsl:if test="position() != last()">
-         <xsl:text>, </xsl:text>         
+         <xsl:text>, </xsl:text>
       </xsl:if>
    </xsl:for-each>
    <xsl:text>)</xsl:text>
@@ -276,7 +276,7 @@ package <xsl:value-of select="../@name"/>;
 
 <xsl:template name="throws">
    <xsl:param name="n"/>
-   <xsl:value-of select="$NEWLINE"/>      
+   <xsl:value-of select="$NEWLINE"/>
    <xsl:text>      throws </xsl:text>
    <xsl:for-each select="$n">
       <xsl:call-template name="classname">
@@ -284,16 +284,16 @@ package <xsl:value-of select="../@name"/>;
          <xsl:with-param name="package" select="../../../@name"/>
       </xsl:call-template>
       <xsl:if test="position() != last()">
-         <xsl:text>,</xsl:text>         
-         <xsl:value-of select="$NEWLINE"/>      
-         <xsl:text>         </xsl:text>         
+         <xsl:text>,</xsl:text>
+         <xsl:value-of select="$NEWLINE"/>
+         <xsl:text>         </xsl:text>
       </xsl:if>
    </xsl:for-each>
 </xsl:template>
 
 <xsl:template name="implements">
    <xsl:param name="n"/>
-   <xsl:value-of select="$NEWLINE"/>      
+   <xsl:value-of select="$NEWLINE"/>
    <xsl:text>      implements </xsl:text>
    <xsl:for-each select="$n">
       <xsl:call-template name="classname">
@@ -301,16 +301,16 @@ package <xsl:value-of select="../@name"/>;
          <xsl:with-param name="package" select="../../@name"/>
       </xsl:call-template>
       <xsl:if test="position() != last()">
-         <xsl:text>,</xsl:text>         
-         <xsl:value-of select="$NEWLINE"/>      
-         <xsl:text>         </xsl:text>         
+         <xsl:text>,</xsl:text>
+         <xsl:value-of select="$NEWLINE"/>
+         <xsl:text>         </xsl:text>
       </xsl:if>
    </xsl:for-each>
 </xsl:template>
 
 <xsl:template name="classname-without-package">
    <xsl:param name="classname"/>
-   
+
    <xsl:choose>
       <xsl:when test="contains($classname, '.')">
          <xsl:call-template name="classname-without-package">
@@ -322,7 +322,7 @@ package <xsl:value-of select="../@name"/>;
       </xsl:otherwise>
    </xsl:choose>
 </xsl:template>
-   
+
 <xsl:template name="java-formatter">
    <xsl:param name="line"/>
    <xsl:param name="ident" select="'   '"/>
@@ -341,14 +341,14 @@ package <xsl:value-of select="../@name"/>;
    <xsl:choose>
       <!-- line < width -->
       <xsl:when test="string-length($line) + string-length($ident) &lt;= $width">
-         <xsl:value-of select="$ident"/>      
+         <xsl:value-of select="$ident"/>
          <xsl:value-of select="$line"/>
       </xsl:when>
       <!-- field: break before '=' -->
-      <xsl:when test="contains($line, ' = ')"> 
-         <xsl:value-of select="$ident"/>      
+      <xsl:when test="contains($line, ' = ')">
+         <xsl:value-of select="$ident"/>
          <xsl:value-of select="substring-before($line, '=')"/>
-         <xsl:value-of select="$NEWLINE"/>      
+         <xsl:value-of select="$NEWLINE"/>
          <xsl:call-template name="java-formatter">
             <xsl:with-param name="line" select="concat('=', substring-after($line, '='))"/>
             <xsl:with-param name="ident" select="$newIdent"/>
@@ -385,8 +385,8 @@ package <xsl:value-of select="../@name"/>;
             </xsl:call-template>
          </xsl:variable>
          <xsl:variable name="index">
-            <xsl:choose>   
-               <!-- split after open parent. '(' PRIO 1 --> 
+            <xsl:choose>
+               <!-- split after open parent. '(' PRIO 1 -->
                <xsl:when test="$cindex != -1"><xsl:value-of select="$cindex + 1"/></xsl:when>
                <!-- split after open parent. '(' PRIO 2 -->
                <xsl:when test="$pindex != -1"><xsl:value-of select="$pindex"/></xsl:when>
@@ -395,22 +395,19 @@ package <xsl:value-of select="../@name"/>;
                <!-- split *before* dot. '.' PRIO 4 -->
                <xsl:when test="$dindex != -1 and not(starts-with($line, '.'))"><xsl:value-of select="$dindex - 1"/></xsl:when>
                <xsl:otherwise>
-                  <xsl:message terminate="no">
-                     Failed to break line '<xsl:value-of select="$line"/>'.
-                  </xsl:message>
                   <!-- panic: don't know how to handle -->
                   <xsl:value-of select="string-length('$line')"/>
                </xsl:otherwise>
-            </xsl:choose>   
+            </xsl:choose>
          </xsl:variable>
-         <xsl:value-of select="$ident"/>      
+         <xsl:value-of select="$ident"/>
          <xsl:value-of select="substring($line, 1, $index)"/>
-         <xsl:value-of select="$NEWLINE"/>      
+         <xsl:value-of select="$NEWLINE"/>
          <xsl:call-template name="java-formatter">
             <xsl:with-param name="line" select="substring($line, $index + 1)"/>
             <xsl:with-param name="ident" select="$newIdent"/>
             <xsl:with-param name="level" select="$level + 1"/>
-         </xsl:call-template>         
+         </xsl:call-template>
       </xsl:otherwise>
    </xsl:choose>
 </xsl:template>
@@ -420,7 +417,7 @@ package <xsl:value-of select="../@name"/>;
    <xsl:param name="str"/>
    <xsl:param name="index"/>
    <xsl:param name="substr"/>
-   <xsl:choose>   
+   <xsl:choose>
       <xsl:when test="$index &lt; 1">
          <xsl:message terminate="yes">
             Index must be greater than zero. sub-string '<xsl:value-of select="$substr"/>'
@@ -440,7 +437,7 @@ package <xsl:value-of select="../@name"/>;
             <xsl:with-param name="substr" select="$substr"/>
          </xsl:call-template>
       </xsl:otherwise>
-   </xsl:choose>   
+   </xsl:choose>
 </xsl:template>
 
 </xsl:stylesheet>

@@ -32,27 +32,34 @@
  */
 package org.jcoderz.phoenix.sqlparser;
 
+
 /**
  * @author Albrecht Messner
  */
 public class DefaultClause
-      extends ColumnAttribute
+    extends ColumnAttribute
 {
-   private final String mDefaultExpression;
-   
-   /**
-    * Allocate a DefaultClause object.
-    * @param expr the SQL expression represented by this default clause
-    */
-   public DefaultClause (String expr)
-   {
-      mDefaultExpression = expr;
-   }
-   
-   /** {@inheritDoc} */
-   public final String toString ()
-   {
-      return "[Column Default: expr=" + mDefaultExpression + "]";
-   }
+    private final String mDefaultExpression;
 
+    /**
+     * Allocate a DefaultClause object.
+     *
+     * @param expr the SQL expression represented by this default clause
+     */
+    public DefaultClause (String expr)
+    {
+        mDefaultExpression = expr;
+    }
+
+    /** {@inheritDoc} */
+    public final String toString ()
+    {
+        return "[Column Default: expr=" + mDefaultExpression + "]";
+    }
+
+    /** {@inheritDoc} */
+    public String getValue ()
+    {
+        return mDefaultExpression;
+    }
 }

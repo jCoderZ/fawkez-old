@@ -37,5 +37,9 @@ package org.jcoderz.phoenix.sqlparser;
  */
 public abstract class ColumnAttribute
 {
-
+    /**
+     * Returns the value of the attribute.
+     * @return the value of the attribute.
+     */
+    public abstract String getValue();
 }

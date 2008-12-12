@@ -35,50 +35,31 @@ package org.jcoderz.phoenix.sqlparser;
 /**
  * @author Albrecht Messner
  */
-public final class NumericAttribute
+public final class StringAttribute
    extends ColumnAttribute
 {
-   private final int mNumber;
+   private final String mString;
    /**
-    * Create a new numeric attribute.
-    * @param number the number represented by this attribute
+    * Create a new string attribute.
+    * @param number the string represented by this attribute
     */
-   public NumericAttribute (int number)
+   public StringAttribute (String number)
    {
-      mNumber = number;
+      mString = number;
    }
 
    /**
-    * Create a new numeric attribute.
-    * @param numberAsStr the number represented by this attribute, as string
+    * Returns the string of this attribute.
+    * @return the string of this attribute
     */
-   public NumericAttribute (String numberAsStr)
+   public final String getValue ()
    {
-      mNumber = Integer.parseInt(numberAsStr);
-   }
-
-   /**
-    * Returns the number of this attribute.
-    * @return the number of this attribute
-    */
-   public final int getNumber ()
-   {
-      return mNumber;
+      return mString;
    }
 
    /** {@inheritDoc} */
    public final String toString ()
    {
-      return "[NumericAttribute: number=" + mNumber + "]";
+      return "[StringAttribute: string=" + mString + "]";
    }
-
-   /**
-    * Returns the value of this attribute.
-    * @return the value of this attribute
-    */
-   public final String getValue ()
-   {
-      return String.valueOf(mNumber);
-   }
-
 }

@@ -49,7 +49,7 @@ public class SqlToXml
 {
    private final File mInputFile;
    private final File mOutputFile;
-   
+
    public SqlToXml (String inFileName, String outFileName)
    {
       mInputFile = new File(inFileName);
@@ -66,7 +66,7 @@ public class SqlToXml
       try
       {
           pw.println("<tables>");
-    
+
           final List statements  = parser.parse();
           for (final Iterator it = statements.iterator(); it.hasNext(); )
           {
@@ -80,7 +80,7 @@ public class SqlToXml
                 transformStatementToXml((CreateSequenceStatement) stmt, pw);
              }
           }
-          
+
           pw.println("</tables>");
       }
       finally
@@ -89,7 +89,7 @@ public class SqlToXml
       }
    }
 
-   private void transformStatementToXml (CreateSequenceStatement stmt, 
+   private void transformStatementToXml (CreateSequenceStatement stmt,
            PrintWriter pw)
    {
       pw.println("<sequence name=\"" + stmt.getName() + "\">");
@@ -99,16 +99,16 @@ public class SqlToXml
       pw.println("</sequence>");
    }
 
-   private void transformStatementToXml (CreateTableStatement stmt, 
+   private void transformStatementToXml (CreateTableStatement stmt,
            PrintWriter out)
    {
       out.println("<table name=\"" + stmt.getTableName() + "\">");
-      
+
       if (stmt.getAnnotation() != null)
       {
-         out.println(stmt.getAnnotation());         
+         out.println(stmt.getAnnotation());
       }
-      
+
       for (final Iterator it = stmt.getColumns().iterator(); it.hasNext(); )
       {
          final ColumnSpec column = (ColumnSpec) it.next();
@@ -119,24 +119,28 @@ public class SqlToXml
          for (final Iterator it2 = column.getDatatypeAttributes().iterator();
                it2.hasNext(); )
          {
+            final ColumnAttribute attr = (ColumnAttribute) it2.next();
             if (sbuf == null)
             {
                sbuf = new StringBuffer();
                sbuf.append('(');
             }
+            else if (attr instanceof StringAttribute)
+            {
+               sbuf.append(' ');
+            }
             else
             {
                sbuf.append(',');
             }
-            final NumericAttribute attr = (NumericAttribute) it2.next();
-            sbuf.append(attr.getNumber());
+            sbuf.append(attr.getValue());
          }
          if (sbuf != null)
          {
             sbuf.append(')');
             out.print(sbuf);
          }
-         
+
          out.println("\">");
          if (column.getAnnotation() != null)
          {
@@ -157,7 +161,7 @@ public class SqlToXml
          out.println("   </column>");
       }
 
-      for (final Iterator it = stmt.getFkConstraints().iterator(); 
+      for (final Iterator it = stmt.getFkConstraints().iterator();
           it.hasNext(); )
       {
          final FkConstraint fk = (FkConstraint) it.next();
@@ -170,7 +174,7 @@ public class SqlToXml
          }
          out.println("      </columns>");
          out.println("      <refcolumns>");
-         for (final Iterator it2 = fk.getRefColumns().iterator(); 
+         for (final Iterator it2 = fk.getRefColumns().iterator();
              it2.hasNext(); )
          {
             out.println("         <col>" + it2.next() + "</col>");
@@ -178,14 +182,14 @@ public class SqlToXml
          out.println("      </refcolumns>");
          out.println("   </fk>");
       }
-      
+
       for (final Iterator it = stmt.getIndexes().iterator(); it.hasNext(); )
       {
          final CreateIndexStatement idxStmt = (CreateIndexStatement) it.next();
          out.println("   <index name=\"" + idxStmt.getIndexName() + "\">");
          if (idxStmt.isUnique())
          {
-            out.println("      <unique/>");  
+            out.println("      <unique/>");
          }
          out.println("      <desc>");
          out.println(
@@ -205,7 +209,7 @@ public class SqlToXml
    {
       String inputFile = null;
       String outputFile = null;
-      
+
       int i = 0;
       try
       {
@@ -220,7 +224,7 @@ public class SqlToXml
                outputFile = args[++i];
             }
          }
-         
+
       }
       catch (ArrayIndexOutOfBoundsException x)
       {
@@ -228,12 +232,12 @@ public class SqlToXml
             + args[i - 1] + " requires an option");
          usage();
       }
-      
+
       if (inputFile == null || outputFile == null)
       {
          usage();
       }
-      
+
       final SqlToXml transformer = new SqlToXml(inputFile, outputFile);
       try
       {
@@ -246,7 +250,7 @@ public class SqlToXml
          System.exit(1);
       }
    }
-   
+
    private static void usage ()
    {
       System.err.println("Usage: SqlToXml -i <input_file> -o <output_file>");

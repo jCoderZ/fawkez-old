@@ -251,10 +251,13 @@ public final class SqlScanner
             try
             {
                // FIXME: prefix keyword? otherwise 'comma' will be a keyword
-               final TokenType tokenType
-                  = TokenType.fromString(
-                        word.toLowerCase(Constants.SYSTEM_LOCALE));
-               return new Token(tokenType, word);
+               if (!TokenType.OPERATOR.toString().equalsIgnoreCase(word))
+               {
+                   final TokenType tokenType
+                      = TokenType.fromString(
+                            word.toLowerCase(Constants.SYSTEM_LOCALE));
+                   return new Token(tokenType, word);
+               }
             }
             catch (IllegalArgumentException ignore)
             {

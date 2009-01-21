@@ -242,6 +242,17 @@ public class StringUtilTest
    }
 
    /**
+    * Tests the method {@link StringUtil#trimLengthLeft(String, int)}.
+    */
+   public void testTrimLeft ()
+   {
+      final String trimmed = StringUtil.trimLengthLeft("12345", 1);
+      assertEquals("Unexpected string length.",
+            1, trimmed.length());
+      assertEquals("Unexpected result from trimLength", "5", trimmed);
+   }
+
+   /**
     * Tests the method {@link StringUtil#padLeft(String, char, int)}.
     */
    public void testPadLeft ()

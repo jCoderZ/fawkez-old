@@ -256,7 +256,7 @@ public final class StringUtil
            for (int i = 0; i < length; i++)
            {
                if (!Character.isWhitespace(s.charAt(i)))
-               {    
+               {
                    result = false;
                    break;
                }
@@ -368,7 +368,7 @@ public final class StringUtil
     * returned unmodified.
     * @param str the string to trim.
     * @param maxLength the maximum length
-    * @return the string, trimt to a maximum length of maxLength
+    * @return the string, trimmed to a maximum length of maxLength
     */
    public static String trimLength (String str, int maxLength)
    {
@@ -377,6 +377,30 @@ public final class StringUtil
       if (str != null && str.length() > maxLength)
       {
          result = str.substring(0, maxLength);
+      }
+      else
+      {
+         result = str;
+      }
+      return result;
+   }
+
+   /**
+    * Trims the length of the given string to the given maxlength by cutting of
+    * data at the left side (beginning) of the string, if
+    * the string length is below the given maxlength the string is returned
+    * unmodified.
+    * @param str the string to trim.
+    * @param maxLength the maximum length
+    * @return the string, trimmed to a maximum length of maxLength
+    */
+   public static String trimLengthLeft (String str, int maxLength)
+   {
+      Assert.assertTrue("maxLength must not be negative.", maxLength >= 0);
+      final String result;
+      if (str != null && str.length() > maxLength)
+      {
+         result = str.substring(str.length() - maxLength);
       }
       else
       {

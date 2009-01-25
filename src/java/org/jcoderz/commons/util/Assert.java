@@ -142,7 +142,7 @@ public final class Assert
     * Can be called if an exception is unexpectedly caught. This can
     * be used at catch blocks that should never be reached at all.
     * It throws an AssertionFailedException with the given nested
-    * exception.
+    * exception and message.
     *
     * @param message The message to be used in the exception.
     * @param ex the exception that was not expected
@@ -151,6 +151,6 @@ public final class Assert
    public static void fail (String message, Throwable ex)
        throws AssertionFailedException
    {
-     throw new AssertionFailedException(message, ex);
+       throw new AssertionFailedException(message, ex);
    }
 }

@@ -204,6 +204,8 @@
     <xsd:element name='MissingClass' type="xsd:string"
                  minOccurs='0' maxOccurs='unbounded'/>
    </xsd:sequence>
+   <xsd:attribute name="errors" type="xsd:unsignedInt" use="optional"/>
+   <xsd:attribute name="missingClasses" type="xsd:unsignedInt" use="optional"/>
   </xsd:complexType>
  </xsd:element>
 
@@ -266,6 +268,7 @@
    </xsd:sequence>
    <xsd:attribute name='descriptor'  type='xsd:string' use='required'/>
    <xsd:attribute name='role' use='optional' type="xsd:string"/>
+   <xsd:attribute name='typeParameters' use='optional' type='xsd:string'/>
   </xsd:complexType>
  </xsd:element>
 
@@ -327,12 +330,15 @@
        </xsd:complexType>
       </xsd:element>
       <xsd:element ref='PackageStats' maxOccurs='unbounded'/>
+      <xsd:element ref="FindBugsProfile" minOccurs="0" maxOccurs="1"/>
    </xsd:sequence>
    <xsd:attribute name='timestamp' use='required' type='xsd:string'/>
    <xsd:attribute name='total_classes' use='required' type='xsd:int'/>
+   <xsd:attribute name="referenced_classes" type="xsd:unsignedInt" use="optional"/>
    <xsd:attribute name='total_bugs' use='required' type='xsd:int'/>
    <xsd:attribute name='total_size' use='required' type='xsd:int'/>
    <xsd:attribute name='num_packages' use='required' type='xsd:int'/>
+   <xsd:attribute name="vm_version" type="xsd:string" use="optional"/>
    <xsd:attribute name="cpu_seconds" type="xsd:float" use="optional" />
    <xsd:attribute name="clock_seconds" type="xsd:float" use="optional" />
    <xsd:attribute name="peak_mbytes" type="xsd:float" use="optional" />
@@ -356,6 +362,27 @@
    <xsd:attribute name='priority_1' use='optional' type='xsd:int'/>
    <xsd:attribute name='priority_2' use='optional' type='xsd:int'/>
    <xsd:attribute name='priority_3' use='optional' type='xsd:int'/>
+  </xsd:complexType>
+ </xsd:element>
+
+ <xsd:element name='FindBugsProfile'>
+  <xsd:complexType>
+   <xsd:sequence>
+    <xsd:element ref="ClassProfile" minOccurs="0" maxOccurs="unbounded"/>
+   </xsd:sequence>
+   <xsd:attribute name='name' use='required' type='xsd:string'/>
+   <xsd:attribute name="totalMilliseconds" type="xsd:unsignedInt" use="required"/>
+   <xsd:attribute name="invocations" type="xsd:unsignedInt" use="required"/>
+   <xsd:attribute name="avgMicrosecondsPerInvocation" type="xsd:unsignedInt" use="required"/>
+  </xsd:complexType>
+ </xsd:element>
+
+ <xsd:element name='ClassProfile'>
+  <xsd:complexType>
+   <xsd:attribute name='name' use='required' type='xsd:string'/>
+   <xsd:attribute name="totalMilliseconds" type="xsd:unsignedInt" use="required"/>
+   <xsd:attribute name="invocations" type="xsd:unsignedInt" use="required"/>
+   <xsd:attribute name="avgMicrosecondsPerInvocation" type="xsd:unsignedInt" use="required"/>
   </xsd:complexType>
  </xsd:element>
 

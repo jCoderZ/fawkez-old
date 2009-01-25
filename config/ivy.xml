@@ -34,12 +34,14 @@
         <dependency org="offo" name="offo" rev="unknown">
             <artifact name="fop-hyph"/>
         </dependency>
-        <dependency org="findbugs" name="findbugs" rev="1.3.5">
+        <dependency org="findbugs" name="findbugs" rev="1.3.7">
             <artifact name="bcel" type="jar"/>
             <artifact name="findbugs" type="jar"/>
             <artifact name="findbugs-ant" type="jar"/>
             <artifact name="jsr305" type="jar"/>
+            <artifact name="jFormatString" type="jar"/>
         </dependency>
+        <dependency org="commons-lang" name="commons-lang" rev="2.4" />
         <dependency org="fb-contrib" name="fb-contrib" rev="3.6.1"/>
         <dependency org="luntsys" name="luntbuild" rev="1.3.4">
             <artifact name="luntbuild-api" type="jar"/>

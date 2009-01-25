@@ -77,11 +77,12 @@
             <include name="default/asm*/*.jar"/>
             <include name="default/jaxen/*.jar"/>
             <include name="default/dom4j/*.jar"/>
+            <include name="default/commons-lang/*.jar"/>
             <exclude name="**/fb-contrib.jar"/>
          </fileset>
       </path>
       <path id="findbugs.plugins">
-		  <path location="${base.dir}/lib/default/fb-contrib/fb-contrib.jar"/>
+        <path location="${base.dir}/lib/default/fb-contrib/fb-contrib.jar"/>
       </path>
       <!-- This is the auxiliary classpath used by findbugs -->   
       <path id="findbugs.aux.classpath">
@@ -104,13 +105,13 @@
                 debug="false"
                 maxheap="128"
                 encoding="US-ASCII"
-                cpus="1"> <!-- Increase to speed up -->
+                cpus="0"> <!-- Increase to speed up -->
          <classpath refid="jcreport.classpath"/>
          <reports>   
             <report name="fawkez-test"
                     level="test"
                     sourcepath="${base.dir}/test/java"
-                    classpath="${build.dir}/classes">
+                    classpath="${build.dir}/test-classes">
             </report>    
             <report name="fawkez-prod"
                     level="prod"

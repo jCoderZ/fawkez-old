@@ -82,7 +82,6 @@ public class BaseRuntimeException
    {
       super(messageInfo.getSymbol());
       mLoggable = new LoggableImpl(this, messageInfo);
-      logCreation();
    }
 
    /**
@@ -95,7 +94,6 @@ public class BaseRuntimeException
    {
       super(messageInfo.getSymbol(), cause);
       mLoggable = new LoggableImpl(this, messageInfo, cause);
-      logCreation();
    }
 
    /** {@inheritDoc} */
@@ -196,12 +194,7 @@ public class BaseRuntimeException
        return mLoggable.toString();
    }
 
-   LoggableImpl getExceptionImpl ()
-   {
-      return mLoggable;
-   }
-
-   private void logCreation ()
+   protected final void logCreation ()
    {
        if (LOGGER.isLoggable(
            RteLogMessage.RuntimeExceptionCreated.LOG_LEVEL))
@@ -216,4 +209,10 @@ public class BaseRuntimeException
                logEvent.getMessage(), logEvent);
        }
    }
+
+   LoggableImpl getExceptionImpl ()
+   {
+      return mLoggable;
+   }
+
 }

@@ -259,6 +259,7 @@ public <xsl:value-of select="$abstract"/> class <xsl:value-of select="$classname
          <xsl:call-template name="inner-clazz-log-parameter-call">
             <xsl:with-param name="tokens" select="$tokens"/>
          </xsl:call-template>);</xsl:if>
+      logCreation();
    }
 
    /**
@@ -282,6 +283,7 @@ public <xsl:value-of select="$abstract"/> class <xsl:value-of select="$classname
          <xsl:call-template name="inner-clazz-log-parameter-call">
             <xsl:with-param name="tokens" select="$tokens"/>
          </xsl:call-template>);</xsl:if>
+      logCreation();
    }
 
    /**

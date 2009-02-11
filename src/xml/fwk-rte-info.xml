@@ -208,7 +208,6 @@
          Supply a correct value for the argument.
       </solution>
    </message>
-
    <message
       id="14"
       name="UNEXPECTED_EXCEPTION"
@@ -220,6 +219,32 @@
       </text>
       <solution>
          .
+      </solution>
+   </message>
+   <message
+      id="15"
+      name="EXCEPTION_CREATED"
+      level="FINE">
+      <text>
+        An Exception with symbol {SYMBOL} has been created.
+        Exception Message is: {MESSAGE}
+      </text>
+      <solution>
+        This fact is just written for the records here for the records. There is
+        normaly no action needed. This is just for debugging purposes.
+      </solution>
+   </message>
+   <message
+      id="16"
+      name="RUNTIME_EXCEPTION_CREATED"
+      level="FINE">
+      <text>
+        An RuntimeException with symbol {SYMBOL} has been created.
+        Exception Message is: {MESSAGE}
+      </text>
+      <solution>
+        This fact is just written for the records here for the records. There is
+        normaly no action needed. This is just for debugging purposes.
       </solution>
    </message>
 </group>

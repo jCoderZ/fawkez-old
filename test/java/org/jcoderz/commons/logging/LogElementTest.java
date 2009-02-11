@@ -33,8 +33,12 @@
 package org.jcoderz.commons.logging;
 
 import java.util.logging.Handler;
+import java.util.logging.Level;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
+
+import org.jcoderz.commons.BaseException;
+import org.jcoderz.commons.BaseRuntimeException;
 import org.jcoderz.commons.LogFormatterOutputTest;
 
 
@@ -115,6 +119,8 @@ public class LogElementTest
    {
       mHandler = new LogElementHandler();
       ROOT_LOGGER.addHandler(mHandler);
+      Logger.getLogger(BaseException.class.getName()).setLevel(Level.INFO);
+      Logger.getLogger(BaseRuntimeException.class.getName()).setLevel(Level.INFO);
    }
 
    /**

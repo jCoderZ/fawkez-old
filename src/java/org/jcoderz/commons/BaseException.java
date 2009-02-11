@@ -36,6 +36,8 @@ package org.jcoderz.commons;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 /**
@@ -64,7 +66,10 @@ public class BaseException
       extends Exception
       implements Loggable
 {
-   static final long serialVersionUID = 2L;
+   private static final long serialVersionUID = 2L;
+   private static final String CLASSNAME = BaseException.class.getName();
+   private static final Logger LOGGER = Logger.getLogger(CLASSNAME);
+
 
    /** The loggable implementation. */
    private final LoggableImpl mLoggable;
@@ -78,6 +83,7 @@ public class BaseException
    {
       super(messageInfo.getSymbol());
       mLoggable = new LoggableImpl(this, messageInfo);
+      logCreation();
    }
 
    /**
@@ -90,6 +96,7 @@ public class BaseException
    {
       super(messageInfo.getSymbol(), cause);
       mLoggable = new LoggableImpl(this, messageInfo, cause);
+      logCreation();
    }
 
    /** {@inheritDoc} */
@@ -193,5 +200,21 @@ public class BaseException
    LoggableImpl getExceptionImpl ()
    {
       return mLoggable;
+   }
+
+   private void logCreation ()
+   {
+       if (LOGGER.isLoggable(
+           RteLogMessage.ExceptionCreated.LOG_LEVEL))
+       {
+           final LogEvent logEvent
+               = new LogEvent(RteLogMessage.EXCEPTION_CREATED, this);
+           RteLogMessage.ExceptionCreated.addParameters(
+               logEvent, mLoggable.getLogMessageInfo().getSymbol(),
+               mLoggable.getMessage());
+           LOGGER.logp(logEvent.getLogMessageInfo().getLogLevel(),
+               logEvent.getSourceClass(), logEvent.getSourceMethod(),
+               logEvent.getMessage(), logEvent);
+       }
    }
 }

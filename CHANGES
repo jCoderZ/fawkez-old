@@ -33,6 +33,11 @@ Fawkez 1.2 'Charlie X'
     of the generated code!
   * Generated service level exceptions are now abstract to prevent
     them from being directly used.
+  * The BaseRuntimeException and the BaseException now log
+    the fact that they are created with the loglevel FINE.
+    So if you are in the situation that you have to find
+    an exception that is swallowed somewhere accidentally,
+    you can use this output to find it again.
 
 
 Fawkez 1.1 'The Man Trap' (March 31, 2007)

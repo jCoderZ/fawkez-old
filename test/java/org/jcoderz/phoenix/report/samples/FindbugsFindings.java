@@ -65,4 +65,18 @@ public class FindbugsFindings
         }
 
     }
+    
+    
+    public void noInfinitLoop ()
+    {
+        final int offset = 5;
+        final int current = 10;
+        final int start = current - offset;    
+        final int end = current + offset;
+        
+        for (int i = start; i <= end; i++)
+        {
+            System.out.println("At " + i);
+        }
+    }
 }

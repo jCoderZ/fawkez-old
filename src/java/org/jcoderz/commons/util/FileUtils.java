@@ -423,4 +423,42 @@ public final class FileUtils
          }
       }
    }
+
+   /**
+    * Creates the given directories.
+    *
+    * @param dirs the directories to be created.
+    * @throws IOException the directories could not be created.
+    * @see File#mkdirs()
+    */
+   public static void mkdirs (File dirs)
+         throws IOException
+   {
+      if (!dirs.exists() || !dirs.isDirectory())
+      {
+         if (!dirs.mkdirs())
+         {
+            throw new IOException("Failed to create directories " + dirs);
+         }
+      }
+   }
+
+   /**
+    * Creates the given directory.
+    *
+    * @param dir the directory to be created.
+    * @throws IOException the directory could not be created.
+    * @see File#mkdir()
+    */
+   public static void mkdir (File dir)
+         throws IOException
+   {
+      if (!dir.exists() || !dir.isDirectory())
+      {
+         if (!dir.mkdir())
+         {
+            throw new IOException("Failed to create directory " + dir);
+         }
+      }
+   }
 }

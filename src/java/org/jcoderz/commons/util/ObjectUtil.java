@@ -135,4 +135,16 @@ public final class ObjectUtil
    {
       return obj == null ? null : obj.toString();
    }
+
+   /**
+    * Returns the string representation of the object or
+    * an empty string if the object is null.
+    * @param obj the object to be converted or <code>null</code>.
+    * @return the string representation of the object or
+    * an empty string if the object is null.
+    */
+   public static String toStringOrEmpty (Object obj)
+   {
+      return obj == null ? "" : obj.toString();
+   }
 }

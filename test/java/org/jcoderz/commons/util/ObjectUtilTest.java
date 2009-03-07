@@ -68,4 +68,13 @@ public class ObjectUtilTest
       assertEquals("ObjectUtil.toString(\"foo\") should return \"foo\".",
             "foo", ObjectUtil.toString("foo"));
    }
+
+   /** Tests the {@link ObjectUtil#toStringOrEmpty(Object)} method. */
+   public void testToStringOrEmpty ()
+   {
+      assertEquals("ObjectUtil.toStringOrEmpty(null) should return \"\".",
+            "", ObjectUtil.toStringOrEmpty(null));
+      assertEquals("ObjectUtil.toStringOrEmpty(\"foo\") should return \"foo\".",
+            "foo", ObjectUtil.toStringOrEmpty("foo"));
+   }
 }

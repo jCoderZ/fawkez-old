@@ -723,11 +723,11 @@ import java.util.List;
  * &lt;/ul&gt;
  *
  * <xsl:if test="$numeric">The values of this enum have beside the internal
- * sequenicial integer representation that is used for serialization
+ * sequential integer representation that is used for serialization
  * dedicated assigned numeric values that are used in the
  * &lt;code>toInt()&lt;/code> and &lt;code>fromInt()&lt;/code> methods.</xsl:if>
  * <xsl:if test="not($numeric)">The values of this enum have a internal
- * sequenicial integer representation starting with '0'.</xsl:if>
+ * sequential integer representation starting with '0'.</xsl:if>
  *
  * @author generated
  */

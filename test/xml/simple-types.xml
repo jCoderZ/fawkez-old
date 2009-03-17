@@ -132,6 +132,23 @@
      =============================================================== -->
    <valueObjects>
       <valueObject
+         classname="SampleValueObject"
+         baseclass="SampleValueObjectBase"
+         package="org.jcoderz.commons.types.samples"
+         serializable="true"
+         final="false" >
+        <member name="test value"
+          type="long"/>
+      </valueObject>
+      <valueObject
+         classname="SampleValueObjectBase"
+         package="org.jcoderz.commons.types.samples"
+         serializable="true"
+         final="false" >
+        <member name="test value base"
+          type="long"/>
+      </valueObject>
+      <valueObject
          classname="FooValueObject"
          package="org.jcoderz.commons.types.samples"
          serializable="true"

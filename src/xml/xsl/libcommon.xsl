@@ -469,6 +469,7 @@ import org.jcoderz.commons.util.HashCodeUtil;
 import org.jcoderz.commons.util.ObjectUtil;
 
 /**
+ * <xsl:if test="not($object/description)"><xsl:value-of select="$name"/> value object.</xsl:if>
  * <xsl:value-of select="$object/description"/><xsl:call-template name="generate-xdoclet">
    <xsl:with-param name="doc-text" select="$object/xdoclet" />
    <xsl:with-param name="indent"><xsl:text> </xsl:text></xsl:with-param>
@@ -558,8 +559,11 @@ public <xsl:if test="$object/@final = 'true'">final </xsl:if>class <xsl:value-of
             select="$identifier"/>;</xsl:for-each>
     }
 
-  <!-- Do not provide the copy constructor if we have final, initialized fields. -->
-  <xsl:if test="not($object//member[@initial-value][@final = 'true' or ../@final = 'true'])">
+  <!-- Do not provide the copy constructor if we have final, initialized fields.
+       And not if we overide a baseclass.  -->
+  <xsl:if test="
+    not($object/@baseclass) and
+    not($object//member[@initial-value][@final = 'true' or ../@final = 'true'])">
    /**
     * Copy constructor for <xsl:value-of
       select="$classname"/>. No deep copy is performed.
@@ -586,7 +590,14 @@ public <xsl:if test="$object/@final = 'true'">final </xsl:if>class <xsl:value-of
       name="asJavaIdentifier">
          <xsl:with-param name="name" select="./@name"/></xsl:call-template>
    </xsl:variable>
-   <xsl:variable name="doc"><xsl:value-of select="normalize-space(current())"/>
+   <xsl:variable name="doc-plain">
+     <xsl:value-of select="normalize-space(current())"/>
+   </xsl:variable>
+   <xsl:variable name="doc">
+     <xsl:choose>
+       <xsl:when test="normalize-space(current())"><xsl:value-of select="$doc-plain"/></xsl:when>
+       <xsl:otherwise><xsl:value-of select="$display-name"/></xsl:otherwise>
+     </xsl:choose>
    </xsl:variable>
    /**
     * Returns the <xsl:value-of select="$doc"/>. <xsl:call-template name="generate-xdoclet">
@@ -607,17 +618,26 @@ public <xsl:if test="$object/@final = 'true'">final </xsl:if>class <xsl:value-of
 
    /**
     * Sets the <xsl:value-of select="$doc"/>.
-    * @param a<xsl:value-of select="$identifier"/> Sets the <xsl:value-of select="$doc"/>.
+    * @param a<xsl:value-of select="$identifier"/> the <xsl:value-of select="$doc"/> to be set.
     */
    <xsl:value-of select="$setter-visibility"/> void set<xsl:value-of select="$identifier"/> (<xsl:value-of select="./@type"/> a<xsl:value-of select="$identifier"/>)
    {
       m<xsl:value-of select="$identifier"/> = a<xsl:value-of select="$identifier"/>;
    }</xsl:if>
    </xsl:for-each>
+
+   /**
+    * Creates a String representation of this object holding the
+    * state of all members.
+    * @return a String representation of this object.
+    */
    public String toString()
    {
       final StringBuffer buffer = new StringBuffer();
-      buffer.append("[<xsl:value-of select="$classname"/>:");<xsl:for-each
+      buffer.append("[<xsl:value-of select="$classname"/>:");<xsl:if
+       test="$object/@baseclass">
+      buffer.append(" super: ");
+      buffer.append(super.toString());</xsl:if><xsl:for-each
          select="$object//member"><xsl:variable
       name="identifier"><xsl:call-template
          name="asJavaIdentifier">
@@ -636,7 +656,11 @@ public <xsl:if test="$object/@final = 'true'">final </xsl:if>class <xsl:value-of
     */
    public int hashCode()
    {
-      int hashCode = HashCodeUtil.SEED;<xsl:for-each
+      int hashCode = <xsl:choose>
+        <xsl:when test="$object/@baseclass">super.hashCode()</xsl:when>
+        <xsl:otherwise>HashCodeUtil.SEED</xsl:otherwise>
+      </xsl:choose>;
+      <xsl:for-each
       select="$object//member[not(@identity-independent)]">
       <xsl:variable name="identifier"><xsl:call-template
          name="asJavaIdentifier">
@@ -664,7 +688,10 @@ public <xsl:if test="$object/@final = 'true'">final </xsl:if>class <xsl:value-of
       else if (object instanceof <xsl:value-of select="$classname"/>)
       {
          final <xsl:value-of select="$classname"/> o = (<xsl:value-of select="$classname"/>) object;
-         result = true <xsl:for-each select="$object//member[not(@identity-independent)]">
+         result = <xsl:choose>
+        <xsl:when test="$object/@baseclass">super.equals(object)</xsl:when>
+        <xsl:otherwise>true</xsl:otherwise>
+      </xsl:choose><xsl:for-each select="$object//member[not(@identity-independent)]">
             <xsl:variable name="identifier"><xsl:call-template
                   name="asJavaIdentifier"><xsl:with-param
                   name="name" select="./@name"/></xsl:call-template>

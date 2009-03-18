@@ -61,7 +61,7 @@ public class BaseClassTest
     }
 
     /**
-     * Test the inheritance should call super.equals();
+     * Test the inheritance should call super.hashCode();
      */
     public void testInheritanceHashCode()
     {
@@ -78,24 +78,7 @@ public class BaseClassTest
     }
 
     /**
-     * Test the inheritance should call super.equals();
-     */
-    public void testInheritanceCopyConstructor()
-    {
-        final SampleValueObject value = new SampleValueObject();
-        value.setTestValue(1);
-        value.setTestValueBase(1);
-
-        final SampleValueObject value2 = new SampleValueObject(value);
-
-        assertEquals("Base class fields not honored in copy constructor.",
-            value.getTestValueBase(), value2.getTestValueBase());
-        assertEquals("Not equal after copy.",
-            value, value2);
-    }
-
-    /**
-     * Test the inheritance should call super.equals();
+     * Test the inheritance should call super.toString();
      */
     public void testInheritanceToString()
     {

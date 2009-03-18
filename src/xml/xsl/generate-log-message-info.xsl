@@ -533,7 +533,7 @@ public abstract class <xsl:value-of select="$classname"/>
          <xsl:with-param name="name" select="./@name"/>
       </xsl:call-template>
    </xsl:variable>
-   /** The log message for thwe event &lt;code&gt;<xsl:value-of select="./@name"/>&lt;/code&gt;. */
+   /** The log message for the event &lt;code&gt;<xsl:value-of select="./@name"/>&lt;/code&gt;. */
    public static final <xsl:value-of select="$inner-classname"/><xsl:text> </xsl:text><xsl:value-of select="./@name"/>
          = new <xsl:value-of select="$inner-classname"/>();
 </xsl:for-each>

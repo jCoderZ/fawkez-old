@@ -121,7 +121,7 @@ public final class LoggerUtil
       Assert.assertEquals("Business Impact must match",
             item.getBusinessImpact(),
             loggable.getLogMessageInfo().getBusinessImpact());
-      Assert.assertEquals("Category must match",
+      Assert.assertEquals("Thread Name must match",
             item.getThreadName(),
             loggable.getThreadName());
       Assert.assertEquals("Instance ID must match",

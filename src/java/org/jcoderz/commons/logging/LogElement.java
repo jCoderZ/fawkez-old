@@ -166,6 +166,7 @@ public class LogElement
          setSymbolId(
                Integer.toHexString(mLoggable.getLogMessageInfo().toInt()));
          setThreadId(mLoggable.getThreadId());
+         setThreadName(mLoggable.getThreadName());
          setTimestamp(Date.fromUtilDate(
                new java.util.Date(mLoggable.getEventTime())));
          setTrackingNumber(mLoggable.getTrackingNumber());
@@ -190,6 +191,7 @@ public class LogElement
          setSymbol(TRACEMSG);
          setSymbolId(TRACEMSG);
          setThreadId(mLogRecord.getThreadID());
+         setThreadName(Thread.currentThread().getName());
          setTimestamp(Date.fromLong(mLogRecord.getMillis()));
          setTrackingNumber(Integer.toHexString(
                (int) mLogRecord.getSequenceNumber()));

@@ -36,7 +36,7 @@
       </fileset>
     </path>
 
-	<target name="xsl-stylesheets" depends="xsl-stylesheets_uptodatecheck,
+  <target name="xsl-stylesheets" depends="xsl-stylesheets_uptodatecheck,
        xsl-stylesheets-nodeps" />
     <target name="xsl-stylesheets_uptodatecheck">
       <uptodate property="xsl-stylesheets_uptodate"
@@ -89,7 +89,8 @@ static-catalog=yes
             token="\" value="\\"/>
     </target>
 
-    <target name="sad" depends="compile-all, xsl-stylesheets, sad-nodeps"/>
+    <target name="sad"
+      depends="compile-all, errorcode-doc-fragments, xsl-stylesheets, sad-nodeps"/>
     <target name="sad-nodeps">
        <taskdef name="xdoc"
                 classname="org.jcoderz.commons.taskdefs.XtremeDocs">
@@ -136,7 +137,8 @@ static-catalog=yes
        </xdoc>
     </target>
 
-    <target name="usecase" depends="compile-all, xsl-stylesheets, usecase-nodeps"/>
+    <target name="usecase"
+      depends="compile-all, xsl-stylesheets, usecase-nodeps"/>
     <target name="usecase-nodeps">
        <taskdef name="xdoc"
                 classname="org.jcoderz.commons.taskdefs.XtremeDocs">
@@ -146,8 +148,8 @@ static-catalog=yes
           </classpath>
        </taskdef>
        <taskdef name="hibernatetool"
-       	        classname="org.hibernate.tool.ant.HibernateToolTask"
-       	        classpathref="hibernate-tools.classpath" />
+                 classname="org.hibernate.tool.ant.HibernateToolTask"
+                 classpathref="hibernate-tools.classpath" />
 
        <mkdir dir="${build.dir}/doc/usecase/images"/>
        <copy todir="${build.dir}/doc/usecase/images"
@@ -196,7 +198,7 @@ static-catalog=yes
            <pathelement path="${build.dir}/hibernate-classes" />
          </classpath>
          <configuration configurationfile="${build.dir}/doc/usecase/sample/hibernate/hibernate.cfg.xml"
-          	            propertyfile="config/hibernate.properties" 
+                        propertyfile="config/hibernate.properties"
                         namingstrategy="org.hibernate.cfg.DefaultComponentSafeNamingStrategy" />
          <hbm2java destdir="${build.dir}/gen-hibernate"/>
          <!-- <hbm2dao destdir="${build.dir}/gen-hibernate"/> -->
@@ -207,9 +209,9 @@ static-catalog=yes
       </hibernatetool>
       <mkdir dir="${build.dir}/hibernate-classes"/>
       <javac classpathref="hibernate-tools.classpath"
-      	     srcdir="${build.dir}/gen-hibernate"
-      	     destdir="${build.dir}/hibernate-classes"
-      	     source="1.4">
+             srcdir="${build.dir}/gen-hibernate"
+             destdir="${build.dir}/hibernate-classes"
+             source="1.4">
       </javac>
    </target>
 
@@ -303,7 +305,7 @@ static-catalog=yes
         </docletPath>
     </xdoc>
    </target>
-  
+
    <target name="release-notes" depends="compile-all, xsl-stylesheets, release-notes-nodeps"/>
    <target name="release-notes-nodeps">
        <taskdef name="xdoc"
@@ -350,7 +352,7 @@ static-catalog=yes
           </docletPath>
       </xdoc>
    </target>
-  
+
   <target name="kpi-stats" depends="compile-all, xsl-stylesheets, kpi-stats-nodeps"/>
   <target name="kpi-stats-nodeps">
        <taskdef name="xdoc"
@@ -380,7 +382,7 @@ static-catalog=yes
           </docletPath>
       </xdoc>
    </target>
-  
+
    <target name="kpi-report" depends="compile-all, xsl-stylesheets, kpi-report-nodeps"/>
    <target name="kpi-report-nodeps">
       <taskdef name="xdoc"
@@ -390,7 +392,7 @@ static-catalog=yes
             <path refid="xdoc.classpath"/>
          </classpath>
       </taskdef>
-      
+
       <mkdir dir="${build.dir}/doc/kpi-report"/>
       <mkdir dir="${build.dir}/doc/kpi-report/images"/>
       <mkdir dir="${build.dir}/doc/kpi-report/images/svg"/>
@@ -627,5 +629,22 @@ static-catalog=yes
          <param name="outfile" value="${java.outdir}/java.pdf"/>
       </antcall>
    </target>
+
+   <target name="errorcode-doc-fragments">
+      <taskdef name="error-code-manual-generator"
+        classname="org.jcoderz.commons.taskdefs.ErrorCodeManual">
+        <classpath>
+          <pathelement location="${build.dir}/classes"/>
+          <path refid="default.classpath"/>
+        </classpath>
+      </taskdef>
+      <error-code-manual-generator
+          in="${base.dir}/build/app-info.xml"
+          out="${build.dir}/errorcode-manual.log"
+          destDir="${build.dir}/errorcodes"
+          failonerror="true"
+          force="true"/>
+   </target>
+
 
 </project>

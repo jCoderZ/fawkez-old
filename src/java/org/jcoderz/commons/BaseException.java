@@ -190,6 +190,12 @@ public class BaseException
    }
 
    /** {@inheritDoc} */
+   public String getThreadName ()
+   {
+       return mLoggable.getThreadName();
+   }
+
+   /** {@inheritDoc} */
    public String toString ()
    {
        return mLoggable.toString();

@@ -112,6 +112,13 @@ public class FormatTest
             FIX_LENGTH, FixLengthFormat.RIGHT_PADDING, '#');
       formatAndParse(format, "123#4");
       formatAndParse(format, "String78");
+
+      format = new FixLengthFormat(
+          FIX_LENGTH, FixLengthFormat.LEFT_CUT_RIGHT_PADDING, '#');
+      formatAndParse(format, "123#4");
+      formatAndParse(format, "String78");
+      assertEquals("23456789", format.format("123456789"));
+      assertEquals("1#######", format.format("1"));
    }
 
    /**

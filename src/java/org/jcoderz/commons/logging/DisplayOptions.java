@@ -58,6 +58,7 @@ public final class DisplayOptions
    private boolean mDisplayStackTrace = true;
    private boolean mDisplayMessageStackTrace = false;
    private boolean mDisplayTraceLines = false;
+   private boolean mThreadName = false;
 
    /**
     * Sets the flag whether the thread id is displayed.
@@ -162,6 +163,27 @@ public final class DisplayOptions
    public boolean displayCategory ()
    {
       return mDisplayCategory;
+   }
+
+   /**
+    * Sets the flag whether the thread name is displayed.
+    *
+    * @param display If true, the thread name is displayed; if false do not
+    * display the thread name.
+    */
+   public void displayThreadName (final boolean display)
+   {
+      mThreadName = display;
+   }
+
+   /**
+    * Sets the flag whether the thread name should be displayed.
+    * @return true, the thread name is displayed; if false do not
+    * display the thread name.
+    */
+   public boolean displayThreadName ()
+   {
+      return mThreadName;
    }
 
    /**
@@ -443,8 +465,8 @@ public final class DisplayOptions
       return mDisplayTraceLines;
    }
 
-   /** {@inheritDoc} */ 
-   public Object clone () 
+   /** {@inheritDoc} */
+   public Object clone ()
        throws CloneNotSupportedException
    {
        return super.clone();

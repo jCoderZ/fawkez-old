@@ -76,6 +76,7 @@ public abstract class LogItem
    private String mSourceClass = null;
    private String mSourceMethod = null;
    private String mSolution = null;
+   private String mThreadName = null;
    private StringBuffer mMessageBuffer = null;
 
    private final Map mParameters = new HashMap();
@@ -256,6 +257,16 @@ public abstract class LogItem
    public void setType (final String type)
    {
       mType = type;
+   }
+
+   /**
+    * Sets the thread name for this LogItem.
+    *
+    * @param type The thread name to set..
+    */
+   public void setThreadName (final String threadName)
+   {
+      mThreadName = threadName;
    }
 
    /**
@@ -450,6 +461,16 @@ public abstract class LogItem
    public String getType ()
    {
       return mType;
+   }
+
+   /**
+    * Gets the thread name for this LogItem.
+    *
+    * @return The thread name of this log item.
+    */
+   public String getThreadName ()
+   {
+      return mThreadName;
    }
 
    /**

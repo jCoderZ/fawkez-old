@@ -64,7 +64,14 @@ public class FixLengthFormat
     */
    public static final Padding RIGHT_PADDING = new Padding();
 
-   private static final Padding[] PADDINGS = {LEFT_PADDING, RIGHT_PADDING};
+   /**
+    * The string is right padded with the padding char to get the full sized
+    * string or cut on the left side if it dues not fit the length.
+    */
+   public static final Padding LEFT_CUT_RIGHT_PADDING = new Padding();
+
+   private static final Padding[] PADDINGS = {LEFT_PADDING, RIGHT_PADDING,
+       LEFT_CUT_RIGHT_PADDING};
 
    private static final long serialVersionUID = 3256720688978278194L;
 
@@ -227,7 +234,12 @@ public class FixLengthFormat
          pos.setEndIndex(0);
          final String toBeFormatted = (String) obj;
          final int len = toBeFormatted.length();
-         if (len > mAllPadding.length)
+         if (len > mAllPadding.length && mType == LEFT_CUT_RIGHT_PADDING)
+         {
+             toAppendTo.append(toBeFormatted.substring(
+                 len - mAllPadding.length));
+         }
+         else if (len > mAllPadding.length)
          {
             toAppendTo.append(toBeFormatted.substring(0, mAllPadding.length));
          }

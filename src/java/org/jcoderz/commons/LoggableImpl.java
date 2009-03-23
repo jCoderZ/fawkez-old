@@ -105,6 +105,9 @@ public class LoggableImpl
    /** Key used for the thread id parameter object. */
    public static final String THREAD_ID_PARAMETER_NAME = "_THREAD_ID";
 
+   /** Key used for the thread name parameter object. */
+   public static final String THREAD_NAME_PARAMETER_NAME = "_THREAD_NAME";
+
    /** Key used for the instance id parameter object. */
    public static final String INSTANCE_ID_PARAMETER_NAME = "_INSTANCE_ID";
 
@@ -126,6 +129,10 @@ public class LoggableImpl
    /** Id for this instance. */
    public static final String INSTANCE_ID;
 
+   /** Virtual thread Id generated for this thread. */
+   public static final ThreadIdHolder THREAD_ID_GENERATOR
+       = new ThreadIdHolder();
+
    static final long serialVersionUID = 1;
 
    /**
@@ -139,8 +146,6 @@ public class LoggableImpl
    /** Random generator to create pseudo unique Ids for each loggable. */
    private static final Random RANDOM_ID_GENERATOR = new Random();
 
-   private static final ThreadIdHolder THREAD_ID_GENERATOR
-         = new ThreadIdHolder();
 
    private static final String DUMMY_INSTANCE_ID
          = "P" + Integer.toHexString(RANDOM_ID_GENERATOR.nextInt());
@@ -173,6 +178,9 @@ public class LoggableImpl
    /** The thread id. */
    private final long mThreadId;
 
+   /** The thread name. */
+   private final String mThreadName;
+
    /** The Throwable that caused this loggable. */
    private Throwable mCause;
 
@@ -190,23 +198,25 @@ public class LoggableImpl
    public LoggableImpl (Loggable outer, LogMessageInfo errorId)
    {
       this(outer, errorId, THREAD_ID_GENERATOR.getThreadId(),
-            INSTANCE_ID, NODE_ID);
+          Thread.currentThread().getName(), INSTANCE_ID, NODE_ID);
    }
 
    public LoggableImpl (Loggable outer, LogMessageInfo errorId,
        Throwable cause)
    {
-      this(outer, errorId, THREAD_ID_GENERATOR.getThreadId(), INSTANCE_ID,
+      this(outer, errorId, THREAD_ID_GENERATOR.getThreadId(),
+          Thread.currentThread().getName(), INSTANCE_ID,
             NODE_ID, cause);
    }
 
    public LoggableImpl (Loggable outer, LogMessageInfo errorId,
-       long threadId, String instanceId, String nodeId)
+       long threadId, String threadName, String instanceId, String nodeId)
    {
       mEventTime = System.currentTimeMillis();
       mTrackingNumber = Integer.toHexString(RANDOM_ID_GENERATOR.nextInt());
       mLogMessageInfo = errorId;
       mThreadId = threadId;
+      mThreadName = threadName;
       mInstanceId = instanceId;
       mNodeId = nodeId;
       mOuter = outer;
@@ -214,7 +224,8 @@ public class LoggableImpl
    }
 
    public LoggableImpl (Loggable outer, LogMessageInfo errorId,
-       long threadId, String instanceId, String nodeId, Throwable cause)
+       long threadId, String threadName, String instanceId, String nodeId,
+       Throwable cause)
    {
       mEventTime = System.currentTimeMillis();
       if (cause instanceof Loggable)
@@ -227,6 +238,7 @@ public class LoggableImpl
       }
       mLogMessageInfo = errorId;
       mThreadId = threadId;
+      mThreadName = threadName;
       mInstanceId = instanceId;
       mNodeId = nodeId;
       mOuter = outer;
@@ -328,6 +340,12 @@ public class LoggableImpl
    }
 
    /** {@inheritDoc} */
+   public final String getThreadName ()
+   {
+      return mThreadName;
+   }
+
+   /** {@inheritDoc} */
    public Throwable getCause ()
    {
       return mCause;
@@ -385,6 +403,7 @@ public class LoggableImpl
       addParameter(TRACKING_NUMBER_PARAMETER_NAME, mTrackingNumber);
       addParameter(EVENT_TIME_PARAMETER_NAME, new Long(mEventTime));
       addParameter(THREAD_ID_PARAMETER_NAME, new Long(mThreadId));
+      addParameter(THREAD_NAME_PARAMETER_NAME, mThreadName);
       addParameter(INSTANCE_ID_PARAMETER_NAME, mInstanceId);
       addParameter(NODE_ID_PARAMETER_NAME, mNodeId);
       addParameter(APPLICATION_NAME_PARAMETER_NAME,

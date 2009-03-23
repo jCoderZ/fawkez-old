@@ -69,6 +69,7 @@ public abstract class BasicLogLineFormat
    private static final int MESSAGEID_INDEX = 5;
    private static final int BUSINESSIMPACT_INDEX = 6;
    private static final int CATEGORY_INDEX = 7;
+   private static final int THREAD_NAME_INDEX = 7;
    private static final int TRACKINGID_INDEX = 8;
 
    /**
@@ -84,6 +85,7 @@ public abstract class BasicLogLineFormat
     * <li>business impact
     * <li>category
     * <li>tracking number
+    * <li>thread name
     * </ul>
     */
    private static final String LOGLINE_FORMAT_PATTERN
@@ -167,7 +169,13 @@ public abstract class BasicLogLineFormat
          // business impact
          formatList.add(getBusinessImpactFormat());
       }
-      if (ignoreOptions || options.displayCategory())
+      if (ignoreOptions || options.displayThreadName())
+      {
+         // category
+         formatList.add(getThreadNameFormat());
+      }
+      // was replaced with thread name in default
+      if (!ignoreOptions && options.displayCategory())
       {
          // category
          formatList.add(getCategoryFormat());
@@ -210,6 +218,7 @@ public abstract class BasicLogLineFormat
                Integer.toHexString(loggable.getLogMessageInfo().toInt()));
          setBusinessImpact(loggable.getLogMessageInfo().getBusinessImpact());
          setCategory(loggable.getLogMessageInfo().getCategory());
+         setThreadName(loggable.getThreadName());
       }
       else
       {
@@ -219,6 +228,8 @@ public abstract class BasicLogLineFormat
          setThreadId(record.getThreadID());
          setBusinessImpact(BusinessImpact.NONE);
          setCategory(Category.TECHNICAL);
+         // Take care this one might be wrong!
+         setThreadName(Thread.currentThread().getName());
          setMessageId(NO_MSG_SYMBOL);
       }
       format(sb);
@@ -245,7 +256,8 @@ public abstract class BasicLogLineFormat
          parse(sb);
 
          entry.setBusinessImpact(getBusinessImpact());
-         entry.setCategory(getCategory());
+         // entry.setCategory(getCategory());
+         entry.setThreadName(getThreadName());
          entry.setInstanceId(getInstanceId());
          entry.setLoggerLevel(getLevel());
          entry.setNodeId(getNodeId());
@@ -352,6 +364,26 @@ public abstract class BasicLogLineFormat
    protected final long getThreadId ()
    {
       return Long.parseLong((String) getParameter(THREADID_INDEX));
+   }
+
+   /**
+    * Sets the thread name from the message to dump.
+    *
+    * @param threadId The thread name to dump.
+    */
+   protected final void setThreadName (String threadName)
+   {
+      setParameter(THREAD_NAME_INDEX, threadName);
+   }
+
+   /**
+    * Gets the thread id of a parsed log line.
+    *
+    * @return Thread id of parsed log line.
+    */
+   protected final String getThreadName ()
+   {
+      return (String) getParameter(THREAD_NAME_INDEX);
    }
 
    /**

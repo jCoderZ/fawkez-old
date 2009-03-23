@@ -389,6 +389,17 @@ public abstract class LogLineFormat
    }
 
    /**
+    * Gets the format to use for formatting the thread name element.
+    *
+    * @return Format for formatting the category.
+    */
+   protected static final Format getThreadNameFormat ()
+   {
+      return new FixLengthFormat(
+            CATEGORY_LENGTH, FixLengthFormat.LEFT_CUT_RIGHT_PADDING);
+   }
+
+   /**
     * Gets the format to use for formatting the tracking numbers
     *
     * @return Format for formatting the tracking numbers.

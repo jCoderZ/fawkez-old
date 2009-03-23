@@ -49,6 +49,8 @@ public class LoggableImplTest
    private static final String TEST_INSTANCE_ID = "TEST_INSTANCE";
    private static final String TEST_NODE = "TEST_NODE";
    private static final long TEST_THREAD_ID = 12345L;
+   private static final String TEST_THREAD_NAME = "THIS_IS_A_TEST_THREAD_123";
+   private static final String TEST_THREAD_NAME_CUT = "HREAD_123";
    private static final String TEST_DUMMY_PARAMETER_NAME
          = "DUMMY";
    private static final LogMessageInfo TEST_LOG_MESSAGE_INFO
@@ -60,7 +62,8 @@ public class LoggableImplTest
    public final void testLoggableImplLogMessageInfolongStringString ()
    {
       final LoggableImpl testObject = new LoggableImpl(null,
-            TEST_LOG_MESSAGE_INFO, TEST_THREAD_ID, TEST_INSTANCE_ID, TEST_NODE);
+            TEST_LOG_MESSAGE_INFO, TEST_THREAD_ID, TEST_THREAD_NAME,
+            TEST_INSTANCE_ID, TEST_NODE);
 
       assertEquals("Instance id getter changes value.", TEST_INSTANCE_ID,
             testObject.getInstanceId());
@@ -75,6 +78,8 @@ public class LoggableImplTest
 
       assertEquals("Thread id getter changes value.", TEST_THREAD_ID,
             testObject.getThreadId());
+      assertEquals("Thread name getter changes value.", TEST_THREAD_NAME,
+          testObject.getThreadName());
       assertEquals("Thread id parameter changes value.", new Long(
             TEST_THREAD_ID), testObject.getParameter(
             LoggableImpl.THREAD_ID_PARAMETER_NAME).get(0));
@@ -92,8 +97,8 @@ public class LoggableImplTest
    {
       final Exception testException = new Exception();
       final LoggableImpl testObject = new LoggableImpl(null,
-            TEST_LOG_MESSAGE_INFO, TEST_THREAD_ID, TEST_INSTANCE_ID,
-            TEST_NODE, testException);
+            TEST_LOG_MESSAGE_INFO, TEST_THREAD_ID, TEST_THREAD_NAME,
+            TEST_INSTANCE_ID, TEST_NODE, testException);
 
       assertEquals("Cause getter changes value.", testException,
             testObject.getCause());
@@ -104,7 +109,7 @@ public class LoggableImplTest
    {
       final LoggableImpl testObject
             = new LoggableImpl(null, TEST_LOG_MESSAGE_INFO, TEST_THREAD_ID,
-               TEST_INSTANCE_ID, TEST_NODE);
+                TEST_THREAD_NAME, TEST_INSTANCE_ID, TEST_NODE);
 
       testObject.initCause(null);
       assertEquals("Cause getter changes value. (null)", null,
@@ -116,7 +121,7 @@ public class LoggableImplTest
    {
       final LoggableImpl testObject
             = new LoggableImpl(null, TEST_LOG_MESSAGE_INFO, TEST_THREAD_ID,
-               TEST_INSTANCE_ID, TEST_NODE);
+                TEST_THREAD_NAME, TEST_INSTANCE_ID, TEST_NODE);
 
       testObject.addParameter(TEST_DUMMY_PARAMETER_NAME, "value1");
       testObject.addParameter(TEST_DUMMY_PARAMETER_NAME, "value2");
@@ -145,7 +150,7 @@ public class LoggableImplTest
    {
       final LoggableImpl testObject
             = new LoggableImpl(null, TEST_LOG_MESSAGE_INFO, TEST_THREAD_ID,
-               TEST_INSTANCE_ID, TEST_NODE);
+                TEST_THREAD_NAME, TEST_INSTANCE_ID, TEST_NODE);
 
       assertEquals("Message info changed?", TEST_LOG_MESSAGE_INFO,
             testObject.getLogMessageInfo());
@@ -156,10 +161,10 @@ public class LoggableImplTest
    {
       final LoggableImpl testObject1
             = new LoggableImpl(null, TEST_LOG_MESSAGE_INFO, TEST_THREAD_ID,
-               TEST_INSTANCE_ID, TEST_NODE);
+                TEST_THREAD_NAME, TEST_INSTANCE_ID, TEST_NODE);
       final LoggableImpl testObject2
             = new LoggableImpl(null, TEST_LOG_MESSAGE_INFO, TEST_THREAD_ID,
-               TEST_INSTANCE_ID, TEST_NODE);
+                TEST_THREAD_NAME, TEST_INSTANCE_ID, TEST_NODE);
 
       assertFalse("Tracking number should never be the same.",
             testObject1.getTrackingNumber().equals(
@@ -182,7 +187,7 @@ public class LoggableImplTest
       final long before = System.currentTimeMillis();
       final LoggableImpl testObject1
             = new LoggableImpl(null, TEST_LOG_MESSAGE_INFO, TEST_THREAD_ID,
-               TEST_INSTANCE_ID, TEST_NODE);
+                TEST_THREAD_NAME, TEST_INSTANCE_ID, TEST_NODE);
       final long after = System.currentTimeMillis();
 
       assertTrue("Timestamp must be after before mark.",
@@ -196,14 +201,14 @@ public class LoggableImplTest
    {
       final LoggableImpl testObject
             = new LoggableImpl(null, TEST_LOG_MESSAGE_INFO, TEST_THREAD_ID,
-               TEST_INSTANCE_ID, TEST_NODE);
+                TEST_THREAD_NAME, TEST_INSTANCE_ID, TEST_NODE);
 
       assertEquals("Node id getter changes value.", TEST_NODE,
             testObject.getNodeId());
 
       final LoggableImpl testNullObject
             = new LoggableImpl(null, TEST_LOG_MESSAGE_INFO, TEST_THREAD_ID,
-               TEST_INSTANCE_ID, null);
+                TEST_THREAD_NAME, TEST_INSTANCE_ID, null);
 
       assertEquals("Node id getter changes value (null).", null,
             testNullObject.getNodeId());
@@ -214,7 +219,7 @@ public class LoggableImplTest
    {
       final LoggableImpl testObject
             = new LoggableImpl(null, TEST_LOG_MESSAGE_INFO, TEST_THREAD_ID,
-               TEST_INSTANCE_ID, TEST_NODE);
+                TEST_THREAD_NAME, TEST_INSTANCE_ID, TEST_NODE);
 
       assertEquals("Instance id getter changes value.", TEST_INSTANCE_ID,
             testObject.getInstanceId());
@@ -225,7 +230,7 @@ public class LoggableImplTest
    {
       final LoggableImpl testObject
             = new LoggableImpl(null, TEST_LOG_MESSAGE_INFO, TEST_THREAD_ID,
-               TEST_INSTANCE_ID, TEST_NODE);
+                TEST_THREAD_NAME, TEST_INSTANCE_ID, TEST_NODE);
 
       assertEquals("Thread id getter changes value.", TEST_THREAD_ID,
             testObject.getThreadId());
@@ -236,7 +241,7 @@ public class LoggableImplTest
    {
       final LoggableImpl testObject
             = new LoggableImpl(null, TEST_LOG_MESSAGE_INFO, TEST_THREAD_ID,
-               TEST_INSTANCE_ID, TEST_NODE);
+                TEST_THREAD_NAME, TEST_INSTANCE_ID, TEST_NODE);
       final Exception testException = new Exception();
 
       testObject.initCause(testException);
@@ -254,7 +259,7 @@ public class LoggableImplTest
    {
       final LoggableImpl testObject
             = new LoggableImpl(null, TEST_LOG_MESSAGE_INFO, TEST_THREAD_ID,
-               TEST_INSTANCE_ID, TEST_NODE);
+                TEST_THREAD_NAME, TEST_INSTANCE_ID, TEST_NODE);
 
       testObject.log(); // should not throw a exception...
    }
@@ -264,7 +269,7 @@ public class LoggableImplTest
    {
       final LoggableImpl testObject
             = new LoggableImpl(null, TEST_LOG_MESSAGE_INFO, TEST_THREAD_ID,
-               TEST_INSTANCE_ID, TEST_NODE);
+                TEST_THREAD_NAME, TEST_INSTANCE_ID, TEST_NODE);
 
       testObject.addParameter(TEST_DUMMY_PARAMETER_NAME, "value");
 

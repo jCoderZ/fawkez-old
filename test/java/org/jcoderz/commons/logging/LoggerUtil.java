@@ -122,8 +122,8 @@ public final class LoggerUtil
             item.getBusinessImpact(),
             loggable.getLogMessageInfo().getBusinessImpact());
       Assert.assertEquals("Category must match",
-            item.getCategory(),
-            loggable.getLogMessageInfo().getCategory());
+            item.getThreadName(),
+            loggable.getThreadName());
       Assert.assertEquals("Instance ID must match",
             item.getInstanceId(), loggable.getInstanceId());
       Assert.assertEquals("Log level must match",

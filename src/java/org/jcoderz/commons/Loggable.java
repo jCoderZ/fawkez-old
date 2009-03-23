@@ -150,6 +150,15 @@ public interface Loggable
    long getThreadId ();
 
    /**
+    * Returns the thread name as it was valid at the time of
+    * creation of this <code>Loggable</code>.
+    * @return the thread name as it was valid at the time of
+    * creation of this <code>Loggable</code>.
+    * @see Thread#getName()
+    */
+   String getThreadName ();
+
+   /**
     * Returns the cause of this throwable or <code>null</code> if the
     * cause is nonexistent or unknown.  (The cause is the throwable
     * that caused this throwable to get thrown.)

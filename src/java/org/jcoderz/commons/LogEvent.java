@@ -175,6 +175,12 @@ public class LogEvent
       return mLoggable.getSourceMethod();
    }
 
+   /** {@inheritDoc} */
+   public String getThreadName ()
+   {
+       return mLoggable.getThreadName();
+   }
+
    LoggableImpl getExceptionImpl ()
    {
       return mLoggable;

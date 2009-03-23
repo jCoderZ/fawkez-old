@@ -377,4 +377,5 @@ public class LogFileEntry
    {
       mRootEntry.mEntryCursor = entry;
    }
+
 }

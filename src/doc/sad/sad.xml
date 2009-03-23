@@ -37,8 +37,8 @@
       </overview>
 
       <goals>
-         <para>Provide base concepts and common implementation for 
-			Java projects.</para>
+         <para>Provide base concepts and common implementation for
+      Java projects.</para>
       </goals>
 
       <constraints>
@@ -102,6 +102,18 @@
       </component>
    </components>
 
+  <chapter>
+    <title>Errorcodes for
+              FawkeZ</title>
+    <para>All the errorcodes listed below belong to the
+              appication FawkeZ.
+            </para>
+      <include href="build/errorcodes/FWK-RTE-errorcodes.xml"/>
+      <include href="build/errorcodes/FWK-CMN-errorcodes.xml"/>
+      <include href="build/errorcodes/FWK-CON-errorcodes.xml"/>
+      <include href="build/errorcodes/FWK-CFG-errorcodes.xml"/>
+      <include href="build/errorcodes/FWK-TST-errorcodes.xml"/>
+    </chapter>
    <include href="src/doc/sad/appendix.xml"/>
 
 </sad>

@@ -57,6 +57,7 @@
 </xsl:template>
 
 <xsl:template match="apidoc">
+  <!-- FIXME: path should not be that restrictive! -->
    <xsl:variable name="doc" select="document(concat($basedir, '/build/doc/sad/apidoc/', @name, '.xml'))"/>
    <xsl:apply-templates select="$doc/section/section"/>
 </xsl:template>

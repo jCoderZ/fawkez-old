@@ -79,7 +79,7 @@ extends TestCase
         getCauseDetectionTestHelper(
                 javax.resource.spi.UnavailableException.class,
                 "getLinkedException");
-        getCauseDetectionTestHelper(JaxenException.class, "getRootCause");
+        getCauseDetectionTestHelper(JaxenException.class, "getCause");
     }
 
     private void getCauseDetectionTestHelper (Class ex, String methodName)

@@ -57,6 +57,7 @@ import org.apache.tools.ant.types.FileSet;
 import org.apache.tools.ant.types.Path;
 import org.jcoderz.commons.util.Constants;
 import org.jcoderz.commons.util.IoUtil;
+import org.jcoderz.commons.util.StringUtil;
 
 
 /**
@@ -470,7 +471,7 @@ public class XtremeDocs
     private boolean isOutputEnabled (String format)
     {
         final boolean result;
-        if (mFormat == null || mFormat.equals("")
+        if (StringUtil.isEmptyOrNull(mFormat)
             || mFormat.equals(FORMAT_ALL) || mFormat.equals(format))
         {
             result = true;
@@ -537,7 +538,8 @@ public class XtremeDocs
                     .stripFileExtension(AntTaskUtil
                         .stripFileExtension(docbookFile.getName())));
                 renderDocBook(docbookFile, passOneFile);
-                log("Will render file: " + docbookFile.getName(), Project.MSG_VERBOSE);
+                log("Will render file: " + docbookFile.getName(), 
+                    Project.MSG_VERBOSE);
             }
         }
         else
@@ -609,10 +611,11 @@ public class XtremeDocs
                     return "usecase_diagrams.xsl";
                 }
 
-                void setAdditionalTransformerParameters (Transformer transformer)
+                void setAdditionalTransformerParameters (
+                    Transformer transformer)
                 {
-                    transformer.setParameter("basedir", getProject().getBaseDir()
-                        .toString());
+                    transformer.setParameter(
+                        "basedir", getProject().getBaseDir().toString());
                     transformer.setParameter("imagedir", imageDir.toString());
                 }
             };
@@ -620,7 +623,8 @@ public class XtremeDocs
             task.setTaskName("diagrams");
             task.setIn(filePassOne);
             task.setForce(true); // FIXME
-            final File outFile = new File(mOutDir, "use-case-diagrams" + ".tmp");
+            final File outFile 
+                = new File(mOutDir, "use-case-diagrams" + ".tmp");
             task.setOut(outFile);
             task.setFailonerror(mFailOnError);
             task.setDestdir(outFile.getParentFile());
@@ -628,7 +632,8 @@ public class XtremeDocs
         }
     }
     
-    private void generateKeyPerformanceDiagrams (File filePassOne, final File imageDir)
+    private void generateKeyPerformanceDiagrams (
+        File filePassOne, final File imageDir)
     {
         if (isOutputEnabled(FORMAT_PDF) || isOutputEnabled(FORMAT_HTML))
         {
@@ -639,7 +644,8 @@ public class XtremeDocs
                     return "key-performance-diagrams.xsl";
                 }
 
-                void setAdditionalTransformerParameters (Transformer transformer)
+                void setAdditionalTransformerParameters (
+                    Transformer transformer)
                 {
                     setXdocTransformerParams(transformer);
                     transformer.setParameter("imagedir", imageDir.toString());
@@ -649,7 +655,8 @@ public class XtremeDocs
             task.setTaskName("diagrams");
             task.setIn(filePassOne);
             task.setForce(true); // FIXME
-            final File outFile = new File(mOutDir, "key-performance-diagrams" + ".tmp");
+            final File outFile 
+                = new File(mOutDir, "key-performance-diagrams" + ".tmp");
             task.setOut(outFile);
             task.setFailonerror(mFailOnError);
             task.setDestdir(outFile.getParentFile());
@@ -700,12 +707,18 @@ public class XtremeDocs
             void setAdditionalTransformerParameters (Transformer transformer)
             {
                 transformer.setParameter("targetdir", targetdir);
-                transformer.setParameter("package-prefix", mHibernateInfoData.getPackagePrefix());
-                transformer.setParameter("package-suffix", mHibernateInfoData.getPackageSuffix());
-                transformer.setParameter("tablename-prefix", mHibernateInfoData.getTableNamePrefix());
-                transformer.setParameter("tablename-suffix", mHibernateInfoData.getTableNameSuffix());
-                transformer.setParameter("foreign-key-prefix", mHibernateInfoData.getForeignKeyPrefix());
-                transformer.setParameter("foreign-key-suffix", mHibernateInfoData.getForeignKeySuffix());
+                transformer.setParameter("package-prefix", 
+                    mHibernateInfoData.getPackagePrefix());
+                transformer.setParameter("package-suffix", 
+                    mHibernateInfoData.getPackageSuffix());
+                transformer.setParameter("tablename-prefix", 
+                    mHibernateInfoData.getTableNamePrefix());
+                transformer.setParameter("tablename-suffix", 
+                    mHibernateInfoData.getTableNameSuffix());
+                transformer.setParameter("foreign-key-prefix", 
+                    mHibernateInfoData.getForeignKeyPrefix());
+                transformer.setParameter("foreign-key-suffix", 
+                    mHibernateInfoData.getForeignKeySuffix());
             }
         };
         task.setProject(getProject());
@@ -735,7 +748,8 @@ public class XtremeDocs
             void setAdditionalTransformerParameters (Transformer transformer)
             {
                 transformer.setParameter("targetdir", targetdir);
-                transformer.setParameter("session-factory", mHibernateInfoData.getSessionFactory());
+                transformer.setParameter("session-factory", 
+                    mHibernateInfoData.getSessionFactory());
             }
         };
         task.setProject(getProject());
@@ -1020,7 +1034,8 @@ public class XtremeDocs
      */
     public static class HibernateInfoData
     {
-        private static final String DEFAULT_PACKAGE_PREFIX = "org.jcoderz.hibernate";
+        private static final String DEFAULT_PACKAGE_PREFIX 
+            = "org.jcoderz.hibernate";
         private static final String DEFAULT_PACKAGE_SUFFIX = "";
 
         private static final String DEFAULT_TABLE_NAME_PREFIX = "JC_";
@@ -1029,7 +1044,8 @@ public class XtremeDocs
         private static final String DEFAULT_FOREIGN_KEY_PREFIX = "FK_";
         private static final String DEFAULT_FOREIGN_KEY_SUFFIX = "";
 
-        private static final String DEFAULT_HIBERNATE_SESSION_FACTORY = "Default";
+        private static final String DEFAULT_HIBERNATE_SESSION_FACTORY 
+            = "Default";
 
         /** Package prefix. */
         private String mPackagePrefix = DEFAULT_PACKAGE_PREFIX;
@@ -1086,11 +1102,11 @@ public class XtremeDocs
         /**
          * Sets the package prefix.
          *
-         * @param mPackagePrefix the new package prefix
+         * @param packagePrefix the new package prefix
          */
-        public void setPackagePrefix (String mPackagePrefix)
+        public void setPackagePrefix (String packagePrefix)
         {
-            this.mPackagePrefix = mPackagePrefix;
+            mPackagePrefix = packagePrefix;
         }
 
         /**
@@ -1106,11 +1122,11 @@ public class XtremeDocs
         /**
          * Sets the package suffix.
          *
-         * @param mPackageSuffix the new package suffix
+         * @param packageSuffix the new package suffix
          */
-        public void setPackageSuffix (String mPackageSuffix)
+        public void setPackageSuffix (String packageSuffix)
         {
-            this.mPackageSuffix = mPackageSuffix;
+            mPackageSuffix = packageSuffix;
         }
 
         /**

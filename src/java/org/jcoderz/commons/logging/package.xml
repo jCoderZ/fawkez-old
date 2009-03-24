@@ -3,23 +3,23 @@
 <section>
    <title>Logging Formatter</title>
    <p>This section provides a comprehensive architectural overview
-   of the FawkeZ LogFormatter, and how it could be integrated 
-   into a Java Application environment. It describes the format of 
+   of the FawkeZ LogFormatter, and how it could be integrated
+   into a Java Application environment. It describes the format of
    how log messages are presented and how this fits into CA Unicenter
    requirements and gives an overview of related tools.</p>
-   
+
    <section>
       <title>Integration into The Java Logging API</title>
-      <p>A Logger uses a Handler for publishing a LogRecord. 
-      The LogRecord encapsulates all kinds of information, 
-      the location where it was logged, the message text, 
+      <p>A Logger uses a Handler for publishing a LogRecord.
+      The LogRecord encapsulates all kinds of information,
+      the location where it was logged, the message text,
       parameters for the message, thread id, etc.</p>
-      
-      <p>The Handler uses a Formatter for converting all this 
-      information into a human readable string. The FawkeZ 
-      LogFormatter is an implementation of such a Formatter. 
-      The diagram below sketches an overview of this collaboration. 
-      For further information see the API documentation of the Java 
+
+      <p>The Handler uses a Formatter for converting all this
+      information into a human readable string. The FawkeZ
+      LogFormatter is an implementation of such a Formatter.
+      The diagram below sketches an overview of this collaboration.
+      For further information see the API documentation of the Java
       SDK classes in the <classname>java.util.logging package.</classname></p>
 
       <figure>
@@ -27,24 +27,24 @@
          <img src="images/logging-collaboration.svg"/>
       </figure>
    </section>
-   
+
    <section>
       <title>Log format</title>
-      <p>This chapter specifies the log format and lists significant 
+      <p>This chapter specifies the log format and lists significant
       goals of this format.</p>
 
       <section>
          <title>Goals and Constraints</title>
          <p>The Log Format is based upon the following goals:
             <ul>
-               <li>Text based format to allow viewing the log file 
+               <li>Text based format to allow viewing the log file
                without special tools.</li>
-               <li>Allow usage of Unix standard tools for filtering 
-               messages out of log files like <classname>grep</classname> and 
+               <li>Allow usage of Unix standard tools for filtering
+               messages out of log files like <classname>grep</classname> and
                <classname>tail</classname>.</li>
                <li>Meet requirements of CA Unicenter.</li>
                <li>Put as much information as possible into the log file</li>
-               <li>Present the data human readable even without having 
+               <li>Present the data human readable even without having
                to use any tool.</li>
             </ul>
          </p>
@@ -52,77 +52,85 @@
 
       <section>
          <title>Overview</title>
-         <p>In general, a <classname>LogRecord</classname> is split into 
-         several lines of text containing line specific information. 
-         The line starts with a character denoting the type of the 
-         current line. The output is slightly different between 
+         <p>In general, a <classname>LogRecord</classname> is split into
+         several lines of text containing line specific information.
+         The line starts with a character denoting the type of the
+         current line. The output is slightly different between
          Trace Logs and Message Logs.
-         In case of Message Logs the output contains always the stack 
+         In case of Message Logs the output contains always the stack
          trace to enable thorough analysis of the log file.</p>
       </section>
-      
+
       <section>
          <title>Log fields</title>
-         <p>The following presents the fields being logged and the 
-         format used for logging the appropriate field. 
-         Log Lines are composed of these fields, in general with 
+         <p>The following presents the fields being logged and the
+         format used for logging the appropriate field.
+         Log Lines are composed of these fields, in general with
          blanks as delimiters.</p>
-         
+
          <informaltable frame='none'>
             <tgroup cols='2' align='left' colsep='0' rowsep='0'>
             <tbody>
             <row><entry>Log line type</entry><entry>A single character that
                defines the type of the current log line.</entry></row>
             <row>
-               <entry>Timestamp</entry><entry>Gives the time in 
-               UTC in the Format 
+               <entry>Timestamp</entry><entry>Gives the time in
+               UTC in the Format
                <classname>yyyy-MM-dd'T'HH:mm:ss.SSS'Z'</classname>, for example
                <classname>2005-05-19T11:35:06.547Z</classname></entry></row>
             <row>
-               <entry>Node Id</entry><entry>Fix length of 15 chars, 
+               <entry>Node Id</entry><entry>Fix length of 15 chars,
                left padded with blanks.</entry></row>
-            <row><entry>Instance Id</entry><entry>Fix length of 8 chars, 
+            <row><entry>Instance Id</entry><entry>Fix length of 8 chars,
                right padded with blanks.</entry></row>
-            <row><entry>Thread Id</entry><entry>Fix length of 5, 
+            <row><entry>Thread Id</entry><entry>Fix length of 5,
                left padded with blanks.</entry></row>
-            <row><entry>Level</entry><entry>Fix length 8, 
+            <row><entry>Level</entry><entry>Fix length 8,
                right padded with blanks</entry></row>
-            <row><entry>Symbol Id</entry><entry>symbolic id of the message, 
-               in general hex string, fix length 8, left padded 
+            <row><entry>Symbol Id</entry><entry>symbolic id of the message,
+               in general hex string, fix length 8, left padded
                with blanks</entry></row>
-            <row><entry>BusinessImpact</entry><entry>One of Critical, 
-               Major, Middle, Minor, None, Undefined. 
+            <row><entry>BusinessImpact</entry><entry>One of Critical,
+               Major, Middle, Minor, None, Undefined.
                Fix length 9, right padded with blanks</entry></row>
-            <row><entry>Category</entry><entry>One of Audit, Business, 
-               Flow, Security, Technical, Undefined. 
-               Fix length 9, right padded with blanks.</entry></row>
-            <row><entry>Tracking Number</entry><entry>Unique number of 
-               the log message, hex string. Fix length 8, left 
+            <row><entry>ThreadName / Category</entry><entry>This entry has been
+               changed. It was One of Audit, Business,
+               Flow, Security, Technical, Undefined.
+               And is now changed to the last 9 characters of the thread name.
+               In case of a ordinary log record the the name of the logger
+               thread is used. This might be wrong in certain setups but is
+               correct in many cases. The fawkeZ loggable records the
+               thread name of the thread that created the loggable instance
+               which is the correct thread name in all cases.
+               Fix length 9, right padded with blanks.
+            </entry></row>
+            <row><entry>Tracking Number</entry><entry>Unique number of
+               the log message, hex string. Fix length 8, left
                padded with 0.</entry></row>
-            <row><entry>Sequence Of TrackingNumbers</entry><entry>The Log 
-               format supports nesting of log messages. 
-               In some log lines the tracking numbers are logged 
-               as sequence of tracking numbers of all nested log 
-               messages, which are known when logging the line. 
-               So with every nested log message this sequence increases. 
-               It consists of elements of format Tracking Number 
-               delimited by the char sequence ‘>-‘.</entry></row>
+            <row><entry>Sequence Of TrackingNumbers</entry><entry>The Log
+               format supports nesting of log messages.
+               In some log lines the tracking numbers are logged
+               as sequence of tracking numbers of all nested log
+               messages, which are known when logging the line.
+               So with every nested log message this sequence increases.
+               It consists of elements of format Tracking Number
+               delimited by the char sequence ???>-???.</entry></row>
             </tbody>
             </tgroup>
         </informaltable>
       </section>
-      
+
       <section>
          <title>Log line types</title>
-         <p>The following presents the types of log lines, the 
-         appropriate type code and the fields the log line is composed of. 
-         The type code is the first character of the log line followed 
+         <p>The following presents the types of log lines, the
+         appropriate type code and the fields the log line is composed of.
+         The type code is the first character of the log line followed
          by a blank followed by the fields specific for the line.</p>
-         
+
          <section>
             <title>Trace line</title>
-            <p>Type code <classname>'T’</classname>. 
-            This is the first line of a trace log. It consists of 
+            <p>Type code <classname>'T???</classname>.
+            This is the first line of a trace log. It consists of
             the following fields, in this order, delimited by blanks:
             <ul>
                <li>Timestamp Format</li>
@@ -132,7 +140,7 @@
                <li>Level</li>
                <li>Symbol Id</li>
                <li>Business Impact</li>
-               <li>Category</li>
+               <li>ThreadName (was Category)</li>
                <li>Tracking Number</li>
                <li>Log Source in the format classname.methodname()</li>
                <li>Parameters as formatted list</li>
@@ -143,14 +151,14 @@
 
          <section>
             <title>Exception line</title>
-            <p>Type code <classname>‘F’</classname>. This is equal 
-            to a trace line and used if the trace log was logged 
+            <p>Type code <classname>???F???</classname>. This is equal
+            to a trace line and used if the trace log was logged
             with an exception</p>
          </section>
 
          <section>
             <title>Message line</title>
-            <p>Type code <classname>‘M’</classname>. This is logged 
+            <p>Type code <classname>???M???</classname>. This is logged
             in case of Message Logs. It consists of the following fields:
             <ul>
                <li>Timestamp Format</li>
@@ -160,35 +168,35 @@
                <li>Level</li>
                <li>Symbol Id</li>
                <li>Business Impact</li>
-               <li>Category</li>
+               <li>ThreadName (was Category)</li>
                <li>Sequence of TrackingNumbers</li>
-               <li>Formatted message text</li>            
+               <li>Formatted message text</li>
             </ul>
             </p>
          </section>
 
          <section>
             <title>Error line</title>
-            <p>Type code <classname>‘E’</classname>. 
-            This is logged in case of Message Logs if the Loggable 
-            has as cause an exception other than another instance 
+            <p>Type code <classname>???E???</classname>.
+            This is logged in case of Message Logs if the Loggable
+            has as cause an exception other than another instance
             of Loggable and has the same format as a Message Line</p>
          </section>
 
          <section>
             <title>Parameter line</title>
-            <p>Type code <classname>‘P’</classname>. 
-            This contains the parameters given in a Message log and 
+            <p>Type code <classname>???P???</classname>.
+            This contains the parameters given in a Message log and
             consists of the following fields:
                <ul>
                   <li>Thread Id</li>
                   <li>Sequence of Tracking Numbers</li>
-                  <li>Parameter Name, delimited by 
+                  <li>Parameter Name, delimited by
                      <classname>": \t"</classname> from the next field</li>
                   <li>List of parameter values in the format</li>
-                  <li><classname>[value1,value2,?]</classname> with 
-                     all <classname>','</classname> and 
-                     <classname>']'</classname> chars in the 
+                  <li><classname>[value1,value2,?]</classname> with
+                     all <classname>','</classname> and
+                     <classname>']'</classname> chars in the
                      values escaped.</li>
                </ul>
             </p>
@@ -196,60 +204,60 @@
 
          <section>
             <title>Nested line</title>
-            <p>Type code <classname>‘N’</classname>. 
-            A line of this type is logged when there is a cause 
+            <p>Type code <classname>???N???</classname>.
+            A line of this type is logged when there is a cause
             for a log message. It consists of the following fields:
                <ul>
                   <li>Thread Id</li>
                   <li>Sequence of Tracking Numbers</li>
                   <li>"Caused by: "</li>
-                  <li>One of  Exception text in case the cause is 
-                     not a Loggable or Message symbol in case 
-                     the cause is a Loggable</li>               
+                  <li>One of  Exception text in case the cause is
+                     not a Loggable or Message symbol in case
+                     the cause is a Loggable</li>
                </ul>
             </p>
          </section>
 
          <section>
             <title>Stack trace line</title>
-            <p>Type code <classname>‘S’</classname>. 
-            This type of line is used when the stack trace of 
-            <classname>Loggables</classname> or 
-            <classname>Throwables</classname> is logged. 
+            <p>Type code <classname>???S???</classname>.
+            This type of line is used when the stack trace of
+            <classname>Loggables</classname> or
+            <classname>Throwables</classname> is logged.
             It consists of the fields:
                <ul>
                   <li>Thread Id</li>
                   <li>Sequence of Tracking Numbers</li>
                   <li>One of "Caused by: " followed by exception message or
                      "  at " followed by classname.methodname</li>
-                  <li><classname>“…”</classname> followed by number 
-                     followed by <classname>“ more”</classname></li>
+                  <li><classname>?????????</classname> followed by number
+                     followed by <classname>??? more???</classname></li>
                </ul>
             </p>
          </section>
       </section>
-      
-      <section> 
+
+      <section>
          <title>Composition of log lines</title>
-         
+
          <p>This section describes how the LogLines are composed for a formatted
          LogRecord. There are some slight differences between TraceLogs and
          MessageLogs.</p>
-      
+
          <section>
             <title>Trace log composition</title>
-            
+
             <p>In case of a trace log we have the following composition of log
-            lines: 
-            
-            Either a single line of log line type 'T' 
+            lines:
+
+            Either a single line of log line type 'T'
                <pre>
 T 2005-08-28T10:12:58.520Z     10.64.4.103 P6c7e483c     10 INFO     TRA [...]</pre>
-               
+
             or a single line of log line type 'F' followed by the log line
             type 'N' for every nested throwable and additional lines of the
             log line type 'S'.
-            
+
                <pre>
 F 2005-08-28T10:12:57.655Z     10.64.4.103 P6c7e483c     10 SEVERE   TRA [...]
 N    10 00000002 Caused by: java.lang.Exception: This is a top level tes [...]
@@ -257,22 +265,22 @@ S    10 00000002 java.lang.Exception: This is a top level test exception [...]
 S    10 00000002   at org.jcoderz.commons.LogFormatterOutputTest.testLog [...]
 [...]
 S    10 00000002   at org.apache.tools.ant.taskdefs.optional.junit.JUnit [...]</pre>
-            </p>            
+            </p>
          </section>
-         
+
          <section>
             <title>Message Log Composition</title>
-            
+
             <p>In case of a message log we have the following composition of log
             lines:
-              
+
             A single line of either the log line type 'E' or 'M' followed by
-            at least three lines <footnote><p>The log source line 
-            "classname.method(line)", the message symbol and solution text is 
+            at least three lines <footnote><p>The log source line
+            "classname.method(line)", the message symbol and solution text is
             always logged as log line type 'P' (parameters)</p></footnote>
-            with the log line type 'P'. 
-            After all the nested elements are logged, log lines of 
-            type ‘S’ for the top level and every nested element.
+            with the log line type 'P'.
+            After all the nested elements are logged, log lines of
+            type ???S??? for the top level and every nested element.
 
                <pre>
 M 2005-08-28T10:12:57.367Z     10.64.4.103 P6c7e483c     10 INFO     200 [...]
@@ -280,8 +288,8 @@ P    10 e15f4df4 _SYMBOL_:    [FWK_TST_TEST_MESSAGE]                     [...]
 P    10 e15f4df4 _SOLUTION_:  [This is the solution of the test message. [...]
 P    10 e15f4df4 _LOGGED_AT_:    [org.jcoderz.commons.LogFormatterOutput [...]
 P    10 e15f4df4 NOW:   [Sun Aug 28 12:12:57 CEST 2005]
-P    10 e15f4df4 FOO:   [foo]                          
-S    10 e15f4df4 FWK_TST_TEST_MESSAGE                  
+P    10 e15f4df4 FOO:   [foo]
+S    10 e15f4df4 FWK_TST_TEST_MESSAGE
 S    10 e15f4df4   at org.jcoderz.commons.TstLogMessage$TestMessage.log( [...]
 [...]
 S    10 e15f4df4   at org.apache.tools.ant.taskdefs.optional.junit.JUnit [...]</pre>
@@ -317,24 +325,24 @@ S    10 0000051e>-c2472cd8 FWK_RTE_ARGUMENT_MALFORMED
 S    10 0000051e>-c2472cd8   at org.jcoderz.commons.types.FooToken       [...]
 [...]
 S    10 0000051e>-c2472cd8   at org.apache.tools.ant.taskdefs.optional.j [...]</pre>
-            </p>            
+            </p>
          </section>
       </section>
    </section>
    <section>
       <title>Constraints and Restrictions</title>
-      
+
       <section>
          <title>White space Normalization</title>
-         
+
          <p>The log format depends heavily on the log line type code at the
          start of the log line and that it contains all the fields belonging to
          the specific line. Therefore it is not possible to log messages, which
          contains line separators. So the LogFormatter normalizes all white
-         space in the following way: 
+         space in the following way:
             <ul>
-               <li>The blank char ‘\u0020’ is left untouched.</li>
-               <li>All other white space characters are compressed to 
+               <li>The blank char ???\u0020??? is left untouched.</li>
+               <li>All other white space characters are compressed to
                one blank char.</li>
             </ul>
          </p>
@@ -345,30 +353,30 @@ S    10 0000051e>-c2472cd8   at org.apache.tools.ant.taskdefs.optional.j [...]</
          <p>A parameter name must not include white space.</p>
       </section>
    </section>
-   
+
    <section>
       <title>Log Formatter</title>
-      
+
       <section>
          <title>Overview</title>
-         
+
          <p>The <classname>LogFormatter</classname> can logically be divided
          into three main layers. The <classname>LogFormatter</classname> class
          itself acts as line composer, that is it takes the information from a
          <classname>LogRecord</classname> and decomposes it into several line
          types. For each type of line it uses a specialized line formatter,
          which just creates one or several lines of the corresponding lines. So
-         for example the formatter for line type ‘N’ creates one line for each
-         supplied nested element, the formatter for line type ‘S’ formats the
+         for example the formatter for line type ???N??? creates one line for each
+         supplied nested element, the formatter for line type ???S??? formats the
          stack trace of one element in one go, produces therefore several lines.
          A line formatter itself uses field formatters for creating a log line.
          Both the line and field formatters could be used as parsers as well
          capable of parsing just the information they have been formatted.</p>
-     </section>    
+     </section>
 
       <section>
          <title>Implementation View</title>
-         
+
          <p>This section provides a view on the most important classes
          participating in the functionality of the LogFormatter. There is the
          LogFormatter itself, a class within the package
@@ -379,8 +387,8 @@ S    10 0000051e>-c2472cd8   at org.apache.tools.ant.taskdefs.optional.j [...]</
          such implementation uses implementations of
          <classname>java.text.Format</classname> as formatter for a field of the
          log line.</p>
-         
-         
+
+
          <diagram type="class" name="logformat">
             <class name="org.jcoderz.commons.LogFormatter"/>
             <class name="org.jcoderz.commons.logging.LogLineFormat"/>
@@ -429,26 +437,26 @@ S    10 0000051e>-c2472cd8   at org.apache.tools.ant.taskdefs.optional.j [...]</
             </description>
          </diagram>
       </section>
-            
+
       <section>
          <title>Deployment View</title>
-         
-         <p>This Deployment View shows the requirements for using the FawkeZ 
+
+         <p>This Deployment View shows the requirements for using the FawkeZ
          LogFormatter.</p>
-         
+
          <section>
             <title>Classpath</title>
-            
+
             <p>All the classes required for using the LogFormatter are bundled
             in a single jar file named common-logging.jar. This jar file must be
             included in the classpath of any Java application using the
             LogFormatter. In the case of a J2EE application the jar file must be
             on the classpath of the J2EE server application.</p>
          </section>
-         
+
          <section>
             <title>Enabling the LogFormatter</title>
-            
+
             <p>The Java Logging API is configured with means of a properties
             file or a configuration class. In this section only the properties
             file is considered. For more information see the API documentation
@@ -458,30 +466,30 @@ S    10 0000051e>-c2472cd8   at org.apache.tools.ant.taskdefs.optional.j [...]</
             specific to the handler how it is configured to use a certain
             Formatter. The following is an example how it is set for the
             FileHandler within the logging properties file.
-            
+
             <pre>
 java.util.logging.FileHandler.formatter = org.jcoderz.commons.LogFormatter</pre>
             </p>
-            
+
          </section>
       </section>
-      
+
       <section>
          <title>API Documentation</title>
-         
+
             <apidoc name="logformatterapi">
                <class name="org.jcoderz.commons.LogFormatter"/>
                <class name="org.jcoderz.commons.logging.LogLineFormat"/>
             </apidoc>
       </section>
    </section>
-   
+
    <section>
       <title>LogViewer</title>
-      
+
       <p>
       </p>
-      
+
       <refentry id="LogViewer">
          <refmeta>
             <refentrytitle>LogViewer</refentrytitle>
@@ -501,23 +509,23 @@ java.util.logging.FileHandler.formatter = org.jcoderz.commons.LogFormatter</pre>
 
          <refsect1>
          <title>Description</title>
-         <para>The LogViewer is a stand-alone Java application in 
+         <para>The LogViewer is a stand-alone Java application in
          the package <classname>org.jcoderz.commons.logging</classname>.
          All required internal classes are include within the fawkez.jar file.
          </para>
 
          <para>
-         The LogViewer uses external classes for parsing command lines 
+         The LogViewer uses external classes for parsing command lines
          options and for object pooling.
          The required packages are the following:
          <itemizedlist>
             <listitem>
-               <para>org.apache.commons.cli, which is supplied by a 
+               <para>org.apache.commons.cli, which is supplied by a
                <classname>commons-cli-nn.jar</classname> file with <token>nn</token>
                denoting the version (currently 1.0).</para>
             </listitem>
             <listitem>
-               <para>org.apache.commons.pool, which is supplied by a 
+               <para>org.apache.commons.pool, which is supplied by a
                <classname>commons-pool-nn.jar</classname> file with <token>nn</token>
                denoting the version (currently 1.2).
                </para>
@@ -526,20 +534,20 @@ java.util.logging.FileHandler.formatter = org.jcoderz.commons.LogFormatter</pre>
 
          If the log viewer is used for converting a log file into an xml file, then jaxb runtime classes a required additionally.
          </para>
-         
+
          <p>The following commandline demonstrates how the LogViewer can
-         be started in a shell (bash). The Java Virtual Machine 
+         be started in a shell (bash). The Java Virtual Machine
          (<classname>java</classname>) must be on the <classname>PATH</classname>.
-         
-         <pre>   
+
+         <pre>
 $ java -classpath fawwkez.jar:commons-cli-1.0.jar:commons-pool-1.2.jar \
    org.jcoderz.commons.logging.LogViewer \
    --standard \
    --logDir /path/to/log \
    --logFile application.log0
-         </pre>   
+         </pre>
          </p>
-         
+
          </refsect1>
 
          <refsect1>
@@ -553,13 +561,13 @@ $ java -classpath fawwkez.jar:commons-cli-1.0.jar:commons-pool-1.2.jar \
                      <parameter class='command'>{[dateFrom], [dateTo]}</parameter>
                   </term>
                   <listitem>
-                     <para>display date and search for given date/timestamp range. 
-                     The following date formats are supported: 
-                     <token>&lt;<varname>yyyy-MM-dd</varname> 
-                     | <varname>yyyy-MM-dd'T'HH:mm:ss'Z'</varname> 
+                     <para>display date and search for given date/timestamp range.
+                     The following date formats are supported:
+                     <token>&lt;<varname>yyyy-MM-dd</varname>
+                     | <varname>yyyy-MM-dd'T'HH:mm:ss'Z'</varname>
                      | <varname>yyyy-MM-dd'T'HH:mm:ss.SSS'Z'</varname>&gt;.
                      </token>
-      		         One of both dates may be omitted.</para>
+                   One of both dates may be omitted.</para>
                   </listitem>
                </varlistentry>
             </variablelist>
@@ -571,10 +579,10 @@ $ java -classpath fawwkez.jar:commons-cli-1.0.jar:commons-pool-1.2.jar \
                   <term><option>--standard</option>
                   </term>
                   <listitem>
-                     <para>set standard mode, same as <option>-t</option> 
-                     <option>-i</option> 
-                     <option>-c</option> 
-                     <option>-L</option> 
+                     <para>set standard mode, same as <option>-t</option>
+                     <option>-i</option>
+                     <option>-c</option>
+                     <option>-L</option>
                      <option>-stack 1</option></para>
                   </listitem>
                </varlistentry>
@@ -602,7 +610,7 @@ $ java -classpath fawwkez.jar:commons-cli-1.0.jar:commons-pool-1.2.jar \
                      <parameter class='command'>{FILE}</parameter>
                   </term>
                   <listitem>
-                     <para>open file <filename>FILE</filename> instead 
+                     <para>open file <filename>FILE</filename> instead
                      of <filename>log.out</filename>.</para>
                   </listitem>
                </varlistentry>
@@ -640,7 +648,7 @@ $ java -classpath fawwkez.jar:commons-cli-1.0.jar:commons-pool-1.2.jar \
                   <term><option>-b</option></term>
                   <term><option>--batch </option></term>
                   <listitem>
-                     <para>batch mode, terminate if the end of the log 
+                     <para>batch mode, terminate if the end of the log
                      file is reached.</para>
                   </listitem>
                </varlistentry>
@@ -667,7 +675,7 @@ $ java -classpath fawwkez.jar:commons-cli-1.0.jar:commons-pool-1.2.jar \
                      <parameter><arg choice="req" rep="repeat">IMPACT</arg></parameter>
                   </term>
                   <listitem>
-                     <para>display business impact and filter for 
+                     <para>display business impact and filter for
                      given business impact ids</para>
                   </listitem>
                </varlistentry>
@@ -681,7 +689,7 @@ $ java -classpath fawwkez.jar:commons-cli-1.0.jar:commons-pool-1.2.jar \
                      <parameter class='command'>{FILE}</parameter>
                   </term>
                   <listitem>
-                     <para>send output to <filename>FILE</filename> instead of 
+                     <para>send output to <filename>FILE</filename> instead of
                      <filename>stdout</filename></para>
                   </listitem>
                </varlistentry>
@@ -694,8 +702,8 @@ $ java -classpath fawwkez.jar:commons-cli-1.0.jar:commons-pool-1.2.jar \
                      <parameter>{0|1|2}</parameter>
                   </term>
                   <listitem>
-                     <para>display stack trace details; 
-                     <literal>0</literal>: no stacktrace; 
+                     <para>display stack trace details;
+                     <literal>0</literal>: no stacktrace;
                      <literal>1</literal>: only for exceptions (default)</para>
                   </listitem>
                </varlistentry>
@@ -725,7 +733,7 @@ $ java -classpath fawwkez.jar:commons-cli-1.0.jar:commons-pool-1.2.jar \
          </refsynopsisdiv>
       </refentry>
    </section>
-   
+
 </section>
 
 </body>

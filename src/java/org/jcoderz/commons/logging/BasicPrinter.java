@@ -239,6 +239,7 @@ public class BasicPrinter
       i = setLoggerLevel(i, mTraceLineData, entry);
       i = setSymbolId(i, mTraceLineData, entry);
       i = setBusinessImpact(i, mTraceLineData, entry);
+      i = setThreadName(i, mTraceLineData, entry);
       i = setCategory(i, mTraceLineData, entry);
       i = setTrackingNumber(i, mTraceLineData, trackingIds);
       i = setSource(i, mTraceLineData, entry);
@@ -261,6 +262,7 @@ public class BasicPrinter
       i = setLoggerLevel(i, mLogMessageData, entry);
       i = setSymbolId(i, mLogMessageData, entry);
       i = setBusinessImpact(i, mLogMessageData, entry);
+      i = setThreadName(i, mTraceLineData, entry);
       i = setCategory(i, mLogMessageData, entry);
       i = setTrackingNumber(i, mLogMessageData, trackingIds);
       i = setMessage(i, mLogMessageData, entry);
@@ -502,6 +504,19 @@ public class BasicPrinter
       }
       return rc;
    }
+
+   private int setThreadName (
+       final int i,
+       final Object[] data,
+       final LogItem entry)
+ {
+    int rc = i;
+    if (getDisplayOptions().displayThreadName())
+    {
+       data[rc++] = entry.getThreadName();
+    }
+    return rc;
+ }
 
    private int setTrackingNumber (
          final int i,

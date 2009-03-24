@@ -13,6 +13,7 @@
          <xs:element name="Symbol" type="xs:string"/>
          <xs:element name="Level" type="xs:string"/>
          <xs:element name="Thread" type="xs:long"/>
+         <xs:element name="ThreadName" type="xs:string"/>
          <xs:element name="TrackingNumber" type="xs:string"/>
          <xs:element name="BusinessImpact" type="BusinessImpactEnumType"/>
          <xs:element name="Category" type="CategoryEnumType"/>

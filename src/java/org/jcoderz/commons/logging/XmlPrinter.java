@@ -709,6 +709,7 @@ public final class XmlPrinter
       logRecord.getSource().setSourceMethod(
             entry.getSourceMethod());
       logRecord.setThread(entry.getThreadId());
+      logRecord.setThreadName(entry.getThreadName());
       logRecord.setMessage(entry.getMessage());
       logRecord.setSolution(entry.getSolution());
       logRecord.setBusinessImpact(

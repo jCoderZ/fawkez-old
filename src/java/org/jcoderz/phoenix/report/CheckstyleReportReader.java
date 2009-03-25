@@ -63,7 +63,7 @@ public final class CheckstyleReportReader
    public static final String CHECKSTYLE_JAXB_CONTEXT_PATH
       = "org.jcoderz.phoenix.checkstyle.jaxb";
 
-   private static final String CLASSNAME 
+   private static final String CLASSNAME
        = CheckstyleReportReader.class.getName();
 
    private static final Logger logger = Logger.getLogger(CLASSNAME);
@@ -171,8 +171,8 @@ public final class CheckstyleReportReader
                detectFindingTypeForMessage(error.getMessage());
             if (type == null)
             {
-               item.setFindingType("checkstyle");
-               logger.log(Level.INFO, "Could not find finding type for " 
+               item.setFindingType(sourceToClass(error.getSource()));
+               logger.log(Level.INFO, "Could not find finding type for "
                    + "Checkstyle finding with message '" + error.getMessage()
                    + "'.");
             }
@@ -187,6 +187,12 @@ public final class CheckstyleReportReader
       }
 
       return ret;
+   }
+
+   private static String sourceToClass(String source)
+   {
+       final int i = source.lastIndexOf('.');
+       return source.substring(i + 1);
    }
 
 }

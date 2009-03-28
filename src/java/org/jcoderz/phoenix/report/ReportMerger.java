@@ -37,6 +37,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -168,50 +169,127 @@ public class ReportMerger
        {
            final org.jcoderz.phoenix.report.jaxb.File oldFile 
                = findFile(newFile, oldReport);
-           for(Item item:(List<Item>) newFile.getItem())
+           if (oldFile != null)
            {
-               if (oldFile == null 
-                   || (item.getSeverity().getPenalty() > 0 
-                       && findItem(item, oldFile) == null))
-               {
-                   flagAsNew(item);
-               }
+               findNewFindings(newFile, oldFile);
+           }
+           else
+           {
+               flaggAllAsNew(newFile.getItem());
            }
        }
        
        writeResult(currentReport, mOutFile);
    }
 
-    // be more smart in finding matching items... (eg if the file was edited)
-    private Item findItem (
-        Item newItem, org.jcoderz.phoenix.report.jaxb.File oldFile)
+    private void findNewFindings(org.jcoderz.phoenix.report.jaxb.File newFile,
+        org.jcoderz.phoenix.report.jaxb.File oldFile)
     {
-        Item result = null;
-        for(Item item:(List<Item>) oldFile.getItem())
+        final List<Item> newFindings 
+            = new ArrayList((List<Item>) newFile.getItem());
+        final List<Item> oldFindings 
+            = new ArrayList((List<Item>) oldFile.getItem());
+
+        filterLowSeverity(newFindings);
+        filterLowSeverity(oldFindings);
+        filterFullMatches(newFindings, oldFindings);
+        filterPartialMatches(newFindings, oldFindings);
+
+        // the rest...
+        flaggAllAsNew(newFindings);
+        for(Item item:(List<Item>) oldFindings)
         {
-            if (item.getLine() == newItem.getLine()
-                && item.getColumn() == newItem.getColumn()
-                && item.getFindingType().equals(newItem.getFindingType())
-                && item.getCounter() <= newItem.getCounter())
-            {
-                result = item;
-                break;
-            }
+            addAsOld(newFindings, item);
         }
-        return result;
+        
+    }
+
+    private void flaggAllAsNew (final List<Item> newFindings)
+    {
+        for(Item item:(List<Item>) newFindings)
+        {
+            flagAsNew(item);
+        }
+    }
+
+    private void addAsOld (List<Item> newFindings, Item item)
+    {
+        item.setSeverity(Severity.OK);
+        item.unsetNew();
+        item.setOld(true);
+        newFindings.add(item);
     }
 
 
+    private void filterFullMatches (final List<Item> newFindings,
+        final List<Item> oldFindings)
+    {
+        // Filter 100% matches:
+        final Iterator<Item> newIterator = newFindings.iterator();
+        while (newIterator.hasNext())
+        {
+            final Item newItem = newIterator.next();
+            final Iterator<Item> oldIterator = oldFindings.iterator();
+            while (oldIterator.hasNext())
+            {
+                final Item oldItem = oldIterator.next();
+                if (oldItem.getLine() == newItem.getLine()
+                    && oldItem.getColumn() == newItem.getColumn()
+                    && oldItem.getMessage().equals(newItem.getMessage())
+                    && oldItem.getFindingType().equals(newItem.getFindingType())
+                    && oldItem.getCounter() <= newItem.getCounter())
+                {
+                    newIterator.remove();
+                    oldIterator.remove();
+                    break;
+                }
+            }
+        }
+    }
+
+    private void filterPartialMatches (final List<Item> newFindings,
+        final List<Item> oldFindings)
+    {
+        // Filter matches that 'moved' within the file. 
+        // There is for sure a better algorithm possible..
+        final Iterator<Item> newIterator = newFindings.iterator();
+        while (newIterator.hasNext())
+        {
+            final Item newItem = newIterator.next();
+            final Iterator<Item> oldIterator = oldFindings.iterator();
+            while (oldIterator.hasNext())
+            {
+                final Item oldItem = oldIterator.next();
+                if (oldItem.getMessage().equals(newItem.getMessage())
+                    && oldItem.getFindingType().equals(newItem.getFindingType())
+                    && oldItem.getCounter() <= newItem.getCounter())
+                {
+                    newIterator.remove();
+                    oldIterator.remove();
+                    break;
+                }
+            }
+        }
+    }
+
+    private void filterLowSeverity (final List<Item> newFindings)
+    {
+        final Iterator<Item> i = newFindings.iterator();
+        while (i.hasNext())
+        {
+            final Item item = i.next();
+            if (item.getSeverity().getPenalty() == 0
+                || item.getSeverity() == Severity.COVERAGE)
+            {
+                i.remove();
+            }
+        }
+    }
+
     private void flagAsNew (Item item)
     {
-        final Severity oldSeverity = item.getSeverity();
-        item.setSeverity(Severity.NEW);
-        final String severityReason = item.getSeverityReason();
-        item.setSeverityReason(
-            (severityReason == null ? "" : (severityReason + " ")) 
-            + "Increased severity from '" + oldSeverity
-            + "' for new Finding.");
-            
+        item.unsetOld();
+        item.setNew(true);
     }
 
 

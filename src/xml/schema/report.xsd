@@ -54,6 +54,8 @@
    <xsd:attribute name='end-column' type='xsd:int' use='optional'/>
    <xsd:attribute name='line' type='xsd:int' use='optional'/>
    <xsd:attribute name='end-line' type='xsd:int' use='optional'/>
+   <xsd:attribute name='new' type='xsd:boolean' use='optional'/>
+   <xsd:attribute name='old' type='xsd:boolean' use='optional'/>
   </xsd:complexType>
  </xsd:element>
 

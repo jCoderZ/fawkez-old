@@ -57,8 +57,6 @@ import edu.umd.cs.findbugs.Detector;
  *
  * <p>The following severities are defined:
  * <ol>
- *    <li>{@link #NEW}</li>
- *    <li>{@link #ERROR}</li>
  *    <li>{@link #CPD}</li>
  *    <li>{@link #WARNING}</li>
  *    <li>{@link #DESIGN}</li>
@@ -172,19 +170,11 @@ public final class Severity
      */
     public static final Severity ERROR = new Severity("error", 100);
 
-    /**
-     * New findings of this build.
-     * <p>Findings of this level are new in this build and because of that
-     * rated at higher severity level in this one build.</p>
-     * <p>A severity of this level marks 10 lines as bad.</p>
-     */
-    public static final Severity NEW = new Severity("new", 100);
-    
     /** 
      * The maximum possible severity. 
-     * Is {@link #NEW}.
+     * Is {@link #ERROR}.
      */
-    public static final Severity MAX_SEVERITY = NEW;
+    public static final Severity MAX_SEVERITY = ERROR;
 
     /** The maximum possible severity as int. */
     public static final int MAX_SEVERITY_INT = MAX_SEVERITY.toInt();
@@ -200,8 +190,7 @@ public final class Severity
         Severity.DESIGN,
         Severity.WARNING,
         Severity.CPD,
-        Severity.ERROR,
-        Severity.NEW
+        Severity.ERROR
     };
 
     /** Immutable list of the severities. */

@@ -66,6 +66,7 @@ import net.sourceforge.chart2d.Object2DProperties;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 import org.jcoderz.commons.util.FileUtils;
+import org.jcoderz.commons.util.IoUtil;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -287,13 +288,11 @@ public class JcSummaryReportAntTask
             pw.println(FileSummary.calculateQuality(sum.getLoc(),
                   sum.getInfo(), sum.getWarning(), sum.getError(),
                   sum.getCoverage(), sum.getFiltered(),
-                  sum.getCodestyle(), sum.getDesign(), sum.getCpd(), 
-                  sum.getNew()));
+                  sum.getCodestyle(), sum.getDesign(), sum.getCpd()));
          }
-
          fos.flush();
-         FileUtils.safeClose(pw);
-         FileUtils.close(fos);
+         IoUtil.close(pw);
+         IoUtil.close(fos);
       }
       catch (IOException ex)
       {
@@ -445,18 +444,14 @@ public class JcSummaryReportAntTask
             attrs.getNamedItem("cpd").getNodeValue().trim());
          final int error = Integer.parseInt(
                attrs.getNamedItem("error").getNodeValue().trim());
-         // TODO...
-         final int newFindings = 0;
-         //Integer.parseInt(
-         //    attrs.getNamedItem("new").getNodeValue().trim());
          final int loc = Integer.parseInt(
                attrs.getNamedItem("loc").getNodeValue().trim());
          final int codeloc = Integer.parseInt(
                attrs.getNamedItem("codeLoc").getNodeValue().trim());
          final double quality = Double.parseDouble(
                attrs.getNamedItem("quality").getNodeValue());
-         sum = new Summary(ts, newFindings, error, warning, info, coverage, 
-             loc, codeloc, filtered, codestyle, design, cpd, quality, summaryXml);
+         sum = new Summary(ts, error, warning, info, coverage, loc, codeloc, 
+             filtered, codestyle, design, cpd, quality, summaryXml);
       }
       catch (ParserConfigurationException ex)
       {
@@ -548,8 +543,8 @@ public class JcSummaryReportAntTask
       final File summaryFile = new File(baseDir, String.valueOf(timestamp)
             + File.separator + "summary.xml");
       if (summaryFile.exists() && summaryFile.isFile())
-      {  // TODO: Care about new items
-         summary = new Summary(timestamp, 0, error, warning, info, coverage, loc,
+      {
+         summary = new Summary(timestamp, error, warning, info, coverage, loc,
             codeloc, filtered, codestyle, design, cpd,
             quality, summaryFile);
       }
@@ -1098,7 +1093,6 @@ public class JcSummaryReportAntTask
    private static final class Summary
    {
       private final long mTimestamp;
-      private final int mNew;
       private final int mError;
       private final int mFiltered;
       private final int mDesign;
@@ -1113,7 +1107,7 @@ public class JcSummaryReportAntTask
       private final double mQuality;
       private final File mSummaryXml;
 
-      public Summary (long timestamp, int newFindings, int error, 
+      public Summary (long timestamp, int error, 
           int warning, int info, int coverage, int loc, int codeloc, 
           int filtered, int codestyle, int design, int cpd, double quality)
       {
@@ -1122,7 +1116,6 @@ public class JcSummaryReportAntTask
          mDesign = design;
          mCpd = cpd;
          mTimestamp = timestamp;
-         mNew = newFindings;
          mError = error;
          mWarning = warning;
          mInfo = info;
@@ -1133,7 +1126,7 @@ public class JcSummaryReportAntTask
          mSummaryXml = null;
       }
 
-      public Summary (long timestamp, int newFindings, int error, 
+      public Summary (long timestamp, int error, 
           int warning, int info, int coverage, int loc, int codeloc, 
           int filtered, int codestyle, int design, int cpd,
           double quality, File summaryXml)
@@ -1143,7 +1136,6 @@ public class JcSummaryReportAntTask
          mDesign = design;
          mCpd = cpd;
          mTimestamp = timestamp;
-         mNew = newFindings;
          mError = error;
          mWarning = warning;
          mInfo = info;
@@ -1157,11 +1149,6 @@ public class JcSummaryReportAntTask
       public long getTimestamp ()
       {
          return mTimestamp;
-      }
-
-      public int getNew ()
-      {
-         return mNew;
       }
 
       public int getError ()
@@ -1258,7 +1245,7 @@ public class JcSummaryReportAntTask
 
       public String toString ()
       {
-         return "[" + mTimestamp + ", " + mNew + ", " + mError + ", " 
+         return "[" + mTimestamp + ", " + mError + ", " 
              + mWarning + ", " + mInfo + ", " + mCoverage + ", " + mLoc 
              + ", " + mCodeLoc + ", " + mFiltered + ", " + mCodestyle + ", "
              + mDesign + ", " + mCpd + ", " + mQuality + ", " 

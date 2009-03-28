@@ -207,12 +207,11 @@ public final class FileSummary
      * @param codestyle number of codestyle level findings.
      * @param design number of design level findings.
      * @param cpd number of cpd level findings.
-     * @param newViolations number of new level findings.
      * @return the unweighed quality score.
      */
     public static float calculateQuality (int loc, int info, int warning,
         int error, int coverage, int filtered, int codestyle, int design,
-        int cpd, int newViolations)
+        int cpd)
     {
         final int[] violations = new int[Severity.VALUES.size()];
         violations[Severity.INFO.toInt()] = info;
@@ -223,7 +222,6 @@ public final class FileSummary
         violations[Severity.CODE_STYLE.toInt()] = codestyle;
         violations[Severity.DESIGN.toInt()] = design;
         violations[Severity.CPD.toInt()] = cpd;
-        violations[Severity.NEW.toInt()] = newViolations;
         return FileSummary.calculateQuality(loc, violations);
     }
 

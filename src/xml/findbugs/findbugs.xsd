@@ -326,6 +326,7 @@
        <xsd:complexType>
          <xsd:attribute name="path" type="xsd:string" use="required" />
          <xsd:attribute name="bugCount" type="xsd:unsignedInt" use="required" />
+         <xsd:attribute name="size" type="xsd:unsignedInt" use="optional" />
          <xsd:attribute name="bugHash" type="xsd:string" use="optional" />
        </xsd:complexType>
       </xsd:element>
@@ -374,6 +375,9 @@
    <xsd:attribute name="totalMilliseconds" type="xsd:unsignedInt" use="required"/>
    <xsd:attribute name="invocations" type="xsd:unsignedInt" use="required"/>
    <xsd:attribute name="avgMicrosecondsPerInvocation" type="xsd:unsignedInt" use="required"/>
+   <xsd:attribute name="maxMicrosecondsPerInvocation" type="xsd:unsignedInt" use="optional"/>
+   <xsd:attribute name="standardDeviationMircosecondsPerInvocation" 
+    type="xsd:unsignedInt" use="optional"/>
   </xsd:complexType>
  </xsd:element>
 

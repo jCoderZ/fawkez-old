@@ -447,7 +447,7 @@ public final class FileUtils
     * Creates the given directory.
     *
     * @param dir the directory to be created.
-    * @throws IOException the directory could not be created.
+    * @throws IOException if the file could not be created.
     * @see File#mkdir()
     */
    public static void mkdir (File dir)
@@ -461,4 +461,19 @@ public final class FileUtils
          }
       }
    }
+
+   /**
+    * Creates the given file.
+    * @param newFile the file to create
+    * @throws IOException the file could not be created.
+    * @see File#createNewFile()
+    */
+    public static void createNewFile (File newFile) 
+        throws IOException
+    {
+        if (!newFile.createNewFile())
+        {
+            throw new IOException("Failed to create new File " + newFile);
+        }
+    }
 }

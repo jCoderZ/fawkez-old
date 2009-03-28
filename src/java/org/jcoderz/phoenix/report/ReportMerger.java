@@ -44,6 +44,7 @@ import java.util.logging.Logger;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
+import javax.xml.bind.PropertyException;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
@@ -55,8 +56,6 @@ import org.jcoderz.commons.util.Assert;
 import org.jcoderz.commons.util.FileUtils;
 import org.jcoderz.commons.util.IoUtil;
 import org.jcoderz.commons.util.LoggingUtils;
-import org.jcoderz.commons.util.ObjectUtil;
-import org.jcoderz.commons.util.StringUtil;
 import org.jcoderz.phoenix.report.jaxb.Item;
 import org.jcoderz.phoenix.report.jaxb.ObjectFactory;
 import org.jcoderz.phoenix.report.jaxb.Report;
@@ -80,7 +79,7 @@ public class ReportMerger
    private Level mLogLevel;
 
    /** The out file. */
-   private File mOutFile;
+   private File mOutFile = null;
 
    /** The reports. */
    private final List<File> mReports = new ArrayList<File>();
@@ -101,14 +100,6 @@ public class ReportMerger
        throws JAXBException, FileNotFoundException
    {
      logger.log(Level.FINE, "Merging jcoderz-report.xml files...");
-     // prepare JAXB
-     final JAXBContext mJaxbContext
-         = JAXBContext.newInstance("org.jcoderz.phoenix.report.jaxb",
-           this.getClass().getClassLoader());
-     final Marshaller mMarshaller = mJaxbContext.createMarshaller();
-     mMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT,
-             Boolean.TRUE);
-
      // merge the reports
      final Report mergedReport = new ObjectFactory().createReport();
      for (final File reportFile : mReports)
@@ -126,8 +117,7 @@ public class ReportMerger
            ex.printStackTrace();
         }
      }
-     // create the file
-     mMarshaller.marshal(mergedReport, new FileOutputStream(mOutFile));
+     writeResult(mergedReport, mOutFile);
    }
 
 
@@ -148,7 +138,7 @@ public class ReportMerger
 
            final File tempOutputFile 
                = new File(mOutFile.getCanonicalPath() + ".tmp");
-           tempOutputFile.createNewFile();
+           FileUtils.createNewFile(tempOutputFile);
 
            final FileOutputStream out = new FileOutputStream(tempOutputFile);
            transformer.transform(new StreamSource(mOutFile),
@@ -168,9 +158,11 @@ public class ReportMerger
    {
        logger.log(Level.FINE, "Searching for NEW findings...");
        final Report currentReport 
-           = (Report) new ObjectFactory().createUnmarshaller().unmarshal(mOutFile);
+           = (Report) new ObjectFactory().createUnmarshaller().unmarshal(
+               mOutFile);
        final Report oldReport 
-           = (Report) new ObjectFactory().createUnmarshaller().unmarshal(mOldReport);
+           = (Report) new ObjectFactory().createUnmarshaller().unmarshal(
+               mOldReport);
        for(org.jcoderz.phoenix.report.jaxb.File newFile : 
            (List<org.jcoderz.phoenix.report.jaxb.File>) currentReport.getFile())
        {
@@ -187,15 +179,7 @@ public class ReportMerger
            }
        }
        
-       final FileOutputStream out = new FileOutputStream(mOutFile);
-       try
-       {
-           new ObjectFactory().createMarshaller().marshal(currentReport, out);
-       }
-       finally
-       {
-           IoUtil.close(out);
-       }
+       writeResult(currentReport, mOutFile);
    }
 
     // be more smart in finding matching items... (eg if the file was edited)
@@ -417,7 +401,7 @@ public class ReportMerger
         mOutFile = outFile;
         if (mOutFile.isDirectory())
         {
-            mOutFile.mkdirs();
+            FileUtils.mkdirs(mOutFile);
             mOutFile = new File(mOutFile,
                 ReportNormalizer.JCODERZ_REPORT_XML).getCanonicalFile();
         }
@@ -427,4 +411,27 @@ public class ReportMerger
         }
 
     }
+
+    private void writeResult (final Report mergedReport, File outFile)
+        throws JAXBException, PropertyException, FileNotFoundException
+    {
+        // create the file
+         final JAXBContext mJaxbContext
+             = JAXBContext.newInstance("org.jcoderz.phoenix.report.jaxb",
+           this.getClass().getClassLoader());
+         final Marshaller marshaller = mJaxbContext.createMarshaller();
+         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT,
+                 Boolean.TRUE);
+         final FileOutputStream out = new FileOutputStream(outFile);
+         try
+         {
+             marshaller.marshal(mergedReport, out);
+         }
+         finally
+         {
+             IoUtil.close(out);
+         }
+    }
+    
+
 }

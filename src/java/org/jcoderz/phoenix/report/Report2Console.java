@@ -167,7 +167,12 @@ public final class Report2Console
        {
            final Severity severity = item.getSeverity();
            PrintStream out = System.out;
-           if (Severity.INFO.compareTo(severity) < 0)
+           if (Severity.FILTERED.equals(severity)
+               || Severity.OK.equals(severity))
+           {
+               continue;
+           }
+           else if (Severity.INFO.compareTo(severity) < 0)
            {
                out = System.out;
            }

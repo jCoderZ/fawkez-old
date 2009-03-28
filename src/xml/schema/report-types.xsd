@@ -27,6 +27,7 @@
          <xsd:enumeration value='warning'/>
          <xsd:enumeration value='cpd'/>
          <xsd:enumeration value='error'/>
+         <xsd:enumeration value='new'/>
       </xsd:restriction>
    </xsd:simpleType>
 

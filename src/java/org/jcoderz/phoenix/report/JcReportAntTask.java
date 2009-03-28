@@ -93,6 +93,7 @@ public class JcReportAntTask
 
    private String mName = null;
    private File mDest = null;
+   private File mOldReportFile = null;
    private String mWikiBase = null;
    private String mWebRcsBase = null;
    private String mWebRcsSuffix = null;
@@ -119,7 +120,6 @@ public class JcReportAntTask
         return mCpus;
     }
 
-
     /**
      * @param cpus the cpus to set
      */
@@ -128,15 +128,13 @@ public class JcReportAntTask
         mCpus = cpus;
     }
 
-
-/**
+    /**
      * @return the sourceEncoding
      */
     public String getEncoding ()
     {
         return mSourceEncoding.name();
     }
-
 
     /**
      * @param encoding the sourceEncoding to set
@@ -146,8 +144,7 @@ public class JcReportAntTask
         mSourceEncoding = Charset.forName(encoding);
     }
 
-
-/**
+    /**
     * Returns the working directory.
     *
     * @return the working directory.
@@ -156,7 +153,6 @@ public class JcReportAntTask
    {
       return mWorkingDir;
    }
-
 
    /**
     * Sets the maximum heap value.
@@ -222,6 +218,10 @@ public class JcReportAntTask
       mWikiBase = wikiBase;
    }
 
+   public void setOldReportsFile (String oldReportsFile)
+   {
+      mOldReportFile = new File(oldReportsFile);
+   }
 
    /**
     * Sets the stylesheet to be used for the report.
@@ -593,6 +593,10 @@ public class JcReportAntTask
       {
          final NestedFilterElement filterElement = filterIter.next();
          merger.addFilter(filterElement.getFile());
+      }
+      if (mOldReportFile != null)
+      {
+          merger.setOldFile(mOldReportFile);
       }
       merger.merge();
       merger.filter();

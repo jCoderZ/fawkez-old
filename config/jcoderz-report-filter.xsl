@@ -266,5 +266,14 @@
       </item>
    </xs:template>
 
+   <xs:template
+      match="/report/file[@classname = 'LogViewer'][@package = 'org.jcoderz.commons.logging']/
+              item[@finding-type = 'SMII_STATIC_METHOD_INSTANCE_INVOCATION']">
+      <item>
+         <xs:apply-templates select="@*"/>
+         <xs:attribute name="severity">filtered</xs:attribute>
+         <xs:attribute name="severity-reason">Intended use of return value.</xs:attribute>
+      </item>
+   </xs:template>
 
 </xs:stylesheet>

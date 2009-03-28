@@ -51,9 +51,11 @@ import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
 import org.jcoderz.commons.ArgumentMalformedException;
+import org.jcoderz.commons.util.Assert;
 import org.jcoderz.commons.util.FileUtils;
 import org.jcoderz.commons.util.IoUtil;
 import org.jcoderz.commons.util.LoggingUtils;
+import org.jcoderz.phoenix.report.jaxb.Item;
 import org.jcoderz.phoenix.report.jaxb.ObjectFactory;
 import org.jcoderz.phoenix.report.jaxb.Report;
 
@@ -83,6 +85,9 @@ public class ReportMerger
 
    /** The filters. */
    private final List<File> mFilters = new ArrayList<File>();
+
+   /** The old Report. */
+   private File mOldReport;
 
 
    /**
@@ -134,13 +139,13 @@ public class ReportMerger
        {
            logger.log(Level.FINE, "Filter: " + filterFile);
            final TransformerFactory tFactory
-           = TransformerFactory.newInstance();
+               = TransformerFactory.newInstance();
 
-           final Transformer transformer = tFactory.newTransformer(
-               new StreamSource(filterFile));
+           final Transformer transformer 
+               = tFactory.newTransformer(new StreamSource(filterFile));
 
-           final File tempOutputFile = new File(
-               mOutFile.getCanonicalPath() + ".tmp");
+           final File tempOutputFile 
+               = new File(mOutFile.getCanonicalPath() + ".tmp");
            tempOutputFile.createNewFile();
 
            final FileOutputStream out = new FileOutputStream(tempOutputFile);
@@ -152,8 +157,97 @@ public class ReportMerger
        }
    }
 
-
    /**
+    * Searches for new findings based on the old jcReport and increases the
+    * severity of such findings to NEW. 
+    */
+   public void flagNewFindings () 
+       throws JAXBException, FileNotFoundException
+   {
+       logger.log(Level.FINE, "Searching for NEW findings...");
+       final Report currentReport 
+           = (Report) new ObjectFactory().createUnmarshaller().unmarshal(mOutFile);
+       final Report oldReport 
+           = (Report) new ObjectFactory().createUnmarshaller().unmarshal(mOldReport);
+       for(org.jcoderz.phoenix.report.jaxb.File newFile : 
+           (List<org.jcoderz.phoenix.report.jaxb.File>) currentReport.getFile())
+       {
+           final org.jcoderz.phoenix.report.jaxb.File oldFile 
+               = findFile(newFile, oldReport);
+           for(Item item:(List<Item>) newFile.getItem())
+           {
+               if (findItem(item, oldFile) == null)
+               {
+                   flagAsNew(item);
+               }
+           }
+       }
+       
+       final FileOutputStream out = new FileOutputStream(mOutFile);
+       try
+       {
+           new ObjectFactory().createMarshaller().marshal(currentReport, out);
+       }
+       finally
+       {
+           IoUtil.close(out);
+       }
+   }
+
+    // be more smart in finding matching items... (eg if the file was edited)
+    private Item findItem (
+        Item newItem, org.jcoderz.phoenix.report.jaxb.File oldFile)
+    {
+        Item result = null;
+        for(Item item:(List<Item>) oldFile.getItem())
+        {
+            if (item.getLine() == newItem.getLine()
+                && item.getColumn() == newItem.getColumn()
+                && item.getFindingType().equals(newItem.getFindingType())
+                && item.getCounter() <= newItem.getCounter())
+            {
+                result = item;
+                break;
+            }
+        }
+        return result;
+    }
+
+
+    private void flagAsNew (Item item)
+    {
+        final Severity oldSeverity = item.getSeverity();
+        item.setSeverity(Severity.NEW);
+        item.setMessage(
+            item.getMessage() + " Severity " + oldSeverity + ".");
+    }
+
+
+// This could be done faster, might be restructure the data first for 
+   // faster lookup.
+   private org.jcoderz.phoenix.report.jaxb.File findFile (
+       org.jcoderz.phoenix.report.jaxb.File newFile, Report oldReport)
+   {
+       final String className = newFile.getClassname();
+       final String packageName = newFile.getPackage();
+       final String fileName = newFile.getName();
+       org.jcoderz.phoenix.report.jaxb.File result = null;
+       for(org.jcoderz.phoenix.report.jaxb.File file : 
+           (List<org.jcoderz.phoenix.report.jaxb.File>) oldReport.getFile())
+       {
+           if (file.getName().equals(fileName) 
+               || (file.getClassname().equals(className) 
+                   && file.getPackage().equals(packageName)))
+           {
+               result = file;
+               break;
+           }
+       }
+       return result;
+   }
+
+
+/**
     * Parses the arguments.
     *
     * @param args the args
@@ -174,6 +268,10 @@ public class ReportMerger
             else if ("-filter".equals(args[i]))
             {
                addFilter(new File(args[i + 1]));
+            }
+            else if ("-old".equals(args[i]))
+            {
+               setOldFile(new File(args[i + 1]));
             }
             else if ("-loglevel".equals(args[i]))
             {
@@ -208,7 +306,6 @@ public class ReportMerger
          throw ex;
       }
    }
-
 
    /**
     * The main method.
@@ -278,6 +375,22 @@ public class ReportMerger
     }
 
 
+    /**
+     * Set the old report to compare with.
+     * @param file old report file.
+     */
+    public void setOldFile (File file)
+        throws IOException
+    {
+        Assert.notNull(file, "file");
+        if (mOldReport != null)
+        {
+            throw new ArgumentMalformedException("old", file,
+                "Old Report File has already set to '" + mOldReport + "'.");
+        }
+        mOldReport = file.getCanonicalFile();
+    }
+    
     /**
      * Sets the out file.
      *

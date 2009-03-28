@@ -171,14 +171,22 @@ public final class Severity
      */
     public static final Severity ERROR = new Severity("error", 100);
 
+    /**
+     * New findings of this build.
+     * <p>Findings of this level are new in this build and because of that
+     * rated at higher severity level in this one build.</p>
+     * <p>A severity of this level marks 10 lines as bad.</p>
+     */
+    public static final Severity NEW = new Severity("new", 100);
+    
     /** 
      * The maximum possible severity. 
-     * Is {@link #ERROR}.
+     * Is {@link #NEW}.
      */
-    public static final Severity MAX_SEVERITY = ERROR;
+    public static final Severity MAX_SEVERITY = NEW;
 
     /** The maximum possible severity as int. */
-    public static final int MAX_SEVERITY_INT = ERROR.toInt();
+    public static final int MAX_SEVERITY_INT = MAX_SEVERITY.toInt();
 
     /** Internal list of all available severities. */
     private static final Severity[] PRIVATE_VALUES =
@@ -191,7 +199,8 @@ public final class Severity
         Severity.DESIGN,
         Severity.WARNING,
         Severity.CPD,
-        Severity.ERROR
+        Severity.ERROR,
+        Severity.NEW
     };
 
     /** Immutable list of the severities. */

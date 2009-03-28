@@ -93,6 +93,8 @@
          </fileset>
       </path>
 
+   	  
+   	
       <delete dir="${base.dir}/build/jcreport"/>
       <jcreport name="fawkez"
                 dest="${base.dir}/build/doc/findings-report"
@@ -105,7 +107,8 @@
                 debug="false"
                 maxheap="128"
                 encoding="US-ASCII"
-                cpus="0"> <!-- Increase to speed up -->
+                cpus="0"
+                oldReportFile="${env.CRUISECONTROL_HOME}/artifacts/${name}/global/jcoderz-report.xml"> 
          <classpath refid="jcreport.classpath"/>
          <reports>   
             <report name="fawkez-test"
@@ -151,6 +154,10 @@
             <filter file="${filter.rules}"/>
          </filters>
       </jcreport>   
+   	<!-- TODO: Only do this on the cc machine. -->
+   	<copy 
+        file="${base.dir}/build/doc/findings-report/jcoderz-report.xml"
+        tofile="${env.CRUISECONTROL_HOME}/artifacts/${name}/global/jcoderz-report.xml" />
    </target>   
 
    <target name="view-report" depends="report, view-report-nodeps"

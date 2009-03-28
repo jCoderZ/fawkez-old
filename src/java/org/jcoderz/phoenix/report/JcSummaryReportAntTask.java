@@ -445,8 +445,10 @@ public class JcSummaryReportAntTask
             attrs.getNamedItem("cpd").getNodeValue().trim());
          final int error = Integer.parseInt(
                attrs.getNamedItem("error").getNodeValue().trim());
-         final int newFindings = Integer.parseInt(
-             attrs.getNamedItem("new").getNodeValue().trim());
+         // TODO...
+         final int newFindings = 0;
+         //Integer.parseInt(
+         //    attrs.getNamedItem("new").getNodeValue().trim());
          final int loc = Integer.parseInt(
                attrs.getNamedItem("loc").getNodeValue().trim());
          final int codeloc = Integer.parseInt(

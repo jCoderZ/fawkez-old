@@ -29,9 +29,9 @@
       <!-- TODO: Find a good place for the fawkez build!
            The folder should be the CC artefacts folder -->
       <jcsummaryreport name="fawkez-summary"
-                       summary="c:/temp/findings-report/history.csv"
-                       dest="c:/temp/findings-report/xxx"
-                       basedir="c:/temp/findings-report"/>
+                       summary="${env.CRUISECONTROL_HOME}/artifacts/${name}/global/history.csv"
+                       dest="${build.dir}/build/doc"
+                       basedir="${env.CRUISECONTROL_HOME}/artifacts/${name}"/>
    </target>
 
    <target name="report">

@@ -55,6 +55,8 @@ import org.jcoderz.commons.util.Assert;
 import org.jcoderz.commons.util.FileUtils;
 import org.jcoderz.commons.util.IoUtil;
 import org.jcoderz.commons.util.LoggingUtils;
+import org.jcoderz.commons.util.ObjectUtil;
+import org.jcoderz.commons.util.StringUtil;
 import org.jcoderz.phoenix.report.jaxb.Item;
 import org.jcoderz.phoenix.report.jaxb.ObjectFactory;
 import org.jcoderz.phoenix.report.jaxb.Report;
@@ -218,8 +220,12 @@ public class ReportMerger
     {
         final Severity oldSeverity = item.getSeverity();
         item.setSeverity(Severity.NEW);
-        item.setMessage(
-            item.getMessage() + " Severity " + oldSeverity + ".");
+        final String severityReason = item.getSeverityReason();
+        item.setSeverityReason(
+            (severityReason == null ? "" : (severityReason + " ")) 
+            + "Increased severity from '" + oldSeverity
+            + "' for new Finding.");
+            
     }
 
 

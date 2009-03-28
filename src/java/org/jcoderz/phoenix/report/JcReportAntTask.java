@@ -594,12 +594,13 @@ public class JcReportAntTask
          final NestedFilterElement filterElement = filterIter.next();
          merger.addFilter(filterElement.getFile());
       }
+      merger.merge();
+      merger.filter();
       if (mOldReportFile != null)
       {
           merger.setOldFile(mOldReportFile);
+          merger.flagNewFindings();
       }
-      merger.merge();
-      merger.filter();
 
       final File outFile = new File(mWorkingDir,
          ReportNormalizer.JCODERZ_REPORT_XML);

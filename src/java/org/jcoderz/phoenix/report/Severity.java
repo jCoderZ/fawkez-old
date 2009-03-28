@@ -57,6 +57,7 @@ import edu.umd.cs.findbugs.Detector;
  *
  * <p>The following severities are defined:
  * <ol>
+ *    <li>{@link #NEW}</li>
  *    <li>{@link #ERROR}</li>
  *    <li>{@link #CPD}</li>
  *    <li>{@link #WARNING}</li>

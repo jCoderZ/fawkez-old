@@ -370,8 +370,7 @@ public class JcSummaryReportAntTask
                log("The folder '" + folders[i]
                    + "' is not a timestamp folder!");
             }
-            final Summary sum
-                = readSummaryXml(new File(folder, "summary.xml"), ts);
+            final Summary sum = readSummaryXml(findSummaryXml(folder), ts);
             files.put(new Long(sum.getTimestamp()), sum);
          }
          else
@@ -380,6 +379,27 @@ public class JcSummaryReportAntTask
          }
       }
       return files;
+   }
+
+   private static File findSummaryXml(File folder)
+   {
+       File result = null;
+       if (folder.isFile() && "summary.xml".equals(folder.getName()))
+       {
+           result = folder;
+       }
+       else if (folder.isDirectory())
+       {
+           for (File file : folder.listFiles())
+           {
+               result = findSummaryXml(file);
+               if (result != null)
+               {
+                   break;
+               }
+           }
+       }
+       return result;
    }
 
 
@@ -1254,8 +1274,9 @@ public class JcSummaryReportAntTask
          final File folder = new File(dir, name);
          if (folder.exists() && folder.isDirectory())
          {
-            final File summaryXml = new File(folder, "summary.xml");
-            result = summaryXml.exists() && summaryXml.isFile();
+            final File summaryXml = findSummaryXml(folder);
+            result = summaryXml != null 
+                && summaryXml.exists() && summaryXml.isFile();
          }
 
          return result;

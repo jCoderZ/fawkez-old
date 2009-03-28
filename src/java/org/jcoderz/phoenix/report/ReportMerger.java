@@ -155,31 +155,39 @@ public class ReportMerger
     * severity of such findings to NEW. 
     */
    public void flagNewFindings () 
-       throws JAXBException, FileNotFoundException
    {
        logger.log(Level.FINE, "Searching for NEW findings...");
-       final Report currentReport 
-           = (Report) new ObjectFactory().createUnmarshaller().unmarshal(
-               mOutFile);
-       final Report oldReport 
-           = (Report) new ObjectFactory().createUnmarshaller().unmarshal(
-               mOldReport);
-       for(org.jcoderz.phoenix.report.jaxb.File newFile : 
-           (List<org.jcoderz.phoenix.report.jaxb.File>) currentReport.getFile())
+       try
        {
-           final org.jcoderz.phoenix.report.jaxb.File oldFile 
-               = findFile(newFile, oldReport);
-           if (oldFile != null)
+           final Report currentReport 
+               = (Report) new ObjectFactory().createUnmarshaller().unmarshal(
+                   mOutFile);
+           final Report oldReport 
+               = (Report) new ObjectFactory().createUnmarshaller().unmarshal(
+                   mOldReport);
+           for(org.jcoderz.phoenix.report.jaxb.File newFile : 
+               (List<org.jcoderz.phoenix.report.jaxb.File>) 
+                 currentReport.getFile())
            {
-               findNewFindings(newFile, oldFile);
+               final org.jcoderz.phoenix.report.jaxb.File oldFile 
+                   = findFile(newFile, oldReport);
+               if (oldFile != null)
+               {
+                   findNewFindings(newFile, oldFile);
+               }
+               else
+               {
+                   flaggAllAsNew(newFile.getItem());
+               }
            }
-           else
-           {
-               flaggAllAsNew(newFile.getItem());
-           }
+           
+           writeResult(currentReport, mOutFile);
        }
-       
-       writeResult(currentReport, mOutFile);
+       catch (Exception ex)
+       {
+           logger.log(Level.WARNING, 
+               "Failed to flagNewFindings. Cause " + ex.getMessage(), ex);
+       }
    }
 
     private void findNewFindings(org.jcoderz.phoenix.report.jaxb.File newFile,

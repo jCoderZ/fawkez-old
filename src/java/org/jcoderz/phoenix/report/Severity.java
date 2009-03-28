@@ -235,7 +235,7 @@ public final class Severity
         catch (ArrayIndexOutOfBoundsException e)
         {
            final IllegalArgumentException ex = new IllegalArgumentException(
-                "Illegal int representation of Severity");
+                "Illegal int representation " + i + " of Severity");
            ex.initCause(e);
            throw ex;
         }
@@ -257,7 +257,7 @@ public final class Severity
         if (result == null)
         {
             throw new IllegalArgumentException(
-            "Illegal string representation of Severity");
+                "Illegal string representation " + str + " of Severity");
         }
         return result;
     }

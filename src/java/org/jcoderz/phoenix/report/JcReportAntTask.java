@@ -218,9 +218,9 @@ public class JcReportAntTask
       mWikiBase = wikiBase;
    }
 
-   public void setOldReportsFile (String oldReportsFile)
+   public void setOldReportFile (String oldReportFile)
    {
-      mOldReportFile = new File(oldReportsFile);
+      mOldReportFile = new File(oldReportFile);
    }
 
    /**

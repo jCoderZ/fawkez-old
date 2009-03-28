@@ -1271,14 +1271,21 @@ public class JcSummaryReportAntTask
       public boolean accept (File dir, String name)
       {
          boolean result = false;
-         final File folder = new File(dir, name);
-         if (folder.exists() && folder.isDirectory())
+         try
          {
-            final File summaryXml = findSummaryXml(folder);
-            result = summaryXml != null 
-                && summaryXml.exists() && summaryXml.isFile();
+             Long.parseLong(name);
+             final File folder = new File(dir, name);
+             if (folder.exists() && folder.isDirectory())
+             {
+                final File summaryXml = findSummaryXml(folder);
+                result = summaryXml != null 
+                    && summaryXml.exists() && summaryXml.isFile();
+             }
          }
-
+         catch (NumberFormatException ex)
+         {
+             // result is false;
+         }
          return result;
       }
    }

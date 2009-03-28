@@ -178,7 +178,8 @@ public class ReportMerger
                = findFile(newFile, oldReport);
            for(Item item:(List<Item>) newFile.getItem())
            {
-               if (findItem(item, oldFile) == null)
+               if (item.getSeverity().getPenalty() > 0 
+                   && findItem(item, oldFile) == null)
                {
                    flagAsNew(item);
                }

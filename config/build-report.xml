@@ -59,6 +59,9 @@
             <include name="default/commons-logging/*.jar"/>
          </fileset>
          <path location="${base.dir}/build/classes"/>
+         <fileset dir="${base.dir}/lib">
+           <include name="default/**/*.jar"/>
+         </fileset>
       </path>
       <!-- This classpath is used by the pmd and cpd process -->   
       <path id="pmd.classpath">
@@ -107,7 +110,7 @@
                 debug="false"
                 maxheap="128"
                 encoding="US-ASCII"
-                cpus="0"
+                cpus="1"
                 oldReportFile="${env.CRUISECONTROL_HOME}/artifacts/${name}/global/jcoderz-report.xml"> 
          <classpath refid="jcreport.classpath"/>
          <reports>   
@@ -115,7 +118,7 @@
                     level="test"
                     sourcepath="${base.dir}/test/java"
                     classpath="${build.dir}/test-classes">
-            </report>    
+            </report>
             <report name="fawkez-prod"
                     level="prod"
                     sourcepath="${base.dir}/src/java"

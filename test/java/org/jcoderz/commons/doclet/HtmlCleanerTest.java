@@ -35,7 +35,7 @@ package org.jcoderz.commons.doclet;
 import junit.framework.TestCase;
 
 /**
- * Class to test the HtmlCleaner 
+ * Class to test the HtmlCleaner.
  * @author Andreas Mandel
  */
 public class HtmlCleanerTest

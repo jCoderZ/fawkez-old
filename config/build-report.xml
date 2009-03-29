@@ -60,7 +60,7 @@
          </fileset>
          <path location="${base.dir}/build/classes"/>
          <fileset dir="${base.dir}/lib">
-           <include name="default/**/*.jar"/>
+           <include name="default/jaxb/jaxb-api.jar"/>
          </fileset>
       </path>
       <!-- This classpath is used by the pmd and cpd process -->   

@@ -42,8 +42,8 @@ import junit.framework.Test;
 public class HttpClientConnectionTestSetup
       extends TestSetup
 {
-   private static final int DEFAULT_SERVER_PORT = 8008;
-   private SimpleServer mServer;
+   private static final int DEFAULT_SERVER_PORT = 17128;
+   private SimpleServer mServer = null;
 
    /**
     * Constructor.

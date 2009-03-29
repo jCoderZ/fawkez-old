@@ -16,7 +16,7 @@ import org.jcoderz.commons.ArgumentMalformedException;
  */
 public class EmailAddressTest extends TestCase
 {
-  public void testNullParameter()
+  public void testNullParameter ()
   {
     try
     {
@@ -29,7 +29,7 @@ public class EmailAddressTest extends TestCase
     }
   }
 
-  public void testEmptyParameter()
+  public void testEmptyParameter ()
   {
     try
     {
@@ -42,7 +42,7 @@ public class EmailAddressTest extends TestCase
     }
   }
 
-  public void testNoAtSign()
+  public void testNoAtSign ()
   {
     try
     {
@@ -55,7 +55,7 @@ public class EmailAddressTest extends TestCase
     }
   }
 
-  public void testInvalidLocalPart()
+  public void testInvalidLocalPart ()
   {
     try
     {
@@ -68,7 +68,7 @@ public class EmailAddressTest extends TestCase
     }
   }
 
-  public void testGoodEmail()
+  public void testGoodEmail ()
   {
     final EmailAddress email = new EmailAddress("test@example.com");
     assertEquals(

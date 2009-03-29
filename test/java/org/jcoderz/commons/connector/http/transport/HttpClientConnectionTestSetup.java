@@ -68,7 +68,7 @@ public class HttpClientConnectionTestSetup
       mServer.start();
       while (!mServer.isServerStarted())
       {
-         Thread.yield();
+         Thread.sleep(100);
       }
    }
 

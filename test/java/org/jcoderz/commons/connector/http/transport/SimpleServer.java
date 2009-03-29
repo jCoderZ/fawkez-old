@@ -38,6 +38,7 @@ import java.net.SocketTimeoutException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -73,7 +74,7 @@ public class SimpleServer
    /**
     * Constructor.
     * @param port
-    *          th server port in use
+    *          the server port in use
     */
    public SimpleServer (int port)
    {
@@ -148,9 +149,11 @@ public class SimpleServer
       }
       catch (Exception e)
       {
-         logger.warning("Failed to start SimpleServer: " + e);
+         logger.log(Level.WARNING, "Failed to start SimpleServer: " + e, e);
          e.printStackTrace();
       }
+      // don't let others wait for ever.
+      mServerStarted = true;
    }
 
    /**
@@ -241,9 +244,9 @@ public class SimpleServer
       }
       catch (Exception ex)
       {
-         logger.warning(
+         logger.log(Level.WARNING,
             "Exception while interrupting client handler thread: "
-            + ex.getMessage());
+            + ex.getMessage(), ex);
       }
       client.join(JOIN_TIMEFRAME);
       if (client.isAlive())

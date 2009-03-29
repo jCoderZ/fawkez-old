@@ -216,16 +216,24 @@ public class ReportMerger
     {
         for(Item item:(List<Item>) newFindings)
         {
-            flagAsNew(item);
+            if (item.getSeverity().getPenalty() > 0
+                && item.getSeverity() != Severity.COVERAGE)
+            {
+                flagAsNew(item);
+            }
         }
     }
 
     private void addAsOld (List<Item> newFindings, Item item)
     {
-        item.setSeverity(Severity.OK);
-        item.unsetNew();
-        item.setOld(true);
-        newFindings.add(item);
+        if (item.getSeverity().getPenalty() > 0
+            && item.getSeverity() != Severity.COVERAGE)
+        {
+            item.setSeverity(Severity.OK);
+            item.unsetNew();
+            item.setOld(true);
+            newFindings.add(item);
+        }
     }
 
 

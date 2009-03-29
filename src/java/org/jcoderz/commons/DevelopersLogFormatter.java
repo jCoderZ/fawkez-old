@@ -160,8 +160,8 @@ public class DevelopersLogFormatter
 
    private void formatMessage (StringBuffer sb, LogRecord record)
    {
-       Object [] parameters = record.getParameters();
-       String msg = record.getMessage();
+       final Object [] parameters = record.getParameters();
+       final String msg = record.getMessage();
        if (parameters != null && parameters.length != 0 &&
            !StringUtil.isEmptyOrNull(msg) && msg.indexOf('{') >= 0)
        {
@@ -204,7 +204,7 @@ public class DevelopersLogFormatter
    private static void formatArgumentsCompact (StringBuffer sb,
        Object[] parameters)
    {
-       Iterator i = Arrays.asList(parameters).iterator();
+       final Iterator i = Arrays.asList(parameters).iterator();
        while (i.hasNext())
        {
            Object parameter = i.next();
@@ -273,7 +273,7 @@ public class DevelopersLogFormatter
 
     private char getChar (Level level)
     {
-        int value = level.intValue();
+        final int value = level.intValue();
         final char result;
         if (value <= Level.FINEST.intValue())
         {

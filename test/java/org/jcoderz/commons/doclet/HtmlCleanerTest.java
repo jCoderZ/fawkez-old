@@ -41,6 +41,20 @@ public class HtmlCleanerTest
    public void testSimpleClean ()
          throws Exception
    {
-      System.out.println(new HtmlCleaner().clean("<p>test <br><p>test"));
+      assertEquals("Cleaned output unexpected.", 
+          "<p>test</p>", 
+          new HtmlCleaner().clean("<p>test</p>"));
+   }
+
+   /** Simple broken test. */
+   public void testBrokenClean ()
+         throws Exception
+   {
+       final HtmlCleaner htmlCleaner = new HtmlCleaner();
+      assertEquals("Cleaned output unexpected.", 
+          "Invalid HTML could not be parsed.", 
+          htmlCleaner.clean("&&foo;<table><test> <br><p>test"));
+      assertTrue("Error message unexpected. " + htmlCleaner.getWarnings(), 
+          htmlCleaner.getWarnings().indexOf("<test>") >= 0);
    }
 }

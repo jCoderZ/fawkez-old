@@ -65,6 +65,8 @@
       <fileset dir="${base.dir}/lib">
         <include name="default/findbugs/bcel*.jar"/>
       </fileset>
+      <pathelement path="${build.dir}/test-classes"/>
+      <pathelement path="${build.dir}/instrumented-classes"/>
     </path>
 
     <path id="jaxb-compile.classpath">
@@ -736,7 +738,8 @@ xerces in current vm: ${xerces.version.ant}
               <path refid="default.classpath"/>
           </classpath>
         </javac>
-        <copy todir="${build.dir}/classes">
+        <copy todir="${build.dir}/classes"
+            preservelastmodified="true">
             <fileset dir="${base.dir}/src/java/">
                 <include name="**/*.properties"/>
             </fileset>
@@ -746,7 +749,8 @@ xerces in current vm: ${xerces.version.ant}
                 <include name="**/*.properties"/>
             </fileset>
         </copy>
-        <copy todir="${build.dir}/classes/org/jcoderz/commons/taskdefs">
+        <copy todir="${build.dir}/classes/org/jcoderz/commons/taskdefs"
+        	preservelastmodified="true">
             <fileset dir="${base.dir}/src/xml/xsl">
                 <include name="*.xsl"/>
             </fileset>
@@ -756,39 +760,47 @@ xerces in current vm: ${xerces.version.ant}
         </copy>
         <!-- Copy resources for the JcoderzReport to be included into the jar -->
         <copy file="${base.dir}/src/css/reportstyle.css"
-              todir="${build.dir}/classes/org/jcoderz/phoenix/report"/>
-        <copy todir="${build.dir}/classes/org/jcoderz/phoenix/report">
+              todir="${build.dir}/classes/org/jcoderz/phoenix/report"
+              preservelastmodified="true"/>
+        <copy todir="${build.dir}/classes/org/jcoderz/phoenix/report"
+              preservelastmodified="true">
            <fileset dir="${base.dir}/src/image">
               <include name="*.gif"/>
            </fileset>
         </copy>
         <!-- extract PMD rulesets -->
         <unjar dest="${build.dir}/classes"
-               src="${base.dir}/lib/default/pmd/pmd.jar">
+               src="${base.dir}/lib/default/pmd/pmd.jar"
+        	   overwrite="false">
             <patternset>
                 <include name="rulesets/**/*.*"/>
             </patternset>
         </unjar>
         <!-- extract fb-contrib messages.xml -->
         <unjar dest="${build.dir}/classes/org/jcoderz/phoenix/findbugs"
-               src="${base.dir}/lib/default/fb-contrib/fb-contrib.jar">
+               src="${base.dir}/lib/default/fb-contrib/fb-contrib.jar"
+               overwrite="false">
             <patternset>
                 <include name="messages.xml"/>
             </patternset>
         </unjar>
         <move file="${build.dir}/classes/org/jcoderz/phoenix/findbugs/messages.xml"
+        	  preservelastmodified="true"
               tofile="${build.dir}/classes/org/jcoderz/phoenix/findbugs/fb-contrib-messages.xml"/>
         <!-- extract findbugs messages.xml -->
         <unjar dest="${build.dir}/classes/org/jcoderz/phoenix/findbugs"
-               src="${base.dir}/lib/default/findbugs/findbugs.jar">
+               src="${base.dir}/lib/default/findbugs/findbugs.jar"
+               overwrite="false">
             <patternset>
                 <include name="messages.xml"/>
             </patternset>
         </unjar>
         <copy file="${base.dir}/src/xml/checkstyle-messages.xml"
-              tofile="${build.dir}/classes/org/jcoderz/phoenix/checkstyle/checkstyle-messages.xml"/>
+              tofile="${build.dir}/classes/org/jcoderz/phoenix/checkstyle/checkstyle-messages.xml"
+              preservelastmodified="true"/>
         <copy file="${base.dir}/src/java/org/jcoderz/phoenix/chart2d/chart2d.dtd"
-              tofile="${build.dir}/stats/chart2d/chart2d.dtd"/>
+              tofile="${build.dir}/stats/chart2d/chart2d.dtd"
+              preservelastmodified="true"/>
     </target>
 
     <target name="fawkez-jar" depends="compile-all, fawkez-jar-nodeps"/>
@@ -964,7 +976,7 @@ xerces in current vm: ${xerces.version.ant}
    <!-- build distribution tarball                                          -->
    <!-- =================================================================== -->
    <target name="tarball"
-           depends="dist, doc"
+           depends="dist, test-compile, doc"
            description="Build distribution tarball">
       <property name="tarball"
                 value="${build.dir}/fawkez-${DSTAMP}${TSTAMP}.tar.gz"/>

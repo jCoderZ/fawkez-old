@@ -37,24 +37,30 @@ import junit.framework.TestCase;
 public class HtmlCleanerTest
       extends TestCase
 {
-   /** Simple test. */
+   /**
+    * Simple test.
+    * @throws Exception if the test case fails with an exception.
+    */
    public void testSimpleClean ()
          throws Exception
    {
-      assertEquals("Cleaned output unexpected.", 
-          "<p>test</p>", 
+      assertEquals("Cleaned output unexpected.",
+          "<p>test</p>",
           new HtmlCleaner().clean("<p>test</p>"));
    }
 
-   /** Simple broken test. */
+   /**
+    * Simple broken test.
+    * @throws Exception if the test case fails with an exception.
+    */
    public void testBrokenClean ()
          throws Exception
    {
        final HtmlCleaner htmlCleaner = new HtmlCleaner();
-      assertEquals("Cleaned output unexpected.", 
-          "Invalid HTML could not be parsed.", 
+      assertEquals("Cleaned output unexpected.",
+          "Invalid HTML could not be parsed.",
           htmlCleaner.clean("&&foo;<table><test> <br><p>test"));
-      assertTrue("Error message unexpected. " + htmlCleaner.getWarnings(), 
+      assertTrue("Error message unexpected. " + htmlCleaner.getWarnings(),
           htmlCleaner.getWarnings().indexOf("<test>") >= 0);
    }
 }

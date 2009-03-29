@@ -35,12 +35,34 @@
    </target>
 
    <target name="report">
+   	
+    <path id="emma.lib">
+      <pathelement location="${base.dir}/lib/default/emma/emma.jar"/>
+      <pathelement location="${base.dir}/lib/default/emma_ant/emma_ant.jar"/>
+    </path>
+    <taskdef resource="emma_ant.properties" classpathref="emma.lib"/>
+    <emma enabled="${build.coverage}" >
+      <merge outfile="${build.dir}/full-coverage.es">
+        <fileset dir="${build.dir}" includes="*.em, *.ec" />
+        <fileset dir="${base.dir}" includes="*.em, *.ec">
+          <exclude name="full-coverage.es"/>
+        </fileset>
+      </merge>
+    </emma>
+   	<delete>
+        <fileset dir="${base.dir}">
+          <include name="*.em"/>
+          <include name="*.ec"/>
+        </fileset>
+   	</delete>
+   	
       <!-- This is the classpath used by the JcReportAntTask -->   
       <path id="jcreport.classpath">
          <pathelement path="${base.dir}/build/classes"/>
          <fileset dir="${base.dir}/lib">
             <include name="default/jaxb/*.jar"/>
             <include name="default/chart2d/*.jar"/>
+            <include name="default/emma/*.jar"/>
          </fileset>
       </path>
       <taskdef name="jcreport"
@@ -152,6 +174,7 @@
             </checkstyle>
             <!-- cobertura datafile="x.ser">
             </cobertura -->
+            <emma datafile="${build.dir}/full-coverage.es"/>
          </tools>
          <filters>
             <filter file="${filter.rules}"/>

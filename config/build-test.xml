@@ -14,8 +14,8 @@
     </path>
 
     <path id="test.runtime.classpath">
+        <pathelement path="${build.dir}/instrumented-classes/classes"/>
         <pathelement path="${build.dir}/test-classes"/>
-        <pathelement path="${build.dir}/instrumented-classes"/>
         <path refid="test.classpath"/>
     </path>
 
@@ -109,6 +109,24 @@
     <target name="instrument" depends="test-compile, instrument-nodeps"
             description="Add jcoverage instrumentation"></target>
     <target name="instrument-nodeps" if="build.coverage">
+      <path id="emma.lib">
+        <pathelement location="${base.dir}/lib/default/emma/emma.jar"/>
+        <pathelement location="${base.dir}/lib/default/emma_ant/emma_ant.jar"/>
+      </path>
+      <taskdef resource="emma_ant.properties" classpathref="emma.lib"/>
+      <emma>
+        <instr destdir="${build.dir}/instrumented-classes" 
+               metadatafile="${build.dir}/metadata.em"
+               merge="true" mode="fullcopy">
+            <instrpath>
+            	<path location="${build.dir}/classes"/>
+                <path location="${build.dir}/test-classes"/>
+            </instrpath>
+      	</instr>
+      </emma>
+
+      
+<!--    Switch back after cobertura 1.9.1 is available      
         <taskdef resource="tasks.properties"
                  classpathref="default.classpath"/>
         <mkdir dir="${build.dir}/instrumented-classes" />
@@ -124,6 +142,7 @@
         </cobertura-instrument>
         <move file="${base.dir}/cobertura.ser"
             tofile="${build.dir}/instrumented-classes/cobertura.ser"/>
+-->
     </target>
 
    <!-- insert test data into database -->
@@ -159,7 +178,7 @@
         <mkdir dir="${build.dir}/report/junit"/>
         <junit printsummary="yes" haltonfailure="no"
                 dir="${base.dir}/build" fork="true" timeout="600000"
-                forkmode="perTest"> <!-- should be forkmode="perBatch" after timeout fix --> 
+                forkmode="perBatch"> <!-- should be forkmode="perBatch" after timeout fix --> 
             <classpath refid="test.runtime.classpath"/>
             <sysproperty key="basedir" value="${base.dir}"/>
             <sysproperty key="java.util.logging.config.file"

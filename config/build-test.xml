@@ -177,7 +177,7 @@
     <target name="test-local-nodeps" if="junit.present">
         <mkdir dir="${build.dir}/report/junit"/>
         <junit printsummary="yes" haltonfailure="no"
-                dir="${base.dir}/build" fork="true" timeout="600000"
+                dir="${base.dir}/build" fork="true" timeout="300000"
                 forkmode="perBatch"> <!-- should be forkmode="perBatch" after timeout fix --> 
             <classpath refid="test.runtime.classpath"/>
             <sysproperty key="basedir" value="${base.dir}"/>
@@ -191,6 +191,7 @@
             <batchtest todir="${build.dir}/report/junit">
                 <fileset dir="${base.dir}/test/java">
                     <include name="**/*Test.java"/>
+                    <exclude name="**/HttpClientConnectionTest.java"/>
                     <exclude name="**/*ServerTest.java"/>
                     <exclude name="**/*BeanTest.java"/>
                 </fileset>
@@ -198,6 +199,11 @@
                     <include name="**/*Test.java"/>
                     <exclude name="**/*ServerTest.java"/>
                     <exclude name="**/*BeanTest.java"/>
+                </fileset>
+            </batchtest>
+            <batchtest todir="${build.dir}/report/junit">
+                <fileset dir="${base.dir}/test/java">
+                    <exclude name="**/HttpClientConnectionTest.java"/>
                 </fileset>
             </batchtest>
         </junit>

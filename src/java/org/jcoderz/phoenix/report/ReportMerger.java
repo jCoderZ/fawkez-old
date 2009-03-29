@@ -207,7 +207,7 @@ public class ReportMerger
         flaggAllAsNew(newFindings);
         for(Item item:(List<Item>) oldFindings)
         {
-            addAsOld(newFindings, item);
+            addAsOld(newFile.getItem(), item);
         }
         
     }

@@ -267,12 +267,18 @@ public final class ReportNormalizer
 
         final File tempOutputFile = new File(
             mOutFile.getCanonicalPath() + ".tmp");
-        tempOutputFile.createNewFile();
+        FileUtils.createNewFile(tempOutputFile);
 
         final FileOutputStream out = new FileOutputStream(tempOutputFile);
-        transformer.transform(new StreamSource(mOutFile),
-            new StreamResult(out));
-        IoUtil.close(out);
+        try
+        {
+            transformer.transform(new StreamSource(mOutFile),
+                new StreamResult(out));
+        }
+        finally
+        {
+            IoUtil.close(out);
+        }
         FileUtils.copyFile(tempOutputFile, mOutFile);
         FileUtils.delete(tempOutputFile);
     }

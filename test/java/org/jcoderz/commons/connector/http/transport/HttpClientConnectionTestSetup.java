@@ -42,8 +42,9 @@ import junit.framework.Test;
 public class HttpClientConnectionTestSetup
       extends TestSetup
 {
+   /** Port to use in testing. */
+   public static final int DEFAULT_SERVER_PORT = 17128;
    private static final int STARTUP_POLL_DELAY = 100;
-   private static final int DEFAULT_SERVER_PORT = 17128;
    private SimpleServer mServer = null;
 
    /**

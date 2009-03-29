@@ -33,8 +33,10 @@
 package org.jcoderz.commons.connector.http.transport;
 
 import java.io.ByteArrayInputStream;
+
 import junit.framework.Test;
 import junit.framework.TestSuite;
+
 import org.jcoderz.commons.ArgumentMalformedException;
 import org.jcoderz.commons.TestCase;
 import org.jcoderz.commons.util.Constants;
@@ -45,7 +47,7 @@ import org.jcoderz.commons.util.StringUtil;
 /**
  * This class test the implementation of the HttpConnectionInterface
  * provided via the Jakarta commons-httpclient project.
- *
+ * @author anonymous
  */
 public class HttpClientConnectionTest
       extends TestCase
@@ -55,7 +57,8 @@ public class HttpClientConnectionTest
    private static final String FILE_SEPARATOR
          = System.getProperty("file.separator");
    private static final String
-         DEFAULT_URL = "http://localhost:8008";
+         DEFAULT_URL = "http://localhost:" 
+             + HttpClientConnectionTestSetup.DEFAULT_SERVER_PORT;
    private static final byte[]
          SIMPLE_BODY = "This is a simple POST request".getBytes();
    private static final String
@@ -173,15 +176,7 @@ public class HttpClientConnectionTest
       mHttpConnection.setRequestResponseHeader(header);
 
       // execute
-      try
-      {
-         mHttpConnection.execute();
-      }
-      catch (HttpConnectionException he)
-      {
-         he.printStackTrace();
-         fail(HTTPCONNECTIONEXCEPTION + he.getMessage());
-      }
+      mHttpConnection.execute();
       final String response = getResponseBodyAsString();
       final String connectionValue
             = mHttpConnection.getResponseHeader(CONNECTION_PARAMETER);
@@ -199,8 +194,10 @@ public class HttpClientConnectionTest
 
    /**
     * Sends post request without a waiting server.
+    * @throws Exception if the test case fails with an exception.
     */
    public void testSendSimplePostRequestToNotExistingTarget ()
+       throws Exception
    {
       //    connect
       mHttpConnection.establishConnection(
@@ -225,12 +222,6 @@ public class HttpClientConnectionTest
       {
         // expected
       }
-      catch (HttpConnectionException he)
-      {
-         he.printStackTrace();
-         fail(HTTPCONNECTIONEXCEPTION + he.getMessage());
-      }
-
       // close
       mHttpConnection.closeConnection();
    }
@@ -260,15 +251,7 @@ public class HttpClientConnectionTest
       mHttpConnection.setRequestResponseHeader(header);
 
       // execute
-      try
-      {
-         mHttpConnection.execute();
-      }
-      catch (HttpConnectionException he)
-      {
-         he.printStackTrace();
-         fail(HTTPCONNECTIONEXCEPTION + he.getMessage());
-      }
+      mHttpConnection.execute();
       final String response = getResponseBodyAsString();
       final String connectionValue
             = mHttpConnection.getResponseHeader(CONNECTION_PARAMETER);
@@ -323,10 +306,6 @@ public class HttpClientConnectionTest
       {
          // expected
       }
-      catch (HttpConnectionException he)
-      {
-         fail("Not the expected exception " + he.getMessage());
-      }
    }
 
    /**
@@ -361,11 +340,6 @@ public class HttpClientConnectionTest
       catch (HttpEmptyResponseException expected)
       {
          // expected
-      }
-      catch (HttpConnectionException he)
-      {
-         he.printStackTrace();
-         fail(HTTPCONNECTIONEXCEPTION + he.getMessage());
       }
 
       // close
@@ -405,11 +379,6 @@ public class HttpClientConnectionTest
       {
          assertNull("No response message expected", response);
       }
-      catch (HttpConnectionException ex)
-      {
-         fail ("Exception not expected: " + ex.getMessage());
-      }
-
       // close
       mHttpConnection.closeConnection();
    }
@@ -445,7 +414,6 @@ public class HttpClientConnectionTest
       }
       catch (HttpConnectionException he)
       {
-         he.printStackTrace();
          assertNull("No response message expected", response);
       }
 
@@ -479,15 +447,7 @@ public class HttpClientConnectionTest
       String connectionValue = null;
 
       // execute message 1
-      try
-      {
-         mHttpConnection.execute();
-      }
-      catch (HttpConnectionException he)
-      {
-         he.printStackTrace();
-         fail(HTTPCONNECTIONEXCEPTION + he.getMessage());
-      }
+      mHttpConnection.execute();
       response = getResponseBodyAsString();
       connectionValue = mHttpConnection.getResponseHeader(CONNECTION_PARAMETER);
 
@@ -514,15 +474,7 @@ public class HttpClientConnectionTest
       mHttpConnection.setRequestResponseHeader(header);
 
       // execute message 2
-      try
-      {
-         mHttpConnection.execute();
-      }
-      catch (HttpConnectionException he)
-      {
-         he.printStackTrace();
-         fail(HTTPCONNECTIONEXCEPTION + he.getMessage());
-      }
+      mHttpConnection.execute();
       response = getResponseBodyAsString();
 
       // release connection
@@ -540,17 +492,8 @@ public class HttpClientConnectionTest
       mHttpConnection.setRequestResponseHeader(header);
 
       // execute message 3
-      try
-      {
-         mHttpConnection.execute();
-      }
-      catch (HttpConnectionException he)
-      {
-         he.printStackTrace();
-         fail(HTTPCONNECTIONEXCEPTION + he.getMessage());
-      }
+      mHttpConnection.execute();
       response = getResponseBodyAsString();
-      // close
       mHttpConnection.closeConnection();
    }
 
@@ -623,8 +566,10 @@ public class HttpClientConnectionTest
    /**
     * Tests the release of connection after sending a message and a sending anew
     * after releasing.
+    * @throws Exception if the test case fails with an exception.
     */
    public void testReleaseConnectionSuccessWithTwoSendMessages ()
+       throws Exception
    {
       // connect
       mHttpConnection.establishConnection(
@@ -643,15 +588,7 @@ public class HttpClientConnectionTest
             new ByteArrayInputStream("This is message one".getBytes()));
 
       // send message 1
-      try
-      {
-         mHttpConnection.execute();
-      }
-      catch (HttpConnectionException he)
-      {
-         he.printStackTrace();
-         fail(HTTPCONNECTIONEXCEPTION + he.getMessage());
-      }
+      mHttpConnection.execute();
 
       // release connection
       mHttpConnection.releaseConnection();
@@ -667,20 +604,7 @@ public class HttpClientConnectionTest
       mHttpConnection.setRequestResponseHeader(header);
 
       // send message 2
-      try
-      {
-         mHttpConnection.execute();
-      }
-      catch (IllegalStateException ise)
-      {
-         ise.printStackTrace();
-         fail(ILLEGALSTATEEXCEPTION + ise.getMessage());
-      }
-      catch (HttpConnectionException he)
-      {
-         he.printStackTrace();
-         fail(HTTPCONNECTIONEXCEPTION + he.getMessage());
-      }
+      mHttpConnection.execute();
 
       // close
       mHttpConnection.closeConnection();
@@ -689,8 +613,10 @@ public class HttpClientConnectionTest
    /**
     * Tests releasing the connection and sending a second message without
     * sending the first message.
+    * @throws Exception if the test case fails with an exception.
     */
    public void testReleaseConnectionSuccessWithOneSendMessage ()
+       throws Exception
    {
       //    connect
       mHttpConnection.establishConnection(
@@ -722,27 +648,16 @@ public class HttpClientConnectionTest
       mHttpConnection.setRequestResponseHeader(header);
 
       // send message 2
-      try
-      {
-         mHttpConnection.execute();
-      }
-      catch (IllegalStateException ise)
-      {
-         ise.printStackTrace();
-         fail(ILLEGALSTATEEXCEPTION + ise.getMessage());
-      }
-      catch (HttpConnectionException he)
-      {
-         he.printStackTrace();
-         fail(HTTPCONNECTIONEXCEPTION + he.getMessage());
-      }
+      mHttpConnection.execute();
    }
 
    /**
     * Tests error case with a missing "releaseConnection" call before reusing
     * an already opened connection.
+    * @throws Exception if the test case fails with an exception.
     */
    public void testReleaseConnectionFailed ()
+       throws Exception
    {
       // connect
       mHttpConnection.establishConnection(
@@ -761,15 +676,7 @@ public class HttpClientConnectionTest
             new ByteArrayInputStream("This is message one".getBytes()));
 
       // send message 1
-      try
-      {
-         mHttpConnection.execute();
-      }
-      catch (HttpConnectionException he)
-      {
-         he.printStackTrace();
-         fail(HTTPCONNECTIONEXCEPTION + he.getMessage());
-      }
+      mHttpConnection.execute();
 
       // set message 2
       header = new HttpRequestResponseHeader();
@@ -791,12 +698,6 @@ public class HttpClientConnectionTest
                CONNECTION_MUST_BE_ESTABLISHED_OR_RELEASED,
                ise.getMessage());
       }
-      catch (HttpConnectionException he)
-      {
-         he.printStackTrace();
-         fail(HTTPCONNECTIONEXCEPTION + he.getMessage());
-      }
-
       // close
       mHttpConnection.closeConnection();
    }
@@ -821,8 +722,10 @@ public class HttpClientConnectionTest
    }
     /**
     * Closes the connection after successful sending.
+    * @throws Exception if the test case fails with an exception.
     */
    public void testCloseConnectionSuccessAfterSending ()
+       throws Exception
    {
       mHttpConnection.establishConnection(
             DEFAULT_URL,
@@ -839,16 +742,7 @@ public class HttpClientConnectionTest
       mHttpConnection.setRequestBody(
             new ByteArrayInputStream("This is the message".getBytes()));
 
-      // send message
-      try
-      {
-         mHttpConnection.execute();
-      }
-      catch (HttpConnectionException ex)
-      {
-         ex.printStackTrace();
-         fail(ex.toString());
-      }
+      mHttpConnection.execute();
       mHttpConnection.closeConnection();
    }
 
@@ -889,9 +783,11 @@ public class HttpClientConnectionTest
    }
 
    /**
-    * Executes connection wihout establishing before.
+    * Executes connection without establishing before.
+    * @throws Exception if the test case fails with an exception.
     */
    public void testExecuteFailed ()
+       throws Exception
    {
       // not connected
       try
@@ -905,12 +801,6 @@ public class HttpClientConnectionTest
                CONNECTION_MUST_BE_ESTABLISHED_OR_RELEASED,
                ise.getMessage());
       }
-      catch (HttpConnectionException he)
-      {
-         he.printStackTrace();
-         fail(HTTPCONNECTIONEXCEPTION + he.getMessage());
-      }
-      //
 
       // executed twice
       mHttpConnection.establishConnection(
@@ -937,13 +827,7 @@ public class HttpClientConnectionTest
                CONNECTION_MUST_BE_ESTABLISHED_OR_RELEASED,
                ise.getMessage());
       }
-      catch (HttpConnectionException he)
-      {
-         he.printStackTrace();
-         fail(HTTPCONNECTIONEXCEPTION + he.getMessage());
-      }
       mHttpConnection.closeConnection();
-      //
    }
 
    /**

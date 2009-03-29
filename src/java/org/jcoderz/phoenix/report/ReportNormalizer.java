@@ -206,8 +206,8 @@ public final class ReportNormalizer
                 || report.getFilename().isDirectory())
             {
                 final ReportReader reportReader
-                = ReportReaderFactory.createReader(
-                    report.getReportFormat());
+                    = ReportReaderFactory.createReader(
+                        report.getReportFormat());
                 reportReader.parse(report.getFilename());
                 reportReader.merge(items);
             }
@@ -564,12 +564,12 @@ public final class ReportNormalizer
         throws IOException
     {
         mFilterFile = filterFile;
+        // Do not fail here if the argument is invalid.
         if (!mFilterFile.exists())
         {
             throw new IOException("Filter file '" + mFilterFile
                 + "' does not exists.");
         }
-
     }
 
     /**
@@ -586,7 +586,7 @@ public final class ReportNormalizer
 
         /**
          * Instantiates a new source report.
-         *
+         * No check here. Let the report parsing fail.
          * @param r the ReportFormat
          * @param f the File
          */
@@ -594,11 +594,6 @@ public final class ReportNormalizer
         {
             mReportFormat = r;
             mFilename = f;
-            if (! mFilename.exists())
-            {
-                throw new IllegalArgumentException(
-                    "Input file/directory '" + f + "' does not exists.");
-            }
         }
 
         /**

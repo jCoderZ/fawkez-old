@@ -37,11 +37,12 @@ import junit.framework.Test;
 
 /**
  * Test setup used for HttpConnectionImplTest.
- *
+ * @author anonymous
  */
 public class HttpClientConnectionTestSetup
       extends TestSetup
 {
+   private static final int STARTUP_POLL_DELAY = 100;
    private static final int DEFAULT_SERVER_PORT = 17128;
    private SimpleServer mServer = null;
 
@@ -68,7 +69,7 @@ public class HttpClientConnectionTestSetup
       mServer.start();
       while (!mServer.isServerStarted())
       {
-         Thread.sleep(100);
+         Thread.sleep(STARTUP_POLL_DELAY);
       }
    }
 

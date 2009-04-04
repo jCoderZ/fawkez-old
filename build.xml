@@ -326,7 +326,8 @@ xerces in current vm: ${xerces.version.ant}
              deprecation="${build.debug}"
              debug="true"
              fork="true"
-             source="1.4">
+             source="1.4"
+        	 target="1.4">
             <src path="${base.dir}/src/bootstrap-java"/>
             <classpath refid="default.classpath"/>
         </javac>
@@ -334,7 +335,8 @@ xerces in current vm: ${xerces.version.ant}
              deprecation="${build.debug}"
              debug="true"
              fork="true"
-             source="1.5">
+             source="1.5"
+        	 target="1.5">
             <src path="${base.dir}/src/java"/>
             <include name="org/jcoderz/commons/taskdefs/*.java"/>
             <include name="org/jcoderz/commons/util/*.java"/>
@@ -530,12 +532,14 @@ xerces in current vm: ${xerces.version.ant}
             deprecation="${build.debug}"
             debug="true"
             classpathref="default.classpath"
-            source="1.4">
+            source="1.4"
+        	target="1.4">
             <src path="${base.dir}/src/java"/>
             <src path="${build.dir}/gen-java"/>
             <include name="org/jcoderz/phoenix/report/Severity.java"/>
             <include name="org/jcoderz/phoenix/report/Origin.java"/>
             <include name="org/jcoderz/phoenix/report/ReportLevel.java"/>
+            <include name="org/jcoderz/commons/types/Date.java"/>
         </javac>
         <taskdef name="xjc" classname="com.sun.tools.xjc.XJCTask">
             <classpath>
@@ -717,7 +721,8 @@ xerces in current vm: ${xerces.version.ant}
            deprecation="${build.debug}"
            debug="true"
            fork="true"
-           source="1.4">
+           source="1.4"
+      	   target="1.4">
           <src path="${base.dir}/src/java"/>
           <src path="${build.dir}/gen-java"/>
           <exclude name="org/jcoderz/phoenix/report/**"/>
@@ -728,7 +733,8 @@ xerces in current vm: ${xerces.version.ant}
              deprecation="${build.debug}"
              debug="true"
              fork="true"
-             source="1.5">
+             source="1.5"
+        	 target="1.5">
             <src path="${base.dir}/src/java"/>
             <src path="${build.dir}/gen-java"/>
             <include name="org/jcoderz/phoenix/report/**"/>

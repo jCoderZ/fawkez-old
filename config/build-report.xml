@@ -129,7 +129,7 @@
                 packagebase="org.jcoderz"
                 projectbase="${base.dir}"
                 tempfolder="${base.dir}/build/jcreport"
-                debug="true"
+                debug="false"
                 maxheap="128"
                 encoding="US-ASCII"
                 cpus="1"

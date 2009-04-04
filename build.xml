@@ -540,6 +540,7 @@ xerces in current vm: ${xerces.version.ant}
             <include name="org/jcoderz/phoenix/report/Origin.java"/>
             <include name="org/jcoderz/phoenix/report/ReportLevel.java"/>
             <include name="org/jcoderz/commons/types/Date.java"/>
+            <include name="org/jcoderz/commons/util/XsdUtil.java"/>
         </javac>
         <taskdef name="xjc" classname="com.sun.tools.xjc.XJCTask">
             <classpath>

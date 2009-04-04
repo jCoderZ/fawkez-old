@@ -33,6 +33,11 @@
 package org.jcoderz.commons.util;
 
 import java.math.BigInteger;
+import java.util.Calendar;
+
+import javax.xml.bind.DatatypeConverter;
+
+import org.jcoderz.commons.types.Date;
 
 /**
  * This class encapsulates util methods used for schema data type handling.
@@ -219,4 +224,36 @@ public final class XsdUtil
       return result;
    }
 
+   /**
+    * Parses the given String as schema date time representation and returns
+    * a Date object holding the given time.
+    * This method must only be used after a JAXBContext has been initialized,
+    * otherwise it is likely that a NullpointerException is thrown.
+    * @param date the date time in schema dateTime
+    * @return a newly generated Date object representing the time given in the
+    *         date.
+    */
+   public static Date fromDateTimeString (String date)
+   {
+      final Calendar cal = DatatypeConverter.parseDateTime(date);
+      cal.setLenient(false);
+      return new Date(cal.getTimeInMillis());
+   }
+
+   /**
+    * Parses the given String as schema date representation and returns
+    * a Date object holding the given time.
+    * This method must only be used after a JAXBContext has been initialized,
+    * otherwise it is likely that a NullpointerException is thrown.
+    * @param date the date in schema date representation
+    * @return a newly generated Date object representing the time given in the
+    *         date.
+    */
+   public static Date fromDateString (String date)
+   {
+      final Calendar cal = DatatypeConverter.parseDate(date);
+      cal.setLenient(false);
+      return new Date(cal.getTimeInMillis());
+   }
+   
 }

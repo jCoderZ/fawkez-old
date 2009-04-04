@@ -53,6 +53,7 @@ import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
 import org.jcoderz.commons.ArgumentMalformedException;
+import org.jcoderz.commons.types.Date;
 import org.jcoderz.commons.util.Assert;
 import org.jcoderz.commons.util.FileUtils;
 import org.jcoderz.commons.util.IoUtil;
@@ -91,6 +92,8 @@ public class ReportMerger
    /** The old Report. */
    private File mOldReport;
 
+   /** The old Report. */
+   private final Date mReportDate = Date.now();
 
    /**
     * Merge input reports.
@@ -255,6 +258,7 @@ public class ReportMerger
                     && oldItem.getFindingType().equals(newItem.getFindingType())
                     && oldItem.getCounter() <= newItem.getCounter())
                 {
+                    newItem.setSince(oldItem.getSince());
                     newIterator.remove();
                     oldIterator.remove();
                     break;
@@ -280,6 +284,7 @@ public class ReportMerger
                     && oldItem.getFindingType().equals(newItem.getFindingType())
                     && oldItem.getCounter() <= newItem.getCounter())
                 {
+                    newItem.setSince(oldItem.getSince());
                     newIterator.remove();
                     oldIterator.remove();
                     break;
@@ -306,6 +311,7 @@ public class ReportMerger
     {
         item.unsetOld();
         item.setNew(true);
+        item.setSince(mReportDate);
     }
 
 

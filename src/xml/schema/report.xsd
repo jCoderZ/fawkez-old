@@ -27,6 +27,10 @@
             enableFailFastCheck="false"
             generateIsSetMethod="true"
             underscoreBinding="asCharInWord">
+            <jxb:javaType name="org.jcoderz.commons.types.Date" 
+              xmlType="xsd:dateTime" 
+              printMethod="toString"   
+              parseMethod="org.jcoderz.commons.util.XsdUtil.fromDateTimeString"/>
             <xjc:serializable uid="106"/>
          </jxb:globalBindings>
          <jxb:schemaBindings>
@@ -56,6 +60,7 @@
    <xsd:attribute name='end-line' type='xsd:int' use='optional'/>
    <xsd:attribute name='new' type='xsd:boolean' use='optional'/>
    <xsd:attribute name='old' type='xsd:boolean' use='optional'/>
+   <xsd:attribute name='since' type='xsd:dateTime' use='optional'/>
   </xsd:complexType>
  </xsd:element>
 

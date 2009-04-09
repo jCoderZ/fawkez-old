@@ -36,7 +36,7 @@ import java.awt.Color;
 
 /**
  * Simple class to demonstrate some Findbugs finder.
- * 
+ *
  * @author Andreas
  *
  */
@@ -46,37 +46,49 @@ public class FindbugsFindings
 
     /**
      * Method to demonstrate the finder that detects calls to equals
-     * with different classes. 
+     * with different classes.
      */
     public void compareWithEquals ()
     {
         final String foo = "FOO";
         final Color bar = Color.GREEN;
-        
+
         if (foo.equals(bar))
         {
             throw new RuntimeException(
                     "Ups, this should never happen, JDK bug?");
         }
 
-        synchronized (sLock) 
+        synchronized (sLock)
         {
             // a test
         }
 
     }
-    
-    
+
+
     public void noInfinitLoop ()
     {
         final int offset = 5;
         final int current = 10;
-        final int start = current - offset;    
+        final int start = current - offset;
         final int end = current + offset;
-        
+
         for (int i = start; i <= end; i++)
         {
             System.out.println("At " + i);
         }
+    }
+
+    public void couldBeStaticInnerClass (final String test)
+    {
+        final Runnable go = new Runnable()
+        {
+            public void run ()
+            {
+                System.out.println("Input was " + test);
+            }
+        };
+        new Thread(go).run();
     }
 }

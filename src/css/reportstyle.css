@@ -121,6 +121,18 @@ text-align: right;
 tr.okodd td { background:#e0e0e0; }
 tr.okeven td { background:#ffffff; }
 
+td.code {
+border-width: 0px 1px 0px 1px;
+border-color: black;
+border-style: solid;
+}
+
+td.code_last {
+border-width: 0px 1px 1px 1px;
+border-color: black;
+border-style: solid;
+}
+
 td.code-odd {
 border-width: 0px 1px 0px 1px;
 border-color: black;

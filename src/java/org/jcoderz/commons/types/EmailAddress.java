@@ -90,8 +90,10 @@ import org.jcoderz.commons.util.StringUtil;
  * CFWS            =       *([FWS] comment) (([FWS] comment) / FWS)
  * </pre>
  *
- * <p>The maximum length of an email address is: 64+1+255 characters (local-part + @ + domain).
- * The minimum length of an email address is: 1+1+4 characters (local-part + @ + domain).</p>
+ * <p>The maximum length of an email address is: 
+ * 64+1+255 characters (local-part + @ + domain).
+ * The minimum length of an email address is: 
+ * 1+1+4 characters (local-part + @ + domain).</p>
  *
  * <p>A valid list of top-level domains is defined by the IANA. A top-level
  * domain which is not part of the
@@ -122,8 +124,10 @@ public class EmailAddress
   private static final String LETTER = "[a-zA-Z]";
   private static final String LET_DIG = "[a-zA-Z0-9]";
   private static final String LET_DIG_HYP = "[a-zA-Z0-9-]";
-  private static final String RFC_LABEL = LET_DIG + LET_DIG_HYP + "{0,61}" + LET_DIG;
-  private static final String DOMAIN = RFC_LABEL + "(\\." + RFC_LABEL + ")*\\." + LETTER + "{2,6}";
+  private static final String RFC_LABEL 
+      = LET_DIG + LET_DIG_HYP + "{0,61}" + LET_DIG;
+  private static final String DOMAIN 
+      = RFC_LABEL + "(\\." + RFC_LABEL + ")*\\." + LETTER + "{2,6}";
 
   //Combined together, these form the allowed email regexp allowed by RFC 2822:
   private static final String ADDRESS = "^" + LOCAL_PART + "@" + DOMAIN + "$";
@@ -140,7 +144,7 @@ public class EmailAddress
    *
    * @param email The email address.
    */
-  public EmailAddress(String email)
+  public EmailAddress (String email)
   {
     Assert.notNull(email, "email");
     final String mail = email.trim();
@@ -155,12 +159,14 @@ public class EmailAddress
     if (at > MAX_LENGTH_LOCAL_PART)
     {
       throw new ArgumentMalformedException("email", email,
-          "The local part is longer than " + MAX_LENGTH_LOCAL_PART + " characters!");
+          "The local part is longer than " + MAX_LENGTH_LOCAL_PART 
+          + " characters!");
     }
     if (mail.length() - at - 1 > MAX_LENGTH_DOMAIN)
     {
       throw new ArgumentMalformedException("email", email,
-          "The domain is longer than " + MAX_LENGTH_DOMAIN + " characters!");
+          "The domain is longer than " + MAX_LENGTH_DOMAIN 
+          + " characters!");
     }
     mLocalPart = mail.substring(0, at);
     mDomain = mail.substring(at + 1);
@@ -170,7 +176,8 @@ public class EmailAddress
   }
 
   /**
-   * Factory method for converting a String into an instance of type EmailAddress.
+   * Factory method for converting a String into an instance of type 
+   * EmailAddress.
    *
    * @param email the email address to parse
    * @return An instance of type EmailAddress
@@ -182,10 +189,9 @@ public class EmailAddress
 
   /**
    * Returns the local part of the address.
-   *
    * @return the local part of the address.
    */
-  public String getName()
+  public String getName ()
   {
     return mLocalPart;
   }
@@ -193,10 +199,9 @@ public class EmailAddress
 
   /**
    * Returns the domain name of the address.
-   *
    * @return the domain name of the address.
    */
-  public String getDomain()
+  public String getDomain ()
   {
     return mDomain;
   }
@@ -204,10 +209,9 @@ public class EmailAddress
 
   /**
    * Returns the top-level domain name of the address.
-   *
    * @return the top-level domain name of the address.
    */
-  public String getTopLevelDomain()
+  public String getTopLevelDomain ()
   {
     return mTopLevelDomain;
   }
@@ -215,10 +219,9 @@ public class EmailAddress
 
   /**
    * Returns the full email address.
-   *
    * @return the full email address.
    */
-  public String getAddress()
+  public String getAddress ()
   {
     return mLocalPart + "@" + mDomain;
   }
@@ -227,17 +230,18 @@ public class EmailAddress
    * Returns the full email address.
    * @return the full email address.
    */
-  public String toString()
+  public String toString ()
   {
     return mLocalPart + "@" + mDomain;
   }
 
   /**
    * Returns the true if this email address equals the other.
+   * @param obj the object to compare to.
    * @return the true if this email address equals the other.
    * @see java.lang.Object#equals(java.lang.Object)
    */
-  public boolean equals(Object obj)
+  public boolean equals (Object obj)
   {
     boolean result = false;
     if (this == obj)
@@ -260,7 +264,7 @@ public class EmailAddress
    * Returns the hash code for this email.
    * @return the hash code for this email.
    */
-  public int hashCode()
+  public int hashCode ()
   {
     int hashCode = HashCodeUtil.hash(HashCodeUtil.SEED, mLocalPart);
     return HashCodeUtil.hash(hashCode, mDomain);

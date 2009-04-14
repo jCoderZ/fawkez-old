@@ -74,14 +74,9 @@ import org.jcoderz.phoenix.report.jaxb.Item;
 import org.jcoderz.phoenix.report.jaxb.Report;
 
 /**
- * TODO: Fix CVS links
- * TODO: Refactor!
  * TODO: Link to current build
  * TODO: Link to CC home
  * TODO: Add @media printer???
- * TODO: Add doku
- * TODO: Codestyle
- * TODO: Generate error group view
  *
  * @author Andreas Mandel
  */
@@ -112,7 +107,7 @@ public final class Java2Html
    /** Name of the index page with content sorted by coverage. */
    private static final String SORT_BY_COVERAGE_INDEX = "index_c.html";
 
-   /** Marker for ccs stypes used as the last row in a table. */
+   /** Marker for ccs styles used as the last row in a table. */
    private static final String LAST_MARKER = "_last";
 
    private static final String DEFAULT_STYLESHEET = "reportstyle.css";
@@ -435,28 +430,17 @@ public final class Java2Html
       final Report report = (Report) unmarshaller.unmarshal(mInputData);
       mGlobalSummary = new FileSummary();
 
-//      final Iterator files = report.getFile().iterator();
-
       for (final org.jcoderz.phoenix.report.jaxb.File file
           : (List<org.jcoderz.phoenix.report.jaxb.File>) report.getFile())
       {
          try
          {
-            if (file.getName().endsWith(".java"))
-            {
-               // TODO parentDir = project-home (from jcoderz report xml)
-               java2html(new java.io.File(file.getName()), file);
-            }
-            else
-            {
-               mGlobalFindings.add(file);
-            }
+            java2html(new java.io.File(file.getName()), file);
          }
          catch (Exception ex)
          {
             logger.log(Level.SEVERE,
-                  "Failed to generate report for '" + file.getName() + "'.",
-                  ex);
+                "Failed to generate report for '" + file.getName() + "'.", ex);
             mGlobalFindings.add(file);
          }
       }
@@ -484,7 +468,6 @@ public final class Java2Html
       }
       sc.createCharts();
 
-      // copy the stylesheet and the icons
       copyStylesheet();
       copyIcons();
 
@@ -827,7 +810,7 @@ public final class Java2Html
                   bw.write("      <a name='FINDING" + pos + "' />\n");
                   bw.write("         (" + pos + ")\n");
                   bw.write("   </td>\n");
-                  bw.write("   <td></td><td></td><td></td>\n"); // linenumber
+                  bw.write("   <td></td><td></td><td></td>\n"); // line number
                   bw.write("   <td width='100%' class='findings-data'>\n");
                   bw.write(XmlUtil.escape(item.getMessage()));
                   if (item.getSeverityReason() != null)

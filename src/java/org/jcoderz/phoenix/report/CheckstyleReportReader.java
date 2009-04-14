@@ -45,6 +45,7 @@ import java.util.logging.Logger;
 
 import javax.xml.bind.JAXBException;
 
+import org.jcoderz.commons.util.IoUtil;
 import org.jcoderz.phoenix.checkstyle.jaxb.Checkstyle;
 import org.jcoderz.phoenix.report.jaxb.Item;
 import org.jcoderz.phoenix.report.jaxb.ObjectFactory;
@@ -80,8 +81,16 @@ public final class CheckstyleReportReader
    public void parse (File f)
          throws FileNotFoundException, JAXBException
    {
-      mReportDocument = (Checkstyle) getUnmarshaller().unmarshal(
-            new FileInputStream(f));
+      final FileInputStream is = new FileInputStream(f);
+      try
+      {
+          mReportDocument 
+              = (Checkstyle) getUnmarshaller().unmarshal(is);
+      }
+      finally
+      {
+          IoUtil.close(is);
+      }
    }
 
    protected Map getItems ()
@@ -189,7 +198,7 @@ public final class CheckstyleReportReader
       return ret;
    }
 
-   private static String sourceToClass(String source)
+   private static String sourceToClass (String source)
    {
        final int i = source.lastIndexOf('.');
        return source.substring(i + 1);

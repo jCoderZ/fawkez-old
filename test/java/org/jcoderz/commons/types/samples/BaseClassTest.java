@@ -44,9 +44,9 @@ public class BaseClassTest
     extends TestCase
 {
     /**
-     * Test the inheritance should call super.equals();
+     * Test the inheritance should call super.equals().
      */
-    public void testInheritanceEquals()
+    public void testInheritanceEquals ()
     {
         final SampleValueObject value = new SampleValueObject();
         value.setTestValue(1);
@@ -61,9 +61,9 @@ public class BaseClassTest
     }
 
     /**
-     * Test the inheritance should call super.hashCode();
+     * Test the inheritance should call super.hashCode().
      */
-    public void testInheritanceHashCode()
+    public void testInheritanceHashCode ()
     {
         final SampleValueObject value = new SampleValueObject();
         value.setTestValue(1);
@@ -73,20 +73,20 @@ public class BaseClassTest
         value2.setTestValue(1);
         value2.setTestValueBase(0);
 
-        assertTrue("Base class fields not honored in hash code.",
-            value.hashCode() != value2.hashCode());
+        assertFalse("Base class fields not honored in hash code.",
+            value.hashCode() == value2.hashCode());
     }
 
     /**
-     * Test the inheritance should call super.toString();
+     * Test the inheritance should call super.toString().
      */
-    public void testInheritanceToString()
+    public void testInheritanceToString ()
     {
         final SampleValueObject value = new SampleValueObject();
         value.setTestValue(1);
         value.setTestValueBase(0);
 
         assertTrue("Can't see base class fields in string output.",
-            value.toString().indexOf("0") > -1);
+            value.toString().indexOf('0') > -1);
     }
 }

@@ -193,7 +193,7 @@ public class ReportMerger
        }
    }
 
-    private void findNewFindings(org.jcoderz.phoenix.report.jaxb.File newFile,
+    private void findNewFindings (org.jcoderz.phoenix.report.jaxb.File newFile,
         org.jcoderz.phoenix.report.jaxb.File oldFile)
     {
         final List<Item> newFindings 
@@ -208,7 +208,7 @@ public class ReportMerger
 
         // the rest...
         flaggAllAsNew(newFindings);
-        for(Item item:(List<Item>) oldFindings)
+        for (Item item : (List<Item>) oldFindings)
         {
             addAsOld(newFile.getItem(), item);
         }
@@ -217,7 +217,7 @@ public class ReportMerger
 
     private void flaggAllAsNew (final List<Item> newFindings)
     {
-        for(Item item:(List<Item>) newFindings)
+        for (Item item : (List<Item>) newFindings)
         {
             if (item.getSeverity().getPenalty() > 0
                 && item.getSeverity() != Severity.COVERAGE)
@@ -324,7 +324,7 @@ public class ReportMerger
        final String packageName = newFile.getPackage();
        final String fileName = newFile.getName();
        org.jcoderz.phoenix.report.jaxb.File result = null;
-       for(org.jcoderz.phoenix.report.jaxb.File file : 
+       for (org.jcoderz.phoenix.report.jaxb.File file : 
            (List<org.jcoderz.phoenix.report.jaxb.File>) oldReport.getFile())
        {
            if (file.getName().equals(fileName) 

@@ -157,7 +157,7 @@ public final class ResourceInfo
     public static ResourceInfo lookup (String packageName, String className)
     {
         ResourceInfo result = null;
-        for (ResourceInfo resource: RESOURCES.values())
+        for (ResourceInfo resource : RESOURCES.values())
         {
             if (resource.getClassname().equals(className)
                 && resource.getPackage().equals(packageName))

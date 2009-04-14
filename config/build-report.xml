@@ -20,6 +20,7 @@
          <fileset dir="${base.dir}/lib">
             <include name="default/jaxb/*.jar"/>
             <include name="default/chart2d/*.jar"/>
+            <include name="default/jedit/*.jar"/>
          </fileset>
       </path>
       <taskdef name="jcsummaryreport"
@@ -64,6 +65,9 @@
             <include name="default/chart2d/*.jar"/>
             <include name="default/emma/*.jar"/>
          </fileset>
+        <fileset dir="${build.dir}">
+           <include name="jedit-syntax.jar"/>
+        </fileset>
       </path>
       <taskdef name="jcreport"
                classname="org.jcoderz.phoenix.report.JcReportAntTask">

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="ASCII"?>
 <?xml-stylesheet type="text/xsl"
     href="http://www.jayasoft.fr/org/ivyrep/ivy-doc.xsl"?>
 <ivy-module version="1.1">
@@ -140,6 +140,10 @@
 
         <dependency org="emma" name="emma" rev="2.0.5312"/>
         <dependency org="emma" name="emma_ant" rev="2.0.5312"/>
+
+        <dependency org="jedit" name="jedit" rev="4.3pre16">
+            <artifact name="jedit-install" type="jar"/>
+        </dependency>
    </dependencies>
 
 </ivy-module>

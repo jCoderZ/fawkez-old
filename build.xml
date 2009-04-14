@@ -261,6 +261,46 @@ xerces in current vm: ${xerces.version.ant}
       depends="configure-proxy-with-auth, configure-proxy-without-auth"/>
 
     <!-- =================================================================== -->
+    <!-- Repackage jEdit for syntax highlightinh package                     -->
+    <!-- =================================================================== -->
+	<target name="repackage-jedit"
+	    depends="repackage-jedit.uptodatecheck,	repackage-jedit-nodeps"/>
+	<target name="repackage-jedit.uptodatecheck">
+	    <uptodate property="repackage-jedit.uptodate"
+	    	targetfile="${build.dir}/jedit-syntax.jar" 
+	    	srcfile="${base.dir}/lib/default/jedit/jedit-install.jar"/>
+    </target>
+	<target name="repackage-jedit-nodeps" 
+		unless="repackage-jedit.uptodate">
+		<mkdir dir="${build.dir}/jedit/jedit-syntax/modes"/>
+		<unjar src="${base.dir}/lib/default/jedit/jedit-install.jar"
+			dest="${build.dir}/jedit" overwrite="false">
+		    <patternset>
+		        <include name="**/jedit-program.tar.bz2"/>
+		    </patternset>
+			<mapper type="flatten"/>
+		</unjar>
+		<bunzip2 src="${build.dir}/jedit/jedit-program.tar.bz2" 
+			dest="${build.dir}/jedit/jedit-program.tar"/>
+		<untar src="${build.dir}/jedit/jedit-program.tar" 
+			dest="${build.dir}/jedit">
+		    <patternset>
+		        <include name="jedit.jar"/>
+		        <include name="modes/**"/>
+		    </patternset>
+		</untar>
+		<copy preservelastmodified="true"
+			todir="${build.dir}/jedit/jedit-syntax/modes">
+			<fileset dir="${build.dir}/jedit/modes"/>
+		</copy>
+		<unjar src="${build.dir}/jedit/jedit.jar"
+			dest="${build.dir}/jedit/jedit-syntax"
+			overwrite="false"/>
+		<jar destfile="${build.dir}/jedit-syntax.jar"
+			basedir="${build.dir}/jedit/jedit-syntax"/>
+	</target>
+	
+    <!-- =================================================================== -->
     <!-- Retrieve 3rd party libraries from ibiblio and local file repository -->
     <!-- =================================================================== -->
     <target name="retrieve-3rd-party-libs"
@@ -309,7 +349,7 @@ xerces in current vm: ${xerces.version.ant}
         </tstamp>
     </target>
     <target name="prepare" depends="timestamp, dump-info,
-        generate-version-class, retrieve-3rd-party-libs">
+        generate-version-class, retrieve-3rd-party-libs, repackage-jedit">
         <!-- Part of the IDE source path -->
         <mkdir dir="${build.dir}/gen-java"/>
         <mkdir dir="${build.dir}/gen-test"/>
@@ -933,7 +973,11 @@ xerces in current vm: ${xerces.version.ant}
          </fileset>
       </sqltransformer>
 
-      <!-- etc -->
+   	    <!-- The repackaged jEdit syntax highlighter -->
+        <copy todir="${dist.dir}/"
+    	    file="${build.dir}/jedit-syntax.jar"/>
+
+   	  <!-- etc -->
       <copy todir="${dist.dir}/etc">
          <fileset dir="${base.dir}/src/xml">
             <include name="app-info.xml"/>

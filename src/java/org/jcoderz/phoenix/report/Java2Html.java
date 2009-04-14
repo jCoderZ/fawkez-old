@@ -30,28 +30,6 @@
  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-/*
- * Java2HTML v0.1 alpha converts a java source code into HTML with
- * syntax highlighting for keywords, comments, strings and chars
- *
- * The contents of this file are subject to the
- * Mozilla Public License Version 1.1 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at http://www.mozilla.org/MPL/
- *
- * Software distributed under the License is distributed on an
- * "AS IS" basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
- * See the License for the specific language governing rights
- * and limitations under the License.
- *
- * The Original Code is Java2HTML Converter v0.1 alpha.
- * The Initial Developer of the Original Code is Borislav Manolov.
- * Portions created by Borislav Manolov are Copyright (C) 2003,
- * Borislav Manolov. All Rights Reserved.
- *
- * Submit bugs and comments at manfear@web.de
- * 03/03/03
- */
 package org.jcoderz.phoenix.report;
 
 import java.io.BufferedWriter;
@@ -70,13 +48,13 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -134,8 +112,6 @@ public final class Java2Html
    /** Name of the index page with content sorted by coverage. */
    private static final String SORT_BY_COVERAGE_INDEX = "index_c.html";
 
-   private static final Integer INTEGER_ZERO = Integer.valueOf(0);
-
    /** Marker for ccs stypes used as the last row in a table. */
    private static final String LAST_MARKER = "_last";
 
@@ -144,6 +120,11 @@ public final class Java2Html
    /** Collects a List of all <code>FileSummary</code>s of the report. */
    private final List<FileSummary> mAllFiles
        = new ArrayList<FileSummary>();
+
+   private static final int ABSOLUTE_END_OF_LINE = 9999;
+
+   /** Default tab with to use. */
+   private static final int DEFAULT_TAB_WIDTH = 8;
 
 
    /** Map of package name + FileSummary for this package. */
@@ -157,8 +138,8 @@ public final class Java2Html
     */
    private final Map<Integer, List<Item>> mFindingsInFile
        = new HashMap<Integer, List<Item>>();
-   private final Map<Integer, String> mFindingsInCurrentLine
-       = new HashMap<Integer, String>();
+   private final Set<Item> mFindingsInCurrentLine
+       = new HashSet<Item>();
    private final List<Item> mCurrentFindings = new ArrayList<Item>();
    private final List<Item> mHandledFindings
        = new ArrayList<Item>();
@@ -169,8 +150,6 @@ public final class Java2Html
    private FileSummary mGlobalSummary;
 
 
-   /** HtmlView object used to render input source into html code. */
-   private final HtmlView mHtmlView = new HtmlView();
    private String mProjectName = "";
    private String mWebVcBase = null;
    private String mWebVcSuffix = "";
@@ -199,6 +178,10 @@ public final class Java2Html
     */
    private final List<Item> mActiveItems
        = new LinkedList<Item>();
+
+   private Charset mCharSet = Charset.defaultCharset();
+
+   private int mTabWidth = DEFAULT_TAB_WIDTH;
 
    /**
     * Constructor.
@@ -344,13 +327,37 @@ public final class Java2Html
    }
 
    /**
+    * Sets the tab with to be used when calculating the position in the current line.
+    * @param tabWidth the tab width to assume in input files.
+    */
+   public void setTabwidth (String tabWidth)
+   {
+       Assert.notNull(tabWidth, "width");
+       mTabWidth = Integer.parseInt(tabWidth);
+       logger.config("Source tab width set to '" + mTabWidth + "'.");
+   }
+
+   /**
+    * The log level to be used when processing the input. 
+    * Level must be parseable by {@link Level#parse(String)}.
+    * @param loglevel the log level to set.
+    */
+   public void setLoglevel (String loglevel)
+   {
+       mLogLevel = Level.parse(loglevel);
+       LoggingUtils.setGlobalHandlerLogLevel(Level.ALL);
+       logger.fine("Setting log level: " + mLogLevel);
+       logger.setLevel(mLogLevel);
+   }
+
+   /**
     * Sets the char-set used for the source files.
     * @param charset The char-set in which the source files are expected.
     */
    public void setSourceCharset (Charset charset)
    {
       Assert.notNull(charset, "charset");
-      mHtmlView.setSourceCharset(charset);
+      mCharSet = charset;
       logger.config("Source charset set to '" + charset + "'.");
    }
 
@@ -484,11 +491,12 @@ public final class Java2Html
       logger.fine("Done.");
    }
 
-   private void copyIcons ()
+   private void copyIcons () 
+       throws IOException
    {
       // create images sub-folder
       final File outDir = new File(mOutDir, "images");
-      outDir.mkdirs();
+      FileUtils.mkdirs(outDir);
 
       for (int i = 0; i < Severity.VALUES.size(); i++)
       {
@@ -552,6 +560,7 @@ public final class Java2Html
          }
          catch (FileNotFoundException ex)
          {
+             IoUtil.close(in);
             in = this.getClass().getResourceAsStream(DEFAULT_STYLESHEET);
             if (in == null)
             {
@@ -623,6 +632,10 @@ public final class Java2Html
             {
                setLoglevel(args[i + 1]);
             }
+            else if ("-tabwidth".equals(args[i]))
+            {
+               setTabwidth(args[i + 1]);
+            }
             else
             {
                throw new IllegalArgumentException(
@@ -643,18 +656,10 @@ public final class Java2Html
       {
          final IllegalArgumentException ex = new IllegalArgumentException(
                "Problem with arument value for " + args[args.length - 1]
-               + "Argument line was "+ ArraysUtil.toString(args));
+               + "Argument line was " + ArraysUtil.toString(args));
          ex.initCause(e);
          throw ex;
       }
-   }
-
-   private void setLoglevel (String loglevel)
-   {
-       mLogLevel = Level.parse(loglevel);
-       LoggingUtils.setGlobalHandlerLogLevel(Level.ALL);
-       logger.fine("Setting log level: " + mLogLevel);
-       logger.setLevel(mLogLevel);
    }
 
    /**
@@ -708,6 +713,7 @@ public final class Java2Html
       mCurrentFindings.clear();
       mHandledFindings.clear();
       mFindingsInFile.clear();
+      mFindingsInCurrentLine.clear();
       mActiveItems.clear();
       mCurrentFindings.addAll(data.getItem());
       fillFindingsInFile(data);
@@ -717,18 +723,18 @@ public final class Java2Html
       String file = null;
       try
       {
-         mHtmlView.reset(inFile);
-         mPackage = mHtmlView.getPackage();
-         mClassname = mHtmlView.getClassname();
+         mPackage = data.getPackage();
+         mClassname = data.getClassname();
 
          final String subdir = mPackage.replaceAll("\\.", "/");
          final java.io.File dir = new java.io.File(mOutDir, subdir);
-         dir.mkdirs();
+         FileUtils.mkdirs(dir);
 
          bw = openWriter(dir, mClassname + ".html");
 
+         final Syntax src = new Syntax(inFile, mCharSet, mTabWidth);
          final FileSummary summary
-               = createFileSummary(mHtmlView.getNumberOfLines(), subdir);
+               = createFileSummary(src.getNumberOfLines(), subdir);
          addSummary(summary);
 
          file = mPackage + "." + mClassname;
@@ -763,18 +769,16 @@ public final class Java2Html
                   + "<th class='remainder'>Source</th></tr></thead>");
          bw.write("<tbody>");
 
-         final int lastLine = mHtmlView.getNumberOfLines();
          // PASS 2
-         String line;
+         final int lastLine = src.getNumberOfLines();
          for (int currentLine = 1; currentLine <= lastLine; currentLine++)
          {
-            line = mHtmlView.getLine(currentLine);
             bw.write("<tr class='"
                + errorLevel(currentLine)
                + Java2Html.toOddEvenString(currentLine) + "'>");
             bw.write("<td align='right' class='lineno");
             final boolean isLast = currentLine == lastLine;
-            appendIf(bw, currentLine == lastLine, LAST_MARKER);
+            appendIf(bw, isLast, LAST_MARKER);
             bw.write("'><a name='LINE" + currentLine + "' />");
             bw.write(String.valueOf(currentLine));
             bw.write("</td>");
@@ -783,10 +787,11 @@ public final class Java2Html
             appendIf(bw, isLast, LAST_MARKER);
             bw.write("'>");
             bw.write(getIcons(currentLine));
-            bw.write("</td><td class='code");
+            bw.write("</td><td class='code-");
+            bw.write(Java2Html.toOddEvenString(currentLine));
             appendIf(bw, isLast, LAST_MARKER);
             bw.write("'>");
-            bw.write(replaceLeadingSpaces(addLineItems(line)));
+            createCodeLine(bw, src);
             bw.write("</td></tr>\n");
          }
          bw.write("</tbody>");
@@ -896,6 +901,7 @@ public final class Java2Html
          IoUtil.close(bw);
       }
    }
+
 
    /**
     * Generates a image related to the severity of the given Item.
@@ -1087,7 +1093,6 @@ public final class Java2Html
    private String getIcons (int line)
    {
       final StringBuilder icons = new StringBuilder();
-      mFindingsInCurrentLine.clear();
 
       // collect relevant findings
       final Iterator<Item> items = findingsInLine(line);
@@ -1124,16 +1129,9 @@ public final class Java2Html
             icons.append(mGetIconsStringBuffer);
             if (item.isSetColumn())
             {
-               final int pos = item.getColumn();
-               final String last = mFindingsInCurrentLine.get(pos);
-               if (last != null)
-               {
-                  mGetIconsStringBuffer.insert(0, last);
-               }
-               mFindingsInCurrentLine.put(pos,
-                     mGetIconsStringBuffer.toString());
+                mFindingsInCurrentLine.add(item);
             }
-            items.remove(); // item was handled fully
+           items.remove(); // item was handled fully
          }
       }
       if (icons.length() == 0)
@@ -1221,7 +1219,7 @@ public final class Java2Html
       final String packageName = pkg.get(0).getPackage();
       final String subdir = packageName.replaceAll("\\.", "/");
       final java.io.File dir = new java.io.File(mOutDir, subdir);
-      dir.mkdirs();
+      FileUtils.mkdirs(dir);
 
       final BufferedWriter bw = openWriter(dir, filename);
       try
@@ -1464,7 +1462,7 @@ public final class Java2Html
       bw.write(NEWLINE + "</head>" + NEWLINE + "<body>" + NEWLINE);
    }
 
-   private String relativeRoot (String currentPackage)
+   private static String relativeRoot (String currentPackage)
    {
       return relativeRoot(currentPackage, "index.html");
    }
@@ -1535,69 +1533,126 @@ public final class Java2Html
       return result;
    }
 
-   private String addLineItems (String line)
+   /**
+    * Create the marked html output for the current line.
+    * @param out the writer to generate the output to.
+    * @param src the source to read the line data from.
+    * @throws IOException if IO operations fail writing to the 
+    *   given writer.
+    */
+   private void createCodeLine (Writer out, Syntax src) 
+       throws IOException
    {
-      if (mFindingsInCurrentLine.isEmpty())
-      {
-         return line;
-      }
-      final StringBuilder result = mStringBuilder;
-      result.setLength(0);
-
-      int pos = 1;  // counting starts with 1
-      mFindingsInCurrentLine.remove(INTEGER_ZERO); // global findings
-      boolean quote = false;
-      boolean entity = false;
-      for (int i = 0; i < line.length(); i++)
-      {
-         final char current = line.charAt(i);
-         if (current == '<')
-         {
-            quote = true;
-         }
-         else
-         {
-            if (quote)
-            {
-               quote = (current != '>');
-               entity &= (current != ';');
-            }
-            else if (entity)
-            {
-               entity = (current != ';');
-            }
-            else
-            {
-               final String finding
-                     = mFindingsInCurrentLine.remove(pos);
-               if (finding != null)
+       String text = src.nextToken();
+       String lastTokenType = null;
+       Item lastFinding = null;
+       boolean isFirst = true;
+       while (null != src.getCurrentTokenType())
+       {
+           final Item currentFinding 
+               = getCurrentFinding(text, src.getCurrentLineNumber(),
+                   src.getCurrentLinePos(), src.getCurrentTokenLength());
+           if (currentFinding != lastFinding)
+           {
+               if (lastTokenType != null)
                {
-                  result.append(finding);
+                   out.write("</span>"); // close token type
+                   lastTokenType = null;
                }
-               pos++;
-            }
-         }
-         result.append(current);
-         if (current == '&')
-         {
-            entity = true;
-         }
-      }
-
-      final Iterator<Entry<Integer, String>> i
-          = mFindingsInCurrentLine.entrySet().iterator();
-      while (i.hasNext())
-      {
-         final Entry<Integer, String> entry = i.next();
-         final String finding = entry.getValue();
-         i.remove();
-         if (finding != null)
-         {
-            result.append(finding);
-         }
-      }
-      return result.toString();
+               if (lastFinding != null)
+               {
+                   out.write("</span>"); // close last finding
+               }
+               if (currentFinding != null)
+               {
+                   out.write("<span class='finding-");
+                   out.write(currentFinding.getSeverity().toString());
+                   out.write("' title='");
+                   out.write(
+                       XmlUtil.attributeEscape(currentFinding.getMessage()));
+                   out.write("'>");
+               }
+               lastFinding = currentFinding;
+           }
+           final String tokenType = src.getCurrentTokenType();
+           if (!tokenType.equals(lastTokenType))
+           {
+               if (lastTokenType != null)
+               {
+                   out.write("</span>");
+                   isFirst = false;
+               }
+               out.write("<span class='code-");
+               out.write(tokenType);
+               out.write("'>");
+           }
+           String xml = XmlUtil.escape(text);
+           if (isFirst)
+           {
+               xml = replaceLeadingSpaces(xml);
+           }
+           out.write(xml); 
+           
+           lastTokenType = tokenType;
+           text = src.nextToken();
+       }
+       if (lastTokenType != null)
+       {
+           out.write("</span>");
+       }
+       if (lastFinding != null)
+       {
+           out.write("</span>");
+       }
    }
+
+   private Item getCurrentFinding (
+       String text, int currentLineNumber, int currentLinePos, int tokenLen)
+   {
+       Item theFinding = null;
+       final Iterator<Item> i = mFindingsInCurrentLine.iterator();
+       while (i.hasNext())
+       {
+           final Item finding = i.next();
+           
+           if (finding.getEndLine() < currentLineNumber 
+               && finding.getLine() < currentLineNumber)
+           {
+               i.remove();
+               continue;
+           }
+           
+           final int start = 
+               finding.getLine() == currentLineNumber
+                   ? finding.getColumn() : 0;
+           int end = 
+               finding.getEndLine() == currentLineNumber 
+                   ? finding.getEndColumn() : ABSOLUTE_END_OF_LINE;
+           if (finding.getEndLine() == 0)
+           {
+               end = finding.getEndColumn();
+           }
+           
+           // TODO Add code to find pos by symbol!
+                // finding at current pos
+           if ((start == currentLinePos && end == 0)
+                // or in range that contains the current pos
+               || (start <= currentLinePos && end >= currentLinePos)
+                // or inside the token
+               || (start >= currentLinePos 
+                   && start < currentLinePos + tokenLen))
+           {
+               if (theFinding == null
+                   || finding.getSeverity().compareTo(
+                       theFinding.getSeverity()) > 0)
+               {
+                   theFinding = finding;
+               }
+           }
+       }
+       return theFinding;
+   }
+
 
    /**
     * Creates a list of all classes as html table and appends it to the

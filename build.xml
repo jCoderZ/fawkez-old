@@ -53,6 +53,7 @@
     </path>
     <path id="default.classpath">
       <path refid="xalan.classpath"/>
+      <path location="${build.dir}/jedit-syntax.jar"/>
       <path location="${base.dir}/lib/eclipse/tools.jar"/>
       <fileset dir="${base.dir}/lib">
         <include name="default/**/*.jar"/>

@@ -69,6 +69,7 @@ import org.jcoderz.commons.util.EmptyIterator;
 import org.jcoderz.commons.util.FileUtils;
 import org.jcoderz.commons.util.IoUtil;
 import org.jcoderz.commons.util.LoggingUtils;
+import org.jcoderz.commons.util.StringUtil;
 import org.jcoderz.commons.util.XmlUtil;
 import org.jcoderz.phoenix.report.jaxb.Item;
 import org.jcoderz.phoenix.report.jaxb.Report;
@@ -709,6 +710,12 @@ public final class Java2Html
          mPackage = data.getPackage();
          mClassname = data.getClassname();
 
+         // If no class name is reported take the filename.
+         if (StringUtil.isEmptyOrNull(mClassname))
+         {
+             mClassname = inFile.getName();
+         }
+         
          final String subdir = mPackage.replaceAll("\\.", "/");
          final java.io.File dir = new java.io.File(mOutDir, subdir);
          FileUtils.mkdirs(dir);

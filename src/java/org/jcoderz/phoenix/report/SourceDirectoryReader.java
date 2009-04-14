@@ -105,14 +105,9 @@ public final class SourceDirectoryReader
                 addSourceFiles(files[i], subpkg, sourceDir);
             }
          }
-         else if (resourceName.endsWith(".java")
-               || resourceName.endsWith("package.html"))
+         else 
          {
             addResource(pkg, sourceDir, resourceName);
-         }
-         else
-         {
-            logger.finer("Ignoring source file: '" + files[i] + "'");
          }
       }
       // register package.html if not already registered (only in **/src/java**)

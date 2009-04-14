@@ -1199,6 +1199,7 @@ xerces in current vm: ${xerces.version.ant}
          <link href="http://findbugs.sourceforge.net/api/"/>
          <link href="http://xmlgraphics.apache.org/batik/javadoc/"/>
          <link href="http://www.hibernate.org/hib_docs/v3/api/"/>
+         <link href="http://www.jedit.org/api/"/>
       </javadoc>
       <!--
       <copy todir="${build.dir}/doc/api">

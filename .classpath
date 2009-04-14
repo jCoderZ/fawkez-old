@@ -159,5 +159,10 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="lib/default/emma/emma.jar"/>
 	<classpathentry kind="lib" path="lib/default/xom/xom.jar"/>
+	<classpathentry kind="lib" path="build/jedit-syntax.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="http://www.jedit.org/api"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="eclipse/bin"/>
 </classpath>

@@ -53,6 +53,7 @@ import org.apache.tools.ant.AntClassLoader;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Task;
+import org.jcoderz.commons.util.IoUtil;
 import org.jcoderz.commons.util.StringUtil;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -524,8 +525,16 @@ public abstract class XsltBasedTask
         throws IOException
     {
         final Properties props = new Properties();
-        props
-            .load(XsltBasedTask.class.getResourceAsStream(FAWKEZ_VERSION_FILE));
+        final InputStream in 
+            = XsltBasedTask.class.getResourceAsStream(FAWKEZ_VERSION_FILE);
+        try
+        {
+            props.load(in);
+        }
+        finally
+        {
+            IoUtil.close(in);
+        }
         return props;
     }
 

@@ -41,6 +41,7 @@ import org.gjt.sp.jedit.Mode;
 import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.syntax.ModeProvider;
 import org.gjt.sp.util.XMLUtilities;
+import org.jcoderz.commons.util.IoUtil;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.helpers.DefaultHandler;
@@ -97,6 +98,10 @@ public final class SyntaxModeCatalogHandler
             LOGGER.log(Level.WARNING, "Failed to load modes catalog, " 
                 + "no syntax highlighting will be available in the output.", 
                 ex);
+        }
+        finally
+        {
+            IoUtil.close(in);
         }
     }
 

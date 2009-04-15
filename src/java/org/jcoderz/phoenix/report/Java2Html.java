@@ -119,15 +119,14 @@ public final class Java2Html
     */
    private static final int MAX_LINES_WITH_INLINE_MARK = 3;
 
-   /** Collects a List of all <code>FileSummary</code>s of the report. */
-   private final List<FileSummary> mAllFiles
-       = new ArrayList<FileSummary>();
-
    private static final int ABSOLUTE_END_OF_LINE = 9999;
 
    /** Default tab with to use. */
    private static final int DEFAULT_TAB_WIDTH = 8;
 
+   /** Collects a List of all <code>FileSummary</code>s of the report. */
+   private final List<FileSummary> mAllFiles
+       = new ArrayList<FileSummary>();
 
    /** Map of package name + FileSummary for this package. */
    private final Map<String, FileSummary> mPackageSummary
@@ -184,6 +183,9 @@ public final class Java2Html
    private Charset mCharSet = Charset.defaultCharset();
 
    private int mTabWidth = DEFAULT_TAB_WIDTH;
+
+   /** The full Report. */
+   private Report mReport;
 
    /**
     * Constructor.
@@ -329,7 +331,8 @@ public final class Java2Html
    }
 
    /**
-    * Sets the tab with to be used when calculating the position in the current line.
+    * Sets the tab with to be used when calculating the position in the 
+    * current line.
     * @param tabWidth the tab width to assume in input files.
     */
    public void setTabwidth (String tabWidth)
@@ -434,11 +437,11 @@ public final class Java2Html
                   this.getClass().getClassLoader());
       final Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
       unmarshaller.setValidating(true);
-      final Report report = (Report) unmarshaller.unmarshal(mInputData);
+      mReport = (Report) unmarshaller.unmarshal(mInputData);
       mGlobalSummary = new FileSummary();
 
       for (final org.jcoderz.phoenix.report.jaxb.File file
-          : (List<org.jcoderz.phoenix.report.jaxb.File>) report.getFile())
+          : (List<org.jcoderz.phoenix.report.jaxb.File>) mReport.getFile())
       {
          try
          {
@@ -467,11 +470,11 @@ public final class Java2Html
       final StatisticCollector sc;
       if (mPackageBase == null)
       {
-        sc = new StatisticCollector(report, mOutDir, mTimestamp);
+        sc = new StatisticCollector(mReport, mOutDir, mTimestamp);
       }
       else
       {
-        sc = new StatisticCollector(report, mPackageBase, mOutDir, mTimestamp);
+        sc = new StatisticCollector(mReport, mPackageBase, mOutDir, mTimestamp);
       }
       sc.createCharts();
 
@@ -687,6 +690,10 @@ public final class Java2Html
       try
       {
           htmlHeader(out, "Finding report " + mProjectName, "");
+          out.write("<h1><a href='index.html'>View by Classes</a></h1>");
+          out.write("<h1>Findings - Overview</h1>");
+          createNewFindingsList(out);
+          createOldFindingsList(out);
           FindingsSummary.createOverallContent(out);
           out.write("</body></html>");
       }
@@ -696,7 +703,96 @@ public final class Java2Html
       }
    }
 
-   /**
+    private void createNewFindingsList (BufferedWriter out)
+        throws IOException
+    {
+        int row = 0;
+        for (org.jcoderz.phoenix.report.jaxb.File file 
+            : (List<org.jcoderz.phoenix.report.jaxb.File>) mReport.getFile())
+        {
+            for (Item item : (List<Item>) file.getItem())
+            {
+                if (item.isNew())
+                {
+                    if (row == 0)
+                    {
+                        openTable(out, "New");
+                    }
+                    createRow(out, file, item, row);
+                    row++;
+                }
+            }
+        }
+        if (row > 0)
+        {
+            closeTable(out);
+        }
+    }
+
+    private void createOldFindingsList (BufferedWriter out)
+        throws IOException
+    {
+        int row = 0;
+        for (org.jcoderz.phoenix.report.jaxb.File file 
+            : (List<org.jcoderz.phoenix.report.jaxb.File>) mReport.getFile())
+        {
+            for (Item item : (List<Item>) file.getItem())
+            {
+                if (item.isOld())
+                {
+                    if (row == 0)
+                    {
+                        openTable(out, "Fixed");
+                    }
+                    createRow(out, file, item, row);
+                    row++;
+                }
+            }
+        }
+        if (row > 0)
+        {
+            closeTable(out);
+        }
+    }
+    
+    private void createRow (BufferedWriter bw,
+        org.jcoderz.phoenix.report.jaxb.File file, Item item, int rowCounter)
+        throws IOException
+    {
+        bw.write("<tr class='ok");
+        bw.write(Java2Html.toOddEvenString(rowCounter));
+        bw.write("'><td class='findings-image'>");
+        appendSeverityImage(bw, item, "");
+        bw.write("</td><td width='100%' class='findings-data'>");
+        bw.write("<a href='");
+        bw.write(createReportLink(file));
+        bw.write("#LINE");
+        bw.write(String.valueOf(item.getLine()));
+        bw.write("'>");
+        bw.write(XmlUtil.escape(file.getClassname()));
+        bw.write(": ");
+        appendItemMessage(bw, item);
+        bw.write("</a></td></tr>\n");
+        
+    }
+
+    private void openTable (BufferedWriter out, String string) 
+        throws IOException
+    {
+        out.write("<h2 class='severity-header'>");
+        out.write(string);
+        out.write(" Findings</h2>");
+        out.write("<table width='95%' cellpadding='2' cellspacing='0' "
+              + "border='0'>");
+    }
+
+    private void closeTable (BufferedWriter out) 
+        throws IOException
+    {
+        out.append("</table>");
+    }
+    
+    /**
     * converts a java source to HTML
     * with syntax highlighting for the
     * comments, keywords, strings and chars
@@ -830,11 +926,7 @@ public final class Java2Html
                   bw.write("   </td>\n");
                   bw.write("   <td></td><td></td><td></td>\n"); // line number
                   bw.write("   <td width='100%' class='findings-data'>\n");
-                  bw.write(XmlUtil.escape(item.getMessage()));
-                  if (item.getSeverityReason() != null)
-                  {
-                     bw.write(XmlUtil.escape(item.getSeverityReason()));
-                  }
+                  appendItemMessage(bw, item);
                   bw.write("   </td>\n");
                   bw.write("</tr>\n");
                }
@@ -878,7 +970,7 @@ public final class Java2Html
             bw.write("   </td>\n");
             bw.write("   <td width='100%' class='findings-data'>\n");
             bw.write("      <a href='" + link + "' >\n");
-            bw.write(XmlUtil.escape(item.getMessage()));
+            appendItemMessage(bw, item);
             bw.write("\n");
             bw.write("      </a>\n");
             bw.write("   </td>\n");
@@ -902,6 +994,29 @@ public final class Java2Html
          IoUtil.close(bw);
       }
    }
+
+private void appendItemMessage (BufferedWriter bw, final Item item)
+    throws IOException
+{
+    if (item.isOld())
+      {
+          bw.write("Fixed: ");
+      }
+      if (item.isNew())
+      {
+          bw.write("New: ");
+      }
+      bw.write(XmlUtil.escape(item.getMessage()));
+      if (item.getSeverityReason() != null)
+      {
+         bw.write(XmlUtil.escape(item.getSeverityReason()));
+      }
+      if (item.isSetSince())
+      {
+         bw.write("Since: ");
+         bw.write(item.getSince().toString());
+      }
+}
 
 
    /**
@@ -1107,7 +1222,8 @@ public final class Java2Html
                items.remove(); // will never see this again!
             }
          }
-         else if (item.getSeverity() == Severity.FILTERED)
+         else if (item.getSeverity() == Severity.FILTERED
+             || item.isOld())
          {
             // not listen with the code but in the global section below the
             // code.
@@ -1870,5 +1986,21 @@ public final class Java2Html
            throw ex;
        }
        return result;
+   }
+   
+   private static String createReportLink(org.jcoderz.phoenix.report.jaxb.File file)
+   {
+       String pkg = file.getPackage();
+       String clazzName = file.getClassname();
+
+       // If no class name is reported take the filename.
+       if (StringUtil.isEmptyOrNull(clazzName))
+       {
+           clazzName = new File(file.getName()).getName();
+       }
+       
+       final String subdir = pkg.replaceAll("\\.", "/");
+       
+       return subdir + "/" + clazzName + ".html";
    }
 }

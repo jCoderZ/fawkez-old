@@ -183,9 +183,6 @@ final class FindingsSummary
                 = colAllFindings.toArray(
                     new FindingSummary[colAllFindings.size()]);
 
-         out.write("<h1><a href='index.html'>View by Classes</a></h1>");
-         out.write("<h1>Findings - Overview</h1>");
-
          Arrays.sort(allFindings);
 
          Severity currentSeverity = null;

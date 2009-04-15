@@ -113,6 +113,12 @@ public final class Java2Html
 
    private static final String DEFAULT_STYLESHEET = "reportstyle.css";
 
+   /** 
+    * Only findings that span at maximum this number of lines are 
+    * highlighted in the code.
+    */
+   private static final int MAX_LINES_WITH_INLINE_MARK = 3;
+
    /** Collects a List of all <code>FileSummary</code>s of the report. */
    private final List<FileSummary> mAllFiles
        = new ArrayList<FileSummary>();
@@ -1122,7 +1128,9 @@ public final class Java2Html
             mGetIconsStringBuffer.append(mHandledFindings.size());
             mGetIconsStringBuffer.append(")</span></a>");
             icons.append(mGetIconsStringBuffer);
-            if (item.isSetColumn())
+            if (item.isSetColumn() 
+                && (!item.isSetEndLine() 
+                    || item.getEndLine() - line <= MAX_LINES_WITH_INLINE_MARK))
             {
                 mFindingsInCurrentLine.add(item);
             }

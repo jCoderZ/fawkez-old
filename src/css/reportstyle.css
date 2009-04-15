@@ -260,7 +260,7 @@ a.cvs:active { color:#0000EE; background-color:#FFFF99; font-weight:bold; }
 
 /* lines numbers */
 .ln {
-	color: #b0b0b0;
+    color: #b0b0b0;
     background-color: inherit;
     font-family: courier, sans-serif;
     font-weight: normal;
@@ -326,58 +326,47 @@ padding:10px; padding-top:20px;
 .code-LITERAL1 { color:#2A00FF; }
 .code-LITERAL2 { color:#2A00FF; } /* null */
  
-/* Higlight the code position */
+/* Higlight the code position 
+    no style for finding-ok  and finding-coverage */
 .finding-filtered 
 { 
-  border-bottom-width: 2px;
-  border-bottom-color: gray;
-  border-bottom-style: dotted; 
-}
-.finding-ok 
-{ 
-  border-bottom-width: 2px;
-  border-bottom-color: green;
-  border-bottom-style: dotted; 
+  background-image: url(images/bg-filtered.gif);
+  background-repeat: repeat-x;
+  background-position: bottom;
 }
 .finding-info 
 { 
-  border-bottom-width: 2px;
-  border-bottom-color: blue;
-  border-bottom-style: dotted; 
+  background-image: url(images/bg-info.gif);
+  background-repeat: repeat-x;
+  background-position: bottom;
 }
 .finding-code-style 
 { 
-  border-bottom-width: 2px;
-  border-bottom-color: aqua;
-  border-bottom-style: dotted; 
-}
-.finding-coverage 
-{ 
-  border-bottom-width: 2px;
-  border-bottom-color: blue;
-  border-bottom-style: dotted; 
+  background-image: url(images/bg-code-style.gif);
+  background-repeat: repeat-x;
+  background-position: bottom;
 }
 .finding-design 
 { 
-  border-bottom-width: 2px;
-  border-bottom-color: fuchsia;
-  border-bottom-style: dotted; 
+  background-image: url(images/bg-design.gif);
+  background-repeat: repeat-x;
+  background-position: bottom;
 }
 .finding-warning 
 { 
-  border-bottom-width: 2px;
-  border-bottom-color: red;
-  border-bottom-style: dotted; 
+  background-image: url(images/bg-warning.gif);
+  background-repeat: repeat-x;
+  background-position: bottom;
 }
 .finding-cpd 
 { 
-  border-bottom-width: 2px;
-  border-bottom-color: red;
-  border-bottom-style: dotted; 
+  background-image: url(images/bg-cpd.gif);
+  background-repeat: repeat-x;
+  background-position: bottom;
 }
 .finding-error 
 { 
-  border-bottom-width: 2px;
-  border-bottom-color: maroon;
-  border-bottom-style: dotted; 
+  background-image: url(images/bg-error.gif);
+  background-repeat: repeat-x;
+  background-position: bottom;
 }

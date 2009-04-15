@@ -489,19 +489,24 @@ public final class Java2Html
           {
               continue;
           }
-          final String name = "icon_" + s.toString() + ".gif";
-          final InputStream in
-                  = this.getClass().getResourceAsStream(name);
-          if (in != null)
-          {
-              copyResource(in, name, outDir);
-          }
-          else
-          {
-              logger.warning("Could not find resource '" + name + "'!");
-          }
+          copyImage(outDir, "icon_" + s.toString() + ".gif");
+          copyImage(outDir, "bg-" + s.toString() + ".gif");
       }
    }
+
+    private void copyImage (final File outDir, final String name)
+    {
+        final InputStream in
+            = this.getClass().getResourceAsStream(name);
+        if (in != null)
+        {
+            copyResource(in, name, outDir);
+        }
+        else
+        {
+            logger.warning("Could not find resource '" + name + "'!");
+        }
+    }
 
    private void copyResource (InputStream in, String resource, File outDir)
    {

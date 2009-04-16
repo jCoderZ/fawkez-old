@@ -1988,9 +1988,10 @@ private void appendItemMessage (BufferedWriter bw, final Item item)
        return result;
    }
    
-   private static String createReportLink(org.jcoderz.phoenix.report.jaxb.File file)
+   private static String createReportLink (
+       org.jcoderz.phoenix.report.jaxb.File file)
    {
-       String pkg = file.getPackage();
+       final String pkg = file.getPackage();
        String clazzName = file.getClassname();
 
        // If no class name is reported take the filename.

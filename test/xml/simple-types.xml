@@ -198,7 +198,28 @@
             final="true">
             creation date of Buz
          </member>
-      </valueObject> <!--
+      </valueObject>
+      <valueObject
+         classname="CopyValueSampleObject"
+         package="org.jcoderz.commons.types.samples"
+         serializable="true"
+         final="false" >
+         <description>Class to test the 'copyValue functionality</description>
+         <member
+            name="modification date"
+            type="java.util.Date"
+            copyValue="clone">
+           <decription>Sample value copied via clone</decription>
+         </member>
+         <member
+            name="sample bar"
+            type="BarValueObject"
+            copyValue="constructor"
+            final="true">
+           <decription>Sample value copied via copy constructor</decription>
+         </member>
+      </valueObject>
+      <!--
       <valueObject
          classname="Settlement"
          package="org.jcoderz.commons.types.samples"
@@ -259,5 +280,15 @@
       total-digits="10"
       user-type="true">
     </fixPointNumber>
+    <fixPointNumber
+      classname="TestFixPointTwo"
+      package="org.jcoderz.commons.types.samples"
+      min-value="-9999999.99999"
+      max-value="9999999.99999"
+      fraction-digits="5"
+      total-digits="12"
+      user-type="true">
+    </fixPointNumber>
+
   </fixPointNumbers>
 </simpleTypes>

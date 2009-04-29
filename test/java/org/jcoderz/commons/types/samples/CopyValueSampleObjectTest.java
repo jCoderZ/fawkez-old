@@ -36,10 +36,15 @@ import java.util.Date;
 
 import junit.framework.TestCase;
 
+/**
+ * Test class for {@link CopyValueSampleObject}.
+ * @author Andreas Mandel
+ */
 public class CopyValueSampleObjectTest
     extends TestCase
 {
-    public void testClonedValue()
+    /** Check value modifications on a cloned object. */
+    public void testClonedValue ()
     {
         final Date date = new Date();
         final BarValueObject bar
@@ -54,7 +59,8 @@ public class CopyValueSampleObjectTest
             test.getModificationDate().getTime() == date.getTime());
     }
 
-    public void testCopyConstructorValue()
+    /** Check value modifications on a object copied via copy constructor. */
+    public void testCopyConstructorValue ()
     {
         final Date date = new Date();
         final BarValueObject bar

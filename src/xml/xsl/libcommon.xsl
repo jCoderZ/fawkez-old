@@ -482,17 +482,17 @@ public <xsl:if test="$object/@final = 'true'">final </xsl:if>class <xsl:value-of
 {
 <xsl:if test="$object/@serializable">
    private static final long serialVersionUID = 1L;</xsl:if>
-   <xsl:for-each select="$object//member">
-   private <xsl:if test="./@final = 'true' or ../@final = 'true'">final </xsl:if>
-      <xsl:value-of select="./@type"/> m<xsl:call-template
+   <xsl:for-each select="$object/member">
+   private <xsl:if test="@final = 'true' or ../@final = 'true'">final </xsl:if>
+      <xsl:value-of select="@type"/> m<xsl:call-template
       name="asJavaIdentifier">
-         <xsl:with-param name="name" select="./@name"/></xsl:call-template>;</xsl:for-each>
+         <xsl:with-param name="name" select="@name"/></xsl:call-template>;</xsl:for-each>
 
    <xsl:variable name="minimum-argument-count"><xsl:copy-of
-      select="count($object//member[not(@initial-value)][@final = 'true' or ../@final = 'true'])"/>
+      select="count($object/member[not(@initial-value)][@final = 'true' or ../@final = 'true'])"/>
    </xsl:variable>
    <xsl:variable name="maximum-argument-count"><xsl:copy-of
-      select="count($object//member[not(@initial-value)])"/>
+      select="count($object/member[not(@initial-value)])"/>
    </xsl:variable>
    <xsl:if test="$minimum-argument-count != $maximum-argument-count">
 
@@ -500,10 +500,10 @@ public <xsl:if test="$object/@final = 'true'">final </xsl:if>class <xsl:value-of
    /**
     * Constructs a <xsl:value-of
       select="$classname"/> with the minimum arguments.<xsl:for-each
-      select="$object//member[not(@initial-value)][@final = 'true' or ../@final = 'true']">
+      select="$object/member[not(@initial-value)][@final = 'true' or ../@final = 'true']">
    <xsl:variable name="identifier"><xsl:call-template
       name="asJavaIdentifier">
-         <xsl:with-param name="name" select="./@name"/></xsl:call-template>
+         <xsl:with-param name="name" select="@name"/></xsl:call-template>
    </xsl:variable>
     * @param a<xsl:value-of select="$identifier"/> The <xsl:value-of
     select="normalize-space(.)"/>.<xsl:if test="@copyValue = 'clone'">
@@ -511,39 +511,39 @@ public <xsl:if test="$object/@final = 'true'">final </xsl:if>class <xsl:value-of
     *   The value is copied using the copy constructor before being stored.</xsl:if></xsl:for-each>
     */
     public <xsl:value-of select="$classname"/> (<xsl:for-each
-      select="$object//member[not(@initial-value)][@final = 'true' or ../@final = 'true']">
+      select="$object/member[not(@initial-value)][@final = 'true' or ../@final = 'true']">
        <xsl:variable name="identifier"><xsl:call-template
           name="asJavaIdentifier">
              <xsl:with-param name="name" select="./@name"/></xsl:call-template>
        </xsl:variable>
-       <xsl:value-of select="./@type"/> a<xsl:value-of select="$identifier"/>
+       <xsl:value-of select="@type"/> a<xsl:value-of select="$identifier"/>
        <xsl:if test="position() != last()">,
        </xsl:if>
        </xsl:for-each>)
-    {  <xsl:for-each select="$object//member[not(@initial-value)][@final = 'true' or ../@final = 'true']">
+    {  <xsl:for-each select="$object/member[not(@initial-value)][@final = 'true' or ../@final = 'true']">
        <xsl:variable name="identifier"><xsl:call-template
           name="asJavaIdentifier">
-             <xsl:with-param name="name" select="./@name"/></xsl:call-template>
+             <xsl:with-param name="name" select="@name"/></xsl:call-template>
        </xsl:variable>
        m<xsl:value-of select="$identifier"/> = <xsl:choose>
        <xsl:when test="@copyValue = 'clone'">a<xsl:value-of select="$identifier"/> == null
-         ? null : (<xsl:value-of select="./@type"/>) a<xsl:value-of select="$identifier"/>.clone();</xsl:when>
+         ? null : (<xsl:value-of select="@type"/>) a<xsl:value-of select="$identifier"/>.clone();</xsl:when>
        <xsl:when test="@copyValue = 'constructor'">a<xsl:value-of select="$identifier"/> == null
-         ? null : new <xsl:value-of select="./@type"/>(a<xsl:value-of select="$identifier"/>);</xsl:when>
+         ? null : new <xsl:value-of select="@type"/>(a<xsl:value-of select="$identifier"/>);</xsl:when>
      <xsl:otherwise>a<xsl:value-of select="$identifier"/>;</xsl:otherwise></xsl:choose></xsl:for-each>
-     <xsl:for-each select="$object//member[@initial-value]">
+     <xsl:for-each select="$object/member[@initial-value]">
        m<xsl:call-template name="asJavaIdentifier">
          <xsl:with-param name="name" select="@name"/>
-       </xsl:call-template> = <xsl:value-of select="./@initial-value"/>;</xsl:for-each>
+       </xsl:call-template> = <xsl:value-of select="@initial-value"/>;</xsl:for-each>
     }</xsl:if>
 
    /**
     * Constructs a <xsl:value-of
       select="$classname"/> with all arguments.<xsl:for-each
-      select="$object//member[not(@initial-value)]">
+      select="$object/member[not(@initial-value)]">
    <xsl:variable name="identifier"><xsl:call-template
       name="asJavaIdentifier">
-         <xsl:with-param name="name" select="./@name"/></xsl:call-template>
+         <xsl:with-param name="name" select="@name"/></xsl:call-template>
    </xsl:variable>
     * @param a<xsl:value-of select="$identifier"/> The <xsl:value-of
     select="normalize-space(.)"/>.<xsl:if test="@copyValue = 'clone'">
@@ -551,31 +551,31 @@ public <xsl:if test="$object/@final = 'true'">final </xsl:if>class <xsl:value-of
     *   The value is copied using the copy constructor before being stored.</xsl:if></xsl:for-each>
     */
     public <xsl:value-of select="$classname"/> (<xsl:for-each
-      select="$object//member[not(@initial-value)]">
+      select="$object/member[not(@initial-value)]">
        <xsl:variable name="identifier"><xsl:call-template
           name="asJavaIdentifier">
-             <xsl:with-param name="name" select="./@name"/></xsl:call-template>
+             <xsl:with-param name="name" select="@name"/></xsl:call-template>
        </xsl:variable>
-       <xsl:value-of select="./@type"/> a<xsl:value-of select="$identifier"/>
+       <xsl:value-of select="@type"/> a<xsl:value-of select="$identifier"/>
        <xsl:if test="position() != last()">,
        </xsl:if>
        </xsl:for-each>)
-    {  <xsl:for-each select="member[not(@initial-value)]">
+    {  <xsl:for-each select="$object/member[not(@initial-value)]">
        <xsl:variable name="identifier"><xsl:call-template
           name="asJavaIdentifier">
-             <xsl:with-param name="name" select="./@name"/></xsl:call-template>
+             <xsl:with-param name="name" select="@name"/></xsl:call-template>
        </xsl:variable>
        m<xsl:value-of select="$identifier"/> = <xsl:choose>
          <xsl:when test="@copyValue = 'clone'">a<xsl:value-of select="$identifier"/> == null
-         ? null : (<xsl:value-of select="./@type"/>) a<xsl:value-of select="$identifier"/>.clone();</xsl:when>
+         ? null : (<xsl:value-of select="@type"/>) a<xsl:value-of select="$identifier"/>.clone();</xsl:when>
          <xsl:when test="@copyValue = 'constructor'">a<xsl:value-of select="$identifier"/> == null
-         ? null : new <xsl:value-of select="./@type"/>(a<xsl:value-of select="$identifier"/>);</xsl:when>
+         ? null : new <xsl:value-of select="@type"/>(a<xsl:value-of select="$identifier"/>);</xsl:when>
          <xsl:otherwise>a<xsl:value-of select="$identifier"/>;</xsl:otherwise>
      </xsl:choose></xsl:for-each>
-     <xsl:for-each select="$object//member[@initial-value]">
+     <xsl:for-each select="$object/member[@initial-value]">
        m<xsl:call-template name="asJavaIdentifier">
          <xsl:with-param name="name" select="@name"/>
-        </xsl:call-template> = <xsl:value-of select="./@initial-value"/>;</xsl:for-each>
+        </xsl:call-template> = <xsl:value-of select="@initial-value"/>;</xsl:for-each>
     }
 
   <!-- Do not provide the copy constructor if we if we overide a baseclass.  -->
@@ -588,10 +588,10 @@ public <xsl:if test="$object/@final = 'true'">final </xsl:if>class <xsl:value-of
     */
     public <xsl:value-of select="$classname"/> (<xsl:value-of
     select="$classname"/> a<xsl:value-of select="$classname"/>)
-    {  <xsl:for-each select="member">
+    {  <xsl:for-each select="$object/member">
        <xsl:variable name="identifier"><xsl:call-template
           name="asJavaIdentifier">
-             <xsl:with-param name="name" select="./@name"/></xsl:call-template>
+             <xsl:with-param name="name" select="@name"/></xsl:call-template>
        </xsl:variable>
        m<xsl:value-of select="$identifier"/>
          = a<xsl:value-of select="$classname"/>.get<xsl:value-of
@@ -599,13 +599,13 @@ public <xsl:if test="$object/@final = 'true'">final </xsl:if>class <xsl:value-of
     }
   </xsl:if>
 
-   <xsl:for-each select="$object//member">
+   <xsl:for-each select="$object/member">
    <xsl:variable name="display-name"><xsl:call-template name="asDisplayName"><xsl:with-param
-         name="name" select="./@name"/></xsl:call-template>
+         name="name" select="@name"/></xsl:call-template>
    </xsl:variable>
    <xsl:variable name="identifier"><xsl:call-template
       name="asJavaIdentifier">
-         <xsl:with-param name="name" select="./@name"/></xsl:call-template>
+         <xsl:with-param name="name" select="@name"/></xsl:call-template>
    </xsl:variable>
    <xsl:variable name="doc-plain">
      <xsl:value-of select="normalize-space(current())"/>
@@ -625,23 +625,23 @@ public <xsl:if test="$object/@final = 'true'">final </xsl:if>class <xsl:value-of
     * The value is copied using the copy constructor before being returned.</xsl:if>
     * @return the <xsl:value-of select="$doc"/>.
     */
-   public <xsl:value-of select="./@type"/> get<xsl:value-of select="$identifier"/> ()
+   public <xsl:value-of select="@type"/> get<xsl:value-of select="$identifier"/> ()
    {
      return <xsl:choose>
        <xsl:when test="@copyValue = 'clone'">m<xsl:value-of select="$identifier"/> == null
-         ? null : (<xsl:value-of select="./@type"/>) m<xsl:value-of select="$identifier"/>.clone();
+         ? null : (<xsl:value-of select="@type"/>) m<xsl:value-of select="$identifier"/>.clone();
        </xsl:when>
        <xsl:when test="@copyValue = 'constructor'">m<xsl:value-of select="$identifier"/> == null
-         ? null : new <xsl:value-of select="./@type"/>(m<xsl:value-of select="$identifier"/>);
+         ? null : new <xsl:value-of select="@type"/>(m<xsl:value-of select="$identifier"/>);
        </xsl:when>
      <xsl:otherwise>m<xsl:value-of select="$identifier"/>;
      </xsl:otherwise>
    </xsl:choose>
    }
-   <xsl:if test="not(./@final = 'true' or ../@final = 'true')">
+   <xsl:if test="not(@final = 'true' or ../@final = 'true')">
 
    <xsl:variable name="setter-visibility"><xsl:choose><xsl:when
-    test="./@setter-visibility"><xsl:value-of select="./@setter-visibility"/></xsl:when>
+    test="@setter-visibility"><xsl:value-of select="@setter-visibility"/></xsl:when>
     <xsl:otherwise>public</xsl:otherwise></xsl:choose></xsl:variable>
 
    /**
@@ -650,14 +650,14 @@ public <xsl:if test="$object/@final = 'true'">final </xsl:if>class <xsl:value-of
     * The value is copied using the copy constructor before being stored.</xsl:if>
     * @param a<xsl:value-of select="$identifier"/> the <xsl:value-of select="$doc"/> to be set.
     */
-   <xsl:value-of select="$setter-visibility"/> void set<xsl:value-of select="$identifier"/> (<xsl:value-of select="./@type"/> a<xsl:value-of select="$identifier"/>)
+   <xsl:value-of select="$setter-visibility"/> void set<xsl:value-of select="$identifier"/> (<xsl:value-of select="@type"/> a<xsl:value-of select="$identifier"/>)
    {
       m<xsl:value-of select="$identifier"/> = <xsl:choose>
        <xsl:when test="@copyValue = 'clone'">m<xsl:value-of select="$identifier"/> == null
          ? null : (<xsl:value-of select="./@type"/>) m<xsl:value-of select="$identifier"/>.clone();
        </xsl:when>
        <xsl:when test="@copyValue = 'constructor'">m<xsl:value-of select="$identifier"/> == null
-         ? null : new <xsl:value-of select="./@type"/>(m<xsl:value-of select="$identifier"/>);
+         ? null : new <xsl:value-of select="@type"/>(m<xsl:value-of select="$identifier"/>);
        </xsl:when>
      <xsl:otherwise>a<xsl:value-of select="$identifier"/>;
      </xsl:otherwise>
@@ -677,10 +677,10 @@ public <xsl:if test="$object/@final = 'true'">final </xsl:if>class <xsl:value-of
        test="$object/@baseclass">
       buffer.append(" super: ");
       buffer.append(super.toString());</xsl:if><xsl:for-each
-         select="$object//member"><xsl:variable
+         select="$object/member"><xsl:variable
       name="identifier"><xsl:call-template
          name="asJavaIdentifier">
-            <xsl:with-param name="name" select="./@name"/></xsl:call-template>
+            <xsl:with-param name="name" select="@name"/></xsl:call-template>
       </xsl:variable>
       buffer.append(" m<xsl:value-of select="$identifier"/>: ");
       buffer.append(m<xsl:value-of select="$identifier"/>);</xsl:for-each>
@@ -700,10 +700,10 @@ public <xsl:if test="$object/@final = 'true'">final </xsl:if>class <xsl:value-of
         <xsl:otherwise>HashCodeUtil.SEED</xsl:otherwise>
       </xsl:choose>;
       <xsl:for-each
-      select="$object//member[not(@identity-independent)]">
+      select="$object/member[not(@identity-independent)]">
       <xsl:variable name="identifier"><xsl:call-template
          name="asJavaIdentifier">
-            <xsl:with-param name="name" select="./@name"/></xsl:call-template>
+            <xsl:with-param name="name" select="@name"/></xsl:call-template>
       </xsl:variable>
       hashCode = HashCodeUtil.hash(hashCode, get<xsl:value-of
             select="$identifier"/>());</xsl:for-each>
@@ -730,10 +730,10 @@ public <xsl:if test="$object/@final = 'true'">final </xsl:if>class <xsl:value-of
          result = <xsl:choose>
         <xsl:when test="$object/@baseclass">super.equals(object)</xsl:when>
         <xsl:otherwise>true</xsl:otherwise>
-      </xsl:choose><xsl:for-each select="$object//member[not(@identity-independent)]">
+      </xsl:choose><xsl:for-each select="$object/member[not(@identity-independent)]">
             <xsl:variable name="identifier"><xsl:call-template
                   name="asJavaIdentifier"><xsl:with-param
-                  name="name" select="./@name"/></xsl:call-template>
+                  name="name" select="@name"/></xsl:call-template>
             </xsl:variable>
                &amp;&amp; ObjectUtil.equals(get<xsl:value-of
                   select="$identifier"/>(), o.get<xsl:value-of

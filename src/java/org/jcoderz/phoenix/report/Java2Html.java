@@ -805,7 +805,7 @@ public final class Java2Html
     {
         // Don't be to colorful, use the OK coloring
         // for all entries.
-        bw.write("<tr class='ok");
+        bw.write("<tr class='findings-");
         bw.write(Java2Html.toOddEvenString(rowCounter));
         bw.write("'><td class='findings-image'>");
         appendSeverityImage(bw, item, "");

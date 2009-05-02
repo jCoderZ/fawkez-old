@@ -803,8 +803,9 @@ public final class Java2Html
         org.jcoderz.phoenix.report.jaxb.File file, Item item, int rowCounter)
         throws IOException
     {
-        bw.write("<tr class='");
-        bw.write(item.getSeverity().toString());
+        // Don't be to colorful, use the OK coloring
+        // for all entries.
+        bw.write("<tr class='ok");
         bw.write(Java2Html.toOddEvenString(rowCounter));
         bw.write("'><td class='findings-image'>");
         appendSeverityImage(bw, item, "");

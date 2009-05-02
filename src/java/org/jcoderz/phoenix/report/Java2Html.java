@@ -74,7 +74,6 @@ import org.jcoderz.commons.util.EmptyIterator;
 import org.jcoderz.commons.util.FileUtils;
 import org.jcoderz.commons.util.IoUtil;
 import org.jcoderz.commons.util.LoggingUtils;
-import org.jcoderz.commons.util.RandomUtil;
 import org.jcoderz.commons.util.StringUtil;
 import org.jcoderz.commons.util.XmlUtil;
 import org.jcoderz.phoenix.report.jaxb.Item;
@@ -84,6 +83,7 @@ import org.jcoderz.phoenix.report.jaxb.Report;
  * TODO: Link to current build
  * TODO: Link to CC home
  * TODO: Add @media printer???
+ * TODO: Refactor, split class.
  *
  * @author Andreas Mandel
  */
@@ -195,8 +195,9 @@ public final class Java2Html
    /** The full Report. */
    private Report mReport;
 
-   private final Map<Item,org.jcoderz.phoenix.report.jaxb.File> mItemToFileMap
-       = new HashMap<Item,org.jcoderz.phoenix.report.jaxb.File>();
+   private final Map<Item, org.jcoderz.phoenix.report.jaxb.File> mItemToFileMap
+       = new HashMap<Item, org.jcoderz.phoenix.report.jaxb.File>();
+   
    /**
     * Constructor.
     *

@@ -263,6 +263,7 @@
           </description>
         </member>
       </valueObject>
+      <!-- 
       <valueObject
          classname="Clazz"
          package="org.jcoderz.phoenix.dependency"
@@ -302,6 +303,6 @@
             identity-independent="true"
             initial-value="-1">
         </member>
-      </valueObject>
+      </valueObject>  -->
    </valueObjects>   
 </simpleTypes>

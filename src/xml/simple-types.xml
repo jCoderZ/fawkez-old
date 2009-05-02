@@ -222,7 +222,7 @@
      VALUE OBJECTS
      =============================================================== -->
    <valueObjects>
-      <valueObject
+      <!--  <valueObject
          classname="Relation"
          package="org.jcoderz.phoenix.dependency"
          serializable="true"
@@ -263,7 +263,6 @@
           </description>
         </member>
       </valueObject>
-      <!-- 
       <valueObject
          classname="Clazz"
          package="org.jcoderz.phoenix.dependency"

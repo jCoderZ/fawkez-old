@@ -7,6 +7,37 @@
      =============================================================== -->
    <typeSafeEnumerations>
       <enumeration
+         classname="RelationType"
+         package="org.jcoderz.phoenix.dependency">
+         <description>
+           Enumeration that describes the kind of dependency
+           that one type has with an other.
+         </description>
+         <value 
+           description="This class is derived from the other class">Derived</value>
+         <value 
+           description="This class implements from the other interface">Implements</value>
+         <value 
+           description="This class uses the other as generic type.">Generic Type</value>
+         <value
+            description="This class has a static member of the other type.">Static Member</value>
+         <value
+            description="Instances of this class have a outer class relation ship to the other type.">Outer Class</value>
+         <value
+            description="Instances of this class have a member of the other type.">Member</value>
+         <value
+            description="The other class is used as a argument in a static method of this class.">Static Argument</value>
+         <value
+            description="The other class is used as a argument in a method of this class.">Argument</value>
+         <value
+            description="The other class is used as field in a static method of this class.">Static Field</value>
+         <value
+            description="The other class is used as field in a method of this class.">Field</value>
+         <value
+            description="The other class is used in a unused import in this class.">Unused Import</value>
+      </enumeration>
+
+      <enumeration
          classname="BusinessImpact"
          package="org.jcoderz.commons">
          <value>Critical</value>
@@ -26,6 +57,18 @@
          <value>Security</value>
          <value>Technical</value>
          <value>Undefined</value>
+      </enumeration>
+
+      <enumeration
+         classname="ReportInterval"
+         package="org.jcoderz.phoenix.report">
+         <value
+            description="Single builds">Build</value>
+         <value>Day</value>
+         <value>Week</value>
+         <value>Month</value>
+         <value
+            description="Select old findings, not listed before.">Old</value>
       </enumeration>
 
       <enumeration
@@ -173,4 +216,92 @@
          <constants name="SPECIAL" comment="Very Special Value" value="15"/>
       </restrictedLong>
    </restricted-longs>
+   
+   
+<!-- ===============================================================
+     VALUE OBJECTS
+     =============================================================== -->
+   <valueObjects>
+      <valueObject
+         classname="Relation"
+         package="org.jcoderz.phoenix.dependency"
+         serializable="true"
+         final="true" >
+        <member name="type" type="RelationType">
+          <description>
+            The type of this relation.
+          </description>
+        </member>
+        <member name="source line" type="int">
+          <description>
+            The source line creating the relationship.
+          </description>
+        </member>
+        <member name="source symbol" type="String">
+          <description>
+            The symbol that creates the relation ship.
+          </description>
+        </member>
+        <member name="clazz" type="Clazz">
+          <description>
+            The class where this relation points to.
+          </description>
+        </member>
+        <member name="method" type="String">
+          <description>
+            The method where this relation points to. (might be null)
+          </description>
+        </member>
+        <member name="field" type="String">
+          <description>
+            The field where this relation points to. (might be null)
+          </description>
+        </member>
+        <member name="line" type="int">
+          <description>
+            The field where this relation points to. (might be null)
+          </description>
+        </member>
+      </valueObject>
+      <valueObject
+         classname="Clazz"
+         package="org.jcoderz.phoenix.dependency"
+         serializable="true">
+        <member name="qualified name" type="String" final="true">
+          <description>
+            The qualified name of this class.
+          </description>
+        </member>
+        <member name="source file name" 
+            type="String"
+            identity-independent="true">
+          <description>
+            Source file where this class is defined in.
+          </description>
+        </member>
+        <member name="package name" type="String" identity-independent="true">
+          <description>
+            Name of the package where this class belongs to.
+          </description>
+        </member>
+        <member name="relations" type="java.util.Map&lt;String,java.util.Set&lt;Relation&gt;&gt;"
+           initial-value="new java.util.HashMap&lt;String,java.util.Set&lt;Relation&gt;&gt;()"
+           final="true"
+           identity-independent="true">
+          <description>
+            The map of relations of this class key is the relation target.
+          </description>
+        </member>
+        <member name="lowlink" 
+            type="int"
+            identity-independent="true"
+            initial-value="-1">
+        </member>
+        <member name="index" 
+            type="int"
+            identity-independent="true"
+            initial-value="-1">
+        </member>
+      </valueObject>
+   </valueObjects>   
 </simpleTypes>

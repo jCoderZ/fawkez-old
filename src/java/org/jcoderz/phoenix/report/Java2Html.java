@@ -41,11 +41,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.io.Serializable;
 import java.io.Writer;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -54,6 +57,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TimeZone;
 import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -62,6 +66,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 
+import org.jcoderz.commons.types.Date;
 import org.jcoderz.commons.util.ArraysUtil;
 import org.jcoderz.commons.util.Assert;
 import org.jcoderz.commons.util.Constants;
@@ -69,6 +74,7 @@ import org.jcoderz.commons.util.EmptyIterator;
 import org.jcoderz.commons.util.FileUtils;
 import org.jcoderz.commons.util.IoUtil;
 import org.jcoderz.commons.util.LoggingUtils;
+import org.jcoderz.commons.util.RandomUtil;
 import org.jcoderz.commons.util.StringUtil;
 import org.jcoderz.commons.util.XmlUtil;
 import org.jcoderz.phoenix.report.jaxb.Item;
@@ -112,6 +118,8 @@ public final class Java2Html
    private static final String LAST_MARKER = "_last";
 
    private static final String DEFAULT_STYLESHEET = "reportstyle.css";
+
+   private static final int NUMBER_OF_AGE_SEGMENTS = 5;
 
    /** 
     * Only findings that span at maximum this number of lines are 
@@ -187,6 +195,8 @@ public final class Java2Html
    /** The full Report. */
    private Report mReport;
 
+   private final Map<Item,org.jcoderz.phoenix.report.jaxb.File> mItemToFileMap
+       = new HashMap<Item,org.jcoderz.phoenix.report.jaxb.File>();
    /**
     * Constructor.
     *
@@ -464,6 +474,7 @@ public final class Java2Html
 
       createFindingsSummary();
       createPerFindingSummary();
+      createAgeSummary();
 
       logger.fine("Charts.");
 
@@ -482,6 +493,33 @@ public final class Java2Html
       copyIcons();
 
       logger.fine("Done.");
+   }
+
+   private void createAgeSummary ()
+       throws IOException
+   {
+       final List<Item> items = new ArrayList<Item>();
+       for (final org.jcoderz.phoenix.report.jaxb.File file
+           : (List<org.jcoderz.phoenix.report.jaxb.File>) mReport.getFile())
+       {
+          for (Item i : (List<Item>) file.getItem())
+          { 
+              if (i.isSetSince())
+              {
+                  items.add(i);
+                  mItemToFileMap.put(i, file);
+              }
+          }
+       }
+       Collections.sort(items, 
+           Collections.reverseOrder(new ItemAgeComperator()));
+
+       renderAgePage(items, Date.FUTURE_DATE, ReportInterval.BUILD);
+       renderAgePage(items, Date.FUTURE_DATE, ReportInterval.DAY);
+       renderAgePage(items, Date.FUTURE_DATE, ReportInterval.WEEK);
+       final Date oldest 
+           = renderAgePage(items, Date.FUTURE_DATE, ReportInterval.MONTH);
+       renderAgePage(items, oldest, ReportInterval.OLD);
    }
 
    private void copyIcons () 
@@ -691,6 +729,11 @@ public final class Java2Html
       {
           htmlHeader(out, "Finding report " + mProjectName, "");
           out.write("<h1><a href='index.html'>View by Classes</a></h1>");
+          out.write("<h1><a href='age-Build.html'>View by Age per Build</a> "
+              + "<a href='age-Day.html'> Day</a> "
+              + "<a href='age-Week.html'> Week</a> "
+              + "<a href='age-Month.html'> Month</a> "
+              + "<a href='age-Old.html'> Old</a></h1>");
           out.write("<h1>Findings - Overview</h1>");
           createNewFindingsList(out);
           createOldFindingsList(out);
@@ -755,11 +798,12 @@ public final class Java2Html
         }
     }
     
-    private void createRow (BufferedWriter bw,
+    private void createRow (Writer bw,
         org.jcoderz.phoenix.report.jaxb.File file, Item item, int rowCounter)
         throws IOException
     {
-        bw.write("<tr class='ok");
+        bw.write("<tr class='");
+        bw.write(item.getSeverity().toString());
         bw.write(Java2Html.toOddEvenString(rowCounter));
         bw.write("'><td class='findings-image'>");
         appendSeverityImage(bw, item, "");
@@ -772,24 +816,29 @@ public final class Java2Html
         bw.write(XmlUtil.escape(file.getClassname()));
         bw.write(": ");
         appendItemMessage(bw, item);
-        bw.write("</a></td></tr>\n");
+        bw.write("</a></td><td>");
+        if (item.isSetSince())
+        {
+            bw.write(item.getSince().toDateString());
+        }
+        bw.write("</td></tr>\n");
         
     }
 
-    private void openTable (BufferedWriter out, String string) 
+    private void openTable (Writer writer, String string) 
         throws IOException
     {
-        out.write("<h2 class='severity-header'>");
-        out.write(string);
-        out.write(" Findings</h2>");
-        out.write("<table width='95%' cellpadding='2' cellspacing='0' "
+        writer.write("<h2 class='severity-header'>");
+        writer.write(string);
+        writer.write(" Findings</h2>");
+        writer.write("<table width='95%' cellpadding='2' cellspacing='0' "
               + "border='0'>");
     }
 
-    private void closeTable (BufferedWriter out) 
+    private void closeTable (Writer bw) 
         throws IOException
     {
-        out.append("</table>");
+        bw.append("</table>");
     }
     
     /**
@@ -894,7 +943,6 @@ public final class Java2Html
          bw.write("</tbody>");
          bw.write("</table>\n");
 
-
          // findings table
          bw.write("<h2 class='findings-header'>Findings in this File</h2>");
          bw.write("<table width='95%' cellpadding='0' cellspacing='0' "
@@ -995,28 +1043,24 @@ public final class Java2Html
       }
    }
 
-private void appendItemMessage (BufferedWriter bw, final Item item)
-    throws IOException
-{
-    if (item.isOld())
-      {
-          bw.write("Fixed: ");
-      }
-      if (item.isNew())
-      {
-          bw.write("New: ");
-      }
-      bw.write(XmlUtil.escape(item.getMessage()));
-      if (item.getSeverityReason() != null)
-      {
-         bw.write(XmlUtil.escape(item.getSeverityReason()));
-      }
-      if (item.isSetSince())
-      {
-         bw.write("Since: ");
-         bw.write(item.getSince().toString());
-      }
-}
+    private void appendItemMessage (Writer bw, final Item item)
+        throws IOException
+    {
+        if (item.isOld())
+        {
+            bw.write("Fixed: ");
+        }
+        if (item.isNew())
+        {
+            bw.write("New: ");
+        }
+        bw.write(XmlUtil.escape(item.getMessage()));
+        if (item.getSeverityReason() != null)
+        {
+            bw.write(' ');
+            bw.write(XmlUtil.escape(item.getSeverityReason()));
+        }
+    }
 
 
    /**
@@ -1446,6 +1490,11 @@ private void appendItemMessage (BufferedWriter bw, final Item item)
           bw.write("</table>");
 
           bw.write("<h1><a href='findings.html'>View by Finding</a></h1>");
+          bw.write("<h1><a href='age-Build.html'>View by Age per Build</a> "
+              + "<a href='age-Day.html'> Day</a> "
+              + "<a href='age-Week.html'> Week</a> "
+              + "<a href='age-Month.html'> Month</a> "
+              + "<a href='age-Old.html'> Old</a></h1>");
 
           bw.write("<h1>Packages</h1>");
           bw.write("<table border='0' cellpadding='2' cellspacing='0' "
@@ -1562,7 +1611,7 @@ private void appendItemMessage (BufferedWriter bw, final Item item)
     * @param title the title of the page. Should be the package name for
     *        sub packages.
     */
-   private void htmlHeader (BufferedWriter bw, String title, String packageName)
+   private void htmlHeader (Writer bw, String title, String packageName)
         throws IOException
    {
        bw.write("<?xml version='1.0' encoding='UTF-8'?>" + NEWLINE
@@ -1580,8 +1629,234 @@ private void appendItemMessage (BufferedWriter bw, final Item item)
       bw.write(createStyle(packageName, mStyle));
       bw.write(NEWLINE + "</head>" + NEWLINE + "<body>" + NEWLINE);
    }
+   
+   
+   
+   
 
-   private static String relativeRoot (String currentPackage)
+   private Date renderAgePage (
+       List<Item> findings, Date startDate, ReportInterval periode)
+       throws IOException
+   {
+       final Writer bw 
+           = openWriter(mOutDir, "age-" + periode.toString() + ".html");
+       htmlHeader(bw, "Finding in " + periode.toString(), "");
+       
+       bw.write("<h1><a href='index.html'>View by Classes</a></h1>");
+       bw.write("<h1><a href='findings.html'>View by Finding</a></h1>");
+       bw.write("<h1><a href='age-Build.html'>View by Age per Build</a> "
+           + "<a href='age-Day.html'> Day</a> "
+           + "<a href='age-Week.html'> Week</a> "
+           + "<a href='age-Month.html'> Month</a> "
+           + "<a href='age-Old.html'> Old</a></h1>");
+       
+       if (ReportInterval.OLD != periode)
+       {
+           bw.write("<h1>Current Findings by " + periode.toString() + "</h1>");
+       }
+       else
+       {
+           bw.write("<h1>Old findings since " + startDate + "</h1>");
+       }
+       
+       
+       int numberOfSegments = 0;
+       Date iStart = null;
+       try
+       {
+           Date iEnd = null;
+           final List<Item> interval = new ArrayList<Item>();
+           for (Item i : findings)
+           {
+               if (iEnd == null)
+               {
+                   if (i.getSince().before(startDate))
+                   {
+                       iStart = getPeriodStart(periode, i.getSince());
+                       iEnd = getPeriodEnd(periode, i.getSince());
+                   }
+                   else
+                   {
+                       continue;
+                   }
+               }
+               if (i.getSince().before(iStart))
+               {
+                   Collections.sort(interval, new ItemSeverityComperator());
+                   createSegment(bw, interval, iStart, iEnd);
+                   interval.clear();
+                   numberOfSegments++;
+                   if (numberOfSegments > NUMBER_OF_AGE_SEGMENTS)
+                   {
+                       break;
+                   }
+                   iStart = getPeriodStart(periode, i.getSince());
+                   iEnd = getPeriodEnd(periode, i.getSince());
+               }
+               interval.add(i);
+           }
+           
+           if (!interval.isEmpty())
+           {
+               Collections.sort(interval, new ItemSeverityComperator());
+               createSegment(bw, interval, iStart, iEnd);
+               interval.clear();
+           }
+       }
+       finally
+       {
+           IoUtil.close(bw);
+       }
+       return iStart == null ? startDate : iStart;
+   }
+   
+   
+
+   private void createSegment (
+       Writer bw, List<Item> items, Date start, Date end)
+       throws IOException
+   {
+       if (!items.isEmpty())
+       {
+           openTable(bw, "Findings " + start 
+               + (start.equals(end) ? "" : (" - " + end))
+               + " " + items.size());      
+       }
+       int pos = 0;
+       for (final Item item : items)
+       {
+           createRow(bw, getFile(item), item, pos);
+           pos++;
+       }
+       if (!items.isEmpty())
+       {
+           closeTable(bw);
+       }
+       
+   }
+
+    private org.jcoderz.phoenix.report.jaxb.File getFile (Item item)
+    {
+        return mItemToFileMap.get(item);
+    }
+
+    private Date getPeriodEnd (ReportInterval periode, Date actualStart)
+    {
+       final Date result;
+       if (ReportInterval.BUILD == periode)
+       {
+           result = actualStart.plus(1);
+       }
+       else if (ReportInterval.DAY == periode)
+       {
+           final Calendar cal 
+               = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+           cal.setTimeInMillis(actualStart.getTime());
+           cal.set(Calendar.HOUR_OF_DAY, 0);
+           cal.set(Calendar.MINUTE, 0);
+           cal.set(Calendar.SECOND, 0);
+           cal.set(Calendar.MILLISECOND, 0);
+           cal.add(Calendar.DAY_OF_MONTH, 1);
+           result = new Date(cal.getTimeInMillis());
+       }
+       else if (ReportInterval.WEEK == periode)
+       {
+           final Calendar cal 
+               = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+           cal.setFirstDayOfWeek(Calendar.MONDAY);
+           cal.setTimeInMillis(actualStart.getTime());
+           cal.set(Calendar.HOUR_OF_DAY, 0);
+           cal.set(Calendar.MINUTE, 0);
+           cal.set(Calendar.SECOND, 0);
+           cal.set(Calendar.MILLISECOND, 0);
+           cal.add(Calendar.WEEK_OF_YEAR, 1);
+           result = new Date(cal.getTimeInMillis());
+       }
+       else if (ReportInterval.MONTH == periode)
+       {
+           final Calendar cal 
+               = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+           cal.setFirstDayOfWeek(Calendar.MONDAY);
+           cal.setTimeInMillis(actualStart.getTime());
+           cal.set(Calendar.HOUR_OF_DAY, 0);
+           cal.set(Calendar.MINUTE, 0);
+           cal.set(Calendar.SECOND, 0);
+           cal.set(Calendar.MILLISECOND, 0);
+           cal.set(Calendar.DAY_OF_MONTH, 1);
+           cal.add(Calendar.MONTH, 1);
+           result = new Date(cal.getTimeInMillis());
+       }
+       else if (ReportInterval.OLD == periode)
+       {
+           result = actualStart; 
+       }
+       else
+       {
+           Assert.fail("Unsupported value for ReportInterval " + periode);
+           result = null; // never reached
+       }
+       return result;
+   }
+
+    private Date getPeriodStart (ReportInterval periode, Date pos)
+    {
+       final Date result;
+       if (ReportInterval.BUILD == periode)
+       {
+           result = pos;
+       }
+       else if (ReportInterval.DAY == periode)
+       {
+           final Calendar cal 
+               = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+           cal.setTimeInMillis(pos.getTime());
+           cal.set(Calendar.HOUR_OF_DAY, 0);
+           cal.set(Calendar.MINUTE, 0);
+           cal.set(Calendar.SECOND, 0);
+           cal.set(Calendar.MILLISECOND, 0);
+           result = new Date(cal.getTimeInMillis());
+       }
+       else if (ReportInterval.WEEK == periode)
+       {
+           final Calendar cal 
+               = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+           cal.setFirstDayOfWeek(Calendar.MONDAY);
+           cal.setTimeInMillis(pos.getTime());
+           cal.set(Calendar.HOUR_OF_DAY, 0);
+           cal.set(Calendar.MINUTE, 0);
+           cal.set(Calendar.SECOND, 0);
+           cal.set(Calendar.MILLISECOND, 0);
+           cal.add(Calendar.DAY_OF_MONTH, 
+               1 - cal.get(Calendar.DAY_OF_WEEK));
+           result = new Date(cal.getTimeInMillis());
+       }
+       else if (ReportInterval.MONTH == periode)
+       {
+           final Calendar cal 
+               = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+           cal.setFirstDayOfWeek(Calendar.MONDAY);
+           cal.setTimeInMillis(pos.getTime());
+           cal.set(Calendar.HOUR_OF_DAY, 0);
+           cal.set(Calendar.MINUTE, 0);
+           cal.set(Calendar.SECOND, 0);
+           cal.set(Calendar.MILLISECOND, 0);
+           cal.set(Calendar.DAY_OF_MONTH, 1);
+           result = new Date(cal.getTimeInMillis());
+       }
+       else if (ReportInterval.OLD == periode)
+       {
+           result = Date.OLD_DATE; 
+       }
+       else
+       {
+           Assert.fail("Unsupported value for ReportInterval " + periode);
+           result = null; // never reached
+       }
+       return result;
+   }
+    
+
+private static String relativeRoot (String currentPackage)
    {
       return relativeRoot(currentPackage, "index.html");
    }
@@ -2004,4 +2279,55 @@ private void appendItemMessage (BufferedWriter bw, final Item item)
        
        return subdir + "/" + clazzName + ".html";
    }
+   
+   private static class ItemSeverityComperator 
+       implements Comparator<Item>, Serializable
+   {
+       private static final long serialVersionUID = 1L;
+       
+    public int compare (Item o1, Item o2)
+    {
+        int result = 0;
+        result = -(o1.getSeverity().compareTo(o2.getSeverity()));
+        if (result == 0)
+        {
+            result = o1.getSince().compareTo(o2.getSince());
+        }
+        if (result == 0)
+        {
+            if (o1.getLine() > o2.getLine())
+            {
+                result = 1;
+            }
+            else if (o1.getLine() < o2.getLine())
+            {
+                result = -1;
+            }
+            else
+            {
+                result = 0;
+            }
+        }
+        if (result == 0)
+        {
+            result = o1.getFindingType().compareTo(o2.getFindingType());
+        }
+        return result;
+    }
+   }
+   
+    private static class ItemAgeComperator 
+        implements Comparator<Item>, Serializable
+    {
+        private static final long serialVersionUID = 1L;
+
+        public int compare (Item o1, Item o2)
+        {
+            final Date since1 
+                = o1.isSetSince() ? o1.getSince() : Date.OLD_DATE;
+            final Date since2 
+                = o2.isSetSince() ? o2.getSince() : Date.OLD_DATE;
+            return since1.compareTo(since2);
+        }
+    }
 }

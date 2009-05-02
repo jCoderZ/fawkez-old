@@ -807,7 +807,7 @@ public final class Java2Html
         // for all entries.
         bw.write("<tr class='findings-");
         bw.write(Java2Html.toOddEvenString(rowCounter));
-        bw.write("'><td class='findings-image'>");
+        bw.write("row'><td class='findings-image'>");
         appendSeverityImage(bw, item, "");
         bw.write("</td><td width='100%' class='findings-data'>");
         bw.write("<a href='");

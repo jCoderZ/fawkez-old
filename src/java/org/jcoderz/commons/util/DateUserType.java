@@ -54,6 +54,16 @@ public class DateUserType
     private static final int SQL_TYPE = Types.TIMESTAMP;
     private static final int[] SQL_TYPES = {SQL_TYPE};
 
+    /**
+     * Hibernate <tt>org.jcoderz.commons.types.Date</tt> type as mapped
+     * from this UserType.
+     * @return this UserType as org.hibernate.type.Type.
+     */
+    public static org.hibernate.type.Type getType ()
+    {
+       return TypeHolder.TYPE;
+    }
+
     /** {@inheritDoc} */
     public Object nullSafeGet (
         ResultSet resultSet, String[] types, Object owner)
@@ -97,5 +107,14 @@ public class DateUserType
     public int[] sqlTypes ()
     {
         return (int[]) SQL_TYPES.clone();
+    }
+
+    /**
+     * Class to lazy initialize the Hibernate Type adapter.
+     */
+    private static class TypeHolder
+    {
+       private static final org.hibernate.type.Type TYPE
+         = new org.hibernate.type.CustomType(DateUserType.class, null);
     }
 }

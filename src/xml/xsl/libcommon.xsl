@@ -1218,6 +1218,16 @@ public final class <xsl:value-of select="$classname"/>
           </xsl:choose>
 
   /**
+   * Hibernate <tt><xsl:value-of select="$type-classname"/></tt> type as mapped
+   * from this UserType.
+   * @return this UserType as org.hibernate.type.Type.
+   */
+  public static org.hibernate.type.Type getType ()
+  {
+    return TypeHolder.TYPE;
+  }
+
+  /**
    * Creates a <xsl:value-of select="$type-classname"/> from its String
    * database representation.
    * @param value a string holding the database representation of the
@@ -1249,6 +1259,15 @@ public final class <xsl:value-of select="$classname"/>
   {
     return <xsl:value-of select="$type-classname"/>.class;
   }
+
+  /**
+   * Class to lazy initialize the Hibernate Type adapter.
+   */
+   private static class TypeHolder
+   {
+      private static final org.hibernate.type.Type TYPE
+        = new org.hibernate.type.CustomType(<xsl:value-of select="$classname"/>.class, null);
+   }
 }
 </xsl:template>
 
@@ -1523,6 +1542,16 @@ public final class <xsl:value-of select="$classname"/>
    /** The serialVersionUID used for serialization. */
    static final long serialVersionUID = 1;
 
+   /**
+    * Hibernate <tt><xsl:value-of select="$type-classname"/></tt> type as mapped
+    * from this UserType.
+    * @return this UserType as org.hibernate.type.Type.
+    */
+   public static org.hibernate.type.Type getType ()
+   {
+      return TypeHolder.TYPE;
+   }
+
   /**
    * Creates a <xsl:value-of select="$type-classname"/> from its numeric
    * int database representation.
@@ -1559,6 +1588,16 @@ public final class <xsl:value-of select="$classname"/>
   {
     return <xsl:value-of select="$type-classname"/>.class;
   }
+
+
+  /**
+   * Class to lazy initialize the Hibernate Type adapter.
+   */
+   private static class TypeHolder
+   {
+      private static final org.hibernate.type.Type TYPE
+        = new org.hibernate.type.CustomType(<xsl:value-of select="$classname"/>.class, null);
+   }
 }
 </xsl:template>
 
@@ -1582,6 +1621,16 @@ public final class <xsl:value-of select="$classname"/>
 {
    /** The serialVersionUID used for serialization. */
    static final long serialVersionUID = 1;
+
+   /**
+    * Hibernate <tt><xsl:value-of select="$type-classname"/></tt> type as mapped
+    * from this UserType.
+    * @return this UserType as org.hibernate.type.Type.
+    */
+   public static org.hibernate.type.Type getType ()
+   {
+      return TypeHolder.TYPE;
+   }
 
   /**
    * Creates a <xsl:value-of select="$type-classname"/> from its numeric
@@ -1619,6 +1668,15 @@ public final class <xsl:value-of select="$classname"/>
   {
     return <xsl:value-of select="$type-classname"/>.class;
   }
+
+  /**
+   * Class to lazy initialize the Hibernate Type adapter.
+   */
+   private static class TypeHolder
+   {
+      private static final org.hibernate.type.Type TYPE
+        = new org.hibernate.type.CustomType(<xsl:value-of select="$classname"/>.class, null);
+   }
 }
 </xsl:template>
 
@@ -2189,8 +2247,18 @@ import java.math.BigDecimal;
 public final class <xsl:value-of select="$classname"/>
       extends org.jcoderz.commons.util.BigDecimalUserTypeBase
 {
-  /** The serialVersionUID used for serialization. */
-  static final long serialVersionUID = 1;
+   /** The serialVersionUID used for serialization. */
+   static final long serialVersionUID = 1;
+
+   /**
+    * Hibernate <tt><xsl:value-of select="$type-classname"/></tt> type as mapped
+    * from this UserType.
+    * @return this UserType as org.hibernate.type.Type.
+    */
+   public static org.hibernate.type.Type getType ()
+   {
+      return TypeHolder.TYPE;
+   }
 
   /**
    * Creates a <xsl:value-of select="$type-classname"/> from its numeric
@@ -2227,6 +2295,16 @@ public final class <xsl:value-of select="$classname"/>
   {
     return <xsl:value-of select="$type-classname"/>.class;
   }
+
+
+   /**
+    * Class to lazy initialize the Hibernate Type adapter.
+    */
+   private static class TypeHolder
+   {
+      private static final org.hibernate.type.Type TYPE
+        = new org.hibernate.type.CustomType(<xsl:value-of select="$classname"/>.class, null);
+   }
 }
 </xsl:template>
 

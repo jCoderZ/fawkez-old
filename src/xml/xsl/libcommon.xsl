@@ -1151,7 +1151,8 @@ public final class <xsl:value-of select="$classname"/>
     */
    public boolean equals (Object obj)
    {
-      return (obj instanceof <xsl:value-of select="$classname"/>
+      return (this == obj)
+        || (obj instanceof <xsl:value-of select="$classname"/>
             &amp;&amp; ((<xsl:value-of select="$classname"/>) obj).m<xsl:value-of select="$classname"/>.equals(
                m<xsl:value-of select="$classname"/>));
    }
@@ -1485,7 +1486,8 @@ public final class <xsl:value-of select="$classname"/>
    /** {@inheritDoc} */
    public boolean equals (Object obj)
    {
-      return (obj instanceof <xsl:value-of select="$classname"/>
+      return (this == obj)
+        || (obj instanceof <xsl:value-of select="$classname"/>
             &amp;&amp; ((<xsl:value-of select="$classname"/>) obj).m<xsl:value-of select="$classname"/>
                == m<xsl:value-of select="$classname"/>);
    }
@@ -1802,7 +1804,8 @@ public final class <xsl:value-of select="$classname"/>
     */
    public boolean equals (Object obj)
    {
-      return (obj instanceof <xsl:value-of select="$classname"/>
+      return (this == obj)
+        || (obj instanceof <xsl:value-of select="$classname"/>
             &amp;&amp; ((<xsl:value-of select="$classname"/>) obj).m<xsl:value-of select="$classname"/>.equals(
                m<xsl:value-of select="$classname"/>));
    }
@@ -2183,7 +2186,8 @@ public final class <xsl:value-of select="$classname"/>
     /** {@inheritDoc} */
     public boolean equals (Object obj)
     {
-        return (obj instanceof <xsl:value-of select="$classname"/>
+        return (this == obj)
+          || (obj instanceof <xsl:value-of select="$classname"/>
              &amp;&amp; ((<xsl:value-of select="$classname"/>) obj).mUnscaled == mUnscaled);
     }
 

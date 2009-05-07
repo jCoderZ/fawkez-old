@@ -45,6 +45,7 @@
            <xsd:enumeration value='Coverage'/>
            <xsd:enumeration value='CPD'/> <!-- cut'n'paste detector -->
            <xsd:enumeration value='System'/>
+           <xsd:enumeration value='JavaDoc'/>
         <!-- Might need to open this up to allow dynamic addition of new
              bug hunters -->
         </xsd:restriction>

@@ -339,7 +339,7 @@ public class ReportMerger
    }
 
 
-/**
+   /**
     * Parses the arguments.
     *
     * @param args the args

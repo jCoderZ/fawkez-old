@@ -411,11 +411,21 @@ public class JcReportAntTask
             emmaFile = null;
         }
 
+        final File javaDoc;
+        if (mTools.getJavaDoc() != null)
+        {   // EXCEPTION?
+            javaDoc = new File(mTools.getJavaDoc().mLogfile);
+        }
+        else
+        {
+            javaDoc = null;
+        }
+
         // Merge the different reports into one jcoderz-report.xml
         // This must be done on a level by level basis
         return executeReportNormalizer(srcDir, reportTmpDir,
               nre.getLevel(), checkstyleXml, findbugsXml, pmdXml,
-              cpdXml, coberturaXml, emmaFile);
+              cpdXml, coberturaXml, emmaFile, javaDoc);
     }
 
 
@@ -498,7 +508,7 @@ public class JcReportAntTask
    private File executeReportNormalizer (File srcDir, File reportDir,
             ReportLevel level, File checkstyleXml,
             File findbugsXml, File pmdXml, File cpdXml, File coberturaXml,
-            File emmaSummary)
+            File emmaSummary, File javaDoc)
        throws IOException, JAXBException, TransformerException
    {
       // INLINE failed, got java.lang.OutOfMemoryError: PermGen space
@@ -559,6 +569,12 @@ public class JcReportAntTask
       {
          cmd.createArgument().setValue("-emma");
          cmd.createArgument().setFile(emmaSummary);
+      }
+
+      if (javaDoc != null)
+      {
+         cmd.createArgument().setValue("-javaDoc");
+         cmd.createArgument().setFile(javaDoc);
       }
 
       forkToolProcess(this, cmd, new LogStreamHandler(this, Project.MSG_INFO,
@@ -926,6 +942,7 @@ public class JcReportAntTask
       private NestedCheckstyleElement mCheckstyle = null;
       private NestedCoberturaElement mCobertura = null;
       private NestedEmmaElement mEmma = null;
+      private NestedJavaDocElement mJavaDoc = null;
 
       public NestedToolsElement (JcReportAntTask task)
       {
@@ -1012,6 +1029,18 @@ public class JcReportAntTask
       public NestedEmmaElement getEmma ()
       {
          return mEmma;
+      }
+
+      public NestedJavaDocElement createJavaDoc ()
+      {
+         mTask.log("Creating JavaDoc element...");
+         mJavaDoc = new NestedJavaDocElement(mTask);
+         return mJavaDoc;
+      }
+
+      public NestedJavaDocElement getJavaDoc ()
+      {
+         return mJavaDoc;
       }
    }
 
@@ -1382,13 +1411,11 @@ public class JcReportAntTask
               cmd.createVmArgument().setValue("-Dfindbugs.debug=true");
           }
 
-         if (mPluginList == null)
+         if (mPluginList != null)
          {
-             throw new BuildException("The 'pluginlist' element is mandatory"
-                     + " for the findbugs task!", mTask.getLocation());
+             cmd.createArgument().setValue("-pluginList");
+             cmd.createArgument().setPath(mPluginList);
          }
-         cmd.createArgument().setValue("-pluginList");
-         cmd.createArgument().setPath(mPluginList);
 
          if (!StringUtil.isEmptyOrNull(mOmitVisitors))
          {
@@ -1398,7 +1425,7 @@ public class JcReportAntTask
 
 
          final File outFile = new File(reportDir, "findbugs.xml");
-         cmd.createArgument().setValue("-outputFile");
+         cmd.createArgument().setValue("-output");
          cmd.createArgument().setFile(outFile);
 
          cmd.createArgument().setValue("-sourcepath");
@@ -1599,6 +1626,30 @@ public class JcReportAntTask
         {
             return new File(mDatafile);
         }
+    }
+
+   public static class NestedJavaDocElement
+       extends NestedToolElement
+    {
+       private String mLogfile;
+    
+       public NestedJavaDocElement (JcReportAntTask task)
+       {
+           super(task);
+       }
+    
+       public void setLogfile (String logfile)
+       {
+           mLogfile = logfile;
+       }
+    
+       /**
+        * Nothing to be done for javadoc.
+        */
+       public File execute (File reportDir, File srcDir, File clsPath)
+       {
+           return new File(mLogfile);
+       }
     }
    //
    // Filters section

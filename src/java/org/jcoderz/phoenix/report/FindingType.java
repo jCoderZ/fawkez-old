@@ -108,6 +108,7 @@ public class FindingType
          PmdFindingType.initialize();
          CpdFindingType.initialize();
          SystemFindingType.initialize();
+         JavaDocFindingType.initialize();
       }
 
    }

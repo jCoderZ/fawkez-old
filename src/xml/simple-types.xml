@@ -91,6 +91,7 @@
          <value>cpd</value>
          <value>cobertura</value>
          <value>emma</value>
+         <value>javaDoc</value>
       </enumeration>
 
       <enumeration
@@ -102,6 +103,7 @@
          <value>Coverage</value>
          <value>CPD</value>
          <value>System</value>
+         <value>JavaDoc</value>
       </enumeration>
 
       <enumeration
@@ -222,7 +224,7 @@
      VALUE OBJECTS
      =============================================================== -->
    <valueObjects>
-      <!--  <valueObject
+      <valueObject
          classname="Relation"
          package="org.jcoderz.phoenix.dependency"
          serializable="true"
@@ -302,6 +304,6 @@
             identity-independent="true"
             initial-value="-1">
         </member>
-      </valueObject>  -->
+      </valueObject>
    </valueObjects>   
 </simpleTypes>

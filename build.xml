@@ -767,6 +767,7 @@ xerces in current vm: ${xerces.version.ant}
       	   target="1.4">
           <src path="${base.dir}/src/java"/>
           <src path="${build.dir}/gen-java"/>
+          <exclude name="org/jcoderz/phoenix/dependency/**"/>
           <exclude name="org/jcoderz/phoenix/report/**"/>
           <exclude name="org/jcoderz/testdata/**"/>
           <classpath refid="default.classpath"/>
@@ -781,6 +782,7 @@ xerces in current vm: ${xerces.version.ant}
             <src path="${build.dir}/gen-java"/>
             <include name="org/jcoderz/phoenix/report/**"/>
             <include name="org/jcoderz/testdata/**"/>
+            <include name="org/jcoderz/phoenix/dependency/**"/>
           <classpath>
               <pathelement path="${build.dir}/classes"/>
               <path refid="default.classpath"/>
@@ -1108,6 +1110,10 @@ xerces in current vm: ${xerces.version.ant}
      <property name="xerces.javadoc"
        value="http://xerces.apache.org/xerces-j/apiDocs"/>
 
+      <record name="${build.dir}/javadoc.log" 
+        action="start"
+        emacsmode="true"
+        loglevel="info"/>
       <mkdir dir="${build.dir}/doc/api"/>
       <javadoc
          packagenames="org.jcoderz.*"
@@ -1202,6 +1208,7 @@ xerces in current vm: ${xerces.version.ant}
          <link href="http://www.hibernate.org/hib_docs/v3/api/"/>
          <link href="http://www.jedit.org/api/"/>
       </javadoc>
+      <record name="${build.dir}/javadoc.log" action="stop"/>
       <!--
       <copy todir="${build.dir}/doc/api">
          <fileset dir="${base.dir}/src/docs" includes="**/doc-files/*"/>

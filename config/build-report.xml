@@ -12,7 +12,6 @@
    <property name="findbugs.rules" value="${base.dir}/config/jcoderz-findbugs.xml" />
    <property name="filter.rules" value="${base.dir}/config/jcoderz-report-filter.xsl" />
 
-   <!-- NOTE: Not executed by the report target yet! -->
    <target name="summary-report">
       <!-- This is the classpath used by the JcReportAntTask -->   
       <path id="jcreport.classpath">
@@ -27,8 +26,6 @@
                classname="org.jcoderz.phoenix.report.JcSummaryReportAntTask">
          <classpath refid="jcreport.classpath"/>
       </taskdef>
-      <!-- TODO: Find a good place for the fawkez build!
-           The folder should be the CC artefacts folder -->
       <jcsummaryreport name="fawkez-summary"
                        summary="${env.CRUISECONTROL_HOME}/artifacts/${name}/global/history.csv"
                        dest="${build.dir}/doc/summary"
@@ -179,6 +176,7 @@
             <!-- cobertura datafile="x.ser">
             </cobertura -->
             <emma datafile="${build.dir}/full-coverage.es"/>
+            <javaDoc logfile="${build.dir}/javadoc.log"/>
          </tools>
          <filters>
             <filter file="${filter.rules}"/>

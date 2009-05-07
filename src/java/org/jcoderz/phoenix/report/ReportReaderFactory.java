@@ -90,6 +90,10 @@ public final class ReportReaderFactory
             {
                 result = new EmmaReportReader();
             }
+            else if (ReportFormat.JAVA_DOC == format)
+            {
+                result = new JavaDocReportReader();
+            }
             else if (ReportFormat.JCODERZ == format)
             {
                 throw new UnsupportedOperationException(

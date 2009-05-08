@@ -34,6 +34,8 @@ package org.jcoderz.phoenix.report;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -53,6 +55,13 @@ public final class SourceDirectoryReader
    private static final Logger logger = Logger.getLogger(CLASSNAME);
 
    private final Map mSources = new HashMap();
+   
+   /** 
+    * This collection holds directory names that should never 
+    * contain any source files. 
+    **/
+   private static final Collection/*<String>*/ BLACKLISTED_DIR_NAMES 
+       = Collections.unmodifiableCollection(Arrays.asList(new String[] {".svn", "CVS"}));
 
    SourceDirectoryReader ()
          throws JAXBException
@@ -87,7 +96,7 @@ public final class SourceDirectoryReader
          final String resourceName = files[i].getAbsolutePath();
          if (files[i].isDirectory())
          {
-            if (".svn".equals(files[i].getName()))
+            if (BLACKLISTED_DIR_NAMES.contains(files[i].getName()))
             {
                 logger.finer("Ignoring source dir: '" + files[i] + "'");
             }

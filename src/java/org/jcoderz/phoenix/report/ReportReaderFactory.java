@@ -34,6 +34,8 @@ package org.jcoderz.phoenix.report;
 
 import javax.xml.bind.JAXBException;
 
+import org.jcoderz.phoenix.report.ReportNormalizer.SourceReport;
+
 /**
  * Factory class to create a report reader for the requested report format.
  *
@@ -53,8 +55,9 @@ public final class ReportReaderFactory
      * @param format the report format.
      * @return a report reader for the given report format.
      */
-    public static ReportReader createReader (ReportFormat format)
+    public static ReportReader createReader (SourceReport sr)
     {
+        ReportFormat format = sr.getReportFormat();
         final ReportReader result;
         try
         {
@@ -90,9 +93,10 @@ public final class ReportReaderFactory
             {
                 result = new EmmaReportReader();
             }
-            else if (ReportFormat.JAVA_DOC == format)
+            else if (ReportFormat.GENERIC == format)
             {
-                result = new JavaDocReportReader();
+                result = GenericReportReader.initialize(
+                    Origin.fromString(sr.getFlavor()));
             }
             else if (ReportFormat.JCODERZ == format)
             {

@@ -33,40 +33,88 @@
 package org.jcoderz.phoenix.report;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
+import java.util.logging.Logger;
+
+import org.jcoderz.commons.util.StringUtil;
 
 /**
  * @author Andreas Mandel
  */
 public class FindingType
 {
-   private static final Map FINDING_TYPES = new HashMap();
-   private final String mSymbol;
-   private final String mShortText;
-   private final String mDescription;
+    private static final String CLASSNAME = FindingType.class.getName();
+    private static final Logger LOGGER = Logger.getLogger(CLASSNAME);  
+    private static final Map<String,FindingType> 
+        FINDING_TYPES = new HashMap<String,FindingType>();
+    private static final Set<Origin> 
+        INITIALIZED_FINDING_TYPES = new HashSet<Origin>();
+    private final String mSymbol;
+    private final String mShortText;
+    private final String mDescription;
 
 
-   protected FindingType (String symbol, String shortText, String description)
-   {
-      mSymbol = symbol.intern();
-      mShortText = shortText;
-      mDescription = description;
-      FINDING_TYPES.put(mSymbol, this);
-   }
+    protected FindingType (String symbol, String shortText, String description)
+    {
+        mSymbol = symbol.intern();
+        mShortText 
+            = StringUtil.isNullOrBlank(shortText) ? mSymbol : shortText;
+        mDescription 
+            = StringUtil.isNullOrBlank(description) ? mShortText : description;
+        FINDING_TYPES.put(mSymbol, this);
+    }
 
 
    public static FindingType fromString (String symbol)
    {
       new LazyInit();
 
-      FindingType result = (FindingType) FINDING_TYPES.get(symbol);
+      FindingType result = FINDING_TYPES.get(symbol);
       if (result == null)
       {
-         result = new FindingType(symbol, symbol, symbol);
+         result = new FindingType(symbol, null, null);
       }
       return result;
    }
 
+   public static void initialize (Origin findingType)
+   {
+       if (!INITIALIZED_FINDING_TYPES.contains(findingType))
+       {
+           INITIALIZED_FINDING_TYPES.add(findingType);
+           if (Origin.CHECKSTYLE.equals(findingType))
+           {
+               CheckstyleFindingType.initialize();
+           }
+           else if (Origin.COVERAGE.equals(findingType))
+           {
+               // No stuff here
+           }
+           else if (Origin.FINDBUGS.equals(findingType))
+           {
+               FindBugsFindingType.initialize();
+           }
+           else if (Origin.PMD.equals(findingType))
+           {
+               PmdFindingType.initialize();
+           }
+           else if (Origin.CPD.equals(findingType))
+           {
+               CpdFindingType.initialize();
+           }
+           else if (Origin.SYSTEM.equals(findingType))
+           {
+               SystemFindingType.initialize();
+           }
+           else
+           {
+               GenericReportReader.initialize(findingType);
+           }
+       }
+   }
+   
    public String getSymbol ()
    {
       return mSymbol;
@@ -102,14 +150,11 @@ public class FindingType
    {
       static
       {
-         // TODO: Make the location of the message XML files overridable!
-         CheckstyleFindingType.initialize();
-         FindBugsFindingType.initialize();
-         PmdFindingType.initialize();
-         CpdFindingType.initialize();
-         SystemFindingType.initialize();
-         JavaDocFindingType.initialize();
+          initialize(Origin.CHECKSTYLE);
+          initialize(Origin.FINDBUGS);
+          initialize(Origin.PMD);
+          initialize(Origin.CPD);
+          initialize(Origin.SYSTEM);
       }
-
    }
 }

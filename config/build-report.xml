@@ -176,8 +176,10 @@
             <!-- cobertura datafile="x.ser">
             </cobertura -->
             <emma datafile="${build.dir}/full-coverage.es"/>
-            <javaDoc logfile="${build.dir}/javadoc.log"/>
          </tools>
+         <logfiles>
+           <logfile file="${build.dir}/javadoc.log" type="JavaDoc"/> 
+         </logfiles>
          <filters>
             <filter file="${filter.rules}"/>
          </filters>

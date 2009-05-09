@@ -202,12 +202,14 @@ public final class ReportNormalizer
         {
             logger.fine("Processing report " + report.getReportFormat()
                 + " '" + report.getFilename() + "'");
+            
+            
+            
             if (report.getFilename().length() != 0
                 || report.getFilename().isDirectory())
             {
                 final ReportReader reportReader
-                    = ReportReaderFactory.createReader(
-                        report.getReportFormat());
+                    = ReportReaderFactory.createReader(report);
                 reportReader.parse(report.getFilename());
                 reportReader.merge(items);
             }
@@ -296,6 +298,7 @@ public final class ReportNormalizer
      * (http://findbugs.sf.net)</li>
      * <li><code>-pmd pmdreport.xml</code> (http://pmd.sf.net)</li>
      * <li><code>-cpd cpdreport.xml</code> (http://))))</li>
+     * <li><code>-generic javadoc javadoc.log</code> (http://))))</li>
      * </ul>
      *
      * <ul>
@@ -348,13 +351,14 @@ public final class ReportNormalizer
                 {
                     addReport(ReportFormat.EMMA, args[i + 1]);
                 }
-                else if (args[i].equals("-javaDoc"))
-                {
-                    addReport(ReportFormat.JAVA_DOC, args[i + 1]);
-                }
                 else if (args[i].equals("-cpd"))
                 {
                     addReport(ReportFormat.CPD, args[i + 1]);
+                }
+                else if (args[i].equals("-generic"))
+                {
+                    addReport(ReportFormat.GENERIC, args[i + 1], args[i + 2]);
+                    i++;
                 }
                 else if (args[i].equals("-projectHome"))
                 {
@@ -412,6 +416,17 @@ public final class ReportNormalizer
     public void addReport (ReportFormat format, String file)
     {
         addReport(format, new File(file));
+    }
+    
+    /**
+     * Adds the report.
+     *
+     * @param format the format
+     * @param file the file
+     */
+    public void addReport (ReportFormat format, String file, String flavor)
+    {
+        mReportList.add(new SourceReport(format, new File(file), flavor));
     }
 
     /**
@@ -585,7 +600,7 @@ public final class ReportNormalizer
     /**
      * The Class SourceReport.
      */
-    private static final class SourceReport
+    public static final class SourceReport
     {
 
         /** The report format. */
@@ -594,6 +609,9 @@ public final class ReportNormalizer
         /** The filename. */
         private final File mFilename;
 
+        /** The flavor. */
+        private final String mFlavor;
+        
         /**
          * Instantiates a new source report.
          * No check here. Let the report parsing fail.
@@ -604,6 +622,21 @@ public final class ReportNormalizer
         {
             mReportFormat = r;
             mFilename = f;
+            mFlavor = null;
+        }
+
+        /**
+         * Instantiates a new source report.
+         * No check here. Let the report parsing fail.
+         * @param r the ReportFormat
+         * @param f the File
+         * @param flavor the report flavor
+         */
+        SourceReport (ReportFormat r, File f, String flavor)
+        {
+            mReportFormat = r;
+            mFilename = f;
+            mFlavor = flavor;
         }
 
         /**
@@ -624,6 +657,16 @@ public final class ReportNormalizer
         ReportFormat getReportFormat ()
         {
             return mReportFormat;
+        }
+
+        /**
+         * Returns the report flavor.
+         *
+         * @return the report flavor.
+         */
+        public String getFlavor ()
+        {
+            return mFlavor;
         }
     }
 }

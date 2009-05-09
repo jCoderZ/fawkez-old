@@ -57,6 +57,8 @@ Fawkez 1.2 'Charlie X'
     for details.
   * Generated UserTypes now also have a static method that returns the
     Hibernate Type compatible type wrapped vi CustomType class. #67
+  * Initial revision of a generic finding type converter ready to read
+    JavaDoc logfiles. Still many open ends but a start. #63
 
 Fawkez 1.1 'The Man Trap' (March 31, 2007)
 http://www.jcoderz.org/fawkez/browser/tags/FAWKEZ_1_1_0

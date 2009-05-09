@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<findingTypeFormatDescription xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../xml/schema/finding-type-format-description.xsd">
+  <staticTypeInfo>
+    <name>JavaDoc</name>
+    <version>1.0</version>
+    <findingReportFilenamePattern>javadoc.log</findingReportFilenamePattern>
+  </staticTypeInfo>
+  <rootType>
+    <symbol>javadoc-warning</symbol>
+    <pattern>(.*):([0-9]*): (warning|error) - (.*)</pattern>
+    <severity>code-style</severity>
+    <!--  severity for broken doc: design,
+                   for missing stuff: code-style -->
+    <textPos>4</textPos>
+    <filenamePos>1</filenamePos>
+    <lineStartPos>2</lineStartPos>
+  </rootType>
+  <findingType>
+    <symbol>JavaDocWarning</symbol>
+    <shortDescription>JavaDoc warning.</shortDescription>
+    <description>A generic warning from the JavaDoc tool.</description>
+    <pattern>(.*)xxxxxx</pattern>
+    <priority>-99</priority>
+    <severity>code-style</severity>
+  </findingType>
+  <findingType>
+    <symbol>JavaDocNoInheritedDoc</symbol>
+    <shortDescription>(@inheritDoc) used but the element does not override or implement any method.</shortDescription>
+    <description>
+        The {@inheritDoc} tag can only be used when there exists some inherited
+        element. Please remember that constructors are not inherited.  
+    </description>
+    <pattern>(@inheritDoc) used but (.*) does not override or implement any method\.</pattern>
+    <severity>design</severity>
+    <sourceTextPos>1</sourceTextPos>
+  </findingType>
+  <findingType>
+    <symbol>JavaDocNoReturn</symbol>
+    <shortDescription>(@return) tag cannot be used in method with void return type.</shortDescription>
+    <description>
+        The method does not return any value, so there is no use of a @return
+        tag.
+    </description>
+    <pattern>@return tag cannot be used in method with void return type\.</pattern>
+    <severity>code-style</severity>
+    <sourceTextPos>1</sourceTextPos>
+  </findingType>
+  <findingType>
+    <symbol>JavaDocNoParameter</symbol>
+    <shortDescription>The parameter described with the @param tag does not exist.</shortDescription>
+    <pattern>@param argument "(.*)" is not a parameter name\.</pattern>
+    <severity>design</severity>
+    <sourceTextPos>1</sourceTextPos>
+  </findingType>
+  <findingType>
+    <symbol>JavaDocLinkReferenceNotFound</symbol>
+    <shortDescription>Referred target was not found.</shortDescription>
+    <description>
+        The tag points to a reference that could not be found.
+        It might be caused by a typo in the target or also in a missing class
+        on the classpath while generating javadoc.
+    </description>
+    <pattern>Tag (@link|@see): reference not found: (.*)</pattern>
+    <severity>design</severity>
+    <sourceTextPos>1</sourceTextPos>
+  </findingType>
+  <findingType>
+    <symbol>JavaDocUnknownTag</symbol>
+    <shortDescription>The used tag is not known.</shortDescription>
+    <description>
+        The tag used is not known to java doc. Might be a doclet definition is 
+        missing or a typo in the tag name?
+    </description>
+    <pattern>(.*) is an unknown tag\.</pattern>
+    <severity>design</severity>
+    <sourceTextPos>1</sourceTextPos>
+  </findingType>
+  <findingType>
+    <symbol>JavaDocTagMisuse</symbol>
+    <shortDescription>The used tag is not suitable in this context.</shortDescription>
+    <description>
+        The use of the tag is limited to the listed places.
+    </description>
+    <pattern>Tag (.*) cannot be used in (.*) documentation\.  ?It can only be used in the following types of documentation: (.*)\.</pattern>
+    <severity>design</severity>
+    <sourceTextPos>1</sourceTextPos>
+  </findingType>
+  <findingType>
+    <symbol>JavaDocCanNotFindMember</symbol>
+    <shortDescription>The local target of the tag can not be fond.</shortDescription>
+    <pattern>Tag (.*): can't find (.*) ?in (.*)</pattern>
+    <severity>design</severity>
+    <sourceTextPos>1</sourceTextPos>
+  </findingType>
+</findingTypeFormatDescription>

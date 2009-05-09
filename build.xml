@@ -625,6 +625,8 @@ xerces in current vm: ${xerces.version.ant}
 
         <jaxb-compiler schema="${base.dir}/src/xml/schema/coverage.xsd"
             produces="${build.dir}/gen-java/org/jcoderz/phoenix/coverage/jaxb"/>
+        <jaxb-compiler schema="${base.dir}/src/xml/schema/finding-type-format-description.xsd"
+            produces="${build.dir}/gen-java/org/jcoderz/phoenix/report/ftf/jaxb"/>
 
         <jaxb-compiler schema="${base.dir}/src/xml/schema/jcoverage.xsd"
             produces="${build.dir}/gen-java/org/jcoderz/phoenix/jcoverage/jaxb"/>
@@ -792,6 +794,7 @@ xerces in current vm: ${xerces.version.ant}
             preservelastmodified="true">
             <fileset dir="${base.dir}/src/java/">
                 <include name="**/*.properties"/>
+                <include name="**/*.xml"/>
             </fileset>
             <!-- generated properties i.e. for configuration service-->
             <fileset dir="${build.dir}/gen-java/">

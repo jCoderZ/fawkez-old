@@ -61,6 +61,9 @@
    <xsd:attribute name='new' type='xsd:boolean' use='optional'/>
    <xsd:attribute name='old' type='xsd:boolean' use='optional'/>
    <xsd:attribute name='since' type='xsd:dateTime' use='optional'/>
+   <!-- The text that caused the finding used to highlight 
+        the right source position. -->
+   <xsd:attribute name='source-text' type='xsd:string' use='optional'/>
   </xsd:complexType>
  </xsd:element>
 

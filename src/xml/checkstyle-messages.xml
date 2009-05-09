@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ASCII"?>
 <CheckstyleMessages
 	xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
-   xsi:noNamespaceSchemaLocation='schema/checkstyle-merssage.xsd'>
+   xsi:noNamespaceSchemaLocation='schema/checkstyle-message.xsd'>
 
    <FindingType>
       <Symbol>CS_CONTENT</Symbol>

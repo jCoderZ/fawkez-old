@@ -451,6 +451,8 @@ public final class Java2Html
       mReport = (Report) unmarshaller.unmarshal(mInputData);
       mGlobalSummary = new FileSummary();
 
+      initialiteFindingTypes();
+      
       for (final org.jcoderz.phoenix.report.jaxb.File file
           : (List<org.jcoderz.phoenix.report.jaxb.File>) mReport.getFile())
       {
@@ -495,6 +497,27 @@ public final class Java2Html
 
       logger.fine("Done.");
    }
+
+    private void initialiteFindingTypes ()
+    {
+        for (final org.jcoderz.phoenix.report.jaxb.File file
+            : (List<org.jcoderz.phoenix.report.jaxb.File>) mReport.getFile())
+        {
+            for (Item i : (List<Item>) file.getItem())
+            {
+                try
+                {
+                    FindingType.initialize(i.getOrigin());
+                }
+                catch (Exception ex)
+                {
+                    logger.log(Level.WARNING, "Could not initialize finding type "
+                        + i.getFindingType());
+                }
+            }
+         }
+        
+    }
 
    private void createAgeSummary ()
        throws IOException

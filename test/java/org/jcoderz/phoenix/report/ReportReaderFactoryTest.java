@@ -70,8 +70,10 @@ public class ReportReaderFactoryTest extends TestCase
 
    public void testCreateReader ()
    {
-      assertNotNull(ReportReaderFactory.createReader(ReportFormat.CHECKSTYLE));
-      assertNotNull(ReportReaderFactory.createReader(ReportFormat.JCOVERAGE));
+      assertNotNull(ReportReaderFactory.createReader(
+          new ReportNormalizer.SourceReport(ReportFormat.CHECKSTYLE, null)));
+      assertNotNull(ReportReaderFactory.createReader(
+          new ReportNormalizer.SourceReport(ReportFormat.JCOVERAGE, null)));
    }
 
 }

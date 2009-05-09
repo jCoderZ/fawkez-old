@@ -982,7 +982,7 @@ public final class Java2Html
          {
              for (final Item item : lineFindings)
              {
-               if (!item.getOrigin().equals(Origin.COVERAGE))
+               if (!Origin.COVERAGE.equals(item.getOrigin()))
                {
                   pos++;
                   rowCounter++;
@@ -1130,7 +1130,7 @@ public final class Java2Html
       for (final Item item : mCurrentFindings)
       {
          FindingsSummary.addFinding(item, summary);
-         if (item.getOrigin().equals(Origin.COVERAGE))
+         if (Origin.COVERAGE.equals(item.getOrigin()))
          {
             if (item.getCounter() != 0)
             {
@@ -1218,7 +1218,7 @@ public final class Java2Html
       while (items.hasNext())
       {
          final Item item = items.next();
-         if (item.getOrigin() == Origin.COVERAGE)
+         if (item.getOrigin().equals(Origin.COVERAGE))
          {
             if (item.getCounter() == 0)
             {
@@ -1261,7 +1261,7 @@ public final class Java2Html
       while (items.hasNext())
       {
          final Item item = items.next();
-         if (item.getOrigin() == Origin.COVERAGE)
+         if (Origin.COVERAGE.equals(item.getOrigin()))
          {
             hits = String.valueOf(item.getCounter());
             break;
@@ -1284,7 +1284,7 @@ public final class Java2Html
       while (items.hasNext())
       {
          final Item item = items.next();
-         if (item.getOrigin() == Origin.COVERAGE)
+         if (Origin.COVERAGE.equals(item.getOrigin()))
          {
             if (item.getCounter() == 0)
             {

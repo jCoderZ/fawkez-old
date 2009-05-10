@@ -343,7 +343,8 @@ public final class ResourceInfo
             catch (IOException ex)
             {
                 throw new RuntimeException(
-                    "Uuppss, this was not expected in 'getCanonicalPath'.",
+                    "Uuppss, this was not expected in 'getCanonicalPath' "
+                        + " for '" + lookupName + "'.",
                     ex);
             }
         }

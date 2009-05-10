@@ -7,19 +7,19 @@
   </staticTypeInfo>
   <rootType>
     <symbol>javadoc-warning</symbol>
-    <pattern>(.*):([0-9]*): (warning|error) - (.*)</pattern>
+    <pattern>((.:)?[^:]*):(([0-9]*):)? (warning|error) - (.*)</pattern>
     <severity>code-style</severity>
     <!--  severity for broken doc: design,
                    for missing stuff: code-style -->
-    <textPos>4</textPos>
+    <textPos>6</textPos>
     <filenamePos>1</filenamePos>
-    <lineStartPos>2</lineStartPos>
+    <lineStartPos>4</lineStartPos>
   </rootType>
   <findingType>
     <symbol>JavaDocWarning</symbol>
     <shortDescription>JavaDoc warning.</shortDescription>
     <description>A generic warning from the JavaDoc tool.</description>
-    <pattern>(.*)xxxxxx</pattern>
+    <pattern>(.*)</pattern>
     <priority>-99</priority>
     <severity>code-style</severity>
   </findingType>
@@ -89,6 +89,19 @@
     <symbol>JavaDocCanNotFindMember</symbol>
     <shortDescription>The local target of the tag can not be fond.</shortDescription>
     <pattern>Tag (.*): can't find (.*) ?in (.*)</pattern>
+    <severity>design</severity>
+    <sourceTextPos>1</sourceTextPos>
+  </findingType>
+  <findingType>
+    <symbol>JavaDocErrorFetchingUrl</symbol>
+    <shortDescription>Data on the given Url could not be loaded.</shortDescription>
+    <description>
+        Data on the given Url could not be loaded. Might be because the
+        network is temporarily not available or the resource does not 
+        exist.
+    </description>
+    <global>true</global>
+    <pattern>Error fetching URL: (.*)</pattern>
     <severity>design</severity>
     <sourceTextPos>1</sourceTextPos>
   </findingType>

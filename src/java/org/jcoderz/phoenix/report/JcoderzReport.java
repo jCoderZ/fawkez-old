@@ -141,11 +141,14 @@ public final class JcoderzReport
          final List<Item> itemList = entry.getValue();
          final org.jcoderz.phoenix.report.jaxb.File f
             = new org.jcoderz.phoenix.report.jaxb.ObjectFactory().createFile();
-         f.setName(info.getResourceName());
-         f.setClassname(info.getClassname());
-         f.setPackage(info.getPackage());
-         f.setSrcDir(info.getSourcDir());
-         f.setLoc(info.getLinesOfCode());
+         if (info != null)
+         {
+             f.setName(info.getResourceName());
+             f.setClassname(info.getClassname());
+             f.setPackage(info.getPackage());
+             f.setSrcDir(info.getSourcDir());
+             f.setLoc(info.getLinesOfCode());
+         }
          f.setLevel(level);
          f.getItem().addAll(itemList);
 

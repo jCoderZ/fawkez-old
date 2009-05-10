@@ -54,6 +54,7 @@ import net.sourceforge.chart2d.MultiColorsProperties;
 import net.sourceforge.chart2d.Object2DProperties;
 
 import org.jcoderz.commons.util.IoUtil;
+import org.jcoderz.commons.util.ObjectUtil;
 import org.jcoderz.phoenix.report.jaxb.File;
 import org.jcoderz.phoenix.report.jaxb.Report;
 
@@ -294,7 +295,7 @@ public final class StatisticCollector
    private String getService (String pkg)
    {
       String result;
-      if (pkg.startsWith(mPrefix))
+      if (pkg != null && pkg.startsWith(mPrefix))
       {
          result = pkg.substring(mPrefix.length());
          if (result.indexOf('.') != -1)
@@ -308,7 +309,7 @@ public final class StatisticCollector
       }
       else
       {
-         result = pkg;
+         result = ObjectUtil.toStringOrEmpty(pkg);
       }
       return result;
    }

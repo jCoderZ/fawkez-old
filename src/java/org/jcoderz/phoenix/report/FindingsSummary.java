@@ -396,6 +396,7 @@ final class FindingsSummary
       public void createFindingTypeContent (Writer out)
          throws IOException
       {
+          // TODO: Handle global findings more nice
          final FindingOccurrence[] allFindings
                  = mOccurrences.values().toArray(new FindingOccurrence[0]);
 

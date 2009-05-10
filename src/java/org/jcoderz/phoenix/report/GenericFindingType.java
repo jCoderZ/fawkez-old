@@ -32,6 +32,7 @@
  */
 package org.jcoderz.phoenix.report;
 
+import java.io.Serializable;
 import java.util.Comparator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -61,6 +62,7 @@ public final class GenericFindingType
    private final int mColumnEnd;
    private final int mSourceText;
    private final Severity mSeverity;
+   private final boolean mIsGlobal;
    
    private final ObjectFactory mOf = new ObjectFactory(); 
    
@@ -75,16 +77,17 @@ public final class GenericFindingType
        mPriority = fd.getPriority();
        mPattern = Pattern.compile(fd.getPattern());
        mFindingDescription = fd;
-       mTextPos = fd.isSetTextPos() ? Integer.valueOf(fd.getTextPos()) : -1;
-       mLineStart = fd.isSetLineStartPos() ? Integer.valueOf(fd.getLineStartPos()) : -1;
-       mLineEnd = fd.isSetLineEndPos() ? Integer.valueOf(fd.getLineEndPos()) : -1;
+       mTextPos = fd.isSetTextPos() ? Integer.parseInt(fd.getTextPos()) : -1;
+       mLineStart = fd.isSetLineStartPos() ? Integer.parseInt(fd.getLineStartPos()) : -1;
+       mLineEnd = fd.isSetLineEndPos() ? Integer.parseInt(fd.getLineEndPos()) : -1;
        mColumnStart = fd.isSetColumnStartPos() 
-           ? Integer.valueOf(fd.getColumnStartPos()) : -1;
+           ? Integer.parseInt(fd.getColumnStartPos()) : -1;
        mColumnEnd = fd.isSetColumnEndPos() 
-           ? Integer.valueOf(fd.getColumnEndPos()) : -1;
+           ? Integer.parseInt(fd.getColumnEndPos()) : -1;
        mSourceText = fd.isSetSourceTextPos() 
-           ? Integer.valueOf(fd.getSourceTextPos()) : -1;
-       mSeverity = fd.isSetSeverity() ? fd.getSeverity() : null; 
+           ? Integer.parseInt(fd.getSourceTextPos()) : -1;
+       mSeverity = fd.isSetSeverity() ? fd.getSeverity() : null;
+       mIsGlobal = fd.isGlobal();
     }
    
 
@@ -93,7 +96,7 @@ public final class GenericFindingType
     * accordingly if a match is found. 
     * @param message the message to parse.
     * @return a new Item with available data filled or null.
-    * @throws JAXBException 
+    * @throws JAXBException if Item creation fails on jaxb level.
     */
    public Item createItem (String message) throws JAXBException
    {
@@ -131,8 +134,10 @@ public final class GenericFindingType
            {
                result.setSeverity(mSeverity);
            }
-           
-           
+           if (mFindingDescription.isGlobal())
+           {
+               result.setGlobal(true);
+           }
        }
        return result;
    }
@@ -164,12 +169,17 @@ public final class GenericFindingType
        // already done
    }
    
-   
+   /**
+    * Class to sort {@link GenericFindingType}s by their priority.
+    */
    public static class OrderByPriority 
-       implements Comparator<GenericFindingType>
+       implements Comparator<GenericFindingType>, Serializable
    {
-        public int compare (GenericFindingType o1, GenericFindingType o2)
-        {
+       private static final long serialVersionUID = 1L;
+
+       /** {@inheritDoc} */
+       public int compare (GenericFindingType o1, GenericFindingType o2)
+       {
             final int result;
             if (o1.getPriority() > o2.getPriority())
             {

@@ -58,6 +58,7 @@ import org.jcoderz.commons.util.Assert;
 import org.jcoderz.commons.util.FileUtils;
 import org.jcoderz.commons.util.IoUtil;
 import org.jcoderz.commons.util.LoggingUtils;
+import org.jcoderz.commons.util.ObjectUtil;
 import org.jcoderz.phoenix.report.jaxb.Item;
 import org.jcoderz.phoenix.report.jaxb.ObjectFactory;
 import org.jcoderz.phoenix.report.jaxb.Report;
@@ -327,9 +328,9 @@ public class ReportMerger
        for (org.jcoderz.phoenix.report.jaxb.File file : 
            (List<org.jcoderz.phoenix.report.jaxb.File>) oldReport.getFile())
        {
-           if (file.getName().equals(fileName) 
-               || (file.getClassname().equals(className) 
-                   && file.getPackage().equals(packageName)))
+           if (ObjectUtil.equals(file.getName(), fileName) 
+               || (ObjectUtil.equals(file.getClassname(), className) 
+                   && ObjectUtil.equals(file.getPackage(), packageName)))
            {
                result = file;
                break;

@@ -74,6 +74,7 @@ import org.jcoderz.commons.util.EmptyIterator;
 import org.jcoderz.commons.util.FileUtils;
 import org.jcoderz.commons.util.IoUtil;
 import org.jcoderz.commons.util.LoggingUtils;
+import org.jcoderz.commons.util.ObjectUtil;
 import org.jcoderz.commons.util.StringUtil;
 import org.jcoderz.commons.util.XmlUtil;
 import org.jcoderz.phoenix.report.jaxb.Item;
@@ -458,7 +459,14 @@ public final class Java2Html
       {
          try
          {
-            java2html(new java.io.File(file.getName()), file);
+             if (file.getName() != null)
+             {
+                 java2html(new java.io.File(file.getName()), file);
+             }
+             else
+             {
+                 mGlobalFindings.add(file);
+             }
          }
          catch (Exception ex)
          {
@@ -511,7 +519,8 @@ public final class Java2Html
                 }
                 catch (Exception ex)
                 {
-                    logger.log(Level.WARNING, "Could not initialize finding type "
+                    logger.log(Level.WARNING, 
+                        "Could not initialize finding type "
                         + i.getFindingType());
                 }
             }
@@ -1582,7 +1591,9 @@ public final class Java2Html
                 bw.write("<tr class='");
                 bw.write(item.getSeverity().toString());
                 bw.write(Java2Html.toOddEvenString(row));
-                bw.write("'><td class='unassigned-filename'>");
+                bw.write("'><td class='unassigned-origin'>");
+                bw.write(ObjectUtil.toStringOrEmpty(item.getOrigin()));
+                bw.write("</td><td class='unassigned-filename'>");
                 bw.write(cutPath(file.getName()));
                 bw.write("</td><td class='unassigned-data' width='100%'>");
                 bw.write(item.getMessage());
@@ -1909,8 +1920,8 @@ private static String relativeRoot (String currentPackage)
 
    private String cutPath (String fileName)
    {
-      String result = fileName;
-      if (fileName.toLowerCase(Constants.SYSTEM_LOCALE)
+      String result = ObjectUtil.toStringOrEmpty(fileName);
+      if (fileName != null && fileName.toLowerCase(Constants.SYSTEM_LOCALE)
               .startsWith(mProjectHome.toLowerCase(Constants.SYSTEM_LOCALE)))
       {
          result = fileName.substring(mProjectHome.length());

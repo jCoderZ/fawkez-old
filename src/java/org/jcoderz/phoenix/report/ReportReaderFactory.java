@@ -52,12 +52,12 @@ public final class ReportReaderFactory
     /**
      * Creates a report reader for the given report format.
      *
-     * @param format the report format.
+     * @param sr the source report format.
      * @return a report reader for the given report format.
      */
     public static ReportReader createReader (SourceReport sr)
     {
-        ReportFormat format = sr.getReportFormat();
+        final ReportFormat format = sr.getReportFormat();
         final ReportReader result;
         try
         {

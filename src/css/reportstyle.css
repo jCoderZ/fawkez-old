@@ -268,6 +268,7 @@ a.cvs:active { color:#0000EE; background-color:#FFFF99; font-weight:bold; }
 
 /* unassigned findings */
 
+.unassigned-origin { padding:2px; padding-left:10px; padding-right:10px;}
 .unassigned-filename { font-family:courier,monospace; }
 .unassigned-data { padding:2px; padding-left:10px; font-family:arial,helvetica,sans-serif; font-size:10pt; color:#000000; }
 

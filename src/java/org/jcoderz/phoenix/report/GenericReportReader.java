@@ -238,6 +238,8 @@ public class GenericReportReader implements ReportReader
               break;
            }
        }
+       logger.fine("For text: '" + message + "' matched finding: " 
+           + result == null ? "null" : result.getFindingType());       
        return result;
     }
     
@@ -252,14 +254,14 @@ public class GenericReportReader implements ReportReader
             if (item == null)
             {
                 item = mOf.createItem();
-logger.warning("Could not find concrete finding for " + text);
             }
             item.setOrigin(mOrigin);
             if (!item.isSetSeverity())
             {
 //                item.setSeverity(...)
             }
-            if (!item.isSetLine() && mLineStart != -1)
+            if (!item.isSetLine() && mLineStart != -1 
+                && matcher.group(mLineStart) != null)
             {
                 item.setLine(Integer.parseInt(matcher.group(mLineStart)));
             }
@@ -271,19 +273,23 @@ logger.warning("Could not find concrete finding for " + text);
             {
                 item.setMessage(matcher.group(mTextPos));
             }
-            
+            if (mFindingTypeFormatDescription.getRootType().isGlobal())
+            {
+                item.setGlobal(true);
+            }
             addItemToResource(matcher.group(mFilePos), item);
         }
         else
         {
-            logger.fine("No finding for: " + line);
+            logger.fine(
+                "Root pattern did not match line " + i + ": '" + line + "'.");
         }
     }
 
     private void addItemToResource (String resourceFilename, Item item)
     {
         final ResourceInfo info = ResourceInfo.lookup(resourceFilename);
-        if (info != null)
+        if (info != null || item.isGlobal())
         {
             final List<Item> l;
             if (mItems.containsKey(info))
@@ -312,8 +318,8 @@ logger.warning("Could not find concrete finding for " + text);
         }
         else
         {
-            logger.finer("Ignore findings for resource " 
-                + resourceFilename + ".");
+            logger.finer("Ignore findings for resource '" 
+                + resourceFilename + "' type was " + item.getFindingType() + ".");
         }
     }
     

@@ -70,6 +70,10 @@
                  If omitted the shortDescription is used here. -->
             <xsd:element name="description" type="xsd:string" 
                 minOccurs="0"/>
+            <!-- If set, the finding is relevant independent if 
+                 the source file was found in the input data. -->
+            <xsd:element name="global" type="xsd:boolean" 
+                minOccurs="0" default="false"/>
             <!--  Regular expression to match a item. (xpath?) -->
             <xsd:element name="pattern" type="xsd:string"/>
             <!--  Patterns are applied according to their priority -->

@@ -118,10 +118,11 @@ public class EmmaReportReader
     }
 
     /** {@inheritDoc} */
-    public final Map getItems ()
+    public final Map<ResourceInfo, List<Item>> getItems ()
         throws JAXBException
     {
-        final Map itemMap = new HashMap();
+        final Map<ResourceInfo, List<Item>> itemMap 
+            = new HashMap<ResourceInfo, List<Item>>();
 
         final Iterator<ClassDescriptor> i = mEmmaMetaData.iterator();
         while (i.hasNext())
@@ -135,7 +136,7 @@ public class EmmaReportReader
                     0, srcFileName.lastIndexOf('.'));
             }
             else
-            {   // fallback if data is not available.
+            {   // fall back if data is not available.
                 fileName = clazz.getClassVMName().substring(
                     clazz.getClassVMName().lastIndexOf('/') + 1);
             }
@@ -170,8 +171,8 @@ public class EmmaReportReader
         return itemMap;
     }
 
-    private void processClazz (Map itemMap, ResourceInfo source,
-        final ClassDescriptor clazz, DataHolder coverage)
+    private void processClazz (Map<ResourceInfo, List<Item>> itemMap, 
+        ResourceInfo source, ClassDescriptor clazz, DataHolder coverage)
             throws JAXBException
     {
         logger.fine("Processing class '" + clazz.getName() + "'");
@@ -186,7 +187,7 @@ public class EmmaReportReader
         {
             if (itemMap.containsKey(source))
             {
-               final List l = (List) itemMap.get(source);
+               final List<Item> l = itemMap.get(source);
                l.addAll(itemList);
             }
             else
@@ -253,7 +254,7 @@ public class EmmaReportReader
         final Map<Integer, CoverageDetail> lineCoverage)
         throws JAXBException
     {
-        final List<Item> itemList = new ArrayList();
+        final List<Item> itemList = new ArrayList<Item>();
         for (Entry<Integer, CoverageDetail> entry : lineCoverage.entrySet())
         {
            final CoverageDetail c = entry.getValue();

@@ -169,9 +169,9 @@ public class ReportMerger
            final Report oldReport 
                = (Report) new ObjectFactory().createUnmarshaller().unmarshal(
                    mOldReport);
-           for(org.jcoderz.phoenix.report.jaxb.File newFile : 
-               (List<org.jcoderz.phoenix.report.jaxb.File>) 
-                 currentReport.getFile())
+           for (org.jcoderz.phoenix.report.jaxb.File newFile 
+               : (List<org.jcoderz.phoenix.report.jaxb.File>) 
+                   currentReport.getFile())
            {
                final org.jcoderz.phoenix.report.jaxb.File oldFile 
                    = findFile(newFile, oldReport);
@@ -325,8 +325,8 @@ public class ReportMerger
        final String packageName = newFile.getPackage();
        final String fileName = newFile.getName();
        org.jcoderz.phoenix.report.jaxb.File result = null;
-       for (org.jcoderz.phoenix.report.jaxb.File file : 
-           (List<org.jcoderz.phoenix.report.jaxb.File>) oldReport.getFile())
+       for (org.jcoderz.phoenix.report.jaxb.File file 
+           : (List<org.jcoderz.phoenix.report.jaxb.File>) oldReport.getFile())
        {
            if (ObjectUtil.equals(file.getName(), fileName) 
                || (ObjectUtil.equals(file.getClassname(), className) 
@@ -404,6 +404,7 @@ public class ReportMerger
     * The main method.
     *
     * @param args the arguments
+    * @throws Exception in case of a technical issue.
     */
    public static void main (String[] args)
        throws Exception
@@ -471,6 +472,7 @@ public class ReportMerger
     /**
      * Set the old report to compare with.
      * @param file old report file.
+     * @throws IOException if the file name conversion fails
      */
     public void setOldFile (File file)
         throws IOException

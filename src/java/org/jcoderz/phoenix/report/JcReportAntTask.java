@@ -66,6 +66,7 @@ import org.apache.tools.ant.types.Path;
 import org.apache.tools.ant.types.Environment.Variable;
 import org.jcoderz.commons.taskdefs.AntTaskUtil;
 import org.jcoderz.commons.types.Date;
+import org.jcoderz.commons.util.ArraysUtil;
 import org.jcoderz.commons.util.FileUtils;
 import org.jcoderz.commons.util.StringUtil;
 
@@ -573,9 +574,7 @@ public class JcReportAntTask
       forkToolProcess(this, cmd, new LogStreamHandler(this, Project.MSG_INFO,
          Project.MSG_WARN));
 
-      final File outFile = new File(reportDir,
-         ReportNormalizer.JCODERZ_REPORT_XML);
-      return outFile;
+      return new File(reportDir, ReportNormalizer.JCODERZ_REPORT_XML);
    }
 
 
@@ -1560,7 +1559,8 @@ public class JcReportAntTask
          dataFile = new File(mDatafile);
          if (!dataFile.exists())
          {
-             throw new BuildException("The datafile was not found!",
+             throw new BuildException(
+                 "The datafile '" + mDatafile + "' was not found!",
                  mTask.getLocation());
          }
 
@@ -1775,7 +1775,9 @@ public class JcReportAntTask
       }
       catch (IOException e)
       {
-         throw new BuildException("Process fork failed.", e,
+         throw new BuildException(
+             "Process fork failed. " 
+                 + ArraysUtil.toString(cmdline.getCommandline()), e,
             task.getLocation());
       }
    }

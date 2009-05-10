@@ -364,20 +364,20 @@ xerces in current vm: ${xerces.version.ant}
         <mkdir dir="${build.dir}/bootstrap-classes"/>
         <!-- fork="true" is needed to prevent from compile errors on AIX. -->
         <javac destdir="${build.dir}/bootstrap-classes"
-             deprecation="${build.debug}"
+             deprecation="false"
              debug="true"
              fork="true"
              source="1.4"
-        	 target="1.4">
+             target="1.4">
             <src path="${base.dir}/src/bootstrap-java"/>
             <classpath refid="default.classpath"/>
         </javac>
         <javac destdir="${build.dir}/bootstrap-classes"
-             deprecation="${build.debug}"
+             deprecation="false"
              debug="true"
              fork="true"
              source="1.5"
-        	 target="1.5">
+             target="1.5">
             <src path="${base.dir}/src/java"/>
             <include name="org/jcoderz/commons/taskdefs/*.java"/>
             <include name="org/jcoderz/commons/util/*.java"/>
@@ -761,35 +761,45 @@ xerces in current vm: ${xerces.version.ant}
     </target>
     <target name="compile-all-nodeps">
         <mkdir dir="${build.dir}/classes"/>
-      <javac destdir="${build.dir}/classes"
-           deprecation="${build.debug}"
+        <record name="${build.dir}/javac.log" 
+          action="start"
+          emacsmode="true"
+          loglevel="info"/>
+        <javac destdir="${build.dir}/classes"
+           deprecation="true"
            debug="true"
            fork="true"
            source="1.4"
-      	   target="1.4">
+           target="1.4">
           <src path="${base.dir}/src/java"/>
           <src path="${build.dir}/gen-java"/>
           <exclude name="org/jcoderz/phoenix/dependency/**"/>
           <exclude name="org/jcoderz/phoenix/report/**"/>
           <exclude name="org/jcoderz/testdata/**"/>
           <classpath refid="default.classpath"/>
+        <compilerarg value="-Xlint:all"/>
+        <compilerarg value="-Xmaxwarns"/><compilerarg value="1000"/>
       </javac>
         <javac destdir="${build.dir}/classes"
-             deprecation="${build.debug}"
+             deprecation="true"
              debug="true"
              fork="true"
              source="1.5"
-        	 target="1.5">
+             target="1.5">
             <src path="${base.dir}/src/java"/>
             <src path="${build.dir}/gen-java"/>
             <include name="org/jcoderz/phoenix/report/**"/>
             <include name="org/jcoderz/testdata/**"/>
             <include name="org/jcoderz/phoenix/dependency/**"/>
+            <compilerarg value="-Xlint:all"/>
+            <compilerarg value="-Xmaxwarns"/><compilerarg value="1000"/>
           <classpath>
               <pathelement path="${build.dir}/classes"/>
               <path refid="default.classpath"/>
           </classpath>
         </javac>
+        <record name="${build.dir}/javac.log" 
+          action="stop"/>
         <copy todir="${build.dir}/classes"
             preservelastmodified="true">
             <fileset dir="${base.dir}/src/java/">

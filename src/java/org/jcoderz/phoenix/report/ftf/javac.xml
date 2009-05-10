@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<findingTypeFormatDescription xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../xml/schema/finding-type-format-description.xsd">
+  <staticTypeInfo>
+    <name>javac</name>
+    <version>1.5</version>
+    <findingReportFilenamePattern>javac.log</findingReportFilenamePattern>
+  </staticTypeInfo>
+  <rootType>
+    <symbol>javac-lint</symbol>
+    <pattern>(((.:)?[^:]*):(([0-9]*):)? )?(warning|error): (.*)</pattern>
+    <severity>code-style</severity>
+    <textPos>7</textPos>
+    <filenamePos>2</filenamePos>
+    <lineStartPos>5</lineStartPos>
+  </rootType>
+  <findingType>
+    <symbol>JavacWarning</symbol>
+    <shortDescription>Javac warning.</shortDescription>
+    <description>A generic warning from the java compiler.</description>
+    <pattern>(.*)</pattern>
+    <priority>-99</priority>
+    <severity>code-style</severity>
+  </findingType>
+  <findingType>
+    <symbol>JavacUncheckedCall</symbol>
+    <shortDescription>Unchecked call.</shortDescription>
+    <pattern>\[unchecked\] unchecked call to (.*) as a member of the raw type (.*)</pattern>
+    <severity>design</severity>
+  </findingType>
+  <findingType>
+    <symbol>JavacUncheckedConversion</symbol>
+    <shortDescription>Unchecked conversion.</shortDescription>
+    <pattern>\[unchecked\] unchecked conversion</pattern>
+    <severity>design</severity>
+  </findingType>
+  <findingType>
+    <symbol>JavacUncheckedCast</symbol>
+    <shortDescription>Unchecked cast.</shortDescription>
+    <pattern>\[unchecked\] unchecked cast</pattern>
+    <severity>design</severity>
+  </findingType>
+  <findingType>
+    <symbol>JavacUncheckedOverrideReturn</symbol>
+    <shortDescription>Return type requires unchecked conversion.</shortDescription>
+    <pattern>(.*); return type requires unchecked conversion</pattern>
+    <severity>design</severity>
+  </findingType>
+  <findingType>
+    <symbol>JavacUncheckedMethodInvocation</symbol>
+    <shortDescription>Unchecked method invocation.</shortDescription>
+    <pattern>\[unchecked\] unchecked method invocation: (.*) in (.*) is applied to (.*)\((.*)\)</pattern>
+    <severity>design</severity>
+  </findingType>
+  <findingType>
+    <symbol>JavacDeprecationAnnotation</symbol>
+    <shortDescription>Deprecated name is not annotated as such.</shortDescription>
+    <description>
+        A name is marked as deprecated via a javadoc tag, but the equivalent annotation
+        is not set.
+    </description>
+    <pattern>\[dep-ann\] deprecated name isnt annotated with @Deprecated</pattern>
+    <severity>design</severity>
+  </findingType>
+  <findingType>
+    <symbol>JavacDeprecated</symbol>
+    <shortDescription>The used element had been deprecated.</shortDescription>
+    <pattern>(\[deprecation\])? (.*) in (.*) has been deprecated</pattern>
+    <severity>design</severity>
+  </findingType>
+  <findingType>
+    <symbol>JavacSerialMissingSerialVersionUid</symbol>
+    <shortDescription>The class is serializable but has no serialVersionUID defined.</shortDescription>
+    <pattern>\[serial\] serializable class (.*) has no definition of serialVersionUID</pattern>
+    <severity>design</severity>
+  </findingType>
+  <findingType>
+    <symbol>JavacFallThroughPossible</symbol>
+    <shortDescription>Switch block has a possible fall-trough issue.</shortDescription>
+    <pattern>\[fallthrough\] possible fall-through into case</pattern>
+    <severity>design</severity>
+  </findingType>
+  <findingType>
+    <symbol>JavacPathBadDirectoryElement</symbol>
+    <shortDescription>Element on the path was not found.</shortDescription>
+    <global>true</global>
+    <pattern>\[path\] bad path element "(.*)": no such directory</pattern>
+    <severity>design</severity>
+  </findingType>
+  <findingType>
+    <symbol>JavacPathBadElement</symbol>
+    <shortDescription>Element on the path was not found.</shortDescription>
+    <global>true</global>
+    <pattern>\[path\] bad path element "(.*)": no such file or directory</pattern>
+    <severity>design</severity>
+  </findingType>
+</findingTypeFormatDescription>

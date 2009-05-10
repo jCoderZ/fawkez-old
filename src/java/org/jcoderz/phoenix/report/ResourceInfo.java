@@ -333,18 +333,18 @@ public final class ResourceInfo
 
     private static String checkName (String lookupName)
     {
-        String name = lookupName;
-        if (!RESOURCES.containsKey(lookupName))
+        String name = ObjectUtil.toStringOrEmpty(lookupName);
+        if (!RESOURCES.containsKey(name))
         {
             try
             {
-                name = new File(lookupName).getCanonicalPath();
+                name = new File(name).getCanonicalPath();
             }
             catch (IOException ex)
             {
                 throw new RuntimeException(
                     "Uuppss, this was not expected in 'getCanonicalPath' "
-                        + " for '" + lookupName + "'.",
+                        + " for '" + name + "'.",
                     ex);
             }
         }

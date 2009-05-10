@@ -81,13 +81,13 @@ import org.xml.sax.InputSource;
  * @author Andreas Mandel
  *
  */
-public class GenericReportReader implements ReportReader
+public final class GenericReportReader implements ReportReader
 {
     private static final String CLASSNAME
         = GenericReportReader.class.getName();
     private static final Logger logger = Logger.getLogger(CLASSNAME);
-    private static final Map<Origin,GenericReportReader> GENERIC_REPORT_TYPES
-        = new HashMap<Origin,GenericReportReader>();
+    private static final Map<Origin, GenericReportReader> GENERIC_REPORT_TYPES
+        = new HashMap<Origin, GenericReportReader>();
 
     private final List<GenericFindingType> mFindingTypes
         = new ArrayList<GenericFindingType>();
@@ -105,7 +105,7 @@ public class GenericReportReader implements ReportReader
     private final int mFilePos;
     private final int mLineStart; 
 
-    private GenericReportReader(Origin type) 
+    private GenericReportReader (Origin type) 
         throws JAXBException
     {
         mOrigin = type;
@@ -116,8 +116,8 @@ public class GenericReportReader implements ReportReader
         mMessagePattern = Pattern.compile(root.getPattern());
         mTextPos =  Integer.parseInt(root.getTextPos());
         mFilePos =  Integer.parseInt(root.getFilenamePos());
-        mLineStart = root.isSetLineStartPos() ? 
-            Integer.parseInt(root.getLineStartPos()) : -1;
+        mLineStart = root.isSetLineStartPos() 
+            ? Integer.parseInt(root.getLineStartPos()) : -1;
     }
 
     /**
@@ -132,7 +132,7 @@ public class GenericReportReader implements ReportReader
         GenericReportReader result = null;
         synchronized (GENERIC_REPORT_TYPES)
         {
-            if (!GENERIC_REPORT_TYPES.containsKey(findingType));
+            if (!GENERIC_REPORT_TYPES.containsKey(findingType))
             {
                 try
                 {
@@ -306,9 +306,10 @@ public class GenericReportReader implements ReportReader
             while (i.hasNext())
             {
                 final Item it = i.next();
-                if (it.getColumn() == item.getColumn()
+                if (it.getLine() == item.getLine()
+                    && it.getColumn() == item.getColumn()
                     && it.getOrigin() == item.getOrigin()
-                    && ObjectUtil.equals(it.getMessage(),item.getMessage()))
+                    && ObjectUtil.equals(it.getMessage(), item.getMessage()))
                 {
                     i.remove();
                     break;
@@ -319,7 +320,8 @@ public class GenericReportReader implements ReportReader
         else
         {
             logger.finer("Ignore findings for resource '" 
-                + resourceFilename + "' type was " + item.getFindingType() + ".");
+                + resourceFilename + "' type was " 
+                + item.getFindingType() + ".");
         }
     }
     

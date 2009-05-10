@@ -762,7 +762,7 @@ xerces in current vm: ${xerces.version.ant}
     <target name="compile-all-nodeps">
         <mkdir dir="${build.dir}/classes"/>
         <record name="${build.dir}/javac.log" 
-          action="start"
+          action="start" append="true"
           emacsmode="true"
           loglevel="info"/>
         <javac destdir="${build.dir}/classes"

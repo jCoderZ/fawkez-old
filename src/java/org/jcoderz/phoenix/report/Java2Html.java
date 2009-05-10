@@ -2302,13 +2302,20 @@ private static String relativeRoot (String currentPackage)
    private static String createReportLink (
        org.jcoderz.phoenix.report.jaxb.File file)
    {
-       final String pkg = file.getPackage();
-       String clazzName = file.getClassname();
+       final String pkg = ObjectUtil.toStringOrEmpty(file.getPackage());
+       String clazzName = ObjectUtil.toStringOrEmpty(file.getClassname());
 
        // If no class name is reported take the filename.
        if (StringUtil.isEmptyOrNull(clazzName))
        {
-           clazzName = new File(file.getName()).getName();
+           if (!StringUtil.isEmptyOrNull(file.getName()))
+           {
+               clazzName = new File(file.getName()).getName();
+           }
+           else
+           {
+               clazzName = "";  
+           }
        }
        
        final String subdir = pkg.replaceAll("\\.", "/");

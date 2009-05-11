@@ -1353,14 +1353,30 @@ public final class Java2Html
       {
          result = "&nbsp;";
       }
-      else if (in.charAt(0) == ' ')
+      else if (in.charAt(0) == ' ' || in.charAt(0) == '\t')
       {
          mStringBuilder.setLength(0);
          int i;
-
-         for (i = 0; i < in.length() && in.charAt(i) == ' ';  i++)
+         int pos = 0;
+         for (i = 0; i < in.length() && in.charAt(i) == ' ' 
+             && in.charAt(i) == '\t';  i++)
          {
-            mStringBuilder.append("&nbsp;");
+             if (in.charAt(i) == ' ')
+             {
+                 mStringBuilder.append("&nbsp;");
+                 pos++;
+             }
+             else if (in.charAt(i) == '\t')
+             {
+                 mStringBuilder.append("&nbsp;");
+                 pos++;
+                 while (pos % mTabWidth != 0)
+                 {
+                     mStringBuilder.append("&nbsp;");
+                     pos++;
+                 }
+             }
+             
          }
          mStringBuilder.append(in.substring(i));
          result = mStringBuilder.toString();

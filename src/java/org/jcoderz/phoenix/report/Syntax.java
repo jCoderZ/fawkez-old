@@ -74,6 +74,7 @@ public class Syntax
     private final int mTabWidth;
     private final char[] mFileContent;
     private int mFileContentPos;
+    // CHECKME: ate tabs in the token counted to the length?
     private Token mToken = emptyToken();
     private int mCurrentLineNumber;
     private int mCurrentLinePos;

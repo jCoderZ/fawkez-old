@@ -357,8 +357,7 @@ public final class ReportNormalizer
                 }
                 else if (args[i].equals("-generic"))
                 {
-                    addReport(ReportFormat.GENERIC, args[i + 1], args[i + 2]);
-                    i++;
+                    addReport(ReportFormat.GENERIC, args[++i], args[i + 1]);
                 }
                 else if (args[i].equals("-projectHome"))
                 {
@@ -419,10 +418,12 @@ public final class ReportNormalizer
     }
     
     /**
-     * Adds the report.
+     * Adds the report with a given flavor.
+     * The flavor is used for generic reports to detect the type of file.
      *
      * @param format the format
      * @param file the file
+     * @param flavor the flavor of the report.
      */
     public void addReport (ReportFormat format, String file, String flavor)
     {

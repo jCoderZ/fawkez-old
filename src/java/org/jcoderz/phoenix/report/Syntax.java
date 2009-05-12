@@ -67,6 +67,9 @@ import org.jcoderz.commons.util.IoUtil;
  */
 public class Syntax
 {
+    private static final int MAX_RATIO_ILLEGAL_CHARACTERS = 10;
+    private static final int MAX_AVERAGE_LINE_LENGTH = 200;
+    private static final int BINARY_TEST_PROBE_CHARACTERS = 1024;
     private static final String CLASSNAME = Syntax.class.getName();
     private static final Logger LOGGER = Logger.getLogger(CLASSNAME);
     
@@ -117,7 +120,13 @@ public class Syntax
             = ModeProvider.instance.getModeForFile(in.getName(), mFirstLine);
         if (mode == null)
         {
-            LOGGER.warning("Could not find mode file for '" + in.getName() 
+            if (isBinary(in.getAbsolutePath(), mFileContent))
+            {
+                throw new RuntimeException("No html view for binary file '"
+                    + in.getAbsolutePath() + "'.");
+            }
+            
+            LOGGER.fine("Could not find mode file for '" + in.getName() 
                 + "'. Is the jedit-syntax.jar on the classpath?");
             mTokenMarker = new TokenMarker();
             mTokenMarker.addRuleSet(new ParserRuleSet("text", "MAIN"));
@@ -312,4 +321,54 @@ public class Syntax
     {
         return new Token((byte) Token.END, 0, 0, null);
     }
+
+    static boolean isBinary (String name, char[] fileContent)
+    {
+        int newLines = 0;
+        int chars = 0;
+        int illegal = 0;
+        int i;
+        for (i = 0; i < fileContent.length 
+            && i < BINARY_TEST_PROBE_CHARACTERS; i++)
+        {
+            final char c = fileContent[i];
+            if (c == '\n' || c == '\r')
+            {
+                newLines++;
+            }
+            else if (Character.isWhitespace(c))
+            {
+                chars++;
+            }
+            else if (Character.isISOControl(c))
+            {
+                illegal++;
+            }
+            else if (Character.isDefined(c))
+            {
+                chars++;
+            }
+            else
+            {
+                illegal++;
+            }
+        }
+        boolean result = false; // assume a text file
+        // less than a new line per 200 characters
+        if (((newLines + 1) * MAX_AVERAGE_LINE_LENGTH) < i)
+        {
+            result = true;
+        }
+        // to many 'illegal' chars
+        else if (illegal * MAX_RATIO_ILLEGAL_CHARACTERS > chars)
+        {
+            result = true;
+        }
+        LOGGER.finest("For file " + name + " tested " + i + " chars with "
+            + newLines + " newlines, " + chars + " legal chars, "
+            + illegal + " illegal chars. -> " 
+            + (result ? "isBinary" : "isNotBinary"));
+        return result;
+    }
+
 }

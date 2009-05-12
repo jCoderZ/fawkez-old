@@ -470,9 +470,19 @@ public final class Java2Html
          }
          catch (Exception ex)
          {
-            logger.log(Level.SEVERE,
-                "Failed to generate report for '" + file.getName() + "'.", ex);
-            mGlobalFindings.add(file);
+            if (file.getItem().isEmpty())
+            {
+                logger.log(Level.FINE,
+                    "No report for file without items '" + file.getName() 
+                        + "'.", ex);
+            }
+            else
+            {
+                logger.log(Level.SEVERE,
+                    "Failed to generate report for '" + file.getName() 
+                    + "'.", ex);
+                mGlobalFindings.add(file);
+            }
          }
       }
 

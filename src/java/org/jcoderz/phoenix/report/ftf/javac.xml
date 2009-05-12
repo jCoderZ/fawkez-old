@@ -25,7 +25,9 @@
     <symbol>JavacUncheckedCall</symbol>
     <shortDescription>Unchecked call.</shortDescription>
     <pattern>\[unchecked\] unchecked call to (.*) as a member of the raw type (.*)</pattern>
+    <!-- NOT Supported yet: \nfound   : (.*)\nrequired: (.*)</pattern> -->
     <severity>design</severity>
+    <columnStartPos>caret</columnStartPos>
   </findingType>
   <findingType>
     <symbol>JavacUncheckedConversion</symbol>
@@ -66,18 +68,21 @@
     <shortDescription>The used element had been deprecated.</shortDescription>
     <pattern>(\[deprecation\])? (.*) in (.*) has been deprecated</pattern>
     <severity>design</severity>
+    <columnStartPos>caret</columnStartPos>
   </findingType>
   <findingType>
     <symbol>JavacSerialMissingSerialVersionUid</symbol>
     <shortDescription>The class is serializable but has no serialVersionUID defined.</shortDescription>
     <pattern>\[serial\] serializable class (.*) has no definition of serialVersionUID</pattern>
     <severity>design</severity>
+    <columnStartPos>caret</columnStartPos>
   </findingType>
   <findingType>
     <symbol>JavacFallThroughPossible</symbol>
     <shortDescription>Switch block has a possible fall-trough issue.</shortDescription>
     <pattern>\[fallthrough\] possible fall-through into case</pattern>
     <severity>design</severity>
+    <columnStartPos>caret</columnStartPos>
   </findingType>
   <findingType>
     <symbol>JavacPathBadDirectoryElement</symbol>
@@ -92,5 +97,12 @@
     <global>true</global>
     <pattern>\[path\] bad path element "(.*)": no such file or directory</pattern>
     <severity>design</severity>
+  </findingType>
+  <findingType>
+    <symbol>JavacRedundantCast</symbol>
+    <shortDescription>Redundant cast.</shortDescription>
+    <pattern>\[cast\] redundant cast to (.*)</pattern>
+    <severity>code-style</severity>
+    <columnStartPos>caret</columnStartPos>
   </findingType>
 </findingTypeFormatDescription>

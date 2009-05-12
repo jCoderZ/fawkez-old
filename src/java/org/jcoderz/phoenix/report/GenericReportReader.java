@@ -103,7 +103,9 @@ public final class GenericReportReader implements ReportReader
     private final int mTextPos; 
     private final Origin mOrigin;
     private final int mFilePos;
-    private final int mLineStart; 
+    private final int mLineStart;
+    private BufferedReader mReader = null;
+    private int mCurrentLineNumber = 0; 
 
     private GenericReportReader (Origin type) 
         throws JAXBException
@@ -187,7 +189,10 @@ public final class GenericReportReader implements ReportReader
     public void parse (File f)
         throws JAXBException, FileNotFoundException
     {
+        closeStream();
         mFile = f;
+        mReader = new BufferedReader(new FileReader(mFile));
+        mCurrentLineNumber = 0;
     }
 
     public void merge (Map<ResourceInfo, List<Item>> items)
@@ -198,12 +203,11 @@ public final class GenericReportReader implements ReportReader
         BufferedReader br = null;
         try
         {
-            br = new BufferedReader(new FileReader(mFile));
-            String line = br.readLine();
+            String line = readLine();
             while (line != null)
             {
-                parseLine(line, ++lineNumber);
-                line = br.readLine();
+                parseLine(line);
+                line = readLine();
             }
         }
         catch (IOException ex)
@@ -226,7 +230,7 @@ public final class GenericReportReader implements ReportReader
      * @throws JAXBException 
      */
     public Item detectFindingTypeForMessage (String message) 
-        throws JAXBException
+        throws JAXBException, IOException
     {
        Item result = null;
        for (final GenericFindingType type : mFindingTypes)
@@ -235,6 +239,26 @@ public final class GenericReportReader implements ReportReader
            if (i != null)
            {
               result = i;
+              if (type.isSourceColumnByCaret())
+              {
+                  // we could be more sensitive here... 
+                  // but for now we assume there is no need to fall back
+                  final String codeLine = readLine();
+                  final String caretLine = readLine();
+                  final int pos = caretLine.indexOf('^');
+                  if (pos < 0)
+                  {
+                      logger.fine("Carret defined but not found for '" + message
+                          + "' Code Line: '" + codeLine + "' caretLine: '" 
+                          + caretLine + "'.");
+                  }
+                  else
+                  {
+                      i.setColumn(pos + 2);
+                  }
+              }
+              
+              
               break;
            }
        }
@@ -243,8 +267,34 @@ public final class GenericReportReader implements ReportReader
        return result;
     }
     
-    private void parseLine (String line, int i) 
-        throws JAXBException
+    private String readLine () throws IOException
+    {
+        final String line;
+        if (mReader != null)
+        {
+            line = mReader.readLine();
+            mCurrentLineNumber++;
+            if (line == null)
+            {
+                closeStream();
+            }
+        }
+        else
+        {
+            line = null;
+        }
+        return line;
+    }
+    
+    private void closeStream ()
+    {
+        IoUtil.close(mReader);
+        mReader = null;
+        mCurrentLineNumber = 0;
+    }
+    
+    private void parseLine (String line) 
+        throws JAXBException, IOException
     {
         final Matcher matcher = mMessagePattern.matcher(line);
         if (matcher.matches())
@@ -282,7 +332,8 @@ public final class GenericReportReader implements ReportReader
         else
         {
             logger.fine(
-                "Root pattern did not match line " + i + ": '" + line + "'.");
+                "Root pattern did not match line " 
+                    + mCurrentLineNumber + ": '" + line + "'.");
         }
     }
 

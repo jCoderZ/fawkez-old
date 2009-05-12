@@ -61,6 +61,7 @@ public final class GenericFindingType
    private final int mColumnStart;
    private final int mColumnEnd;
    private final int mSourceText;
+   private final boolean mSourceColumnByCaret;
    private final Severity mSeverity;
    private final boolean mIsGlobal;
    
@@ -80,8 +81,17 @@ public final class GenericFindingType
        mTextPos = fd.isSetTextPos() ? Integer.parseInt(fd.getTextPos()) : -1;
        mLineStart = fd.isSetLineStartPos() ? Integer.parseInt(fd.getLineStartPos()) : -1;
        mLineEnd = fd.isSetLineEndPos() ? Integer.parseInt(fd.getLineEndPos()) : -1;
-       mColumnStart = fd.isSetColumnStartPos() 
-           ? Integer.parseInt(fd.getColumnStartPos()) : -1;
+       if (fd.isSetColumnStartPos() && "caret".equals(fd.getColumnStartPos()))
+       {
+           mColumnStart = -1;
+           mSourceColumnByCaret = true;
+       }
+       else
+       {
+           mColumnStart = fd.isSetColumnStartPos() 
+               ? Integer.parseInt(fd.getColumnStartPos()) : -1;
+           mSourceColumnByCaret = false;
+       }
        mColumnEnd = fd.isSetColumnEndPos() 
            ? Integer.parseInt(fd.getColumnEndPos()) : -1;
        mSourceText = fd.isSetSourceTextPos() 
@@ -161,6 +171,24 @@ public final class GenericFindingType
        return mPriority;
    }
    
+   /**
+    * @return the sourceColumnByCaret
+    */
+    public boolean isSourceColumnByCaret ()
+    {
+        return mSourceColumnByCaret;
+    }
+
+
+    /**
+     * @return the isGlobal
+     */
+    public boolean isGlobal ()
+    {
+        return mIsGlobal;
+    }
+    
+    
    /**
     * Init of the enum.
     */

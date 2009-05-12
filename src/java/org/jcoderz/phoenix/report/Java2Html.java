@@ -1368,8 +1368,8 @@ public final class Java2Html
          mStringBuilder.setLength(0);
          int i;
          int pos = 0;
-         for (i = 0; i < in.length() && in.charAt(i) == ' ' 
-             && in.charAt(i) == '\t';  i++)
+         for (i = 0; i < in.length() && 
+             (in.charAt(i) == ' ' || in.charAt(i) == '\t');  i++)
          {
              if (in.charAt(i) == ' ')
              {

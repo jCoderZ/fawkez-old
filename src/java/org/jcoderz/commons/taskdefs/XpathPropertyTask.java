@@ -61,14 +61,14 @@ import org.xml.sax.InputSource;
  *
  * <p>The task can be defined using the following taskdef:
  * <pre>
- *     <taskdef name="xpathproperty" 
+ *     &lt;taskdef name="xpathproperty" 
  *         classname="org.jcoderz.commons.taskdefs.XpathPropertyTask"
  *         classpath="fawkez-all.jar"/>
  * </pre></p>
  * 
  * <p>A possible use would be:
  * <pre>
- *     <xpathproperty 
+ *     &lt;xpathproperty 
  *        name="xpathtest" 
  *        xpath="/project/@name" 
  *        file="build.xml"/>

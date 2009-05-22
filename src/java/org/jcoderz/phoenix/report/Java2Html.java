@@ -1368,8 +1368,8 @@ public final class Java2Html
          mStringBuilder.setLength(0);
          int i;
          int pos = 0;
-         for (i = 0; i < in.length() && 
-             (in.charAt(i) == ' ' || in.charAt(i) == '\t');  i++)
+         for (i = 0; i < in.length() 
+             && (in.charAt(i) == ' ' || in.charAt(i) == '\t');  i++)
          {
              if (in.charAt(i) == ' ')
              {
@@ -1802,7 +1802,8 @@ public final class Java2Html
         return mItemToFileMap.get(item);
     }
 
-    private Date getPeriodEnd (ReportInterval periode, Date actualStart)
+    /*private*/ static Date getPeriodEnd (
+        ReportInterval periode, Date actualStart)
     {
        final Date result;
        if (ReportInterval.BUILD == periode)
@@ -1831,7 +1832,14 @@ public final class Java2Html
            cal.set(Calendar.MINUTE, 0);
            cal.set(Calendar.SECOND, 0);
            cal.set(Calendar.MILLISECOND, 0);
-           cal.add(Calendar.WEEK_OF_YEAR, 1);
+           
+           int dayOffset 
+               = Calendar.MONDAY - cal.get(Calendar.DAY_OF_WEEK);
+           if (dayOffset <= 0)
+           {
+               dayOffset += cal.getMaximum(Calendar.DAY_OF_WEEK);
+           }
+           cal.add(Calendar.DAY_OF_MONTH, dayOffset);
            result = new Date(cal.getTimeInMillis());
        }
        else if (ReportInterval.MONTH == periode)
@@ -1860,7 +1868,7 @@ public final class Java2Html
        return result;
    }
 
-    private Date getPeriodStart (ReportInterval periode, Date pos)
+    /*private*/ static Date getPeriodStart (ReportInterval periode, Date pos)
     {
        final Date result;
        if (ReportInterval.BUILD == periode)
@@ -1888,8 +1896,13 @@ public final class Java2Html
            cal.set(Calendar.MINUTE, 0);
            cal.set(Calendar.SECOND, 0);
            cal.set(Calendar.MILLISECOND, 0);
-           cal.add(Calendar.DAY_OF_MONTH, 
-               1 - cal.get(Calendar.DAY_OF_WEEK));
+           int dayOffset 
+               = Calendar.MONDAY - cal.get(Calendar.DAY_OF_WEEK);
+           if (dayOffset > 0)
+           {
+               dayOffset -= cal.getMaximum(Calendar.DAY_OF_WEEK);
+           }
+           cal.add(Calendar.DAY_OF_MONTH, dayOffset);
            result = new Date(cal.getTimeInMillis());
        }
        else if (ReportInterval.MONTH == periode)
@@ -1918,7 +1931,7 @@ public final class Java2Html
    }
     
 
-private static String relativeRoot (String currentPackage)
+   private static String relativeRoot (String currentPackage)
    {
       return relativeRoot(currentPackage, "index.html");
    }

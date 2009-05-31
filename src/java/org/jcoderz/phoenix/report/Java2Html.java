@@ -499,16 +499,27 @@ public final class Java2Html
 
       logger.fine("Charts.");
 
-      final StatisticCollector sc;
-      if (mPackageBase == null)
+      try
       {
-        sc = new StatisticCollector(mReport, mOutDir, mTimestamp);
+          final StatisticCollector sc;
+          if (mPackageBase == null)
+          {
+            sc = new StatisticCollector(mReport, mOutDir, mTimestamp);
+          }
+          else
+          {
+            sc = new StatisticCollector(mReport, mPackageBase, mOutDir, mTimestamp);
+          }
+          sc.createCharts();
       }
-      else
+      // we already created the report. There is no way
+      // to flag this as finding, so log it as a error
+      catch (Exception ex)
       {
-        sc = new StatisticCollector(mReport, mPackageBase, mOutDir, mTimestamp);
+          logger.log(Level.SEVERE, 
+              "Failed to create charts for report. " 
+              + ex.getMessage(), ex);
       }
-      sc.createCharts();
 
       copyStylesheet();
       copyIcons();
@@ -588,13 +599,21 @@ public final class Java2Html
     {
         final InputStream in
             = this.getClass().getResourceAsStream(name);
-        if (in != null)
+        try
         {
-            copyResource(in, name, outDir);
+            if (in != null)
+            {
+                copyResource(in, name, outDir);
+            }
+            else
+            {
+                logger.warning(
+                    "Could not find resource '" + name + "'!");
+            }
         }
-        else
+        finally
         {
-            logger.warning("Could not find resource '" + name + "'!");
+            IoUtil.close(in);
         }
     }
 
@@ -619,7 +638,6 @@ public final class Java2Html
       }
       finally
       {
-         IoUtil.close(in);
          IoUtil.close(out);
       }
    }
@@ -630,26 +648,32 @@ public final class Java2Html
       // 2. Try to open it from a user-defined location
       // 3. Use the default one if the user-defined is not found
       InputStream in = this.getClass().getResourceAsStream(mStyle);
-      if (in == null)
+      try
       {
-         try
-         {
-            final File style = new File(mStyle);
-            in = new FileInputStream(style);
-         }
-         catch (FileNotFoundException ex)
-         {
-             IoUtil.close(in);
-            in = this.getClass().getResourceAsStream(DEFAULT_STYLESHEET);
-            if (in == null)
-            {
-               throw new RuntimeException("Can not find stylesheet file '"
-                     + mStyle + "'.", ex);
-            }
-         }
+          if (in == null)
+          {
+             try
+             {
+                final File style = new File(mStyle);
+                in = new FileInputStream(style);
+             }
+             catch (FileNotFoundException ex)
+             {
+                IoUtil.close(in);
+                in = this.getClass().getResourceAsStream(DEFAULT_STYLESHEET);
+                if (in == null)
+                {
+                   throw new RuntimeException("Can not find stylesheet file '"
+                         + mStyle + "'.", ex);
+                }
+             }
+          }
+          copyResource(in, DEFAULT_STYLESHEET, mOutDir);
       }
-
-      copyResource(in, DEFAULT_STYLESHEET, mOutDir);
+      finally
+      {
+          IoUtil.close(in);
+      }
    }
 
    private void parseArguments (String[] args)
@@ -1982,11 +2006,12 @@ public final class Java2Html
       }
       else
       {
-         absFile = (new java.io.File(absFile)).getAbsolutePath();
-         if (absFile.toLowerCase(Constants.SYSTEM_LOCALE)
-                 .startsWith(mProjectHome.toLowerCase(Constants.SYSTEM_LOCALE)))
+         final String absPath 
+             = (new java.io.File(absFile)).getAbsolutePath();
+         if (absPath.toLowerCase(Constants.SYSTEM_LOCALE).startsWith(
+             mProjectHome.toLowerCase(Constants.SYSTEM_LOCALE)))
          {
-            result = absFile.substring(mProjectHome.length());
+            result = absPath.substring(mProjectHome.length());
          }
          else
          {

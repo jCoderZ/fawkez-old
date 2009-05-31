@@ -122,6 +122,9 @@ public final class Java2Html
 
    private static final int NUMBER_OF_AGE_SEGMENTS = 5;
 
+   /** Name to be used for unnamed package. */
+   private static final String UNNAMED_PACKAGE_NAME = "unnamed-package";
+
    /** 
     * Only findings that span at maximum this number of lines are 
     * highlighted in the code.
@@ -508,7 +511,8 @@ public final class Java2Html
           }
           else
           {
-            sc = new StatisticCollector(mReport, mPackageBase, mOutDir, mTimestamp);
+            sc = new StatisticCollector(
+                mReport, mPackageBase, mOutDir, mTimestamp);
           }
           sc.createCharts();
       }
@@ -932,6 +936,10 @@ public final class Java2Html
       try
       {
          mPackage = data.getPackage();
+         if (StringUtil.isEmptyOrNull(mPackage))
+         {
+             mPackage=UNNAMED_PACKAGE_NAME;
+         }
          mClassname = data.getClassname();
 
          // If no class name is reported take the filename.
@@ -2366,7 +2374,9 @@ public final class Java2Html
    private static String createReportLink (
        org.jcoderz.phoenix.report.jaxb.File file)
    {
-       final String pkg = ObjectUtil.toStringOrEmpty(file.getPackage());
+       final String pkg 
+           = StringUtil.isEmptyOrNull(file.getPackage()) 
+               ? UNNAMED_PACKAGE_NAME : file.getPackage();
        String clazzName = ObjectUtil.toStringOrEmpty(file.getClassname());
 
        // If no class name is reported take the filename.

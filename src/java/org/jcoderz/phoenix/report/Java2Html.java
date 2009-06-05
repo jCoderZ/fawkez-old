@@ -938,7 +938,7 @@ public final class Java2Html
          mPackage = data.getPackage();
          if (StringUtil.isEmptyOrNull(mPackage))
          {
-             mPackage=UNNAMED_PACKAGE_NAME;
+             mPackage = UNNAMED_PACKAGE_NAME;
          }
          mClassname = data.getClassname();
 

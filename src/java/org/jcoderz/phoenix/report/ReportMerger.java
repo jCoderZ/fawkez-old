@@ -59,6 +59,7 @@ import org.jcoderz.commons.util.FileUtils;
 import org.jcoderz.commons.util.IoUtil;
 import org.jcoderz.commons.util.LoggingUtils;
 import org.jcoderz.commons.util.ObjectUtil;
+import org.jcoderz.commons.util.StringUtil;
 import org.jcoderz.phoenix.report.jaxb.Item;
 import org.jcoderz.phoenix.report.jaxb.ObjectFactory;
 import org.jcoderz.phoenix.report.jaxb.Report;
@@ -128,6 +129,8 @@ public class ReportMerger
 
    /**
     * Filters the report XML file using the JDK XSL processor.
+    * @throws TransformerException if the transformation fails.
+    * @throws IOException if an io operation fails.
     */
    public void filter () throws TransformerException, IOException
    {
@@ -316,7 +319,7 @@ public class ReportMerger
     }
 
 
-// This could be done faster, might be restructure the data first for 
+   // This could be done faster, might be restructure the data first for 
    // faster lookup.
    private org.jcoderz.phoenix.report.jaxb.File findFile (
        org.jcoderz.phoenix.report.jaxb.File newFile, Report oldReport)
@@ -329,7 +332,9 @@ public class ReportMerger
            : (List<org.jcoderz.phoenix.report.jaxb.File>) oldReport.getFile())
        {
            if (ObjectUtil.equals(file.getName(), fileName) 
-               || (ObjectUtil.equals(file.getClassname(), className) 
+               || (!StringUtil.isEmptyOrNull(className) 
+                   && packageName != null
+                   && ObjectUtil.equals(file.getClassname(), className) 
                    && ObjectUtil.equals(file.getPackage(), packageName)))
            {
                result = file;

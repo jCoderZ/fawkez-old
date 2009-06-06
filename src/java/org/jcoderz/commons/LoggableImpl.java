@@ -37,8 +37,10 @@ import java.io.Serializable;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -181,7 +183,10 @@ public class LoggableImpl
    /** The thread name. */
    private final String mThreadName;
 
-   /** The Throwable that caused this loggable. */
+   /**
+    * The Throwable that caused this loggable.
+    * Should be equal to mOuter.getCause()
+    */
    private Throwable mCause;
 
    /** The outer exception, where this loggable belongs to. */
@@ -195,12 +200,25 @@ public class LoggableImpl
       INSTANCE_ID = getStaticInstanceId();
    }
 
+   /**
+    * Create this loggable provide the 'Loggable' functionality for the
+    * given outer loggable.
+    * @param outer the the outer loggable.
+    * @param errorId the static LogMessageInfo for this Loggable.
+    */
    public LoggableImpl (Loggable outer, LogMessageInfo errorId)
    {
       this(outer, errorId, THREAD_ID_GENERATOR.getThreadId(),
           Thread.currentThread().getName(), INSTANCE_ID, NODE_ID);
    }
 
+   /**
+    * Create this loggable provide the 'Loggable' functionality for the
+    * given outer loggable with an initial cause.
+    * @param outer the the outer loggable.
+    * @param errorId the static LogMessageInfo for this Loggable.
+    * @param cause the cause of the outer.
+    */
    public LoggableImpl (Loggable outer, LogMessageInfo errorId,
        Throwable cause)
    {
@@ -209,6 +227,16 @@ public class LoggableImpl
             NODE_ID, cause);
    }
 
+   /**
+    * Create this loggable provide the 'Loggable' functionality for the
+    * given outer loggable with the given dynamic parameters.
+    * @param outer the the outer loggable.
+    * @param errorId the static LogMessageInfo for this Loggable.
+    * @param threadId the threadId to be set.
+    * @param threadName the threadName to be set.
+    * @param instanceId the instanceId to be set.
+    * @param nodeId the nodeId to be set.
+    */
    public LoggableImpl (Loggable outer, LogMessageInfo errorId,
        long threadId, String threadName, String instanceId, String nodeId)
    {
@@ -223,14 +251,32 @@ public class LoggableImpl
       initInternalParameters();
    }
 
+   /**
+    * Create this loggable provide the 'Loggable' functionality for the
+    * given outer loggable with the given dynamic parameters and an
+    * initial cause..
+    * @param outer the the outer loggable.
+    * @param errorId the static LogMessageInfo for this Loggable.
+    * @param threadId the threadId to be set.
+    * @param threadName the threadName to be set.
+    * @param instanceId the instanceId to be set.
+    * @param nodeId the nodeId to be set.
+    * @param cause the cause of the outer.
+    */
    public LoggableImpl (Loggable outer, LogMessageInfo errorId,
        long threadId, String threadName, String instanceId, String nodeId,
        Throwable cause)
    {
       mEventTime = System.currentTimeMillis();
-      if (cause instanceof Loggable)
+      ThrowableUtil.fixChaining(cause);
+      Throwable thr = cause;
+      while (thr != null && !(thr instanceof Loggable))
       {
-         mTrackingNumber = ((Loggable) cause).getTrackingNumber();
+          thr = thr.getCause();
+      }
+      if (thr instanceof Loggable)
+      {
+         mTrackingNumber = ((Loggable) thr).getTrackingNumber();
       }
       else
       {
@@ -397,6 +443,48 @@ public class LoggableImpl
       return sb.toString();
    }
 
+   /** {@inheritDoc} */
+   public String toDetailedString ()
+   {
+       final StringBuffer sb = new StringBuffer();
+       LoggableImpl.appendParameters(sb, this);
+       Throwable cause = null;
+       if (mOuter != null)
+       {
+           cause = mOuter.getCause();
+       }
+       if (cause == null)
+       {
+           cause = getCause();
+       }
+       // add parameters of nested chain
+       while (cause != null)
+       {
+           if (cause instanceof Loggable)
+           {
+               sb.append("\nCaused by: ");
+               LoggableImpl.appendParameters(sb, (Loggable) cause);
+               break;
+           }
+           cause = cause.getCause();
+       }
+       cause = null;
+       if (mOuter != null)
+       {
+           cause = mOuter.getCause();
+       }
+       if (cause == null)
+       {
+           cause = getCause();
+       }
+       if (cause != null)
+       {
+           sb.append('\n');
+           sb.append(ThrowableUtil.toString(cause));
+       }
+       return sb.toString();
+   }
+
    private void initInternalParameters ()
    {
       addParameter(MESSAGE_INFO_PARAMETER_NAME, mLogMessageInfo);
@@ -416,7 +504,7 @@ public class LoggableImpl
       // not analyzed yet.
       if (mMethodName == null || mClassName == null)
       {
-          final StackTraceElement[] stack = (new Throwable()).getStackTrace();
+          final StackTraceElement[] stack = new Throwable().getStackTrace();
           // First, search back to a method in the Logger class.
           int ix = 0;
           boolean found = false;
@@ -485,6 +573,24 @@ public class LoggableImpl
       }
    }
 
+   private static void appendParameters (StringBuffer sb, Loggable loggable)
+   {
+       sb.append(loggable.toString());
+
+       final Object[] params = loggable.getParameterNames().toArray();
+       Arrays.sort(params);
+       final Iterator/*<String>*/ parameterNames
+           = Arrays.asList(params).iterator();
+       while(parameterNames.hasNext())
+       {
+           final String parameterName = (String) parameterNames.next();
+           sb.append("\n\t");
+           sb.append(parameterName);
+           sb.append(": \t");
+           sb.append(loggable.getParameter(parameterName));
+       }
+   }
+
    private static String getStaticNodeId ()
    {
       String nodeId = DUMMY_NODE_ID;
@@ -522,4 +628,6 @@ public class LoggableImpl
          return ((Long) get()).longValue();
       }
    }
+
+
 }

@@ -169,13 +169,21 @@ public interface Loggable
    Throwable getCause ();
 
    /**
+    * The toString method of <code>Loggable</code> dumps the
+    * String representation of the class name of the loggable
+    * and the contained message.
+    * @return one line information about this <code>Loggable</code>.
+    */
+   String toString ();
+
+   /**
     * The toString method of <code>Loggable</code> must dump out all
     * information stored within this loggable in a readable way. This
     * includes the information of possible nested data.
     * @return a exhaustive dump of the data stored within this
     *       <code>Loggable</code>.
     */
-   String toString ();
+   String toDetailedString ();
 
    /**
     * Logs this <code>Loggable</code> into the appropriate log

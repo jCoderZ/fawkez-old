@@ -181,6 +181,19 @@ public class LogEvent
        return mLoggable.getThreadName();
    }
 
+   /** {@inheritDoc} */
+   public String toString ()
+   {
+      return mLoggable.toString();
+   }
+
+   /** {@inheritDoc} */
+   public String toDetailedString ()
+   {
+      return mLoggable.toDetailedString();
+   }
+
+
    LoggableImpl getExceptionImpl ()
    {
       return mLoggable;

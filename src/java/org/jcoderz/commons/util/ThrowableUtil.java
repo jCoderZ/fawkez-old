@@ -32,6 +32,8 @@
  */
 package org.jcoderz.commons.util;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.logging.Level;
@@ -46,15 +48,15 @@ import org.jcoderz.commons.Loggable;
  */
 public final class ThrowableUtil
 {
-   /** 
+   /**
     * Stores the Throwable.getCause() method if this method is available.
-    * This should be the case for all JDKs > 1.4. 
+    * This should be the case for all JDKs > 1.4.
     */
    private static final Method GET_CAUSE;
-   /** 
-    * Stores the Throwable.initCause(Throwable) method if this method 
+   /**
+    * Stores the Throwable.initCause(Throwable) method if this method
     * is available.
-    * This should be the case for all JDKs > 1.4. 
+    * This should be the case for all JDKs > 1.4.
     */
    private static final Method INIT_CAUSE;
    /** A empty object array. */
@@ -98,7 +100,7 @@ public final class ThrowableUtil
     * to nest exceptions. This method tries best to detect this
     * classes and pass the nested exceptions into the standart
     * nesting mechanism available since JDK1.4 with the throwable
-    * class. It is save to call this method several times for a 
+    * class. It is save to call this method several times for a
     * give exception.
     * @param ex the exception to be checked.
     */
@@ -136,6 +138,29 @@ public final class ThrowableUtil
          logger.log(
                Level.SEVERE, "Unexpected exception, ignored.", unexpected);
       }
+   }
+
+   /**
+    * Dumps the stack trace of the given throwable to its String representation.
+    * @param thr the throwable to dump the stack trace from.
+    * @return a String representation of the given throwable
+    * @see Throwable#printStackTrace()
+    */
+   public static String toString (Throwable thr)
+   {
+       final StringWriter sw = new StringWriter();
+       PrintWriter pw = null;
+       try
+       {
+           pw = new PrintWriter(sw);
+           thr.printStackTrace(pw);
+       }
+       finally
+       {
+           IoUtil.close(pw);
+           IoUtil.close(sw);
+       }
+       return sw.toString();
    }
 
    static Method findGetCauseMethod (final Method[] methods)

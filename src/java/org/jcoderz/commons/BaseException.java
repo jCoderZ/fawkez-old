@@ -36,7 +36,6 @@ package org.jcoderz.commons;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
@@ -198,7 +197,13 @@ public class BaseException
    /** {@inheritDoc} */
    public String toString ()
    {
-       return mLoggable.toString();
+      return mLoggable.toString();
+   }
+
+   /** {@inheritDoc} */
+   public String toDetailedString ()
+   {
+      return mLoggable.toDetailedString();
    }
 
    protected final void logCreation ()

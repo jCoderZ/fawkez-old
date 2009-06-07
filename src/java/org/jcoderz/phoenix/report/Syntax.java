@@ -319,7 +319,7 @@ public class Syntax
     
     private static Token emptyToken ()
     {
-        return new Token((byte) Token.END, 0, 0, null);
+        return new Token(Token.END, 0, 0, null);
     }
 
     static boolean isBinary (String name, char[] fileContent)

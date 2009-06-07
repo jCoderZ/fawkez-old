@@ -201,9 +201,9 @@ public class ReportMerger
         org.jcoderz.phoenix.report.jaxb.File oldFile)
     {
         final List<Item> newFindings 
-            = new ArrayList((List<Item>) newFile.getItem());
+            = new ArrayList<Item>((List<Item>) newFile.getItem());
         final List<Item> oldFindings 
-            = new ArrayList((List<Item>) oldFile.getItem());
+            = new ArrayList<Item>((List<Item>) oldFile.getItem());
 
         filterLowSeverity(newFindings);
         filterLowSeverity(oldFindings);
@@ -212,7 +212,7 @@ public class ReportMerger
 
         // the rest...
         flaggAllAsNew(newFindings);
-        for (Item item : (List<Item>) oldFindings)
+        for (Item item : oldFindings)
         {
             addAsOld(newFile.getItem(), item);
         }
@@ -221,7 +221,7 @@ public class ReportMerger
 
     private void flaggAllAsNew (final List<Item> newFindings)
     {
-        for (Item item : (List<Item>) newFindings)
+        for (Item item : newFindings)
         {
             if (item.getSeverity().getPenalty() > 0
                 && item.getSeverity() != Severity.COVERAGE)

@@ -1,6 +1,3 @@
-/**
- *
- */
 /*
  * $Id: ReportReaderFactoryTest.java 1450 2009-05-09 22:54:06Z amandel $
  *

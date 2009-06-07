@@ -40,6 +40,7 @@ import java.util.logging.Logger;
 
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.taskdefs.MatchingTask;
+import org.jcoderz.commons.util.FileUtils;
 
 /**
  * Ant Task rendering <code>jcoderz-report.xml</code> files
@@ -103,18 +104,19 @@ public final class HTMLRenderAntTask
    {
       try
       {
-         final List argList = new ArrayList();
+         final List<String> argList = new ArrayList<String>();
 
          // FIXME: . is not correct if the build process was started from a
          //    different dir (which is true in cc build)
          final File outDir = mOut == null 
                ? new File(mBaseDir , "build/report-" + mName) : mOut;
-         outDir.mkdirs();
+         FileUtils.mkdirs(outDir);
          argList.add("-outDir");
          argList.add(outDir.getCanonicalPath());
 
          argList.add("-report");
-         final File reportFile = new File(outDir, "jcoderz-merged-report.xml");
+         final File reportFile 
+             = new File(outDir, "jcoderz-merged-report.xml");
          argList.add(reportFile.getCanonicalPath());
 
          // FIXME: . is not correct if the build process was started from a
@@ -138,7 +140,7 @@ public final class HTMLRenderAntTask
          }
          logger.fine("Calling Java2Html with args '" + argList + "'");
          final String[] java2HtmlArgs
-            = (String[]) argList.toArray(new String[0]);
+            = (String[]) argList.toArray(new String[argList.size()]);
          Java2Html.main(java2HtmlArgs);
       }
       catch (Exception ex)

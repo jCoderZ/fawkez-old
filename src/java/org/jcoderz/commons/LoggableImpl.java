@@ -593,7 +593,7 @@ public class LoggableImpl
        Arrays.sort(params);
        final Iterator/*<String>*/ parameterNames
            = Arrays.asList(params).iterator();
-       while(parameterNames.hasNext())
+       while (parameterNames.hasNext())
        {
            final String parameterName = (String) parameterNames.next();
            sb.append("\n\t");

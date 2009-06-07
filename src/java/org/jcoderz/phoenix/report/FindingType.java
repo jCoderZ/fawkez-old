@@ -41,14 +41,16 @@ import java.util.logging.Logger;
 import org.jcoderz.commons.util.StringUtil;
 
 /**
+ * Base class identifies the unique type of a finding.
+ * 
  * @author Andreas Mandel
  */
 public class FindingType
 {
     private static final String CLASSNAME = FindingType.class.getName();
     private static final Logger LOGGER = Logger.getLogger(CLASSNAME);  
-    private static final Map<String,FindingType> 
-        FINDING_TYPES = new HashMap<String,FindingType>();
+    private static final Map<String, FindingType> 
+        FINDING_TYPES = new HashMap<String, FindingType>();
     private static final Set<Origin> 
         INITIALIZED_FINDING_TYPES = new HashSet<Origin>();
     private final String mSymbol;
@@ -66,10 +68,15 @@ public class FindingType
         FINDING_TYPES.put(mSymbol, this);
     }
 
-
+   /**
+    * Retrieves the finding type based on it's symbol. 
+    * @param symbol the symbol to look up.
+    * @return the findings type that holds the given symbol.
+    */
    public static FindingType fromString (String symbol)
    {
-      new LazyInit();
+      // touch the class to get the static initializer to be called
+      LazyInit.class.getName();
 
       FindingType result = FINDING_TYPES.get(symbol);
       if (result == null)
@@ -79,67 +86,90 @@ public class FindingType
       return result;
    }
 
-   public static void initialize (Origin findingType)
+   /**
+    * Initializes the findings with the given origin.
+    * @param origin the class of findings to be initialized.
+    */
+   public static void initialize (Origin origin)
    {
-       if (!INITIALIZED_FINDING_TYPES.contains(findingType))
+       if (!INITIALIZED_FINDING_TYPES.contains(origin))
        {
-           INITIALIZED_FINDING_TYPES.add(findingType);
-           if (Origin.CHECKSTYLE.equals(findingType))
+           INITIALIZED_FINDING_TYPES.add(origin);
+           if (Origin.CHECKSTYLE.equals(origin))
            {
                CheckstyleFindingType.initialize();
            }
-           else if (Origin.COVERAGE.equals(findingType))
+           else if (Origin.COVERAGE.equals(origin))
            {
                // No stuff here
            }
-           else if (Origin.FINDBUGS.equals(findingType))
+           else if (Origin.FINDBUGS.equals(origin))
            {
                FindBugsFindingType.initialize();
            }
-           else if (Origin.PMD.equals(findingType))
+           else if (Origin.PMD.equals(origin))
            {
                PmdFindingType.initialize();
            }
-           else if (Origin.CPD.equals(findingType))
+           else if (Origin.CPD.equals(origin))
            {
                CpdFindingType.initialize();
            }
-           else if (Origin.SYSTEM.equals(findingType))
+           else if (Origin.SYSTEM.equals(origin))
            {
                SystemFindingType.initialize();
            }
            else
            {
-               GenericReportReader.initialize(findingType);
+               GenericReportReader.initialize(origin);
            }
        }
    }
    
+   /**
+    * Returns the symbol of this finding type.
+    * @return the symbol of this finding type.
+    */
    public String getSymbol ()
    {
       return mSymbol;
    }
 
+   /**
+    * Returns the short text description of this finding type.
+    * Should be a one liner.
+    * @return the short text description of this finding type.
+    */
    public String getShortText ()
    {
       return mShortText;
    }
 
+   /**
+    * Returns a long description of this finding type. Might contain html markup.
+    * @return the long description of this finding type.
+    */
    public String getDescription ()
    {
       return mDescription;
    }
 
+   /**
+    * Returns the finding type symbol as its string representation.
+    * @return the finding type symbol as its string representation.
+    */
    public String toString ()
    {
       return mSymbol;
    }
 
+   /** {@inheritDoc} */
    public int hashCode ()
    {
       return mSymbol.hashCode();
    }
 
+   /** {@inheritDoc} */
    public boolean equals (Object o)
    {
       return (o instanceof FindingType)

@@ -7,7 +7,7 @@
   </staticTypeInfo>
   <rootType>
     <symbol>javadoc-warning</symbol>
-    <pattern>((.:)?[^:]*):(([0-9]*):)? (warning|error) - (.*)</pattern>
+    <pattern>^((.:)?[^:\n]*):(([0-9]*):)? (warning|error) - (.*)$</pattern>
     <severity>code-style</severity>
     <!--  severity for broken doc: design,
                    for missing stuff: code-style -->

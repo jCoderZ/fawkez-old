@@ -34,10 +34,10 @@ package org.jcoderz.phoenix.report;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -56,11 +56,11 @@ import org.jcoderz.commons.util.Constants;
 import org.jcoderz.commons.util.IoUtil;
 import org.jcoderz.commons.util.JaxbUtil;
 import org.jcoderz.commons.util.ObjectUtil;
+import org.jcoderz.commons.util.StringUtil;
 import org.jcoderz.commons.util.JaxbUtil.UnmarshalResult;
 import org.jcoderz.phoenix.report.ftf.jaxb.FindingDescription;
 import org.jcoderz.phoenix.report.ftf.jaxb.FindingTypeFormat;
 import org.jcoderz.phoenix.report.jaxb.Item;
-import org.jcoderz.phoenix.report.jaxb.ObjectFactory;
 import org.xml.sax.InputSource;
 
 /**
@@ -86,26 +86,34 @@ public final class GenericReportReader implements ReportReader
     private static final String CLASSNAME
         = GenericReportReader.class.getName();
     private static final Logger logger = Logger.getLogger(CLASSNAME);
+    
+    private static final Pattern CODE_LINE_PATTERN 
+        = Pattern.compile("^.*$", Pattern.MULTILINE);
+    
+    private static final Pattern CARET_LINE_PATTERN 
+        = Pattern.compile("^\\s*\\^$", Pattern.MULTILINE);
+    
     private static final Map<Origin, GenericReportReader> GENERIC_REPORT_TYPES
         = new HashMap<Origin, GenericReportReader>();
 
+    
     private final List<GenericFindingType> mFindingTypes
         = new ArrayList<GenericFindingType>();
-    
+
     private Map<ResourceInfo, List<Item>> mItems;
     
-    private File mFile;
+    private SourceFile mSourceFile;
 
     private final Pattern mMessagePattern;
     private final FindingTypeFormat mFindingTypeFormatDescription;
-    private final ObjectFactory mOf = new ObjectFactory();
 
     private final int mTextPos; 
     private final Origin mOrigin;
     private final int mFilePos;
     private final int mLineStart;
-    private BufferedReader mReader = null;
-    private int mCurrentLineNumber = 0; 
+    private final Severity mDefaultSeverity;
+    
+    private Matcher mRootMatcher = null;
 
     private GenericReportReader (Origin type) 
         throws JAXBException
@@ -115,11 +123,15 @@ public final class GenericReportReader implements ReportReader
         initializeFindingTypes();
         final FindingDescription root 
             = mFindingTypeFormatDescription.getRootType();
-        mMessagePattern = Pattern.compile(root.getPattern());
+        mMessagePattern 
+            = Pattern.compile(root.getPattern(), 
+                Pattern.MULTILINE);
         mTextPos =  Integer.parseInt(root.getTextPos());
         mFilePos =  Integer.parseInt(root.getFilenamePos());
         mLineStart = root.isSetLineStartPos() 
             ? Integer.parseInt(root.getLineStartPos()) : -1;
+        mDefaultSeverity = root.isSetSeverity() 
+            ? root.getSeverity() : Severity.CODE_STYLE;
     }
 
     /**
@@ -186,39 +198,29 @@ public final class GenericReportReader implements ReportReader
         return findingTypeFormatDescription;
     }
     
+    /** {@inheritDoc} */
     public void parse (File f)
-        throws JAXBException, FileNotFoundException
+        throws JAXBException
     {
-        closeStream();
-        mFile = f;
-        mReader = new BufferedReader(new FileReader(mFile));
-        mCurrentLineNumber = 0;
+        try
+        {
+            mSourceFile = new SourceFile(f);
+            mRootMatcher = mMessagePattern.matcher(mSourceFile.getContent());
+        }
+        catch (IOException ex)
+        {
+            throw new JAXBException("Failed to read '" + f + "'.", ex);
+        }
     }
 
+    /** {@inheritDoc} */
     public void merge (Map<ResourceInfo, List<Item>> items)
         throws JAXBException
     {
         mItems = items;
-        int lineNumber = 0;
-        BufferedReader br = null;
-        try
+        while (!mSourceFile.readFully())
         {
-            String line = readLine();
-            while (line != null)
-            {
-                parseLine(line);
-                line = readLine();
-            }
-        }
-        catch (IOException ex)
-        {
-            Assert.fail(
-                "Error reading '" + mFile + "' in line " + lineNumber + ".", 
-                ex);
-        }
-        finally 
-        {
-            IoUtil.close(br);
+            parseNext();
         }
     }
     
@@ -227,113 +229,127 @@ public final class GenericReportReader implements ReportReader
      * @param message the message to read.
      * @return the finding type matching to the message, or null if no such
      *   type was found.
-     * @throws JAXBException 
+     * @throws JAXBException if item creation fails. 
+     * @throws IOException if reading the input data fails- 
      */
     public Item detectFindingTypeForMessage (String message) 
-        throws JAXBException, IOException
+        throws JAXBException
     {
        Item result = null;
        for (final GenericFindingType type : mFindingTypes)
        {
-           final Item i = type.createItem(message);
-           if (i != null)
+           result = type.createItem(mSourceFile, message);
+           if (result != null)
            {
-              result = i;
               if (type.isSourceColumnByCaret())
               {
-                  // we could be more sensitive here... 
-                  // but for now we assume there is no need to fall back
-                  final String codeLine = readLine();
-                  final String caretLine = readLine();
-                  final int pos = caretLine.indexOf('^');
-                  if (pos < 0)
-                  {
-                      logger.fine("Carret defined but not found for '" + message
-                          + "' Code Line: '" + codeLine + "' caretLine: '" 
-                          + caretLine + "'.");
-                  }
-                  else
-                  {
-                      i.setColumn(pos + 2);
-                  }
+                  addPositionByCaret(result);
               }
-              
-              
               break;
            }
        }
-       logger.fine("For text: '" + message + "' matched finding: " 
-           + result == null ? "null" : result.getFindingType());       
+       if (logger.isLoggable(Level.FINE))
+       {
+           logger.fine("For text: '" + StringUtil.trimLength(message, 20)
+               + "' matched finding: " 
+               + (result == null ? "null" : result.getFindingType() 
+               + "'. End at " + mSourceFile.getPos()));
+       }
        return result;
     }
-    
-    private String readLine () throws IOException
+
+    private void addPositionByCaret (final Item i)
     {
-        final String line;
-        if (mReader != null)
+        final String text 
+            = mSourceFile.getContent().substring(mSourceFile.getPos()); 
+        final Matcher codeMat 
+            = CODE_LINE_PATTERN.matcher(text);
+        if (codeMat.lookingAt())
         {
-            line = mReader.readLine();
-            mCurrentLineNumber++;
-            if (line == null)
+            final String textAfterCode 
+                = mSourceFile.getContent().substring(
+                    mSourceFile.getPos() + codeMat.end() + 1); 
+            final Matcher caretMat 
+                = CARET_LINE_PATTERN.matcher(textAfterCode);
+            if (caretMat.lookingAt())
             {
-                closeStream();
+                i.setColumn(caretMat.end());
+                mSourceFile.setPos(
+                    mSourceFile.getPos() 
+                    + codeMat.end() + 1 
+                    + caretMat.end() + 1);
+            }
+            else
+            {
+                logger.fine("Caret defined but not found for '" 
+                    + i.getFindingType()
+                    + "' Code Line: '" + codeMat + "' caretLine: '" 
+                    + caretMat + "'. text: '" 
+                    + StringUtil.trimLength(textAfterCode, 100) + "'.");
             }
         }
         else
         {
-            line = null;
+            logger.fine("Caret defined but not found for '" 
+                + i.getFindingType()
+                + "' Code Line: '" + codeMat + "'. text: '" 
+                + StringUtil.trimLength(text, 100) + "'.");
         }
-        return line;
     }
-    
-    private void closeStream ()
+
+    private void parseNext () 
+        throws JAXBException
     {
-        IoUtil.close(mReader);
-        mReader = null;
-        mCurrentLineNumber = 0;
-    }
-    
-    private void parseLine (String line) 
-        throws JAXBException, IOException
-    {
-        final Matcher matcher = mMessagePattern.matcher(line);
-        if (matcher.matches())
+        if (mRootMatcher.find())
         {
-            final String text = matcher.group(mTextPos);
-            Item item = detectFindingTypeForMessage(text);
+            final String text = mRootMatcher.group(mTextPos);
+            mSourceFile.setPos(mRootMatcher.start(mTextPos));
+            final Item item = detectFindingTypeForMessage(text);
             if (item == null)
             {
-                item = mOf.createItem();
+                int pos = mSourceFile.getContent().indexOf(
+                    '\n', mSourceFile.getPos());
+                if (pos != -1)
+                {
+                    mSourceFile.setPos(pos + 1);  
+                }
+                else
+                {
+                    mSourceFile.setPos(mSourceFile.getContent().length());  
+                }
             }
-            item.setOrigin(mOrigin);
-            if (!item.isSetSeverity())
+            else
             {
-//                item.setSeverity(...)
+                item.setOrigin(mOrigin);
+                if (!item.isSetSeverity())
+                {
+                    item.setSeverity(mDefaultSeverity);
+                }
+                if (!item.isSetLine() && mLineStart != -1 
+                    && mRootMatcher.group(mLineStart) != null)
+                {
+                    item.setLine(
+                        Integer.parseInt(mRootMatcher.group(mLineStart)));
+                }
+                if (!item.isSetFindingType())
+                {
+                    item.setFindingType(mOrigin.toString());
+                }
+                if (!item.isSetMessage())
+                {
+                    item.setMessage(mRootMatcher.group(mTextPos));
+                }
+                if (mFindingTypeFormatDescription.getRootType().isGlobal())
+                {
+                    item.setGlobal(true);
+                }
+                addItemToResource(mRootMatcher.group(mFilePos), item);
             }
-            if (!item.isSetLine() && mLineStart != -1 
-                && matcher.group(mLineStart) != null)
-            {
-                item.setLine(Integer.parseInt(matcher.group(mLineStart)));
-            }
-            if (!item.isSetFindingType())
-            {
-                item.setFindingType(mOrigin.toString());
-            }
-            if (!item.isSetMessage())
-            {
-                item.setMessage(matcher.group(mTextPos));
-            }
-            if (mFindingTypeFormatDescription.getRootType().isGlobal())
-            {
-                item.setGlobal(true);
-            }
-            addItemToResource(matcher.group(mFilePos), item);
         }
         else
         {
-            logger.fine(
-                "Root pattern did not match line " 
-                    + mCurrentLineNumber + ": '" + line + "'.");
+            // set pos to end of file
+            mSourceFile.setPos(mSourceFile.getContent().length());
         }
     }
 
@@ -390,5 +406,71 @@ public final class GenericReportReader implements ReportReader
         }
         Collections.sort(
             mFindingTypes, new GenericFindingType.OrderByPriority());
+    }
+    
+    
+    static final class SourceFile
+    {
+        private final File mFile;
+        private final String mContent;
+        private int mPos;
+        
+        public SourceFile (File file) 
+            throws IOException
+        {
+            mFile = file;
+            Reader in = null;
+            Reader buffered = null;
+            try
+            {
+                in = new FileReader(file);
+                buffered = new BufferedReader(in);
+                mContent = IoUtil.readFullyNormalizeNewLine(buffered);
+            }
+            finally
+            {
+                IoUtil.close(buffered);
+                IoUtil.close(in);
+            }
+            mPos = 0;
+        }
+
+        /**
+         * @return the pos
+         */
+        public int getPos ()
+        {
+            logger.finest("getPos: " + mPos);
+            return mPos;
+        }
+
+        /**
+         * @param pos the pos to set
+         */
+        public void setPos (int pos)
+        {
+            mPos = pos;
+        }
+
+        /**
+         * @return the file
+         */
+        public File getFile ()
+        {
+            return mFile;
+        }
+
+        /**
+         * @return the content
+         */
+        public String getContent ()
+        {
+            return mContent;
+        }
+        
+        public boolean readFully ()
+        {
+            return mPos >= mContent.length();
+        }
     }
 }

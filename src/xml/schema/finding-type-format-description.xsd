@@ -100,6 +100,12 @@
                 minOccurs="0"/>
             <xsd:element name="lineStartPos" type="xsd:string"
                 minOccurs="0"/>
+            <!--  We support one special here 'caret' which means that
+                  the source location can be determined by looking into the 
+                  next 2 lines that look like this:
+                  |import org.hibernate.engine.SessionImplementor;
+                  |       ^
+                  to determine the column of the code position. -->
             <xsd:element name="columnStartPos" type="xsd:string"
                 minOccurs="0"/>
             <xsd:element name="lineEndPos" type="xsd:string"

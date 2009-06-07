@@ -39,6 +39,7 @@ import java.util.regex.Pattern;
 
 import javax.xml.bind.JAXBException;
 
+import org.jcoderz.phoenix.report.GenericReportReader.SourceFile;
 import org.jcoderz.phoenix.report.ftf.jaxb.FindingDescription;
 import org.jcoderz.phoenix.report.jaxb.Item;
 import org.jcoderz.phoenix.report.jaxb.ObjectFactory;
@@ -76,7 +77,7 @@ public final class GenericFindingType
            fd.getDescription());
    
        mPriority = fd.getPriority();
-       mPattern = Pattern.compile(fd.getPattern());
+       mPattern = Pattern.compile(fd.getPattern(), Pattern.MULTILINE + Pattern.UNIX_LINES);
        mFindingDescription = fd;
        mTextPos = fd.isSetTextPos() ? Integer.parseInt(fd.getTextPos()) : -1;
        mLineStart = fd.isSetLineStartPos() ? Integer.parseInt(fd.getLineStartPos()) : -1;
@@ -108,17 +109,22 @@ public final class GenericFindingType
     * @return a new Item with available data filled or null.
     * @throws JAXBException if Item creation fails on jaxb level.
     */
-   public Item createItem (String message) throws JAXBException
+   public Item createItem (SourceFile sf, String message) throws JAXBException
    {
        Item result = null;
        final Matcher match = mPattern.matcher(message);
-       if (match.matches())
+       if (match.lookingAt())
        {
+           sf.setPos(sf.getPos() + match.end() + 1);
            result = mOf.createItem();
            result.setFindingType(getSymbol());
            if (mTextPos != -1)
            {
                result.setMessage(match.group(mTextPos));
+           }
+           else
+           {
+               result.setMessage(match.group());
            }
            if (mLineStart != -1)
            {

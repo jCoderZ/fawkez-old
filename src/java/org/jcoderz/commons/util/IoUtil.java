@@ -32,6 +32,7 @@
  */
 package org.jcoderz.commons.util;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -324,6 +325,49 @@ public final class IoUtil
       while ((read = in.read(buffer)) >= 0)
       {
          out.write(buffer, 0, read);
+      }
+
+      return out.toString();
+   }
+
+
+   /**
+    * Reads all characters from the reader <code>in</code> and
+    * normalizes newlines to single '\n'.
+    *
+    * @param in the Reader to read from.
+    * @return an String containing the read data
+    * @throws IOException in an I/O error occurs.
+    */
+   public static String readFullyNormalizeNewLine (Reader in)
+         throws IOException
+   {
+      final StringWriter out = new StringWriter();
+
+      int c;
+      int last = 0;
+      while ((c = in.read()) != -1)
+      {
+         if (c == '\n')
+         {
+             if (last != '\r')
+             {
+                 out.write(c);
+             }
+         }
+         else if (c == '\r' || c == '\u0085' 
+             || c == '\u2028' || c == '\u2029')
+         {
+             if (last != '\n')
+             {
+                 out.write('\n');
+             }
+         }
+         else
+         {
+             out.write(c);
+         }
+         last = c;
       }
 
       return out.toString();

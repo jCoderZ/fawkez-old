@@ -32,7 +32,6 @@
  */
 package org.jcoderz.commons.util;
 
-import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -401,15 +400,21 @@ public final class IoUtil
          throws IOException
    {
       final InputStream in = new FileInputStream(src);
-      final OutputStream out = new FileOutputStream(dest);
       try
       {
-         copy(in, out);
+          final OutputStream out = new FileOutputStream(dest);
+          try
+          {
+             copy(in, out);
+          }
+          finally
+          {
+             close(out);
+          }
       }
       finally
       {
          close(in);
-         close(out);
       }
    }
 

@@ -136,6 +136,12 @@ public class LoggableImpl
        = new ThreadIdHolder();
 
    static final long serialVersionUID = 1;
+   
+   /** 
+    * Maximum number of steps to get the cause of an exception,
+    * until we stop climbing up the cause chain. 
+    */
+   private static final int MAX_EXCEPTION_CHAIN_UP = 20;
 
    /**
     * In the first step use bea specific instance name, which is set as system
@@ -270,9 +276,13 @@ public class LoggableImpl
       mEventTime = System.currentTimeMillis();
       ThrowableUtil.fixChaining(cause);
       Throwable thr = cause;
-      while (thr != null && !(thr instanceof Loggable))
+      int depth = 0;
+      while (thr != null 
+          && !(thr instanceof Loggable)
+          && depth < MAX_EXCEPTION_CHAIN_UP)
       {
           thr = thr.getCause();
+          depth++;
       }
       if (thr instanceof Loggable)
       {
@@ -408,8 +418,8 @@ public class LoggableImpl
    /** {@inheritDoc} */
    public String getMessage ()
    {
-      return getLogMessageInfo().formatMessage(mParameters, new StringBuffer())
-            .toString();
+      return getLogMessageInfo().formatMessage(
+          mParameters, new StringBuffer()).toString();
    }
 
    /** {@inheritDoc} */
@@ -458,7 +468,8 @@ public class LoggableImpl
            cause = getCause();
        }
        // add parameters of nested chain
-       while (cause != null)
+       int depth = 0;
+       while (cause != null && depth < MAX_EXCEPTION_CHAIN_UP)
        {
            if (cause instanceof Loggable)
            {
@@ -467,6 +478,7 @@ public class LoggableImpl
                break;
            }
            cause = cause.getCause();
+           depth++;
        }
        cause = null;
        if (mOuter != null)
@@ -628,6 +640,4 @@ public class LoggableImpl
          return ((Long) get()).longValue();
       }
    }
-
-
 }

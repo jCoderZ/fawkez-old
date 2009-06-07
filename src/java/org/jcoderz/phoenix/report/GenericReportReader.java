@@ -83,6 +83,7 @@ import org.xml.sax.InputSource;
  */
 public final class GenericReportReader implements ReportReader
 {
+    private static final int MAX_DEBUG_TEXT_CHARS = 100;
     private static final String CLASSNAME
         = GenericReportReader.class.getName();
     private static final Logger logger = Logger.getLogger(CLASSNAME);
@@ -230,7 +231,6 @@ public final class GenericReportReader implements ReportReader
      * @return the finding type matching to the message, or null if no such
      *   type was found.
      * @throws JAXBException if item creation fails. 
-     * @throws IOException if reading the input data fails- 
      */
     public Item detectFindingTypeForMessage (String message) 
         throws JAXBException
@@ -250,7 +250,8 @@ public final class GenericReportReader implements ReportReader
        }
        if (logger.isLoggable(Level.FINE))
        {
-           logger.fine("For text: '" + StringUtil.trimLength(message, 20)
+           logger.fine("For text: '" 
+               + StringUtil.trimLength(message, MAX_DEBUG_TEXT_CHARS)
                + "' matched finding: " 
                + (result == null ? "null" : result.getFindingType() 
                + "'. End at " + mSourceFile.getPos()));
@@ -285,7 +286,8 @@ public final class GenericReportReader implements ReportReader
                     + i.getFindingType()
                     + "' Code Line: '" + codeMat + "' caretLine: '" 
                     + caretMat + "'. text: '" 
-                    + StringUtil.trimLength(textAfterCode, 100) + "'.");
+                    + StringUtil.trimLength(
+                        textAfterCode, MAX_DEBUG_TEXT_CHARS) + "'.");
             }
         }
         else
@@ -293,7 +295,8 @@ public final class GenericReportReader implements ReportReader
             logger.fine("Caret defined but not found for '" 
                 + i.getFindingType()
                 + "' Code Line: '" + codeMat + "'. text: '" 
-                + StringUtil.trimLength(text, 100) + "'.");
+                + StringUtil.trimLength(
+                    text, MAX_DEBUG_TEXT_CHARS) + "'.");
         }
     }
 
@@ -307,8 +310,9 @@ public final class GenericReportReader implements ReportReader
             final Item item = detectFindingTypeForMessage(text);
             if (item == null)
             {
-                int pos = mSourceFile.getContent().indexOf(
-                    '\n', mSourceFile.getPos());
+                final int pos 
+                    = mSourceFile.getContent().indexOf(
+                        '\n', mSourceFile.getPos());
                 if (pos != -1)
                 {
                     mSourceFile.setPos(pos + 1);  

@@ -38,10 +38,13 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
 import javax.xml.bind.JAXBException;
+
+import org.jcoderz.phoenix.report.jaxb.Item;
 
 /**
  * @author Michael Griffel
@@ -54,14 +57,16 @@ public final class SourceDirectoryReader
 
    private static final Logger logger = Logger.getLogger(CLASSNAME);
 
-   private final Map mSources = new HashMap();
+   private final Map<ResourceInfo, List<Item>> mSources 
+       = new HashMap<ResourceInfo, List<Item>>();
    
    /** 
     * This collection holds directory names that should never 
     * contain any source files. 
     **/
-   private static final Collection/*<String>*/ BLACKLISTED_DIR_NAMES 
-       = Collections.unmodifiableCollection(Arrays.asList(new String[] {".svn", "CVS"}));
+   private static final Collection<String> BLACKLISTED_DIR_NAMES 
+       = Collections.unmodifiableCollection(
+           Arrays.asList(new String[] {".svn", "CVS"}));
 
    SourceDirectoryReader ()
          throws JAXBException
@@ -70,7 +75,7 @@ public final class SourceDirectoryReader
    }
 
    /** {@inheritDoc} */
-   protected Map getItems ()
+   protected Map<ResourceInfo, List<Item>> getItems ()
          throws JAXBException
    {
       return Collections.unmodifiableMap(mSources);
@@ -83,7 +88,8 @@ public final class SourceDirectoryReader
       if (! f.isDirectory())
       {
          throw new RuntimeException(
-               "The given source directory is not a valid directory.");
+             "The given source directory '" + f.getAbsolutePath() 
+             + "' is not a valid directory.");
       }
       addSourceFiles(f, null, f.getAbsolutePath());
    }
@@ -120,11 +126,10 @@ public final class SourceDirectoryReader
          }
       }
       // register package.html if not already registered (only in **/src/java**)
-      final String packageHtml = directory.getAbsolutePath() + File.separator
-            + "package.html";
+      final String packageHtml 
+          = directory.getAbsolutePath() + File.separator + "package.html";
       if (ResourceInfo.lookup(packageHtml) == null
-            && packageHtml.matches(
-                  ".*/src/java.*"))
+            && packageHtml.matches(".*/src/java.*"))
       {
          ResourceInfo.register(packageHtml, pkg, sourceDir);
       }

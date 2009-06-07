@@ -146,7 +146,8 @@ public class FindingType
    }
 
    /**
-    * Returns a long description of this finding type. Might contain html markup.
+    * Returns a long description of this finding type. Might 
+    *   contain html markup.
     * @return the long description of this finding type.
     */
    public String getDescription ()

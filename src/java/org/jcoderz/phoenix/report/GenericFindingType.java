@@ -70,6 +70,11 @@ public final class GenericFindingType
    
    // private final Severity mSeverity;
 
+   /**
+    * Create new finding type based on xml description.
+    * @param root the definition of the root finding description. 
+    * @param fd the definition of the detailed finding description. 
+    */
    public GenericFindingType (
        FindingDescription root, FindingDescription fd)
     {
@@ -77,11 +82,14 @@ public final class GenericFindingType
            fd.getDescription());
    
        mPriority = fd.getPriority();
-       mPattern = Pattern.compile(fd.getPattern(), Pattern.MULTILINE + Pattern.UNIX_LINES);
+       mPattern = Pattern.compile(
+           fd.getPattern(), Pattern.MULTILINE + Pattern.UNIX_LINES);
        mFindingDescription = fd;
        mTextPos = fd.isSetTextPos() ? Integer.parseInt(fd.getTextPos()) : -1;
-       mLineStart = fd.isSetLineStartPos() ? Integer.parseInt(fd.getLineStartPos()) : -1;
-       mLineEnd = fd.isSetLineEndPos() ? Integer.parseInt(fd.getLineEndPos()) : -1;
+       mLineStart = fd.isSetLineStartPos()
+           ? Integer.parseInt(fd.getLineStartPos()) : -1;
+       mLineEnd = fd.isSetLineEndPos()
+           ? Integer.parseInt(fd.getLineEndPos()) : -1;
        if (fd.isSetColumnStartPos() && "caret".equals(fd.getColumnStartPos()))
        {
            mColumnStart = -1;
@@ -105,6 +113,7 @@ public final class GenericFindingType
    /**
     * Try to match the given method and fill the item 
     * accordingly if a match is found. 
+    * @param sf the input source read. Allows to set the new file position.
     * @param message the message to parse.
     * @return a new Item with available data filled or null.
     * @throws JAXBException if Item creation fails on jaxb level.

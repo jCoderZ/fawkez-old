@@ -369,7 +369,7 @@ public abstract class BasicLogLineFormat
    /**
     * Sets the thread name from the message to dump.
     *
-    * @param threadId The thread name to dump.
+    * @param threadName The thread name to dump.
     */
    protected final void setThreadName (String threadName)
    {

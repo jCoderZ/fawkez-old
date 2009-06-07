@@ -47,7 +47,6 @@ import org.jcoderz.commons.util.Assert;
 import org.jcoderz.commons.util.HashCode;
 import org.jcoderz.commons.util.IoUtil;
 import org.jcoderz.commons.util.ObjectUtil;
-import org.jcoderz.commons.util.StringUtil;
 
 /**
  * This class holds resource information about a Java class.
@@ -58,6 +57,9 @@ public final class ResourceInfo
 {
    /** holds a map from resource name to ResourceInfo */
     private static final Map<String, ResourceInfo> RESOURCES
+        = Collections.synchronizedMap(new HashMap<String, ResourceInfo>());
+    /** holds a map from package / classname to ResourceInfo */
+    private static final Map<String, ResourceInfo> RESOURCES_BY_CLASS
         = Collections.synchronizedMap(new HashMap<String, ResourceInfo>());
 
     private static final String CLASSNAME = ResourceInfo.class.getName();
@@ -83,14 +85,7 @@ public final class ResourceInfo
         Assert.notNull(name, "name");
         Assert.notNull(sourceDir, "sourceDir");
         mResourceName = checkName(name).intern();
-        if (pkg != null)
-        {
-            mPackage = pkg;
-        }
-        else
-        {
-            mPackage = StringUtil.EMPTY_STRING;
-        }
+        mPackage = ObjectUtil.toStringOrEmpty(pkg);
         mSourcDir = checkName(sourceDir).intern();
         mClassname = determineClassName(name).intern();
         if (logger.isLoggable(Level.FINER))
@@ -138,13 +133,19 @@ public final class ResourceInfo
      */
     public static ResourceInfo lookup (String name)
     {
-        final String lookupName = checkName(name);
-        if (!RESOURCES.containsKey(lookupName))
+        String lookupName = name;
+        ResourceInfo result = RESOURCES.get(lookupName);
+        if (result == null)
+        {
+            lookupName = checkName(name);
+            result = RESOURCES.get(lookupName);
+        }
+        if (result == null)
         {
             logger.finer("### ResourceInfo not found for '"
                 + lookupName + "'");
         }
-        return RESOURCES.get(lookupName);
+        return result;
     }
 
     /**
@@ -156,15 +157,12 @@ public final class ResourceInfo
      */
     public static ResourceInfo lookup (String packageName, String className)
     {
-        ResourceInfo result = null;
-        for (ResourceInfo resource : RESOURCES.values())
+        final String key = combineName(packageName, className);
+        final ResourceInfo result = RESOURCES_BY_CLASS.get(key);
+        if (result == null)
         {
-            if (resource.getClassname().equals(className)
-                && resource.getPackage().equals(packageName))
-            {
-                result = resource;
-                break;
-            }
+            logger.finer("### ResourceInfo not found for '"
+                + key + "'");
         }
         return result;
     }
@@ -173,6 +171,7 @@ public final class ResourceInfo
     {
         return RESOURCES.toString();
     }
+
     /**
      * Returns the number of lines for the given file <tt>filename</tt>.
      * @param fileName the name of the file.
@@ -328,7 +327,18 @@ public final class ResourceInfo
 
     private static void add (String name, ResourceInfo info)
     {
-        RESOURCES.put(name, info);
+        synchronized (RESOURCES)
+        {
+            RESOURCES.put(name, info);
+            RESOURCES_BY_CLASS.put(
+                combineName(info.getPackage(), info.getClassname()), info);
+        }
+    }
+
+    private static String combineName (String packageName, String className)
+    {
+        return ObjectUtil.toStringOrEmpty(packageName) + "--" 
+            + ObjectUtil.toStringOrEmpty(className);
     }
 
     private static String checkName (String lookupName)

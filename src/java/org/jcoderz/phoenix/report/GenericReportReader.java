@@ -306,6 +306,12 @@ public final class GenericReportReader implements ReportReader
         if (mRootMatcher.find())
         {
             final String text = mRootMatcher.group(mTextPos);
+            if (logger.isLoggable(Level.FINE))
+            {
+                logger.fine("Main pattern matched for: '"
+                    + StringUtil.trimLength(text, MAX_DEBUG_TEXT_CHARS)
+                    + "'. End at " + mRootMatcher.end());
+            }
             mSourceFile.setPos(mRootMatcher.start(mTextPos));
             final Item item = detectFindingTypeForMessage(text);
             if (item == null)
@@ -349,9 +355,19 @@ public final class GenericReportReader implements ReportReader
                 }
                 addItemToResource(mRootMatcher.group(mFilePos), item);
             }
+            mRootMatcher.region(
+                mSourceFile.getPos(), mSourceFile.getContent().length());
         }
         else
         {
+            if (logger.isLoggable(Level.FINE))
+            {
+                logger.fine("No match after " + mSourceFile.getPos()
+                    + " '" + StringUtil.trimLength(
+                        mSourceFile.getContent().substring(
+                            mSourceFile.getPos()), 
+                            MAX_DEBUG_TEXT_CHARS));
+            }
             // set pos to end of file
             mSourceFile.setPos(mSourceFile.getContent().length());
         }
@@ -444,7 +460,6 @@ public final class GenericReportReader implements ReportReader
          */
         public int getPos ()
         {
-            logger.finest("getPos: " + mPos);
             return mPos;
         }
 

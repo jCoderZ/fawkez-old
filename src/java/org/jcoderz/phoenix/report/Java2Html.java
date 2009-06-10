@@ -590,7 +590,7 @@ public final class Java2Html
       for (int i = 0; i < Severity.VALUES.size(); i++)
       {
           final Severity s = Severity.fromInt(i);
-          if (s.equals(Severity.OK) || s.equals(Severity.COVERAGE))
+          if (s.equals(Severity.COVERAGE))
           {
               continue;
           }

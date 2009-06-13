@@ -139,6 +139,7 @@ border-color: black;
 border-style: solid;
 text-align: left;
 font-family: monospace;
+white-space: pre;
 background-color: #e0e0e0;
 }
 td.code-even {
@@ -147,6 +148,7 @@ border-color: black;
 border-style: solid;
 text-align: left;
 font-family: monospace;
+white-space: pre;
 background-color: #ffffff;
 }
 td.note_last {
@@ -177,6 +179,7 @@ border-color: black;
 border-style: solid;
 text-align: left;
 font-family: monospace;
+white-space: pre;
 background:#e0e0e0;
 }
 td.code-even_last {
@@ -185,6 +188,7 @@ border-color: black;
 border-style: solid;
 text-align: left;
 font-family: monospace;
+white-space: pre;
 background:#ffffff;
 }
 .navbar {

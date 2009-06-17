@@ -34,6 +34,7 @@ package org.jcoderz.commons.util;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.logging.Level;
@@ -48,6 +49,12 @@ import org.jcoderz.commons.Loggable;
  */
 public final class ThrowableUtil
 {
+   private static final int MAX_REASONABLE_PARAMETER_LENGTH = 10000;
+/** Name of getter methods start with this prefix. */
+   private static final String GETTER_METHOD_PREFIX = "get";
+   /** Length of the getter prefix. */
+   private static final int GETTER_METHOD_PREFIX_LENGTH
+       = GETTER_METHOD_PREFIX.length();
    /**
     * Stores the Throwable.getCause() method if this method is available.
     * This should be the case for all JDKs > 1.4.
@@ -96,9 +103,9 @@ public final class ThrowableUtil
 
    /**
     * Tries to fix the exception chaining for the given Throwable.
-    * Some exception classes still use a none standart way
+    * Some exception classes still use a none standard way
     * to nest exceptions. This method tries best to detect this
-    * classes and pass the nested exceptions into the standart
+    * classes and pass the nested exceptions into the standard
     * nesting mechanism available since JDK1.4 with the throwable
     * class. It is save to call this method several times for a
     * give exception.
@@ -116,8 +123,8 @@ public final class ThrowableUtil
             if (nesting++ > MAX_NESTING_DEPTH)
             {
                logger.log(Level.FINEST,
-                     "Stoped fixing exception nesting cause max depth "
-                     + "reached for given exeption.", ex);
+                     "Stopped fixing exception nesting cause max depth "
+                     + "reached for given exception.", ex);
                break;
             }
             if (current.getCause() == null)
@@ -134,7 +141,38 @@ public final class ThrowableUtil
       }
       catch (Exception unexpected)
       {
-         // do not risc any side effect here
+         // do not risk any side effect here
+         logger.log(
+               Level.SEVERE, "Unexpected exception, ignored.", unexpected);
+      }
+   }
+
+   /**
+    * Pull up nested information.
+    * @param ex the exception to be checked.
+    */
+   public static void collectNestedData (Loggable loggable)
+   {
+      try
+      {
+         Throwable current = loggable.getCause();
+         int nesting = 0;
+         while (current != null && !(current instanceof Loggable))
+         {
+            if (nesting++ > MAX_NESTING_DEPTH)
+            {
+               logger.log(Level.FINEST,
+                     "Stopped collecting nested information max depth "
+                     + "reached for given exception.", loggable);
+               break;
+            }
+            collectParameters(loggable, current, nesting);
+            current = current.getCause();
+         }
+      }
+      catch (Exception unexpected)
+      {
+         // do not risk any side effect here
          logger.log(
                Level.SEVERE, "Unexpected exception, ignored.", unexpected);
       }
@@ -180,7 +218,7 @@ public final class ThrowableUtil
          {
             if (theGetCauseMethod != null)
             {
-               // 2nd hit, savety first
+               // 2nd hit, safety first
                logger.info("Found 2 matching methods "  + theGetCauseMethod
                      + " or " + methods[i] + ".");
                theGetCauseMethod = null;
@@ -209,4 +247,34 @@ public final class ThrowableUtil
       }
    }
 
+   private static void collectParameters (
+       Loggable loggable, Throwable thr, int nesting)
+       throws IllegalAccessException, InvocationTargetException
+   {
+       final Method[] methods = thr.getClass().getMethods();
+       for (int i = 0; i < methods.length; i++)
+       {
+          final int modifier = methods[i].getModifiers();
+          if (methods[i].getDeclaringClass() != Throwable.class
+              && methods[i].getDeclaringClass() != Object.class
+              && methods[i].getParameterTypes().length == 0
+              && Modifier.isPublic(modifier)
+              && !Modifier.isStatic(modifier)
+              && methods[i].getName().startsWith(GETTER_METHOD_PREFIX)
+              && !methods[i].getReturnType().equals(Void.class))
+          {
+              final Object result = methods[i].invoke(thr, (Object[]) null);
+              if (result != null && result != thr.getCause())
+              {
+                  loggable.addParameter(
+                      "CAUSE_" + nesting + "_" + thr.getClass().getName()
+                          + "#" + methods[i].getName().substring(
+                              GETTER_METHOD_PREFIX_LENGTH),
+                      StringUtil.trimLength(
+                          String.valueOf(result),
+                          MAX_REASONABLE_PARAMETER_LENGTH));
+              }
+          }
+       }
+   }
 }

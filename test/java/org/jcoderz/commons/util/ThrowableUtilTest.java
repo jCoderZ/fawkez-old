@@ -33,6 +33,7 @@
 package org.jcoderz.commons.util;
 
 import java.lang.reflect.Method;
+import java.util.Iterator;
 
 import javax.servlet.ServletException;
 import javax.servlet.UnavailableException;
@@ -40,6 +41,7 @@ import javax.xml.bind.JAXBException;
 import junit.framework.TestCase;
 
 import org.jaxen.JaxenException;
+import org.jcoderz.commons.ArgumentMalformedException;
 import org.xml.sax.SAXException;
 
 /**
@@ -82,13 +84,30 @@ extends TestCase
         getCauseDetectionTestHelper(JaxenException.class, "getCause");
     }
 
+    /** Test {@link ThrowableUtil#collectNestedData(Loggable)} */
+    public void testCollectNestedData ()
+    {
+        final SAXException sax
+            = new org.xml.sax.SAXParseException(
+                "SAX", "public id", "system id", 5, 4);
+        final ArgumentMalformedException ex
+            = new ArgumentMalformedException("TEST", "VALUE", "Hint",
+                sax);
+        assertEquals("Parameter from nested Exception not found in list. "
+            + ex.getParameterNames(), "public id",
+            ex.getParameter(
+                "CAUSE_1_org.xml.sax.SAXParseException#PublicId").get(0));
+    }
+
     private void getCauseDetectionTestHelper (Class ex, String methodName)
     {
         final Method m
-        = ThrowableUtil.findGetCauseMethod(ex.getMethods());
+            = ThrowableUtil.findGetCauseMethod(ex.getMethods());
         assertNotNull("Could not get getCause method for " + ex.getName(), m);
         assertEquals("Differen method expected for getCause in " + ex.getName(),
                 methodName, m.getName());
     }
+
+
 
 }

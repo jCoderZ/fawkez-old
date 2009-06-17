@@ -136,10 +136,10 @@ public class LoggableImpl
        = new ThreadIdHolder();
 
    static final long serialVersionUID = 1;
-   
-   /** 
+
+   /**
     * Maximum number of steps to get the cause of an exception,
-    * until we stop climbing up the cause chain. 
+    * until we stop climbing up the cause chain.
     */
    private static final int MAX_EXCEPTION_CHAIN_UP = 20;
 
@@ -277,7 +277,7 @@ public class LoggableImpl
       ThrowableUtil.fixChaining(cause);
       Throwable thr = cause;
       int depth = 0;
-      while (thr != null 
+      while (thr != null
           && !(thr instanceof Loggable)
           && depth < MAX_EXCEPTION_CHAIN_UP)
       {
@@ -306,7 +306,7 @@ public class LoggableImpl
     * Sets the cause of this throwable.
     *
     * This method should be called after the call to the
-    * {@link java.lang.Throwable#initCause(java.lang.Throwable)}for the case
+    * {@link Throwable#initCause(Throwable)} for the case
     * the super call fails.
     *
     * @param cause the cause of this Exception.
@@ -316,6 +316,7 @@ public class LoggableImpl
       mCause = cause;
       addParameter(CAUSE_PARAMETER_NAME, cause);
       ThrowableUtil.fixChaining(cause);
+      ThrowableUtil.collectNestedData(this);
    }
 
    /**

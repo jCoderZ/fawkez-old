@@ -240,7 +240,14 @@ public class ParameterLineFormat
          final Loggable loggable,
          final List trackingIds)
    {
-      for (final Iterator nameIter = loggable.getParameterNames().iterator();
+       final java.util.Set/*<String>*/ namesUnsorted
+           = loggable.getParameterNames();
+       final String[] names
+           = (String[]) namesUnsorted.toArray(
+               new String[namesUnsorted.size()]);
+       Arrays.sort(names);
+
+      for (final Iterator nameIter = Arrays.asList(names).iterator();
             nameIter.hasNext(); )
       {
          final String name = (String) nameIter.next();

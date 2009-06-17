@@ -149,7 +149,14 @@ public final class ThrowableUtil
 
    /**
     * Pull up nested information.
-    * @param ex the exception to be checked.
+    * This method goes down the exception chain of the given
+    * loggable and if it find getters for properties,
+    * like <code>getSql()</code> adds the values of these
+    * properties as parameters to the loggable. The search is
+    * stopped when either a {@link Loggable} is found in the list,
+    * the end of the chain is reached or after MAX_NESTING_DEPTH
+    * steps down the chain.
+    * @param loggable the Loggable to be feed with parameters.
     */
    public static void collectNestedData (Loggable loggable)
    {

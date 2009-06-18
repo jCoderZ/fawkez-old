@@ -171,7 +171,8 @@ public final class XmlUtil
                   sb.append("&amp;");
                   break;
                default :
-                  if (c > Byte.MAX_VALUE)
+                  if (c > Byte.MAX_VALUE
+                      || Character.isISOControl(c))
                   {
                      sb.append("&#x");
                      sb.append(Integer.toHexString(c));

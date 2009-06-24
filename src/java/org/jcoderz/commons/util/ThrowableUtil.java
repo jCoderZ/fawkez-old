@@ -277,11 +277,25 @@ public final class ThrowableUtil
                       "CAUSE_" + nesting + "_" + thr.getClass().getName()
                           + "#" + methods[i].getName().substring(
                               GETTER_METHOD_PREFIX_LENGTH),
-                      StringUtil.trimLength(
-                          String.valueOf(result),
-                          MAX_REASONABLE_PARAMETER_LENGTH));
+                      asString(result));
               }
           }
        }
    }
+
+    private static String asString (Object obj)
+    {
+        String result;
+        if (obj instanceof Object[])
+        {
+            result = ArraysUtil.toString((Object[]) obj);
+        }
+        else
+        {
+            result = String.valueOf(obj);
+        }
+        return StringUtil.trimLength(
+            result,
+            MAX_REASONABLE_PARAMETER_LENGTH);
+    }
 }

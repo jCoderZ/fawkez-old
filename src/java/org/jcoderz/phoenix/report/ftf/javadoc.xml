@@ -36,12 +36,12 @@
   </findingType>
   <findingType>
     <symbol>JavaDocNoReturn</symbol>
-    <shortDescription>(@return) tag cannot be used in method with void return type.</shortDescription>
+    <shortDescription>@return tag cannot be used in method with void return type.</shortDescription>
     <description>
         The method does not return any value, so there is no use of a @return
         tag.
     </description>
-    <pattern>@return tag cannot be used in method with void return type\.</pattern>
+    <pattern>(@return) tag cannot be used in method with void return type\.</pattern>
     <severity>code-style</severity>
     <sourceTextPos>1</sourceTextPos>
   </findingType>
@@ -87,8 +87,40 @@
   </findingType>
   <findingType>
     <symbol>JavaDocCanNotFindMember</symbol>
-    <shortDescription>The local target of the tag can not be fond.</shortDescription>
+    <shortDescription>The local target of the tag can not be found.</shortDescription>
     <pattern>Tag (.*): can't find (.*) ?in (.*)</pattern>
+    <severity>design</severity>
+    <sourceTextPos>1</sourceTextPos>
+  </findingType>
+  <findingType>
+    <symbol>JavaDocTagWithNoArgument</symbol>
+    <shortDescription>The tag is expected to get at least one argument.</shortDescription>
+    <description>
+        Intention of the tag is to mark what is documented, it looks
+        like the documentation itself is missing.
+    </description>
+    <pattern>(@return) tag has no arguments\.</pattern>
+    <severity>design</severity>
+    <sourceTextPos>1</sourceTextPos>
+  </findingType>
+  <findingType>
+    <symbol>JavaDocTagUnknownCase</symbol>
+    <shortDescription>The tag is not known - with the current casing.</shortDescription>
+    <description>
+        The tag is not known, but a tag exists that only differs
+        in casing.
+    </description>
+    <pattern>(.*) is an unknown tag -- same as a known tag except for case\.</pattern>
+    <severity>design</severity>
+    <sourceTextPos>1</sourceTextPos>
+  </findingType>
+  <findingType>
+    <symbol>JavaDocMissingClosingCurlyBracket</symbol>
+    <shortDescription>A closing curly bracket is missing.</shortDescription>
+    <description>
+        The curly bracket used for the inline tag are not closed..
+    </description>
+    <pattern>Missing closing '}' character for inline tag: "(.*)"</pattern>
     <severity>design</severity>
     <sourceTextPos>1</sourceTextPos>
   </findingType>

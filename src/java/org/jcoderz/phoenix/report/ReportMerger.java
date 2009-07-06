@@ -313,7 +313,7 @@ public class ReportMerger
             while (oldIterator.hasNext())
             {
                 final Item oldItem = oldIterator.next();
-                if (isPartialSameFinding())
+                if (isPartialSameFinding(newItem, oldItem))
                 {
                     newItem.setSince(oldItem.getSince());
                     newIterator.remove();
@@ -325,7 +325,7 @@ public class ReportMerger
     }
 
 
-    private boolean isPartialSameFinding ()
+    private boolean isPartialSameFinding (Item newItem, Item oldItem)
     {
         final boolean result;
         if (oldItem.getFindingType().equals(newItem.getFindingType()))

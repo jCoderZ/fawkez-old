@@ -80,7 +80,7 @@ public class ReportMerger
    private static final Logger logger = Logger.getLogger(CLASSNAME);
 
    /** The length of an unique part of a c&p finding message. */
-   private static int CPD_UNIQUE_STRING_LENGTH 
+   private static final int CPD_UNIQUE_STRING_LENGTH 
        = "Copied and pasted code. 341 equal".length();
    
    /** The log level. */
@@ -313,9 +313,7 @@ public class ReportMerger
             while (oldIterator.hasNext())
             {
                 final Item oldItem = oldIterator.next();
-                if (oldItem.getMessage().equals(newItem.getMessage())
-                    && oldItem.getFindingType().equals(newItem.getFindingType())
-                    && oldItem.getCounter() <= newItem.getCounter())
+                if (isPartialSameFinding())
                 {
                     newItem.setSince(oldItem.getSince());
                     newIterator.remove();
@@ -324,6 +322,35 @@ public class ReportMerger
                 }
             }
         }
+    }
+
+
+    private boolean isPartialSameFinding ()
+    {
+        final boolean result;
+        if (oldItem.getFindingType().equals(newItem.getFindingType()))
+        {
+            if (oldItem.getOrigin().equals(Origin.CPD))
+            {
+                // Fuzzy compare CPD Findings
+                // see also http://www.jcoderz.org/fawkez/ticket/71
+                // The or is by intention due to resistant findings
+                // reported as new frequently.
+                result = oldItem.getLine() == newItem.getLine()
+                    || oldItem.getMessage().regionMatches(
+                        0, newItem.getMessage(), 0, CPD_UNIQUE_STRING_LENGTH);
+            }
+            else
+            {
+                result = oldItem.getMessage().equals(newItem.getMessage())
+                    && oldItem.getCounter() <= newItem.getCounter();
+            }
+        }
+        else
+        {
+            result = false;
+        }
+        return result;
     }
 
     private void filterLowSeverity (final List<Item> newFindings)

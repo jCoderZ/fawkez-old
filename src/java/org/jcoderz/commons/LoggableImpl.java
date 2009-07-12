@@ -580,9 +580,13 @@ public class LoggableImpl
             mMethodName = frame.getMethodName() + "(" + fileName + ")";
          }
       }
-      else
+      else if (frame.getMethodName().indexOf('(') < 0)
       {
          mMethodName = frame.getMethodName() + "()";
+      }
+      else
+      {
+          mMethodName = frame.getMethodName();
       }
    }
 

@@ -36,15 +36,13 @@ package org.jcoderz.commons.logging;
 import java.text.Format;
 import java.text.MessageFormat;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.LogRecord;
 
 import org.jcoderz.commons.Loggable;
 import org.jcoderz.commons.util.ArraysUtil;
+import org.jcoderz.commons.util.ObjectUtil;
+import org.jcoderz.commons.util.StringUtil;
 
 /**
  * This formats a standard LogRecord and parses a log line with a formatted
@@ -101,7 +99,7 @@ public class TraceLineFormat
     * @param thrown Unused by this, might be null.
     * @param parameter Unused by this, might be null.
     *
-    * @see org.jcoderz.commons.logging.LogLineFormat#format(java.lang.StringBuffer, java.util.logging.LogRecord, org.jcoderz.commons.Loggable, java.util.List, java.lang.Throwable, java.lang.Object)
+    * @see LogLineFormat#format(StringBuffer, LogRecord, Loggable, List, Throwable, Object)
     */
    public void format (
          final StringBuffer sb,
@@ -133,7 +131,7 @@ public class TraceLineFormat
     *
     * @throws ParseException if an error occurs.
     *
-    * @see org.jcoderz.commons.logging.LogLineFormat#parse(java.lang.StringBuffer, org.jcoderz.commons.logging.LogFileEntry)
+    * @see LogLineFormat#parse(StringBuffer, LogFileEntry)
     */
    public void parse (StringBuffer sb, LogFileEntry entry)
          throws ParseException
@@ -224,7 +222,12 @@ public class TraceLineFormat
    protected final void setLogSource (
          final String clazz, final String method)
    {
-      setParameter(LOGSOURCE_INDEX, clazz + "." + method + "()");
+       final boolean needParentheses 
+           = !StringUtil.isNullOrEmpty(method) && method.indexOf('(') < 0;
+       setParameter(LOGSOURCE_INDEX,
+           ObjectUtil.toStringOrEmpty(clazz) + "." 
+               + ObjectUtil.toStringOrEmpty(method) 
+               + (needParentheses ? "()" : ""));
    }
 
    /**

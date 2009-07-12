@@ -55,12 +55,13 @@ public class LogFormatter
       extends Formatter
 {
     /**
-     * Name of the logger that controls which log level is needed as minimum to trigger
-     * stack traces with log messages.
+     * Name of the logger that controls which log level is needed as minimum 
+     * to trigger stack traces with log messages.
      */
     public static final String MSG_LOGGER_STACK_TRACE = "msgLoggerStackTrace";
+    private static final Logger FWK_TRACE_LOGGER_LOGGER 
+        = Logger.getLogger(MSG_LOGGER_STACK_TRACE);
     private final ThreadLocal mMessageFormatters = new ThreadLocal();
-    private final Logger FWK_TRACE_LOGGER_LOGGER = Logger.getLogger(MSG_LOGGER_STACK_TRACE);
 
    /** {@inheritDoc} */
    public String format (LogRecord record)

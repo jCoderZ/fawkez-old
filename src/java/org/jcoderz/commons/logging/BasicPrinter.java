@@ -548,7 +548,7 @@ public class BasicPrinter
 
    /**
     * Gets source class and method appended within one string buffer according
-    * to the display options ciurrently set.
+    * to the display options currently set.
     *
     * @param sourceClass The name of the source class.
     * @param sourceMethod The name of the source method.

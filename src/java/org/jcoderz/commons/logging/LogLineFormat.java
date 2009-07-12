@@ -435,8 +435,15 @@ public abstract class LogLineFormat
       final String[] splittedSource = new String[NUMBER_OF_SOURCE_ELEMENTS];
       splittedSource[SOURCECLASS_INDEX]
                      = source.substring(0, beforeMethodName);
-      splittedSource[SOURCEMETHOD_INDEX]
-                        = source.substring(beforeMethodName + 1);
+      if (beforeMethodName + 1 < source.length())
+      {
+          splittedSource[SOURCEMETHOD_INDEX]
+                            = source.substring(beforeMethodName + 1);
+      }
+      else
+      {
+          splittedSource[SOURCEMETHOD_INDEX] = "";
+      }
       return splittedSource;
    }
 }

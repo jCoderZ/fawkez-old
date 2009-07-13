@@ -218,7 +218,16 @@ public abstract class BasicLogLineFormat
                Integer.toHexString(loggable.getLogMessageInfo().toInt()));
          setBusinessImpact(loggable.getLogMessageInfo().getBusinessImpact());
          setCategory(loggable.getLogMessageInfo().getCategory());
-         setThreadName(loggable.getThreadName());
+         try
+         {
+             setThreadName(loggable.getThreadName());
+         }
+         catch (AbstractMethodError ex)
+         {
+             // We have a old loggable that does not support
+             // thread name jet.
+             setThreadName(Thread.currentThread().getName());
+         }
       }
       else
       {

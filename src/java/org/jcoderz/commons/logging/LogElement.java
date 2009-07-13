@@ -166,7 +166,17 @@ public class LogElement
          setSymbolId(
                Integer.toHexString(mLoggable.getLogMessageInfo().toInt()));
          setThreadId(mLoggable.getThreadId());
-         setThreadName(mLoggable.getThreadName());
+         try
+         {
+             setThreadName(mLoggable.getThreadName());
+          }
+          catch (AbstractMethodError ex)
+          {
+              // We have a old loggable that does not support
+              // thread name jet.
+              setThreadName(Thread.currentThread().getName());
+          }
+
          setTimestamp(Date.fromUtilDate(
                new java.util.Date(mLoggable.getEventTime())));
          setTrackingNumber(mLoggable.getTrackingNumber());

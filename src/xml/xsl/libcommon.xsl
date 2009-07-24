@@ -653,11 +653,11 @@ public <xsl:if test="$object/@final = 'true'">final </xsl:if>class <xsl:value-of
    <xsl:value-of select="$setter-visibility"/> void set<xsl:value-of select="$identifier"/> (<xsl:value-of select="@type"/> a<xsl:value-of select="$identifier"/>)
    {
       m<xsl:value-of select="$identifier"/> = <xsl:choose>
-       <xsl:when test="@copyValue = 'clone'">m<xsl:value-of select="$identifier"/> == null
-         ? null : (<xsl:value-of select="./@type"/>) m<xsl:value-of select="$identifier"/>.clone();
+       <xsl:when test="@copyValue = 'clone'">a<xsl:value-of select="$identifier"/> == null
+         ? null : (<xsl:value-of select="./@type"/>) a<xsl:value-of select="$identifier"/>.clone();
        </xsl:when>
-       <xsl:when test="@copyValue = 'constructor'">m<xsl:value-of select="$identifier"/> == null
-         ? null : new <xsl:value-of select="@type"/>(m<xsl:value-of select="$identifier"/>);
+       <xsl:when test="@copyValue = 'constructor'">a<xsl:value-of select="$identifier"/> == null
+         ? null : new <xsl:value-of select="@type"/>(a<xsl:value-of select="$identifier"/>);
        </xsl:when>
      <xsl:otherwise>a<xsl:value-of select="$identifier"/>;
      </xsl:otherwise>

@@ -75,4 +75,15 @@ public class CopyValueSampleObjectTest
         assertFalse("Modification of bar must not be propagated.",
             test.getSampleBar().getId() == bar.getId());
     }
+
+    /** Check value modifications on a cloned object which is initialized with null. */
+    public void testClonedValueNullInit ()
+    {
+        final Date date = new Date();
+        final BarValueObject bar
+            = new BarValueObject(org.jcoderz.commons.types.Date.now());
+        final CopyValueSampleObject test = new CopyValueSampleObject(null, bar);
+        test.setModificationDate(date);
+        assertEquals("Object should be set and equal.", date, test.getModificationDate());
+    }
 }

@@ -32,17 +32,14 @@
  */
 package org.jcoderz.commons.types;
 
+import junit.framework.TestCase;
+
 import org.jcoderz.commons.ArgumentMaxLengthViolationException;
 import org.jcoderz.commons.ArgumentMaxValueViolationException;
 import org.jcoderz.commons.ArgumentMinLengthViolationException;
 import org.jcoderz.commons.ArgumentMinValueViolationException;
-import org.jcoderz.commons.TaggedColor;
-import org.jcoderz.commons.TaggedFooString;
 import org.jcoderz.commons.config.ConfigurationKey;
 import org.jcoderz.commons.test.RestrictedLong;
-import org.jcoderz.commons.types.samples.SampleFixPoint;
-
-import junit.framework.TestCase;
 
 /**
  * Test the generated Strong Types.

@@ -29,6 +29,8 @@
    Generating classes to directory <xsl:value-of select="$outdir"/>.
    Found <xsl:value-of select="count(//enumeration)"/> enumerations,
    <xsl:value-of select="count(//restrictedString)"/> restricted strings,
+   <xsl:value-of select="count(//fixPointNumber)"/> fix point number,
+   <xsl:value-of select="count(//restrictedLong)"/> restricted longs,
    <xsl:value-of select="count(//regexString)"/> regex strings and
    <xsl:value-of select="count(//valueObject)"/> value objects.
    <xsl:apply-templates/>
@@ -50,6 +52,7 @@
       <xsl:with-param name="package" select="@package"/>
       <xsl:with-param name="values" select=".//value"/>
       <xsl:with-param name="javadoc" select="./description"/>
+      <xsl:with-param name="implements" select="@implements"/>
    </xsl:call-template>
 
    </redirect:write>
@@ -105,6 +108,7 @@
       <xsl:with-param name="package" select="@package"/>
       <xsl:with-param name="min-length" select="@min-length"/>
       <xsl:with-param name="max-length" select="@max-length"/>
+      <xsl:with-param name="implements" select="@implements"/>
       <xsl:with-param name="constants" select=".//constant"/>
       <xsl:with-param name="token-type" select="@token-type"/>
       <xsl:with-param name="regex" select="@regex"/>
@@ -168,6 +172,7 @@
             <xsl:with-param name="total-digits" select="@total-digits"/>
             <xsl:with-param name="min-value" select="@min-value"/>
             <xsl:with-param name="max-value" select="@max-value"/>
+            <xsl:with-param name="implements" select="@implements"/>
             <xsl:with-param name="constants" select=".//constant"/>
         </xsl:call-template>
     </redirect:write>
@@ -227,6 +232,7 @@
       <xsl:with-param name="package" select="@package"/>
       <xsl:with-param name="min-value" select="@min-value"/>
       <xsl:with-param name="max-value" select="@max-value"/>
+      <xsl:with-param name="implements" select="@implements"/>
       <xsl:with-param name="constants" select=".//constant"/>
    </xsl:call-template>
 

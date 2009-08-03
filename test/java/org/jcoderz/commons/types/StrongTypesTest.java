@@ -36,6 +36,8 @@ import org.jcoderz.commons.ArgumentMaxLengthViolationException;
 import org.jcoderz.commons.ArgumentMaxValueViolationException;
 import org.jcoderz.commons.ArgumentMinLengthViolationException;
 import org.jcoderz.commons.ArgumentMinValueViolationException;
+import org.jcoderz.commons.TaggedColor;
+import org.jcoderz.commons.TaggedFooString;
 import org.jcoderz.commons.config.ConfigurationKey;
 import org.jcoderz.commons.test.RestrictedLong;
 import org.jcoderz.commons.types.samples.SampleFixPoint;
@@ -147,4 +149,35 @@ public class StrongTypesTest
                 .compareTo(RestrictedLong.fromString("15")) > 0);
     }
 
+    /** Test for enumeration implements tag. */
+    public void testImplementsTaggedColor ()
+    {
+        assertTrue("TaggedColor should implement Tagger interface", 
+            TestTaggerInterface.class.isAssignableFrom(TaggedColor.class)); 
+    }
+    
+    /** Test for restricted string implements tag. */
+    public void testImplementsTaggedFooString ()
+    {
+        assertTrue("TaggedFooString should implement Tagger interface", 
+            TestTaggerInterface.class.isAssignableFrom(TaggedFooString.class)); 
+    }
+
+    /** Test for value objects implements tag. */
+    public void testImplementsTaggedValueObject ()
+    {
+        assertTrue(
+            "TaggedSampleValueObject should implement Tagger interface", 
+            TestTaggerInterface.class.isAssignableFrom(
+                TaggedSampleValueObject.class)); 
+        assertTrue(
+            "TaggedPlainSampleValueObject should implement Tagger interface", 
+            TestTaggerInterface.class.isAssignableFrom(
+                TaggedPlainSampleValueObject.class)); 
+        assertTrue(
+            "TaggedSerializableSampleValueObject " +
+            "should implement Tagger interface", 
+            TestTaggerInterface.class.isAssignableFrom(
+                TaggedSerializableSampleValueObject.class)); 
+    }
 }

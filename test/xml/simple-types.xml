@@ -291,4 +291,45 @@
     </fixPointNumber>
 
   </fixPointNumbers>
+  
+  
+  <!--  Test the implements feature: -->
+  <enumeration
+     classname="TaggedColor"
+     package="org.jcoderz.commons.types"
+     implements="org.jcoderz.commons.types.TestTaggerInterface">
+     <value>blue</value>
+     <value>red</value>
+     <value>yellow</value>
+  </enumeration>
+  <restrictedString
+      classname="TaggedFooString"
+      package="org.jcoderz.commons.types"
+      min-length="1" max-length="10"
+      implements="org.jcoderz.commons.types.TestTaggerInterface">
+  </restrictedString>
+  <valueObject
+     classname="TaggedSampleValueObject"
+     baseclass="org.jcoderz.commons.types.samples.SampleValueObjectBase"
+     package="org.jcoderz.commons.types"
+     serializable="true"
+     final="false" 
+    implements="org.jcoderz.commons.types.TestTaggerInterface">
+    <member name="test value"
+      type="long"/>
+  </valueObject>
+  <valueObject
+     classname="TaggedPlainSampleValueObject"
+     package="org.jcoderz.commons.types"
+     final="final" 
+     implements="org.jcoderz.commons.types.TestTaggerInterface">
+     <member name="test value" type="long"/>
+  </valueObject>
+  <valueObject
+     classname="TaggedSerializableSampleValueObject"
+     package="org.jcoderz.commons.types"
+     implements="org.jcoderz.commons.types.TestTaggerInterface">
+     <member name="test value" type="long"/>
+  </valueObject>
+  
 </simpleTypes>

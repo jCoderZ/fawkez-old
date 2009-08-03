@@ -477,8 +477,8 @@ import org.jcoderz.commons.util.ObjectUtil;
  * @author generated
  */
 public <xsl:if test="$object/@final = 'true'">final </xsl:if>class <xsl:value-of select="$classname"/><xsl:if test="$object/@baseclass">
-  extends <xsl:value-of select="$object/@baseclass"/></xsl:if><xsl:if test="$object/@serializable">
-      implements java.io.Serializable</xsl:if>
+  extends <xsl:value-of select="$object/@baseclass"/></xsl:if><xsl:if test="$object/@serializable or $object/@implements">
+      implements <xsl:if test="$object/@serializable">java.io.Serializable<xsl:if test="$object/@implements">, </xsl:if></xsl:if><xsl:value-of select="$object/@implements"/></xsl:if>
 {
 <xsl:if test="$object/@serializable">
    private static final long serialVersionUID = 1L;</xsl:if>
@@ -757,6 +757,7 @@ public <xsl:if test="$object/@final = 'true'">final </xsl:if>class <xsl:value-of
    <xsl:param name="package"/>
    <xsl:param name="values"/>
    <xsl:param name="javadoc"/>
+   <xsl:param name="implements" select="''"/>
    <xsl:variable name="name"><xsl:call-template
       name="asDisplayName"><xsl:with-param
          name="name" select="$classname"/></xsl:call-template></xsl:variable>
@@ -798,7 +799,8 @@ import java.util.List;
  * @author generated
  */
 public final class <xsl:value-of select="$classname"/>
-      implements Serializable, org.jcoderz.commons.EnumType
+        implements Serializable, org.jcoderz.commons.EnumType<xsl:if test="$implements">,
+            <xsl:value-of select="$implements"/></xsl:if>
 {
    /**
     * The name of this type.
@@ -986,7 +988,6 @@ public final class <xsl:value-of select="$classname"/>
 
 <xsl:template name="simple-enum-generator-import-hook" priority="-1">
 import org.jcoderz.commons.ArgumentMalformedException;
-import org.jcoderz.commons.util.Assert;
 </xsl:template>
 
 <!-- find the best name for the symbol -->
@@ -1015,6 +1016,7 @@ import org.jcoderz.commons.util.Assert;
    <xsl:param name="constants"/>
    <xsl:param name="token-type" select="''"/>
    <xsl:param name="regex" select="''"/>
+   <xsl:param name="implements" select="''"/>
    <xsl:variable name="classname-constant">TYPE_NAME</xsl:variable>
    <xsl:call-template name="java-copyright-header"/>
 package <xsl:value-of select="$package"/>;
@@ -1040,7 +1042,8 @@ import java.io.Serializable;
  * @author generated via stylesheet
  */
 public final class <xsl:value-of select="$classname"/>
-      implements Serializable, org.jcoderz.commons.RestrictedString, Comparable
+      implements Serializable, org.jcoderz.commons.RestrictedString, Comparable<xsl:if test="$implements">,
+            <xsl:value-of select="$implements"/></xsl:if>
 {
    /**
     * <xsl:value-of select="$classname"/> - the name of this type as string constant.
@@ -1294,6 +1297,7 @@ import org.jcoderz.commons.util.Assert;
    <xsl:param name="min-value"/>
    <xsl:param name="max-value"/>
    <xsl:param name="constants"/>
+   <xsl:param name="implements"/>
    <xsl:variable name="classname-constant">TYPE_NAME</xsl:variable>
    <xsl:call-template name="java-copyright-header"/>
 package <xsl:value-of select="$package"/>;
@@ -1316,7 +1320,8 @@ import org.jcoderz.commons.util.HashCodeUtil;
  * @author generated via stylesheet
  */
 public final class <xsl:value-of select="$classname"/>
-      implements Serializable, org.jcoderz.commons.RestrictedLong, Comparable
+      implements Serializable, org.jcoderz.commons.RestrictedLong, Comparable<xsl:if test="$implements">,
+            <xsl:value-of select="$implements"/></xsl:if>
 {
    /**
     * <xsl:value-of select="$classname"/> - the name of this type as string constant.
@@ -1834,6 +1839,7 @@ import org.jcoderz.commons.util.Assert;
    <xsl:param name="classname"/>
    <xsl:param name="package"/>
    <xsl:param name="constants" select="''"/>
+   <xsl:param name="implements" select="''"/>
    <xsl:param name="fraction-digits" select="'FIXME'"/>
    <xsl:param name="total-digits" select="'FIXME'"/>
    <xsl:param name="min-value" select="''"/>
@@ -1928,7 +1934,8 @@ import org.jcoderz.commons.util.NumberUtil;
  */
 public final class <xsl:value-of select="$classname"/>
     extends Number
-    implements Comparable, FixPointNumber, Serializable
+    implements Comparable, FixPointNumber, Serializable<xsl:if test="$implements">,
+            <xsl:value-of select="$implements"/></xsl:if>
 {
     /**
      * <xsl:value-of select="$classname"/> - the name of this type as String constant.

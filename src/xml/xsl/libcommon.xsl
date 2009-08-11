@@ -1175,6 +1175,7 @@ public final class <xsl:value-of select="$classname"/>
     * The order is based on the natural order of the String representation
     * of the compared instances.
     *
+    * @param o the Object to be compared.
     * @return a negative integer, zero, or a positive integer as this
     *   object is less than, equal to, or greater than the specified object.
     * @throws ClassCastException if the specified object's type prevents

@@ -984,7 +984,9 @@
                </ulink>
             </entry>
             <entry>
-               <xsl:value-of select="$this_shortname"/>            
+               <xsl:call-template name="makebreak">
+                  <xsl:with-param name="text" select="$this_shortname" />
+               </xsl:call-template>           
             </entry>
             <entry>
                <xsl:value-of select="tr:comment"/>            
@@ -1040,7 +1042,9 @@
       <xsl:if test="$testcase_id = 'STEPS'">
          <row>
             <entry>
-               <xsl:value-of select="$this_shortname"/>
+               <xsl:call-template name="makebreak">
+                  <xsl:with-param name="text" select="$this_shortname" />
+               </xsl:call-template>
             </entry>
             <entry>
                <xsl:for-each select="tr:issue"><xsl:call-template name="link_to_cms">
@@ -1086,7 +1090,9 @@
                </ulink>   
             </entry>
             <entry>
-               <xsl:value-of select="$this_shortname"/>
+               <xsl:call-template name="makebreak">
+                  <xsl:with-param name="text" select="$this_shortname" />
+               </xsl:call-template>
             </entry>
             <entry>
                <xsl:for-each select="tc:scrno"><xsl:call-template name="link_to_cms">
@@ -1603,6 +1609,23 @@
          </entry>
       </row><xsl:text>
       </xsl:text>
+   </xsl:template>
+   
+   <xsl:template name="makebreak">
+      <xsl:param name="text" />
+      <xsl:variable name="textafterbreak" select="substring($text, 21)" />
+      <xsl:choose>
+        <xsl:when test="string-length($text) &gt; 20">
+           <xsl:value-of select="substring($text, 1, 20)" /><xsl:text>
+           </xsl:text>
+           <xsl:call-template name="makebreak">
+              <xsl:with-param name="text" select="$textafterbreak" />
+           </xsl:call-template>
+        </xsl:when>
+        <xsl:otherwise>
+           <xsl:value-of select="$text" />
+        </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    
 </xsl:stylesheet>

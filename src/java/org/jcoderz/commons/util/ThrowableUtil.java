@@ -122,7 +122,7 @@ public final class ThrowableUtil
          {
             if (nesting++ > MAX_NESTING_DEPTH)
             {
-               logger.log(Level.FINEST,
+               logger.log(Level.FINE,
                      "Stopped fixing exception nesting cause max depth "
                      + "reached for given exception.", ex);
                break;
@@ -164,11 +164,11 @@ public final class ThrowableUtil
       {
          Throwable current = loggable.getCause();
          int nesting = 0;
-         while (current != null && !(current instanceof Loggable))
+         while (current != null)
          {
             if (nesting++ > MAX_NESTING_DEPTH)
             {
-               logger.log(Level.FINEST,
+               logger.log(Level.FINE,
                      "Stopped collecting nested information max depth "
                      + "reached for given exception.", loggable);
                break;
@@ -223,10 +223,17 @@ public final class ThrowableUtil
              && !Modifier.isStatic(modifier)
              && Throwable.class.isAssignableFrom(methods[i].getReturnType()))
          {
+             // if the method is called getCause, assume it does 
+             // what it is named FIXES #76
+             if (methods[i].getName().equals("getCause"))
+             {
+                 theGetCauseMethod = methods[i];
+                 break;
+             }
             if (theGetCauseMethod != null)
             {
                // 2nd hit, safety first
-               logger.info("Found 2 matching methods "  + theGetCauseMethod
+               logger.fine("Found 2 matching methods "  + theGetCauseMethod
                      + " or " + methods[i] + ".");
                theGetCauseMethod = null;
                break;

@@ -145,7 +145,7 @@ public final class LoggingProxy
                 }
                 else
                 {
-                    args2[i] = args[1];
+                    args2[i] = args[i];
                 }
             }
             mObjectLogger.entering(

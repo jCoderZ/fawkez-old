@@ -69,7 +69,8 @@ public final class ArraysUtil
     * This method is useful to dump the content of the array in a tracing 
     * method, e.g.:
     * <pre>
-    * logger.entering(CLASSNAME, "foo(Object[])", ArraysUtil.toString(array));
+    * logger.entering(
+    *       CLASSNAME, "foo(Object[])", ArraysUtil.toString(array));
     * </pre>
     * @param array The array whose string representation to return.  
     * @return A string representation of <tt>array</tt>.
@@ -123,7 +124,8 @@ public final class ArraysUtil
 
 
    /**
-    * Returns a string representation of the contents of the specified array. 
+    * Returns a string representation of the contents of the 
+    * specified array. 
     * If the array contains other arrays as elements, they are converted 
     * to strings by the {@link Object#toString}method inherited 
     * from <tt>Object</tt>, which describes their <i>identities</i> 
@@ -136,7 +138,8 @@ public final class ArraysUtil
     * This method is useful to dump the content of the array in a tracing 
     * method, e.g.:
     * <pre>
-    * logger.entering(CLASSNAME, "foo(Object[])", ArraysUtil.toString(array));
+    * logger.entering(
+    *     CLASSNAME, "foo(Object[])", ArraysUtil.toString(array));
     * </pre>
     * @param array The array whose string representation to return.  
     * @return A string representation of <tt>array</tt>.
@@ -176,14 +179,16 @@ public final class ArraysUtil
 
 
    /**
-    * Returns a string representation of the contents of the specified array. 
+    * Returns a string representation of the contents of the specified 
+    * array. 
     * <p>
     * The value dumps all int stored in the given array.
     * <p>
     * This method is useful to dump the content of the array in a tracing 
     * method, e.g.:
     * <pre>
-    * logger.entering(CLASSNAME, "foo(int[])", ArraysUtil.toString(array));
+    * logger.entering(
+    *     CLASSNAME, "foo(int[])", ArraysUtil.toString(array));
     * </pre>
     * @param array The array whose string representation to return.  
     * @return A string representation of <tt>array</tt>.
@@ -222,14 +227,16 @@ public final class ArraysUtil
     }
 
     /**
-     * Returns a string representation of the contents of the specified array. 
+     * Returns a string representation of the contents of the specified 
+     * array. 
      * <p>
      * The value dumps all short stored in the given array.
      * <p>
      * This method is useful to dump the content of the array in a tracing 
      * method, e.g.:
      * <pre>
-     * logger.entering(CLASSNAME, "foo(short[])", ArraysUtil.toString(array));
+     * logger.entering(
+     *     CLASSNAME, "foo(short[])", ArraysUtil.toString(array));
      * </pre>
      * @param array The array whose string representation to return.  
      * @return A string representation of <tt>array</tt>.
@@ -268,14 +275,16 @@ public final class ArraysUtil
      }
 
      /**
-      * Returns a string representation of the contents of the specified array. 
+      * Returns a string representation of the contents of the 
+      * specified array. 
       * <p>
       * The value dumps all long stored in the given array.
       * <p>
       * This method is useful to dump the content of the array in a tracing 
       * method, e.g.:
       * <pre>
-      * logger.entering(CLASSNAME, "foo(long[])", ArraysUtil.toString(array));
+      * logger.entering(
+      *     CLASSNAME, "foo(long[])", ArraysUtil.toString(array));
       * </pre>
       * @param array The array whose string representation to return.  
       * @return A string representation of <tt>array</tt>.
@@ -314,14 +323,16 @@ public final class ArraysUtil
       }
       
       /**
-       * Returns a string representation of the contents of the specified array. 
+       * Returns a string representation of the contents of the specified 
+       * array.
        * <p>
        * The value dumps all byte values stored in the given array.
        * <p>
        * This method is useful to dump the content of the array in a tracing 
        * method, e.g.:
        * <pre>
-       * logger.entering(CLASSNAME, "foo(byte[])", ArraysUtil.toString(array));
+       * logger.entering(
+       *     CLASSNAME, "foo(byte[])", ArraysUtil.toString(array));
        * </pre>
        * @param array The array whose string representation to return.  
        * @return A string representation of <tt>array</tt>.
@@ -360,14 +371,16 @@ public final class ArraysUtil
        }
        
        /**
-        * Returns a string representation of the contents of the specified array. 
+        * Returns a string representation of the contents of the specified 
+        * array.
         * <p>
         * The value dumps all char values stored in the given array.
         * <p>
         * This method is useful to dump the content of the array in a tracing 
         * method, e.g.:
         * <pre>
-        * logger.entering(CLASSNAME, "foo(char[])", ArraysUtil.toString(array));
+        * logger.entering(
+        *     CLASSNAME, "foo(char[])", ArraysUtil.toString(array));
         * </pre>
         * @param array The array whose string representation to return.  
         * @return A string representation of <tt>array</tt>.
@@ -406,14 +419,16 @@ public final class ArraysUtil
         }
 
         /**
-         * Returns a string representation of the contents of the specified array. 
+         * Returns a string representation of the contents of the 
+         * specified array. 
          * <p>
          * The value dumps all boolean values stored in the given array.
          * <p>
          * This method is useful to dump the content of the array in a tracing 
          * method, e.g.:
          * <pre>
-         * logger.entering(CLASSNAME, "foo(boolean[])", ArraysUtil.toString(array));
+         * logger.entering(
+         *     CLASSNAME, "foo(boolean[])", ArraysUtil.toString(array));
          * </pre>
          * @param array The array whose string representation to return.  
          * @return A string representation of <tt>array</tt>.

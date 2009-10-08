@@ -50,6 +50,7 @@ import org.hibernate.usertype.UserType;
  */
 public abstract class UserTypeBase implements UserType, Serializable
 {
+    private static final long serialVersionUID = 1L;
 
     /**
      * {@inheritDoc}

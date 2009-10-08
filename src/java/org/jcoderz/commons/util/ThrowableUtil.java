@@ -272,6 +272,7 @@ public final class ThrowableUtil
           if (methods[i].getDeclaringClass() != Throwable.class
               && methods[i].getDeclaringClass() != Object.class
               && methods[i].getParameterTypes().length == 0
+              && methods[i].getExceptionTypes().length == 0
               && Modifier.isPublic(modifier)
               && !Modifier.isStatic(modifier)
               && methods[i].getName().startsWith(GETTER_METHOD_PREFIX)

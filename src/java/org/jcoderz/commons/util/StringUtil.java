@@ -164,7 +164,7 @@ public final class StringUtil
          // this should not occur because the ASCII encoder is always
          // supported by the JDK
          throw new RuntimeException(
-               "UTF-8 character encoding not supported?", e);
+               "ASCII character encoding not supported?", e);
       }
       return result;
    }

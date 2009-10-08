@@ -48,6 +48,7 @@ import org.hibernate.HibernateException;
 public abstract class IntUserTypeBase
     extends UserTypeBase
 {
+    private static final long serialVersionUID = 1L;
     private static final int SQL_TYPE = Types.INTEGER;
     private static final int[] SQL_TYPES = {SQL_TYPE};
 

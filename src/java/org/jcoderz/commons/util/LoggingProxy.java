@@ -55,6 +55,7 @@ import java.util.logging.Logger;
  * </p>
  *
  * @author Albrecht Messner
+ * @author Andreas Mandel
  */
 public final class LoggingProxy
       implements InvocationHandler
@@ -135,8 +136,20 @@ public final class LoggingProxy
          }
          else
          {
+            final Object[] args2 = new Object[args.length];
+            for (int i = 0; i < args.length; i++)
+            {
+                if (args[i] != null && args[i].getClass().isArray())
+                {
+                    args2[i] = ArraysUtil.toString(args[i]);
+                }
+                else
+                {
+                    args2[i] = args[1];
+                }
+            }
             mObjectLogger.entering(
-                  mRealObjectClassName, method.getName(), args);
+                  mRealObjectClassName, method.getName(), args2);
          }
       }
 
@@ -147,7 +160,8 @@ public final class LoggingProxy
          if (result != null || method.getReturnType() != Void.TYPE)
          {
            mObjectLogger.exiting(
-                 mRealObjectClassName, method.getName(), result);
+                 mRealObjectClassName, method.getName(), 
+                 ArraysUtil.toString(result));
          }
          else
          {

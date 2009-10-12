@@ -69,4 +69,53 @@ public class ArraysUtilTest
             "[null, , a string]", output);
    }
 
+   /**
+    * Tests the method {@link ArraysUtil#toString(Object)}.
+    */
+   public final void testToStringNativeArray ()
+   {
+      final int[] nullInput = null;
+      final String nullInputResult = ArraysUtil.toString((Object) nullInput);
+      assertEquals(
+          "Expected a 'null' string for an native array that is 'null'.",
+          NULL_STRING, nullInputResult);
+
+      final int[] emptyArray = {};
+      final String emptyArrayResult = ArraysUtil.toString(emptyArray);
+      assertEquals("Expected a '" + EMPTY_ARRAY_STRING
+            + "' string for an empty array.",
+            EMPTY_ARRAY_STRING, emptyArrayResult);
+
+      final int[] inputArray = {1, 0, -1};
+      final String output = ArraysUtil.toString(inputArray);
+      assertEquals("Unexpected string representation of array received.",
+            "[1, 0, -1]", output);
+   }
+
+   /**
+    * Tests the method {@link ArraysUtil#toString(Object)} with 
+    * nested array.
+    */
+   public final void testToStringNested ()
+   {
+      final Object[] inputArray = {null, "test", new int[] {1, 0, -1}};
+      final String output = ArraysUtil.toString((Object) inputArray);
+      assertEquals(
+          "Unexpected string representation of nested array received.",
+          "[null, test, [1, 0, -1]]", output);
+   }
+
+   /**
+    * Tests the method {@link ArraysUtil#toString(Object)} with 
+    * nested array.
+    */
+   public final void testToStringNestedBoolean ()
+   {
+      final Object[] inputArray = {null, "test", new boolean[] {true, false}};
+      final String output = ArraysUtil.toString(inputArray);
+      assertEquals(
+          "Unexpected string representation of nested array received.",
+          "[null, test, [true, false]]", output);
+   }
+
 }

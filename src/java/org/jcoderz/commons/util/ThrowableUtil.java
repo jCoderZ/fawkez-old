@@ -173,7 +173,10 @@ public final class ThrowableUtil
                      + "reached for given exception.", loggable);
                break;
             }
-            collectParameters(loggable, current, nesting);
+            if (!(current instanceof Loggable))
+            {
+                collectParameters(loggable, current, nesting);
+            }
             current = current.getCause();
          }
       }

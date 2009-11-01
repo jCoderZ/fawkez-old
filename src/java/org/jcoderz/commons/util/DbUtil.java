@@ -285,7 +285,7 @@ public final class DbUtil
    public static PreparedStatement getLimitedBatchSizePreparedStatement (
          PreparedStatement pstmt, int maxBatchSize)
    {
-      return new LimitedBatchSizePreparedStatement(pstmt, maxBatchSize);
+      return null; // new LimitedBatchSizePreparedStatement(pstmt, maxBatchSize);
    }
 
    private static void setParameterOrNull (
@@ -325,7 +325,7 @@ public final class DbUtil
    }
 
    private static final class LimitedBatchSizePreparedStatement
-      implements PreparedStatement
+// FIXME: does not work with JDK1.6.0     implements PreparedStatement
    {
       private final PreparedStatement mPreparedStatement;
       private final int mMaxBatchSize;

@@ -187,7 +187,7 @@ public class DbUtilTest
       }
    }
 
-   public void testLimitedBatchSizePreparedStatement ()
+   public void xtestLimitedBatchSizePreparedStatement ()
          throws Exception
    {
       final PreparedStatementHandler pstmtHandler

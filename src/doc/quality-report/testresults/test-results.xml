@@ -20,7 +20,7 @@
                                     http://www.jcoderz.org/xsd/xdoc/generic-cms-SNAPSHOT.xsd"> 
    <tr:testresult>
       <tr:version>1.0.0.0.1</tr:version>
-      <tr:testcase>T0001</tr:testcase>
+      <tr:testcase>T1001</tr:testcase>
       <tr:issue>TRAC-123</tr:issue>
       <tr:result>passed</tr:result>
       <tr:executor>Selenium</tr:executor>
@@ -31,7 +31,7 @@
    </tr:testresult>
    <tr:testresult>
       <tr:version>1.0.0.0.1</tr:version>
-      <tr:testcase>T0002</tr:testcase>
+      <tr:testcase>T1002</tr:testcase>
       <tr:issue>TRAC-345</tr:issue>
       <tr:result>passed</tr:result>
       <tr:executor>Selenium</tr:executor>
@@ -42,7 +42,19 @@
    </tr:testresult>
    <tr:testresult>
       <tr:version>1.0.0.0.1</tr:version>
-      <tr:testcase>T0003</tr:testcase>
+      <tr:testcase>T1003</tr:testcase>
+      <tr:shortname>Module2PositiveTest-001</tr:shortname>
+      <tr:issue></tr:issue>
+      <tr:result>failed</tr:result>
+      <tr:executor>Selenium</tr:executor>
+      <tr:time>2.33</tr:time>
+      <tr:comment></tr:comment>
+      <tr:timestamp>2008-03-04 09:25:38</tr:timestamp>
+      <tr:environment>jcoderz build environment</tr:environment>
+   </tr:testresult>
+   <tr:testresult>
+      <tr:version>1.0.0.0.1</tr:version>
+      <tr:testcase>T1004</tr:testcase>
       <tr:shortname>Module2PositiveTest-001</tr:shortname>
       <tr:issue></tr:issue>
       <tr:result>failed</tr:result>

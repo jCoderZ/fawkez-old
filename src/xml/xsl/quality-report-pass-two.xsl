@@ -49,6 +49,12 @@
    <xsl:key name="testresult-group"                   match="//tr:testresult[starts-with(tr:version,$version)]" use="."/>
    <xsl:key name="testresult-testcase-group"          match="//tr:testresult[starts-with(tr:version,$version)]" use="tr:testcase"/>
    <xsl:key name="testresult-shortname-group"         match="//tr:testresult[starts-with(tr:version,$version)]" use="tr:shortname"/>
+   
+   <xsl:key name="testresult-testcase-final-group"    match="//tr:testresult[starts-with(tr:version,$version)][tr:testcase = //tc:id[../tc:state = 'final']]" use="tr:testcase"/>
+   <xsl:key name="testresult-shortname-final-group"   match="//tr:testresult[starts-with(tr:version,$version)][tr:shortname = //tc:shortname[../tc:state = 'final']]" use="tr:shortname"/>
+   <xsl:key name="testresult-testcase-draft-group"    match="//tr:testresult[starts-with(tr:version,$version)][tr:testcase = //tc:id[../tc:state = 'draft']]" use="tr:testcase"/>
+   <xsl:key name="testresult-shortname-draft-group"   match="//tr:testresult[starts-with(tr:version,$version)][tr:shortname = //tc:shortname[../tc:state = 'draft']]" use="tr:shortname"/>
+   
    <xsl:key name="testresult-passed-testcase-group"   match="//tr:testresult[starts-with(tr:version,$version) and tr:result = 'passed']" use="normalize-space(tr:testcase)"/>
    <xsl:key name="testresult-passed-shortname-group"  match="//tr:testresult[starts-with(tr:version,$version) and tr:result = 'passed']" use="normalize-space(tr:shortname)"/>
    
@@ -465,8 +471,10 @@
                      <xsl:variable name="number_specified_tests" select="count(//tc:test[not(tc:state = 'draft')])"/>
                      <xsl:variable name="number_specified_tests_draft" select="count(//tc:test[tc:state = 'draft'])"/>
                      <xsl:variable name="number_executed_tests" select="count(key('testresult-group',.))"/>
-                     <xsl:variable name="number_executed_testspecs" select="count(//tc:test[key('testresult-testcase-group',tc:id) or key('testresult-shortname-group',tc:shortname)])"/>
-                     <xsl:variable name="number_executed_testspecs_passed" select="count(//tc:test[key('testresult-testcase-group',tc:id)[tr:result = 'passed'] or key('testresult-shortname-group',tc:shortname)[tr:result = 'passed']])"/>
+                     <xsl:variable name="number_executed_testspecs_final" select="count(//tc:test[key('testresult-testcase-final-group',tc:id) or key('testresult-shortname-final-group',tc:shortname)])"/>
+                     <xsl:variable name="number_executed_testspecs_final_passed" select="count(//tc:test[key('testresult-testcase-final-group',tc:id)[tr:result = 'passed'] or key('testresult-shortname-final-group',tc:shortname)[tr:result = 'passed']])"/>
+                     <xsl:variable name="number_executed_testspecs_draft" select="count(//tc:test[key('testresult-testcase-draft-group',tc:id) or key('testresult-shortname-draft-group',tc:shortname)])"/>
+                     <xsl:variable name="number_executed_testspecs_draft_passed" select="count(//tc:test[key('testresult-testcase-draft-group',tc:id)[tr:result = 'passed'] or key('testresult-shortname-draft-group',tc:shortname)[tr:result = 'passed']])"/>
                      <xsl:variable name="number_issues" select="count(//cms:issue[(cms:type = $cms.bug.type or cms:type = $cms.cr.type) and contains(cms:version,$version)])"/>
                      <xsl:variable name="number_accepted_issues" select="count(//cms:issue[(cms:type = $cms.bug.type or cms:type = $cms.cr.type) and (cms:state = $cms.state.accepted or cms:state = $cms.state.closed) and contains(cms:version,$version)])"/>
                      <xsl:variable name="number_tests" select="count(//tr:testresult[starts-with(tr:version,$version)])"/>
@@ -484,13 +492,23 @@
                      </row><xsl:text>
                      </xsl:text>
                      <row>
-                        <entry><emphasis role="bold">Test Specifications executed</emphasis></entry>
-                        <entry><xsl:value-of select="$number_executed_testspecs"/> (<xsl:value-of select="round($number_executed_testspecs div $number_specified_tests * 1000) div 10"/> %)</entry>
+                        <entry><emphasis role="bold">Test Specifications executed (final)</emphasis></entry>
+                        <entry><xsl:value-of select="$number_executed_testspecs_final"/> (<xsl:value-of select="round($number_executed_testspecs_final div $number_specified_tests * 1000) div 10"/> %)</entry>
                      </row><xsl:text>
                      </xsl:text>
                      <row>
-                        <entry><emphasis role="bold">Test Specifications passed</emphasis></entry>
-                        <entry><xsl:value-of select="$number_executed_testspecs_passed"/> (<xsl:value-of select="round($number_executed_testspecs_passed div $number_executed_testspecs * 1000) div 10"/> %)</entry>
+                        <entry><emphasis role="bold">Test Specifications passed (final)</emphasis></entry>
+                        <entry><xsl:value-of select="$number_executed_testspecs_final_passed"/> (<xsl:value-of select="round($number_executed_testspecs_final_passed div $number_executed_testspecs_final * 1000) div 10"/> %)</entry>
+                     </row><xsl:text>
+                     </xsl:text>
+                     <row>
+                        <entry><emphasis role="bold">Test Specifications executed (draft)</emphasis></entry>
+                        <entry><xsl:value-of select="$number_executed_testspecs_draft"/> (<xsl:value-of select="round($number_executed_testspecs_draft div $number_specified_tests_draft * 1000) div 10"/> %)</entry>
+                     </row><xsl:text>
+                     </xsl:text>
+                     <row>
+                        <entry><emphasis role="bold">Test Specifications passed (draft)</emphasis></entry>
+                        <entry><xsl:value-of select="$number_executed_testspecs_draft_passed"/> (<xsl:value-of select="round($number_executed_testspecs_draft_passed div $number_executed_testspecs_draft * 1000) div 10"/> %)</entry>
                      </row><xsl:text>
                      </xsl:text>
                      <row>

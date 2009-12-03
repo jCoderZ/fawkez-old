@@ -62,6 +62,7 @@
 
 <xsl:template name="title-page">
    <xsl:param name="release" select="'n/a'"/>
+   <xsl:param name="legal-notice" select="''"/>
 
    <mediaobject>
       <imageobject  role="fo">
@@ -108,6 +109,7 @@
       <holder><xsl:value-of select="$companyname"/></holder>
    </copyright>
 
+    <xsl:if test="$legal-notice != 'false'">
    <legalnotice><title>Important Notice</title>
       <xsl:call-template name="legal-notice"/>
 
@@ -117,6 +119,7 @@
          <para>All Rights Reserved.</para>
       </formalpara>
    </legalnotice>
+    </xsl:if>
 </xsl:template>
 
 <xsl:template name="legal-notice">

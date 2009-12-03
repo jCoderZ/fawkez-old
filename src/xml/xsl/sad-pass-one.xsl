@@ -41,13 +41,17 @@
       <bookinfo>
          <xsl:call-template name="title-page">
             <xsl:with-param name="release" select="/sad/@release"/>
+            <xsl:with-param name="legal-notice" select="/sad/@legal-notice"/>
          </xsl:call-template>
 
          <xsl:variable name="app-id" select="/sad/@app-id"/>
          <title><xsl:value-of
             select="$app-info//application[@id = $app-id]/@name"/></title>
 
-         <subtitle>Software Architecture Document</subtitle>
+         <subtitle><xsl:choose>
+            <xsl:when test="/sad/@title"><xsl:value-of select="/sad/@title"/></xsl:when>
+            <xsl:otherwise>Software Architecture Document</xsl:otherwise>
+         </xsl:choose></subtitle>
 
          <xsl:apply-templates select="/sad/info/*"/>
 

@@ -58,6 +58,8 @@ class AppInfoSaxHandler
    public static final int APPLICATION_ID_ACM = 120;
    /** Application Identifier of application (amandel). */
    public static final int APPLICATION_ID_ACR = 121;
+   /** Application Identifier of application (amandel). */
+   public static final int APPLICATION_ID_DMB = 122;
 
    private static final Pattern REGEX_SINGLE_QUOTES
          = Pattern.compile(".*[^']'[^'].*",
@@ -98,6 +100,7 @@ class AppInfoSaxHandler
       mMap.registerApplication(APPLICATION_ID_TAC, "TAC");
       mMap.registerApplication(APPLICATION_ID_ACR, "ACR");
       mMap.registerApplication(APPLICATION_ID_ACM, "ACM");
+      mMap.registerApplication(APPLICATION_ID_DMB, "DMB");
    }
 
    /** {@inheritDoc} */

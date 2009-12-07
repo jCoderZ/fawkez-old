@@ -211,7 +211,7 @@
     <target name="test-single-local"
             depends="test-compile, instrument, test-single-local-nodeps"
             description="Run a single JUnit test suite"/>
-    <target name="test-single-local-nodeps" if="testcase, junit.present">
+    <target name="test-single-local-nodeps" if="testcase">
         <mkdir dir="${build.dir}/report/junit"/>
         <junit printsummary="yes" haltonfailure="no"
                 dir="${base.dir}/build" fork="true" timeout="60000"
@@ -220,7 +220,7 @@
             <sysproperty key="methods" value="${methods}"/>
             <sysproperty key="basedir" value="${base.dir}"/>
             <sysproperty key="java.util.logging.config.file"
-                    value="${base.dir}/src/etc/fawkez-logging.properties"/>
+                    file="${base.dir}/src/etc/fawkez-logging.properties"/>
             <sysproperty key="org.xml.sax.driver"
                     value="org.apache.xerces.parsers.SAXParser"/>
                     <!--value="org.apache.crimson.parser.XMLReaderImpl"/-->

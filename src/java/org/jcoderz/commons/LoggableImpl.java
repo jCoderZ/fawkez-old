@@ -45,6 +45,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
+import java.util.Map.Entry;
 import java.util.logging.Logger;
 
 import org.jcoderz.commons.util.ThrowableUtil;
@@ -125,6 +126,9 @@ public class LoggableImpl
    /** Name of the group of the loggable. */
    public static final String GROUP_NAME_PARAMETER_NAME = "_GROUP";
 
+   /** Context parameter values prefix. */
+   public static final String CONTEXT_PARAMETER_PREFIX = "CTX~";
+   
    /** This nodes id. */
    public static final String NODE_ID = getStaticNodeId();
 
@@ -255,6 +259,7 @@ public class LoggableImpl
       mNodeId = nodeId;
       mOuter = outer;
       initInternalParameters();
+      initThreadContextParameters();
    }
 
    /**
@@ -300,6 +305,7 @@ public class LoggableImpl
       mOuter = outer;
       initCause(cause);
       initInternalParameters();
+      initThreadContextParameters();
    }
 
    /**
@@ -512,6 +518,18 @@ public class LoggableImpl
       addParameter(GROUP_NAME_PARAMETER_NAME, mLogMessageInfo.getGroupName());
    }
 
+   private final void initThreadContextParameters ()
+   {
+       final Iterator i = LogThreadContext.get().entrySet().iterator();
+       while (i.hasNext())
+       {
+           final Entry entry = (Entry) i.next();
+           addParameter(
+               CONTEXT_PARAMETER_PREFIX + entry.getKey(), 
+               String.valueOf(entry.getValue()));
+       }
+   }
+   
    private final void getSource ()
    {
       // not analyzed yet.

@@ -120,7 +120,7 @@ public class LogFormatter
     *
     * @param sb the StringBuffer where to append the formatted log record
     * @param record the log record to format
-    * @param trackingIdSequence a list collectiong all tracking ids of messages
+    * @param trackingIdSequence a list collecting all tracking ids of messages
     * being formatted by one call.
     */
    private void formatLogRecord (

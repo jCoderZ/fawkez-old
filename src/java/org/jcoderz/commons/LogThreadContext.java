@@ -47,7 +47,7 @@ import org.jcoderz.commons.util.ObjectUtil;
  *  
  * @author Andreas Mandel
  */
-public class LogThreadContext
+public final class LogThreadContext
 {
     private static final ThreadLocal TREAD_CONTEXT = new ThreadLocal()
     {
@@ -56,6 +56,11 @@ public class LogThreadContext
             return new HashMap();
         }
     };
+    
+    private LogThreadContext ()
+    {
+        // No public instances
+    }
     
     /**
      * Add a value identified by the given key to the thread context.
@@ -67,7 +72,7 @@ public class LogThreadContext
      * @return the String representation of the previous value stored 
      *  for this key, or null if no such value was stored.
      */
-    public static String put(String key, String value)
+    public static String put (String key, String value)
     {
         return ObjectUtil.toString(get().put(key, value));
     }
@@ -79,7 +84,7 @@ public class LogThreadContext
      * @return the value of the selected context parameter, or null
      *  if the selected parameter is not set.
      */
-    public static String get(String key)
+    public static String get (String key)
     {
         return ObjectUtil.toString(get().get(key));
     }
@@ -90,7 +95,7 @@ public class LogThreadContext
      * @return the value of the selected context parameter, or null
      *  if the selected parameter is not set.
      */
-    public static String remove(String key)
+    public static String remove (String key)
     {
         return ObjectUtil.toString(get().remove(key));
     }
@@ -102,7 +107,7 @@ public class LogThreadContext
      * @return the underlying map that is used to store context 
      * parameters of the current thread.
      */
-    public static Map/*<String,String>*/ get()
+    public static Map/*<String,String>*/ get ()
     {
         return (Map) TREAD_CONTEXT.get();
     }

@@ -32,9 +32,6 @@
  */
 package org.jcoderz.commons.util;
 
-
-
-
 /**
  * This class contains a static factory that allows arrays to be viewed as
  * lists.
@@ -77,6 +74,26 @@ public final class ArraysUtil
     */
    public static String toString (Object array)
    {
+       return toString(array, 0);
+   }
+
+   /**
+    * Returns a string representation of the contents of given
+    * object with special care for potential arrays, the output is
+    * cut - for each potentially contained array - to maxSize.
+    * 
+    * <p>
+    * If one of the contained arrays contains more than maxSize 
+    * elements, the dump is stopped and the number of total elements 
+    * is printed in the output, for the particular array.
+    * </p> 
+    * 
+    * @param array The array whose string representation to return.  
+    * @return A string representation of <tt>array</tt>.
+    * @see #toString(Object)
+    */
+   public static String toString (Object array, int maxSize)
+   {
       final String result;
       
       if (array == null)
@@ -89,31 +106,31 @@ public final class ArraysUtil
       }
       else if (array instanceof Object[])
       {
-          result = ArraysUtil.toString((Object[]) array);
+          result = ArraysUtil.toString((Object[]) array, maxSize);
       }
       else if (array instanceof boolean[])
       {
-          result = ArraysUtil.toString((boolean[]) array);
+          result = ArraysUtil.toString((boolean[]) array, maxSize);
       }
       else if (array instanceof byte[])
       {
-          result = ArraysUtil.toString((byte[]) array);
+          result = ArraysUtil.toString((byte[]) array, maxSize);
       }
       else if (array instanceof short[])
       {
-          result = ArraysUtil.toString((short[]) array);
+          result = ArraysUtil.toString((short[]) array, maxSize);
       }
       else if (array instanceof char[])
       {
-          result = ArraysUtil.toString((char[]) array);
+          result = ArraysUtil.toString((char[]) array, maxSize);
       }
       else if (array instanceof int[])
       {
-          result = ArraysUtil.toString((int[]) array);
+          result = ArraysUtil.toString((int[]) array, maxSize);
       }
       else if (array instanceof long[])
       {
-          result = ArraysUtil.toString((long[]) array);
+          result = ArraysUtil.toString((long[]) array, maxSize);
       }
       else // no float/double
       {
@@ -121,7 +138,6 @@ public final class ArraysUtil
       }
       return result;
    }
-
 
    /**
     * Returns a string representation of the contents of the 
@@ -146,6 +162,34 @@ public final class ArraysUtil
     */
    public static String toString (Object[] array)
    {
+       return toString(array, 0);
+   }
+
+   /**
+    * Returns a string representation of the contents of the specified 
+    * array with a maxSize limitation.
+    * If the array contains other arrays as elements, they are converted 
+    * to strings by the {@link Object#toString}method inherited 
+    * from <tt>Object</tt>, which describes their <i>identities</i> 
+    * rather than their contents.
+    * <p>
+    * The value returned by this method is equal to the value that would be
+    * returned by <tt>Arrays.asList(a).toString()</tt>, unless <tt>array</tt>
+    * is <tt>null</tt>, in which case <tt>"null"</tt> is returned.
+    * <p>
+    * This method is useful to dump the content of the array in a tracing 
+    * method, e.g.:
+    * <pre>
+    * logger.entering(
+    *     CLASSNAME, "foo(Object[])", ArraysUtil.toString(array));
+    * </pre>
+    * @param array The array whose string representation to return.  
+    * @param maxSize the maximum number of elements to print, will
+    *   be ignored if set to 0 or below.
+    * @return A string representation of <tt>array</tt>.
+    */
+   public static String toString (Object[] array, int maxSize)
+   {
       final String result;
       
       if (array == null)
@@ -165,6 +209,13 @@ public final class ArraysUtil
             {
                buf.append('[');
             }
+            else if (i == maxSize)
+            {
+                buf.append(",... in total ");
+                buf.append(array.length);
+                buf.append("Elements");
+                break;
+            }
             else
             {
                buf.append(", ");
@@ -176,7 +227,6 @@ public final class ArraysUtil
       }
       return result;
    }
-
 
    /**
     * Returns a string representation of the contents of the specified 
@@ -191,9 +241,34 @@ public final class ArraysUtil
     *     CLASSNAME, "foo(int[])", ArraysUtil.toString(array));
     * </pre>
     * @param array The array whose string representation to return.  
+    * @param maxSize the maximum number of elements to print, will
+    *   be ignored if set to 0.
     * @return A string representation of <tt>array</tt>.
     */
     public static String toString (int[] array)
+    {
+        return toString(array, 0);
+    }
+   
+
+   /**
+    * Returns a string representation of the contents of the specified 
+    * array with a maxSize limitation.
+    * <p>
+    * The value dumps up to maxSize ints stored in the given array.
+    * <p>
+    * This method is useful to dump the content of the array in a tracing 
+    * method, e.g.:
+    * <pre>
+    * logger.entering(
+    *     CLASSNAME, "foo(int[])", ArraysUtil.toString(array, 20));
+    * </pre>
+    * @param array The array whose string representation to return.  
+    * @param maxSize the maximum number of elements to print, will
+    *   be ignored if set to 0 or below.
+    * @return A string representation of <tt>array</tt>.
+    */
+    public static String toString (int[] array, int maxSize)
     {
         final String result;
         
@@ -213,6 +288,13 @@ public final class ArraysUtil
               if (i == 0)
               {
                  buf.append('[');
+              }
+              else if (i == maxSize)
+              {
+                  buf.append(",... in total ");
+                  buf.append(array.length);
+                  buf.append("Elements");
+                  break;
               }
               else
               {
@@ -243,6 +325,28 @@ public final class ArraysUtil
      */
      public static String toString (short[] array)
      {
+         return toString(array, 0);
+     }
+    
+    /**
+     * Returns a string representation of the contents of the specified 
+     * array with a maxSize limitation.
+     * <p>
+     * The value dumps all short stored in the given array.
+     * <p>
+     * This method is useful to dump the content of the array in a tracing 
+     * method, e.g.:
+     * <pre>
+     * logger.entering(
+     *     CLASSNAME, "foo(short[])", ArraysUtil.toString(array));
+     * </pre>
+     * @param array The array whose string representation to return.  
+     * @param maxSize the maximum number of elements to print, will
+     *   be ignored if set to 0 or below.
+     * @return A string representation of <tt>array</tt>.
+     */
+     public static String toString (short[] array, int maxSize)
+     {
          final String result;
          
          if (array == null)
@@ -261,6 +365,13 @@ public final class ArraysUtil
                if (i == 0)
                {
                   buf.append('[');
+               }
+               else if (i == maxSize)
+               {
+                   buf.append(",... in total ");
+                   buf.append(array.length);
+                   buf.append("Elements");
+                   break;
                }
                else
                {
@@ -291,6 +402,28 @@ public final class ArraysUtil
       */
       public static String toString (long[] array)
       {
+          return toString(array, 0);
+      }
+      
+     /**
+      * Returns a string representation of the contents of the specified 
+      * array with a maxSize limitation.
+      * <p>
+      * The value dumps all long stored in the given array.
+      * <p>
+      * This method is useful to dump the content of the array in a tracing 
+      * method, e.g.:
+      * <pre>
+      * logger.entering(
+      *     CLASSNAME, "foo(long[])", ArraysUtil.toString(array));
+      * </pre>
+      * @param array The array whose string representation to return.  
+      * @param maxSize the maximum number of elements to print, will
+      *   be ignored if set to 0 or below.
+      * @return A string representation of <tt>array</tt>.
+      */
+      public static String toString (long[] array, int maxSize)
+      {
           final String result;
           
           if (array == null)
@@ -309,6 +442,13 @@ public final class ArraysUtil
                 if (i == 0)
                 {
                    buf.append('[');
+                }
+                else if (i == maxSize)
+                {
+                    buf.append(",... in total ");
+                    buf.append(array.length);
+                    buf.append("Elements");
+                    break;
                 }
                 else
                 {
@@ -339,6 +479,28 @@ public final class ArraysUtil
        */
        public static String toString (byte[] array)
        {
+           return toString(array, 0);
+       }
+       
+      /**
+       * Returns a string representation of the contents of the specified 
+       * array with a maxSize limitation.
+       * <p>
+       * The value dumps all byte values stored in the given array.
+       * <p>
+       * This method is useful to dump the content of the array in a tracing 
+       * method, e.g.:
+       * <pre>
+       * logger.entering(
+       *     CLASSNAME, "foo(byte[])", ArraysUtil.toString(array));
+       * </pre>
+       * @param array The array whose string representation to return.  
+       * @param maxSize the maximum number of elements to print, will
+       *   be ignored if set to 0 or below.
+       * @return A string representation of <tt>array</tt>.
+       */
+       public static String toString (byte[] array, int maxSize)
+       {
            final String result;
            
            if (array == null)
@@ -358,6 +520,13 @@ public final class ArraysUtil
                  {
                     buf.append('[');
                  }
+                 else if (i == maxSize)
+                 {
+                     buf.append(",... in total ");
+                     buf.append(array.length);
+                     buf.append("Elements");
+                     break;
+                 }
                  else
                  {
                     buf.append(", ");
@@ -369,7 +538,7 @@ public final class ArraysUtil
            }
            return result;
        }
-       
+
        /**
         * Returns a string representation of the contents of the specified 
         * array.
@@ -386,6 +555,28 @@ public final class ArraysUtil
         * @return A string representation of <tt>array</tt>.
         */
         public static String toString (char[] array)
+        {
+            return toString(array, 0);
+        }
+       
+       /**
+        * Returns a string representation of the contents of the specified 
+        * array with a maxSize limitation.
+        * <p>
+        * The value dumps all char values stored in the given array.
+        * <p>
+        * This method is useful to dump the content of the array in a tracing 
+        * method, e.g.:
+        * <pre>
+        * logger.entering(
+        *     CLASSNAME, "foo(char[])", ArraysUtil.toString(array));
+        * </pre>
+        * @param array The array whose string representation to return.  
+        * @param maxSize the maximum number of elements to print, will
+        *   be ignored if set to 0 or below.
+        * @return A string representation of <tt>array</tt>.
+        */
+        public static String toString (char[] array, int maxSize)
         {
             final String result;
             
@@ -405,6 +596,13 @@ public final class ArraysUtil
                   if (i == 0)
                   {
                      buf.append('[');
+                  }
+                  else if (i == maxSize)
+                  {
+                      buf.append(",... in total ");
+                      buf.append(array.length);
+                      buf.append("Elements");
+                      break;
                   }
                   else
                   {
@@ -435,6 +633,28 @@ public final class ArraysUtil
          */
          public static String toString (boolean[] array)
          {
+             return toString(array, 0);
+         }
+
+         /**
+         * Returns a string representation of the contents of the specified 
+         * array with a maxSize limitation.
+         * <p>
+         * The value dumps all boolean values stored in the given array.
+         * <p>
+         * This method is useful to dump the content of the array in a tracing 
+         * method, e.g.:
+         * <pre>
+         * logger.entering(
+         *     CLASSNAME, "foo(boolean[])", ArraysUtil.toString(array));
+         * </pre>
+         * @param array The array whose string representation to return.  
+         * @param maxSize the maximum number of elements to print, will
+         *   be ignored if set to 0 or below.
+         * @return A string representation of <tt>array</tt>.
+         */
+         public static String toString (boolean[] array, int maxSize)
+         {
              final String result;
              
              if (array == null)
@@ -454,6 +674,13 @@ public final class ArraysUtil
                    {
                       buf.append('[');
                    }
+                   else if (i == maxSize)
+                   {
+                       buf.append(",... in total ");
+                       buf.append(array.length);
+                       buf.append("Elements");
+                       break;
+                   }
                    else
                    {
                       buf.append(", ");
@@ -465,6 +692,4 @@ public final class ArraysUtil
              }
              return result;
          }
-         
-         
 }

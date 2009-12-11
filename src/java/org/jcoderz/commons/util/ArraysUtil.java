@@ -277,7 +277,7 @@ public final class ArraysUtil
         return toString(array, 0);
     }
 
-    private static void appendArray(
+    private static void appendArray (
         StringBuffer buf, Object array, int maxSize)
     {
         if (array == null)
@@ -291,21 +291,18 @@ public final class ArraysUtil
         else
         {
             final int length = Array.getLength(array);
+            buf.append('[');
             for (int i = 0; i < length; i++)
             {
-                if (i == 0)
+                if (i != 0)
                 {
-                    buf.append('[');
-                }
-                else if (i == maxSize)
-                {
-                    buf.append(",... in total ");
-                    buf.append(length);
-                    buf.append(" Elements");
-                    break;
-                }
-                else
-                {
+                    if (i == maxSize)
+                    {
+                        buf.append(",... in total ");
+                        buf.append(length);
+                        buf.append(" Elements");
+                        break;
+                    }
                     buf.append(", ");
                 }
                 appendArray(buf, Array.get(array, i), maxSize);

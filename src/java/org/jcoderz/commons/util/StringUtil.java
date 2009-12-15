@@ -209,6 +209,7 @@ public final class StringUtil
          if (!isAscii(c.charAt(i)))
          {
             result = false;
+            break;
          }
       }
       return result;

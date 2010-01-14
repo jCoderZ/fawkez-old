@@ -53,8 +53,10 @@ import org.apache.tools.ant.AntClassLoader;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Task;
+import org.apache.xerces.util.XMLCatalogResolver;
 import org.jcoderz.commons.util.IoUtil;
 import org.jcoderz.commons.util.StringUtil;
+import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
@@ -478,6 +480,41 @@ public abstract class XsltBasedTask
         }
         return result;
     }
+    
+    /**
+     * Instantiates xml resolver for xerces xml parser.
+     * 
+     * If xml-resolver.jar is available on the boot classpath of ant, the 
+     * implementation of an xml catalog resolver will be returned otherwise
+     * the dummy resolver implementation will be provided 
+     * 
+     * @return EntityResolver entity resolver
+     */
+    private EntityResolver getEntityResolver()
+    {
+        EntityResolver resolver = new DummyEntityResolver(this);
+        try 
+        {
+            String [] catalogs = {"/org/jcoderz/commons/taskdefs/catalog.xml"};
+      
+            System.getProperties().put("xml.catalog.verbosity", "1000");
+            // Create catalog resolver and set a catalog list.
+            XMLCatalogResolver xmlResolver = new XMLCatalogResolver();
+            xmlResolver.setPreferPublic(true);
+            xmlResolver.setCatalogList(catalogs);
+            resolver = xmlResolver;
+        }
+        catch (NoClassDefFoundError e)
+        {
+            // The most secure way to check for non-existence of the CatalogReader
+            // class is within ant class loaders is to catch the NoClassDefFoundError.
+            log("Class CatalogReader (xml-resolver.jar) could not be found " +
+            		" within bootstrap classpath. No entity resolver is " + 
+            		" available, setting dummy resolver.", Project.MSG_WARN);
+        }
+        
+        return resolver;
+    }
 
     /**
      * @return a resource stream from in file.
@@ -490,11 +527,13 @@ public abstract class XsltBasedTask
         {
             final org.xml.sax.XMLReader reader;
             try
-            {
+            {      
+                EntityResolver resolver = getEntityResolver();
+                
                 // reader = XMLReaderFactory.createXMLReader(
                 // "org.apache.xerces.parsers.SAXParser");
                 reader = org.xml.sax.helpers.XMLReaderFactory.createXMLReader();
-                reader.setEntityResolver(new DummyEntityResolver(this));
+                reader.setEntityResolver(resolver);
                 result = new SAXSource(reader, new InputSource(
                     new FileInputStream(mInFile)));
             }

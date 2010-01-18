@@ -495,12 +495,14 @@ public abstract class XsltBasedTask
         EntityResolver resolver = new DummyEntityResolver(this);
         try 
         {
-            String [] catalogs = {"/org/jcoderz/commons/taskdefs/catalog.xml"};
-      
+            String [] catalogs = {"src/xml/catalog.xml"};
             System.getProperties().put("xml.catalog.verbosity", "1000");
+            
+            log("Instantiating xml catalog resolver .", Project.MSG_INFO);
             // Create catalog resolver and set a catalog list.
             XMLCatalogResolver xmlResolver = new XMLCatalogResolver();
-            xmlResolver.setPreferPublic(true);
+            
+            xmlResolver.setPreferPublic(false);
             xmlResolver.setCatalogList(catalogs);
             resolver = xmlResolver;
         }

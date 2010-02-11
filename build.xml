@@ -31,7 +31,7 @@
     OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
     ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  -->
-<project name="fawkeZ" basedir="." default="build" xmlns:ivy="antlib:fr.jayasoft.ivy.ant">
+<project name="fawkeZ" basedir="." default="build" xmlns:ivy="antlib:org.apache.ivy.ant">
 
     <import file="config/properties.xml"/>
     <import file="config/macros.xml"/>
@@ -45,7 +45,7 @@
     <path id="xalan.classpath">
        <fileset dir="${base.dir}/lib">
          <include name="default/xalan/xalan.jar"/>
-         <include name="default/xalan/serializer.jar"/>
+         <include name="default/serializer/serializer.jar"/>
          <include name="default/xercesImpl/xml-apis.jar"/>
          <include name="default/xercesImpl/xercesImpl.jar"/>
          <include name="default/xml-resolver/xml-resolver.jar"/>
@@ -164,7 +164,6 @@ xerces in current vm: ${xerces.version.ant}
       </echo>
       <fail message="Outdated version of xerces found on classpath!"/>
     </target>
-
     <target name="check-xerces-ant"
        depends="check-xerces-ant-available, check-xerces-ant-version">
     </target>
@@ -325,20 +324,21 @@ xerces in current vm: ${xerces.version.ant}
         <copy file="${env.JAVA_HOME}/lib/tools.jar"
             todir="${base.dir}/lib/eclipse"/>
         <!-- xmlns:ivy="antlib:fr.jayasoft.ivy.ant" -->
-        <typedef resource="fr/jayasoft/ivy/ant/antlib.xml">
-            <classpath>
-                <pathelement location="${base.dir}/lib/ivy/ivy-2.0.0.jar"/>
-            </classpath>
-        </typedef>
-        <settings file="${base.dir}/config/ivyconf.xml" />
-        <resolve file="${base.dir}/config/ivy.xml" conf="default"/>
-        <retrieve pattern="${base.dir}/lib/[conf]/[module]/[artifact].[ext]"
+    	<path id="ivy.classpath">
+    		<pathelement location="${base.dir}/lib/ivy/ivy-2.1.0.jar"/>
+    	</path>
+        <taskdef resource="org/apache/ivy/ant/antlib.xml"
+            uri="antlib:org.apache.ivy.ant" classpath="${base.dir}/lib/ivy/ivy-2.1.0.jar"/>
+        <ivy:settings file="${base.dir}/config/ivyconf.xml" />
+        <ivy:resolve file="${base.dir}/config/ivy.xml" conf="default"/>
+        <ivy:retrieve pattern="${base.dir}/lib/[conf]/[module]/[artifact].[ext]"
             conf="default"/>
+    	<ivy:report todir="${build.dir}/doc/ivy" dot="true"/> 
         <touch file="${base.dir}/lib/default/retrieve-3rd-party-libs.done"/>
     </target>
     <target name="report-dependency" depends="retrieve-3rd-party-libs">
         <mkdir dir="${build.dir}/ivy"/>
-        <report todir="${build.dir}/ivy"/>
+        <ivy:report todir="${build.dir}/ivy"/>
     </target>
 
     <!-- =================================================================== -->
@@ -399,6 +399,14 @@ xerces in current vm: ${xerces.version.ant}
                 <include name="app-info.xsd"/>
             </fileset>
         </copy>
+        <taskdef name="xpathproperty" 
+            classname="org.jcoderz.commons.taskdefs.XpathPropertyTask">
+            <classpath>
+                <pathelement path="${build.dir}/bootstrap-classes"/>
+            </classpath>
+        </taskdef>
+        <xpathproperty name="xpathtest" xpath="/project/@name" file="build.xml"/>
+        <echo message="Result = ${xpathtest}"/>
     </target>
 
    <!-- =================================================================== -->

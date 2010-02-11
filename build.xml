@@ -415,7 +415,8 @@ xerces in current vm: ${xerces.version.ant}
    <target name="generate-log-message-info"
            depends="bootstrap-ant-tasks,
                     generate-log-message-info.uptodatecheck,
-                    generate-log-message-info-nodeps"/>
+                    generate-log-message-info-nodeps,
+   					app-info"/>
    <target name="generate-log-message-info.uptodatecheck">
       <uptodate property="generate-log-message-info.uptodate"
                 targetfile="${build.dir}/generate-log-message-info.out" >
@@ -439,7 +440,7 @@ xerces in current vm: ${xerces.version.ant}
          </classpath>
       </taskdef>
       <log-message-generator
-         in="${base.dir}/src/xml/app-info.xml"
+         in="${build.dir}/app-info.xml"
          out="${build.dir}/generate-log-message-info.out"
          destDir="${build.dir}/gen-java"
          application="FWK"
@@ -512,7 +513,7 @@ xerces in current vm: ${xerces.version.ant}
          </classpath>
       </taskdef>
       <config-classes-generator
-               in="${base.dir}/src/xml/app-info.xml"
+               in="${build.dir}/app-info.xml"
                out="${build.dir}/app-info-config-classes.out"
                destDir="${build.dir}/gen-java"
                application="FawkeZ"
@@ -548,7 +549,7 @@ xerces in current vm: ${xerces.version.ant}
        </taskdef>
        <!-- for database solution -->
        <config-init-file-generator
-                in="${base.dir}/src/xml/app-info.xml"
+                in="${build.dir}/app-info.xml"
                 out="${build.dir}/gen-sql/cfg_initialize.sql"
                 application="FawkeZ"
                 groups="TST CFG CON"
@@ -762,7 +763,7 @@ xerces in current vm: ${xerces.version.ant}
    <!-- compile all Java classes                                            -->
    <!-- =================================================================== -->
    <target name="compile-all"
-          depends="generate-log-message-info, app-info, generate-simple-types,
+          depends="app-info, generate-log-message-info, generate-simple-types,
                generate-config-classes, generate-config-init-file, jaxb-stubs, webdoclet,
                add-readonly-entities, compile-all-nodeps"
           description="Compile all Java classes">

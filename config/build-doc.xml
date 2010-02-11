@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 
 <project name="build-doc">
-
+	
     <path id="xdoc.classpath">
        <path refid="xalan.classpath"/>
        <pathelement path="${build.dir}/classes"/>
@@ -9,13 +9,15 @@
        <pathelement path="${build.dir}/docbook/docbook-xsl-1.73.2/extensions/saxon65.jar"/>
        <fileset dir="${base.dir}/lib">
           <include name="default/commons-io/*.jar"/>
-          <include name="default/commons-logging/*.jar"/>
+          <include name="default/jcl-over-slf4j/*.jar"/>
+          <include name="default/slf4j-api/*.jar"/>
+          <include name="default/slf4j-jdk14/*.jar"/>
           <include name="default/saxon/*.jar"/>
           <include name="default/fop/*.jar"/>
           <include name="default/batik*/*.jar"/>
           <include name="default/xmlgraphics-commons/*.jar"/>
           <include name="default/avalon-framework/*.jar"/>
-          <include name="offo/fop-hyph.jar"/>
+          <include name="default/offo/fop-hyph.jar"/>
           <include name="jimi/jimi.jar"/>
        </fileset>
     </path>
@@ -26,7 +28,9 @@
       <pathelement path="${build.dir}/hibernate-classes" />
       <fileset dir="${base.dir}/lib">
         <include name="default/commons-collections/*.jar"/>
-        <include name="default/commons-logging/*.jar"/>
+        <include name="default/jcl-over-slf4j/*.jar"/>
+        <include name="default/slf4j-api/*.jar"/>
+        <include name="default/slf4j-jdk14/*.jar"/>
         <include name="default/dom4j/*.jar"/>
         <include name="default/freemarker/*.jar"/>
         <include name="default/hibernate/*.jar"/>

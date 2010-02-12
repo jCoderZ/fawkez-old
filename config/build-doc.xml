@@ -16,7 +16,7 @@
           <include name="default/fop/*.jar"/>
           <include name="default/batik*/*.jar"/>
           <include name="default/xmlgraphics-commons/*.jar"/>
-          <include name="default/avalon-framework/*.jar"/>
+          <include name="default/avalon-framework*/*.jar"/>
           <include name="default/offo/fop-hyph.jar"/>
           <include name="jimi/jimi.jar"/>
        </fileset>
@@ -521,7 +521,7 @@ static-catalog=yes
       <fop format="application/pdf"
            fofile="${fo.file}"
            outfile="${outfile}"
-           messagelevel="warn" />
+           messagelevel="warn"/>
    </target>
    <target name="subtarget-fo" depends="check-have-renderX, xep, fop">
    </target>

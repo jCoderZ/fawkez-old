@@ -45,7 +45,7 @@
     <path id="xalan.classpath">
        <fileset dir="${base.dir}/lib">
          <include name="default/xalan/xalan.jar"/>
-         <include name="default/xalan/serializer.jar"/>
+         <include name="default/serializer/serializer.jar"/>
          <include name="default/xercesImpl/xml-apis.jar"/>
          <include name="default/xercesImpl/xercesImpl.jar"/>
          <include name="default/xml-resolver/xml-resolver.jar"/>

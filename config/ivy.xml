@@ -63,6 +63,7 @@
             <artifact name="xml-apis"/>
         </dependency>
         <dependency org="xalan" name="xalan" rev="2.7.1"/>
+        <dependency org="xalan" name="serializer" rev="2.7.1"/>
         <dependency org="pmd" name="pmd" rev="4.2.3"/>
         <dependency org="jedit" name="jedit" rev="4.3pre16">
             <artifact name="jedit-install" type="jar"/>

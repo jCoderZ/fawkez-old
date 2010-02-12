@@ -79,7 +79,9 @@
             <include name="default/commons-beanutils/*.jar"/>
             <include name="default/commons-beanutils-core/*.jar"/>
             <include name="default/commons-cli/*.jar"/>
-            <include name="default/commons-logging/*.jar"/>
+            <include name="default/jcl-over-slf4j/*.jar"/>
+            <include name="default/slf4j-api/*.jar"/>
+            <include name="default/slf4j-jdk14/*.jar"/>
          </fileset>
          <path location="${base.dir}/build/classes"/>
          <fileset dir="${base.dir}/lib">

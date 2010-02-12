@@ -34,6 +34,8 @@ package org.jcoderz.phoenix.report;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -66,18 +68,18 @@ import org.xml.sax.InputSource;
 /**
  * Reads reports with format definitions described in the
  * finding-type-format-definition.xds.
- * 
+ *
  * To find the finding type format definition for requested format
  * the following locations are used:
- * 
+ *
  * The name is converted to lower case.
- * 
- * A file <i>name</i>.xml is searched in the 
+ *
+ * A file <i>name</i>.xml is searched in the
  * <code>org.jcoderz.phoenix.report.ftf</code> package. If
  * this is not found the file is searched in the <code>ftf</code>
  * directory. The directory must be available through the classpath.
- * 
- * 
+ *
+ *
  * @author Andreas Mandel
  *
  */
@@ -87,56 +89,56 @@ public final class GenericReportReader implements ReportReader
     private static final String CLASSNAME
         = GenericReportReader.class.getName();
     private static final Logger logger = Logger.getLogger(CLASSNAME);
-    
-    private static final Pattern CODE_LINE_PATTERN 
+
+    private static final Pattern CODE_LINE_PATTERN
         = Pattern.compile("^.*$", Pattern.MULTILINE);
-    
-    private static final Pattern CARET_LINE_PATTERN 
+
+    private static final Pattern CARET_LINE_PATTERN
         = Pattern.compile("^\\s*\\^$", Pattern.MULTILINE);
-    
+
     private static final Map<Origin, GenericReportReader> GENERIC_REPORT_TYPES
         = new HashMap<Origin, GenericReportReader>();
 
-    
+
     private final List<GenericFindingType> mFindingTypes
         = new ArrayList<GenericFindingType>();
 
     private Map<ResourceInfo, List<Item>> mItems;
-    
+
     private SourceFile mSourceFile;
 
     private final Pattern mMessagePattern;
     private final FindingTypeFormat mFindingTypeFormatDescription;
 
-    private final int mTextPos; 
+    private final int mTextPos;
     private final Origin mOrigin;
     private final int mFilePos;
     private final int mLineStart;
     private final Severity mDefaultSeverity;
-    
+
     private Matcher mRootMatcher = null;
 
-    private GenericReportReader (Origin type) 
+    private GenericReportReader (Origin type)
         throws JAXBException
     {
         mOrigin = type;
         mFindingTypeFormatDescription = loadFormatDescription(type);
         initializeFindingTypes();
-        final FindingDescription root 
+        final FindingDescription root
             = mFindingTypeFormatDescription.getRootType();
-        mMessagePattern 
-            = Pattern.compile(root.getPattern(), 
+        mMessagePattern
+            = Pattern.compile(root.getPattern(),
                 Pattern.MULTILINE);
         mTextPos =  Integer.parseInt(root.getTextPos());
         mFilePos =  Integer.parseInt(root.getFilenamePos());
-        mLineStart = root.isSetLineStartPos() 
+        mLineStart = root.isSetLineStartPos()
             ? Integer.parseInt(root.getLineStartPos()) : -1;
-        mDefaultSeverity = root.isSetSeverity() 
+        mDefaultSeverity = root.isSetSeverity()
             ? root.getSeverity() : Severity.CODE_STYLE;
     }
 
     /**
-     * Initializes the selected finding type. 
+     * Initializes the selected finding type.
      * Might return <code>null</code> if the initialization fails.
      * CHECKME: Should return a null object?
      * @param findingType the type to load.
@@ -156,8 +158,8 @@ public final class GenericReportReader implements ReportReader
                 catch (Exception ex)
                 {
                     // TODO: collect this an add it to the findings map later!
-                    logger.log(Level.WARNING, 
-                        "Could not load finding type for '" + findingType 
+                    logger.log(Level.WARNING,
+                        "Could not load finding type for '" + findingType
                         + "' failed with " + ex.getMessage() + ".", ex);
                 }
                 GENERIC_REPORT_TYPES.put(findingType, result);
@@ -174,8 +176,8 @@ public final class GenericReportReader implements ReportReader
         InputStream in = null;
         try
         {
-            final String filename 
-                = type.toString().toLowerCase(Constants.SYSTEM_LOCALE) 
+            final String filename
+                = type.toString().toLowerCase(Constants.SYSTEM_LOCALE)
                     + ".xml";
             in = GenericReportReader.class.getResourceAsStream(
                 "ftf/" + filename);
@@ -184,11 +186,22 @@ public final class GenericReportReader implements ReportReader
                 in = GenericReportReader.class.getResourceAsStream(
                     "/ftf/" + filename);
             }
+            if (in == null)
+            {
+                try
+                {
+                    in = new FileInputStream(filename);
+                }
+                catch (FileNotFoundException ex)
+                {
+                    // in = null;
+                }
+            }
             Assert.notNull(in, "report type description " + type);
-            final UnmarshalResult unmarshal 
-                = JaxbUtil.unmarshal(new InputSource(in), 
+            final UnmarshalResult unmarshal
+                = JaxbUtil.unmarshal(new InputSource(in),
                     "org.jcoderz.phoenix.report.ftf.jaxb");
-            
+
             findingTypeFormatDescription
                 = (FindingTypeFormat) unmarshal.getParsedData();
         }
@@ -198,7 +211,7 @@ public final class GenericReportReader implements ReportReader
         }
         return findingTypeFormatDescription;
     }
-    
+
     /** {@inheritDoc} */
     public void parse (File f)
         throws JAXBException
@@ -224,15 +237,15 @@ public final class GenericReportReader implements ReportReader
             parseNext();
         }
     }
-    
+
     /**
      * Reads the given message and tries to find a matching finding type.
      * @param message the message to read.
      * @return the finding type matching to the message, or null if no such
      *   type was found.
-     * @throws JAXBException if item creation fails. 
+     * @throws JAXBException if item creation fails.
      */
-    public Item detectFindingTypeForMessage (String message) 
+    public Item detectFindingTypeForMessage (String message)
         throws JAXBException
     {
        Item result = null;
@@ -250,10 +263,10 @@ public final class GenericReportReader implements ReportReader
        }
        if (logger.isLoggable(Level.FINE))
        {
-           logger.fine("For text: '" 
+           logger.fine("For text: '"
                + StringUtil.trimLength(message, MAX_DEBUG_TEXT_CHARS)
-               + "' matched finding: " 
-               + (result == null ? "null" : result.getFindingType() 
+               + "' matched finding: "
+               + (result == null ? "null" : result.getFindingType()
                + "'. End at " + mSourceFile.getPos()));
        }
        return result;
@@ -261,46 +274,46 @@ public final class GenericReportReader implements ReportReader
 
     private void addPositionByCaret (final Item i)
     {
-        final String text 
-            = mSourceFile.getContent().substring(mSourceFile.getPos()); 
-        final Matcher codeMat 
+        final String text
+            = mSourceFile.getContent().substring(mSourceFile.getPos());
+        final Matcher codeMat
             = CODE_LINE_PATTERN.matcher(text);
         if (codeMat.lookingAt())
         {
-            final String textAfterCode 
+            final String textAfterCode
                 = mSourceFile.getContent().substring(
-                    mSourceFile.getPos() + codeMat.end() + 1); 
-            final Matcher caretMat 
+                    mSourceFile.getPos() + codeMat.end() + 1);
+            final Matcher caretMat
                 = CARET_LINE_PATTERN.matcher(textAfterCode);
             if (caretMat.lookingAt())
             {
                 i.setColumn(caretMat.end());
                 mSourceFile.setPos(
-                    mSourceFile.getPos() 
-                    + codeMat.end() + 1 
+                    mSourceFile.getPos()
+                    + codeMat.end() + 1
                     + caretMat.end() + 1);
             }
             else
             {
-                logger.fine("Caret defined but not found for '" 
+                logger.fine("Caret defined but not found for '"
                     + i.getFindingType()
-                    + "' Code Line: '" + codeMat + "' caretLine: '" 
-                    + caretMat + "'. text: '" 
+                    + "' Code Line: '" + codeMat + "' caretLine: '"
+                    + caretMat + "'. text: '"
                     + StringUtil.trimLength(
                         textAfterCode, MAX_DEBUG_TEXT_CHARS) + "'.");
             }
         }
         else
         {
-            logger.fine("Caret defined but not found for '" 
+            logger.fine("Caret defined but not found for '"
                 + i.getFindingType()
-                + "' Code Line: '" + codeMat + "'. text: '" 
+                + "' Code Line: '" + codeMat + "'. text: '"
                 + StringUtil.trimLength(
                     text, MAX_DEBUG_TEXT_CHARS) + "'.");
         }
     }
 
-    private void parseNext () 
+    private void parseNext ()
         throws JAXBException
     {
         if (mRootMatcher.find())
@@ -316,16 +329,16 @@ public final class GenericReportReader implements ReportReader
             final Item item = detectFindingTypeForMessage(text);
             if (item == null)
             {
-                final int pos 
+                final int pos
                     = mSourceFile.getContent().indexOf(
                         '\n', mSourceFile.getPos());
                 if (pos != -1)
                 {
-                    mSourceFile.setPos(pos + 1);  
+                    mSourceFile.setPos(pos + 1);
                 }
                 else
                 {
-                    mSourceFile.setPos(mSourceFile.getContent().length());  
+                    mSourceFile.setPos(mSourceFile.getContent().length());
                 }
             }
             else
@@ -335,7 +348,7 @@ public final class GenericReportReader implements ReportReader
                 {
                     item.setSeverity(mDefaultSeverity);
                 }
-                if (!item.isSetLine() && mLineStart != -1 
+                if (!item.isSetLine() && mLineStart != -1
                     && mRootMatcher.group(mLineStart) != null)
                 {
                     item.setLine(
@@ -365,7 +378,7 @@ public final class GenericReportReader implements ReportReader
                 logger.fine("No match after " + mSourceFile.getPos()
                     + " '" + StringUtil.trimLength(
                         mSourceFile.getContent().substring(
-                            mSourceFile.getPos()), 
+                            mSourceFile.getPos()),
                             MAX_DEBUG_TEXT_CHARS));
             }
             // set pos to end of file
@@ -406,36 +419,36 @@ public final class GenericReportReader implements ReportReader
         }
         else
         {
-            logger.finer("Ignore findings for resource '" 
-                + resourceFilename + "' type was " 
+            logger.finer("Ignore findings for resource '"
+                + resourceFilename + "' type was "
                 + item.getFindingType() + ".");
         }
     }
-    
+
     private void initializeFindingTypes ()
     {
-        final FindingDescription root 
+        final FindingDescription root
             = mFindingTypeFormatDescription.getRootType();
-        final List<FindingDescription> findingTypes 
+        final List<FindingDescription> findingTypes
             = mFindingTypeFormatDescription.getFindingType();
         for (FindingDescription findingDesc : findingTypes)
         {
-            final GenericFindingType gft 
+            final GenericFindingType gft
                 = new GenericFindingType(root, findingDesc);
             mFindingTypes.add(gft);
         }
         Collections.sort(
             mFindingTypes, new GenericFindingType.OrderByPriority());
     }
-    
-    
+
+
     static final class SourceFile
     {
         private final File mFile;
         private final String mContent;
         private int mPos;
-        
-        public SourceFile (File file) 
+
+        public SourceFile (File file)
             throws IOException
         {
             mFile = file;
@@ -486,7 +499,7 @@ public final class GenericReportReader implements ReportReader
         {
             return mContent;
         }
-        
+
         public boolean readFully ()
         {
             return mPos >= mContent.length();

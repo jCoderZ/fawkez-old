@@ -239,13 +239,14 @@ public class LoggableImplTest
    /** Tests the get cause method. */
    public final void testGetCause ()
    {
+       final Exception testException
+       = new RuntimeException("Runtime", new ArgumentMalformedException("foo", "val", "This is wrong!"));
       final LoggableImpl testObject
             = new LoggableImpl(null, TEST_LOG_MESSAGE_INFO, TEST_THREAD_ID,
-                TEST_THREAD_NAME, TEST_INSTANCE_ID, TEST_NODE);
-      final Exception testException = new Exception();
-
-      testObject.initCause(testException);
-
+                TEST_THREAD_NAME, TEST_INSTANCE_ID, TEST_NODE, testException);
+//      testException.initCause();
+      // testObject.initCause(testException);
+System.out.println("TEST: " + testObject.toDetailedString());
       assertEquals("Cause getter changes value.", testException,
             testObject.getCause());
       assertEquals("Cause getter changes value. (parameter)", testException,

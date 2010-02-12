@@ -263,43 +263,43 @@ xerces in current vm: ${xerces.version.ant}
     <!-- =================================================================== -->
     <!-- Repackage jEdit for syntax highlightinh package                     -->
     <!-- =================================================================== -->
-	<target name="repackage-jedit"
-	    depends="repackage-jedit.uptodatecheck,	repackage-jedit-nodeps"/>
-	<target name="repackage-jedit.uptodatecheck">
-	    <uptodate property="repackage-jedit.uptodate"
-	    	targetfile="${build.dir}/jedit-syntax.jar" 
-	    	srcfile="${base.dir}/lib/default/jedit/jedit-install.jar"/>
+  <target name="repackage-jedit"
+      depends="repackage-jedit.uptodatecheck,	repackage-jedit-nodeps"/>
+  <target name="repackage-jedit.uptodatecheck">
+      <uptodate property="repackage-jedit.uptodate"
+        targetfile="${build.dir}/jedit-syntax.jar"
+        srcfile="${base.dir}/lib/default/jedit/jedit-install.jar"/>
     </target>
-	<target name="repackage-jedit-nodeps" 
-		unless="repackage-jedit.uptodate">
-		<mkdir dir="${build.dir}/jedit/jedit-syntax/modes"/>
-		<unjar src="${base.dir}/lib/default/jedit/jedit-install.jar"
-			dest="${build.dir}/jedit" overwrite="false">
-		    <patternset>
-		        <include name="**/jedit-program.tar.bz2"/>
-		    </patternset>
-			<mapper type="flatten"/>
-		</unjar>
-		<bunzip2 src="${build.dir}/jedit/jedit-program.tar.bz2" 
-			dest="${build.dir}/jedit/jedit-program.tar"/>
-		<untar src="${build.dir}/jedit/jedit-program.tar" 
-			dest="${build.dir}/jedit">
-		    <patternset>
-		        <include name="jedit.jar"/>
-		        <include name="modes/**"/>
-		    </patternset>
-		</untar>
-		<copy preservelastmodified="true"
-			todir="${build.dir}/jedit/jedit-syntax/modes">
-			<fileset dir="${build.dir}/jedit/modes"/>
-		</copy>
-		<unjar src="${build.dir}/jedit/jedit.jar"
-			dest="${build.dir}/jedit/jedit-syntax"
-			overwrite="false"/>
-		<jar destfile="${build.dir}/jedit-syntax.jar"
-			basedir="${build.dir}/jedit/jedit-syntax"/>
-	</target>
-	
+  <target name="repackage-jedit-nodeps"
+    unless="repackage-jedit.uptodate">
+    <mkdir dir="${build.dir}/jedit/jedit-syntax/modes"/>
+    <unjar src="${base.dir}/lib/default/jedit/jedit-install.jar"
+      dest="${build.dir}/jedit" overwrite="false">
+        <patternset>
+            <include name="**/jedit-program.tar.bz2"/>
+        </patternset>
+      <mapper type="flatten"/>
+    </unjar>
+    <bunzip2 src="${build.dir}/jedit/jedit-program.tar.bz2"
+      dest="${build.dir}/jedit/jedit-program.tar"/>
+    <untar src="${build.dir}/jedit/jedit-program.tar"
+      dest="${build.dir}/jedit">
+        <patternset>
+            <include name="jedit.jar"/>
+            <include name="modes/**"/>
+        </patternset>
+    </untar>
+    <copy preservelastmodified="true"
+      todir="${build.dir}/jedit/jedit-syntax/modes">
+      <fileset dir="${build.dir}/jedit/modes"/>
+    </copy>
+    <unjar src="${build.dir}/jedit/jedit.jar"
+      dest="${build.dir}/jedit/jedit-syntax"
+      overwrite="false"/>
+    <jar destfile="${build.dir}/jedit-syntax.jar"
+      basedir="${build.dir}/jedit/jedit-syntax"/>
+  </target>
+
     <!-- =================================================================== -->
     <!-- Retrieve 3rd party libraries from ibiblio and local file repository -->
     <!-- =================================================================== -->
@@ -324,16 +324,16 @@ xerces in current vm: ${xerces.version.ant}
         <copy file="${env.JAVA_HOME}/lib/tools.jar"
             todir="${base.dir}/lib/eclipse"/>
         <!-- xmlns:ivy="antlib:fr.jayasoft.ivy.ant" -->
-    	<path id="ivy.classpath">
-    		<pathelement location="${base.dir}/lib/ivy/ivy-2.1.0.jar"/>
-    	</path>
+      <path id="ivy.classpath">
+        <pathelement location="${base.dir}/lib/ivy/ivy-2.1.0.jar"/>
+      </path>
         <taskdef resource="org/apache/ivy/ant/antlib.xml"
             uri="antlib:org.apache.ivy.ant" classpath="${base.dir}/lib/ivy/ivy-2.1.0.jar"/>
         <ivy:settings file="${base.dir}/config/ivyconf.xml" />
         <ivy:resolve file="${base.dir}/config/ivy.xml" conf="default"/>
         <ivy:retrieve pattern="${base.dir}/lib/[conf]/[module]/[artifact].[ext]"
             conf="default"/>
-    	<ivy:report todir="${build.dir}/doc/ivy" dot="true"/> 
+      <ivy:report todir="${build.dir}/doc/ivy" dot="true"/>
         <touch file="${base.dir}/lib/default/retrieve-3rd-party-libs.done"/>
     </target>
     <target name="report-dependency" depends="retrieve-3rd-party-libs">
@@ -399,7 +399,7 @@ xerces in current vm: ${xerces.version.ant}
                 <include name="app-info.xsd"/>
             </fileset>
         </copy>
-        <taskdef name="xpathproperty" 
+        <taskdef name="xpathproperty"
             classname="org.jcoderz.commons.taskdefs.XpathPropertyTask">
             <classpath>
                 <pathelement path="${build.dir}/bootstrap-classes"/>
@@ -416,7 +416,7 @@ xerces in current vm: ${xerces.version.ant}
            depends="bootstrap-ant-tasks,
                     generate-log-message-info.uptodatecheck,
                     generate-log-message-info-nodeps,
-   					app-info"/>
+             app-info"/>
    <target name="generate-log-message-info.uptodatecheck">
       <uptodate property="generate-log-message-info.uptodate"
                 targetfile="${build.dir}/generate-log-message-info.out" >
@@ -583,7 +583,7 @@ xerces in current vm: ${xerces.version.ant}
             debug="true"
             classpathref="default.classpath"
             source="1.4"
-        	target="1.4">
+          target="1.4">
             <src path="${base.dir}/src/java"/>
             <src path="${build.dir}/gen-java"/>
             <include name="org/jcoderz/phoenix/report/Severity.java"/>
@@ -770,7 +770,7 @@ xerces in current vm: ${xerces.version.ant}
     </target>
     <target name="compile-all-nodeps">
         <mkdir dir="${build.dir}/classes"/>
-        <record name="${build.dir}/javac.log" 
+        <record name="${build.dir}/javac.log"
           action="start" append="true"
           emacsmode="true"
           loglevel="info"/>
@@ -787,6 +787,7 @@ xerces in current vm: ${xerces.version.ant}
           <exclude name="org/jcoderz/testdata/**"/>
           <classpath refid="default.classpath"/>
         <compilerarg value="-Xlint:all"/>
+        <compilerarg value="-Xlint:-path"/>
         <compilerarg value="-Xmaxwarns"/><compilerarg value="1000"/>
       </javac>
         <javac destdir="${build.dir}/classes"
@@ -801,13 +802,14 @@ xerces in current vm: ${xerces.version.ant}
             <include name="org/jcoderz/testdata/**"/>
             <include name="org/jcoderz/phoenix/dependency/**"/>
             <compilerarg value="-Xlint:all"/>
+            <compilerarg value="-Xlint:-path"/>
             <compilerarg value="-Xmaxwarns"/><compilerarg value="1000"/>
           <classpath>
               <pathelement path="${build.dir}/classes"/>
               <path refid="default.classpath"/>
           </classpath>
         </javac>
-        <record name="${build.dir}/javac.log" 
+        <record name="${build.dir}/javac.log"
           action="stop"/>
         <copy todir="${build.dir}/classes"
             preservelastmodified="true">
@@ -822,7 +824,7 @@ xerces in current vm: ${xerces.version.ant}
             </fileset>
         </copy>
         <copy todir="${build.dir}/classes/org/jcoderz/commons/taskdefs"
-        	preservelastmodified="true">
+          preservelastmodified="true">
             <fileset dir="${base.dir}/src/xml/xsl">
                 <include name="*.xsl"/>
             </fileset>
@@ -843,13 +845,13 @@ xerces in current vm: ${xerces.version.ant}
         <!-- extract PMD rulesets -->
         <unjar dest="${build.dir}/classes"
                src="${base.dir}/lib/default/pmd/pmd.jar"
-        	   overwrite="false">
+             overwrite="false">
             <patternset>
                 <include name="rulesets/**/*.*"/>
             </patternset>
         </unjar>
         <!-- extract fb-contrib messages.xml -->
-    	<mkdir dir="${build.dir}/fb-contrib-tmp"/>
+      <mkdir dir="${build.dir}/fb-contrib-tmp"/>
         <unjar dest="${build.dir}/fb-contrib-tmp"
                src="${base.dir}/lib/default/fb-contrib/fb-contrib.jar"
                overwrite="false">
@@ -858,7 +860,7 @@ xerces in current vm: ${xerces.version.ant}
             </patternset>
         </unjar>
         <copy file="${build.dir}/fb-contrib-tmp/messages.xml"
-        	  preservelastmodified="true"
+            preservelastmodified="true"
               tofile="${build.dir}/classes/org/jcoderz/phoenix/findbugs/fb-contrib-messages.xml"/>
         <!-- extract findbugs messages.xml -->
         <mkdir dir="${build.dir}/findbugs-tmp"/>
@@ -998,11 +1000,11 @@ xerces in current vm: ${xerces.version.ant}
          </fileset>
       </sqltransformer>
 
-   	    <!-- The repackaged jEdit syntax highlighter -->
+         <!-- The repackaged jEdit syntax highlighter -->
         <copy todir="${dist.dir}/"
-    	    file="${build.dir}/jedit-syntax.jar"/>
+          file="${build.dir}/jedit-syntax.jar"/>
 
-   	  <!-- etc -->
+       <!-- etc -->
       <copy todir="${dist.dir}/etc">
          <fileset dir="${base.dir}/src/xml">
             <include name="app-info.xml"/>
@@ -1132,7 +1134,7 @@ xerces in current vm: ${xerces.version.ant}
      <property name="xerces.javadoc"
        value="http://xerces.apache.org/xerces-j/apiDocs"/>
 
-      <record name="${build.dir}/javadoc.log" 
+      <record name="${build.dir}/javadoc.log"
         action="start"
         emacsmode="true"
         loglevel="info"/>

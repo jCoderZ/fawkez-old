@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema elementFormDefault="qualified"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    
+    <!-- Start -->
+    <xs:element name="simpleTypes" type="simpleTypes"/>
+
+    <!-- Structure -->
+    <xs:complexType name="simpleTypes">
+        <xs:sequence>
+            <xs:element name="typeSafeEnumerations" type="typeSafeEnumerations"/>
+            <xs:element name="restrictedStrings" type="restrictedStrings"/>
+            <xs:element name="restrictedLongs" type="restrictedLongs"/>
+            <xs:element name="fixPointNumbers" type="fixPointNumbers"/>
+            <xs:element name="valueObjects" type="valueObjects"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- Stuff used in enums -->
+    <xs:complexType name="typeSafeEnumerations">
+        <xs:sequence>
+            <xs:element name="enumeration" type="enumeration"
+                maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="enumeration">
+        <xs:sequence>
+            <xs:element name="description" type="description"
+                minOccurs="0"/>
+            <xs:element name="value" type="value" maxOccurs="unbounded"/>
+            <xs:element ref="state" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="package" type="javaPackageName"
+            use="required"/>
+        <xs:attribute name="classname" type="javaClassName"
+            use="required"/>
+        <xs:attribute name="user-type" type="enumUserType"
+            use="optional"/>
+        <xs:attribute name="implements" type="javaQualifiedClassName"
+            use="optional"/>
+    </xs:complexType>
+    <xs:complexType mixed="true" name="value">
+        <xs:attribute name="description" type="xs:string"
+            use="optional"/>
+        <xs:attribute name="numeric" type="xs:int" use="optional"/>
+        <!-- Refine type for symbol -->
+        <xs:attribute name="symbol" type="xs:string" use="optional"/>
+    </xs:complexType>
+    <xs:simpleType name="enumUserType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="numeric"/>
+            <xs:enumeration value="string"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+
+    <!-- Restricted Strings -->
+    <xs:complexType name="restrictedStrings">
+        <xs:sequence>
+            <xs:element name="restrictedString" type="restrictedString"
+                maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType mixed="true" name="restrictedString">
+        <xs:choice>
+            <xs:element name="constant" type="constant"
+                minOccurs="0" maxOccurs="unbounded"/>
+        </xs:choice>
+        <xs:attribute name="min-length" type="xs:positiveInteger"
+            use="required"/>
+        <xs:attribute name="max-length" type="xs:positiveInteger"
+            use="required"/>
+        <xs:attribute name="package" type="javaPackageName"
+            use="required"/>
+        <xs:attribute name="classname" type="javaClassName"
+            use="required"/>
+        <xs:attribute name="implements" type="javaQualifiedClassName"
+            use="optional"/>
+        <xs:attribute name="user-type" type="flag" use="optional"/>
+        <xs:attribute name="regex" type="xs:string" use="optional"/>
+    </xs:complexType>
+
+    <!-- Restricted Long -->
+    <xs:complexType name="restrictedLongs">
+        <xs:sequence>
+            <xs:element name="restrictedLong" type="restrictedLong"
+                maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="restrictedLong">
+        <xs:sequence>
+            <xs:element name="constant" type="constant"/>
+        </xs:sequence>
+        <xs:attribute name="classname" type="javaClassName"
+            use="required"/>
+        <xs:attribute name="package" type="javaPackageName"
+            use="required"/>
+        <xs:attribute name="max-value" type="xs:long" use="required"/>
+        <xs:attribute name="min-value" type="xs:long" use="required"/>
+        <xs:attribute name="user-type" type="flag" use="optional"/>
+    </xs:complexType>
+
+    <!-- Fix Point Numbers -->
+    <xs:complexType name="fixPointNumbers">
+        <xs:sequence>
+            <xs:element name="fixPointNumber" type="fixPointNumber"
+                maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="fixPointNumber">
+        <xs:sequence>
+            <xs:element name="constant" type="constant"
+                minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="classname" type="javaClassName"
+            use="required"/>
+        <xs:attribute name="package" type="javaPackageName"
+            use="required"/>
+        <xs:attribute name="total-digits" type="xs:int"
+            use="required"/>
+        <xs:attribute name="max-value" type="xs:float" use="optional"/>
+        <xs:attribute name="min-value" type="xs:float" use="required"/>
+        <xs:attribute name="fraction-digits" type="xs:int"
+            use="required"/>
+        <xs:attribute name="user-type" type="flag" use="optional"/>
+    </xs:complexType>
+
+    
+    <!-- Value Objects -->
+    <xs:complexType name="valueObjects">
+        <xs:sequence>
+            <xs:element name="valueObject" type="valueObject"
+                maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="valueObject">
+        <xs:sequence>
+            <xs:element name="description" type="description"
+                minOccurs="0"/>
+            <xs:element name="xdoclet" type="xdoclet" minOccurs="0"/>
+            <xs:element name="member" type="member"
+                maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="classname" type="javaClassName"
+            use="required"/>
+        <xs:attribute name="package" type="javaPackageName"
+            use="required"/>
+        <xs:attribute name="implements" type="javaQualifiedClassName"
+            use="optional"/>
+        <xs:attribute name="baseclass" type="javaQualifiedClassName" use="optional"/>
+        <xs:attribute name="serializable" type="flag" use="optional"/>
+        <xs:attribute name="final" type="flag" use="optional"/>
+    </xs:complexType>
+    <xs:complexType name="member" mixed="true">
+        <xs:sequence>
+            <xs:element name="description" type="description"
+                minOccurs="0"/>
+            <xs:element name="xdoclet" type="xdoclet" minOccurs="0"/>
+        </xs:sequence>
+        <xs:attribute name="name" type="xs:string" use="required"/>
+        <xs:attribute name="initial-value" type="xs:string"
+            use="optional"/>
+        <xs:attribute name="type" type="xs:string" use="required"/>
+        <xs:attribute name="identity-independent" type="flag"
+            use="optional"/>
+        <xs:attribute name="final" type="flag" use="optional"/>
+        <xs:attribute name="copyValue" type="copyValue" use="optional"/>
+    </xs:complexType>
+    <xs:complexType name="xdoclet">
+        <xs:sequence>
+            <xs:any minOccurs="0" maxOccurs="unbounded" processContents="lax"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:simpleType name="copyValue">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="clone"/>
+            <xs:enumeration value="constructor"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+
+    <!-- Used globally -->
+    <xs:simpleType name="javaPackageName">
+        <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+    <xs:simpleType name="javaClassName">
+        <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+    <xs:simpleType name="javaQualifiedClassName">
+        <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+    <xs:complexType name="constant">
+        <xs:attribute name="name" type="xs:NMTOKEN" use="required"/>
+        <xs:attribute name="value" type="xs:NMTOKEN" use="required"/>
+        <xs:attribute name="comment" type="xs:string" use="optional"/>
+    </xs:complexType>
+    <xs:simpleType name="flag">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="true"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:complexType mixed="true" name="description"/>
+    
+
+    <!-- TODO -->
+    <xs:element name="state">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="transition" minOccurs="0"
+                    maxOccurs="unbounded"/>
+            </xs:sequence>
+            <xs:attribute name="name" type="xs:NMTOKEN"
+                use="required"/>
+            <xs:attribute name="type" type="xs:NMTOKEN"
+                use="optional"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="transition">
+        <xs:complexType>
+            <xs:attribute name="name" type="xs:string" use="required"/>
+            <xs:attribute name="target" type="xs:NMTOKEN"
+                use="required"/>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

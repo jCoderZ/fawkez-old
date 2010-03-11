@@ -213,6 +213,10 @@
          <xsl:with-param name="s" select="$message/text"/>
       </xsl:call-template>
    </xsl:variable>
+   <xsl:variable name="has-expicit-parameters"><xsl:call-template name="has-expicit-parameters">
+         <xsl:with-param name="tokens" select="$tokens"/>
+      </xsl:call-template>
+   </xsl:variable>
 package <xsl:value-of select="$package"/>;
 
 import java.io.Serializable;
@@ -233,7 +237,7 @@ public <xsl:value-of select="$abstract"/> class <xsl:value-of select="$classname
    /** use this serialVersionUID for serialization. */
    static final long serialVersionUID = 1L;
 
-   <xsl:if test="normalize-space($tokens)"><xsl:call-template
+   <xsl:if test="$has-expicit-parameters != 'false'"><xsl:call-template
       name="exception-clazz-member-list">
             <xsl:with-param name="tokens" select="$tokens"/></xsl:call-template></xsl:if>
 
@@ -244,14 +248,12 @@ public <xsl:value-of select="$abstract"/> class <xsl:value-of select="$classname
     </xsl:call-template>
     * @param cause the cause of this exception.
     */
-   public <xsl:value-of select="$classname"/> (<xsl:if
-      test="normalize-space($tokens)"><xsl:call-template name="inner-clazz-log-parameter-list">
-            <xsl:with-param name="tokens" select="$tokens"/>
-         </xsl:call-template>
-      ,</xsl:if> Throwable cause)
+   public <xsl:value-of select="$classname"/> (<xsl:call-template name="inner-clazz-log-parameter-list">
+            <xsl:with-param name="tokens" select="concat($tokens, $DEFAULT_STRING_SEPARATOR, 'Throwable:cause')"/>
+         </xsl:call-template>)
    {
       super(<xsl:value-of select="$group-classname"/>.<xsl:value-of select="$constant-name"/>, cause);
-      <xsl:if test="normalize-space($tokens)">
+      <xsl:if test="$has-expicit-parameters != 'false'">
       <xsl:call-template name="exception-clazz-member-init">
          <xsl:with-param name="tokens" select="$tokens"/>
       </xsl:call-template>
@@ -275,7 +277,7 @@ public <xsl:value-of select="$abstract"/> class <xsl:value-of select="$classname
       </xsl:if>)
    {
       super(<xsl:value-of select="$group-classname"/>.<xsl:value-of select="$constant-name"/>);
-      <xsl:if test="normalize-space($tokens)">
+      <xsl:if test="$has-expicit-parameters != 'false'">
       <xsl:call-template name="exception-clazz-member-init">
          <xsl:with-param name="tokens" select="$tokens"/>
       </xsl:call-template>
@@ -666,6 +668,10 @@ public abstract class <xsl:value-of select="$classname"/>
          select="$appNameAbbr"/>_<xsl:value-of
          select="$groupNameAbbr"/>_<xsl:value-of
          select="$message/@name"/></xsl:variable>
+   <xsl:variable name="has-expicit-parameters"><xsl:call-template name="has-expicit-parameters">
+         <xsl:with-param name="tokens" select="$tokens"/>
+   </xsl:call-template></xsl:variable>
+
       /**
        * The unique symbolic String of the log message
        * &lt;code&gt;<xsl:value-of select="./@name"/>&lt;/code&gt;.
@@ -752,11 +758,11 @@ public abstract class <xsl:value-of select="$classname"/>
       { <xsl:choose>
             <xsl:when test="normalize-space($tokens)">
          addParameters(new <xsl:value-of select="$log-event-class"/>(<xsl:value-of
-            select="$constant"/><xsl:if test="$isAudit">, auditPrincipal</xsl:if>),
+            select="$constant"/><xsl:if test="$isAudit">, auditPrincipal</xsl:if>)
                <xsl:call-template
                   name="inner-clazz-log-parameter-call">
                   <xsl:with-param name="tokens" select="$tokens"/>
-                  <xsl:with-param name="isAudit" select="$isAudit"/>
+                  <xsl:with-param name="isFirst" select="false()"/>
                </xsl:call-template>).log();</xsl:when>
             <xsl:otherwise>
          new <xsl:value-of select="$log-event-class"/>(<xsl:value-of
@@ -775,18 +781,16 @@ public abstract class <xsl:value-of select="$classname"/>
        */
       public static void log (<xsl:call-template
                   name="inner-clazz-log-parameter-list">
-                  <xsl:with-param name="tokens" select="$tokens"/>
-                  <xsl:with-param name="isAudit" select="$isAudit"/>
-               </xsl:call-template><xsl:if test="$isAudit or normalize-space($tokens)">,</xsl:if>
-               Throwable cause
+                  <xsl:with-param name="tokens" select="concat($tokens, $DEFAULT_STRING_SEPARATOR, 'Throwable:cause')"/>
+                  <xsl:with-param name="isAudit" select="$isAudit"/></xsl:call-template>
             )
       {<xsl:choose>
             <xsl:when test="normalize-space($tokens)">
-         addParameters(new <xsl:value-of select="$log-event-class"/>(<xsl:value-of select="$constant"/><xsl:if test="$isAudit">, auditPrincipal</xsl:if>, cause),
-               <xsl:call-template
+         addParameters(new <xsl:value-of select="$log-event-class"/>(<xsl:value-of
+           select="$constant"/><xsl:if test="$isAudit">, auditPrincipal</xsl:if>, cause)<xsl:call-template
                   name="inner-clazz-log-parameter-call">
                   <xsl:with-param name="tokens" select="$tokens"/>
-                  <xsl:with-param name="isAudit" select="$isAudit"/>
+                  <xsl:with-param name="isFirst" select="false()"/>
                </xsl:call-template>).log();</xsl:when>
             <xsl:otherwise>
          new <xsl:value-of select="$log-event-class"/>(<xsl:value-of
@@ -805,26 +809,26 @@ public abstract class <xsl:value-of select="$classname"/>
                   <xsl:with-param name="isAudit" select="$isAudit"/>
                </xsl:call-template>
        */
-      public static void log (<xsl:value-of select="$custom-logger-class"/> logger<xsl:if
-       test="$isAudit or normalize-space($tokens)">, <xsl:call-template
+      public static void log (<xsl:value-of select="$custom-logger-class"/> logger<xsl:call-template
                   name="inner-clazz-log-parameter-list">
                   <xsl:with-param name="tokens" select="$tokens"/>
                   <xsl:with-param name="isAudit" select="$isAudit"/>
-          </xsl:call-template></xsl:if>)
+                  <xsl:with-param name="isFirst" select="false()"/>
+          </xsl:call-template>)
       {
         final <xsl:value-of select="$log-event-class"/> logEvent
           = new <xsl:value-of select="$log-event-class"/>(<xsl:value-of
               select="$constant"/><xsl:if test="$isAudit">, auditPrincipal</xsl:if>);
-           <xsl:if test="normalize-space($tokens)">
-        addParameters(logEvent,
+           <xsl:if test="$has-expicit-parameters != 'false'">
+        addParameters(logEvent
                <xsl:call-template
                   name="inner-clazz-log-parameter-call">
                   <xsl:with-param name="tokens" select="$tokens"/>
-                  <xsl:with-param name="isAudit" select="$isAudit"/>
+                  <xsl:with-param name="isFirst" select="false()"/>
                </xsl:call-template>);
            </xsl:if>
 
-         logger.logp(<xsl:value-of select="$constant"/>.getLogLevel(),
+        logger.logp(<xsl:value-of select="$constant"/>.getLogLevel(),
           <xsl:if test="$custom-logger-class != 'java.util.logging.Logger'">
            <xsl:value-of select="$constant"/>.getSymbol(),</xsl:if>
            logEvent.getSourceClass(),
@@ -845,20 +849,19 @@ public abstract class <xsl:value-of select="$classname"/>
                </xsl:call-template>
        * @param cause the Throwable that causes this message to be logged.
        */
-      public static void log (<xsl:value-of select="$custom-logger-class"/> logger<xsl:if
-       test="$isAudit or normalize-space($tokens)">, <xsl:call-template
+      public static void log (<xsl:value-of select="$custom-logger-class"/> logger<xsl:call-template
                   name="inner-clazz-log-parameter-list">
-                  <xsl:with-param name="tokens" select="$tokens"/>
+                  <xsl:with-param name="tokens" select="concat($tokens, $DEFAULT_STRING_SEPARATOR, 'Throwable:cause')"/>
                   <xsl:with-param name="isAudit" select="$isAudit"/>
-          </xsl:call-template></xsl:if>,
-               Throwable cause
+                  <xsl:with-param name="isFirst" select="false()"/>
+          </xsl:call-template>
             )
       {
         final <xsl:value-of select="$log-event-class"/> logEvent
           = new <xsl:value-of select="$log-event-class"/>(<xsl:value-of
               select="$constant"/><xsl:if test="$isAudit">, auditPrincipal</xsl:if>,
               cause);
-           <xsl:if test="normalize-space($tokens)">
+           <xsl:if test="$has-expicit-parameters != 'false'">
         addParameters(logEvent,
                <xsl:call-template
                   name="inner-clazz-log-parameter-call">
@@ -951,10 +954,10 @@ public abstract class <xsl:value-of select="$classname"/>
                </xsl:call-template>
        * @return the given initialized &lt;tt>loggable&lt;/tt>.
        */
-      public static Loggable addParameters (Loggable loggable<xsl:if
-         test="normalize-space($tokens)">,</xsl:if> <xsl:call-template
-                  name="inner-clazz-log-parameter-list">
+      public static Loggable addParameters (Loggable loggable<xsl:call-template
+                  name="inner-clazz-log-parameter-list-sub">
                   <xsl:with-param name="tokens" select="$tokens"/>
+                  <xsl:with-param name="isFirst" select="false()"/>
                </xsl:call-template>)
       {<xsl:call-template
                   name="inner-clazz-construct-parameter-setter">
@@ -1021,6 +1024,18 @@ public abstract class <xsl:value-of select="$classname"/>
 <xsl:template name="inner-clazz-log-parameter-list">
    <xsl:param name="tokens" select="''"/>
    <xsl:param name="isAudit" select="false()"/>
+   <xsl:param name="isFirst" select="true()"/>
+
+   <xsl:if test="$isAudit"><xsl:if test="not($isFirst)">, </xsl:if>
+      AuditPrincipal auditPrincipal</xsl:if>
+    <xsl:call-template name="inner-clazz-log-parameter-list-sub">
+       <xsl:with-param name="tokens" select="$tokens"/>
+       <xsl:with-param name="isFirst" select="not($isAudit) and $isFirst"/>
+    </xsl:call-template>
+</xsl:template>
+<xsl:template name="inner-clazz-log-parameter-list-sub">
+   <xsl:param name="tokens" select="''"/>
+   <xsl:param name="isFirst"/>
    <xsl:variable name="type-token">
       <xsl:call-template name="string-set-next-token">
          <xsl:with-param name="s" select="$tokens"/>
@@ -1033,19 +1048,47 @@ public abstract class <xsl:value-of select="$classname"/>
       </xsl:call-template>
    </xsl:variable>
    <xsl:variable name="type" select="substring-before($type-token, ':')"/>
-   <xsl:if test="$isAudit">
-      AuditPrincipal auditPrincipal</xsl:if>
-   <xsl:if test="normalize-space($token)">
-         <xsl:if test="$isAudit"><xsl:text>,</xsl:text></xsl:if> <!-- comma for AuditPrincipal -->
-            <xsl:value-of select="$type"/><xsl:text> </xsl:text><xsl:value-of select="$display_token"/><xsl:if
-               test="contains($tokens, $DEFAULT_STRING_SEPARATOR)">
-         <xsl:text>,</xsl:text>
-      </xsl:if>
-      <xsl:call-template name="inner-clazz-log-parameter-list">
-         <xsl:with-param name="tokens"
-            select="substring-after($tokens, $DEFAULT_STRING_SEPARATOR)"/>
+   <xsl:choose>
+     <xsl:when test="normalize-space($token) and normalize-space($type)">
+           <xsl:if test="not($isFirst)"><xsl:text>, </xsl:text></xsl:if>
+              <xsl:value-of select="$type"/><xsl:text> </xsl:text><xsl:value-of select="$display_token"/>
+        <xsl:call-template name="inner-clazz-log-parameter-list-sub">
+           <xsl:with-param name="tokens"
+              select="substring-after($tokens, $DEFAULT_STRING_SEPARATOR)"/>
+           <xsl:with-param name="isFirst" select="false()"/>
+        </xsl:call-template>
+     </xsl:when>
+     <xsl:otherwise>
+       <xsl:if test="normalize-space($tokens)">
+          <xsl:call-template name="inner-clazz-log-parameter-list-sub">
+             <xsl:with-param name="tokens"
+                select="substring-after($tokens, $DEFAULT_STRING_SEPARATOR)"/>
+             <xsl:with-param name="isFirst" select="$isFirst"/>
+          </xsl:call-template>
+       </xsl:if>
+     </xsl:otherwise>
+   </xsl:choose>
+</xsl:template>
+
+<xsl:template name="has-expicit-parameters">
+   <xsl:param name="tokens" select="''"/>
+   <xsl:variable name="type-token">
+      <xsl:call-template name="string-set-next-token">
+         <xsl:with-param name="s" select="$tokens"/>
       </xsl:call-template>
-   </xsl:if>
+   </xsl:variable>
+   <xsl:variable name="token" select="substring-after($type-token, ':')"/>
+   <xsl:variable name="type" select="substring-before($type-token, ':')"/>
+   <xsl:choose>
+     <xsl:when test="normalize-space($token) and normalize-space($type)">true</xsl:when>
+     <xsl:when test="normalize-space($tokens)">
+          <xsl:call-template name="has-expicit-parameters">
+             <xsl:with-param name="tokens"
+                select="substring-after($tokens, $DEFAULT_STRING_SEPARATOR)"/>
+          </xsl:call-template>
+     </xsl:when>
+     <xsl:otherwise>false</xsl:otherwise>
+   </xsl:choose>
 </xsl:template>
 
 
@@ -1063,7 +1106,7 @@ public abstract class <xsl:value-of select="$classname"/>
       </xsl:call-template>
    </xsl:variable>
    <xsl:variable name="type" select="substring-before($type-token, ':')"/>
-   <xsl:if test="normalize-space($token)">
+   <xsl:if test="normalize-space($token) and normalize-space($type)">
    private final <xsl:value-of select="$type"/><xsl:text> </xsl:text><xsl:value-of select="$display_token"/>;
       <xsl:call-template name="exception-clazz-member-list">
          <xsl:with-param name="tokens"
@@ -1093,7 +1136,7 @@ public abstract class <xsl:value-of select="$classname"/>
       </xsl:call-template>
    </xsl:variable>
    <xsl:variable name="type" select="substring-before($type-token, ':')"/>
-   <xsl:if test="normalize-space($token)">
+   <xsl:if test="normalize-space($token) and normalize-space($type)">
    <xsl:value-of select="$member_token"/> = <xsl:choose><xsl:when
       test="$with = 'param'"><xsl:value-of select="$display_token"/></xsl:when>
       <xsl:otherwise><xsl:value-of select="$with"/></xsl:otherwise></xsl:choose>;
@@ -1130,7 +1173,7 @@ public abstract class <xsl:value-of select="$classname"/>
       </xsl:call-template>
    </xsl:variable>
    <xsl:variable name="type" select="substring-before($type-token, ':')"/>
-   <xsl:if test="normalize-space($token)">
+   <xsl:if test="normalize-space($token) and normalize-space($type)">
    /**
     * Returns the value of the parameter &lt;tt><xsl:value-of select="$display_token"/>&lt;/tt>.
     * @return the value of the parameter &lt;tt><xsl:value-of select="$display_token"/>&lt;/tt>.
@@ -1157,6 +1200,7 @@ public abstract class <xsl:value-of select="$classname"/>
       </xsl:call-template>
    </xsl:variable>
    <xsl:variable name="token" select="substring-after($type-token, ':')"/>
+   <xsl:variable name="type" select="substring-before($type-token, ':')"/>
    <xsl:variable name="display_token">
       <xsl:call-template name="asJavaParameter">
          <xsl:with-param name="name" select="$token"/>
@@ -1171,7 +1215,7 @@ public abstract class <xsl:value-of select="$classname"/>
        * @param auditPrincipal The audit principal that causes this
        *      log event.
    </xsl:if>
-   <xsl:if test="normalize-space($token)">
+   <xsl:if test="normalize-space($token) and normalize-space($type)">
        * @param <xsl:value-of select="$display_token"/> The <xsl:value-of
                select="$display_text"/> used in the message.<xsl:call-template
                name="inner-clazz-log-parameter-javadoc">
@@ -1184,27 +1228,39 @@ public abstract class <xsl:value-of select="$classname"/>
 
 <xsl:template name="inner-clazz-log-parameter-call">
    <xsl:param name="tokens" select="''"/>
+   <xsl:param name="isFirst" select="true()"/>
    <xsl:variable name="type-token">
       <xsl:call-template name="string-set-next-token">
          <xsl:with-param name="s" select="$tokens"/>
       </xsl:call-template>
    </xsl:variable>
    <xsl:variable name="token" select="substring-after($type-token, ':')"/>
+   <xsl:variable name="type" select="substring-before($type-token, ':')"/>
    <xsl:variable name="display_token">
       <xsl:call-template name="asJavaParameter">
          <xsl:with-param name="name" select="$token"/>
       </xsl:call-template>
    </xsl:variable>
-   <xsl:if test="normalize-space($token)">
-             <xsl:value-of select="$display_token"/><xsl:if
-               test="contains($tokens, $DEFAULT_STRING_SEPARATOR)">
-         <xsl:text>, </xsl:text>
-      </xsl:if>
-      <xsl:call-template name="inner-clazz-log-parameter-call">
-         <xsl:with-param name="tokens"
-            select="substring-after($tokens, $DEFAULT_STRING_SEPARATOR)"/>
-      </xsl:call-template>
-   </xsl:if>
+   <xsl:choose>
+     <xsl:when test="normalize-space($token) and normalize-space($type)">
+       <xsl:if test="not($isFirst)"><xsl:text>, </xsl:text>
+       </xsl:if><xsl:value-of select="$display_token"/>
+       <xsl:call-template name="inner-clazz-log-parameter-call">
+           <xsl:with-param name="tokens"
+              select="substring-after($tokens, $DEFAULT_STRING_SEPARATOR)"/>
+           <xsl:with-param name="isFirst" select="false()"/>
+        </xsl:call-template>
+     </xsl:when>
+     <xsl:otherwise>
+       <xsl:if test="$tokens">
+         <xsl:call-template name="inner-clazz-log-parameter-call">
+             <xsl:with-param name="tokens"
+                select="substring-after($tokens, $DEFAULT_STRING_SEPARATOR)"/>
+             <xsl:with-param name="isFirst" select="$isFirst"/>
+          </xsl:call-template>
+       </xsl:if>
+     </xsl:otherwise>
+   </xsl:choose>
 </xsl:template>
 
 <xsl:template name="inner-clazz-construct-parameter-setter">
@@ -1215,7 +1271,8 @@ public abstract class <xsl:value-of select="$classname"/>
       </xsl:call-template>
    </xsl:variable>
    <xsl:variable name="token" select="substring-after($type-token, ':')"/>
-   <xsl:if test="normalize-space($token)">
+   <xsl:variable name="type" select="substring-before($type-token, ':')"/>
+   <xsl:if test="normalize-space($token) and normalize-space($type)">
      <xsl:variable name="display_token">
         <xsl:call-template name="asJavaParameter">
            <xsl:with-param name="name" select="$token"/>

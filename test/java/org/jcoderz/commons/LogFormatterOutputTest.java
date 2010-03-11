@@ -35,6 +35,8 @@ package org.jcoderz.commons;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import junit.framework.TestCase;
+
+import org.jcoderz.commons.test.TssLogMessage;
 import org.jcoderz.commons.types.Date;
 import org.xml.sax.SAXException;
 
@@ -59,6 +61,14 @@ public class LogFormatterOutputTest
    public void testLogEvent ()
    {
       TstLogMessage.TestMessage.log("foo", Date.now().toUtilDate());
+   }
+
+   /**
+    * Produces a log message from an exception w/ two parameters.
+    */
+   public void testLogEventWithImpliedParams ()
+   {
+      TssLogMessage.ImpliedParametersLog.log(new RuntimeException("Foo!"));
    }
 
    /**

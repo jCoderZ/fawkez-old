@@ -87,11 +87,13 @@
     <xs:complexType name="restrictedLongs">
         <xs:sequence>
             <xs:element name="restrictedLong" type="restrictedLong"
-                maxOccurs="unbounded"/>
+                maxOccurs="unbounded" minOccurs="0"/>
         </xs:sequence>
     </xs:complexType>
     <xs:complexType name="restrictedLong">
         <xs:sequence>
+            <xs:element name="description" type="description"
+                minOccurs="0"/>
             <xs:element name="constant" type="constant"
                 minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>

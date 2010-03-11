@@ -7,13 +7,13 @@
 
     <!-- Structure -->
     <xs:complexType name="simpleTypes">
-        <xs:sequence>
+        <xs:all>
             <xs:element name="typeSafeEnumerations" type="typeSafeEnumerations" minOccurs="0"/>
             <xs:element name="restrictedStrings" type="restrictedStrings" minOccurs="0"/>
             <xs:element name="restrictedLongs" type="restrictedLongs" minOccurs="0"/>
             <xs:element name="fixPointNumbers" type="fixPointNumbers" minOccurs="0"/>
             <xs:element name="valueObjects" type="valueObjects" minOccurs="0"/>
-        </xs:sequence>
+        </xs:all>
     </xs:complexType>
 
     <!-- Stuff used in enums -->
@@ -63,12 +63,12 @@
         </xs:sequence>
     </xs:complexType>
     <xs:complexType mixed="true" name="restrictedString">
-        <xs:choice>
+        <xs:sequence>
             <xs:element name="description" type="description"
                 minOccurs="0"/>
             <xs:element name="constant" type="constant"
                 minOccurs="0" maxOccurs="unbounded"/>
-        </xs:choice>
+        </xs:sequence>
         <xs:attribute name="min-length" type="lengthType"
             use="required"/>
         <xs:attribute name="max-length" type="lengthType"
@@ -99,8 +99,8 @@
             use="required"/>
         <xs:attribute name="package" type="javaPackageName"
             use="required"/>
-        <xs:attribute name="max-value" type="xs:long" use="required"/>
-        <xs:attribute name="min-value" type="xs:long" use="required"/>
+        <xs:attribute name="max-value" type="xs:string" use="required"/>
+        <xs:attribute name="min-value" type="xs:string" use="required"/>
         <xs:attribute name="user-type" type="flag" use="optional"/>
     </xs:complexType>
 
@@ -123,8 +123,8 @@
             use="required"/>
         <xs:attribute name="total-digits" type="xs:int"
             use="required"/>
-        <xs:attribute name="max-value" type="xs:float" use="optional"/>
-        <xs:attribute name="min-value" type="xs:float" use="required"/>
+        <xs:attribute name="max-value" type="xs:string" use="optional"/>
+        <xs:attribute name="min-value" type="xs:string" use="required"/>
         <xs:attribute name="fraction-digits" type="xs:int"
             use="required"/>
         <xs:attribute name="user-type" type="flag" use="optional"/>

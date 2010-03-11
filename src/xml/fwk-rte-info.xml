@@ -43,7 +43,7 @@
       level="SEVERE"
       base-exception="org.jcoderz.commons.BaseRuntimeException">
       <text>
-         Assertion failed. A condition in the programme is tested
+         Assertion failed. A condition is tested
          and found to be false. Message: {MESSAGE}.
       </text>
       <solution>

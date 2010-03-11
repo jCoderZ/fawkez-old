@@ -8,11 +8,11 @@
     <!-- Structure -->
     <xs:complexType name="simpleTypes">
         <xs:sequence>
-            <xs:element name="typeSafeEnumerations" type="typeSafeEnumerations"/>
-            <xs:element name="restrictedStrings" type="restrictedStrings"/>
-            <xs:element name="restrictedLongs" type="restrictedLongs"/>
-            <xs:element name="fixPointNumbers" type="fixPointNumbers"/>
-            <xs:element name="valueObjects" type="valueObjects"/>
+            <xs:element name="typeSafeEnumerations" type="typeSafeEnumerations" minOccurs="0"/>
+            <xs:element name="restrictedStrings" type="restrictedStrings" minOccurs="0"/>
+            <xs:element name="restrictedLongs" type="restrictedLongs" minOccurs="0"/>
+            <xs:element name="fixPointNumbers" type="fixPointNumbers" minOccurs="0"/>
+            <xs:element name="valueObjects" type="valueObjects" minOccurs="0"/>
         </xs:sequence>
     </xs:complexType>
 
@@ -20,7 +20,7 @@
     <xs:complexType name="typeSafeEnumerations">
         <xs:sequence>
             <xs:element name="enumeration" type="enumeration"
-                maxOccurs="unbounded"/>
+                maxOccurs="unbounded" minOccurs="0"/>
         </xs:sequence>
     </xs:complexType>
     <xs:complexType name="enumeration">
@@ -49,6 +49,7 @@
     <xs:simpleType name="enumUserType">
         <xs:restriction base="xs:string">
             <xs:enumeration value="numeric"/>
+            <xs:enumeration value="integer"/>
             <xs:enumeration value="string"/>
         </xs:restriction>
     </xs:simpleType>
@@ -58,17 +59,19 @@
     <xs:complexType name="restrictedStrings">
         <xs:sequence>
             <xs:element name="restrictedString" type="restrictedString"
-                maxOccurs="unbounded"/>
+                maxOccurs="unbounded" minOccurs="0"/>
         </xs:sequence>
     </xs:complexType>
     <xs:complexType mixed="true" name="restrictedString">
         <xs:choice>
+            <xs:element name="description" type="description"
+                minOccurs="0"/>
             <xs:element name="constant" type="constant"
                 minOccurs="0" maxOccurs="unbounded"/>
         </xs:choice>
-        <xs:attribute name="min-length" type="xs:positiveInteger"
+        <xs:attribute name="min-length" type="lengthType"
             use="required"/>
-        <xs:attribute name="max-length" type="xs:positiveInteger"
+        <xs:attribute name="max-length" type="lengthType"
             use="required"/>
         <xs:attribute name="package" type="javaPackageName"
             use="required"/>
@@ -89,7 +92,8 @@
     </xs:complexType>
     <xs:complexType name="restrictedLong">
         <xs:sequence>
-            <xs:element name="constant" type="constant"/>
+            <xs:element name="constant" type="constant"
+                minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
         <xs:attribute name="classname" type="javaClassName"
             use="required"/>
@@ -104,11 +108,12 @@
     <xs:complexType name="fixPointNumbers">
         <xs:sequence>
             <xs:element name="fixPointNumber" type="fixPointNumber"
-                maxOccurs="unbounded"/>
+                maxOccurs="unbounded" minOccurs="0"/>
         </xs:sequence>
     </xs:complexType>
     <xs:complexType name="fixPointNumber">
         <xs:sequence>
+            <xs:element name="description" type="description" minOccurs="0"/>
             <xs:element name="constant" type="constant"
                 minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
@@ -130,7 +135,7 @@
     <xs:complexType name="valueObjects">
         <xs:sequence>
             <xs:element name="valueObject" type="valueObject"
-                maxOccurs="unbounded"/>
+                maxOccurs="unbounded" minOccurs="0"/>
         </xs:sequence>
     </xs:complexType>
     <xs:complexType name="valueObject">
@@ -180,6 +185,9 @@
 
 
     <!-- Used globally -->
+    <xs:simpleType name="lengthType">
+        <xs:restriction base="xs:string"/>
+    </xs:simpleType>
     <xs:simpleType name="javaPackageName">
         <xs:restriction base="xs:string"/>
     </xs:simpleType>
@@ -199,7 +207,11 @@
             <xs:enumeration value="true"/>
         </xs:restriction>
     </xs:simpleType>
-    <xs:complexType mixed="true" name="description"/>
+    <xs:complexType mixed="true" name="description">
+        <xs:sequence>
+            <xs:any minOccurs="0" maxOccurs="unbounded" processContents="lax"/>
+        </xs:sequence>
+    </xs:complexType>
     
 
     <!-- TODO -->

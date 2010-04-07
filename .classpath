@@ -158,5 +158,6 @@
 	<classpathentry kind="lib" path="lib/default/log4j-over-slf4j/log4j-over-slf4j.jar"/>
 	<classpathentry kind="lib" path="lib/default/slf4j-api/slf4j-api.jar"/>
 	<classpathentry kind="lib" path="lib/eclipse/tools.jar"/>
+	<classpathentry kind="lib" path="lib/default/asm-tree/asm-tree.jar"/>
 	<classpathentry kind="output" path="eclipse/bin"/>
 </classpath>

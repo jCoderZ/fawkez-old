@@ -33,15 +33,16 @@
 package org.jcoderz.commons.util;
 
 import java.lang.reflect.Method;
-import java.util.Iterator;
 
 import javax.servlet.ServletException;
 import javax.servlet.UnavailableException;
 import javax.xml.bind.JAXBException;
+
 import junit.framework.TestCase;
 
 import org.jaxen.JaxenException;
 import org.jcoderz.commons.ArgumentMalformedException;
+import org.jcoderz.commons.Loggable;
 import org.xml.sax.SAXException;
 
 /**
@@ -84,7 +85,7 @@ extends TestCase
         getCauseDetectionTestHelper(JaxenException.class, "getCause");
     }
 
-    /** Test {@link ThrowableUtil#collectNestedData(Loggable)} */
+    /** Test {@link ThrowableUtil#collectNestedData(Loggable)}. */
     public void testCollectNestedData ()
     {
         final SAXException sax
@@ -107,7 +108,4 @@ extends TestCase
         assertEquals("Differen method expected for getCause in " + ex.getName(),
                 methodName, m.getName());
     }
-
-
-
 }

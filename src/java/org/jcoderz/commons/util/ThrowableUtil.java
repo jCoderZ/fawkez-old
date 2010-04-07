@@ -37,6 +37,8 @@ import java.io.StringWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -50,11 +52,17 @@ import org.jcoderz.commons.Loggable;
 public final class ThrowableUtil
 {
    private static final int MAX_REASONABLE_PARAMETER_LENGTH = 10000;
-/** Name of getter methods start with this prefix. */
+   /** Name of getter methods start with this prefix. */
    private static final String GETTER_METHOD_PREFIX = "get";
+   /** Name of getter methods start with this prefix. */
+   private static final String BOOLEAN_GETTER_METHOD_PREFIX = "is";
    /** Length of the getter prefix. */
    private static final int GETTER_METHOD_PREFIX_LENGTH
        = GETTER_METHOD_PREFIX.length();
+   /** Length of the boolean getter prefix. */
+   private static final int BOOLEAN_GETTER_METHOD_PREFIX_LENGTH
+       = BOOLEAN_GETTER_METHOD_PREFIX.length();
+   
    /**
     * Stores the Throwable.getCause() method if this method is available.
     * This should be the case for all JDKs > 1.4.
@@ -189,6 +197,68 @@ public final class ThrowableUtil
    }
 
    /**
+    * Tries to read additional property like information from this throwable 
+    * and fills it in a map suitable for detailed information output. 
+    * @param thr the throwable to analyze.
+    * @return a Map pointing from String property names to the value. 
+    */
+   public static Map/*<String, Object>*/ getProperties(Throwable thr)
+   {
+       final Map/*<String, Object>*/ result = new HashMap();
+       final Method[] methods = thr.getClass().getMethods();
+       for (int i = 0; i < methods.length; i++)
+       {
+          final int modifier = methods[i].getModifiers();
+          if (methods[i].getDeclaringClass() != Throwable.class
+              && methods[i].getDeclaringClass() != Object.class
+              && methods[i].getParameterTypes().length == 0
+              && Modifier.isPublic(modifier)
+              && !Modifier.isStatic(modifier)
+              && !methods[i].getReturnType().equals(Void.TYPE))
+          {
+              try
+              {
+                  if (methods[i].getName().startsWith(GETTER_METHOD_PREFIX))
+                  {
+                      final Object value
+                          = methods[i].invoke(thr, (Object[]) null);
+                      final String key
+                          = methods[i].getName().substring(
+                              GETTER_METHOD_PREFIX_LENGTH);
+                      result.put(key, value);
+                  }
+                  else if (methods[i].getName().startsWith(
+                          BOOLEAN_GETTER_METHOD_PREFIX)
+                      && (methods[i].getReturnType().equals(Boolean.class)
+                          || methods[i].getReturnType().equals(
+                              java.lang.Boolean.TYPE)))
+                  {
+                      final Object value
+                          = methods[i].invoke(thr, (Object[]) null);
+                      final String key
+                          = methods[i].getName().substring(
+                              BOOLEAN_GETTER_METHOD_PREFIX_LENGTH);
+                      result.put(key, value);
+                  }
+              }
+              catch (InvocationTargetException e)
+              {
+                  // Ignore this property, continue with next
+              }
+              catch (IllegalArgumentException e)
+              {
+                  // Ignore this property, continue with next
+              }
+              catch (IllegalAccessException e)
+              {
+                  // Ignore this property, continue with next
+              }
+          }
+       }
+       return result;
+   }
+   
+   /**
     * Dumps the stack trace of the given throwable to its String representation.
     * @param thr the throwable to dump the stack trace from.
     * @return a String representation of the given throwable
@@ -279,7 +349,7 @@ public final class ThrowableUtil
               && Modifier.isPublic(modifier)
               && !Modifier.isStatic(modifier)
               && methods[i].getName().startsWith(GETTER_METHOD_PREFIX)
-              && !methods[i].getReturnType().equals(Void.class))
+              && !methods[i].getReturnType().equals(Void.TYPE))
           {
               final Object result = methods[i].invoke(thr, (Object[]) null);
               if (result != null && result != thr.getCause())

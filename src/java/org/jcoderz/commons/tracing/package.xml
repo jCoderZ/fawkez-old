@@ -1,0 +1,28 @@
+<body>
+  <section>
+    <title>Tracing Injector Utilities</title>
+    <para>
+      To generate tracing output for debugging purposes the
+      java jdk 1.4 (JSR47) convenience methods for tracing are
+      used
+      (<a href="http://java.sun.com/j2se/1.4.2/docs/api/java/util/logging/Logger.html#entering(java.lang.String,%20java.lang.String)">entering</a>,
+      <a href="http://java.sun.com/j2se/1.4.2/docs/api/java/util/logging/Logger.html#exiting(java.lang.String,%20java.lang.String)">exiting</a>
+      and
+      <a href="http://java.sun.com/j2se/1.4.2/docs/api/java/util/logging/Logger.html#throwing(java.lang.String,%20java.lang.String,%20java.lang.Throwable)">throwing</a>).
+      To avoid that these same code must be added to each method that
+      should be subject of tracing this code is injected
+      as an aspect after the compilation on byte code level.
+    </para>
+    <para>
+      There is a ANT target that triggers the byte code injection.
+     <apidoc name="tracing">
+      <class name="org.jcoderz.commons.tracing.TracingInjectorTask"/>
+     </apidoc>
+    </para>
+    <para>
+      If the instance is encapsulated by an public interface it is also possible to 
+      use a dynamic proxy to get the tracing logging. This is supported by the 
+      TracingProxy utility class.
+    </para>
+  </section>
+</body>

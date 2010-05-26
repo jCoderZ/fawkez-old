@@ -38,6 +38,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.Properties;
 
 import javax.xml.transform.ErrorListener;
@@ -56,6 +58,7 @@ import org.apache.tools.ant.Task;
 import org.apache.xerces.util.XMLCatalogResolver;
 import org.jcoderz.commons.util.IoUtil;
 import org.jcoderz.commons.util.StringUtil;
+import org.jcoderz.commons.util.XmlUtil;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -390,32 +393,36 @@ public abstract class XsltBasedTask
     void transform ()
         throws BuildException
     {
+        StreamResult out = null;
         try
         {
-            final String xmlParserConfig = System
-                .getProperty(XML_PARSER_CONFIGURATION_PROPERTY);
+            final String xmlParserConfig
+                = System.getProperty(XML_PARSER_CONFIGURATION_PROPERTY);
             if (!XML_PARSER_CONFIG_WITH_XINCLUDE.equals(xmlParserConfig))
             {
-                System.setProperty(XML_PARSER_CONFIGURATION_PROPERTY,
+                System.setProperty(
+                    XML_PARSER_CONFIGURATION_PROPERTY,
                     XML_PARSER_CONFIG_WITH_XINCLUDE);
                 log("Using XML Parser configuration "
                     + XML_PARSER_CONFIG_WITH_XINCLUDE, Project.MSG_VERBOSE);
             }
             // Xalan2 transformer is required,
             // that why we explicit use this factory
-            final TransformerFactory factory = (TransformerFactory)
-            (loadClass("org.apache.xalan.processor.TransformerFactoryImpl")
-                .newInstance());
+            final TransformerFactory factory
+                = (TransformerFactory)
+                    (loadClass(
+                        "org.apache.xalan.processor.TransformerFactoryImpl")
+                            .newInstance());
 
             factory.setURIResolver(new JarArchiveUriResolver(this));
-            final InputStream xslStream = getXslFileAsStream();
-            final Transformer transformer = factory
-                .newTransformer(new StreamSource(xslStream));
+            final StreamSource source = getXslFileAsSource();
+            final Transformer transformer
+                = factory.newTransformer(source);
             setAdditionalTransformerParameters(transformer);
             transformer.setParameter("outdir", mDestDir != null ? mDestDir
                 .getAbsolutePath() : "");
             final Source xml = getInAsStreamSource();
-            final StreamResult out = new StreamResult(mOutFile);
+            out = XmlUtil.createStreamResult(mOutFile);
             transformer.setErrorListener(new MyErrorListener());
             transformer.transform(xml, out);
         }
@@ -425,6 +432,10 @@ public abstract class XsltBasedTask
         }
         finally
         {
+            if (out != null)
+            {
+                IoUtil.close(out.getOutputStream());
+            }
             if (mClassLoader != null)
             {
                 mClassLoader.resetThreadContextLoader();
@@ -456,17 +467,19 @@ public abstract class XsltBasedTask
         return result;
     }
 
-    private InputStream getXslFileAsStream ()
+    private StreamSource getXslFileAsSource ()
     {
-        final InputStream result;
+        final StreamSource result;
         final InputStream xslStream
             = XsltBasedTask.class.getResourceAsStream(mXslFile);
         if (xslStream == null)
         {
             try
             {
-                final InputStream xslFile = new FileInputStream(mXslFile);
-                result = xslFile;
+                final File file = new File(mXslFile);
+                final InputStream xslFile = new FileInputStream(file);
+                result = new StreamSource(xslFile);
+                result.setSystemId(file.toURI().toASCIIString());
             }
             catch (FileNotFoundException e)
             {
@@ -476,7 +489,20 @@ public abstract class XsltBasedTask
         }
         else
         {
-            result = xslStream;
+            result = new StreamSource(xslStream);
+            final URL url = XsltBasedTask.class.getResource(mXslFile);
+            if (url != null)
+            {
+                try
+                {
+                    result.setSystemId(url.toURI().toASCIIString());
+                }
+                catch (URISyntaxException ex)
+                {
+                    log("Failed to set systemId. Got " + ex,
+                            Project.MSG_VERBOSE);
+                }
+            }
         }
         return result;
     }

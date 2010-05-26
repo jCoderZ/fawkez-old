@@ -32,6 +32,10 @@
  */
 package org.jcoderz.commons.util;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import javax.xml.transform.stream.StreamResult;
 import org.xml.sax.Attributes;
 
 /**
@@ -327,6 +331,35 @@ public final class XmlUtil
       }
       return result;
    }
+
+    /**
+     * Creae a stream result based on a File.
+     * Other than the default implementation not only the File is used to
+     * initialize the result, but also a Stream is opened and initialized.
+     * This works around an issue with whitespaces in the pathname which
+     * otherwise would lead to a file not found exception
+     * <pre>
+     * Error during transformation: javax.xml.transform.TransformerException: java.io.FileNotFoundException: ...%20...
+     *   at org.apache.xalan.transformer.TransformerImpl.createSerializationHandler(TransformerImpl.java:1218)
+     *   at org.apache.xalan.transformer.TransformerImpl.createSerializationHandler(TransformerImpl.java:1060)
+     *   at org.apache.xalan.transformer.TransformerImpl.transform(TransformerImpl.java:1268)
+     *   at org.apache.xalan.transformer.TransformerImpl.transform(TransformerImpl.java:1251)
+     *   ....
+     * </pre>.
+     * The caller must ensure that the created outputstream is closed.
+     * @param outFile the file to be used in the stream result.
+     * @return a new StreamResult piontint to the given File.
+     * @throws IOException in case of an issue while creating the stream.
+     */
+    public static StreamResult createStreamResult(File outFile)
+        throws IOException
+    {
+        final StreamResult result = new StreamResult(outFile);
+        // set the stream directly to avoid issues with blanks in the
+        // filename.
+        result.setOutputStream(new FileOutputStream(outFile));
+        return result;
+    }
 
    private static void indent (final int i, StringBuffer b)
    {

@@ -32,9 +32,12 @@
  */
 package org.jcoderz.commons.util;
 
+import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -46,6 +49,7 @@ import java.nio.channels.Channel;
 import java.nio.channels.ReadableByteChannel;
 import java.util.Arrays;
 import java.util.Random;
+
 import junit.framework.TestCase;
 
 
@@ -58,6 +62,8 @@ public class IoUtilTest
       extends TestCase
 {
    private static final Random RANDOM_GENERATOR = new Random();
+   
+   private static final int GAP_SIZE = 10 * 1024;
 
    /**
     * Tests the method {@link IoUtil#readFully(InputStream, int)}.
@@ -199,6 +205,21 @@ public class IoUtilTest
       IoUtil.close((Channel) null);
    }
 
+   
+   public void testSkip() throws Exception {
+       final File tmp = File.createTempFile("fawkez", "tmp");
+       FileOutputStream out = new FileOutputStream(tmp);
+       out.write(1);
+       out.write(new byte[GAP_SIZE]);
+       out.write(2);
+       out.close();
+       final InputStream in = new BufferedInputStream(new FileInputStream((tmp)));
+       int first = in.read();
+       IoUtil.skip(in, GAP_SIZE); // instead of in.skip(GAP_SIZE);
+       int second = in.read();
+       assertEquals(3, first + second);
+       
+   }
 
    private void read1kBytes ()
          throws IOException

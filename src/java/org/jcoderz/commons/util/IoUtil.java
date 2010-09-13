@@ -33,6 +33,7 @@
 package org.jcoderz.commons.util;
 
 import java.io.ByteArrayOutputStream;
+import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -417,6 +418,30 @@ public final class IoUtil
          close(in);
       }
    }
+   
+   /**
+    * Ensures that the given number of bytes are skipped from the given 
+    * input stream.
+    * @param in the input stream.
+    * @param bytes the number of bytes to skip.
+    * @throws IOException if the stream does not support seek,
+    *              or if some other I/O error occurs.
+    * @see InputStream#skip             
+    */
+    public static void skip (InputStream in, int bytes)
+        throws IOException
+    {
+        long remaining = bytes;
+        while (remaining != 0)
+        {
+            final long skipped = in.skip(remaining);
+            if (skipped == 0)
+            {
+                throw new EOFException();
+            }
+            remaining -= skipped;
+        }
+    }
 
 
    private static void logCloseFailedWarningMessage (

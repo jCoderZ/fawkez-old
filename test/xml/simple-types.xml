@@ -324,12 +324,16 @@
      final="final" 
      implements="org.jcoderz.commons.types.TestTaggerInterface">
      <member name="test value" type="long"/>
+     <member name="test value boolean" type="boolean"/>
+     <member name="test value boolean object" type="Boolean"/>
   </valueObject>
   <valueObject
      classname="TaggedSerializableSampleValueObject"
      package="org.jcoderz.commons.types"
      implements="org.jcoderz.commons.types.TestTaggerInterface">
      <member name="test value" type="long"/>
+     <member name="test value boolean" type="boolean"/>
+     <member name="test value boolean object" type="Boolean"/>
   </valueObject>
   
 </simpleTypes>

@@ -638,6 +638,21 @@ public <xsl:if test="$object/@final = 'true'">final </xsl:if>class <xsl:value-of
      </xsl:otherwise>
    </xsl:choose>
    }
+   <xsl:if test="@type = 'boolean' or @type = 'Boolean' or @type = 'java.lang.Boolean'">
+   /**
+    * Returns the <xsl:value-of select="$doc"/>. <xsl:call-template name="generate-xdoclet">
+   <xsl:with-param name="doc-text" select="current()/xdoclet" />
+   <xsl:with-param name="indent"><xsl:text>    </xsl:text></xsl:with-param>
+</xsl:call-template><xsl:if test="@copyValue = 'clone'">
+    * The value is cloned before being returned.</xsl:if><xsl:if test="@copyValue = 'constructor'">
+    * The value is copied using the copy constructor before being returned.</xsl:if>
+    * @return the <xsl:value-of select="$doc"/>.
+    */
+   public <xsl:value-of select="@type"/> is<xsl:value-of select="$identifier"/> ()
+   {
+     return get<xsl:value-of select="$identifier"/>();
+   }
+   </xsl:if>
    <xsl:if test="not(@final = 'true' or ../@final = 'true')">
 
    <xsl:variable name="setter-visibility"><xsl:choose><xsl:when

@@ -328,14 +328,30 @@ public class MakeReadonlyBeans
    private SAXSource getSaxSource (File xmlFile)
          throws SAXException, FileNotFoundException
    {
-      final XMLReader xr = XMLReaderFactory.createXMLReader(
-            "org.apache.xerces.parsers.SAXParser");
+      final XMLReader xr = getXmlReader();
       xr.setEntityResolver(new DummyEntityResolver(this));
       final FileInputStream fileInStream = new FileInputStream(xmlFile);
       final InputSource inSource = new InputSource(fileInStream);
       return new SAXSource(xr, inSource);
    }
 
+   private static XMLReader getXmlReader()
+         throws SAXException
+   {
+      XMLReader result;
+      try
+      {
+        result = XMLReaderFactory.createXMLReader(
+            "org.apache.xerces.parsers.SAXParser");
+      }
+      catch (Exception ex)
+      {
+        // log this?
+        result = XMLReaderFactory.createXMLReader();
+      }
+      return result;
+   }
+   
    public final class ReadOnlyBean
    {
       private String mName;

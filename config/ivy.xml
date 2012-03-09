@@ -76,7 +76,7 @@
       -->
 
       <!--  Things below here are from an official repository -->
-      <dependency org="pmd" name="pmd" rev="4.2.+">
+      <dependency org="pmd" name="pmd" rev="4.2.6">
         <exclude module="junit"/>
       </dependency>
 
@@ -100,10 +100,10 @@
       <dependency org="xom" name="xom" rev="1.1"/>
 
       <dependency org="ant" name="ant" rev="1.7.0"/>
-      <dependency org="org.slf4j" name="slf4j-jdk14" rev="1.5.+" transitive="true"/>
-      <dependency org="org.slf4j" name="log4j-over-slf4j" rev="1.5.+"
+      <dependency org="org.slf4j" name="slf4j-jdk14" rev="1.5.11" transitive="true"/>
+      <dependency org="org.slf4j" name="log4j-over-slf4j" rev="1.5.11"
         transitive="true"/>
-      <dependency org="org.slf4j" name="jcl-over-slf4j" rev="1.5.+"
+      <dependency org="org.slf4j" name="jcl-over-slf4j" rev="1.5.11"
         transitive="true"/>
 
       <dependency org="velocity" name="velocity" rev="1.4"/>
@@ -157,6 +157,10 @@
 
       <dependency org="emma" name="emma" rev="2.0.5312"/>
       <dependency org="emma" name="emma_ant" rev="2.0.5312"/>
+      
+      <dependency org="org.codehaus.sonar" name="sonar-ws-client" rev="2.13.1" />
+
+      
     </dependencies>
 
 </ivy-module>
